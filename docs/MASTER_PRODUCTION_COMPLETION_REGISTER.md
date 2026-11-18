@@ -1,3 +1,100 @@
+# LIVE MASTER COMPLETION REFRESH — 18 November 2026, 09:01 SAST
+
+**This is the newest verified status addendum. It supersedes older SHA, test-count, readiness, Meta and branch-inventory snapshots below wherever they conflict. It is an evidence register, not owner authorization to publish.**
+
+## Exact repository and test lineage
+
+- Live PR #1 metadata: OPEN / DRAFT / UNMERGED; implementation branch `codex/marketing-machine-audit-fixes`; live PR head `34e751c6cb1f0cd850180f887c65323dd1ff7d83`; base `main`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- The PR description contains a stale HEAD (`04794264...`); live PR metadata is authoritative for the current head. Latest fully tested application/source candidate is `20e437b1412abfb7e6f45aa06fd926658afc1342`; the current PR-head checkpoint commit `34e751c...` is documentation-only relative to that tested source candidate.
+- Exact PR-head automation/security run [44255110195](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44255110195): **171/171 Node test files passed; 84 Python tests passed; zero skips; npm audit 0 vulnerabilities**. Normal lifecycle install, syntax checks and Python compilation passed.
+- Exact PR-head dashboard browser run [44255110222](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44255110222): **33/33 Chromium journeys passed** against the real local dashboard/backend.
+- Exact PR-head content quality [44255109987], metadata [44255110184], queue readiness [44255110180], Cloudflare durable-state [44255109998], runner bridge [44255110113], deployment recovery [44255109994], signed editorial approval regression [44255109992], Nature Frontiers local draft [44255110046] and Instagram safety [44255110273] completed successfully. Local/regression PASS is not live provider authorization.
+- Meta connection workflow [44255110203] passed its regression tests, but its live Meta user/Page verification step was **SKIPPED** on the pull-request event. Do not record live Meta identity as passed.
+- Production readiness [44255110124] completed **HOLD — 19 blockers**. The readiness failure is the required fail-closed result, not a code-test regression. It performed no upload, scheduling or publication.
+- Non-destructive branch inventory [44255110152] passed: **4,308 branch-only commits, 9 base-only commits, 432 final-tree changed files**, decision `REQUIRES_REVIEW`. The isolated main/candidate baseline run [44255109995] was still in progress at the last inspection; do not count it as PASS until its conclusion is verified.
+- PR safety remains mandatory: do not merge, close, mark ready, retarget, rebase, reset, force-push or rewrite history; do not modify `main`.
+
+## B. Engineering and operational acceptance — current gate decisions
+
+| Gate | Current decision | Exact remaining acceptance |
+|---|---|---|
+| DASH-001 | NOT TESTED overall | 120 controls / 17 forms. 11 forms have local/operator success evidence; 6 remain fail-closed on production prerequisites. Complete per-control/field authorized success, validation, error, authorization, persistence, refresh/restart, concurrency and accessibility evidence. 33 browser journeys are not exhaustive control acceptance. |
+| API-001 | NOT TESTED overall | Last route matrix: 48 protected routes, 42 PASS, 6 BLOCKED; 48/48 missing/invalid-auth checks PASS. Six blocked routes: `POST /api/facebook/drafts/approve`, `POST /api/facebook/publish`, `POST /api/facebook/verify-page`, `POST /api/instagram/approve`, `POST /api/jobs/produce`, `POST /api/uploads/reconcile`. Complete their real provider/media positive paths and remote read-back; do not promote negative fail-closed tests to full route PASS. Matrix snapshot is dated 16 Nov and must be refreshed after new route-specific evidence. |
+| SCHED-001 | NOT TESTED overall | Policy tests pass for rolling `long_form → long_form → short`, at least 72 elapsed hours and no same Johannesburg calendar day. Complete current OAuth, remote history/attempt reconciliation, actual remote timestamps, live dispatch, lease/cancel/retry/dead-letter and worker restart proof. |
+| SCHED-WORKER-DISPATCH-001 | NOT TESTED operationally | Local 409/backoff, uncertain-dispatch quarantine and persistence/restart tests pass. A continuously running production worker and real render dispatch are not proven. |
+| STATE-001 | PASS — staging only | Staging D1 backup/restore/restart and five-backup retention are accepted. Independent off-account backup and production state remain separate. |
+| DEPLOY-001 | NOT TESTED | Deployment recovery smoke passes 2/2 locally. Complete authorized production deployment, monitoring, alerting, rollback and disaster recovery. |
+| GIT-002 | NOT TESTED | 4,308/9 divergence and 432 changed files require human semantic review. Preserve both restore-history tests and all divergence; no integration mutation is authorized. |
+| E2E-001 | NOT TESTED | No genuine rights-cleared item has completed the entire real plan → script → footage → narration → captions → render → QC → human approval → private-upload preparation → remote read-back → restart recovery journey. |
+| SEO-001 | NOT TESTED | Approve final metadata/captions/thumbnail against a genuine final export and provide measured search/competition evidence. Do not claim ranking guarantees. |
+
+The 171-file Node suite, 84 Python tests and 33 browser journeys establish current engineering regression health; they do not close the acceptance gates above.
+
+## Production readiness — 19 current blockers
+
+The exact-head readiness run [44255110124](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44255110124) lists:
+
+**Short manifest (6):**
+1. Missing `media/next-short-footage.mp4`.
+2. Missing `media/next-short-narration.mp3`.
+3. No genuine human-verified footage-rights evidence.
+4. No genuine human-verified narration-rights evidence.
+5. Keep `rightsConfirmed=false` until all actual media permissions are checked.
+6. Keep `complianceReviewed=false` until a human reviews the exact final package.
+
+**Long-form manifest (7):**
+7. Missing `media/long-form-001-footage.mp4`.
+8. Missing `media/long-form-drafts/long-001-narration-final.mp3`.
+9. Missing `long-form-001-captions-final.srt`.
+10. No human-verified footage-rights evidence.
+11. No human-verified narration-rights evidence.
+12. Long-form rights confirmation remains false.
+13. Long-form compliance review remains false.
+
+**Metadata and release (3):**
+14. Exact final metadata has not been human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
+15. Metadata rights confirmation remains false.
+16. Metadata compliance approval remains false.
+
+**Remote access and final master (3):**
+17. Missing rendered production master `media/next-short.mp4`.
+18. Latest read-only YouTube OAuth attempt returns `invalid_grant`; reauthorization is required.
+19. Upload-capable YouTube OAuth scope accepted by `videos.insert` (prefer `youtube.upload`) is not independently verified.
+
+The readiness workflow reports one existing SonicVhibez upload (public=1, private=0, unlisted=0) and prior attempt reconciliation passed in that run. The existing public 20-second Short is a legacy item, not proof of the current 50–60-second production target. The OAuth failure and unverified upload scope still prohibit a new upload. No blind retry is permitted.
+
+## C. Nature Frontiers — separate Meta publishing lane
+
+- Live Metricool read-only brand: Nature Frontiers SA, brand ID `8094526`; Facebook Page ID recorded as `1431329126735709`; Instagram account label `naturefrontieers2026`; timezone `Africa/Johannesburg`.
+- Metricool scheduled-post query for 18 Nov–18 Dec 2026 returned zero scheduled posts. Its brand network data also exposes the SonicVhibez YouTube channel ID; this cross-brand mapping is unresolved and is not permission to publish YouTube content through Nature Frontiers.
+- Meta regression workflow is green, but the live identity/permission step was skipped on PR runs. The latest earlier live Meta identity check returned HTTP 401 (expired/invalid user and Page token session); renew only through secure secret management and then run the authorized read-only verification.
+- Instagram safety and signed editorial-approval code suites pass; local draft package validation passes. None proves provider-side draft creation/read-back or human approval of actual content.
+- The deployed `nature-frontiers-publisher` Worker is health-only: GET `/health`, no Meta publishing routes, no secrets, no cron. Its production D1 operational tables have zero rows. It is not a functioning publisher.
+- Library inventory: 9 Nature Frontiers MP4s technically decoded; **0 publication-ready**, **0 verified original-camera packages**, **0 human-approved assets**. Nile crocodile explainer remains illustrative animation, not documentary footage, with full human playback, factual, source-provenance, rights and exact-hash approval still pending.
+- Maintain `publishingEnabled=false`, `dryRun=true`, `FACEBOOK_PUBLISH_ENABLED=NO`, emergency stop enabled; keep unreviewed content held. No post, schedule or provider mutation is authorized.
+
+## Required future owner inputs
+
+1. Supply the genuine Short footage and the final long-form footage, or exact original-source links and creator/licence evidence; the five imported Canva wildlife clips remain excluded until source identity, original MP4 bytes, hashes, permitted use and human visual review are established.
+2. Provide the user's own narration recording for the chosen content, or explicitly approve AI narration and its disclosures for that specific content. The recent request to record a permanent natural voice is not yet a supplied recording. Do not substitute placeholder eSpeak or unapproved synthetic voices.
+3. Supply/approve final captions and exact script-to-scene mapping for each production item.
+4. Confirm all rights for footage, narration, music, images and derivatives; perform full human playback/editorial/compliance review and approve the exact final hashes.
+5. Human-review exact final metadata and explicitly authorize `READY_FOR_PRIVATE_UPLOAD` for a specific private-only job.
+6. Reauthorize YouTube OAuth through the secure secret manager; independently verify SonicVhibez identity, upload-capable scope and complete current remote history. Confirm whether any upload was attempted, failed, timed out or left uncertain outside the repository/runtime.
+7. Confirm official Nature Frontiers Facebook Page and Instagram professional-account identities/permissions in Meta Business Suite; renew user/Page credentials through secret management and verify by read-only API calls.
+8. Supply an approved SonicVhibez logo if it is to be used in final video/thumbnail.
+9. Confirm a zero-cost independent backup destination and resolve Cloudflare R2 permission/access (prior R2 listing returned 403); no paid service is approved.
+10. Provide production deployment access/secrets only through their secret managers, and owner/admin confirmation to enable branch protection and required status checks.
+11. Complete human semantic review of divergent Git history; this is an owner/maintainer review, not an automated inventory operation.
+
+## Release decision — completed recommendation, owner authorization still separate
+
+**RECOMMENDATION: HOLD / NOT PRODUCTION READY.** This is the evidence-based release decision for the current checkpoint. Do not upload, schedule, publish, activate campaigns, enable unattended publishing or promote staging to production. Reassess only after all relevant blockers have been independently satisfied and the exact final candidate has passed its release gates. This recommendation does not impersonate the owner's signature or grant publishing authorization.
+
+**No credentials, assets, rights, approvals, provider outcomes or production deployment were fabricated. No paid infrastructure was used. No upload, schedule, publication, PR merge or main-branch modification was performed.**
+
+---
+
 # LIVE MASTER STATUS — 18 November 2026
 
 **This live refresh supersedes older checkpoint details below wherever they conflict.** It is an evidence snapshot, not a release approval.
