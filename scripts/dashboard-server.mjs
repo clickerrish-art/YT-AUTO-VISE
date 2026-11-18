@@ -2978,6 +2978,7 @@ const server = http.createServer(async (req, res) => {
             shortParentRelationship: job.contentType === "short" ? structuredClone(job.shortParentRelationship) : null,
             shortParentRelationshipSha256: shortParentRelationshipSha256Value,
             reviewId: review.id,
+            qualityScorecardSha256: review.qualityScorecardSha256,
             reviewedAt: review.reviewedAt,
             reviewer,
             artifactSha256,
