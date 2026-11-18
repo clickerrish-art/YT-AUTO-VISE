@@ -51,6 +51,33 @@ def validate_asset(path: Path, expected_md5: str, expected_bytes: int|None=None)
     if md5_file(path) != expected_md5:
         raise ValueError("Pinned asset MD5 mismatch: "+path.name)
 
+def apply_headroom(path: Path, ceiling: int = 30000) -> dict:
+    """Apply minimal whole-file gain reduction before strict clipping validation."""
+    with wave.open(str(path), "rb") as source:
+        params = source.getparams()
+        if source.getnchannels() != 1 or source.getsampwidth() != 2:
+            raise ValueError("Headroom processing requires mono 16-bit PCM")
+        raw = source.readframes(source.getnframes())
+    samples = [item[0] for item in struct.iter_unpack("<h", raw)]
+    if not samples:
+        raise ValueError("Cannot apply headroom to an empty WAV")
+    peak_before = max(abs(sample) for sample in samples)
+    gain = min(1.0, ceiling / peak_before) if peak_before else 1.0
+    if gain < 1.0:
+        adjusted = b"".join(struct.pack("<h", round(sample * gain)) for sample in samples)
+        temporary = path.with_name(path.stem + ".headroom.wav")
+        with wave.open(str(temporary), "wb") as output:
+            output.setparams(params)
+            output.writeframes(adjusted)
+        temporary.replace(path)
+    peak_after = max(abs(item[0]) for item in struct.iter_unpack("<h", adjusted if gain < 1.0 else raw))
+    return {
+        "applied": gain < 1.0,
+        "gainDb": round(20 * math.log10(gain), 3) if gain < 1.0 else 0.0,
+        "peakBefore": peak_before,
+        "peakAfter": peak_after
+    }
+
 def inspect_wav(path: Path) -> dict:
     with wave.open(str(path),"rb") as w:
         channels,width,rate,frames=w.getnchannels(),w.getsampwidth(),w.getframerate(),w.getnframes()
@@ -87,6 +114,7 @@ def render(output: Path, source: Path) -> dict:
     wav_path=output/OUTPUT
     with wave.open(str(wav_path),"wb") as wav:
         voice.synthesize_wav(narration,wav,SynthesisConfig())
+    headroom=apply_headroom(wav_path)
     metrics=inspect_wav(wav_path)
     report={
       "schemaVersion":1,"status":"AMERICAN_MALE_STORYTELLER_REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
@@ -101,7 +129,7 @@ def render(output: Path, source: Path) -> dict:
       "sourceScriptPath":str(source),"sourceScriptSha256":sha256_text(source_text),
       "sourceNarrationSha256":sha256_text(narration),"sourceNarrationWordCount":len(narration.split()),
       "audioFile":wav_path.name,"audioSha256":sha256_file(wav_path),"audioBytes":wav_path.stat().st_size,
-      "audioMetrics":metrics,"humanVoiceQualityReview":"PENDING",
+      "audioMetrics":metrics,"headroomProcessing":headroom,"humanVoiceQualityReview":"PENDING",
       "commercialAttributionReview":"PENDING","productionApproved":False,"finalNarration":False,
       "publishingEnabled":False,"releaseStatus":"HOLD",
       "limitations":["Perceived age is a direction, not a verified human age.","Piper has limited expressive controls; passionate delivery requires human listening."]

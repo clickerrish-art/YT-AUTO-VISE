@@ -25,6 +25,20 @@ class AmericanNarrationTests(unittest.TestCase):
             self.assertEqual(m["clippedSampleCount"],0)
             self.assertEqual(m["durationSeconds"],20.0)
 
+    def test_headroom_reduces_peak_before_strict_audio_qc(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p=Path(tmp)/"voice.wav"; rate=22050
+            samples=[32767 if i % 1000 == 0 else (-4000 if i % 2 else 4000) for i in range(rate*20)]
+            with wave.open(str(p),"wb") as w:
+                w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
+                w.writeframes(b"".join(struct.pack("<h",sample) for sample in samples))
+            result=module.apply_headroom(p)
+            self.assertTrue(result["applied"])
+            self.assertLess(result["peakAfter"],32760)
+            metrics=module.inspect_wav(p)
+            self.assertEqual(metrics["clippedSampleCount"],0)
+            self.assertEqual(metrics["durationSeconds"],20.0)
+
     def test_wav_inspection_rejects_clipping(self):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/"voice.wav"; rate=22050
