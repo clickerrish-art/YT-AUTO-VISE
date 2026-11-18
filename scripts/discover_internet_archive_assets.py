@@ -28,7 +28,10 @@ DEFAULT_QUERY = (
 EXCLUSION_TERMS = (
     "h1z1", "minecraft", "video game", "gameplay", "gaming", "talk show",
     "church", "sermon", "interview", "pets of the week", "animal shelter",
-    "animal cruelty investigation", "sony deal", "tv4"
+    "animal cruelty investigation", "sony deal", "tv4", "football", "basketball",
+    "baseball", "racing", "fatal fury", "king of fighters", "fighters",
+    "vet gone wild", "kids camp", "photography", "gallery", "insect land",
+    "minuscule", "tatort", "whhi", "bctv", "vutv", "slctv", "twitch"
 )
 FIELDS = ("identifier", "title", "creator", "date", "year", "mediatype",
           "licenseurl", "rights", "description", "collection", "subject")
@@ -74,7 +77,7 @@ def is_wildlife_relevant(doc: dict[str, Any]) -> bool:
     title = clean_text(doc.get("title"), 1000).lower()
     subject = clean_text(doc.get("subject"), 2000).lower()
     identifier = clean_text(doc.get("identifier"), 200).lower()
-    searchable = title + " " + subject
+    searchable = title
     if identifier.startswith("youtube-") or any(term in searchable for term in EXCLUSION_TERMS):
         return False
     return any(term in searchable for term in RELEVANCE_TERMS)
