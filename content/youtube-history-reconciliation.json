@@ -24,13 +24,13 @@
     }
   ],
   "latestInventoryEvidence": {
-    "workflowRunId": 44152608827,
-    "workflowRunAttempt": 2,
-    "jobId": 134487059540,
-    "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc",
-    "verifiedAt": "2026-11-18T00:45:40.055Z",
-    "artifactId": 14385238060,
-    "artifactSha256": "c7ead2f69e86fcc798f252a3f3da53335e54ac8ecc915a178473a17996805033",
+    "workflowRunId": 44211269635,
+    "workflowRunAttempt": 1,
+    "jobId": 134489957947,
+    "sourceCommit": "9aaffeee6b3ad75b19e92774fb1091d4209389ac",
+    "verifiedAt": "2026-11-18T00:52:01.423Z",
+    "artifactId": 14385812917,
+    "artifactSha256": "ef87dc8a4137c4f5a39fd92572e850ee4a6f61fa24474ebdc80d5952d7224206",
     "complete": true,
     "uploadsPlaylistPages": 1,
     "totalUploads": 1,
@@ -52,6 +52,6 @@
   },
   "uploadAttemptReconciliation": {
     "status": "NOT_RECONCILED",
-    "note": "Fresh remote inventory is complete and matches the owner-reviewed publication record. No complete current ledger of pending/uncertain local or remote upload attempts has been supplied or independently verified. This must be reconciled immediately before any upload; no cadence clearance is claimed."
+    "note": "Fresh remote inventory is complete and matches the owner-reviewed publication record. No complete current ledger of pending/uncertain local or remote upload attempts has yet been independently verified. This remains a pre-upload blocker; no cadence clearance is claimed."
   }
 }
