@@ -95,9 +95,20 @@ test("upload workflow requires media preflight before the YouTube insert call", 
 
 
 test("upload approval rejects mismatched job, artifact, metadata, and visibility", () => {
+  const dimensions = ["photorealismVisualCredibility", "sharpnessImageClarity", "compositionVisualSimplicity", "motionContinuityTechnicalExecution", "storyOriginalityFactualIntegrity", "hookPacingRetentionEngineering", "narrationVoicePerformance", "audioCaptionsAccessibility"];
+  const gates = ["photorealism", "sharpness", "composition", "editorialSpecificity", "continuity", "thumbnailIntegrity", "technicalExport", "factualAccuracy", "narrationIntelligibility", "rightsAndDisclosure"];
+  const qualityScorecard = {
+    policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "Test Operator", reviewedAt: new Date().toISOString(),
+    fullVideoPlayback: true, fullPlaybackEvidenceRef: "fixture/full-playback",
+    thumbnailInspectedAtMobile: true, thumbnailInspectedAtDesktop: true, imageInspectionEvidenceRef: "fixture/image-inspection",
+    factualEditorialEvidenceRef: "fixture/factual-review",
+    scores: Object.fromEntries(dimensions.map(key => [key, 90])),
+    criticalGates: Object.fromEntries(gates.map(key => [key, true])),
+    artifactHashes: { video: "a".repeat(64), metadata: "b".repeat(64), thumbnail: "d".repeat(64), captions: "e".repeat(64), narration: "6".repeat(64) }
+  };
   const rightsEvidence = { assetPath: "media/source.mp4", assetSha256: "e".repeat(64), licenseEvidenceLocation: "rights/source-license.txt", licenseEvidenceSha256: "f".repeat(64), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "owner@example.test", verifiedAt: "2026-10-24T00:00:00.000Z" };
   const rightsEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
-  const approval = { decision: "APPROVE", jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "owner@example.test", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", relatedArtifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64) }, { path: "media/next-short-thumbnail.jpg", sha256: "d".repeat(64) }, { path: "content/next-short.srt", sha256: "e".repeat(64) }, { path: "content/next-short.json", sha256: "b".repeat(64) }] };
+  const approval = { decision: "APPROVE", jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "owner@example.test", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", qualityScorecard, relatedArtifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64) }, { path: "media/next-short-thumbnail.jpg", sha256: "d".repeat(64) }, { path: "content/next-short.srt", sha256: "e".repeat(64) }, { path: "audio/next-short.mp3", sha256: "6".repeat(64) }, { path: "content/next-short.json", sha256: "b".repeat(64) }] };
   assert.equal(validateUploadApproval(approval, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), true);
   assert.throws(() => validateUploadApproval({ ...approval, technicalValidationReceipt: undefined }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /technical-validation receipt is missing/);
   assert.throws(() => validateUploadApproval({ ...approval, technicalValidationReceipt: { passed: false, fixtureOnly: true } }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /receipt checksum does not match/);
