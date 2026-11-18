@@ -1,3 +1,51 @@
+# 18 November 2026 — live master completion refresh (09:49 SAST evidence checkpoint)
+
+This supersedes the 09:01 SAST checkpoint below. It records the live branch/PR state and current exact source/test SHA; it does not claim 100% completion.
+
+## Repository and pull requests
+
+- Repository: `clickerrish-art/YT-AUTO-VISE`
+- Implementation branch head / source-test SHA: `3c67fbef9a48ba77774240a30bdb7aecde43320c`
+- Main SHA: `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38` (unchanged)
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
+- Divergence: **4,316 ahead / 9 behind**; PR #1 changed-file count: **432**.
+- PR #1: **OPEN / DRAFT / UNMERGED / mergeable=true**.
+- PR #7: **OPEN / DRAFT / UNMERGED / mergeable=false**, head `7449c1b61dcd26811ee6e6d416a02180a7f1c1ec`, 19 files; one exact-head Actions run passed.
+- Both branch objects report `protected=false`; protection details endpoint returned HTTP 403. No protection changes were attempted.
+
+## Implementation completed in this run
+
+- `baf598f1604997a2b0c8f9310567e3abe2873dad`: added a fail-closed 14-day seller-evidence freshness check for every promoted product; exact product URL, named seller, evidence reference, timezone-qualified verification timestamp, and future-skew checks are now required. Added regression coverage for stale, mismatched, future-dated and unnamed seller evidence.
+- `3c67fbef9a48ba77774240a30bdb7aecde43320c`: corrected spoken disclosure ordering so the disclosure precedes product mentions; refreshed the two current-week creator-education drafts and added a regression test keeping the unapproved 90-Day Blueprint disclosure on HOLD.
+- Current week remains at two drafts, never exceeds the two-item cap, and still has no publication timestamps.
+
+## Exact-SHA tests and CI
+
+- Node regression: **983/983 tests passed**, zero failures/skips — [content quality run 44263192731](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192731).
+- Node test-file inventory: **171/171 passed**; Python **84/84 passed**, zero skips; npm audit **0 vulnerabilities** — [automation run 44263192728](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192728).
+- Dashboard Chromium: **33/33 passed** — [run 44263192946](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192946).
+- Cloudflare durable-state checks, runner-bridge safety, deployment recovery, branch inventory, metadata and lockfile workflows passed on this SHA.
+- Production readiness is **HOLD with 19 blockers** — [run 44263192630](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192630).
+- Queue readiness [run 44263192685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192685) was still in progress at the evidence checkpoint.
+
+## Current acceptance register
+
+**15 PASS / 0 FAIL / 63 NOT_TESTED / 11 BLOCKED** on the current-head snapshot. DASH-001, API-001, SCHED-001, DEPLOY-001 and GIT-002 remain NOT_TESTED. STATE-001 is staging-only PASS. The companion API matrix records 48/48 authentication-negative checks passing on the current SHA, but positive route acceptance remains 0 PASS / 42 NOT_TESTED / 6 BLOCKED. The dashboard matrix records 33/33 browser journeys on the exact SHA, but DASH-001 remains NOT_TESTED overall.
+
+## Current production blockers and safety
+
+- Readiness reports 19 blockers: missing Short and long-form footage/narration/captions, genuine human-verified licence evidence, human rights/compliance review, final MP4, YouTube OAuth `invalid_grant`, and unverified upload-capable scope.
+- Latest stored YouTube history snapshot reports one public upload and no private/unlisted uploads; prior upload-attempt reconciliation passed. The last known actual publication was 22 Oct 2026 17:05:56 Africa/Johannesburg. At the run timestamp 18 Nov 09:49:03, 26d16h43m07s had elapsed; full live history/queue is still unavailable, so spacing remains UNVERIFIED and no schedule is allowed.
+- Metricool returns only Nature Frontiers SA (8094526), with SonicVhibez YouTube ID embedded in a mixed brand; old brand 7545638 returns 403. Current schedule query returned zero posts; draft inventory and eight previously observed future autoPublish records remain unverified.
+- No post was changed. No video was rendered, uploaded, scheduled or published. Public publishing remains disabled. No paid services, GPU, upgrades or trials were used.
+- The exact approved Vault link remains `https://selar.com/0u19v8u99l`; other product disclosure remains held where not owner-approved. Safari affiliate campaign remains inactive.
+
+## Next owner action
+
+Securely reauthorize the existing YouTube OAuth connection and verify an upload-capable scope. Do not send secrets in chat. Rights-cleared media and human review remain separate release gates.
+
+---
+
 # LIVE MASTER COMPLETION REFRESH — 18 November 2026, 09:01 SAST (latest)
 
 **This addendum supersedes older SHA, workflow, Cloudflare, Meta and media-inventory snapshots in this file wherever they conflict. The current decision remains HOLD. This is not owner authorization to publish.**

@@ -1,94 +1,82 @@
-# 18 November 2026 — current master completion checkpoint (refreshed)
+# 18 November 2026 — live current-head blocker register
 
-This checkpoint supersedes the historical notes below. It records the current repository and latest live verification evidence. It does not authorize upload, scheduling, visibility changes or publication.
+This section supersedes the earlier 18 November snapshot below. It is based on live implementation-branch metadata and exact source/test SHA `3c67fbef9a48ba77774240a30bdb7aecde43320c`, plus readiness artifact from run [44263192630](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192630).
 
 ## Repository and Git safety
 
-- Implementation branch: `codex/marketing-machine-audit-fixes`
-- Source/data evidence baseline before this checkpoint document update: `e5ba4a4dc48433e6c6fedfda0163774c439b2c0c` (the document-only update itself is a later branch commit).
-- Current `main`: `2e4153c8252349d1a7c5655f5cdc00da557c597e` (unchanged by this work)
-- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
-- PR #1: OPEN / DRAFT / UNMERGED; do not merge, close, or mark ready.
-- Both `main` and the implementation branch currently report branch protection disabled and required status checks unenforced. Owner/admin action is required to configure protection.
-- Preserve branch divergence. No reset, rebase, force-push, history rewrite, or `main` modification was performed.
+- Implementation branch: `codex/marketing-machine-audit-fixes`, source/test SHA `3c67fbef9a48ba77774240a30bdb7aecde43320c`.
+- `main`: `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`; live divergence: **4,316 ahead / 9 behind**; PR #1 changed-file count: **432**.
+- PR #1: **OPEN / DRAFT / UNMERGED / mergeable=true**. PR #7: **OPEN / DRAFT / UNMERGED / mergeable=false**, head `7449c1b61dcd26811ee6e6d416a02180a7f1c1ec`, 19 changed files; its exact-head Actions query returned one successful run [43734414241](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43734414241).
+- GitHub branch metadata reports `protected=false` for both main and the implementation branch; the detailed protection endpoint returned HTTP 403. Do not edit main or alter protection from this workflow.
+- No merge, close, ready-for-review, reset, rebase, force-push or history rewrite was performed. The two restore regression files remain untouched.
 
-The latest commits in this checkpoint update the YouTube verification and reconciliation evidence records. They do not claim production-media completion.
+## Exact-SHA engineering checks
 
-## YouTube identity and remote inventory — PASS, history/attempt gate still HOLD
+- Content quality: 983/983 Node tests passed, 0 failed, 0 skipped — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192731
+- Automation/security: 171/171 Node test files passed; Python 84/84 passed; 0 skips; npm audit reported 0 vulnerabilities — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192728
+- Dashboard Chromium E2E: 33/33 journeys passed — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192946
+- Cloudflare durable-state checks: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192982
+- Runner-bridge safety: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192928
+- Deployment recovery smoke: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192945
+- Branch inventory: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192732
+- Metadata validation: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263193030
+- Lockfile verification: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263183353
+- Production readiness: expected fail-closed HOLD, 19 genuine blockers — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192630
+- Queue readiness: still IN_PROGRESS at run 44263192685; no completion claimed.
 
-Latest successful read-only verification:
-- Workflow: [44211269635](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44211269635)
-- Job: `134489957947`
-- Source SHA: `9aaffeee6b3ad75b19e92774fb1091d4209389ac`
-- Artifact: `14385812917`
-- Artifact SHA-256: `ef87dc8a4137c4f5a39fd92572e850ee4a6f61fa24474ebdc80d5952d7224206`
-- Authenticated channel: `SonicVibes`, handle `@sonicvhibez`, configured SonicVhibez channel ID matched.
-- Complete uploads inventory: 1 page, 1 upload; public=1, private=0, unlisted=0.
+The first implementation commit `baf598f1604997a2b0c8f9310567e3abe2873dad` exposed a disclosure-order regression in its first content-quality run. It was corrected in `3c67fbef9a48ba77774240a30bdb7aecde43320c`; the current exact-SHA content-quality suite is green. Queue readiness is still running and is not claimed as complete.
 
-The only upload is `LjePS02hA1o`, public, with YouTube `publishedAt=2026-10-22T15:05:56Z` (17:05:56 Africa/Johannesburg), duration `PT20S`. The fresh inventory matches the existing owner-reviewed Studio reconciliation, which classified this video as a Short and confirmed its Studio publication date. Its 20-second duration is a legacy exception; it does not meet the current 50–60-second Short production target.
+## Current production-readiness HOLD — 19 blockers
 
-The current verification status and reconciliation files now record this latest artifact. **Pending/uncertain upload attempts remain NOT RECONCILED.** The uploader's default ledger path is `run-logs/upload-attempts.json`; no current complete ledger was available in the version-controlled tree. Before any new upload, the owner/operator must confirm whether any other upload attempt was made outside this repository/runtime and reconcile every attempt against YouTube. No blind retry is permitted.
+The current readiness artifact reports **19 blockers**. No upload, schedule or publication was attempted.
 
-Latest production-readiness diagnostic: [run 44211380854](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44211380854), HOLD — eight blockers. It performs no upload, scheduling or publication.
+1. Short footage file `media/next-short-footage.mp4` is missing.
+2. Short narration file `media/next-short-narration.mp3` is missing.
+3. Short footage licence evidence is not real and human-verified.
+4. Short narration licence evidence is not real and human-verified.
+5. Short manifest `rightsConfirmed` is not owner-verified.
+6. Short manifest `complianceReviewed` is not human-reviewed.
+7. Long-form footage `media/long-form-001-footage.mp4` is missing.
+8. Long-form narration `media/long-form-drafts/long-001-narration-final.mp3` is missing.
+9. Long-form captions `long-form-001-captions-final.srt` are missing.
+10. Long-form footage licence evidence is not real and human-verified.
+11. Long-form narration licence evidence is not real and human-verified.
+12. Long-form `rightsConfirmed` is not owner-verified.
+13. Long-form `complianceReviewed` is not human-reviewed.
+14. Metadata has not been human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
+15. Metadata rights confirmation is not complete.
+16. Metadata compliance review is not complete.
+17. Rendered file `media/next-short.mp4` is missing.
+18. YouTube OAuth read-only attempt returns `invalid_grant`.
+19. An upload-capable YouTube OAuth scope is not independently verified.
 
-## Remaining SonicVhibez private-upload blockers — eight
+The readiness artifact says five imported Canva wildlife assets are excluded from production because they are not rights-cleared; none is selected as production footage. Queue inventory remains 16 held items and public publishing remains disabled. Prior upload-attempt reconciliation passed; do not repeat the stale claim that this ledger remains unreconciled.
 
-1. **Upload-attempt reconciliation:** obtain and inspect the complete `run-logs/upload-attempts.json` ledger from the uploader runtime, or record an owner-confirmed absence of any prior pending/uncertain attempts; reconcile every attempt against remote YouTube state.
-2. **Five imported Canva clips remain unverified:** `VAHZ9kg2rvg`, `VAHZ9hEjS0U`, `VAHZ9niQJoo`, `VAHZ9i3Hx6U`, `VAHZ9oFCiak`. Each needs its exact original source page and creator, original MP4, visual match, source/hash evidence, permitted-use and commercial-rights verification, and human visual review. The lion source remains unresolved; the aerial zebras candidate has a duration mismatch.
-3. **Genuine Short render manifest missing:** `content/render-manifest.json` must be created only from verified source files, rights evidence, narration, captions and quality evidence.
-4. **Genuine long-form render manifest missing:** `content/long-form-render-manifest.json` must be created only after real 6–10-minute 16:9 footage, narration and rights evidence exist.
-5. **Metadata approval missing:** exact final metadata must be human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
-6. **Final-output rights approval missing:** keep `rightsConfirmed=false` until all final footage, narration, images, music and derivative-use rights are verified.
-7. **Final compliance approval missing:** keep `complianceReviewed=false` until a human reviews the exact final video, narration, captions, thumbnail, claims, commercial disclosures and synthetic-media disclosures.
-8. **Production Short master missing:** `media/next-short.mp4` is absent. A review attachment or draft render is not a production master.
+## YouTube history, spacing and destination
 
-### Existing SHORT-004 NOAA review draft — not production approved
+- Latest stored read-only history snapshot: one public upload, zero private and zero unlisted; prior upload-attempt reconciliation passed. Last known public video `LjePS02hA1o` was published `2026-10-22T15:05:56Z` = **17:05:56 Africa/Johannesburg**.
+- At the run timestamp `2026-11-18 09:49:03 Africa/Johannesburg`, the elapsed gap since that known publication was **26 days 16 hours 43 minutes 7 seconds**.
+- This is not a complete current spacing clearance: OAuth currently returns `invalid_grant`, the full live destination history/queue cannot be refreshed, and Metricool's brand mapping is mixed. **SCHED-001 remains NOT_TESTED; spacing is UNVERIFIED; do not schedule.**
+- Metricool currently exposes only brand `8094526`, labelled **Nature Frontiers SA**. Its YouTube network data contains SonicVhibez channel ID `UCSlkuPfHH78oGC1o418HV4w`, but this is a mixed Nature Frontiers brand, not a separate SonicVhibez-only Metricool destination. The read-only schedule query for 18 Nov 2026–26 Feb 2027 returned zero scheduled posts.
+- Previous brand ID `7545638` returns HTTP 403; eight previously observed future `autoPublish` records remain uninspectable. Metricool does not expose a complete draft inventory in this read. Existing Nature Frontiers draft/auto-publish flags therefore remain **NOT_VERIFIED**; no posts were changed.
+- vidIQ independently exposes the YouTube channel as SonicVibes / `@sonicvhibez` with the same channel ID. This confirms the channel identity but does not resolve the mixed Metricool brand mapping.
 
-The NOAA Fisheries spiny-lobster source is verified against its recorded source SHA-256 and public-domain reuse statement, subject to required credit. A 55-second, 1080×1920, 30 fps H.264/AAC review render exists in a conversation artifact and passes full-file decode. It remains `REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION`: the final master still needs both NOAA Fisheries and NOAA Office of National Marine Sanctuaries attribution, approved narration (current eSpeak voice is not human-approved), human-verified caption timing, full playback/factual review, final rights and compliance review, and hash-bound owner approval. It is not `media/next-short.mp4`; `rightsConfirmed=false`, `humanApproved=false`, `complianceReviewed=false`, `uploadAllowed=false`, and `scheduleAllowed=false`.
+## Promotional Shorts and product checks
 
-### Owner-approved cadence — resolved
+- Current week (16 Nov) remains at exactly two draft items; no third item was added. Short 005 uses the approved Complete YouTube Wildlife Creator's Vault URL. Short 006 uses the 90-Day Creator System URL but remains **DISCLOSURE HOLD** with proposed wording only.
+- Seller registry evidence names Click 47 and was last checked on 9 Nov 2026; it remains inside the new 14-day seller-evidence guard, but the live Selar pages could not be re-opened during this run. Do not describe this as a fresh live seller check.
+- Search evidence is qualitative only. No measured global keyword volume or third-party SEO score is available.
+- The plan remains draft-only: `maxShortsPerWeek=2`, `publicationEnabled=false`, `schedulingEnabled=false`, and no publication timestamps.
 
-The owner approved a rolling `long_form → long_form → short` cycle without a weekly publication target. Minimum 72 elapsed hours between actual publications and no two publications on the same Africa/Johannesburg calendar day remain mandatory. A full three-gap cycle takes at least 216 hours. Tuesday/Saturday triggers are draft-preparation only. Queue readiness has passed with 16 held items and publishing disabled. Actual production scheduling remains blocked until the remote attempt ledger, genuine media, rights, final review and upload gates are complete.
+## Acceptance snapshot
 
-## Engineering acceptance still outstanding
+Current-head register: **15 PASS / 0 FAIL / 63 NOT_TESTED / 11 BLOCKED**. `DASH-001`, `API-001`, `SCHED-001`, `DEPLOY-001` and `GIT-002` remain NOT_TESTED. `STATE-001` is PASS for staging-only evidence, not production deployment. See the current-head acceptance and route/dashboard snapshots in the companion registers.
 
-- **DASH-001 — NOT TESTED overall:** 120 controls / 17 forms; current documented sub-gates include 11 local/operator forms passing and six production-dependent forms remaining fail-closed. Browser journeys pass, but not every control/field has exact success, validation, error, authorization, persistence, refresh/restart, concurrency and accessibility acceptance.
-- **API-001 — NOT TESTED overall:** route matrix records 48 protected routes, 48/48 missing/invalid-auth rejection checks, 42 overall PASS and six provider/production-blocked routes. Full positive-path, persistence, failure, concurrency, audit and restart evidence is not complete for every route.
-- **SCHED-001 — NOT TESTED overall:** policy/queue tests pass, but real publication-history ordering, actual timestamps, attempt reconciliation, and complete live dispatch/restart/lease/cancel/retry/dead-letter behavior have not been accepted end-to-end.
-- **SCHED-WORKER-DISPATCH-001 — NOT TESTED operationally:** worker 409/backoff, uncertain dispatch quarantine and restart persistence are covered by tests; no continuous production worker or real render dispatch is proven.
-- **GIT-002 — NOT TESTED:** the complete divergent branch-only history and semantic integration decision still require review. Do not merge or rewrite history.
-- **DEPLOY-001 — NOT TESTED:** staging checks are not production deployment, monitoring, alerting, rollback or disaster-recovery acceptance.
-- **E2E-001 — NOT TESTED:** no real rights-cleared content has passed the entire plan → script → storyboard → narration → captions → render → QC → human approval → private-upload preparation → remote read-back → restart-recovery journey.
-- **SEO-001 — NOT TESTED:** no final human-reviewed title/description/tags/captions/thumbnail package or measured search/competition evidence is approved against a genuine final export.
+## Next owner action
 
-## Nature Frontiers / Meta — separate brand, publishing remains disabled
+Restore the existing YouTube OAuth connection securely and verify the account identity plus an upload-capable scope. Do not paste secrets into chat. Real rights-cleared footage/narration and human review remain separate gates after OAuth recovery.
 
-- Nature Frontiers is not a YouTube target.
-- Local draft, safety and signed-approval regression suites are not live Page/Instagram authorization or provider-side draft read-back.
-- Exact official Facebook Page identity and Instagram professional-account ID/permissions still require independent confirmation in Meta Business Suite; live Meta credentials require secure renewal and read-only verification.
-- Metricool showed zero future Nature Frontiers scheduled posts in the checked 18 November–18 December 2026 window. This does not authorize publishing or editing old records.
-- Keep `publishingEnabled=false`, `dryRun=true`, `FACEBOOK_PUBLISH_ENABLED=NO`, emergency stop enabled, and all unreviewed content held. Only genuinely approved content may be scheduled or auto-published after provider-side verification.
-
-## Cloudflare / persistence / deployment
-
-- SonicVhibez Worker and D1 observed in the account are staging only; no production SonicVhibez Worker or production D1 was present in the inspected account.
-- Staging D1 had five backup rows and one dashboard-state row (revision 3), but zero runner artifact/control/state rows. No scheduled triggers were configured.
-- R2 bucket-list access returned HTTP 403; disabled service versus insufficient API-token permission remains unresolved. Independent off-account backup and restore are unverified.
-- Worker retry/backoff fixes and staging backup/restore tests are code/test evidence, not a continuously running production worker or production recovery drill.
-- No paid infrastructure is approved. Prefer free/local operation and an independent zero-cost backup target; pause if a required capability would incur charges.
-
-## Required owner inputs to unblock real production
-
-1. Confirm whether any other YouTube upload was attempted, failed, timed out, or left uncertain outside the one public video reconciled above.
-2. Supply the five original Canva-exported MP4s or exact source/download links, especially the unresolved lion clip.
-3. Supply the approved SonicVhibez logo file if it is to be overlaid on the final thumbnail/video.
-4. Choose natural narration (supply a recording) or explicitly approve AI narration and its disclosures for the specific final content.
-5. Confirm the exact Nature Frontiers Facebook Page and Instagram professional-account identities in Meta Business Suite; renew credentials only through secret management.
-6. Confirm a zero-cost independent backup destination or enable the needed Cloudflare R2 capability without incurring charges.
-7. Provide production deployment access/secrets only through their respective secret managers.
-8. Complete human review and approval against the exact final media, narration, captions, thumbnail, metadata and hashes.
-
-Until these gates are independently satisfied, keep all affected jobs held and publishing disabled. No credentials, rights, approvals, media, provider outcomes or production deployment are inferred or fabricated.
+---
 
 # Historical checkpoint — 17 November 2026 (superseded by the 18 November 2026 status above)
 

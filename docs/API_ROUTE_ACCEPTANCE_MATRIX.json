@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-16T19:46:54.000Z",
+  "generatedAt": "2026-11-18T09:49:03+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
@@ -15,12 +15,12 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 3782,
-    "branchBehindBy": 4,
-    "changedFiles": 323,
+    "branchAheadBy": 4316,
+    "branchBehindBy": 9,
+    "changedFiles": 432,
     "branchProtectionEnabled": null,
-    "branchProtectionStatus": "UNVERIFIED — GitHub returned 403 for the protection endpoint.",
-    "comparisonSourceSha": "a56ea9c1006d5f405ad139d6af2f2ef9f6efe6e9",
+    "branchProtectionStatus": "UNVERIFIED — branch objects report protected=false, but the detailed protection endpoint returns HTTP 403.",
+    "comparisonSourceSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
     "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613"
   },
@@ -193,7 +193,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -220,7 +221,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -247,7 +249,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -271,7 +274,8 @@
         "scenario": "Authenticated GET /api/instagram/status returns HTTP 200 and safe read-only status; publishing remains disabled, dry-run and emergency stop remain active, Instagram business account remains unset, configured Page ID is numeric, and operator token is absent from response."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -298,7 +302,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -325,7 +330,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -352,7 +358,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -379,7 +386,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -406,7 +414,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -433,7 +442,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -457,7 +467,8 @@
         "scenario": "Real local dashboard server: unauthenticated request rejected; authenticated GET returns HTTP 200 with Nature Frontiers register, registered asset and rights/inspection/approval statuses; no stateFile path is exposed."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -484,7 +495,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -509,7 +521,8 @@
         "scenario": "Read-only authenticated Node-to-Cloudflare integration through the real dashboard server; state and backup list retrieved; remote state hash/revision unchanged; weak W/\"2\" ETag revision matched by the client."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "GET",
@@ -536,7 +549,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -567,7 +581,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -594,7 +609,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -621,7 +637,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -648,7 +665,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -672,7 +690,8 @@
         "scenario": "Blocked APPROVE is a 400 with byte-identical state; safe REJECT has concurrent idempotency, conflicting retry rejection, one audit receipt and restart persistence. Synthetic operator/test fixtures only."
       },
       "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "currentHeadStatus": "BLOCKED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -699,7 +718,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -717,7 +737,8 @@
       "overallAcceptance": "BLOCKED",
       "notes": "Fail-closed disabled-publish behavior is tested against a mocked verified Page; no live Meta publication, provider-side post, or owner authorization is claimed. A PASS in an individual field records only that tested slice; it does not imply full route acceptance.",
       "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "currentHeadStatus": "BLOCKED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -735,7 +756,8 @@
       "overallAcceptance": "BLOCKED",
       "notes": "Mock-provider route behavior, fail-closed missing-identity behavior and restart durability are tested. Real Meta Page identity/permissions and publishing remain external owner prerequisites and are not claimed. A PASS in an individual field records only that tested slice; it does not imply full route acceptance.",
       "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "currentHeadStatus": "BLOCKED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -759,7 +781,8 @@
         "scenario": "Instagram adapter, approval service, publisher recovery and source-derived API authentication-negative tests passed; no live Instagram identity or approval was asserted."
       },
       "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "currentHeadStatus": "BLOCKED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -786,7 +809,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -814,7 +838,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -841,7 +866,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -868,7 +894,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -897,7 +924,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -924,7 +952,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -951,7 +980,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -978,7 +1008,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1013,7 +1044,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1040,7 +1072,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1066,7 +1099,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1092,7 +1126,8 @@
         "scenario": "Two simultaneous worker-authenticated POST /api/jobs/produce requests for a legacy QUEUED CONTENT_PRODUCTION job without authoring both return 409 with renderStarted=false and publishingEnabled=false; persisted state remains byte-identical; no manifest or per-job media directory is created. After graceful server restart, the same request remains 409 and state remains byte-identical."
       },
       "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "currentHeadStatus": "BLOCKED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1119,7 +1154,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1146,7 +1182,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1173,7 +1210,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1200,7 +1238,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1226,7 +1265,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1254,7 +1294,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1295,7 +1336,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1324,7 +1366,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1348,7 +1391,8 @@
         "scenario": "Real Node dashboard POST /api/state/backup returned HTTP 201; explicit backup was retained in D1 after restore and restart; automatic pre-restore backup was also retained; final backup inventory contained five records."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1373,7 +1417,8 @@
         "scenario": "Live Node dashboard backup/restore; explicit confirmation, revision-checked restore, exact state preservation plus one audit receipt, automatic pre-restore backup, Node restart recovery and stable remote D1 state."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1401,7 +1446,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1425,7 +1471,8 @@
         "scenarios": "Six concurrent missing-ledger requests return 409; six concurrent unreadable-ledger requests return 503; both paths preserve dashboard-state.json byte-for-byte, create no upload attempt or audit mutation, and retain their behavior after a dashboard restart. The symlink-ledger server test expects the explicit 503 unavailable result. This does not test a successful remote reconciliation."
       },
       "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED"
+      "currentHeadStatus": "BLOCKED",
+      "authenticationNegativeCurrentHead": "PASS"
     },
     {
       "method": "POST",
@@ -1452,7 +1499,8 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS"
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "PASS"
     }
   ],
   "liveEvidenceRefresh": {
@@ -1507,57 +1555,60 @@
     "api001Overall": "NOT_TESTED"
   },
   "latestYouTubeInventoryEvidence": {
-    "updatedAt": "2026-11-09T11:32:14Z",
-    "exactTestedSha": "20bc3f12039f562bfe5412eacb838ba4f8555434",
-    "workflow": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970",
-    "deterministicTests": "PASS — 6/6",
-    "liveOAuth": "BLOCKED — invalid_client",
-    "inventoryArtifactCreated": false,
-    "note": "Read-only inventory export is implemented; no channel history was authenticated or reconciled because Google rejected the configured OAuth client pair."
+    "updatedAt": "2026-11-18T00:52:01Z",
+    "exactTestedSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "workflow": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192630",
+    "status": "VERIFIED_SNAPSHOT_WITH_LIVE_OAUTH_BLOCK",
+    "publicItems": 1,
+    "privateItems": 0,
+    "unlistedItems": 0,
+    "latestActualPublishedAt": "2026-10-22T15:05:56Z",
+    "priorUploadAttemptReconciliation": "PASS",
+    "liveOAuth": "BLOCKED — invalid_grant; full current history/queue cannot be refreshed.",
+    "note": "The readiness artifact confirms one public upload and prior upload-attempt reconciliation, but current OAuth invalid_grant prevents a fresh complete live history/schedule read. SCHED-001 remains NOT_TESTED."
   },
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
-    "automationRun": "43942293152",
+    "exactSourceTestSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "automationRun": 44263192728,
+    "nodeTestFiles": {
+      "passed": 171,
+      "failed": 0,
+      "skipped": 0
+    },
     "nodeTests": {
-      "passed": 917,
+      "passed": 983,
       "failed": 0,
       "skipped": 0
     },
     "pythonTests": {
-      "passed": 45,
+      "passed": 84,
       "failed": 0,
       "skipped": 0
     },
     "npmAuditVulnerabilities": 0,
-    "dashboardE2ERun": "43942301932",
+    "dashboardE2ERun": 44263192946,
     "dashboardJourneys": {
       "passed": 33,
       "total": 33
     },
     "routeMatrix": {
       "routes": 48,
-      "overallPass": 42,
+      "overallPass": 0,
+      "overallNotTested": 42,
       "overallBlocked": 6,
       "authenticationNegativePass": 48
     },
-    "metadataRun": "43942302103",
-    "queueReadinessRun": "43942301833",
-    "cloudflareReadOnlyStagingRun": "43942293152",
-    "deploymentRecoveryRun": "43942302049",
-    "isolatedBaselineRun": "43942301927",
+    "metadataRun": 44263193030,
+    "queueReadinessRun": 44263192685,
+    "queueReadinessStatus": "IN_PROGRESS",
+    "cloudflareDurableStateRun": 44263192982,
+    "deploymentRecoveryRun": 44263192945,
     "productionReadiness": {
       "status": "HOLD",
-      "blockers": 9,
-      "run": "43942301842"
+      "blockers": 19,
+      "run": 44263192630
     },
-    "metaIdentity": {
-      "status": "BLOCKED",
-      "httpStatus": 401,
-      "errorCode": 190,
-      "errorSubcode": 463,
-      "run": "43942301878"
-    },
-    "note": "This full exact-candidate regression confirms current tests pass but does not promote any previously blocked route. The six blocked routes still require genuine external/provider or production-media prerequisites; API-001 remains NOT_TESTED."
+    "note": "Exact-SHA tests pass. Route-level positive business acceptance, complete YouTube schedule/history, DASH-001, SCHED-001 and production readiness remain NOT_TESTED/BLOCKED."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-15",
@@ -1643,63 +1694,74 @@
     }
   },
   "currentBranchCheckpoint": {
-    "recordedAt": "2026-11-15T09:44:45+02:00",
-    "currentBranchHeadSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-    "currentCodeTestSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-    "mainSha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
+    "recordedAt": "2026-11-18T09:49:03+02:00",
+    "currentBranchHeadSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "currentCodeTestSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "mainSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 3569,
-    "behindBy": 4,
-    "pr1ChangedFiles": 328,
-    "latestFullCiSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-    "currentHeadFullCi": "PASS",
+    "aheadBy": 4316,
+    "behindBy": 9,
+    "pr1ChangedFiles": 432,
+    "latestFullCiSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "currentHeadFullCi": "PASS — Node 171/171 files, 983/983 tests, Python 84/84, Chromium 33/33, npm audit 0; queue readiness pending and production readiness HOLD",
     "latestFullCiRuns": {
-      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156887",
-      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156782",
-      "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43692156787"
+      "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192728",
+      "contentQuality": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192731",
+      "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192946"
     },
     "currentHeadCounts": {
-      "routes": 45,
+      "routes": 48,
       "overallPass": 0,
-      "overallNotTested": 37,
-      "overallBlocked": 8,
-      "authenticationNegativePass": 45,
+      "overallNotTested": 42,
+      "overallBlocked": 6,
+      "authenticationNegativePass": 48,
       "authenticationNegativeNotTested": 0
     },
-    "note": "All 45 authentication-negative route checks pass on the exact current source/test SHA. The 37 previously passing route-level business acceptances are NOT_TESTED on this SHA because current positive, validation, persistence, audit, concurrency and restart evidence is not complete for every route; 8 routes remain BLOCKED."
+    "note": "All 48 authentication-negative route checks pass on exact SHA 3c67fb. The 42 previously passing route-level business acceptances are NOT_TESTED on this SHA because current positive, validation, persistence, audit, concurrency and restart evidence is not complete for every route; six routes remain BLOCKED. API-001 remains NOT_TESTED."
   },
   "currentHeadEvidence": {
-    "exactSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
-    "sourceTestSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
-    "sourceDifferenceFromTestSha": "Full Node/Python/browser regression ran against the exact candidate. Route-level PASS/BLOCKED classifications are retained from the existing route-specific acceptance evidence; this refresh does not promote any blocked route.",
+    "exactSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "sourceTestSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "sourceDifferenceFromTestSha": "Full Node, Python and Chromium regressions passed on this exact SHA. This does not promote historical positive route-level business acceptance.",
     "authenticationNegative": {
       "pass": 48,
       "notTested": 0,
       "failed": 0,
-      "ciRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43942293152"
+      "ciRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192728"
     },
     "routeOverall": {
-      "pass": 42,
-      "notTested": 0,
+      "pass": 0,
+      "notTested": 42,
       "blocked": 6
     },
-    "cloudflareNodeReadOnlyIntegration": "PASS — authenticated Node dashboard state and backup-list reads; remote state unchanged; publishing disabled.",
     "fullRegression": {
-      "node": 917,
-      "python": 45,
+      "nodeTests": 983,
+      "nodeTestFiles": 171,
+      "python": 84,
       "chromium": 33,
       "npmAuditVulnerabilities": 0
     },
-    "reason": "42 routes retain PASS from route-specific tests; six remain BLOCKED by live Meta authorization, YouTube reconciliation or genuine production-media prerequisites. Full API-001 acceptance remains NOT_TESTED."
+    "reason": "48/48 auth-negative checks pass on the exact current SHA. The 42 prior route-level PASS classifications are downgraded to current-head NOT_TESTED until route-specific positive/persistence/concurrency/restart evidence is rerun. Six remain BLOCKED. API-001 remains NOT_TESTED overall."
   },
   "latestRegressionEvidence": {
-    "recordedAt": "2026-11-17T08:17:56.185Z",
-    "testedSourceTestSha": "621d11d76242e5f5964291371d119ad09e44b94e",
-    "automationRun": 44044525874,
-    "nodeTestFilesPassed": 163,
-    "pythonTestsPassed": 45,
+    "recordedAt": "2026-11-18T09:49:03+02:00",
+    "testedSourceTestSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "automationRun": 44263192728,
+    "nodeTestsPassed": 983,
+    "nodeTestFilesPassed": 171,
+    "pythonTestsPassed": 84,
+    "chromiumJourneysPassed": 33,
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "note": "Exact-SHA regression evidence only. This does not refresh per-route business acceptance. The route-level acceptance snapshot remains 48 routes: 42 PASS, 0 NOT_TESTED, 6 BLOCKED, with 48 authentication-negative checks passing as of 2026-11-16 on source/test SHA 57769fa219fe98b52f8b182f3849206ac3c8110c."
+    "note": "Exact-SHA regression evidence only. It does not promote route-level positive acceptance; current route snapshot remains 0 PASS / 42 NOT_TESTED / 6 BLOCKED, with 48 authentication-negative checks passing."
+  },
+  "currentHeadCounts": {
+    "routes": 48,
+    "overallPass": 0,
+    "overallNotTested": 42,
+    "overallBlocked": 6,
+    "authenticationNegativePass": 48,
+    "authenticationNegativeNotTested": 0,
+    "failed": 0
   }
 }

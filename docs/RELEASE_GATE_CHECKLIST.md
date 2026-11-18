@@ -1,3 +1,42 @@
+# 18 November 2026 — current exact-head release gate
+
+**Source/test SHA:** `3c67fbef9a48ba77774240a30bdb7aecde43320c`  
+**Implementation branch:** `codex/marketing-machine-audit-fixes`  
+**Main:** `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38` (untouched)  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Divergence:** 4,316 ahead / 9 behind; PR #1 changed files: 432.  
+**PR #1:** OPEN, DRAFT, UNMERGED, mergeable=true. **PR #7:** OPEN, DRAFT, UNMERGED, mergeable=false (19 files).
+
+## Exact-SHA results
+
+- Content quality: 983/983 Node tests passed, 0 failed, 0 skipped — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192731
+- Automation/security: 171/171 Node test files passed; Python 84/84 passed; 0 skips; npm audit reported 0 vulnerabilities — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192728
+- Dashboard Chromium E2E: 33/33 journeys passed — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192946
+- Cloudflare durable-state checks: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192982
+- Runner-bridge safety: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192928
+- Deployment recovery smoke: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192945
+- Branch inventory: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192732
+- Metadata validation: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263193030
+- Lockfile verification: PASS — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263183353
+- Production readiness: expected fail-closed HOLD, 19 genuine blockers — https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192630
+- Queue readiness: still IN_PROGRESS at run 44263192685; no completion claimed.
+
+Queue readiness run 44263192685 remains in progress. The production-readiness failure is an intentional fail-closed HOLD, not a test-pass: the current artifact reports 19 blockers. No media was rendered, uploaded, scheduled or published.
+
+## Current acceptance status
+
+- Requirement register current-head statuses: **15 PASS / 0 FAIL / 63 NOT_TESTED / 11 BLOCKED**.
+- API matrix: 48 protected routes; current exact-SHA authentication-negative matrix **48/48 PASS**; positive business acceptance **0 PASS / 42 NOT_TESTED / 6 BLOCKED**. API-001 remains NOT_TESTED overall.
+- Dashboard inventory: 120 controls, 17 forms, 103 form-owned controls, 17 standalone controls; Chromium E2E 33/33 PASS on the exact source/test SHA. DASH-001 remains NOT_TESTED overall.
+- SCHED-001 remains NOT_TESTED because complete current YouTube history and destination queue cannot be refreshed while OAuth is invalid and Metricool brand mapping is mixed.
+- STATE-001 is staging-only PASS; DEPLOY-001 remains NOT_TESTED; GIT-002 semantic review remains NOT_TESTED.
+
+## Production stop conditions
+
+All public publishing remains disabled. No private upload is authorized. The 19 current blockers are listed in `docs/GO_LIVE_BLOCKERS.md`. Keep Nature Frontiers separate from SonicVhibez, keep Safari inactive, and do not schedule until the exact SonicVhibez-only destination and full timestamp history are inspectable.
+
+---
+
 # 17 November 2026 — exact current candidate hold
 
 **Implementation branch:** `621d11d76242e5f5964291371d119ad09e44b94e` (the application-code safety change is `43b17b877a5cb7f1c5770a91a2a54f1f565755d4`; the latest commit adds the December 14 draft/test). **main:** `69fdf35c90f980c142be3aaffa863304bc7eaa25`. **Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`. **Divergence:** 3,989 ahead / 4 behind / 383 changed files. PR #1 remains OPEN/DRAFT/UNMERGED (mergeable, 383 changed files). PR #7 remains OPEN/DRAFT/UNMERGED (not mergeable, 19 changed files; no exact-head Actions runs were returned for its head). GitHub reports branch protection disabled on both the implementation branch and main. No main edit, merge, close, ready-state change, reset, rebase, force-push or history rewrite occurred.
