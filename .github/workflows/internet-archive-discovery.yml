@@ -15,7 +15,15 @@ on:
         description: Internet Archive advanced-search query (metadata only)
         required: false
         type: string
-        default: 'mediatype:movies AND (title:wildlife OR title:crocodile OR title:alligator OR title:elephant OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect OR title:underwater OR title:coral OR subject:wildlife OR subject:crocodile OR subject:elephant OR subject:lion OR subject:shark OR subject:whale OR subject:bird OR subject:reptile OR subject:nature)'
+        default: 'DEFAULT_QUERY = (
+    collection:prelinger AND mediatype:movies AND 
+    (title:wildlife OR title:crocodile OR title:alligator OR title:elephant 
+    OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale 
+    OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect 
+    OR title:underwater OR title:coral) AND 
+    (licenseurl:"http://creativecommons.org/publicdomain/mark/1.0/" 
+    OR licenseurl:"http://creativecommons.org/publicdomain/zero/1.0/")
+)'
       rows:
         description: Maximum number of candidates (1–100)
         required: false
@@ -45,7 +53,15 @@ jobs:
           ARCHIVE_ROWS: ${{ inputs.rows }}
         run: |
           set -euo pipefail
-          query="${ARCHIVE_QUERY:-mediatype:movies AND (title:wildlife OR title:crocodile OR title:alligator OR title:elephant OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect OR title:underwater OR title:coral OR subject:wildlife OR subject:crocodile OR subject:elephant OR subject:lion OR subject:shark OR subject:whale OR subject:bird OR subject:reptile OR subject:nature)}"
+          query="${ARCHIVE_QUERY:-DEFAULT_QUERY = (
+    collection:prelinger AND mediatype:movies AND 
+    (title:wildlife OR title:crocodile OR title:alligator OR title:elephant 
+    OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale 
+    OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect 
+    OR title:underwater OR title:coral) AND 
+    (licenseurl:"http://creativecommons.org/publicdomain/mark/1.0/" 
+    OR licenseurl:"http://creativecommons.org/publicdomain/zero/1.0/")
+)}"
           rows="${ARCHIVE_ROWS:-30}"
           python scripts/discover_internet_archive_assets.py \
             --query "$query" --rows "$rows" \
