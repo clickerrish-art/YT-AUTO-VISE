@@ -35,7 +35,7 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Run deterministic identity and pagination tests
         run: node --test test/verify-youtube-channel.test.mjs
-      - name: Verify authenticated channel and complete uploads inventory (read-only)
+      - name: Verify authenticated channel, upload scope and complete uploads inventory (read-only)
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
