@@ -197,7 +197,7 @@ test("upload approval, rights evidence and one-shot authorization reject malform
     thumbnailInspectedAtMobile: true, thumbnailInspectedAtDesktop: true, imageInspectionEvidenceRef: "fixture/image-inspection",
     factualEditorialEvidenceRef: "fixture/factual-review", scores: Object.fromEntries(dimensions.map(key => [key, 90])),
     criticalGates: Object.fromEntries(gates.map(key => [key, true])),
-    artifactHashes: { video: "a".repeat(64), metadata: "b".repeat(64), thumbnail: "d".repeat(64), captions: "e".repeat(64), narration: "6".repeat(64) }
+    artifactHashes: { video: "a".repeat(64), metadata: "b".repeat(64), thumbnail: "d".repeat(64), images: ["d".repeat(64)], captions: "e".repeat(64), narration: "6".repeat(64) }
   };
   const approvalBase = { decision: "APPROVE", jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "Test Operator", rightsEvidenceSha256: crypto.createHash("sha256").update(JSON.stringify(baseRights)).digest("hex"), rightsEvidence: baseRights, publishingEnabled: false, visibility: "private", qualityScorecard, relatedArtifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64) }, { path: "media/next-short-thumbnail.jpg", sha256: "d".repeat(64) }, { path: "content/next-short.srt", sha256: "e".repeat(64) }, { path: "audio/next-short.mp3", sha256: "6".repeat(64) }, { path: "content/next-short.json", sha256: "b".repeat(64) }] };
   for (const invalid of ["2026-02-30T00:00:00.000Z", "2026-10-24T00:00:00", "2026-10-24T00:00:00+14:30"]) {
