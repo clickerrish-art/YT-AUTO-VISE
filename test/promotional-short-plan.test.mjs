@@ -78,6 +78,19 @@ test("every promotional product requires fresh seller evidence tied to its exact
     .some(error => /verified seller name is required/.test(error)));
 });
 
+test("the 90-Day Blueprint Short remains held and carries its proposed direct-sales disclosure", () => {
+  const item = checkedInPlan.weeks.find(week => week.weekOf === "2026-11-16")
+    .items.find(candidate => candidate.id === "sonicvhibez-short-006-niche-selection");
+  assert.equal(item.productUrl, "https://selar.com/91j893378q");
+  assert.equal(item.disclosure.status, "HOLD");
+  assert.match(item.description, /DISCLOSURE HOLD — proposed wording, not approved for this product/);
+  assert.match(item.description, /This product is sold through my own Selar business; purchases generate revenue for my business\./);
+  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf("The YouTube Success Blueprint 90-Day Creator System"));
+  const spokenWords = item.script.trim().split(/\s+/).filter(Boolean).length;
+  assert.ok(spokenWords >= 90 && spokenWords <= 135);
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+});
+
 test("candidate seller verification is required while direct Selar sales are owner-confirmed and disclosure remains unresolved", () => {
   const candidates = clone(products);
   const candidate = candidates.find(product => product.status === "candidate");
