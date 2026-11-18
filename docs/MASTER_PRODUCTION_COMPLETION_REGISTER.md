@@ -1,3 +1,91 @@
+# LIVE MASTER COMPLETION REFRESH — 18 November 2026, 09:01 SAST (latest)
+
+**This addendum supersedes older SHA, workflow, Cloudflare, Meta and media-inventory snapshots in this file wherever they conflict. The current decision remains HOLD. This is not owner authorization to publish.**
+
+## Exact current candidate and B acceptance
+
+- PR #1 remains **OPEN / DRAFT / UNMERGED**. Implementation branch: `codex/marketing-machine-audit-fixes`. Latest tested source/config candidate before this register-only refresh: `af3c7bd8447af08d12de15a9078f3527490d56be`. `main` baseline: `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38`. Merge base remains `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Candidate automation/security [44257103623]: **171/171 Node test files PASS, 84/84 Python tests PASS, zero skips, npm audit 0 vulnerabilities**.
+- Dashboard Chromium E2E [44257103525]: **33/33 journeys PASS**.
+- Isolated baseline [44257103336]: both main and candidate installs/tests PASS. Main: 54 Node tests, 8 Python tests, 4 moderate npm audit vulnerabilities. Candidate: 171 Node test files, 84 Python tests, 0 skips, 0 npm audit vulnerabilities.
+- Content-quality [44257103498], metadata safety [44257103610], queue readiness [44257103346], Cloudflare durable-state tests [44257103466], runner-bridge tests [44257103518], deployment recovery [44257103524] and Instagram safety [44257103371] passed. The production-readiness workflow [44257103455] returned the expected **HOLD — 19 blockers**.
+- Branch inventory [44257103463]: **4,312 branch-only commits, 9 base-only commits, 432 changed files**, clean working tree, `REQUIRES_REVIEW`. All nine base-only commits were inspected and classified as tests/docs/workflow additions/removals/reverts; no base-only production application source change. The 4,312 branch-only commits and 17 critical modules still require full human semantic review. Selected security-sensitive modules were spot-reviewed only.
+- The PR description has stale HEAD text; use live PR metadata, not the stale description. Do not merge, close, mark ready, retarget, rebase, reset, force-push or rewrite history. Do not modify `main`.
+- GitHub returned no repository rulesets. Branch-protection endpoints returned 403, so required-check/branch-protection state is not independently verified. Owner/admin verification is required before any release.
+
+## B. Engineering and operational acceptance — gate states
+
+| Gate | State | Remaining acceptance |
+|---|---|---|
+| DASH-001 | NOT TESTED overall | 120 controls / 17 forms. 11 forms have local/operator success evidence; 6 remain fail-closed on production prerequisites. 33 browser journeys are not exhaustive per-control/field success, validation, error, auth, persistence, refresh/restart, concurrency and accessibility acceptance. |
+| API-001 | NOT TESTED overall | Last route matrix: 48 protected routes, 42 PASS, 6 BLOCKED; 48/48 missing/invalid-auth checks PASS. Six blocked positive paths: Facebook draft approval, Facebook publish, Facebook Page verification, Instagram approval, production job execution, upload reconciliation. External credentials/media/remote read-back are still required. |
+| SCHED-001 | NOT TESTED overall | Rolling `long_form → long_form → short`, >=72 elapsed hours and no same Johannesburg calendar day are code-tested. No new remote publication has been made; live dispatch, actual remote timestamps, restart, lease, cancellation, retry, dead-letter and full history proof remain open. |
+| Worker dispatch/backoff | CODE PASS; LIVE NOT TESTED | 409/backoff and uncertain-dispatch persistence now fail closed. A failed persistence write retains the exclusive process lock and stops the worker; ambiguous POSTs are quarantined. Regression tests pass. No live runner dispatch has been verified. |
+| STATE-001 | PARTIAL PASS — staging only | Staging D1 state, backup retention and recovery tests pass. Independent off-account backup and production restore remain open; R2 access is blocked (see below). |
+| DEPLOY-001 | PARTIAL PASS — smoke only | Deployment recovery smoke tests pass. Authorized production deployment, monitoring, alerting, rollback and disaster recovery are not tested. |
+| GIT-002 | PARTIAL REVIEW | Nine base-only commits reviewed; 4,312 branch-only commits/17 critical modules still need full human semantic review. No history mutation is authorized. |
+| E2E-001 | NOT TESTED | No genuine rights-cleared media item has completed the entire plan-to-render-to-human-approval-to-private-upload-to-remote-read-back/restart journey. |
+| SEO-001 | NOT TESTED | Final metadata, captions and thumbnail need human approval against a genuine final export and measured search/competition evidence. |
+
+## Live Cloudflare and runner verification
+
+**SonicVhibez staging durable-state Worker** `sonicvhibez-durable-state-staging` is deployed with a D1 binding, R2 binding and two operator secrets (values were not read). Read-only D1 inspection found:
+- One singleton state row, revision 3, last updated 15 Nov 2026; `publishingEnabled=false`.
+- 16 queue items, all held; 0 jobs; 0 uploads.
+- Five D1 backups, oldest 8 Nov and newest 15 Nov.
+- 0 runner states, 0 runner controls, 0 runner artifacts and 0 artifact parts.
+- No Worker scheduled triggers.
+
+**R2 is a hard staging artifact blocker:** read-only listing of `sonicvhibez-artifacts-staging` returned HTTP 403 / Cloudflare error 10042: “Please enable R2 through the Cloudflare Dashboard.” The Worker has an R2 binding, but object list/read/write integrity cannot be accepted. Do not enable R2 without owner approval because usage/billing implications must be accepted. Local/GitHub workflow artifacts are not a durable production substitute.
+
+**Runner trust/execution mismatch:** the deployed staging Worker OIDC trust and `.github/workflows/repository-runner.yml` live on the separate OIDC-trusted branch `codex/cloudflare-adapter-integration-20261108`; that workflow checks out implementation SHA `02da9bc9e9ac4d14377f2c0d1bf4b5c099144099`. The current tested candidate `af3c7bd...` is **60 commits ahead** of that pinned execution SHA. The runner workflow is manual-dispatch only; `run_repository_runner` defaults false. The current implementation branch does not contain that OIDC-trusted workflow. No live runner state/artifacts exist. Updating the pinned execution SHA or OIDC trust requires owner-approved staging change and an authorized manual dispatch; no such deployment/dispatch was performed.
+
+## C. Nature Frontiers — separate Facebook/Instagram lane
+
+**Live Meta identity:** read-only manual workflow [44251034601] returned HTTP 401 / OAuth error 190 for both the Meta user token and Page token. The latest PR-event Meta workflow [44257103371] passed regression tests but skipped live identity verification; do not call the live connection green. Renew the existing credentials through GitHub secret management, then verify Page identity, token validity, permissions and linked Instagram account read-only.
+
+**Metricool:** Nature Frontiers SA brand ID `8094526`; Facebook Page ID recorded as `1431329126735709`; Instagram label `naturefrontieers2026`; timezone `Africa/Johannesburg`. Scheduled-post query for 18 Nov–18 Dec 2026 returned **zero** posts. Its network data also contains the SonicVhibez YouTube channel ID; this cross-brand mapping must be corrected or explicitly confirmed before any scheduling. No Metricool write was performed.
+
+**Nature Frontiers Cloudflare Worker:** live read-only inspection of `nature-frontiers-publisher` found only GET `/health` (other paths 404; non-GET 405), a D1 binding, no Meta secrets and no scheduled triggers. Its seven operational D1 tables (`approvals`, `audit_events`, `content_items`, `content_targets`, `media_rights`, `meta_webhook_events`, `publication_attempts`) each contain zero rows. It is a health endpoint, not a functioning publisher.
+
+**Nature Frontiers media register:** 92 stock candidates (85 Pexels, 7 Pixabay); 18 listing URLs marked verified and 74 unverified. **0 local MP4s, 0 SHA-256 source hashes, 0 rights reviews, 0 additional-permission reviews, 0 visual inspections, 0 human approvals, 0 scheduled and 0 published.** The 9 MP4s found in the separate Library review inventory decode technically, but none is publication-ready. Stock footage must never be represented as Nature Frontiers original field footage.
+
+**Publishing automation:** `.github/workflows/facebook-autonomous-publisher.yml` is main-only, requires a self-hosted runner labelled `linux` and `facebook-publisher`, and hardcodes `FACEBOOK_PUBLISH_ENABLED=NO`. The daily draft workflow generates a local research-only draft package/three-slot plan; it does not create or read back Meta provider drafts. Facebook and Instagram intake/approval queues are empty. Instagram business account ID is null. The Facebook config remains `publishingEnabled=false`, `dryRun=true`, `emergencyStop=true`; Instagram remains disabled/dry-run/emergency-stopped. Target cadence remains 2 Reels + 1 feed post daily only after approval, rights, quality and provider readiness. Safari remains inactive; Selar is draft-only. No campaign or post is authorized.
+
+## Production assets and voice — current state
+
+- SonicVhibez Short and long-form source footage/narration/final masters remain missing from the required production paths. Long-form final captions are missing. The 19-blocker readiness report lists the exact missing paths and approvals.
+- The NOAA California spiny-lobster source has source-level rights/provenance evidence, and the visual review cut is genuine footage with source audio removed. It remains a silent/review-only cut, not `media/next-short.mp4`; final attribution, owner narration, captions, human playback, final rights/compliance approval and exact final hashes remain open.
+- The Nile crocodile draft is a 154-word, 50–60-second, 9:16, research-backed **AI-generated illustrative reconstruction**; it is unqueued and not authentic footage. Do not publish it as documentary footage. Owner must either provide genuine footage or explicitly approve a clearly disclosed reconstruction.
+- The current synthetic American voice candidate (Piper Norman) is review-only, not auditioned/approved; the previous Banjo candidate was rejected. The owner requested their own recorded voice for videos; no owner recording is present. Do not substitute synthetic narration without explicit owner approval. The existing AI-voice disclosure in draft metadata is provisional and must match the final actual audio.
+- The next queued Short/long-form topic remains creator-education, not the animal-encounter direction. Confirm the next editorial topic and footage source before production.
+- The Selar CTA is the owner-provided URL, but the product listing uses Nature Frontiers branding; owner must confirm it belongs in SonicVhibez content and approve the exact direct-sales disclosure before use.
+
+## Required future owner inputs
+
+1. Provide the genuine original footage for the next Short and long-form item, or explicitly authorize use of licensed Pexels/Pixabay/NOAA stock as third-party footage (never described as owner-shot/original field footage).
+2. Provide the owner's clean voice recording for the narration; approve the exact voice-processing approach. No synthetic voice is approved by default.
+3. Approve the editorial direction (animal encounter vs creator-education) and the exact next topic; approve any AI reconstruction separately and only with visible disclosure.
+4. Supply/approve final captions and exact script-to-scene mapping.
+5. Confirm rights for every footage/audio/music/image derivative; human-review the exact final hashes and approve final metadata/thumbnail.
+6. Reauthorize YouTube OAuth through secret management; verify SonicVhibez channel identity, upload-capable `videos.insert` scope and complete remote history. Current read-only readiness [44257103455] returns `invalid_grant`; no upload is allowed.
+7. Confirm whether any uncertain YouTube upload attempt occurred outside the repository/runtime; no blind retry.
+8. Renew Meta user and Page tokens in GitHub secrets; verify official Page identity, required permissions and linked Instagram account; supply the Instagram Business Account ID.
+9. Confirm the Nature Frontiers/Metricool network mapping and remove or explicitly approve the SonicVhibez YouTube association on that brand.
+10. Register/confirm the persistent self-hosted GitHub runner required by the Facebook publisher workflow; authorize any update to the old OIDC-trusted runner branch/pinned SHA only after review.
+11. Decide whether to enable Cloudflare R2 (including billing/usage acceptance) or approve a genuinely durable no-cost alternative; verify backup restore independently off-account.
+12. Owner/admin verifies branch protection and required status checks; human semantic review of all 4,312 branch-only commits and critical modules remains required.
+13. Confirm whether the Nature Frontiers stock candidates may be used and approve final content packages before scheduling. No unreviewed Metricool drafts/posts are approved.
+14. Confirm the Selar product's brand fit and exact direct-sales disclosure for SonicVhibez.
+
+## Release decision — recommendation completed
+
+**HOLD / NOT PRODUCTION READY.** Do not upload, schedule, publish, enable unattended publishing, activate campaigns, deploy the Nature Frontiers publisher, or promote staging to production. Reassess only after the relevant owner inputs, media/rights/human approvals, credentials, live provider verification, runner/R2 decision and exact-SHA acceptance gates are complete. This is an evidence-based recommendation, not the owner's signature or publishing authorization.
+
+**No credentials were read or printed. No production uploads, Meta posts, Metricool writes, campaign activations, R2 enablement, Worker deployment, PR merge or main-branch change were performed.**
+
+---
+
 # LIVE MASTER COMPLETION REFRESH — 18 November 2026, 09:01 SAST
 
 **This is the newest verified status addendum. It supersedes older SHA, test-count, readiness, Meta and branch-inventory snapshots below wherever they conflict. It is an evidence register, not owner authorization to publish.**
