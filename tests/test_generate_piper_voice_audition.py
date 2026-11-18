@@ -5,7 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts.generate_piper_voice_audition import (
-    MODEL_SHA256, CANDIDATES, validate_config, sha256_file
+    MODEL_SHA256, CANDIDATES, validate_config, sha256_file, extract_short_narration
 )
 
 class PiperVoiceAuditionTests(unittest.TestCase):
@@ -36,6 +36,27 @@ class PiperVoiceAuditionTests(unittest.TestCase):
             }))
             with self.assertRaises(ValueError):
                 validate_config(path)
+
+    def test_extracts_current_short_script_narration_without_description(self):
+        markdown = """# Short
+
+## Narration draft (sample)
+
+This is the first narration sentence. This is the second sentence with enough words to pass the minimum count for the script parser. This is another sentence to ensure the extraction remains above the minimum threshold and is clean.
+
+## Draft description
+
+Do not include this text.
+"""
+        text = extract_short_narration(markdown)
+        self.assertIn("first narration sentence", text)
+        self.assertNotIn("Draft description", text)
+
+    def test_rejects_missing_or_unresolved_short_script(self):
+        with self.assertRaises(ValueError):
+            extract_short_narration("# Short\n\n## Draft description\n\nNo narration here.")
+        with self.assertRaises(ValueError):
+            extract_short_narration("# Short\n\n## Narration draft\n\n[ADD SCRIPT HERE]")
 
     def test_model_hash_helper(self):
         with tempfile.TemporaryDirectory() as temp:
