@@ -62,7 +62,7 @@ def inspect_wav(path: Path) -> dict:
     clipped=sum(abs(v)>=32760 for v in samples)
     duration=frames/rate
     if duration<20 or duration>180 or peak==0 or rms<8 or clipped:
-        raise ValueError("Output duration/level/clipping validation failed")
+        raise ValueError(f"Output duration/level/clipping validation failed: duration={duration:.3f}s peak={peak} rms={rms:.2f} clipped={clipped}")
     return {"channels":channels,"sampleRateHz":rate,"sampleWidthBits":16,
             "durationSeconds":round(duration,3),"peakDbfs":round(20*math.log10(peak/32768),2),
             "rmsDbfs":round(20*math.log10(rms/32768),2),"clippedSampleCount":clipped}
