@@ -298,7 +298,7 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
     if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
   }
   const qualityErrors = validateProductionQualityScorecard(approval.qualityScorecard, {
-    artifactSha256, metadataSha256: metadataVersion, relatedArtifacts: approval.relatedArtifacts
+    artifactSha256, metadataSha256: metadataVersion, relatedArtifacts: approval.relatedArtifacts, reviewer: approval.reviewer
   });
   if (qualityErrors.length) throw new Error("production quality scorecard blocked: " + qualityErrors.join("; "));
   if (approval.artifactSha256 !== artifactSha256) throw new Error("approval artifact checksum does not match the actual MP4");
