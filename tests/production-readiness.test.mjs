@@ -15,6 +15,7 @@ test("readiness report identifies blockers, preserves safety defaults, and exits
   assert.equal(result.status, 2);
   assert.match(result.stdout, /SonicVhibez production readiness/);
   assert.match(result.stdout, /YouTube history: verified 1 upload\(s\)/);
+  assert.match(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/);
   assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
   assert.match(result.stdout, /HOLD:/);
   assert.match(result.stdout, /public publishing disabled/);
@@ -52,6 +53,7 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
   }
   assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\/private\/unlisted SonicVhibez history/.test(blocker.message)), false, "fresh owner-reviewed history evidence must clear the unconditional blocker");
   assert.ok(report.notes.some(note => /YouTube history: verified 1 upload/.test(note)));
+  assert.ok(report.blockers.some(blocker => /YouTube OAuth upload scope is not independently verified/.test(blocker.message)));
   assert.equal(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"), false, "the verified read-only OAuth inventory must not remain incorrectly marked as invalid_client");
   const invalidGrantBlocker = report.blockers.find(blocker => /invalid_grant/i.test(blocker.message));
   if (invalidGrantBlocker) {
@@ -78,9 +80,11 @@ test("readiness JSON distinguishes external reconciliation from code-controlled 
   const report = JSON.parse(result.stdout);
   assert.equal(report.blockers.some(blocker => blocker.evidence.kind === "external-reconciliation-required"), false, "complete fresh owner-reviewed history and attempt evidence is already present");
   assert.ok(report.notes.some(note => /prior upload-attempt reconciliation passed/.test(note)));
+  assert.ok(report.blockers.some(blocker => blocker.evidence.kind === "repository-path-check" && /YouTube OAuth upload scope/.test(blocker.evidence.observed)));
   const readinessSource = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
   assert.match(readinessSource, /const attempts = reconciliation\.uploadAttemptReconciliation/);
   assert.match(readinessSource, /MAX_HISTORY_EVIDENCE_AGE_MS = 24 \* 60 \* 60 \* 1000/);
+  assert.match(readinessSource, /uploadScopeVerified !== true/);
   assert.match(readinessSource, /reconciliation\.verifiedAt === verification\.checkedAt/);
   assert.doesNotMatch(readinessSource, /blockers\.push\("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
   assert.ok(report.blockers.some(blocker =>
