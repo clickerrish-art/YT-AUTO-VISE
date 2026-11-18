@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "status": "CANDIDATES_ONLY_OWNER_AUDITION_REQUIRED",
+  "provider": "piper_local",
+  "model": {
+    "repository": "DataCraftsmanAustralia/piper-en_AU-librivox-medium",
+    "revision": "3faad046064c56f7316ffd745d5a8b14035f35df",
+    "modelFile": "en_AU-librivox-medium.onnx",
+    "modelSha256": "f34849bce64d803d0fe90087766d5d6f2a8215a12edad43e486d77072df7dd41",
+    "configFile": "en_AU-librivox-medium.onnx.json",
+    "license": "CC-BY-4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "en_AU-librivox-medium, CC BY 4.0. Fine-tuned from en_GB-jenny_dioco-medium, derived from the Jenny TTS dataset by Jenny (Dioco). Training audio is public domain, recorded by LibriVox volunteers.",
+    "attributionAdditional": "Jenny (Dioco) attribution is required by the base-checkpoint terms; the model author explains their lineage interpretation as good-faith compliance, not a legal conclusion. Retain the full ATTRIBUTION.md.",
+    "engine": "OHF-Voice/piper1-gpl",
+    "engineVersion": "1.8.0",
+    "engineLicense": "GPL-3.0-or-later",
+    "sourceAttributionUrl": "https://github.com/DataCraftsmanAustralia/piper-en_AU/blob/main/ATTRIBUTION.md",
+    "modelCardUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium",
+    "limitations": [
+      "Model author describes the delivery as period-inflected and formal-literary rather than conversational.",
+      "Source recordings are home recordings with variable microphone quality, level drift and band-limiting.",
+      "Modern technical terms, numerals, abbreviations and URLs may be weak.",
+      "Voice samples must be auditioned by the owner; no voice has been approved for final narration."
+    ],
+    "commercialUseStatus": "MODEL_CARD_STATES_COMMERCIAL_USE_PERMITTED_ATTRIBUTION_REQUIRED_OWNER_REVIEW_PENDING",
+    "productionApproved": false
+  },
+  "candidates": [
+    {
+      "id": "banjo",
+      "speakerId": 5,
+      "narrator": "Timothy Ferguson",
+      "gender": "male",
+      "trainingHours": 7.97,
+      "accentEvidence": "Model author selected as Australian by ear; ATTRIBUTION.md records that Timothy Ferguson's spoken outro identifies him as recording from the Gold Coast, Australia.",
+      "sampleUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/banjo.wav",
+      "priority": 1
+    },
+    {
+      "id": "angus",
+      "speakerId": 4,
+      "narrator": "Algy Pug",
+      "gender": "male",
+      "trainingHours": 1.8,
+      "accentEvidence": "Model author selected as Australian by ear.",
+      "sampleUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/angus.wav",
+      "priority": 2
+    },
+    {
+      "id": "flynn",
+      "speakerId": 6,
+      "narrator": "Howard Skyman",
+      "gender": "male",
+      "trainingHours": 0.58,
+      "accentEvidence": "Model author selected as Australian by ear.",
+      "sampleUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/flynn.wav",
+      "priority": 3
+    }
+  ],
+  "audition": {
+    "status": "NOT_YET_AUDITIONED_BY_OWNER",
+    "generatedByWorkflow": false,
+    "chosenVoice": null,
+    "exactTestText": "At first, the river looks still. Then a ripple moves across the water. A saltwater crocodile rises near the bank, pauses, and slips beneath the surface. Keep your distance and let the animal behave naturally.",
+    "requirements": [
+      "Owner listens to all three samples",
+      "Choose one voice or reject all three",
+      "Confirm the accent and naturalness meet the realistic male Australian-English requirement",
+      "Review commercial attribution and terms before production use"
+    ]
+  }
+}
