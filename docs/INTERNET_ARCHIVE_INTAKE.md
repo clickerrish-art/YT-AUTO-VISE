@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Internet Archive is a secondary source-discovery library, not a source of automatically cleared production footage. This integration searches moving-image metadata and produces a review report. It does **not** download media, register assets, render videos, schedule posts or publish.
+Internet Archive is a secondary source-discovery library, not a source of automatically cleared production footage. This integration searches moving-image metadata and produces a review report. Its default search is now restricted to Prelinger collection items carrying a per-item Creative Commons Public Domain Mark or CC0 metadata declaration, and wildlife-related title terms; it also excludes known game, sports, photography and unrelated broadcast false positives. This is still a candidate filter, not rights clearance. It does **not** download media, register assets, render videos, schedule posts or publish.
 
 WanGP on Kaggle remains the primary engine for generating original wildlife shots. Internet Archive candidates may supplement a story only after separate source and rights review.
 
@@ -17,6 +17,8 @@ python scripts/discover_internet_archive_assets.py --rows 30 --output artifacts/
 GitHub Actions: run **Internet Archive wildlife metadata discovery** manually, or let its weekly Wednesday schedule run. Download the resulting Actions artifact for review. The workflow uses read-only repository permissions.
 
 ## Rights triage
+
+The default query is restricted to `collection:prelinger` and items whose `licenseurl` metadata is exactly the Public Domain Mark 1.0 or CC0 1.0 URL. Prelinger explicitly says its collection has mixed rights and that the licence on each item's detail page governs reuse; do not assume all Prelinger items are public domain. The official Internet Archive help page also says uploader-entered rights metadata is not guaranteed. Confirm the exact item page, the original source, uploader authority, all embedded material and the licence before reuse.
 
 The report records the licence URL and rights text as supplied in the item metadata. Its triage is only a screening hint:
 
