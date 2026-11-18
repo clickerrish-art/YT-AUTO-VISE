@@ -66,8 +66,7 @@ jobs:
           if command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1; then
             echo "FFmpeg and FFprobe are already available; skipping package installation."
           else
-            sudo apt-get update
-            sudo apt-get install --yes ffmpeg
+            timeout 300s sudo apt-get install --yes --no-install-recommends -o Acquire::Retries=1 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 ffmpeg
           fi
           ffmpeg -version
           ffprobe -version
