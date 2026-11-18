@@ -98,7 +98,7 @@ test("upload approval rejects mismatched job, artifact, metadata, and visibility
   const dimensions = ["photorealismVisualCredibility", "sharpnessImageClarity", "compositionVisualSimplicity", "motionContinuityTechnicalExecution", "storyOriginalityFactualIntegrity", "hookPacingRetentionEngineering", "narrationVoicePerformance", "audioCaptionsAccessibility"];
   const gates = ["photorealism", "sharpness", "composition", "editorialSpecificity", "continuity", "thumbnailIntegrity", "technicalExport", "factualAccuracy", "narrationIntelligibility", "rightsAndDisclosure"];
   const qualityScorecard = {
-    policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "Test Operator", reviewedAt: new Date().toISOString(),
+    policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "owner@example.test", reviewedAt: new Date().toISOString(),
     fullVideoPlayback: true, fullPlaybackEvidenceRef: "fixture/full-playback",
     thumbnailInspectedAtMobile: true, thumbnailInspectedAtDesktop: true, imageInspectionEvidenceRef: "fixture/image-inspection",
     factualEditorialEvidenceRef: "fixture/factual-review",
