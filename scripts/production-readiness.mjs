@@ -250,7 +250,7 @@ if (!exists(youtubeVerificationPath)) {
     } else {
       const reconciliation = JSON.parse(fs.readFileSync(path.join(root, historyReconciliationPath), "utf8"));
       const publication = verification.publicationHistoryReconciliation;
-      const attempts = verification.uploadAttemptReconciliation;
+      const attempts = reconciliation.uploadAttemptReconciliation;
       const ledgerValidation = attempts?.evidence?.automatedLedgerValidation;
       const channel = verification.channel;
       const inventoryArtifact = verification.inventoryArtifact;
@@ -266,13 +266,13 @@ if (!exists(youtubeVerificationPath)) {
         publication.freshInventoryArtifactSha256 === inventoryArtifact?.sha256 &&
         reconciliation.complete === true &&
         reconciliation.channelId === channel.id &&
-        reconciliation.verifiedAt === publication.verifiedAt &&
+        reconciliation.verifiedAt === verification.checkedAt &&
+        reconciliation.latestInventoryEvidence?.verifiedAt === reconciliation.verifiedAt &&
         reconciliation.latestInventoryEvidence?.complete === true &&
         reconciliation.latestInventoryEvidence?.workflowRunId === verification.workflowRunId &&
         reconciliation.latestInventoryEvidence?.artifactSha256 === inventoryArtifact?.sha256 &&
         reconciliation.latestInventoryEvidence?.totalUploads === verification.totalUploads;
       const historyFresh = isFreshHistoryEvidence(verification.checkedAt) &&
-        isFreshHistoryEvidence(publication?.verifiedAt) &&
         isFreshHistoryEvidence(reconciliation.verifiedAt) &&
         Date.parse(inventoryArtifact?.expiresAt ?? "") > Date.now();
       if (!historyMatches || !historyFresh) {
