@@ -18,12 +18,13 @@ from typing import Any
 
 API_URL = "https://archive.org/advancedsearch.php"
 DEFAULT_QUERY = (
-    "mediatype:movies AND (title:wildlife OR title:crocodile OR title:alligator "
-    "OR title:elephant OR title:lion OR title:tiger OR title:leopard OR title:shark "
-    "OR title:whale OR title:dolphin OR title:bird OR title:reptile OR title:butterfly "
-    "OR title:insect OR title:underwater OR title:coral OR subject:wildlife "
-    "OR subject:crocodile OR subject:elephant OR subject:lion OR subject:shark "
-    "OR subject:whale OR subject:bird OR subject:reptile OR subject:nature)"
+    'collection:prelinger AND mediatype:movies AND '
+    '(title:wildlife OR title:crocodile OR title:alligator OR title:elephant '
+    'OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale '
+    'OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect '
+    'OR title:underwater OR title:coral) AND '
+    '(licenseurl:"http://creativecommons.org/publicdomain/mark/1.0/" '
+    'OR licenseurl:"http://creativecommons.org/publicdomain/zero/1.0/")'
 )
 EXCLUSION_TERMS = (
     "h1z1", "minecraft", "video game", "gameplay", "gaming", "talk show",
