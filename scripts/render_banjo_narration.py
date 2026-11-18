@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import struct
 import sys
 import wave
@@ -95,6 +96,66 @@ def inspect_wav(path: Path) -> dict:
     }
 
 
+
+def repair_isolated_clips(path: Path, *, max_run: int = 4, peak_ceiling: int = 30000) -> dict:
+    """Interpolate only isolated full-scale spikes, then add deterministic peak headroom."""
+    with wave.open(str(path), "rb") as wav:
+        params = wav.getparams()
+        if params.nchannels != 1 or params.sampwidth != 2:
+            raise ValueError("Clip repair requires mono 16-bit PCM")
+        samples = [item[0] for item in struct.iter_unpack("<h", wav.readframes(params.nframes))]
+
+    clipped_runs = []
+    index = 0
+    while index < len(samples):
+        if abs(samples[index]) >= 32760:
+            end = index
+            while end < len(samples) and abs(samples[end]) >= 32760:
+                end += 1
+            run_length = end - index
+            if run_length > max_run:
+                raise ValueError("Clipping run is too long for safe isolated-peak interpolation")
+            if index == 0 or end == len(samples):
+                raise ValueError("Clipping at a file boundary cannot be safely interpolated")
+            clipped_runs.append((index, end))
+            index = end
+        else:
+            index += 1
+
+    for start, end in clipped_runs:
+        left, right = samples[start - 1], samples[end]
+        span = end - start + 1
+        for offset in range(end - start):
+            fraction = (offset + 1) / span
+            samples[start + offset] = round(left + (right - left) * fraction)
+
+    repaired_peak = max(abs(value) for value in samples)
+    if repaired_peak == 0:
+        raise ValueError("Narration is silent after clip repair")
+    gain = min(1.0, peak_ceiling / repaired_peak)
+    if gain < 1.0:
+        samples = [round(value * gain) for value in samples]
+
+    temp_path = path.with_name(path.name + ".repair.tmp")
+    try:
+        with wave.open(str(temp_path), "wb") as wav:
+            wav.setnchannels(params.nchannels)
+            wav.setsampwidth(params.sampwidth)
+            wav.setframerate(params.framerate)
+            wav.writeframes(b"".join(struct.pack("<h", value) for value in samples))
+        os.replace(temp_path, path)
+    finally:
+        if temp_path.exists():
+            temp_path.unlink()
+
+    return {
+        "clippedSamplesDetected": sum(end - start for start, end in clipped_runs),
+        "clippedSamplesInterpolated": sum(end - start for start, end in clipped_runs),
+        "maxConsecutiveClipRun": max((end - start for start, end in clipped_runs), default=0),
+        "peakCeilingDbfs": round(20 * math.log10(peak_ceiling / 32768), 2),
+        "gainAppliedDb": round(20 * math.log10(gain), 3),
+    }
+
 def render(
     output_dir: Path,
     source_script_path: Path = Path("content/short-001-wildlife-video-storytelling.md"),
@@ -137,6 +198,7 @@ def render(
 
     if not wav_path.is_file() or wav_path.stat().st_size < 1024:
         raise ValueError("Banjo narration WAV is missing or unexpectedly small")
+    audio_repair = repair_isolated_clips(wav_path)
     audio_metrics = inspect_wav(wav_path)
 
     report = {
@@ -170,7 +232,8 @@ def render(
         "audioSha256": sha256_file(wav_path),
         "audioBytes": wav_path.stat().st_size,
         "audioMetrics": audio_metrics,
-        "technicalValidation": "PASS_WAV_DECODE_PCM_MONO_16BIT_NON_SILENT_NO_CLIPPING",
+        "audioRepair": audio_repair,
+        "technicalValidation": "PASS_WAV_DECODE_PCM_MONO_16BIT_NON_SILENT_NO_CLIPPING_AFTER_RECORDED_ISOLATED_PEAK_REPAIR",
         "humanVoiceQualityReview": "PENDING",
         "commercialAttributionReview": "PENDING",
         "productionApproved": False,

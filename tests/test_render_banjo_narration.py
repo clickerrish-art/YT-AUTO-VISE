@@ -42,7 +42,7 @@ class FakeVoice:
         wav_file.setnchannels(1)
         wav_file.setsampwidth(2)
         wav_file.setframerate(22050)
-        frames = [struct.pack("<h", 4500 if i % 100 < 50 else -4500) for i in range(22050 * 30)]
+        frames = [struct.pack("<h", 32767 if i in (1000, 10000, 50000) else (4500 if i % 100 < 50 else -4500)) for i in range(22050 * 30)]
         wav_file.writeframes(b"".join(frames))
 
 
@@ -61,6 +61,40 @@ class BanjoNarrationTests(unittest.TestCase):
             self.assertEqual(result["sampleWidthBits"], 16)
             self.assertEqual(result["clippedSampleCount"], 0)
             self.assertEqual(result["durationSeconds"], 30.0)
+
+    def test_repairs_isolated_full_scale_samples_and_adds_headroom(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "repair.wav"
+            rate = 22050
+            samples = [5000 if i % 2 else -5000 for i in range(1000)]
+            for index in (100, 500, 800):
+                samples[index] = 32767
+            with wave.open(str(path), "wb") as wav:
+                wav.setnchannels(1)
+                wav.setsampwidth(2)
+                wav.setframerate(rate)
+                wav.writeframes(b"".join(struct.pack("<h", value) for value in samples))
+            result = module.repair_isolated_clips(path)
+            with wave.open(str(path), "rb") as wav:
+                repaired = [item[0] for item in struct.iter_unpack("<h", wav.readframes(wav.getnframes()))]
+            self.assertEqual(result["clippedSamplesDetected"], 3)
+            self.assertEqual(result["clippedSamplesInterpolated"], 3)
+            self.assertLessEqual(max(map(abs, repaired)), 30000)
+            self.assertEqual(sum(abs(value) >= 32760 for value in repaired), 0)
+
+    def test_rejects_long_clipping_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "long-clip.wav"
+            rate = 22050
+            samples = [5000] * 1000
+            samples[100:105] = [32767] * 5
+            with wave.open(str(path), "wb") as wav:
+                wav.setnchannels(1)
+                wav.setsampwidth(2)
+                wav.setframerate(rate)
+                wav.writeframes(b"".join(struct.pack("<h", value) for value in samples))
+            with self.assertRaisesRegex(ValueError, "too long"):
+                module.repair_isolated_clips(path)
 
     def test_rejects_clipped_audio(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -113,6 +147,8 @@ class BanjoNarrationTests(unittest.TestCase):
             self.assertTrue((output / module.OUTPUT_NAME).is_file())
             self.assertTrue((output / "ATTRIBUTION.txt").is_file())
             self.assertEqual(report["audioMetrics"]["clippedSampleCount"], 0)
+            self.assertEqual(report["audioRepair"]["clippedSamplesInterpolated"], 3)
+            self.assertLessEqual(report["audioMetrics"]["peakDbfs"], -0.7)
 
     def test_report_attribution_is_present(self):
         self.assertIn("Jenny (Dioco)", module.ATTRIBUTION)
