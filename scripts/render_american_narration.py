@@ -18,9 +18,9 @@ MODEL_BYTES = 63531379
 CONFIG_BYTES = 4968
 VOICE_ID = "en_US-norman-medium"
 OUTPUT = "american-short-001-narration-review.wav"
-DIRECTION = ("Mature approximately-45-year-old vocal character; clean, clear, warm, confident, "
-             "passionate wildlife storyteller; natural conversational pacing; controlled emphasis; "
-             "no robotic cadence or exaggerated theatricality.")
+DIRECTION = ("American English male voice; mature approximately-45-year-old vocal character; "
+             "clean, clear, warm, confident, passionate wildlife storyteller; natural conversational pacing; "
+             "controlled emphasis; no robotic cadence or exaggerated theatricality.")
 
 def md5_file(path: Path) -> str:
     h=hashlib.md5()
