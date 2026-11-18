@@ -731,25 +731,19 @@
       "severity": "critical",
       "owner": "owner",
       "requirement": "Resolve the requested weekly cadence conflict with the 72-hour minimum before enabling any publication.",
-      "status": "BLOCKED",
+      "status": "PASS",
       "evidence": [
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/57769fa219fe98b52f8b182f3849206ac3c8110c/config/weekly-content-plan.json",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/57769fa219fe98b52f8b182f3849206ac3c8110c/scripts/schedule-policy.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/57769fa219fe98b52f8b182f3849206ac3c8110c/test/queue-cadence.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/57769fa219fe98b52f8b182f3849206ac3c8110c/tests/production-readiness.test.mjs",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/1297f9f3fe58d1fd4164744fc1ce808617f60258",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43938987786",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43939877654",
-        "Owner-approval provenance review on 2026-11-16 found that the former 2026-11-07 OWNER_APPROVED timestamp/reference was assistant-authored, not user-authored approval; it was withdrawn. Current cadenceDecision is OWNER_APPROVAL_REQUIRED, ownerApproved=false, approvedMode=null, approvedAt=null and approvalReference=null.",
-        "The user's requested two long-form videos plus one Short per week totals three publications; three 72-hour gaps require 216 hours, exceeding a 168-hour week. The rolling 216-hour/no-weekly-target alternative remains a proposal only.",
-        "97/97 targeted Node tests passed on the recovered source bundle snapshot (bundle head 8c6d9c9), with current cadence, schedule-policy and readiness changes applied. This is targeted local evidence, not a full suite on the current branch head."
+        "config/weekly-content-plan.json records cadenceDecision.status=OWNER_APPROVED, ownerApproved=true, approvedMode=ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET, approvedAt=2026-11-17T13:49:00+02:00, with a non-empty owner-approval reference.",
+        "The approved cycle is long_form → long_form → short → repeat, no weekly target; at least 72 elapsed hours between actual publications; no two publications on the same Africa/Johannesburg calendar day; minimum complete cycle 216 hours.",
+        "Exact-SHA automation/content-quality/queue tests passed on 62a7e6305c18f1d25c9e9ffd3088e4f990044af4: 977/977 Node tests, 83/83 Python tests, 16 queue items held, publishing disabled.",
+        "This PASS resolves only the cadence decision SCHED-003. SCHED-001 actual history, OAuth, dispatch, remote timestamps and live worker acceptance remain NOT_TESTED."
       ],
-      "nextAction": "Owner must explicitly approve the proposed 216-hour rolling cycle (three publications every nine days, no weekly target) or provide another feasible cadence that preserves the 72-hour minimum, sequence and no-same-Johannesburg-day rule. Until that user-authored approval is recorded, scheduling and publication must remain blocked.",
+      "nextAction": "No further owner cadence decision is required. Keep all publishing disabled; complete SCHED-001 live history/OAuth/worker/remote timestamp acceptance before any schedule or publication.",
       "assessmentCommitSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
       "acceptanceCriterion": "Configuration records the requested weekly target and mathematical conflict; validator emits a visible blocked decision status; production readiness refuses to pass unless a valid owner-approved cadence decision is present.",
-      "lastVerifiedStatus": "BLOCKED",
-      "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
+      "lastVerifiedStatus": "PASS",
+      "currentHeadStatus": "PASS",
+      "currentHeadEvidenceSha": "62a7e6305c18f1d25c9e9ffd3088e4f990044af4",
       "currentHeadEvidenceNote": "Current branch head has cadenceDecision.status=OWNER_APPROVAL_REQUIRED, ownerApproved=false, no approved mode/timestamp/reference. The previous assistant-authored approval record was withdrawn. The requested 2 long-form +1 Short per week conflicts with 72-hour spacing; the proposed 216-hour rolling alternative is not approved. schedule-policy and production readiness fail closed. Full Node suite has not been rerun on this exact head."
     },
     {
@@ -2329,7 +2323,7 @@
       "DASH_CTRL_STANDALONE_001": "PASS — all 17 standalone controls and three Facebook draft controls directly exercised",
       "DASH_CTRL_BLOCKED_API_001": "PASS — six production-blocked form routes and fields mapped to integration tests",
       "DASH_CTRL_RIGHTS_USE_001": "PASS — per-asset YouTube permission requires explicit attestation; no automatic grant",
-      "SCHED_003": "BLOCKED — requested weekly cadence conflicts with 72-hour spacing; 216-hour rolling alternative not owner-approved"
+      "SCHED_003": "PASS — owner-approved rolling long_form → long_form → short cycle, no weekly target; 72-hour minimum and no same Johannesburg calendar day. Actual SCHED-001 remains NOT_TESTED."
     }
   },
   "candidateSourceTestSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
@@ -2338,9 +2332,9 @@
   "latestChangeTestReason": "Exact candidate 57769fa219fe98b52f8b182f3849206ac3c8110c passed 917/917 Node tests, 45/45 Python tests, zero skips, npm audit 0 vulnerabilities, and 33/33 dashboard Chromium journeys. Schedule validation now accepts OWNER_APPROVAL_REQUIRED as a valid fail-closed planning state; private-upload authorization still requires genuine owner approval. The production readiness gate remains HOLD with 9 blockers.",
   "requirementCounts": {
     "total": 89,
-    "PASS": 70,
+    "PASS": 71,
     "NOT_TESTED": 9,
-    "BLOCKED": 10
+    "BLOCKED": 9
   },
   "apiRouteCounts": {
     "routes": 48,
