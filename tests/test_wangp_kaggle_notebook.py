@@ -35,7 +35,7 @@ class WanGPKaggleNotebookTests(unittest.TestCase):
         self.assertIn("HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE", source)
         self.assertIn("'commercialUseApproved': False", source)
         self.assertIn("'humanVisualReviewStatus': 'PENDING'", source)
-        self.assertIn("'loras': []", source)
+        self.assertIn("'loras': []", source)\n        self.assertIn("'videoFilename': 'wildlife-test.mp4'", source)\n        self.assertIn("'sourceVideoFilename': video_path.name", source)
 
 if __name__ == "__main__":
     unittest.main()
