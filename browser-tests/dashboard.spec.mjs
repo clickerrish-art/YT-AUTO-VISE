@@ -2498,6 +2498,7 @@ test("blocked production forms serialize every field and surface blockers withou
       metadataPath: "content/fixture-metadata.json",
       metadataVersion: "b".repeat(64),
       rightsEvidence: { fixture: true },
+      qualityScorecard: null,
       reason: "Fixture review reason — not human approval."
     } },
     { path: "/api/uploads/reconcile", method: "POST", body: {
