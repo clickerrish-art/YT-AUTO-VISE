@@ -12,7 +12,8 @@ test("authoritative validator accepts the approved rolling cadence while preserv
  assert.equal(result.status,0,result.stdout+result.stderr);
  assert.match(result.stdout,/PASS: rolling long_form, long_form, short cycle/);
  assert.doesNotMatch(result.stdout,/BLOCKED — CADENCE DECISION/);
- assert.match(result.stdout,/NOTE: This local validator does not query YouTube/);\n assert.doesNotMatch(result.stdout,/BLOCKED — LIVE HISTORY/);
+ assert.match(result.stdout,/NOTE: This local validator does not query YouTube/);
+ assert.doesNotMatch(result.stdout,/BLOCKED — LIVE HISTORY/);
 });
 function runWithPlanMutation(mutate){
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),"sonicvhibez-schedule-"));
@@ -32,7 +33,8 @@ test("validator recognizes the recorded owner-approved rolling cadence but leave
  const result=spawnSync(process.execPath,["scripts/validate-schedule.mjs"],{cwd:repoRoot,encoding:"utf8"});
  assert.equal(result.status,0,result.stdout+result.stderr);
  assert.doesNotMatch(result.stdout,/BLOCKED — CADENCE DECISION/);
- assert.match(result.stdout,/NOTE: This local validator does not query YouTube/);\n assert.doesNotMatch(result.stdout,/BLOCKED — LIVE HISTORY/);
+ assert.match(result.stdout,/NOTE: This local validator does not query YouTube/);
+ assert.doesNotMatch(result.stdout,/BLOCKED — LIVE HISTORY/);
 });
 test("validator rejects missing or falsely approved cadence decisions",()=>{
  const missing=runWithPlanMutation(plan=>{delete plan.cadenceDecision;});
