@@ -1,44 +1,48 @@
-# SonicVhibez narration voice — Australian male candidate review
+# SonicVhibez narration voice — American male candidate review
 
-## Preferred candidate set
+## Current candidate
 
-The first candidate model found that directly matches the requested Australian-English male profile is `DataCraftsmanAustralia/piper-en_AU-librivox-medium`, pinned at `3faad046064c56f7316ffd745d5a8b14035f35df`.
+**Norman — `en_US-norman-medium`**, a free local Piper synthetic US-English male voice, is the current audition candidate. It is not yet approved as the permanent production voice.
 
-The model card identifies three male speakers:
-- **Banjo / Timothy Ferguson (speaker 5):** 7.97 training hours. The model author records that Timothy's spoken outro identifies him as recording from the Gold Coast, Australia. Highest-priority audition.
-- **Angus / Algy Pug (speaker 4):** 1.80 hours.
-- **Flynn / Howard Skyman (speaker 6):** 0.58 hours.
+The current project direction is a mature, approximately 45-year-old American male wildlife storyteller: clean, clear, warm, confident, energetic and passionate, with natural conversational pacing. Perceived age is a creative direction, not a claim about the synthetic speaker.
 
-Audition the original samples:
-- [Banjo — Timothy Ferguson](https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/banjo.wav)
-- [Angus — Algy Pug](https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/angus.wav)
-- [Flynn — Howard Skyman](https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/resolve/3faad046064c56f7316ffd745d5a8b14035f35df/samples/flynn.wav)
+## Exact review artifact
 
-The project workflow generates all three on the same wildlife test sentence and also synthesizes the complete current Short narration draft in each voice. It verifies the exact model hash and records the source-script hash, audio hashes, file sizes and durations in a downloadable Actions artifact. These full-script files remain auditions only, not final narration. They are auditions only, not approved final narration.
+- Workflow: [American narration review run 44253500939](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44253500939)
+- Artifact: `sonicvhibez-american-wildlife-encounter-voice-review` (ID `14404553729`)
+- Artifact SHA-256: `8c4777fa068ff42f565081a3e83d416597abed0562aaabbc9c5711a964cd9a50`
+- Exact audio SHA-256: `2c81da407501eb8e91391a360ce5a19ec6f324b08f4222b15a1ef032136962ec`
+- Source script: `content/drafts/nile-crocodile-eyes-at-the-waterline.md`
+- Source script SHA-256: `54b1c9aa9103b8a79511cc38fc27c27d4e35416d460f188701485406aaedfc73`
+- Audio: 51.432 seconds, WAV PCM 16-bit, mono, 22,050 Hz
+- Measured peak: −0.77 dBFS; RMS: −18.59 dBFS; clipped samples: 0
+- Artifact retention: 30 days from 18 November 2026. The evidence JSON is retained in the repository; the WAV itself must be downloaded and stored separately if it is to be retained permanently.
 
-## Licence and attribution
+The render passed the technical duration and clipping checks. These metrics do not establish subjective realism, expressive delivery, noise quality or owner satisfaction. It is generated TTS, not a recording of the owner's voice.
 
-- Piper engine: `piper-tts` 1.8.0, GPL-3.0-or-later.
-- Voice model: CC BY 4.0. The model author states commercial use, redistribution and modification are permitted.
-- Training recordings: public-domain LibriVox recordings; source dataset CC0-1.0.
-- Base checkpoint: `en_GB-jenny_dioco-medium`, derived from the Jenny TTS dataset by Jenny (Dioco). The model author states commercial use is permitted but attribution to Jenny (Dioco) is required. The model author's interpretation of how that attribution applies to this multi-speaker fine-tune is explicitly described as good-faith interpretation, not a legal conclusion.
+## Pinned model and licence review
 
-Required retained attribution:
-> en_AU-librivox-medium, CC BY 4.0. Fine-tuned from en_GB-jenny_dioco-medium, derived from the Jenny TTS dataset by Jenny (Dioco). Training audio is public domain, recorded by LibriVox volunteers.
+- Model repository: `rhasspy/piper-voices`
+- Revision: `8e602cc224300e0961258a0c885bccbfcc515a7f`
+- Model file: `en/en_US/norman/medium/en_US-norman-medium.onnx`
+- Model SHA-256: `b9739443232a80a59c7d18810dd856899bf16a7964725f5ab81ea49b1351cb71`
+- Model card SHA-256: `60eaf4d10009d1bd4a1aa555d337dae00f60421d72fee415b9139a021e7cb5d0`
+- Model card: [Pinned Norman model card](https://huggingface.co/rhasspy/piper-voices/blob/8e602cc224300e0961258a0c885bccbfcc515a7f/en/en_US/norman/medium/MODEL_CARD)
+- Model card describes a single-speaker US-English male voice, medium quality, trained from public-domain LibriVox recordings.
+- Engine: `OHF-Voice/piper1-gpl` 1.8.0, GPL-3.0-or-later.
 
-Retain the upstream `ATTRIBUTION.md` and exact model card with the production package. The model is not automatically cleared just because the model card says commercial use is permitted; review the base-checkpoint attribution condition and exact model provenance before production release.
+The public-domain status of the source recordings does not automatically settle all commercial-use, model-weight, engine-distribution or attribution obligations. The pinned model card and attribution file are retained in the review artifact. Owner/commercial attribution review remains pending.
 
-## Quality limitation
+## Required owner decision
 
-The model author describes the accent as period-inflected and the delivery as formal literary reading rather than conversational. Source recordings have variable home-recording quality, level drift and band-limiting; modern technical terms, numerals, abbreviations and URLs may be weak. It may therefore fail the user's "realistic" and conversational narration requirement. The owner must listen to the same test text from all three male candidates. Reject all if none meet the quality bar.
+1. Listen to the complete 51.432-second WAV and approve or reject Norman for production.
+2. Assess naturalness, warmth, clarity, energetic storytelling, pronunciation and suitability for wildlife encounters.
+3. If Norman is rejected, keep the production voice unselected; do not silently substitute another voice.
+4. If the owner prefers a personal voice, supply a clean recording of their own voice and explicitly approve its use for the intended voice workflow. No owner-recorded voice sample is currently in the repository.
+5. Retain the exact approved narration WAV hash and licence/attribution decision before using it in any final Short or long-form render.
 
 ## Production gate
 
-Do not change the main narration generator to use a selected speaker until:
-1. the audition artifact is generated and verified;
-2. the owner chooses one speaker or rejects all;
-3. the final attribution treatment is reviewed and retained;
-4. an end-to-end sample is checked for pronunciation, pace, audio quality and factual/script fidelity;
-5. final captions are aligned against actual generated audio.
+`humanVoiceQualityReview=PENDING_OWNER_LISTENING`; `commercialAttributionReview=PENDING_OWNER_REVIEW`; `productionApproved=false`; `finalNarration=false`; `publishingEnabled=false`.
 
-No voice selection or production approval is implied by this candidate registry.
+Do not set a global production default or mark the voice as permanently selected until the owner approves the exact reviewed artifact and the commercial attribution review is complete.
