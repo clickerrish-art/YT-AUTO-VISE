@@ -55,6 +55,7 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
   assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\/private\/unlisted SonicVhibez history/.test(blocker.message)), false, "fresh owner-reviewed history evidence must clear the unconditional blocker");
   assert.ok(report.notes.some(note => /YouTube history: verified 1 upload/.test(note)));
   assert.ok(report.blockers.some(blocker => /YouTube OAuth upload scope is not independently verified/.test(blocker.message)));
+  assert.ok(report.blockers.some(blocker => /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/.test(blocker.message)));
   assert.equal(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"), false, "the verified read-only OAuth inventory must not remain incorrectly marked as invalid_client");
   const invalidGrantBlocker = report.blockers.find(blocker => /invalid_grant/i.test(blocker.message));
   if (invalidGrantBlocker) {
