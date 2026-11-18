@@ -4,14 +4,16 @@
 
 ## Exact repository and test lineage
 
-- Live PR #1 metadata: OPEN / DRAFT / UNMERGED; implementation branch `codex/marketing-machine-audit-fixes`; live PR head `34e751c6cb1f0cd850180f887c65323dd1ff7d83`; base `main`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live PR #1 metadata before this register-only refresh: OPEN / DRAFT / UNMERGED; implementation branch `codex/marketing-machine-audit-fixes`; tested documentation snapshot `51e4defda80067ae5a59e1f5ea467d8ad0becee3`; base `main`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. This next register update is also documentation-only; application source/test code remains the tested `20e437b1412abfb7e6f45aa06fd926658afc1342`.
 - The PR description contains a stale HEAD (`04794264...`); live PR metadata is authoritative for the current head. Latest fully tested application/source candidate is `20e437b1412abfb7e6f45aa06fd926658afc1342`; the current PR-head checkpoint commit `34e751c...` is documentation-only relative to that tested source candidate.
-- Exact PR-head automation/security run [44255110195](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44255110195): **171/171 Node test files passed; 84 Python tests passed; zero skips; npm audit 0 vulnerabilities**. Normal lifecycle install, syntax checks and Python compilation passed.
-- Exact PR-head dashboard browser run [44255110222](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44255110222): **33/33 Chromium journeys passed** against the real local dashboard/backend.
-- Exact PR-head content quality [44255109987], metadata [44255110184], queue readiness [44255110180], Cloudflare durable-state [44255109998], runner bridge [44255110113], deployment recovery [44255109994], signed editorial approval regression [44255109992], Nature Frontiers local draft [44255110046] and Instagram safety [44255110273] completed successfully. Local/regression PASS is not live provider authorization.
-- Meta connection workflow [44255110203] passed its regression tests, but its live Meta user/Page verification step was **SKIPPED** on the pull-request event. Do not record live Meta identity as passed.
-- Production readiness [44255110124] completed **HOLD — 19 blockers**. The readiness failure is the required fail-closed result, not a code-test regression. It performed no upload, scheduling or publication.
-- Non-destructive branch inventory [44255110152] passed: **4,308 branch-only commits, 9 base-only commits, 432 final-tree changed files**, decision `REQUIRES_REVIEW`. The isolated main/candidate baseline run [44255109995] was still in progress at the last inspection; do not count it as PASS until its conclusion is verified.
+- Latest exact branch-snapshot automation/security run [44256211875](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44256211875): **171/171 Node test files passed; 84 Python tests passed; zero skips; npm audit 0 vulnerabilities**. Normal lifecycle install, syntax checks and Python compilation passed.
+- Latest dashboard browser run [44256211885](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44256211885): **33/33 Chromium journeys passed** against the real local dashboard/backend.
+- Latest content-quality run [44256211958] passed; metadata safety, schedule validation, timed-caption checks and the fail-closed asset/metadata examples all behaved as expected. The printed `BLOCKED — asset register review failed` is the deliberate rejection of an unreviewed fixture, followed by `PASS: unreviewed asset register example remains blocked`; it is not a workflow failure.
+- Instagram safety [44256211877] passed. Meta connection workflow [44256211724] passed its regression tests, but its live Meta user/Page verification step was **SKIPPED** on the pull-request event. Do not record live Meta identity as passed.
+- Cloudflare durable-state [44255109998], runner bridge [44255110113], deployment recovery [44255109994], signed editorial approval regression [44255109992] and Nature Frontiers local draft [44255110046] passed on the immediately preceding same-source PR snapshot; the intervening commits changed documentation only. Local/regression PASS is not live provider authorization.
+- Production readiness [44255110124] remains **HOLD — 19 blockers**. This is the required fail-closed result, not a code-test regression. It performed no upload, scheduling or publication.
+- Non-destructive branch inventory [44256211966] passed: **4,309 branch-only commits, 9 base-only commits, 432 final-tree changed files**, decision `REQUIRES_REVIEW`.
+- Isolated baseline comparison [44256211803] passed on exact main SHA `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38` and candidate SHA `51e4defda80067ae5a59e1f5ea467d8ad0becee3`: main had 54 Node tests, 8 Python tests and 4 moderate npm audit vulnerabilities; candidate had 171 Node test files, 84 Python tests, zero skips and 0 npm audit vulnerabilities. Both test suites and installs passed.
 - PR safety remains mandatory: do not merge, close, mark ready, retarget, rebase, reset, force-push or rewrite history; do not modify `main`.
 
 ## B. Engineering and operational acceptance — current gate decisions
@@ -29,6 +31,12 @@
 | SEO-001 | NOT TESTED | Approve final metadata/captions/thumbnail against a genuine final export and provide measured search/competition evidence. Do not claim ranking guarantees. |
 
 The 171-file Node suite, 84 Python tests and 33 browser journeys establish current engineering regression health; they do not close the acceptance gates above.
+
+
+
+### GIT-002 semantic review slice completed — 18 November 2026
+
+The full nine-commit base-only list from branch inventory run [44256211966](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44256211966) was inspected by commit and file diff. All nine are test, documentation or workflow additions/removals/reverts; none changes production application source on the base-only side. The two accidental additions to main (the American narration review workflow and requirements-register documentation) were removed by the forward revert; two transient test files were likewise added/removed; the Facebook restore-history test was removed from main but remains deliberately preserved on the implementation branch. This closes the base-only semantic review slice only. The 4,309 branch-only commits and all 17 critical application modules still require complete human semantic review; selected security-sensitive code paths were spot-reviewed, not exhaustively approved. No merge/rebase/reset/force-push/history rewrite was performed.
 
 ## Production readiness — 19 current blockers
 
