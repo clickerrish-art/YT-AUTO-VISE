@@ -2704,7 +2704,7 @@ const server = http.createServer(async (req, res) => {
           technicalValidation: job.validationResults, rightsEvidence: rights,
           rightsEvidenceSha256: job.rightsChecks?.evidenceSha256 ?? null,
           reviewer: operatorId ?? null, publishingEnabled: false,
-          previewUrls: { video: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=video", thumbnail: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=thumbnail", captions: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=captions", narration: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=narration", images: imageArtifacts.map((item, index) => ({ path: item.path, sha256: item.sha256, url: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=image&index=" + index })) }
+          previewUrls: { video: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=video", thumbnail: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=thumbnail", captions: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=captions", narration: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=narration", images: imageArtifacts.map(item => ({ path: item.path, sha256: item.sha256, url: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=image&path=" + encodeURIComponent(item.path) + "&sha256=" + item.sha256 })) }
         });
       } catch (error) {
         return json(res, 409, { error: "Human-review evidence bundle failed integrity checks", detail: redactOperationalText(error instanceof Error ? error.message : "Evidence integrity failure", { roots: [root, stateDir] }), publishingEnabled: false });
@@ -2721,10 +2721,11 @@ const server = http.createServer(async (req, res) => {
         ? (job.outputArtifacts ?? []).find(item => path.extname(item.path ?? "").toLowerCase() === ".mp4")
         : kind === "thumbnail" ? job.thumbnailArtifact
         : kind === "narration" ? reviewNarrationArtifact(job)
-        : kind === "image" ? reviewImageArtifacts(job)[Number(url.searchParams.get("index"))]
+        : kind === "image" ? reviewImageArtifacts(job).find(item => item.path === url.searchParams.get("path") && item.sha256 === url.searchParams.get("sha256"))
         : { path: job.validationResults.captionsPath, sha256: job.validationResults.captionsSha256 };
       try {
         if (!artifact || typeof artifact.path !== "string" || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "")) throw new Error("Preview artifact record is incomplete");
+        if (url.searchParams.get("sha256") !== artifact.sha256) throw new Error("Preview URL is not bound to the current exact artifact SHA-256");
         const file = resolveRepositoryFile(artifact.path);
         const ext = path.extname(file).toLowerCase();
         const types = { ".mp4": "video/mp4", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".avif": "image/avif", ".srt": "text/plain; charset=utf-8", ".vtt": "text/vtt; charset=utf-8", ".mp3": "audio/mpeg", ".wav": "audio/wav", ".m4a": "audio/mp4", ".aac": "audio/aac", ".flac": "audio/flac", ".ogg": "audio/ogg" };
