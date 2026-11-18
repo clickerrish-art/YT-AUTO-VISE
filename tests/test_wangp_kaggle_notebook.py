@@ -24,7 +24,7 @@ class WanGPKaggleNotebookTests(unittest.TestCase):
                 ast.parse(source, filename=f"notebook-cell-{index}")
 
     def test_source_and_checkpoint_pins_are_present(self):
-        source = "\\n".join("".join(c.get("source", [])) for c in self.cells)
+        source = "\n".join("".join(c.get("source", [])) for c in self.cells)
         self.assertIn("f4cfc1259215577be9a2ee280c41efbedfb4459a", source)
         self.assertIn("16bb1ad02fe4ca8319b67261397ea4eeaa4896c4", source)
         self.assertIn("463076f7625d8c7fc8912011cf5d02db7f0a8ae666e1758cd835e5a8517ef0e0", source)
