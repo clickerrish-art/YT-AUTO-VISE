@@ -20,7 +20,7 @@ const relationship = {
 relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
 const rightsEvidence = { assets: [{ assetPath: "media/scene.mp4", licenseEvidenceLocation: "rights/license.txt", assetSha256: sha("c"), licenseEvidenceSha256: sha("d"), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "operator-1", verifiedAt: "2026-10-26T10:00:00.000Z" }] };
 const qualityScorecard = {
-  policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "Test Operator", reviewedAt: new Date().toISOString(),
+  policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "operator-1", reviewedAt: new Date().toISOString(),
   fullVideoPlayback: true, fullPlaybackEvidenceRef: "fixture/full-playback",
   thumbnailInspectedAtMobile: true, thumbnailInspectedAtDesktop: true, imageInspectionEvidenceRef: "fixture/image-inspection",
   factualEditorialEvidenceRef: "fixture/factual-review",
