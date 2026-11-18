@@ -14,7 +14,7 @@ import { assertShortParentRelationship, shortParentRelationshipSha256, validateS
 import { atomicWriteJson } from "./atomic-json-file.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 import { assertYoutubeVideoInsertScope } from "./youtube-oauth-scope.mjs";
-import { validateProductionQualityScorecard } from "./production-quality-scorecard.mjs";
+import { validateProductionQualityScorecard, qualityScorecardSha256 } from "./production-quality-scorecard.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 export const APPROVED_SELAR_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
@@ -296,6 +296,9 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
     if (!/^[a-f0-9]{64}$/.test(evidence.assetSha256 ?? "") || !/^[a-f0-9]{64}$/.test(evidence.licenseEvidenceSha256 ?? "")) throw new Error("rights evidence must contain source and license-evidence SHA-256 checksums");
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
     if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
+  }
+  if (approval.qualityScorecardSha256 !== qualityScorecardSha256(approval.qualityScorecard)) {
+    throw new Error("production quality scorecard checksum does not match the approval record");
   }
   const qualityErrors = validateProductionQualityScorecard(approval.qualityScorecard, {
     artifactSha256, metadataSha256: metadataVersion, relatedArtifacts: approval.relatedArtifacts, reviewer: approval.reviewer
