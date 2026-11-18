@@ -42,6 +42,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
   let oauth;
   let googleClient;
   let uploadScopeStatus = Object.freeze({ allowed: false, acceptedScope: null, grantedYouTubeScopes: [] });
+  let uploadScopeCheckedAt = null;
   if (oauthFactory) {
     oauth = oauthFactory({ clientId, clientSecret, refreshToken });
   } else if (!youtubeFactory) {
@@ -57,6 +58,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     }
     const tokenInfo = await oauth.getTokenInfo(accessToken.token);
     uploadScopeStatus = youtubeVideoInsertScopeStatus(tokenInfo);
+    uploadScopeCheckedAt = new Date().toISOString();
   }
   if (youtubeFactory) {
     youtube = youtubeFactory({ clientId, clientSecret, refreshToken });
@@ -184,6 +186,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     const inventory = {
       schemaVersion: 1, complete: true, mode: "READ_ONLY_OWNER_REVIEW_REQUIRED",
       uploadScopeVerified: uploadScopeStatus.allowed,
+      uploadScopeCheckedAt,
       acceptedUploadScope: uploadScopeStatus.acceptedScope,
       grantedYouTubeScopes: uploadScopeStatus.grantedYouTubeScopes,
       channelId: configuredChannelId, channelTitle: channel.snippet?.title ?? "",
@@ -211,6 +214,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     totalUploads: verifiedVideoCount,
     visibilityCounts: Object.freeze(counts),
     uploadScopeVerified: uploadScopeStatus.allowed,
+    uploadScopeCheckedAt,
     acceptedUploadScope: uploadScopeStatus.acceptedScope,
     grantedYouTubeScopes: Object.freeze([...uploadScopeStatus.grantedYouTubeScopes]),
     note: "Inventory completeness verified. Upload-capable OAuth scope is reported separately; format classification, publication-cycle reconciliation and timestamp approval remain separate release gates."
@@ -230,6 +234,7 @@ async function main() {
       ", private=" + result.visibilityCounts.private +
       ", unlisted=" + result.visibilityCounts.unlisted,
     "Upload-capable OAuth scope verified: " + result.uploadScopeVerified,
+    "Upload scope checked at: " + (result.uploadScopeCheckedAt ?? "NOT_CHECKED"),
     "Accepted videos.insert scope: " + (result.acceptedUploadScope ?? "NONE"),
     "Granted YouTube scopes: " + (result.grantedYouTubeScopes.join(", ") || "none"),
     result.note
