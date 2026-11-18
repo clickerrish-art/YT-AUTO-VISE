@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "status": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
   "mode": "READ_ONLY_IDENTITY_AND_INVENTORY_VERIFIED_OWNER_REVIEW_REQUIRED",
-  "workflowRunId": 44152608827,
-  "workflowRunAttempt": 2,
-  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44152608827",
-  "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc",
-  "checkedAt": "2026-11-18T00:45:40.055Z",
+  "workflowRunId": 44211269635,
+  "workflowRunAttempt": 1,
+  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44211269635",
+  "sourceCommit": "9aaffeee6b3ad75b19e92774fb1091d4209389ac",
+  "checkedAt": "2026-11-18T00:52:01.423Z",
   "deterministicIdentityAndPaginationTests": {
     "status": "PASS",
     "passed": 7,
@@ -33,11 +33,11 @@
     "unlisted": 0
   },
   "inventoryArtifact": {
-    "id": 14385238060,
+    "id": 14385812917,
     "name": "sonicvhibez-youtube-history-inventory",
-    "sha256": "c7ead2f69e86fcc798f252a3f3da53335e54ac8ecc915a178473a17996805033",
-    "createdAt": "2026-11-18T00:45:40Z",
-    "expiresAt": "2026-11-25T00:45:40Z"
+    "sha256": "ef87dc8a4137c4f5a39fd92572e850ee4a6f61fa24474ebdc80d5952d7224206",
+    "createdAt": "2026-11-18T00:52:02Z",
+    "expiresAt": "2026-11-25T00:52:01Z"
   },
   "videos": [
     {
@@ -64,9 +64,10 @@
     "reconciliationBlobSha": "627b68c655744a6891c2128d36bb8656fdb71415",
     "verifiedAt": "2026-11-10T04:35:06Z",
     "verifiedBy": "clickerrish-art",
-    "freshInventoryRunId": 44152608827,
-    "freshInventoryArtifactId": 14385238060,
-    "reason": "The fresh complete public/private/unlisted uploads inventory matches the exact video ID, channel, public visibility and YouTube publishedAt timestamp in the existing owner-reviewed YouTube Studio reconciliation. The owner previously confirmed the format as Short. Duration is PT20S and is a legacy exception to the current 50–60 second production target."
+    "freshInventoryRunId": 44211269635,
+    "freshInventoryArtifactId": 14385812917,
+    "reason": "The fresh complete public/private/unlisted uploads inventory (run 44211269635, artifact 14385812917) matches the exact video ID, channel, public visibility and YouTube publishedAt timestamp in the existing owner-reviewed YouTube Studio reconciliation. The owner previously confirmed the format as Short. Duration is PT20S and is a legacy exception to the current 50–60 second production target.",
+    "freshInventoryArtifactSha256": "ef87dc8a4137c4f5a39fd92572e850ee4a6f61fa24474ebdc80d5952d7224206"
   },
   "secretValuesLogged": false,
   "publishingEnabled": false,
@@ -117,6 +118,14 @@
       "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc",
       "jobId": 134487059540,
       "artifactId": 14385238060
+    },
+    {
+      "workflowRunId": 44211269635,
+      "attempt": 1,
+      "status": "PASS",
+      "sourceCommit": "9aaffeee6b3ad75b19e92774fb1091d4209389ac",
+      "jobId": 134489957947,
+      "artifactId": 14385812917
     }
   ],
   "previousSuccessfulVerification": {
@@ -201,19 +210,19 @@
     "expiresAt": "2026-11-16T15:57:20Z",
     "status": "EXPIRED_HISTORICAL_ARTIFACT"
   },
-  "verifiedAt": "2026-11-18T00:45:40.055Z",
+  "verifiedAt": "2026-11-18T00:52:01.423Z",
   "uploadAttemptReconciliation": {
     "status": "NOT_RECONCILED",
     "reason": "No complete current ledger of pending, uncertain, or previously attempted uploads has yet been independently reconciled. This remains a separate pre-upload blocker."
   },
   "latestSuccessfulReadOnlyVerification": {
-    "workflowRunId": 44152608827,
-    "jobId": 134487059540,
-    "attempt": 2,
-    "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc",
-    "verifiedAt": "2026-11-18T00:45:40.055Z",
+    "workflowRunId": 44211269635,
+    "jobId": 134489957947,
+    "attempt": 1,
+    "sourceCommit": "9aaffeee6b3ad75b19e92774fb1091d4209389ac",
+    "verifiedAt": "2026-11-18T00:52:01.423Z",
     "result": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
-    "artifactId": 14385238060,
-    "artifactSha256": "c7ead2f69e86fcc798f252a3f3da53335e54ac8ecc915a178473a17996805033"
+    "artifactId": 14385812917,
+    "artifactSha256": "ef87dc8a4137c4f5a39fd92572e850ee4a6f61fa24474ebdc80d5952d7224206"
   }
 }
