@@ -7,6 +7,7 @@ on:
       - "config/narration-voice-candidates.json"
       - "scripts/generate_piper_voice_audition.py"
       - "tests/test_generate_piper_voice_audition.py"
+      - "content/short-001-wildlife-video-storytelling.md"
       - ".github/workflows/piper-voice-audition.yml"
   workflow_dispatch:
 
@@ -33,7 +34,7 @@ jobs:
       - name: Validate candidate mapping and model hash logic
         run: python -m unittest discover -s tests -p "test_generate_piper_voice_audition.py" -v
       - name: Generate three male Australian voice samples
-        run: python scripts/generate_piper_voice_audition.py --output artifacts/piper-audition
+        run: python scripts/generate_piper_voice_audition.py --source-script content/short-001-wildlife-video-storytelling.md --output artifacts/piper-audition
       - name: Retain review-only voice samples
         uses: actions/upload-artifact@v4
         with:
