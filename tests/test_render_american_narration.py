@@ -29,7 +29,7 @@ class AmericanNarrationTests(unittest.TestCase):
     def test_headroom_reduces_peak_before_strict_audio_qc(self):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/"voice.wav"; rate=22050
-            samples=[32767 if i % 1000 == 0 else (-4000 if i % 2 else 4000) for i in range(rate*20)]
+            samples=[32767 if i % 1000 == 0 else (-4000 if i % 2 else 4000) for i in range(rate*55)]
             with wave.open(str(p),"wb") as w:
                 w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
                 w.writeframes(b"".join(struct.pack("<h",sample) for sample in samples))
@@ -45,7 +45,7 @@ class AmericanNarrationTests(unittest.TestCase):
             p=Path(tmp)/"voice.wav"; rate=22050
             with wave.open(str(p),"wb") as w:
                 w.setnchannels(1); w.setsampwidth(2); w.setframerate(rate)
-                w.writeframes(struct.pack("<h",32767)*(rate*20))
+                w.writeframes(struct.pack("<h",32767)*(rate*55))
             with self.assertRaisesRegex(ValueError,"duration/level/clipping"):
                 module.inspect_wav(p)
 
