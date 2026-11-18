@@ -12,7 +12,8 @@ import sys
 import wave
 from pathlib import Path
 
-from scripts.generate_piper_voice_audition import (
+try:
+    from .generate_piper_voice_audition import (
     CONFIG_NAME,
     MODEL_NAME,
     MODEL_SHA256,
@@ -22,8 +23,14 @@ from scripts.generate_piper_voice_audition import (
     extract_short_narration,
     sha256_file,
     sha256_text,
-    validate_config,
-)
+        validate_config,
+    )
+except ImportError:
+    from generate_piper_voice_audition import (
+        CONFIG_NAME, MODEL_NAME, MODEL_SHA256, REPO, REVISION,
+        download_pinned, extract_short_narration, sha256_file,
+        sha256_text, validate_config,
+    )
 
 VOICE_ID = "banjo"
 SPEAKER_ID = 5
