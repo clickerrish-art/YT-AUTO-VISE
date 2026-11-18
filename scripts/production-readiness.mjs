@@ -246,6 +246,12 @@ if (!exists(youtubeVerificationPath)) {
       const code = typeof verification.oauth?.errorCode === "string" ? verification.oauth.errorCode : "not-passing";
       blockers.push(`LIVE BLOCKER: read-only YouTube identity and uploads inventory verification is ${verification.status ?? "unknown"}; OAuth error ${code}.`);
     } else {
+      if (verification.latestAttempt && verification.latestAttempt.status !== "PASS") {
+        const latestError = typeof verification.latestAttempt.errorCode === "string"
+          ? verification.latestAttempt.errorCode
+          : "not-passing";
+        blockers.push(`LIVE BLOCKER: latest read-only YouTube OAuth attempt is ${verification.latestAttempt.status} (OAuth error ${latestError}); reauthorize and verify the refresh token before any upload.`);
+      }
       if (verification.uploadScopeVerified !== true ||
           !isFreshHistoryEvidence(verification.uploadScopeCheckedAt) ||
           ![
