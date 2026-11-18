@@ -4,6 +4,7 @@
  * This script never inserts, updates, schedules, or deletes YouTube content.
  */
 import { pathToFileURL } from "node:url";
+import { youtubeVideoInsertScopeStatus } from "./youtube-oauth-scope.mjs";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -32,19 +33,36 @@ function requireSecret(env, name) {
 /** Verify the authenticated account and enumerate every uploads-playlist item.
  * Only aggregate counts are returned; private video IDs/titles are never logged.
  */
-export async function verifySonicVhibezChannel({ env = process.env, youtubeFactory } = {}) {
+export async function verifySonicVhibezChannel({ env = process.env, youtubeFactory, oauthFactory } = {}) {
   const clientId = requireSecret(env, "YOUTUBE_CLIENT_ID");
   const clientSecret = requireSecret(env, "YOUTUBE_CLIENT_SECRET");
   const refreshToken = requireSecret(env, "YOUTUBE_REFRESH_TOKEN");
   const configuredChannelId = requireSecret(env, "SONICVHIBEZ_CHANNEL_ID");
   let youtube;
+  let oauth;
+  let googleClient;
+  let uploadScopeStatus = Object.freeze({ allowed: false, acceptedScope: null, grantedYouTubeScopes: [] });
+  if (oauthFactory) {
+    oauth = oauthFactory({ clientId, clientSecret, refreshToken });
+  } else if (!youtubeFactory) {
+    const { google } = await import("googleapis");
+    googleClient = google;
+    oauth = new googleClient.auth.OAuth2(clientId, clientSecret);
+  }
+  if (oauth) {
+    oauth.setCredentials({ refresh_token: refreshToken });
+    const accessToken = await oauth.getAccessToken();
+    if (!accessToken?.token) {
+      throw new Error("Google OAuth did not return an access token for the configured YouTube refresh token");
+    }
+    const tokenInfo = await oauth.getTokenInfo(accessToken.token);
+    uploadScopeStatus = youtubeVideoInsertScopeStatus(tokenInfo);
+  }
   if (youtubeFactory) {
     youtube = youtubeFactory({ clientId, clientSecret, refreshToken });
   } else {
-    const { google } = await import("googleapis");
-    const oauth = new google.auth.OAuth2(clientId, clientSecret);
-    oauth.setCredentials({ refresh_token: refreshToken });
-    youtube = google.youtube({ version: "v3", auth: oauth });
+    if (!googleClient || !oauth) throw new Error("YouTube API client could not be initialized safely");
+    youtube = googleClient.youtube({ version: "v3", auth: oauth });
   }
 
   const channelResponse = await youtube.channels.list({
@@ -165,6 +183,9 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     const inventoryPath = path.resolve(process.cwd(), inventoryPathValue);
     const inventory = {
       schemaVersion: 1, complete: true, mode: "READ_ONLY_OWNER_REVIEW_REQUIRED",
+      uploadScopeVerified: uploadScopeStatus.allowed,
+      acceptedUploadScope: uploadScopeStatus.acceptedScope,
+      grantedYouTubeScopes: uploadScopeStatus.grantedYouTubeScopes,
       channelId: configuredChannelId, channelTitle: channel.snippet?.title ?? "",
       channelHandle: channel.snippet?.customUrl ?? "", verifiedAt: new Date().toISOString(),
       uploadsPlaylistPages: pages, totalUploads: verifiedVideoCount,
@@ -189,7 +210,10 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     uploadsPlaylistPages: pages,
     totalUploads: verifiedVideoCount,
     visibilityCounts: Object.freeze(counts),
-    note: "Inventory completeness verified. Format classification, publication-cycle reconciliation and timestamp approval remain separate release gates."
+    uploadScopeVerified: uploadScopeStatus.allowed,
+    acceptedUploadScope: uploadScopeStatus.acceptedScope,
+    grantedYouTubeScopes: Object.freeze([...uploadScopeStatus.grantedYouTubeScopes]),
+    note: "Inventory completeness verified. Upload-capable OAuth scope is reported separately; format classification, publication-cycle reconciliation and timestamp approval remain separate release gates."
   });
 }
 
@@ -205,6 +229,9 @@ async function main() {
     "Visibility totals: public=" + result.visibilityCounts.public +
       ", private=" + result.visibilityCounts.private +
       ", unlisted=" + result.visibilityCounts.unlisted,
+    "Upload-capable OAuth scope verified: " + result.uploadScopeVerified,
+    "Accepted videos.insert scope: " + (result.acceptedUploadScope ?? "NONE"),
+    "Granted YouTube scopes: " + (result.grantedYouTubeScopes.join(", ") || "none"),
     result.note
   ].join("\n") + "\n");
 }
