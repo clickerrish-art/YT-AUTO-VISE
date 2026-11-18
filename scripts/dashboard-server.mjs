@@ -2668,6 +2668,9 @@ const server = http.createServer(async (req, res) => {
         add("thumbnail", job.thumbnailArtifact);
         const captionsPath = job.validationResults.captionsPath;
         add("captions", { path: captionsPath, sha256: job.validationResults.captionsSha256 });
+        const narration = (job.outputArtifacts ?? []).find(item => /\.(mp3|wav|m4a|aac|flac|ogg)$/i.test(item.path ?? ""));
+        if (!narration) throw new Error("Final narration audio artifact is missing");
+        add("narration", narration);
         const metadataPath = job.metadataPath;
         const metadataFile = resolveRepositoryFile(metadataPath);
         const metadataStat = fs.lstatSync(metadataFile);
@@ -2680,7 +2683,7 @@ const server = http.createServer(async (req, res) => {
           technicalValidation: job.validationResults, rightsEvidence: rights,
           rightsEvidenceSha256: job.rightsChecks?.evidenceSha256 ?? null,
           reviewer: operatorId ?? null, publishingEnabled: false,
-          previewUrls: { video: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=video", thumbnail: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=thumbnail", captions: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=captions" }
+          previewUrls: { video: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=video", thumbnail: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=thumbnail", captions: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=captions", narration: "/api/jobs/review/preview?jobId=" + encodeURIComponent(jobId) + "&kind=narration" }
         });
       } catch (error) {
         return json(res, 409, { error: "Human-review evidence bundle failed integrity checks", detail: redactOperationalText(error instanceof Error ? error.message : "Evidence integrity failure", { roots: [root, stateDir] }), publishingEnabled: false });
@@ -2689,21 +2692,22 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/jobs/review/preview") {
       const jobId = url.searchParams.get("jobId");
       const kind = url.searchParams.get("kind");
-      if (!jobId || !["video", "thumbnail", "captions"].includes(kind)) return json(res, 400, { error: "jobId and a supported preview kind are required" });
+      if (!jobId || !["video", "thumbnail", "captions", "narration"].includes(kind)) return json(res, 400, { error: "jobId and a supported preview kind are required" });
       const state = loadState();
       const job = state.jobs.find(entry => entry.kind === "CONTENT_PRODUCTION" && entry.id === jobId);
       if (!job || job.state !== "AWAITING_HUMAN_REVIEW" || job.validationResults?.passed !== true) return json(res, 404, { error: "Reviewable job not found" });
       const artifact = kind === "video"
         ? (job.outputArtifacts ?? []).find(item => path.extname(item.path ?? "").toLowerCase() === ".mp4")
         : kind === "thumbnail" ? job.thumbnailArtifact
+        : kind === "narration" ? (job.outputArtifacts ?? []).find(item => /\.(mp3|wav|m4a|aac|flac|ogg)$/i.test(item.path ?? ""))
         : { path: job.validationResults.captionsPath, sha256: job.validationResults.captionsSha256 };
       try {
         if (!artifact || typeof artifact.path !== "string" || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "")) throw new Error("Preview artifact record is incomplete");
         const file = resolveRepositoryFile(artifact.path);
         const ext = path.extname(file).toLowerCase();
-        const types = { ".mp4": "video/mp4", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".srt": "text/plain; charset=utf-8", ".vtt": "text/vtt; charset=utf-8" };
+        const types = { ".mp4": "video/mp4", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".srt": "text/plain; charset=utf-8", ".vtt": "text/vtt; charset=utf-8", ".mp3": "audio/mpeg", ".wav": "audio/wav", ".m4a": "audio/mp4", ".aac": "audio/aac", ".flac": "audio/flac", ".ogg": "audio/ogg" };
         const contentType = types[ext];
-        if (!contentType || (kind === "video" && ext !== ".mp4") || (kind === "thumbnail" && ![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) || (kind === "captions" && ![".srt", ".vtt"].includes(ext))) throw new Error("Preview file type is not permitted");
+        if (!contentType || (kind === "video" && ext !== ".mp4") || (kind === "thumbnail" && ![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) || (kind === "captions" && ![".srt", ".vtt"].includes(ext)) || (kind === "narration" && ![".mp3", ".wav", ".m4a", ".aac", ".flac", ".ogg"].includes(ext))) throw new Error("Preview file type is not permitted");
         // Open without following a final-component symlink, then hash and serve
         // the same descriptor bytes so a path swap cannot bypass integrity checks.
         const fd = fs.openSync(file, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
