@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "status": "BLOCKED_NOT_RENDERABLE",
+  "channel": "SonicVhibez",
+  "contentType": "long_form",
+  "targetAspectRatio": "16:9",
+  "targetDurationSeconds": {
+    "min": 360,
+    "max": 600
+  },
+  "title": "How to Plan a Wildlife Video People Want to Watch",
+  "footagePath": "../media/long-form-001-footage.mp4",
+  "narrationPath": "../media/long-form-drafts/long-001-narration-final.mp3",
+  "captionsPath": "long-form-001-captions-final.srt",
+  "qualityEvidencePath": "long-form-001-quality-evidence.json",
+  "footageLicenseEvidence": "",
+  "narrationLicenseEvidence": "",
+  "rightsConfirmed": false,
+  "complianceReviewed": false,
+  "containsSyntheticMedia": true,
+  "hasPaidPromotion": true,
+  "sourceScriptPath": "long-form-scripts.md",
+  "sourceScriptBlobSha256": "63b4d3473c510e49052a8b7beac406f727491fba",
+  "priorNarrationEvidencePath": "long-form-narration-review-evidence.json",
+  "priorNarrationStatus": "SUPERSEDED_SOURCE_SCRIPT_HASH_MISMATCH",
+  "notes": "This is a fail-closed production manifest, not evidence of a completed render. The current script blob SHA differs from the SHA recorded by the old narration artifact; regenerate narration from this exact current script before use. The referenced final footage, narration, captions and quality evidence do not exist in the repository. Verify commercial voice rights, footage licenses, factual sources, final audio/caption synchronization, thumbnail and full-length human review before changing status. Private-only, unscheduled; no upload authorization."
+}
