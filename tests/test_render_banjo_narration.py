@@ -131,6 +131,8 @@ class BanjoNarrationTests(unittest.TestCase):
             def downloader(filename, destination):
                 if filename == module.MODEL_NAME:
                     destination.write_bytes(b"pinned-test-model")
+                elif filename == module.ATTRIBUTION_FILE:
+                    destination.write_text("CC BY 4.0; Jenny (Dioco); Timothy Ferguson; commercial use permitted.")
                 else:
                     destination.write_text(json.dumps({
                         "num_speakers": 10,
@@ -157,9 +159,20 @@ class BanjoNarrationTests(unittest.TestCase):
             self.assertEqual(report["commercialAttributionReview"], "PENDING")
             self.assertTrue((output / module.OUTPUT_NAME).is_file())
             self.assertTrue((output / "ATTRIBUTION.txt").is_file())
+            self.assertTrue((output / module.ATTRIBUTION_FILE).is_file())
+            self.assertTrue(report["attributionFileValidated"])
             self.assertEqual(report["audioMetrics"]["clippedSampleCount"], 0)
             self.assertEqual(report["audioRepair"]["clippedSamplesInterpolated"], 3)
             self.assertLessEqual(report["audioMetrics"]["peakDbfs"], -0.7)
+
+    def test_full_model_attribution_file_is_validated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "ATTRIBUTION.md"
+            path.write_text("CC BY 4.0; Jenny (Dioco); Timothy Ferguson; commercial use permitted.")
+            self.assertIn("Timothy Ferguson", module.validate_attribution_file(path))
+            path.write_text("CC BY 4.0 only")
+            with self.assertRaisesRegex(ValueError, "incomplete"):
+                module.validate_attribution_file(path)
 
     def test_report_attribution_is_present(self):
         self.assertIn("Jenny (Dioco)", module.ATTRIBUTION)

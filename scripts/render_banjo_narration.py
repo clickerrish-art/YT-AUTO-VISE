@@ -29,6 +29,7 @@ VOICE_ID = "banjo"
 SPEAKER_ID = 5
 NARRATOR = "Timothy Ferguson"
 OUTPUT_NAME = "banjo-short-001-narration-review.wav"
+ATTRIBUTION_FILE = "ATTRIBUTION.md"
 ATTRIBUTION = (
     "en_AU-librivox-medium, CC BY 4.0. Fine-tuned from "
     "en_GB-jenny_dioco-medium, derived from the Jenny TTS dataset "
@@ -40,6 +41,15 @@ ATTRIBUTION_URL = (
     "piper-en_AU-librivox-medium/blob/3faad046064c56f7316ffd745d5a8b14035f35df/ATTRIBUTION.md"
 )
 
+
+
+def validate_attribution_file(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    required = ("CC BY 4.0", "Jenny (Dioco)", "Timothy Ferguson", "commercial use")
+    missing = [term for term in required if term.casefold() not in text.casefold()]
+    if missing:
+        raise ValueError("Pinned model ATTRIBUTION.md is incomplete: " + ", ".join(missing))
+    return text
 
 def inspect_wav(path: Path) -> dict:
     with wave.open(str(path), "rb") as wav:
@@ -173,6 +183,9 @@ def render(
         raise ValueError("Pinned Australian Piper ONNX model SHA-256 mismatch")
     downloader(CONFIG_NAME, config_path)
     config = validate_config(config_path)
+    attribution_path = output_dir / ATTRIBUTION_FILE
+    downloader(ATTRIBUTION_FILE, attribution_path)
+    attribution_text = validate_attribution_file(attribution_path)
 
     if config.get("speaker_id_map", {}).get("timothy_ferguson") != SPEAKER_ID:
         raise ValueError("Banjo speaker mapping does not match the pinned model config")
@@ -218,6 +231,10 @@ def render(
         "modelLicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
         "modelAttribution": ATTRIBUTION,
         "modelAttributionSource": ATTRIBUTION_URL,
+        "attributionFile": ATTRIBUTION_FILE,
+        "attributionFileSha256": sha256_file(attribution_path),
+        "attributionFileBytes": attribution_path.stat().st_size,
+        "attributionFileValidated": True,
         "upstreamAttributionNote": (
             "The model author requests Jenny (Dioco) credit for the base-checkpoint "
             "lineage where practical, including server-side audio generation. "
@@ -244,8 +261,13 @@ def render(
     report_path = output_dir / "banjo-narration-review.json"
     report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     (output_dir / "ATTRIBUTION.txt").write_text(
-        ATTRIBUTION + "\n\nModel source and full attribution: " + ATTRIBUTION_URL +
-        "\nLicense: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/\n",
+        "Model credit: DataCraftsmanAustralia, en_AU-librivox-medium (CC BY 4.0).\n"
+        + ATTRIBUTION + "\n\nFull pinned ATTRIBUTION.md is included beside this file.\n"
+        + "Source: " + ATTRIBUTION_URL + "\n"
+        + "License: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/\n"
+        + "Generated voice: Banjo / Timothy Ferguson, speaker 5.\n"
+        + "Audio changes: isolated full-scale samples were interpolated; the resulting audio was peak-limited to -0.77 dBFS.\n"
+        + "Jenny (Dioco) is credited as the base-checkpoint attribution party where practical, as requested by the model author.\n",
         encoding="utf-8",
     )
     return report
