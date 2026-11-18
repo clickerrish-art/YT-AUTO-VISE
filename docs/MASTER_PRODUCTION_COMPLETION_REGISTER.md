@@ -2,10 +2,11 @@
 
 **This live refresh supersedes older checkpoint details below wherever they conflict.** It is an evidence snapshot, not a release approval.
 
-- Current code/test branch immediately before this register refresh: `cad909be9b70eaa897b919aebc93439dceaf15b6`.
-- `main`: `2e4153c8252349d1a7c5655f5cdc00da557c597e` (not modified).
-- PR #1: OPEN / DRAFT / UNMERGED. No merge, close, ready-for-review change, reset, rebase, force-push or history rewrite.
-- Branch comparison before this documentation commit: 4,287 ahead / 6 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. GIT-002 semantic review remains NOT TESTED.
+- Current implementation branch head at this register refresh: `d7b17f174f921f36424f4e96170187a40a19dbc5`; latest fully tested code candidate before the documentation-only commit: `95fe4d83d230925a2aa31dbbeaa1d5dfd2b0c89f`.
+- `main` HEAD: `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38`. Its tree hash `f4d82cadc0b2f896702d3a249f367c19fdf7e5db` is identical to the original `main` tree at `2e4153c8252349d1a7c5655f5cdc00da557c597e`.
+- **Safety incident and correction:** commits `5af11d8d63e36808ca8c77f5435a29a965270254` and `a10eca5d13da0b120eb55b2c9c40bb2c488eb61a` were accidentally created on `main` because two contents updates omitted the implementation-branch parameter. They added only `docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json` and `.github/workflows/american-narration-review.yml`; both files were removed by normal forward revert commit `2cd6f223`. The original main tree is restored exactly. No force-push, reset, rebase or history rewrite was used. No further writes to `main` are permitted.
+- PR #1: OPEN / DRAFT / UNMERGED. No merge, close or ready-for-review change.
+- Branch comparison after restoration: 4,303 ahead / 9 behind; merge base remains `45352b73bb6cc4787b2a49988b575afb754ab627`. GIT-002 semantic review remains NOT TESTED.
 - Full exact-SHA CI checkpoint `62a7e6305c18f1d25c9e9ffd3088e4f990044af4`: 977/977 Node tests passed; 170/170 Node test files passed; 83/83 Python tests passed; 33/33 Chromium journeys passed; isolated main/candidate baseline passed; metadata, queue, Cloudflare durable-state, runner-bridge, deployment-recovery, Nature Frontiers editorial and Instagram safety suites passed. npm audit reported zero vulnerabilities. The readiness workflow correctly returned HOLD, not PASS. Later narration CLI/headroom changes are being re-tested on newer SHAs; do not transfer the earlier result to those later commits.
 - The latest readiness artifact on `62a7e630` reports **19 release blockers**. It confirms the previously reconciled single legacy YouTube upload and prior-attempt ledger, but it does not authorize a new upload.
 
