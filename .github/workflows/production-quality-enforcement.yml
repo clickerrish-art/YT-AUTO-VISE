@@ -6,7 +6,8 @@ on:
     paths:
       - "scripts/production-quality-scorecard.mjs"
       - "scripts/upload-private.mjs"
-      - "test/production-quality-scorecard.test.mjs"
+      - "test/**"
+      - "tests/**"
       - ".github/workflows/production-quality-enforcement.yml"
       - "docs/PRODUCTION-QUALITY-ENFORCEMENT.md"
   push:
