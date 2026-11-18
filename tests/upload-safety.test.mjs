@@ -113,7 +113,7 @@ test("upload approval rejects mismatched job, artifact, metadata, and visibility
   assert.throws(() => validateUploadApproval({ ...approval, technicalValidationReceipt: undefined }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /technical-validation receipt is missing/);
   assert.throws(() => validateUploadApproval({ ...approval, technicalValidationReceipt: { passed: false, fixtureOnly: true } }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /receipt checksum does not match/);
   assert.throws(() => validateUploadApproval(approval, { jobId: "job-002", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /job ID/);
-  assert.throws(() => validateUploadApproval(approval, { jobId: "job-001", artifactSha256: "d".repeat(64), metadataVersion: "b".repeat(64) }), /artifact checksum/);
+  assert.throws(() => validateUploadApproval(approval, { jobId: "job-001", artifactSha256: "d".repeat(64), metadataVersion: "b".repeat(64) }), /artifact checksum|video hash does not match/);
   assert.throws(() => validateUploadApproval(approval, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "e".repeat(64) }), /metadata version/);
   assert.throws(() => validateUploadApproval({ ...approval, visibility: "public" }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /private-only/);
   assert.throws(() => validateUploadApproval({ ...approval, rightsEvidenceSha256: "c".repeat(64) }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /rights evidence checksum/);
