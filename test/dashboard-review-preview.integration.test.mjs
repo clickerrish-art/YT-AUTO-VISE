@@ -31,14 +31,16 @@ test("human-review bundle and previews require operator auth and reject changed 
     video: Buffer.from("test mp4 bytes - review preview fixture"),
     thumbnail: Buffer.from("test jpeg bytes - review preview fixture"),
     captions: Buffer.from("1\n00:00:00,000 --> 00:00:01,000\nWildlife encounter\n"),
+    narration: Buffer.from("test mp3 bytes - review preview fixture"),
     metadata: Buffer.from(JSON.stringify({ channel: "SonicVhibez", visibility: "private", title: "Review fixture" }) + "\n")
   };
   const paths = {
     video: path.join(relativeDir, "final.mp4"),
     thumbnail: path.join(relativeDir, "thumbnail.jpg"),
-    captions: path.join(relativeDir, "captions.srt")
+    captions: path.join(relativeDir, "captions.srt"),
+    narration: path.join(relativeDir, "narration.mp3")
   };
-  for (const key of ["video", "thumbnail", "captions"]) fs.writeFileSync(path.join(process.cwd(), paths[key]), artifacts[key]);
+  for (const key of ["video", "thumbnail", "captions", "narration"]) fs.writeFileSync(path.join(process.cwd(), paths[key]), artifacts[key]);
   fs.writeFileSync(metadataAbsolute, artifacts.metadata);
   const hashes = Object.fromEntries(Object.entries(artifacts).map(([key, value]) => [key, digest(value)]));
   const port = await reservePort();
@@ -70,7 +72,7 @@ test("human-review bundle and previews require operator auth and reject changed 
   state.jobs.push({
     kind: "CONTENT_PRODUCTION", id: fixtureId, state: "AWAITING_HUMAN_REVIEW",
     title: "Review fixture", contentType: "short", metadataPath: metadataRelative, metadataVersion: hashes.metadata,
-    outputArtifacts: [{ path: paths.video, sha256: hashes.video }],
+    outputArtifacts: [{ path: paths.video, sha256: hashes.video }, { path: paths.narration, sha256: hashes.narration }],
     thumbnailArtifact: { path: paths.thumbnail, sha256: hashes.thumbnail },
     validationResults: { passed: true, artifacts: [{ path: paths.video, sha256: hashes.video }], thumbnail: { path: paths.thumbnail, sha256: hashes.thumbnail }, captionsPath: paths.captions, captionsSha256: hashes.captions, metadataVersion: hashes.metadata },
     rightsChecks: { evidence: { verificationStatus: "VERIFIED", permittedUses: ["YouTube"] }, evidenceSha256: "b".repeat(64) }
@@ -83,9 +85,15 @@ test("human-review bundle and previews require operator auth and reject changed 
   assert.equal(bundleResponse.status, 200);
   const bundle = await bundleResponse.json();
   assert.equal(bundle.publishingEnabled, false);
-  assert.equal(bundle.artifacts.length, 3);
+  assert.equal(bundle.artifacts.length, 4);
   assert.equal(bundle.metadata.sha256, hashes.metadata);
-  for (const kind of ["video", "thumbnail", "captions"]) {
+  assert.equal(bundle.previewUrls.images.length, 1);
+  const unauthImage = await fetch(base + bundle.previewUrls.images[0].url);
+  assert.equal(unauthImage.status, 401, "image preview must require operator authentication");
+  const imageResponse = await fetch(base + bundle.previewUrls.images[0].url, { headers });
+  assert.equal(imageResponse.status, 200);
+  assert.deepEqual(Buffer.from(await imageResponse.arrayBuffer()), artifacts.thumbnail);
+  for (const kind of ["video", "thumbnail", "captions", "narration"]) {
     const unauth = await fetch(base + bundle.previewUrls[kind]);
     assert.equal(unauth.status, 401, kind + " preview must require operator authentication");
     const response = await fetch(base + bundle.previewUrls[kind], { headers });
