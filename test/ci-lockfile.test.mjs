@@ -18,11 +18,8 @@ test("metadata validation runs once per PR update and bounds FFmpeg installation
   assert.match(validationWorkflow, /^  workflow_dispatch:/m);
   assert.doesNotMatch(validationWorkflow, /^  push:/m,
     "the PR-scoped metadata validation must not duplicate the same candidate push run");
-  assert.doesNotMatch(validationWorkflow, /apt-get update/);
-  assert.match(validationWorkflow, /timeout 300s sudo apt-get install/);
-  assert.match(validationWorkflow, /Acquire::Retries=1/);
-  assert.match(validationWorkflow, /Acquire::http::Timeout=30/);
-  assert.match(validationWorkflow, /Acquire::https::Timeout=30/);
+  assert.match(validationWorkflow, /bash \.github\/scripts\/install-ffmpeg-static\.sh/);
+  assert.doesNotMatch(validationWorkflow, /apt-get/);
 });
 
 test("package manifest and lockfile root metadata agree", () => {
@@ -48,11 +45,8 @@ test("isolated baseline runs once per PR update and bounds free-runner dependenc
   assert.match(baselineWorkflow, /^  pull_request:/m);
   assert.doesNotMatch(baselineWorkflow, /^  push:/m,
     "the PR-scoped baseline must not queue a duplicate push run for the same candidate SHA");
-  assert.doesNotMatch(baselineWorkflow, /apt-get update/);
-  assert.match(baselineWorkflow, /timeout 300s sudo apt-get install/);
-  assert.match(baselineWorkflow, /Acquire::Retries=1/);
-  assert.match(baselineWorkflow, /Acquire::http::Timeout=30/);
-  assert.match(baselineWorkflow, /Acquire::https::Timeout=30/);
+  assert.match(baselineWorkflow, /bash \.github\/scripts\/install-ffmpeg-static\.sh/);
+  assert.doesNotMatch(baselineWorkflow, /apt-get/);
   assert.match(baselineWorkflow, /timeout 600s npm ci --ignore-scripts/);
   assert.match(baselineWorkflow, /timeout 600s npm install --ignore-scripts/);
   assert.match(baselineWorkflow, /timeout 300s python -m pip install/);

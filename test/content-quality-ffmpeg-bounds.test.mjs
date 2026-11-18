@@ -2,22 +2,27 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 
-const boundedFfmpegWorkflows = [
+const ffmpegWorkflows = [
   ".github/workflows/validate-automation.yml",
   ".github/workflows/instagram-publisher-safety.yml",
   ".github/workflows/queue-readiness.yml",
   ".github/workflows/content-quality.yml",
-  ".github/workflows/isolated-baseline-comparison.yml"
+  ".github/workflows/isolated-baseline-comparison.yml",
+  ".github/workflows/validate.yml"
 ];
 
-test("FFmpeg CI setup avoids slow apt index refresh and bounds package installation", () => {
-  for (const path of boundedFfmpegWorkflows) {
+test("FFmpeg CI uses pinned static binaries instead of slow apt package installs", () => {
+  for (const path of ffmpegWorkflows) {
     const workflow = fs.readFileSync(path, "utf8");
-    assert.doesNotMatch(workflow, /apt-get update/, path + " must not refresh package indexes");
-    assert.match(workflow, /timeout 300s sudo apt-get install/, path + " must bound FFmpeg installation");
-    assert.match(workflow, /Acquire::Retries=1/, path + " must bound transient retries");
-    assert.match(workflow, /Acquire::http::Timeout=30/, path + " must bound HTTP timeout");
-    assert.match(workflow, /Acquire::https::Timeout=30/, path + " must bound HTTPS timeout");
-    assert.match(workflow, /--no-install-recommends/, path + " must avoid unnecessary packages");
+    assert.match(workflow, /bash \.github\/scripts\/install-ffmpeg-static\.sh/, path + " must use the shared static FFmpeg installer");
+    assert.doesNotMatch(workflow, /apt-get/, path + " must not use apt package installation");
   }
+
+  const installer = fs.readFileSync(".github/scripts/install-ffmpeg-static.sh", "utf8");
+  assert.match(installer, /timeout 240s npm install/);
+  assert.match(installer, /ffmpeg-static@5\.3\.0/);
+  assert.match(installer, /@derhuerst\/ffprobe-static@5\.3\.0/);
+  assert.match(installer, /GITHUB_PATH/);
+  assert.match(installer, /ffmpeg" -version/);
+  assert.match(installer, /ffprobe" -version/);
 });

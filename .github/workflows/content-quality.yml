@@ -46,7 +46,7 @@ jobs:
       - name: Install FFmpeg for renderer integration tests
         run: |
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            timeout 300s sudo apt-get install -y --no-install-recommends -o Acquire::Retries=1 -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 ffmpeg
+            bash .github/scripts/install-ffmpeg-static.sh
           fi
           ffmpeg -version
           ffprobe -version
