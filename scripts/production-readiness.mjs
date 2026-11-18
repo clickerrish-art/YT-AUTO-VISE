@@ -101,7 +101,7 @@ if (!queueExists) {
   }
 }
 
-const mediaInventoryPath = "content/sonicvhibez-imported-media-inventory.json";
+const mediaInventoryPath = process.env.SONICVHIBEZ_IMPORTED_MEDIA_INVENTORY_PATH?.trim() || "content/sonicvhibez-imported-media-inventory.json";
 if (!exists(mediaInventoryPath)) {
   blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is missing.");
 } else {
@@ -110,17 +110,23 @@ if (!exists(mediaInventoryPath)) {
     if (!inventory || typeof inventory !== "object" || Array.isArray(inventory) || !Array.isArray(inventory.assets) || inventory.assets.length === 0) {
       blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory must contain a non-empty assets array.");
     } else {
-      const unresolvedAssets = inventory.assets.filter(asset => {
+      const excludedAssets = inventory.assets.filter(asset =>
+        asset?.excludedFromProduction === true || asset?.status === "EXCLUDED_NOT_USED"
+      );
+      const selectedAssets = inventory.assets.filter(asset =>
+        asset?.excludedFromProduction !== true && asset?.status !== "EXCLUDED_NOT_USED"
+      );
+      const unresolvedAssets = selectedAssets.filter(asset => {
         const sourceVerified = typeof asset?.originalSourceUrl === "string" && /^https:\/\/www\.pexels\.com\/video\//.test(asset.originalSourceUrl);
         const localPath = typeof asset?.localMediaPath === "string" && asset.localMediaPath.trim() && !path.isAbsolute(asset.localMediaPath) && exists(asset.localMediaPath);
         const hashVerified = typeof asset?.sha256 === "string" && /^[a-f0-9]{64}$/i.test(asset.sha256);
         return asset?.status !== "CLEARED" || !sourceVerified || asset?.creatorConfirmed !== true || asset?.rightsConfirmed !== true || !localPath || !hashVerified || asset?.humanVisualReview !== "PASS";
       });
-      if (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0) {
+      if (selectedAssets.length > 0 && (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0)) {
         const ids = unresolvedAssets.map(asset => asset?.canvaAssetId).filter(Boolean);
-        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} imported Canva wildlife asset(s) remain unverified (${ids.join(", ") || "inventory not cleared"}); exact source page and creator, original MP4, SHA-256 and human visual review are required before use.`);
+        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported Canva wildlife asset(s) remain unverified (${ids.join(", ") || "selected inventory not cleared"}); exact source page and creator, original MP4, SHA-256 and human visual review are required before use.`);
       }
-      notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${unresolvedAssets.length} unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
+      notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${excludedAssets.length} excluded from production (not rights-cleared); ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
     }
   } catch {
     blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is not valid JSON.");
