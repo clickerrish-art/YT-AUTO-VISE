@@ -11,7 +11,47 @@
       "format": "short",
       "visibility": "public",
       "actualPublishedAt": "2026-10-22T15:05:56Z",
-      "evidenceReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970; https://www.youtube.com/watch?v=LjePS02hA1o"
+      "evidenceReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970; https://www.youtube.com/watch?v=LjePS02hA1o",
+      "latestInventoryMatch": {
+        "videoId": "LjePS02hA1o",
+        "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+        "visibility": "public",
+        "youtubePublishedAt": "2026-10-22T15:05:56Z",
+        "scheduledPublishAt": null,
+        "duration": "PT20S",
+        "format": "short"
+      }
     }
-  ]
+  ],
+  "latestInventoryEvidence": {
+    "workflowRunId": 44152608827,
+    "workflowRunAttempt": 2,
+    "jobId": 134487059540,
+    "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc",
+    "verifiedAt": "2026-11-18T00:45:40.055Z",
+    "artifactId": 14385238060,
+    "artifactSha256": "c7ead2f69e86fcc798f252a3f3da53335e54ac8ecc915a178473a17996805033",
+    "complete": true,
+    "uploadsPlaylistPages": 1,
+    "totalUploads": 1,
+    "visibilityCounts": {
+      "public": 1,
+      "private": 0,
+      "unlisted": 0
+    }
+  },
+  "durationPolicyException": {
+    "status": "LEGACY_EXCEPTION_NOT_CURRENT_STANDARD",
+    "videoId": "LjePS02hA1o",
+    "actualDuration": "PT20S",
+    "currentShortTargetSeconds": {
+      "min": 50,
+      "max": 60
+    },
+    "note": "Owner-confirmed historical Short remains in publication history but does not satisfy the current 50–60 second Short production specification."
+  },
+  "uploadAttemptReconciliation": {
+    "status": "NOT_RECONCILED",
+    "note": "Fresh remote inventory is complete and matches the owner-reviewed publication record. No complete current ledger of pending/uncertain local or remote upload attempts has been supplied or independently verified. This must be reconciled immediately before any upload; no cadence clearance is claimed."
+  }
 }
