@@ -14,6 +14,7 @@ import { assertShortParentRelationship, shortParentRelationshipSha256, validateS
 import { atomicWriteJson } from "./atomic-json-file.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
 import { assertYoutubeVideoInsertScope } from "./youtube-oauth-scope.mjs";
+import { validateProductionQualityScorecard } from "./production-quality-scorecard.mjs";
 
 export const APPROVED_SELAR_URL = "https://selar.com/0u19v8u99l";
 export const APPROVED_SELAR_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
@@ -296,6 +297,10 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
     if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
   }
+  const qualityErrors = validateProductionQualityScorecard(approval.qualityScorecard, {
+    artifactSha256, metadataSha256: metadataVersion, relatedArtifacts: approval.relatedArtifacts
+  });
+  if (qualityErrors.length) throw new Error("production quality scorecard blocked: " + qualityErrors.join("; "));
   if (approval.artifactSha256 !== artifactSha256) throw new Error("approval artifact checksum does not match the actual MP4");
   if (approval.metadataVersion !== metadataVersion) throw new Error("approval metadata version does not match the actual metadata file");
   if (typeof approval.reviewer !== "string" || approval.reviewer.trim().length < 2) throw new Error("authenticated human reviewer identity is missing");
