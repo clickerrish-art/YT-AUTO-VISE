@@ -1,6 +1,12 @@
 name: Internet Archive wildlife metadata discovery
 
 on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - '.github/workflows/internet-archive-discovery.yml'
+      - 'scripts/discover_internet_archive_assets.py'
+      - 'tests/test_internet_archive_discovery.py'
   schedule:
     - cron: '41 5 * * 3'
   workflow_dispatch:
@@ -32,7 +38,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test rights triage
-        run: python -m unittest tests.test_internet_archive_discovery -v
+        run: python -m unittest discover -s tests -p 'test_internet_archive_discovery.py' -v
       - name: Search Internet Archive metadata only
         env:
           ARCHIVE_QUERY: ${{ inputs.query }}
