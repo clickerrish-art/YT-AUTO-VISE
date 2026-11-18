@@ -1,14 +1,23 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { spawnSync } from "node:child_process";
 
-test("renderer refuses to run without an explicitly reviewed manifest", () => {
-  const result = spawnSync(process.execPath, ["scripts/render-short.mjs"], {
-    encoding: "utf8",
-  });
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /render manifest not found/i);
+test("renderer refuses to run when the working project has no explicitly reviewed manifest", () => {
+  const emptyProject = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-render-short-"));
+  try {
+    const rendererPath = path.resolve("scripts/render-short.mjs");
+    const result = spawnSync(process.execPath, [rendererPath], {
+      cwd: emptyProject,
+      encoding: "utf8",
+    });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /render manifest not found/i);
+  } finally {
+    fs.rmSync(emptyProject, { recursive: true, force: true });
+  }
 });
 
 test("example render manifest defaults to a blocked state", () => {
