@@ -698,3 +698,39 @@ test("publisher supplies the authoritative campaign registry to the final payloa
     assert.equal(result.skipped, 1);
   } finally { f.cleanup(); }
 });
+
+test("publisher performs a second fail-closed quality and policy evaluation immediately before Meta mutation", async () => {
+  const f = setup();
+  try {
+    Object.assign(f.config, { emergencyStop: false, publishingEnabled: true, dryRun: false });
+    fs.writeFileSync(f.configPath, JSON.stringify(f.config));
+    const now = Date.parse("2026-10-25T05:30:00.000Z");
+    const payload = {
+      slotId: "nature-frontiers-premutation-quality-check",
+      destination: "nature_frontiers_facebook", destinationPageId: "123456789012345",
+      scheduledDate: "2026-10-25", scheduledAt: "2026-10-25T06:00:00.000Z",
+      caption: "Educational wildlife habitat note.", links: [], media: [], claims: [], campaignId: null
+    };
+    fs.writeFileSync(f.queuePath, JSON.stringify([payload]));
+    let evaluations = 0, mutationCalls = 0;
+    const result = await runAutonomousFacebookPublisher({
+      rootDir: f.root, configPath: f.configPath, queuePath: f.queuePath, stateDir: f.stateDir, now,
+      env: { FACEBOOK_PUBLISH_ENABLED: "YES", NATURE_FRONTIERS_FACEBOOK_PAGE_ID: "123456789012345", META_USER_ACCESS_TOKEN: "u".repeat(30) },
+      policyEvaluator: async () => {
+        evaluations++;
+        return evaluations === 1
+          ? { eligible: true, blockers: [], warnings: [], contentFingerprint: "a".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "INITIAL_ELIGIBLE" }
+          : { eligible: false, blockers: ["QUALITY_REVIEW_EXPIRED_DURING_PREPARATION"], warnings: [], contentFingerprint: "a".repeat(64), policyRuleVersion: f.config.complianceRuleSet, mediaFingerprints: [], reason: "FINAL_RECHECK_BLOCKED" };
+      },
+      verifyPermissions: async () => ({ permissionsVerified: true, pageAccessToken: "p".repeat(30) }),
+      verifyIdentity: async () => ({ verified: true }),
+      publish: async () => { mutationCalls++; throw new Error("Meta mutation must not be called after the final gate blocks"); }
+    });
+    assert.equal(evaluations, 2, "policy and quality must be re-evaluated immediately before mutation");
+    assert.equal(mutationCalls, 0);
+    assert.equal(result.published, 0);
+    assert.equal(result.skipped, 1);
+    const held = JSON.parse(fs.readFileSync(path.join(f.stateDir, "facebook-held-items.json"), "utf8"));
+    assert.match(held[0].reason, /FINAL_PREMUTATION_QUALITY_OR_POLICY_RECHECK_FAILED/);
+  } finally { f.cleanup(); }
+});

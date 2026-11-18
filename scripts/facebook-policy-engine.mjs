@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
-export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v6";
+export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v7";
 export const NATURE_FRONTIERS_KNOWN_DESTINATIONS = Object.freeze([
   "https://www.safari.com/sabi-sand?a=GM26",
   "https://www.safari.com/kruger-national-park?a=GM26",
@@ -90,6 +90,7 @@ function fingerprint(payload) {
         expiresAt: m?.rightsRecord?.expiresAt ?? null
       }
     })).sort((a, b) => String(a.id).localeCompare(String(b.id))) : [],
+    qualityReview: payload?.qualityReview ?? null,
     commercial: payload?.commercial === true,
     campaignId: payload?.campaignId ?? null,
     disclosure: payload?.disclosure ?? "",
@@ -160,6 +161,34 @@ export function verifyFacebookAutonomousApprovalReceipt(payload, {
   return { valid: errors.length === 0, errors, contentFingerprint: currentFingerprint };
 }
 
+export function validateFacebookMediaQualityReview(payload, { now = new Date().toISOString() } = {}) {
+  const errors = [];
+  const review = payload?.qualityReview;
+  if (!review || typeof review !== "object" || Array.isArray(review)) return ["signed media quality review is required before Meta publishing"];
+  if (review.policyId !== "NF-MQS-001" || review.decision !== "APPROVED") errors.push("media quality review must approve policy NF-MQS-001");
+  if (!text(review.reviewer) || review.reviewer.trim().length < 2) errors.push("media quality reviewer identity is required");
+  if (!isValidZonedIsoTimestamp(review.reviewedAt)) errors.push("media quality review timestamp must be timezone-qualified");
+  else if (Date.parse(review.reviewedAt) > Date.parse(now) + 5 * 60_000 || Date.parse(now) - Date.parse(review.reviewedAt) > 30 * 24 * 60 * 60_000) errors.push("media quality review must be current and not future-dated");
+  const dimensions = ["visualClarity", "composition", "authenticity", "captionAccuracy", "accessibility", "brandFit"];
+  if (!review.scores || typeof review.scores !== "object" || Array.isArray(review.scores)) errors.push("all six media quality scores are required");
+  else {
+    let total = 0;
+    for (const key of dimensions) {
+      const value = review.scores[key];
+      if (!Number.isInteger(value) || value < 0 || value > 100) errors.push("media quality score " + key + " must be an integer from 0 to 100");
+      else { total += value; if (value < 80) errors.push("media quality score " + key + " is below the mandatory 80/100 floor"); }
+    }
+    if (dimensions.every(key => Number.isInteger(review.scores[key]) && review.scores[key] >= 0 && review.scores[key] <= 100) && total / dimensions.length < 85) errors.push("overall media quality score must be at least 85/100");
+  }
+  const critical = ["mediaMatchesCaption", "factualAccuracy", "animalWelfare", "rightsAndDisclosure", "brandIntegrity"];
+  if (!review.criticalGates || typeof review.criticalGates !== "object" || critical.some(key => review.criticalGates[key] !== true)) errors.push("every Meta media critical quality gate must explicitly pass");
+  const expectedHashes = (Array.isArray(payload?.media) ? payload.media : []).map(item => item?.sha256).sort();
+  const reviewedHashes = Array.isArray(review.mediaHashes) ? [...review.mediaHashes].sort() : [];
+  if (!expectedHashes.length || expectedHashes.some(hash => !/^[a-f0-9]{64}$/.test(hash ?? ""))) errors.push("final Meta media must have valid SHA-256 hashes");
+  if (reviewedHashes.length !== expectedHashes.length || reviewedHashes.some((hash, index) => hash !== expectedHashes[index])) errors.push("media quality review hashes must exactly match every final Meta media asset");
+  return [...new Set(errors)];
+}
+
 /**
  * Fail-closed, deterministic gate for the exact final Facebook payload.
  * Source verification is deliberately injectable; a URL alone is never treated as evidence.
@@ -186,10 +215,10 @@ export async function evaluateFinalFacebookPayload(payload, {
   mediaHistoryReconciled = false,
   approvalSecret = process.env.FACEBOOK_APPROVAL_HMAC_SECRET
 } = {}) {
-  const blockers = [], warnings = [], sourceChecks = [], rightsChecks = [], disclosureChecks = [], destinationChecks = [];
+  const blockers = [], warnings = [], sourceChecks = [], rightsChecks = [], disclosureChecks = [], destinationChecks = [], qualityReviewChecks = [];
   const add = (list, reason) => { if (!list.includes(reason)) list.push(reason); };
   const resultBase = { eligible: false, blockers, warnings, sourceChecks, rightsChecks, disclosureChecks, destinationChecks,
-    duplicateCheck: { passed: false, matches: [] }, policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION,
+    duplicateCheck: { passed: false, matches: [] }, qualityReviewChecks, policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION,
     contentFingerprint: fingerprint(payload), mediaFingerprints: [], checkedAt: now, reason: "NOT_EVALUATED" };
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
     add(blockers, "Final payload is missing or malformed");
@@ -203,6 +232,9 @@ export async function evaluateFinalFacebookPayload(payload, {
   if (payload.requiresHumanApproval === true || payload.approvalRequired === true) add(blockers, "Payload is still marked as requiring human approval; complete review before it enters the autonomous queue");
   const approvalCheck = verifyFacebookAutonomousApprovalReceipt(payload, { secret: approvalSecret, now });
   for (const error of approvalCheck.errors) add(blockers, error);
+  const qualityErrors = validateFacebookMediaQualityReview(payload, { now });
+  qualityReviewChecks.push({ passed: qualityErrors.length === 0, errors: qualityErrors, policyId: payload.qualityReview?.policyId ?? null, reviewer: payload.qualityReview?.reviewer ?? null });
+  for (const error of qualityErrors) add(blockers, error);
   if (/(like and share|share this to win|comment yes|tag \d+ friends|share to save|react now|comment below to get|share to unlock)/i.test(payload.caption ?? "")) add(blockers, "Engagement bait detected");
   if (/(graphic injury|animal cruelty|staged animal fight|bait(?:ing)? wildlife|chase wildlife|touch wild animals|provoke wildlife|bloodied carcass)/i.test(payload.caption ?? "")) add(blockers, "Wildlife welfare or graphic-content rule triggered");
   if (/(guaranteed earnings|guaranteed returns|miracle cure|100% proven|exclusive rescue footage|I rescued|we rescued)/i.test(payload.caption ?? "")) add(blockers, "Unsupported certainty, fabricated-experience risk, or high-impact claim detected");

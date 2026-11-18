@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { validateProductionQualityApprovalFile } from "./production-quality-approval.mjs";
 
 const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
 const planPath = process.env.WEEKLY_CONTENT_PLAN_PATH ?? "config/weekly-content-plan.json";
@@ -84,6 +85,24 @@ document.cadence = { ...(document.cadence && typeof document.cadence === "object
 delete document.cadence.postsPerWeek;
 delete document.cadence.days;
 delete document.cadence.breakdown;
+const publicationEligibleStatuses = new Set(["READY_FOR_PUBLICATION", "APPROVED_FOR_PUBLICATION", "QUEUED_FOR_PUBLICATION", "SCHEDULED", "READY_FOR_PRIVATE_UPLOAD", "APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"]);
+for (const item of document.items) {
+  if (!publicationEligibleStatuses.has(String(item?.status ?? "").toUpperCase())) continue;
+  if (typeof item.qualityApprovalPath !== "string" || typeof item.videoPath !== "string" || typeof item.metadataPath !== "string") {
+    console.error("BLOCKED: publication-eligible queue item " + (item.id ?? "(unknown)") + " lacks its human-approved quality record, exact video and metadata paths.");
+    process.exit(1);
+  }
+  const quality = validateProductionQualityApprovalFile({
+    approvalPath: item.qualityApprovalPath, videoPath: item.videoPath, metadataPath: item.metadataPath,
+    jobId: item.id, contentType: item.contentType, rootDir: process.cwd()
+  });
+  if (!quality.valid) {
+    console.error("BLOCKED: publication-eligible queue item " + item.id + " failed the production quality gate:");
+    quality.errors.forEach(error => console.error("- " + error));
+    process.exit(1);
+  }
+}
+
 const known = new Set(document.items.map(item => item.id));
 const additions = seed.filter(item => !known.has(item.id));
 document.items.push(...additions);

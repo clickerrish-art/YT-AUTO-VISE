@@ -110,3 +110,25 @@ test("queue replenishment normalizes an omitted publishing flag to explicit fals
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
 });
+
+test("queue replenishment refuses a publication-eligible item without an exact human quality approval", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-quality-"));
+  const queuePath = path.join(tempDir, "queue.json");
+  const original = {
+    publishingEnabled: false,
+    items: [{
+      id: "scheduled-without-review", title: "Unreviewed export", topic: "Wildlife",
+      productUrl: "https://selar.com/0u19v8u99l", contentType: "short", status: "SCHEDULED"
+    }]
+  };
+  fs.writeFileSync(queuePath, JSON.stringify(original));
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8", env: { ...process.env, QUEUE_PATH: queuePath }
+    });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /lacks its human-approved quality record/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(queuePath, "utf8")), original,
+      "a blocked publication queue must not be rewritten or silently normalized");
+  } finally { fs.rmSync(tempDir, { recursive: true, force: true }); }
+});

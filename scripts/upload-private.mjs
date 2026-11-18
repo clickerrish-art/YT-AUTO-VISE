@@ -576,7 +576,13 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       pendingAttempts: ledger.attempts,
       proposedAt: now().toISOString(),
       jobId,
-      format
+      format,
+      requireQualityApproval: true,
+      qualityApproval: approval,
+      videoPath: safeVideoPath,
+      metadataPath: safeMetadataPath,
+      rootDir: process.cwd(),
+      contentType: format
     });
   }
   const attempt = {

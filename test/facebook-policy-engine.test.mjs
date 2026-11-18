@@ -38,6 +38,13 @@ function fixture() {
         provenanceVerified: true, syntheticOrAlteredKnown: true, attributionRequired: false }
     }]
   };
+  payload.qualityReview = {
+    policyId: "NF-MQS-001", decision: "APPROVED", reviewer: "Unit Test Reviewer",
+    reviewedAt: "2026-10-24T12:00:00.000Z",
+    scores: { visualClarity: 90, composition: 90, authenticity: 90, captionAccuracy: 90, accessibility: 90, brandFit: 90 },
+    criticalGates: { mediaMatchesCaption: true, factualAccuracy: true, animalWelfare: true, rightsAndDisclosure: true, brandIntegrity: true },
+    mediaHashes: [hash(media)]
+  };
   payload.approval = createFacebookAutonomousApprovalReceipt(payload, {
     reviewer: "Unit Test Reviewer",
     reason: "Reviewed exact final caption, media, rights evidence and destination.",
@@ -58,6 +65,40 @@ const options = root => ({
     verified: true, claimHash: hash(claimText), sourceUrlsHash: hash(JSON.stringify(sourceUrls)),
     verifierId: "unit-test-semantic-verifier", checkedAt
   })
+});
+
+test("Meta publishing quality gate rejects missing, low, critical, stale and hash-changed reviews", async () => {
+  const f = fixture();
+  try {
+    const original = structuredClone(f.payload.qualityReview);
+    delete f.payload.qualityReview;
+    let result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.match(result.blockers.join(" "), /media quality review is required/i);
+
+    f.payload.qualityReview = structuredClone(original);
+    f.payload.qualityReview.scores.visualClarity = 79;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, { reviewer: "Unit Test Reviewer", reason: "Negative quality fixture", secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z" });
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.match(result.blockers.join(" "), /below the mandatory 80/i);
+
+    f.payload.qualityReview = structuredClone(original);
+    f.payload.qualityReview.criticalGates.animalWelfare = false;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, { reviewer: "Unit Test Reviewer", reason: "Negative critical gate fixture", secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z" });
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.match(result.blockers.join(" "), /critical quality gate/i);
+
+    f.payload.qualityReview = { ...structuredClone(original), reviewedAt: "2020-01-01T00:00:00.000Z" };
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, { reviewer: "Unit Test Reviewer", reason: "Negative stale fixture", secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z" });
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.match(result.blockers.join(" "), /must be current/i);
+
+    f.payload.qualityReview = structuredClone(original);
+    f.payload.qualityReview.mediaHashes = ["0".repeat(64)];
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, { reviewer: "Unit Test Reviewer", reason: "Negative changed-hash fixture", secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z" });
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.match(result.blockers.join(" "), /exactly match every final Meta media asset/i);
+  } finally { f.cleanup(); }
 });
 
 test("Nature Frontiers cadence caps two Reels and one feed post per Johannesburg day", async () => {
@@ -109,7 +150,7 @@ test("policy returns the required structured decision and accepts only a complet
     assert.match(result.contentFingerprint, /^[a-f0-9]{64}$/);
     assert.equal(result.mediaFingerprints[0].passed, true);
     assert.equal(result.duplicateCheck.passed, true);
-    for (const key of ["blockers","warnings","sourceChecks","rightsChecks","disclosureChecks","destinationChecks","duplicateCheck","contentFingerprint","mediaFingerprints","checkedAt","reason"]) assert.ok(key in result, key);
+    for (const key of ["blockers","warnings","sourceChecks","rightsChecks","disclosureChecks","destinationChecks","duplicateCheck","qualityReviewChecks","contentFingerprint","mediaFingerprints","checkedAt","reason"]) assert.ok(key in result, key);
   } finally { f.cleanup(); }
 });
 

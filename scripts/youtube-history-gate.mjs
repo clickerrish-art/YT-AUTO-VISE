@@ -2,6 +2,7 @@ import fs from "node:fs";
 import crypto from "node:crypto";
 import path from "node:path";
 import { evaluateNextPublication, validateCadenceDecision, DEFAULT_MIN_SPACING_HOURS, DEFAULT_SCHEDULE_TIMEZONE } from "./schedule-policy.mjs";
+import { validateProductionQualityApproval } from "./production-quality-approval.mjs";
 
 const allowedFormats = new Set(["long_form", "short"]);
 const allowedVisibility = new Set(["public", "private", "unlisted"]);
@@ -351,7 +352,8 @@ export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliati
 }
 
 export function assertNextPublicationAllowed({
-  historySnapshot, expectedChannelId, pendingAttempts, proposedAt, jobId, format, timeZone, minSpacingHours
+  historySnapshot, expectedChannelId, pendingAttempts, proposedAt, jobId, format, timeZone, minSpacingHours,
+  requireQualityApproval = false, qualityApproval = null, videoPath = null, metadataPath = null, rootDir = process.cwd(), contentType = null
 } = {}) {
   const verifiedAt = strictIsoTimestamp(historySnapshot?.verifiedAt);
   if (!historySnapshot || typeof historySnapshot !== "object" || Array.isArray(historySnapshot)
@@ -370,6 +372,13 @@ export function assertNextPublicationAllowed({
   }
   if (!Array.isArray(pendingAttempts)) {
     throw new Error("upload attempt ledger must be explicitly inspected and supplied as an array");
+  }
+  if (requireQualityApproval === true) {
+    if (!qualityApproval || typeof videoPath !== "string" || typeof metadataPath !== "string") {
+      throw new Error("queue/scheduler publication requires the exact human-approved production quality record, export and metadata paths");
+    }
+    const qualityErrors = validateProductionQualityApproval(qualityApproval, { videoPath, metadataPath, jobId, contentType, rootDir });
+    if (qualityErrors.length) throw new Error("queue/scheduler production quality gate blocked publication: " + qualityErrors.join("; "));
   }
 
   let policy = {};

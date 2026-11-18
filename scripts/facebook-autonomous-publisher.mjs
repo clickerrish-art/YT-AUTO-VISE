@@ -415,6 +415,32 @@ export async function runAutonomousFacebookPublisher({
         skipped++;
         continue;
       }
+      // Re-evaluate the exact payload immediately before the first provider mutation.
+      // A prior eligibility result is not a reusable authorization after Page identity
+      // checks, ledger recovery, or any time spent in the preparation path.
+      let finalDecision;
+      try {
+        finalDecision = await policyEvaluator(payload, {
+          expectedPageId: config.destinationPageId, expectedPageName: config.destinationPageName,
+          allowedDomains: config.allowedDomains ?? [], allowedCampaignIds: config.allowedCampaignIds ?? [],
+          approvedDestinations: config.approvedDestinations ?? [], campaignRegistry, history: [...history, ...ledger],
+          evidenceRoot: activeRoot, now: isoNow(current), timezone: config.timezone,
+          mediaHistoryReconciled: config.mediaHistoryReconciled === true,
+          maxPostsPerLocalDay: config.dailyCap, maxReelsPerLocalDay: config.dailyReelCap,
+          maxFeedPostsPerLocalDay: config.dailyFeedPostCap, minimumIntervalMinutes: config.minimumIntervalMinutes,
+          fetchImpl: guardedFetch
+        });
+      } catch {
+        finalDecision = { eligible: false, blockers: ["FINAL_PREMUTATION_POLICY_RECHECK_FAILED"], policyRuleVersion: null, contentFingerprint: null, reason: "FINAL_PREMUTATION_POLICY_RECHECK_FAILED" };
+      }
+      if (finalDecision?.eligible !== true || finalDecision.policyRuleVersion !== FACEBOOK_POLICY_RULE_VERSION ||
+          finalDecision.contentFingerprint !== decision.contentFingerprint) {
+        holdQueuedSlot(payload, "HELD_POLICY_BLOCKED",
+          "FINAL_PREMUTATION_QUALITY_OR_POLICY_RECHECK_FAILED_OR_PAYLOAD_CHANGED", finalDecision);
+        skipped++;
+        continue;
+      }
+      decision = finalDecision;
       const isReel = payload.mediaType === "reel";
       const attempt = {
         kind: isReel ? "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT" : "FACEBOOK_PUBLISH_ATTEMPT", slotId: payload.slotId, destination: "nature_frontiers_facebook",

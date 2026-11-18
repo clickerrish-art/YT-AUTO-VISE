@@ -181,6 +181,7 @@ if (validation.error || validation.status !== 0) {
   process.exit(validation.error?.code === "ETIMEDOUT" ? 124 : 1);
 }
 const audioValidatorPath = path.join(scriptDir, "validate-rendered-audio.mjs");
+const releaseValidatorPath = path.join(scriptDir, "validate-production-quality-approval.mjs");
 const audioValidation = spawnSync(process.execPath, [audioValidatorPath, output, qualityEvidence.audioProfile], {
   encoding: "utf8",
   timeout: 120_000
@@ -191,6 +192,32 @@ if (audioValidation.error || audioValidation.status !== 0) {
   console.error("BLOCKED: rendered audio failed measured loudness/true-peak validation.");
   process.exit(audioValidation.error?.code === "ETIMEDOUT" ? 124 : 1);
 }
-console.log("RENDERED AND VALIDATED: " + output + " (horizontal 16:9; duration, streams, codec, frame rate and full-file decode passed).");
-console.log("Next: complete separate metadata, rights, thumbnail and human release review.");
-console.log("No upload or publishing action was performed.");
+if (m.productionQualityApprovalPath !== undefined) {
+  if (typeof m.productionQualityApprovalPath !== "string" || !m.productionQualityApprovalPath.trim() ||
+      typeof m.metadataPath !== "string" || !m.metadataPath.trim()) {
+    console.error("BLOCKED: productionQualityApprovalPath and metadataPath must both identify the exact reviewed release package.");
+    process.exit(1);
+  }
+  let approvalPath, metadataPath;
+  try {
+    approvalPath = resolveRegularFileNoSymlinks(m.productionQualityApprovalPath, path.dirname(manifestPath), "Production quality approval");
+    metadataPath = resolveRegularFileNoSymlinks(m.metadataPath, path.dirname(manifestPath), "Final metadata");
+  } catch (error) {
+    console.error("BLOCKED: production quality approval or metadata is missing or unsafe: " + error.message);
+    process.exit(1);
+  }
+  const releaseValidation = spawnSync(process.execPath, [releaseValidatorPath, output, metadataPath, approvalPath], {
+    encoding: "utf8", timeout: 30_000
+  });
+  if (releaseValidation.stdout) process.stdout.write(releaseValidation.stdout);
+  if (releaseValidation.stderr) process.stderr.write(releaseValidation.stderr);
+  if (releaseValidation.error || releaseValidation.status !== 0) {
+    console.error("BLOCKED: final export did not pass the exact human-reviewed production quality scorecard.");
+    process.exit(releaseValidation.error?.code === "ETIMEDOUT" ? 124 : 1);
+  }
+  console.log("FINAL QUALITY RELEASE VALIDATED: exact export, metadata, reviewer, scorecard, rights and technical receipts passed.");
+} else {
+  console.log("PROVISIONAL RENDER COMPLETE: " + output + " (horizontal 16:9 technical checks passed; NOT approved for release).");
+  console.log("Before release, run: npm run validate:quality-release -- " + output + " <reviewed-metadata.json> <human-approved-upload-record.json>.");
+  console.log("No upload or publishing action was performed.");
+}

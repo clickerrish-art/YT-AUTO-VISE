@@ -451,6 +451,17 @@ test("complete history fetch rejects repeated page tokens and duplicate playlist
 });
 
 
+test("publication scheduler independently requires a current hash-bound production quality approval", () => {
+  const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
+  const base = {
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [],
+    proposedAt: "2026-11-20T15:00:00.000Z", jobId: "quality-gated-job", format: "long_form",
+    requireQualityApproval: true
+  };
+  assert.throws(() => assertNextPublicationAllowed(base), /requires the exact human-approved production quality record/);
+  assert.throws(() => assertNextPublicationAllowed({ ...base, qualityApproval: {}, videoPath: "missing.mp4", metadataPath: "missing.json" }), /production quality gate blocked publication/);
+});
+
 test("production publication gate requires complete channel, scheduled, private-upload and attempt inventories", () => {
   const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
   const snapshot = verifiedHistorySnapshot(history);

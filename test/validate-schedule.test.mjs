@@ -124,3 +124,11 @@ test("validator accepts a non-default minimum gap when schedule, queue and deriv
  });
  assert.equal(result.status,0,result.stdout+result.stderr);
 });
+
+test("validator rejects a scheduled queue item without an exact job-bound quality approval", () => {
+ const result = runWithPlanMutation((plan, queue) => {
+  queue.items[0].status = "SCHEDULED";
+ });
+ assert.notEqual(result.status, 0);
+ assert.match(result.stderr, /lacks a human-approved quality record and exact export\/metadata paths/);
+});

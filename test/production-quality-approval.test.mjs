@@ -1,0 +1,100 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { validateProductionQualityApproval, validateProductionQualityApprovalFile } from "../scripts/production-quality-approval.mjs";
+import { PRODUCTION_QUALITY_DIMENSIONS, PRODUCTION_QUALITY_CRITICAL_GATES, qualityScorecardSha256 } from "../scripts/production-quality-scorecard.mjs";
+
+const hash = value => crypto.createHash("sha256").update(value).digest("hex");
+function fixture() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "production-quality-approval-"));
+  const write = (name, data) => {
+    const file = path.join(root, name);
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, data);
+    return { path: name, sha256: hash(data) };
+  };
+  const video = write("media/final.mp4", "final-video-bytes");
+  const metadata = write("content/metadata.json", "{\"channel\":\"SonicVhibez\"}");
+  const thumbnail = write("media/thumbnail.jpg", "thumbnail-bytes");
+  const captions = write("content/captions.srt", "caption-bytes");
+  const narration = write("audio/narration.mp3", "narration-bytes");
+  const relatedArtifacts = [video, metadata, thumbnail, captions, narration];
+  const qualityScorecard = {
+    policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "Human Reviewer",
+    reviewedAt: new Date().toISOString(), fullVideoPlayback: true,
+    fullPlaybackEvidenceRef: "review/full-playback", thumbnailInspectedAtMobile: true,
+    thumbnailInspectedAtDesktop: true, imageInspectionEvidenceRef: "review/image-inspection",
+    factualEditorialEvidenceRef: "review/factual-editorial",
+    scores: Object.fromEntries(PRODUCTION_QUALITY_DIMENSIONS.map(key => [key, 90])),
+    criticalGates: Object.fromEntries(PRODUCTION_QUALITY_CRITICAL_GATES.map(key => [key, true])),
+    artifactHashes: { video: video.sha256, metadata: metadata.sha256, thumbnail: thumbnail.sha256,
+      images: [thumbnail.sha256], captions: captions.sha256, narration: narration.sha256 }
+  };
+  const technicalValidationReceipt = { passed: true, fixtureOnly: true };
+  const rightsEvidence = { assets: [{ permittedUses: ["YouTube"], verificationStatus: "VERIFIED" }] };
+  const approval = {
+    decision: "APPROVE", publishingEnabled: false, visibility: "private", reviewer: "Human Reviewer",
+    artifactSha256: video.sha256, metadataVersion: metadata.sha256,
+    qualityScorecard, qualityScorecardSha256: qualityScorecardSha256(qualityScorecard),
+    technicalValidationReceipt, technicalValidationSha256: hash(JSON.stringify(technicalValidationReceipt)),
+    rightsEvidence, rightsEvidenceSha256: hash(JSON.stringify(rightsEvidence)), relatedArtifacts
+  };
+  const approvalPath = path.join(root, "run-logs/approval.json");
+  fs.mkdirSync(path.dirname(approvalPath), { recursive: true });
+  fs.writeFileSync(approvalPath, JSON.stringify(approval));
+  return { root, video, metadata, approval, approvalPath, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
+}
+
+test("accepts a current human approval bound to the exact export, metadata and every related artifact", () => {
+  const f = fixture();
+  try {
+    assert.deepEqual(validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    }), []);
+    assert.equal(validateProductionQualityApprovalFile({ approvalPath: path.relative(f.root, f.approvalPath),
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root }).valid, true);
+  } finally { f.cleanup(); }
+});
+
+test("rejects missing approval, changed export, changed metadata, stale scorecard checksum and related-file tampering", () => {
+  const f = fixture();
+  try {
+    assert.match(validateProductionQualityApproval(null).join(" "), /approval record is required/);
+    fs.appendFileSync(path.join(f.root, f.video.path), "tampered");
+    assert.match(validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    }).join(" "), /video hash does not match/);
+    fs.writeFileSync(path.join(f.root, f.video.path), "final-video-bytes");
+    fs.appendFileSync(path.join(f.root, f.metadata.path), "tampered");
+    assert.match(validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    }).join(" "), /metadata hash does not match/);
+    fs.writeFileSync(path.join(f.root, f.metadata.path), "{\"channel\":\"SonicVhibez\"}");
+    f.approval.qualityScorecard.scores.visualClarity = 79;
+    assert.match(validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    }).join(" "), /scorecard checksum/);
+    f.approval.qualityScorecard.scores.visualClarity = 90;
+    f.approval.qualityScorecardSha256 = qualityScorecardSha256(f.approval.qualityScorecard);
+    fs.appendFileSync(path.join(f.root, "audio/narration.mp3"), "changed");
+    assert.match(validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    }).join(" "), /related-artifact bytes changed/);
+  } finally { f.cleanup(); }
+});
+
+test("requires private-only release state and an exact technical-validation receipt", () => {
+  const f = fixture();
+  try {
+    f.approval.publishingEnabled = true;
+    f.approval.technicalValidationReceipt.passed = false;
+    const errors = validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    });
+    assert.match(errors.join(" "), /private visibility/);
+    assert.match(errors.join(" "), /technical-validation receipt/);
+  } finally { f.cleanup(); }
+});

@@ -70,8 +70,11 @@ test("renderer wires technical validation before its success message", () => {
   const source = fs.readFileSync(path.resolve("scripts/render-short.mjs"), "utf8");
   assert.ok(source.indexOf("validate-short-export.mjs") >= 0);
   assert.ok(source.indexOf("rendered Short failed technical export validation") > source.indexOf("validate-short-export.mjs"));
-  assert.ok(source.indexOf("RENDERED AND VALIDATED:") > source.indexOf("rendered Short failed technical export validation"));
+  assert.ok(source.indexOf("PROVISIONAL RENDER COMPLETE:") > source.indexOf("rendered Short failed technical export validation"));
   assert.match(source, /validation\.status !== 0/);
+  assert.match(source, /validate-production-quality-approval\.mjs/);
+  assert.match(source, /productionQualityApprovalPath/);
+  assert.match(source, /PROVISIONAL RENDER COMPLETE/);
 });
 
 test("rejects a symlinked Short export before invoking media tools", t => {

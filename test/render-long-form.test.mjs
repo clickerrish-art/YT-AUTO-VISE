@@ -115,12 +115,16 @@ test("renderer runs the complete export validator before reporting success", () 
   const source = fs.readFileSync(script, "utf8");
   const validatorIndex = source.indexOf("validate-long-form-export.mjs");
   const validationFailureIndex = source.indexOf("rendered output failed technical export validation");
-  const successIndex = source.indexOf("RENDERED AND VALIDATED:");
+  const successIndex = source.indexOf("PROVISIONAL RENDER COMPLETE:");
   assert.ok(validatorIndex >= 0, "renderer must invoke the standalone export validator");
   assert.ok(validationFailureIndex > validatorIndex, "validation failure must fail closed");
-  assert.ok(successIndex > validationFailureIndex, "success must only be reported after validation logic");
+  assert.ok(successIndex > validationFailureIndex, "provisional render must only be reported after technical validation");
+  assert.match(source, /NOT approved for release/);
   assert.match(source, /validation\.status !== 0/);
   assert.match(source, /timeout:\s*240_000/);
+  assert.match(source, /validate-production-quality-approval\.mjs/);
+  assert.match(source, /productionQualityApprovalPath/);
+  assert.match(source, /PROVISIONAL RENDER COMPLETE/);
 });
 
 test("long-form workflow embedded Python validation remains syntactically valid", () => {

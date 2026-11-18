@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { weeklyUtcCronGaps, ROLLING_PUBLICATION_FORMATS, isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
+import { validateProductionQualityApprovalFile } from "./production-quality-approval.mjs";
 const root = process.cwd();
 const read = p => JSON.parse(fs.readFileSync(path.join(root, p), "utf8"));
 const errors = [];
@@ -66,7 +67,16 @@ if (!Array.isArray(queue.items)) errors.push("queue items must be an array");
 const items = Array.isArray(queue.items) ? queue.items : [], ids = items.map(item => item?.id);
 if (ids.some(id => typeof id !== "string" || !id.trim())) errors.push("every queue item needs a stable non-empty ID");
 if (new Set(ids).size !== ids.length) errors.push("queue item IDs must be unique");
+const publicationEligibleStatuses = new Set(["READY_FOR_PUBLICATION", "APPROVED_FOR_PUBLICATION", "QUEUED_FOR_PUBLICATION", "SCHEDULED", "READY_FOR_PRIVATE_UPLOAD", "APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"]);
 for (const item of items) {
+ if (publicationEligibleStatuses.has(String(item?.status ?? "").toUpperCase())) {
+  if (typeof item.qualityApprovalPath !== "string" || typeof item.videoPath !== "string" || typeof item.metadataPath !== "string") {
+   errors.push("publication-eligible queue item " + (item.id ?? "(unknown)") + " lacks a human-approved quality record and exact export/metadata paths");
+  } else {
+   const quality = validateProductionQualityApprovalFile({ approvalPath: item.qualityApprovalPath, videoPath: item.videoPath, metadataPath: item.metadataPath, jobId: item.id, contentType: item.contentType, rootDir: root });
+   if (!quality.valid) errors.push("publication-eligible queue item " + item.id + " failed the production quality gate: " + quality.errors.join("; "));
+  }
+ }
  if (item.productUrl !== "https://selar.com/0u19v8u99l") errors.push("queue item " + (item.id ?? "(unknown)") + " uses an unapproved destination");
  if (item.scheduledDay) {
   const slot = expected.find(s => s.day === item.scheduledDay);
