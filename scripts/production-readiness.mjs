@@ -245,6 +245,15 @@ if (!exists(youtubeVerificationPath)) {
     if (verification.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY") {
       const code = typeof verification.oauth?.errorCode === "string" ? verification.oauth.errorCode : "not-passing";
       blockers.push(`LIVE BLOCKER: read-only YouTube identity and uploads inventory verification is ${verification.status ?? "unknown"}; OAuth error ${code}.`);
+    } else if (verification.uploadScopeVerified !== true ||
+        !isFreshHistoryEvidence(verification.uploadScopeCheckedAt) ||
+        ![
+          "https://www.googleapis.com/auth/youtube.upload",
+          "https://www.googleapis.com/auth/youtube",
+          "https://www.googleapis.com/auth/youtube.force-ssl",
+          "https://www.googleapis.com/auth/youtubepartner"
+        ].includes(verification.acceptedUploadScope)) {
+      blockers.push("LIVE BLOCKER: YouTube OAuth upload scope is not independently verified with a current scope accepted by videos.insert; require youtube.upload (preferred) or another documented upload-capable scope before private upload.");
     } else if (!exists(historyReconciliationPath)) {
       blockers.push("LIVE BLOCKER: owner-reviewed YouTube history reconciliation evidence is missing.");
     } else {
