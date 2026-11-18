@@ -48,6 +48,7 @@ export function validateProductionQualityScorecard(review, {
     errors.push("quality scorecard must approve policy SV-PQS-001");
   }
   if (!nonempty(review.reviewer) || review.reviewer.trim().length < 2) errors.push("quality scorecard reviewer identity is required");
+  if (nonempty(reviewer) && review.reviewer !== reviewer) errors.push("quality scorecard reviewer must match the authenticated approval reviewer");
   const reviewedAt = TIMEZONE_ISO.test(review.reviewedAt ?? "") ? Date.parse(review.reviewedAt) : NaN;
   const nowMs = now instanceof Date ? now.getTime() : Date.parse(now);
   if (!Number.isFinite(reviewedAt) || !Number.isFinite(nowMs) || reviewedAt > nowMs + 5 * 60_000 || nowMs - reviewedAt > maxAgeMs) {
