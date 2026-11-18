@@ -49,6 +49,35 @@ test("owner-approved direct-sales disclosure is carried verbatim in the wildlife
     .some(error => /disclosure approval must match the exact owner-approved product registry record/.test(error)));
 });
 
+test("every promotional product requires fresh seller evidence tied to its exact HTTPS listing", () => {
+  const now = new Date("2026-11-18T07:49:03.000Z");
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
+
+  const staleProducts = clone(products);
+  staleProducts.find(product => product.id === "wildlife-creators-vault")
+    .promotionGate.seller.verifiedAt = "2026-11-01T09:49:01+02:00";
+  assert.ok(validatePromotionalShortPlan(checkedInPlan, staleProducts, { now })
+    .some(error => /seller evidence must be no more than 14 days old/.test(error)));
+
+  const mismatchedProducts = clone(products);
+  mismatchedProducts.find(product => product.id === "wildlife-creators-vault")
+    .promotionGate.seller.sourceUrl = "https://selar.com/different-listing";
+  assert.ok(validatePromotionalShortPlan(checkedInPlan, mismatchedProducts, { now })
+    .some(error => /seller evidence sourceUrl must exactly match the product URL/.test(error)));
+
+  const futureProducts = clone(products);
+  futureProducts.find(product => product.id === "wildlife-creators-vault")
+    .promotionGate.seller.verifiedAt = "2026-11-18T09:55:00+02:00";
+  assert.ok(validatePromotionalShortPlan(checkedInPlan, futureProducts, { now })
+    .some(error => /cannot be more than 5 minutes in the future/.test(error)));
+
+  const unnamedProducts = clone(products);
+  unnamedProducts.find(product => product.id === "wildlife-creators-vault")
+    .promotionGate.seller.name = " ";
+  assert.ok(validatePromotionalShortPlan(checkedInPlan, unnamedProducts, { now })
+    .some(error => /verified seller name is required/.test(error)));
+});
+
 test("candidate seller verification is required while direct Selar sales are owner-confirmed and disclosure remains unresolved", () => {
   const candidates = clone(products);
   const candidate = candidates.find(product => product.status === "candidate");

@@ -8,6 +8,8 @@ const WORD_MIN = 90;
 const WORD_MAX = 135;
 const KEYWORD_EVIDENCE_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
 const KEYWORD_EVIDENCE_FUTURE_SKEW_MS = 5 * 60 * 1000;
+const SELLER_EVIDENCE_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
+const SELLER_EVIDENCE_FUTURE_SKEW_MS = 5 * 60 * 1000;
 
 function isCalendarDate(value) {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -139,12 +141,26 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
       else if (!["approved", "candidate"].includes(product.status)) errors.push(`${label}: product must be an approved or explicitly held candidate record`);
       const secureProductHost = product ? getSecureProductHost(product.url) : "";
       if (product && !secureProductHost) errors.push(`${label}: product registry URL must be HTTPS and must not contain embedded credentials`);
+      if (product) {
+        const seller = product.promotionGate?.seller ?? {};
+        if (seller.status !== "VERIFIED") errors.push(`${label}: seller evidence must be VERIFIED`);
+        if (seller.sourceUrl !== product.url) errors.push(`${label}: seller evidence sourceUrl must exactly match the product URL`);
+        if (typeof seller.name !== "string" || !seller.name.trim()) errors.push(`${label}: verified seller name is required`);
+        if (typeof seller.evidenceReference !== "string" || !seller.evidenceReference.trim()) errors.push(`${label}: seller evidence reference is required`);
+        if (!isValidZonedIsoTimestamp(seller.verifiedAt)) {
+          errors.push(`${label}: seller verification needs a timezone-qualified timestamp`);
+        } else {
+          const sellerEvidenceAgeMs = referenceNow.getTime() - Date.parse(seller.verifiedAt);
+          if (sellerEvidenceAgeMs > SELLER_EVIDENCE_MAX_AGE_MS || sellerEvidenceAgeMs < -SELLER_EVIDENCE_FUTURE_SKEW_MS) {
+            errors.push(`${label}: seller evidence must be no more than 14 days old and cannot be more than 5 minutes in the future`);
+          }
+        }
+      }
       if (product?.status === "candidate") {
         if (item?.status !== "DRAFT_ONLY") errors.push(`${label}: candidate products may appear only in DRAFT_ONLY content`);
         const gate = product.promotionGate ?? {};
         const productHost = secureProductHost;
         const isSelarProduct = productHost === "selar.com" || productHost.endsWith(".selar.com");
-        if (gate.seller?.status !== "VERIFIED") errors.push(`${label}: candidate seller evidence must be VERIFIED from its exact product URL`);
         if (isSelarProduct) {
           if (!isCalendarDate(gate.compensation?.verifiedAt)) {
             errors.push(`${label}: owner-confirmed Selar sales need a calendar-valid YYYY-MM-DD confirmation date`);
