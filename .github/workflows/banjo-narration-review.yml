@@ -1,15 +1,6 @@
-name: Render Banjo Australian narration review
+name: Archived Banjo Australian narration review (manual only)
 
 on:
-  push:
-    branches: [codex/marketing-machine-audit-fixes]
-    paths:
-      - "config/narration-voice-candidates.json"
-      - "scripts/render_banjo_narration.py"
-      - "scripts/generate_piper_voice_audition.py"
-      - "tests/test_render_banjo_narration.py"
-      - "content/short-001-wildlife-video-storytelling.md"
-      - ".github/workflows/banjo-narration-review.yml"
   workflow_dispatch:
 
 permissions:
