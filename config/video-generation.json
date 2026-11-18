@@ -1,17 +1,17 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "channel": "SonicVhibez",
   "provider": "wangp_kaggle",
   "primary": true,
-  "status": "SELECTED_SETUP_AND_ACCEPTANCE_PENDING",
+  "status": "NOTEBOOK_AND_IMPORTER_COMMITTED_KAGGLE_EXECUTION_PENDING",
   "source": {
     "application": "WanGP",
     "repository": "https://github.com/deepbeepmeep/WanGP",
-    "kaggleAdapterRepository": "https://github.com/Square-Zero-Labs/Wan2GP-on-Kaggle",
-    "kaggleNotebook": "https://github.com/Square-Zero-Labs/Wan2GP-on-Kaggle/blob/main/wan2gp-kaggle.ipynb",
-    "adapterLicense": "Apache-2.0",
-    "wanGpCommit": null,
-    "pinBeforeProduction": true
+    "wanGpCommit": "f4cfc1259215577be9a2ee280c41efbedfb4459a",
+    "commitVerifiedBy": "GitHub commit object at the time of setup; unsigned commit",
+    "pinBeforeProduction": true,
+    "notebookPath": "notebooks/sonicvhibez_wangp_kaggle.ipynb",
+    "notebookIsProjectOwned": true
   },
   "runtime": {
     "platform": "Kaggle",
@@ -26,15 +26,32 @@
     "ownerPcModelStorageRequired": false
   },
   "generation": {
-    "preferredModel": "Wan 2.2 TextImage2Video 5B FastWan",
-    "resolution": "480p",
+    "preferredModel": "Wan 2.2 TI2V 5B (pinned no-LoRA test profile)",
+    "modelRepository": "DeepBeepMeep/Wan2.2",
+    "modelRevision": "16bb1ad02fe4ca8319b67261397ea4eeaa4896c4",
+    "checkpointFilename": "wan2.2_text2video_5B_quanto_mbf16_int8.safetensors",
+    "checkpointSha256": "463076f7625d8c7fc8912011cf5d02db7f0a8ae666e1758cd835e5a8517ef0e0",
+    "vaeRevision": "4cb9607e5532be42f37a05778acfc47aee7701e1",
+    "vaeFilename": "Wan2.2_VAE.safetensors",
+    "vaeSha256": "bb6e5e515ca6af2cb2b7bbf8bfc790b8c306832c34e0a76193507c3739ebf54a",
+    "loras": [],
+    "resolution": "832x480",
     "targetAspectRatio": "16:9",
     "initialShotDurationSeconds": 5,
     "visualStyle": "photorealistic wildlife documentary",
     "rejectStyles": ["cartoon", "anime", "illustration", "plastic-looking CGI"],
-    "seedMustBeRecorded": true,
-    "modelAndLoraLicenseReviewRequired": true,
-    "commercialUseApproved": false
+    "seedMustBeRecorded": true
+  },
+  "licensing": {
+    "wanGpLicense": "WanGP Community License 2.0",
+    "wanGpLicenseUrl": "https://github.com/deepbeepmeep/WanGP/blob/f4cfc1259215577be9a2ee280c41efbedfb4459a/LICENSE.txt",
+    "wanGpInternalBusinessUsePermittedSubjectToTerms": true,
+    "upstreamBaseModel": "Wan-AI/Wan2.2-TI2V-5B",
+    "upstreamBaseModelLicense": "Apache-2.0",
+    "upstreamBaseModelLicenseUrl": "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B",
+    "mirrorCheckpointLicenseStatus": "HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE",
+    "commercialUseApproved": false,
+    "reason": "The exact WanGP-compatible mirror checkpoint and VAE do not independently declare licence/provenance in the inspected mirror metadata. Upstream Apache-2.0 is not treated as sufficient proof of the mirror artifacts' provenance."
   },
   "narration": {
     "separateFromVideoGeneration": true,
@@ -51,17 +68,19 @@
   },
   "requiredGenerationEvidence": [
     "wanGpCommit",
-    "modelId",
-    "modelLicenseUrl",
-    "loraIdsAndLicenseUrls",
+    "modelRepository",
+    "modelRevision",
+    "checkpointSha256",
+    "vaeSha256",
+    "loraList",
     "prompt",
     "negativePrompt",
     "seed",
     "generationSettings",
     "kaggleSessionReference",
-    "outputRelativePath",
     "outputSha256",
     "ffprobeReport",
+    "fullDecodePassed",
     "humanVisualReview"
   ]
 }
