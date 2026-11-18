@@ -30,9 +30,11 @@ for (const [index, file] of files.entries()) {
   });
   const output = String(result.stdout ?? "") + String(result.stderr ?? "");
   process.stdout.write(output);
-  const pass = output.match(/ℹ pass (\d+)/);
-  const fail = output.match(/ℹ fail (\d+)/);
-  const skipped = output.match(/ℹ skipped (\d+)/);
+  const normalizedOutput = output.replace(/\u001b\[[0-9;]*m/g, "");
+  const lastMatch = pattern => [...normalizedOutput.matchAll(pattern)].at(-1)?.[1];
+  const pass = lastMatch(/(?:ℹ|#)\s*pass\s+(\d+)/gi);
+  const fail = lastMatch(/(?:ℹ|#)\s*fail\s+(\d+)/gi);
+  const skipped = lastMatch(/(?:ℹ|#)\s*skipped\s+(\d+)/gi);
   if (!pass || !fail || !skipped) {
     failures.push({ file, reason: "test runner summary was missing; pass/fail/skip totals cannot be verified" });
   } else {
