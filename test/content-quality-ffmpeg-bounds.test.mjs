@@ -14,7 +14,7 @@ const ffmpegWorkflows = [
 test("FFmpeg CI uses pinned static binaries instead of slow apt package installs", () => {
   for (const path of ffmpegWorkflows) {
     const workflow = fs.readFileSync(path, "utf8");
-    assert.match(workflow, /bash \.github\/scripts\/install-ffmpeg-static\.sh/, path + " must use the shared static FFmpeg installer");
+    assert.match(workflow, /source .*install-ffmpeg-static\.sh/, path + " must source the shared static FFmpeg installer");
     assert.doesNotMatch(workflow, /apt-get/, path + " must not use apt package installation");
   }
 
@@ -23,6 +23,7 @@ test("FFmpeg CI uses pinned static binaries instead of slow apt package installs
   assert.match(installer, /ffmpeg-static@5\.3\.0/);
   assert.match(installer, /@derhuerst\/ffprobe-static@5\.3\.0/);
   assert.match(installer, /GITHUB_PATH/);
+  assert.match(installer, /export PATH=/);
   assert.match(installer, /ffmpeg" -version/);
   assert.match(installer, /ffprobe" -version/);
 });

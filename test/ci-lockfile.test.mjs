@@ -18,7 +18,7 @@ test("metadata validation runs once per PR update and bounds FFmpeg installation
   assert.match(validationWorkflow, /^  workflow_dispatch:/m);
   assert.doesNotMatch(validationWorkflow, /^  push:/m,
     "the PR-scoped metadata validation must not duplicate the same candidate push run");
-  assert.match(validationWorkflow, /bash \.github\/scripts\/install-ffmpeg-static\.sh/);
+  assert.match(validationWorkflow, /source .*install-ffmpeg-static\.sh/);
   assert.doesNotMatch(validationWorkflow, /apt-get/);
 });
 
@@ -45,7 +45,7 @@ test("isolated baseline runs once per PR update and bounds free-runner dependenc
   assert.match(baselineWorkflow, /^  pull_request:/m);
   assert.doesNotMatch(baselineWorkflow, /^  push:/m,
     "the PR-scoped baseline must not queue a duplicate push run for the same candidate SHA");
-  assert.match(baselineWorkflow, /bash \.github\/scripts\/install-ffmpeg-static\.sh/);
+  assert.match(baselineWorkflow, /source .*install-ffmpeg-static\.sh/);
   assert.doesNotMatch(baselineWorkflow, /apt-get/);
   assert.match(baselineWorkflow, /timeout 600s npm ci --ignore-scripts/);
   assert.match(baselineWorkflow, /timeout 600s npm install --ignore-scripts/);

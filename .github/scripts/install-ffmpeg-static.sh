@@ -28,6 +28,7 @@ test -x "$FFPROBE_PATH"
 ln -sf "$FFMPEG_PATH" "$BIN_DIR/ffmpeg"
 ln -sf "$FFPROBE_PATH" "$BIN_DIR/ffprobe"
 echo "$BIN_DIR" >> "$GITHUB_PATH"
+export PATH="$BIN_DIR:$PATH"
 
 "$BIN_DIR/ffmpeg" -version
 "$BIN_DIR/ffprobe" -version

@@ -66,7 +66,7 @@ jobs:
           if command -v ffmpeg >/dev/null 2>&1 && command -v ffprobe >/dev/null 2>&1; then
             echo "FFmpeg and FFprobe are already available; skipping package installation."
           else
-            bash .github/scripts/install-ffmpeg-static.sh
+            source .github/scripts/install-ffmpeg-static.sh
           fi
           ffmpeg -version
           ffprobe -version

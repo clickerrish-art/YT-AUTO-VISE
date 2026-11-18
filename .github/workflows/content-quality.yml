@@ -46,7 +46,7 @@ jobs:
       - name: Install FFmpeg for renderer integration tests
         run: |
           if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
-            bash .github/scripts/install-ffmpeg-static.sh
+            source .github/scripts/install-ffmpeg-static.sh
           fi
           ffmpeg -version
           ffprobe -version
