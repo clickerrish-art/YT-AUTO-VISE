@@ -105,3 +105,5 @@ jobs:
 # Recovery refresh: deterministic full-history export requested 2026-11-17.
 
 # Recovery refresh: verified writable checkout requested 2026-11-18.
+
+# Recovery refresh: trigger source bundle through contents API push event.
