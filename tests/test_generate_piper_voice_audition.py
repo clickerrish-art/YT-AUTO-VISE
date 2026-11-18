@@ -49,8 +49,10 @@ Want better wildlife videos? Start with one clear story, not a pile of random an
 Do not include this text.
 """
         text = extract_short_narration(markdown)
-        self.assertIn("first narration sentence", text)
+        self.assertIn("Want better wildlife videos?", text)
+        self.assertIn("Finish with one useful takeaway.", text)
         self.assertNotIn("Draft description", text)
+        self.assertNotIn("Do not include this text.", text)
 
     def test_rejects_missing_or_unresolved_short_script(self):
         with self.assertRaises(ValueError):
