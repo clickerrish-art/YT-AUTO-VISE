@@ -1,3 +1,99 @@
+# LIVE EXECUTION ADDENDUM — 18 November 2026, post-08:11 UTC evidence
+
+**This addendum supersedes earlier snapshots below wherever newer live evidence conflicts. It records work executed after the 09:49 SAST checkpoint. It does not claim release completion.**
+
+## 1. Live repository and exact-SHA reconciliation
+
+- PR #1 live HEAD before this register-only update: `b4021c2b1d7c60ba6328a855613ada50c3e3a40b`; branch `codex/marketing-machine-audit-fixes`; state **OPEN / DRAFT / UNMERGED**.
+- Current `main`: `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38`; untouched.
+- Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Live comparison: **4,317 ahead / 9 behind**. PR #1 reports 432 changed files. The compare API exposes a capped 300-file list; do not interpret that as the complete PR diff.
+- `b4021c2...` changes only six documentation/acceptance files. Latest application/source-test SHA remains `3c67fbef9a48ba77774240a30bdb7aecde43320c`; do not mislabel the docs-only HEAD as a newly tested application build.
+- No merge, close, ready-for-review, rebase, reset, force-push, history rewrite or main-branch write was performed. Branch protection remains unverified because the detailed protection endpoint returned HTTP 403; branch metadata reports `protected=false`.
+
+## 2. Latest exact-head engineering and operational checks
+
+All listed runs checked out PR HEAD `b4021c2...` unless the source/test SHA is explicitly stated.
+
+| Evidence | Latest result | Interpretation |
+|---|---|---|
+| Automation/security [44264412095](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412095) | **171/171 Node test files PASS; Python 84/84 PASS; 0 skips; npm audit 0 vulnerabilities** | Engineering regression pass |
+| Content quality [44264412098](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412098) | **983/983 PASS; 0 failures** | Content-quality regression pass |
+| Dashboard browser [44263192946](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44263192946) | **33/33 Chromium journeys PASS** | Exact application/test SHA `3c67fb...`; DASH-001 still NOT_TESTED overall |
+| Queue readiness [44264412121](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412121) | PASS; 16 items, approved destination and product URLs, all held, publishing disabled | Draft/queue preparation only; no publication |
+| Metadata validation [44264412135](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412135) | PASS as a validation workflow; it confirmed HOLD and 23 blockers in its secret-limited environment | Not production readiness |
+| Dedicated production readiness [44264412009](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412009) | **HOLD — 19 blockers** | Expected fail-closed release gate; no upload attempted |
+| Nature Frontiers local draft validation [44264412080](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412080) | Local draft validation PASS; provider-draft generation step SKIPPED | Not a Meta provider draft |
+| Nature Frontiers signed editorial approval regression [44264413079](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264413079) | PASS | Signer/policy regression only; not a real content approval |
+| Meta identity workflow [44264412097](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412097) | Regression PASS; live identity GET **SKIPPED** for pull_request event | Not live Meta connection evidence |
+| Instagram safety [44264412140](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412140) | PASS | Local safety regression only |
+| Cloudflare durable-state [44264412156](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412156) | PASS | Unit/contract checks only |
+| Cloudflare runner bridge [44264412185](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412185) | PASS | Safety tests only; no live runner execution |
+| Deployment recovery [44264412045](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412045) | PASS | Recovery smoke only; no production deployment |
+| Branch inventory [44264412162](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412162) | PASS; decision `REQUIRES_REVIEW` | Non-destructive inventory, not semantic approval |
+| Isolated main/candidate baseline [44264412194](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44264412194) | PASS | Both isolated baseline jobs completed; retain artifact for exact comparative test totals |
+
+The 23-blocker metadata-workflow output includes four missing YouTube environment variables because that workflow does not receive those secrets. The dedicated readiness workflow has its intended read-only credential context and reports 19 blockers. This difference is an execution-environment distinction, not evidence that credentials are healthy: the dedicated live OAuth check still returns `invalid_grant`.
+
+## 3. Recovered media inventory and hands-on visual findings
+
+A recursive Library inventory across all pages found **22 MP4 files**: 13 SonicVhibez and 9 Nature Frontiers. The 17 November technical inventory reports all 22 passed full FFmpeg decode. This is file-integrity evidence only.
+
+- **0 verified original-camera footage packages**.
+- **0 exact-hash human-approved release packages**.
+- **0 verified publication-ready MP4s**.
+- The Library contains two short MiniMax synthetic voice samples and one music bed; no owner-recorded narration sample was found.
+- The two 4.032-second mongoose clips have no original-camera provenance/creator evidence and show stylized/synthetic warning signs. Do not describe them as authentic encounters.
+- Nature Frontiers crocodile videos are stylized/illustrative AI/graphic drafts, not real documentary footage. They must remain separate from SonicVhibez.
+- The existing 6m47s SonicVhibez Episode 2 files are graphic-only creator-workflow presentations. The v14 file is H.264 1920×1080 30fps, AAC 48kHz stereo, 407.6s, SHA-256 `0b13c209acbc1a34987de21e74d728cdf40b2214b7f4ecddb765eb7df9f8346d`. Its report says scene boundaries are estimates and not verified by listening. Sampled frames show the lower caption band; this limited sample is not a full playback/approval.
+- Episode 2 v11 is 407.6s, H.264 1920×1080 30fps, AAC, SHA-256 `4ed9b7aac96c9689d02e85ee7af60f655d4e0227b0e042b0013c8ee12b979d53`. Its technical report describes a bottom caption band, but explicitly leaves narration timing, caption text review, pacing and human approval open.
+- The 53.367s Short file `sonicvhibez-short-corrected-draft.mp4` has SHA-256 `9ab2955c4ebef413adbe78e483d23ecaa2649985b2154585411c110fa718e4bd`. A sampled frame at 20s shows subtitle text overlapping the upper title/header region. Treat this specific draft as **VISUAL HOLD / REJECT FOR RELEASE**; no final correction has been rendered or verified.
+- A separate `wildlife-short-caption-readability` review package uses Pexels stock montage and NOAA B-roll with synthetic narration. Its manifest explicitly leaves `rightsConfirmed=false`, `humanEditorialReview=false`, `complianceReviewed=false`, `productionApproved=false`, `uploadAllowed=false` and `scheduleAllowed=false`. Exact Pexels clip-to-credit mapping and full review remain incomplete. It is not a substitute for original-camera footage or the owner's narration.
+
+**Production consequence:** do not reuse the existing stock, AI/illustrative wildlife or unproven mongoose clips as authentic SonicVhibez wildlife footage. Do not promote the synthetic narration. The owner-recorded voice and original-camera footage remain outstanding.
+
+## 4. Nature Frontiers lane — refreshed interpretation
+
+- Local daily draft package validation and signed-approval code regression passed, but provider draft creation was skipped and the Meta live identity check was skipped on the PR event.
+- Previous manual read-only Meta verification [44251034601] returned HTTP 401 / OAuth error 190 for user/Page credentials. No current live Meta identity/permission acceptance is established.
+- Keep Nature Frontiers separate from SonicVhibez YouTube. Do not enable the Facebook/Instagram publisher, alter Metricool schedules, create provider drafts, or activate a campaign based on local test fixtures.
+- The Cloudflare production Worker remains health-only with empty operational tables and no Meta secret bindings/schedules; it is not a functioning publisher.
+- Existing safe defaults remain: publishing disabled, dry-run enabled, emergency stop active, campaign unset, commercial/disclosure flags unchanged. No provider writes were performed.
+
+## 5. Remaining acceptance gates — current blockers and future inputs
+
+### Owner-supplied production inputs
+1. Original-camera wildlife footage for the next Short and long-form episode, with source originals, provenance, creator/owner, capture context and publication rights. No stock/AI substitute is approved for authentic wildlife footage.
+2. Owner's own clean narration recording for the relevant approved script. The existing MiniMax/Piper voices are not an approved substitute.
+3. Owner confirmation of the next editorial topic and exact story/parent relationship; the existing creator-education queue must not be silently replaced by an animal-encounter topic.
+4. Owner approval of final script, source-to-scene mapping, narration, captions, thumbnail, metadata, rights evidence and exact final hashes.
+5. Explicit approval for any AI reconstruction if one is ever proposed, with visible disclosure; it must never be described as recorded wildlife footage.
+
+### YouTube
+6. Reauthorize the existing YouTube OAuth client securely; latest read-only attempt returns `invalid_grant`.
+7. Verify the current `youtube.upload` or other documented `videos.insert`-capable scope.
+8. Refresh complete public/private/unlisted and pending/scheduled history, reconcile every uncertain upload attempt and reverify exact SonicVhibez channel identity before any upload.
+9. Supply a valid exact-job, exact-hash, one-shot private-upload authorization only after all content gates pass. Public/unattended publishing remains disabled.
+
+### Engineering / operations
+10. Complete DASH-001 exhaustive field-level acceptance for 120 controls/17 forms, including positive/negative validation, authorization, persistence, refresh/restart, concurrency and accessibility. 33/33 browser journeys do not close the entire gate.
+11. Complete API-001 positive acceptance for all 48 protected routes; current matrix has 48/48 auth-negative checks PASS, 42 positive paths accepted and six routes still externally blocked.
+12. Complete SCHED-001 against complete live history, real dispatch, leases/cancel/retry/dead-letter/restart and remote publication read-back. The rolling `long_form → long_form → short` rule with 72-hour gaps needs at least 216 hours per cycle; owner-approved feasible cadence is still required.
+13. Finish live runner integration: deployed trusted runner branch/pinned SHA is behind current implementation; no runner state/artifacts exist. Update only through reviewed owner-approved staging execution.
+14. Resolve staging R2 HTTP 403/error 10042 by owner-approved R2 enablement (including billing/usage acceptance) or an approved durable alternative; no storage enablement performed.
+15. Complete independent off-account backup/restore and production deployment/rollback/monitoring acceptance. Staging D1 backups are not a production disaster-recovery proof.
+16. Finish GIT-002 human semantic review of 4,317 branch-only commits and 17 critical modules; preserve all nine base-only commits and do not mutate history. Verify branch protection/required checks with an owner/admin because GitHub's detailed endpoint returned 403.
+17. Resolve Nature Frontiers live Meta tokens, exact Page/Instagram identity, Instagram Business Account ID, Metricool brand mapping, self-hosted publisher runner and provider-side draft/read-back. Keep both social lanes fail-closed.
+18. Reconcile all remaining SEO, analytics, legal, monitoring, retention, disaster-recovery and post-publication evidence against the 89-requirement register. Do not mark NOT_TESTED as PASS based on workflow status alone.
+
+## 6. Release decision
+
+**HOLD / NOT PRODUCTION READY.** Engineering regression remains green, but production media and owner voice are absent/unapproved; YouTube OAuth is invalid; upload scope is unverified; full live history/spacing cannot be refreshed; Nature Frontiers Meta verification is not live; R2 and runner integration are incomplete; DASH-001, API-001, SCHED-001, DEPLOY-001 and GIT-002 remain open.
+
+No YouTube upload, Facebook/Instagram publication, Metricool write, campaign activation, R2 enablement, production Worker deployment, PR merge, PR ready-state change or main-branch mutation was performed. This release recommendation is not the owner's authorization.
+
+---
+
 # 18 November 2026 — live master completion refresh (09:49 SAST evidence checkpoint)
 
 This supersedes the 09:01 SAST checkpoint below. It records the live branch/PR state and current exact source/test SHA; it does not claim 100% completion.
