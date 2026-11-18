@@ -90,6 +90,8 @@ The 8-of-10 target is an outcome metric, not a release exception: all individual
 
 ## 8. Enforcement and evidence status
 
-This document defines the acceptance contract. It does not, by itself, prove that application code enforces every clause. The release owner must verify that the render/export validator, final approval record, upload gate, scheduler and dashboard all reject missing, stale, below-threshold or hash-mismatched quality evidence. Until those code paths and their regression tests are verified on an exact commit, implementation status is **NOT VERIFIED** and production readiness remains HOLD.
+**Implemented in this branch:** the SonicVhibez private YouTube upload approval gate calls the production scorecard validator before any YouTube insert. It rejects missing/stale/future reviews, scores below 85 overall or below 80 in any dimension, failed critical gates, missing playback or mobile/desktop image-inspection evidence, mismatched video/metadata hashes, unbound thumbnail/captions/narration files, and any final image in the approved related-artifact set that is absent from `artifactHashes.images`.
+
+**Not yet verified across every production path:** this validator is not yet wired into the renderer/export pipeline, queue/scheduler eligibility checks, dashboard approval journeys, or Nature Frontiers Facebook/Instagram publishers. The policy is therefore **PARTIALLY ENFORCED, NOT COMPLETE**. Until each applicable path has its own fail-closed integration and negative regression tests on an exact commit, do not claim universal enforcement or production readiness. The existing public/unattended publishing safeguards remain in force.
 
 No one may report this policy as technically enforced based only on this document or a passing generic test suite. Evidence must identify the exact commit, changed files, tests, workflow run and negative cases proving that each gate blocks a failing asset.
