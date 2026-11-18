@@ -23,7 +23,7 @@ function validReview() {
     scores: { ...scores }, criticalGates: { ...criticalGates },
     artifactHashes: {
       video: hash("video"), metadata: hash("metadata"),
-      thumbnail: relatedArtifacts[0].sha256, captions: relatedArtifacts[1].sha256,
+      thumbnail: relatedArtifacts[0].sha256, images: [relatedArtifacts[0].sha256], captions: relatedArtifacts[1].sha256,
       narration: relatedArtifacts[2].sha256
     }
   };
@@ -83,6 +83,14 @@ test("rejects absent or incorrectly typed thumbnail, caption and narration bindi
   const review = validReview();
   review.artifactHashes.captions = hash("not-in-approved-set");
   assert.match(validateProductionQualityScorecard(review, options()).join(" "), /captions hash is not present/);
+});
+
+test("rejects any final image missing from the image-review hash set", () => {
+  const review = validReview();
+  const additionalImage = { path: "media/scene-still.png", sha256: hash("scene-still") };
+  assert.match(validateProductionQualityScorecard(review, { ...options(), relatedArtifacts: [...relatedArtifacts, additionalImage] }).join(" "), /final image artifact is not bound/);
+  review.artifactHashes.images.push(additionalImage.sha256);
+  assert.deepEqual(validateProductionQualityScorecard(review, { ...options(), relatedArtifacts: [...relatedArtifacts, additionalImage] }), []);
 });
 
 test("private upload source invokes the mandatory scorecard gate before any remote insert", () => {
