@@ -7,7 +7,6 @@ on:
       - "config/narration-voice-candidates.json"
       - "scripts/render_american_narration.py"
       - "content/drafts/nile-crocodile-eyes-at-the-waterline.md"
-      - ".github/workflows/american-narration-review.yml"
       - "scripts/generate_piper_voice_audition.py"
       - "tests/test_render_american_narration.py"
       - "content/short-001-wildlife-video-storytelling.md"
@@ -18,8 +17,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: sonicvhibez-american-narration-review
-  cancel-in-progress: false
+  group: sonicvhibez-american-narration-review-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   render-review:
@@ -36,23 +35,27 @@ jobs:
         run: python -m pip install --disable-pip-version-check "piper-tts==1.8.0"
       - name: Test American narration renderer
         run: PYTHONPATH=. python -m unittest discover -s tests -p "test_render_american_narration.py" -v
-      - name: Render American male storyteller review audio
-        run: python scripts/render_american_narration.py --source-script content/short-001-wildlife-video-storytelling.md --output artifacts/american-narration-review
+      - name: Render American male wildlife-encounter review audio
+        run: python scripts/render_american_narration.py --source-script content/drafts/nile-crocodile-eyes-at-the-waterline.md --output artifacts/american-narration-review
       - name: Install FFmpeg for listening export
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: timeout 180 sudo apt-get install -y --no-install-recommends ffmpeg
+      - name: Create and validate listening MP3
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ffmpeg
-      - name: Create listening MP3
-        run: ffmpeg -nostdin -hide_banner -loglevel error -y -i artifacts/american-narration-review/american-short-001-narration-review.wav -codec:a libmp3lame -b:a 192k artifacts/american-narration-review/american-short-001-narration-review.mp3
+          ffmpeg -nostdin -hide_banner -loglevel error -y -i artifacts/american-narration-review/american-wildlife-encounter-narration-review.wav -codec:a libmp3lame -b:a 192k artifacts/american-narration-review/american-wildlife-encounter-narration-review.mp3
+          test -s artifacts/american-narration-review/american-wildlife-encounter-narration-review.mp3
+          ffmpeg -nostdin -v error -xerror -i artifacts/american-narration-review/american-wildlife-encounter-narration-review.mp3 -f null -
       - name: Retain review audio and provenance
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: sonicvhibez-american-male-storyteller-review
+          name: sonicvhibez-american-wildlife-encounter-voice-review
           path: |
-            artifacts/american-narration-review/american-short-001-narration-review.wav
-            artifacts/american-narration-review/american-short-001-narration-review.mp3
+            artifacts/american-narration-review/american-wildlife-encounter-narration-review.wav
+            artifacts/american-narration-review/american-wildlife-encounter-narration-review.mp3
             artifacts/american-narration-review/american-narration-review.json
             artifacts/american-narration-review/ATTRIBUTION.txt
             artifacts/american-narration-review/MODEL_CARD
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30

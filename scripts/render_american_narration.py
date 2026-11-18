@@ -20,7 +20,7 @@ CARD_MD5 = "c34f20bbc4918681ad7a070a8321f2fa"
 MODEL_BYTES = 63531379
 CONFIG_BYTES = 4968
 VOICE_ID = "en_US-norman-medium"
-OUTPUT = "american-short-001-narration-review.wav"
+OUTPUT = "american-wildlife-encounter-narration-review.wav"
 DIRECTION = ("American English male voice; mature approximately-45-year-old vocal character; "
              "clean, clear, warm, confident, passionate wildlife storyteller; natural conversational pacing; "
              "controlled emphasis; no robotic cadence or exaggerated theatricality.")
