@@ -34,7 +34,7 @@
   ],
   "notes": [
     "Publishing is deliberately disabled and dry-run enabled until the exact Nature Frontiers Page connection is securely configured and independently verified.",
-    "The Page ID must be supplied through secure configuration and verified against Meta. No ID, token, permission, or live acceptance is assumed.",
+    "The owner explicitly confirmed on 2026-11-16 that the official Nature Frontiers SA Facebook Page ID is 1431329126735709. Do not ask the owner to re-enter this ID or substitute any other Page/Business Portfolio ID. The configured ID remains subject to fresh read-only Meta identity and permission verification before publishing can be enabled.",
     "All policy uncertainty, missing source checks, missing rights evidence, unknown media provenance, unapproved destinations, duplicates, and uncertain publish results block the affected slot automatically.",
     "History and attempt ledger paths must point to durable operator-controlled storage in production; GitHub Actions artifacts are diagnostic exports only.",
     "The Nature Frontiers Facebook destination is separate from the SonicVhibez YouTube destination.",
