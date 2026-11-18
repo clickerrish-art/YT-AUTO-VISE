@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { parseNodeTestSummary } from "./node-test-summary.mjs";
 
 const roots = ["test", "tests"];
 const files = roots.flatMap(root => {
@@ -30,17 +31,13 @@ for (const [index, file] of files.entries()) {
   });
   const output = String(result.stdout ?? "") + String(result.stderr ?? "");
   process.stdout.write(output);
-  const normalizedOutput = output.replace(/\u001b\[[0-9;]*m/g, "");
-  const lastMatch = pattern => [...normalizedOutput.matchAll(pattern)].at(-1)?.[1];
-  const pass = lastMatch(/(?:ℹ|#)\s*pass\s+(\d+)/gi);
-  const fail = lastMatch(/(?:ℹ|#)\s*fail\s+(\d+)/gi);
-  const skipped = lastMatch(/(?:ℹ|#)\s*skipped\s+(\d+)/gi);
-  if (!pass || !fail || !skipped) {
-    failures.push({ file, reason: "test runner summary was missing; pass/fail/skip totals cannot be verified" });
+  const summary = parseNodeTestSummary(output);
+  if (!summary) {
+    failures.push({ file, reason: "test runner summary was missing or malformed; pass/fail/skip totals cannot be verified" });
   } else {
-    totalPass += Number(pass[1]);
-    totalFail += Number(fail[1]);
-    totalSkipped += Number(skipped[1]);
+    totalPass += summary.pass;
+    totalFail += summary.fail;
+    totalSkipped += summary.skipped;
   }
 
   if (result.error) {
