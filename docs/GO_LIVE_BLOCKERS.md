@@ -5,7 +5,7 @@ This checkpoint supersedes the historical notes below. It records the current re
 ## Repository and Git safety
 
 - Implementation branch: `codex/marketing-machine-audit-fixes`
-- Current implementation branch HEAD: `e5ba4a4dc48433e6c6fedfda0163774c439b2c0c`
+- Source/data evidence baseline before this checkpoint document update: `e5ba4a4dc48433e6c6fedfda0163774c439b2c0c` (the document-only update itself is a later branch commit).
 - Current `main`: `2e4153c8252349d1a7c5655f5cdc00da557c597e` (unchanged by this work)
 - Merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`
 - PR #1: OPEN / DRAFT / UNMERGED; do not merge, close, or mark ready.
