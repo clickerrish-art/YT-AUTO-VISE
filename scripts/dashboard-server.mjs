@@ -58,6 +58,10 @@ if (stateApiUrl && (stateApiToken.length < 24 || !stateAccessClientId || !stateA
 let remoteStateStore = null;
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
 const htmlPath = path.join(root, "public", "dashboard.html");
+function reviewNarrationArtifact(job) {
+  return (job.outputArtifacts ?? []).find(item => /\.(mp3|wav|m4a|aac|flac|ogg)$/i.test(item.path ?? "")) ??
+    job.authoring?.narrationStage?.artifacts?.["narration.mp3"] ?? null;
+}
 function reviewImageArtifacts(job) {
   const isImage = value => typeof value === "string" && /\.(jpg|jpeg|png|webp|gif|avif)$/i.test(value);
   const rights = job.rightsChecks?.evidence;
@@ -2685,7 +2689,7 @@ const server = http.createServer(async (req, res) => {
         }
         const captionsPath = job.validationResults.captionsPath;
         add("captions", { path: captionsPath, sha256: job.validationResults.captionsSha256 });
-        const narration = (job.outputArtifacts ?? []).find(item => /\.(mp3|wav|m4a|aac|flac|ogg)$/i.test(item.path ?? ""));
+        const narration = reviewNarrationArtifact(job);
         if (!narration) throw new Error("Final narration audio artifact is missing");
         add("narration", narration);
         const metadataPath = job.metadataPath;
@@ -2716,7 +2720,7 @@ const server = http.createServer(async (req, res) => {
       const artifact = kind === "video"
         ? (job.outputArtifacts ?? []).find(item => path.extname(item.path ?? "").toLowerCase() === ".mp4")
         : kind === "thumbnail" ? job.thumbnailArtifact
-        : kind === "narration" ? (job.outputArtifacts ?? []).find(item => /\.(mp3|wav|m4a|aac|flac|ogg)$/i.test(item.path ?? ""))
+        : kind === "narration" ? reviewNarrationArtifact(job)
         : kind === "image" ? reviewImageArtifacts(job)[Number(url.searchParams.get("index"))]
         : { path: job.validationResults.captionsPath, sha256: job.validationResults.captionsSha256 };
       try {
