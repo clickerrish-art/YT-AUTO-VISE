@@ -15,7 +15,10 @@
   },
   "runtime": {
     "platform": "Kaggle",
-    "acceleratorPreference": ["GPU T4", "GPU P100"],
+    "acceleratorPreference": [
+      "GPU T4",
+      "GPU P100"
+    ],
     "internetRequired": true,
     "executionMode": "owner_started_session_batch",
     "unattended": false,
@@ -39,7 +42,12 @@
     "targetAspectRatio": "16:9",
     "initialShotDurationSeconds": 5,
     "visualStyle": "photorealistic wildlife documentary",
-    "rejectStyles": ["cartoon", "anime", "illustration", "plastic-looking CGI"],
+    "rejectStyles": [
+      "cartoon",
+      "anime",
+      "illustration",
+      "plastic-looking CGI"
+    ],
     "seedMustBeRecorded": true
   },
   "licensing": {
@@ -51,7 +59,43 @@
     "upstreamBaseModelLicenseUrl": "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B",
     "mirrorCheckpointLicenseStatus": "HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE",
     "commercialUseApproved": false,
-    "reason": "The exact WanGP-compatible mirror checkpoint and VAE do not independently declare licence/provenance in the inspected mirror metadata. Upstream Apache-2.0 is not treated as sufficient proof of the mirror artifacts' provenance."
+    "reason": "The exact WanGP-compatible mirror checkpoint and VAE do not independently declare licence/provenance in the inspected mirror metadata. Upstream Apache-2.0 is not treated as sufficient proof of the mirror artifacts' provenance.",
+    "wanGpLicenseReview": {
+      "status": "PASS_FOR_INTERNAL_BUSINESS_USE_AND_OUTPUT_CREATION",
+      "licenseVersion": "WanGP Community License 2.0",
+      "sourceUrl": "https://github.com/deepbeepmeep/WanGP/blob/f4cfc1259215577be9a2ee280c41efbedfb4459a/LICENSE.txt",
+      "reviewedAt": "2026-11-18",
+      "verifiedTerms": [
+        "Internal company and business use is Free Use",
+        "Private batch/queue/headless use for internal business use is permitted",
+        "Outputs may be published, distributed, sold or licensed subject to third-party terms",
+        "WanGP credit is required for Direct Output Sale as defined by the licence; free YouTube publication and ordinary internal use are not Direct Output Sales"
+      ],
+      "conditions": [
+        "Third-party model weights, VAE, datasets and libraries retain their own licences",
+        "Do not sell or expose WanGP itself as paid hosted/API/SaaS/white-label/OEM access without a separate written commercial licence",
+        "Preserve notices if redistributing WanGP source or bundles"
+      ],
+      "directOutputSaleCredit": "Made with WanGP (or equivalent) when the video/output itself is directly sold or licensed"
+    },
+    "mirrorProvenanceReview": {
+      "status": "HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE",
+      "checkpointSha256": "463076f7625d8c7fc8912011cf5d02db7f0a8ae666e1758cd835e5a8517ef0e0",
+      "checkpointPage": "https://huggingface.co/DeepBeepMeep/Wan2.2/blob/c4ceebd36e8ed707cf1116a6c8086eb756cd03ad/wan2.2_text2video_5B_quanto_mbf16_int8.safetensors",
+      "checkpointFileSha256Evidence": "Hugging Face Xet pointer page reports SHA-256 463076f7625d8c7fc8912011cf5d02db7f0a8ae666e1758cd835e5a8517ef0e0",
+      "vaeSha256": "bb6e5e515ca6af2cb2b7bbf8bfc790b8c306832c34e0a76193507c3739ebf54a",
+      "vaePage": "https://huggingface.co/DeepBeepMeep/Wan2.2/blob/4cb9607e5532be42f37a05778acfc47aee7701e1/Wan2.2_VAE.safetensors",
+      "vaeFileSha256Evidence": "Hugging Face Xet pointer page reports SHA-256 bb6e5e515ca6af2cb2b7bbf8bfc790b8c306832c34e0a76193507c3739ebf54a",
+      "upstreamOfficialRepository": "https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B",
+      "upstreamLicense": "Apache-2.0",
+      "upstreamLicenseEvidence": "Official Wan-AI model card identifies the TI2V-5B model as Apache-2.0.",
+      "conflict": "The DeepBeepMeep/Wan2.2 model repository's model-tree metadata identifies Wan-AI/Wan2.2-T2V-A14B as its base model, while the pinned file is named TI2V-5B. The repository does not provide file-specific conversion/provenance or an explicit mirror licence for the pinned checkpoint/VAE.",
+      "requiredResolution": [
+        "Obtain maintainer evidence that these exact pinned checkpoint and VAE files derive from Wan-AI/Wan2.2-TI2V-5B and are redistributed under Apache-2.0, with conversion and quantization process documented",
+        "Or switch to an exact WanGP-compatible model package with file-level licence/provenance evidence",
+        "Keep commercialUseApproved=false until exact weight and VAE provenance is cleared"
+      ]
+    }
   },
   "narration": {
     "separateFromVideoGeneration": true,
