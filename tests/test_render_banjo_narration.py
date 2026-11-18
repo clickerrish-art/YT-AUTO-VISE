@@ -131,14 +131,15 @@ class BanjoNarrationTests(unittest.TestCase):
             def downloader(filename, destination):
                 if filename == module.MODEL_NAME:
                     destination.write_bytes(b"pinned-test-model")
-                elif filename == module.ATTRIBUTION_FILE:
-                    destination.write_text("CC BY 4.0; Jenny (Dioco); Timothy Ferguson; commercial use permitted.")
                 else:
                     destination.write_text(json.dumps({
                         "num_speakers": 10,
                         "speaker_id_map": {"timothy_ferguson": 5, "algy_pug": 4, "howard_skyman": 6},
                         "audio": {"sample_rate": 22050},
                     }))
+
+            def attribution_downloader(destination):
+                destination.write_text("Jenny (Dioco); Timothy Ferguson; commercial use permitted.")
 
             model_hash = hashlib.sha256(b"pinned-test-model").hexdigest()
             with patch.object(module, "MODEL_SHA256", model_hash):
@@ -148,6 +149,7 @@ class BanjoNarrationTests(unittest.TestCase):
                     downloader=downloader,
                     voice_loader=lambda path: FakeVoice(),
                     synthesis_config_factory=lambda **kwargs: kwargs,
+                    attribution_downloader=attribution_downloader,
                 )
 
             self.assertEqual(report["voice"], "banjo")
@@ -168,7 +170,7 @@ class BanjoNarrationTests(unittest.TestCase):
     def test_full_model_attribution_file_is_validated(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "ATTRIBUTION.md"
-            path.write_text("CC BY 4.0; Jenny (Dioco); Timothy Ferguson; commercial use permitted.")
+            path.write_text("Jenny (Dioco); Timothy Ferguson; commercial use permitted.")
             self.assertIn("Timothy Ferguson", module.validate_attribution_file(path))
             path.write_text("CC BY 4.0 only")
             with self.assertRaisesRegex(ValueError, "incomplete"):

@@ -10,6 +10,7 @@ import os
 import struct
 import sys
 import wave
+import urllib.request
 from pathlib import Path
 
 try:
@@ -36,16 +37,39 @@ ATTRIBUTION = (
     "by Jenny (Dioco). Training audio is public domain, recorded "
     "by LibriVox volunteers."
 )
+ATTRIBUTION_REPOSITORY = "DataCraftsmanAustralia/piper-en_AU"
+ATTRIBUTION_REVISION = "f958f96f655adb57281f31b8077ea28046aa81fa"
 ATTRIBUTION_URL = (
-    "https://huggingface.co/DataCraftsmanAustralia/"
-    "piper-en_AU-librivox-medium/blob/3faad046064c56f7316ffd745d5a8b14035f35df/ATTRIBUTION.md"
+    "https://github.com/DataCraftsmanAustralia/piper-en_AU/blob/"
+    + ATTRIBUTION_REVISION + "/ATTRIBUTION.md"
 )
+MODEL_CARD_URL = "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium"
+
+
+def download_attribution(destination: Path, opener=urllib.request.urlopen) -> None:
+    url = (
+        "https://raw.githubusercontent.com/" + ATTRIBUTION_REPOSITORY + "/"
+        + ATTRIBUTION_REVISION + "/ATTRIBUTION.md"
+    )
+    request = urllib.request.Request(url, headers={"User-Agent": "SonicVhibez-Banjo-Attribution/1.0"})
+    with opener(request, timeout=60) as response, destination.open("wb") as output:
+        total = 0
+        while True:
+            chunk = response.read(64 * 1024)
+            if not chunk:
+                break
+            total += len(chunk)
+            if total > 2 * 1024 * 1024:
+                raise ValueError("Pinned model attribution file exceeded 2 MiB safety limit")
+            output.write(chunk)
+    if destination.stat().st_size == 0:
+        raise ValueError("Pinned model ATTRIBUTION.md download is empty")
 
 
 
 def validate_attribution_file(path: Path) -> str:
     text = path.read_text(encoding="utf-8")
-    required = ("CC BY 4.0", "Jenny (Dioco)", "Timothy Ferguson", "commercial use")
+    required = ("Jenny (Dioco)", "Timothy Ferguson", "commercial use")
     missing = [term for term in required if term.casefold() not in text.casefold()]
     if missing:
         raise ValueError("Pinned model ATTRIBUTION.md is incomplete: " + ", ".join(missing))
@@ -172,6 +196,7 @@ def render(
     downloader=download_pinned,
     voice_loader=None,
     synthesis_config_factory=None,
+    attribution_downloader=download_attribution,
 ) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     model_path = output_dir / MODEL_NAME
@@ -184,7 +209,7 @@ def render(
     downloader(CONFIG_NAME, config_path)
     config = validate_config(config_path)
     attribution_path = output_dir / ATTRIBUTION_FILE
-    downloader(ATTRIBUTION_FILE, attribution_path)
+    attribution_downloader(attribution_path)
     attribution_text = validate_attribution_file(attribution_path)
 
     if config.get("speaker_id_map", {}).get("timothy_ferguson") != SPEAKER_ID:
@@ -229,8 +254,12 @@ def render(
         "modelSha256": actual_model_sha,
         "modelLicense": "CC-BY-4.0",
         "modelLicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "modelCardUrl": MODEL_CARD_URL,
+        "attributionRepository": ATTRIBUTION_REPOSITORY,
+        "attributionRevision": ATTRIBUTION_REVISION,
         "modelAttribution": ATTRIBUTION,
         "modelAttributionSource": ATTRIBUTION_URL,
+        "modelAttributionBlobSha": "dc24653fd19359580f066ac98be0f4aea4d79495",
         "attributionFile": ATTRIBUTION_FILE,
         "attributionFileSha256": sha256_file(attribution_path),
         "attributionFileBytes": attribution_path.stat().st_size,

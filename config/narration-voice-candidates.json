@@ -11,11 +11,11 @@
     "license": "CC-BY-4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
     "attribution": "en_AU-librivox-medium, CC BY 4.0. Fine-tuned from en_GB-jenny_dioco-medium, derived from the Jenny TTS dataset by Jenny (Dioco). Training audio is public domain, recorded by LibriVox volunteers.",
-    "attributionAdditional": "Jenny (Dioco) attribution is requested by the base-checkpoint terms; the model author describes the lineage interpretation as good-faith compliance, not a legal conclusion. Retain full ATTRIBUTION.md and obtain owner review before commercial use.",
+    "attributionAdditional": "Full provenance and upstream Jenny (Dioco) serving attribution retained from the pinned DataCraftsmanAustralia/piper-en_AU ATTRIBUTION.md. The author's lineage interpretation is expressly not a legal conclusion.",
     "engine": "OHF-Voice/piper1-gpl",
     "engineVersion": "1.8.0",
     "engineLicense": "GPL-3.0-or-later",
-    "sourceAttributionUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium/blob/3faad046064c56f7316ffd745d5a8b14035f35df/ATTRIBUTION.md",
+    "sourceAttributionUrl": "https://github.com/DataCraftsmanAustralia/piper-en_AU/blob/f958f96f655adb57281f31b8077ea28046aa81fa/ATTRIBUTION.md",
     "modelCardUrl": "https://huggingface.co/DataCraftsmanAustralia/piper-en_AU-librivox-medium",
     "limitations": [
       "Model author describes the delivery as period-inflected and formal-literary rather than conversational.",
