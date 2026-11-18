@@ -79,10 +79,10 @@ test("readiness JSON distinguishes external reconciliation from code-controlled 
   assert.equal(report.blockers.some(blocker => blocker.evidence.kind === "external-reconciliation-required"), false, "complete fresh owner-reviewed history and attempt evidence is already present");
   assert.ok(report.notes.some(note => /prior upload-attempt reconciliation passed/.test(note)));
   const readinessSource = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
-  assert.match(readinessSource, /const attempts = reconciliation\\.uploadAttemptReconciliation/);
-  assert.match(readinessSource, /MAX_HISTORY_EVIDENCE_AGE_MS = 24 \\* 60 \\* 60 \\* 1000/);
-  assert.match(readinessSource, /reconciliation\\.verifiedAt === verification\\.checkedAt/);
-  assert.doesNotMatch(readinessSource, /blockers\\.push\\("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
+  assert.match(readinessSource, /const attempts = reconciliation\.uploadAttemptReconciliation/);
+  assert.match(readinessSource, /MAX_HISTORY_EVIDENCE_AGE_MS = 24 \* 60 \* 60 \* 1000/);
+  assert.match(readinessSource, /reconciliation\.verifiedAt === verification\.checkedAt/);
+  assert.doesNotMatch(readinessSource, /blockers\.push\("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
   assert.ok(report.blockers.some(blocker =>
     blocker.evidence.kind === "environment-presence-check" &&
     /secret values are never included/.test(blocker.evidence.observed)
