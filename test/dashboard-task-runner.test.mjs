@@ -123,12 +123,12 @@ test("dashboard runs only allowlisted real validation commands and persists resu
   // Two independent dashboard processes share one durable state directory.
   // A long-running allowlisted task must be claimed once; the other process
   // must see the persisted RUNNING record rather than launching a duplicate.
-  const duplicateTaskRequests = await Promise.all([
+  const duplicateTaskResponses = await Promise.all([
     fetch(base + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "test-suite" }) }),
     fetch(base2 + "/api/tasks/run", { method: "POST", headers, body: JSON.stringify({ taskId: "test-suite" }) })
   ]);
-  assert.deepEqual(duplicateTaskRequests.map(response => response.status).sort(), [200, 409]);
-  const duplicateTaskBodies = await Promise.all(duplicateTaskRequests.map(response => response.json()));
+  const duplicateTaskBodies = await Promise.all(duplicateTaskResponses.map(response => response.json()));
+  assert.deepEqual(duplicateTaskResponses.map(response => response.status).sort(), [200, 409], JSON.stringify(duplicateTaskBodies));
   const rejectedDuplicate = duplicateTaskBodies.find(body => body.error);
   assert.match(rejectedDuplicate.error, /durable RUNNING record|already running/i);
   assert.equal(rejectedDuplicate.retryAllowed, false);
