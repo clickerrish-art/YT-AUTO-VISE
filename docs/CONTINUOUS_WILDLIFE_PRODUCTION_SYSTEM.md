@@ -15,18 +15,17 @@ This system is footage-led and zero-cost by default. It must never describe an u
 
 ## Primary AI video-generation engine: WanGP on Kaggle
 
-**Selected primary engine:** [WanGP](https://github.com/deepbeepmeep/WanGP), run in a user-started Kaggle GPU notebook session. GitHub Actions remains the queue, orchestration, validation and evidence layer; it is not the video-generation GPU.
+**Primary engine:** project-owned [Kaggle notebook](../notebooks/sonicvhibez_wangp_kaggle.ipynb) running the official [WanGP repository](https://github.com/deepbeepmeep/WanGP) at immutable commit `f4cfc1259215577be9a2ee280c41efbedfb4459a` (v20.00). The commit is unsigned; the notebook pins the exact SHA and never pulls mutable `main`.
 
-- **Kaggle adapter candidate:** [Square-Zero-Labs/Wan2GP-on-Kaggle](https://github.com/Square-Zero-Labs/Wan2GP-on-Kaggle). Its notebook is Apache-2.0, uses Kaggle's installed CUDA/PyTorch stack, places model caches in `/kaggle/temp`, and places generated outputs in `/kaggle/working/Wan2GP-outputs`.
-- **Preferred first model/profile:** Wan 2.2 TextImage2Video 5B FastWan at 480p, subject to actual availability in the selected WanGP build and the model's own licence. Start with short test shots; do not assume a 6–10 minute video can be generated in one pass.
-- **Storage:** model weights and caches are temporary Kaggle session data; generated outputs must be saved as a Kaggle notebook output/version or another owner-approved durable store before the session ends. Do not download large model weights to the owner's PC.
-- **Session operation:** the notebook must be started by the owner when GPU access is available. Kaggle free GPU quota/session limits mean this is repeatable batch production, not a permanently running or guaranteed unattended GPU service.
-- **Pinning and supply-chain rule:** do not run a mutable `main` clone or `git pull` as a production dependency. Before production use, pin the WanGP source to an inspected commit, record the commit and dependency environment in each job record, and review notebook changes. Do not run third-party notebook cells blindly.
-- **Notebook safety note:** the alternative `kayas881/WanGP-Kaggle` notebook was inspected but is not the selected production bootstrap: it installs a separately pinned PyTorch/CUDA stack, patches upstream source with `sed`, and deletes its output directory during launch. Do not use it unchanged.
-- **Licensing:** the WanGP software licence does not grant rights to every model, LoRA, reference image, dataset or generated subject. Check and retain the exact model/checkpoint and LoRA licence for commercial YouTube use before generation is approved. Record the WanGP version, model ID, model licence URL, LoRAs, prompt, seed and output SHA-256.
-- **Visual standard:** photorealistic wildlife only. Reject cartoon, plastic-looking, anatomically implausible, morphing or physically impossible animal behaviour. Generated scenes must not be represented as genuine documentary footage of a real event. Use the applicable YouTube altered/synthetic-content disclosure.
-- **Voice:** narration remains a separate stage. The target remains a natural, realistic male Australian-English voice; do not assume a voice model or service is commercially cleared merely because it is free.
-- **Brand and release:** SonicVhibez only for YouTube. Generated video is a draft asset, not a publishable video. Human full-playback review, factual review, rights review, captions, thumbnail and hash-bound approval remain mandatory. Publishing stays disabled until the separate authorization gate passes.
+- **Notebook-owned setup:** clones the pinned source, keeps model weights/cache in Kaggle `/kaggle/temp`, writes MP4 outputs under `/kaggle/working/WanGP-outputs`, and records the Python environment.
+- **Test model:** Wan 2.2 TI2V 5B quantized single-file checkpoint `DeepBeepMeep/Wan2.2/wan2.2_text2video_5B_quanto_mbf16_int8.safetensors`, pinned to revision `16bb1ad02fe4ca8319b67261397ea4eeaa4896c4`, SHA-256 `463076f7625d8c7fc8912011cf5d02db7f0a8ae666e1758cd835e5a8517ef0e0`. VAE is pinned to revision `4cb9607e5532be42f37a05778acfc47aee7701e1`, SHA-256 `bb6e5e515ca6af2cb2b7bbf8bfc790b8c306832c34e0a76193507c3739ebf54a`. No FastWan or other LoRA is applied.
+- **Model licence determination:** official `Wan-AI/Wan2.2-TI2V-5B` model card declares Apache-2.0. The WanGP-compatible single-file checkpoint and converted VAE are mirrored under `DeepBeepMeep/Wan2.2`; the inspected mirror metadata does not independently declare a licence or a complete provenance statement for those converted files. Therefore the exact mirror checkpoint's commercial-use rights are **HOLD pending written provenance/rights confirmation**. The upstream base-model licence alone is not treated as proof that the mirror artifacts are licensed. Notebook and importer fail closed with `HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE`.
+- **WanGP software licence:** Community License 2.0. It permits internal business use and use of outputs subject to its terms; direct output sales require reasonable credit, while selling/hosting WanGP itself or paid API/SaaS access requires separate written commercial permission. Third-party model, LoRA, dataset and package terms remain separate.
+- **Evidence intake:** `scripts/import_wangp_kaggle_output.py` validates pinned revisions, checkpoint/VAE hashes, video SHA-256, ffprobe metadata and full-file FFmpeg decode. It stores generated clips in `media/jobs/<job-id>/generated-shot.mp4` and writes `content/generation-evidence/<job-id>.json`. Import status is generated/unreviewed; it never approves rights or publishing and does not mark a long-form render complete.
+- **Session operation:** the owner must start Kaggle when free GPU quota is available. The notebook's temporary Gradio share URL is public while active; do not enter credentials or private information. Kaggle free sessions are repeatable batch compute, not permanently running or guaranteed unattended GPU service.
+- **Visual standard:** photorealistic wildlife only. Reject cartoon, plastic-looking, anatomically implausible, morphing or physically impossible animal behaviour. Generated scenes must not be represented as genuine documentary footage of a real event. Review YouTube altered/synthetic-content disclosure requirements.
+- **Voice:** narration remains a separate stage. Target remains a natural, realistic male Australian-English voice; no voice is commercially cleared merely because it is free.
+- **Brand and release:** SonicVhibez only for YouTube. Human full-playback review, factual review, rights review, captions, thumbnail and hash-bound approval remain mandatory. Publishing stays disabled until the separate authorization gate passes.
 
 ### Required production stages
 
@@ -63,10 +62,11 @@ This system is footage-led and zero-cost by default. It must never describe an u
 ## Current implementation status
 
 - Weekly NOAA source-candidate intake: implemented in GitHub Actions.
-- **Primary generation engine selected:** WanGP on Kaggle.
-- Kaggle notebook adapter identified and source inspected; it is not yet pinned, installed in the user's Kaggle account, or test-generated against a wildlife prompt.
-- Secure project-owned notebook bootstrap, pinned WanGP commit, Kaggle output persistence, and machine-readable generation-artifact intake remain to be implemented and verified.
-- Automated final video rendering from accepted generated shots: not yet verified.
+- **Project-owned WanGP Kaggle notebook:** committed; pinned source and model files are defined and hash-checked by the notebook. Not yet executed in the owner's Kaggle account.
+- **MP4 evidence importer:** committed with Python unit tests; it has not yet received a real Kaggle output package.
+- **Real wildlife test generation:** NOT_TESTED — no Kaggle GPU session has been started from this conversation, and no MP4 exists to inspect.
+- **Exact mirror checkpoint commercial rights:** HOLD — upstream Wan-AI model card declares Apache-2.0, but the exact WanGP-compatible mirror checkpoint/converted VAE provenance and licence are not independently confirmed. Obtain written confirmation before commercial use.
+- Automated final long-form video rendering from accepted generated shots: not yet verified.
 - Commercially cleared Australian-English male narration: not established.
 - Rights review and human approval: remain required.
 - Continuous end-to-end production and automatic scheduling: not established.
