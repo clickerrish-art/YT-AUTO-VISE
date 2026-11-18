@@ -1,7 +1,7 @@
 # SonicVhibez master production completion register
 
 **Scope:** first fully reviewed SonicVhibez production package and safe, verified publishing path.  
-**Last inspected implementation SHA:** `e7a017267cbef4efb7408f3abb595334767e1651`  
+**Last inspected implementation SHA:** `c36f19a57e90b049607afacfbbcebda0c0bb358c`  
 **Register status:** `BLOCKED — NOT MASTER COMPLETE`
 
 This is an evidence register, not a declaration that the project is complete. A task moves to PASS only when the exact implementation SHA, source evidence, test result and/or human approval are recorded. Never turn a missing file, draft, passing unit test, queued workflow, metadata search result or owner attestation into production proof.
@@ -168,19 +168,29 @@ Tasks:
 
 ### Gate 8 — Schedule, publish, verify and measure
 
-**Status: BLOCKED / NOT STARTED**
+**Status: BLOCKED — CRITICAL METRICOOL BRAND-SEPARATION ISSUE**
+
+Fresh Metricool read-only inspection on 2026-11-18 returns only one connected brand, `Nature Frontiers SA` (brand ID `8094526`, timezone `Africa/Johannesburg`). Its `youtubeData` is the SonicVhibez channel ID `UCSlkuPfHH78oGC1o418HV4w`. This is a cross-brand association and is not an approved SonicVhibez scheduling destination.
+
+The current brand's scheduled-post query for 2026-11-18 through 2027-01-31 returned an empty list. The older brand ID `7545638` remains inaccessible with HTTP 403. The earlier 2026-10-28 snapshot documented eight future records with `draft=false` and `autoPublish=true`; their final state remains UNKNOWN because the old brand is inaccessible. Do not infer they were canceled or transferred.
+
+**Owner action required:** create/restore a separate SonicVhibez Metricool brand connected only to the verified SonicVhibez YouTube channel; remove the SonicVhibez YouTube connection from Nature Frontiers; restore access to the old Metricool brand or independently verify all eight historical records in Metricool UI. Do not mutate, cancel, edit or publish any post until exact record identity and owner authorization are established.
+
+
 
 Tasks:
 1. Keep the rolling long-form → long-form → Short order and minimum 72 elapsed hours between actual publication timestamps; enforce no same Johannesburg calendar day.
 2. Draft-preparation Tuesday/Saturday triggers are not publication slots.
 3. Verify actual remote timestamps immediately before each scheduling/publication operation.
-4. Confirm Metricool integration/account and YouTube scheduling method are actually connected and tested; repository currently has only a Metricool risk document, not a verified Metricool production integration.
-5. Schedule only fully approved content and verify the remote scheduled record.
-6. Publish privately first where authorized; verify video ID, channel, privacy, processing and metadata in YouTube Studio.
-7. Public release requires a separate explicit owner authorization; public and unattended publishing stay disabled until that exists.
-8. Verify actual publication timestamp and rolling cycle state.
-9. Run read-only analytics, verify the correct video identity and report real metrics only.
-10. Confirm no prohibited automated engagement, spam, duplicate distribution or artificial metric activity.
+4. Confirm a separate SonicVhibez Metricool brand exists and is connected only to the approved YouTube channel. The currently connected Nature Frontiers brand contains the SonicVhibez YouTube channel ID and must never be used for SonicVhibez publishing.
+5. Reconcile the inaccessible old Metricool brand ID 7545638 and its eight previously observed future autoPublish records; current brand 8094526 has no scheduled posts returned for 2026-11-18 through 2027-01-31, which does not resolve the old brand's records.
+6. Verify the Metricool integration/account and YouTube scheduling method after brand separation;
+7. Schedule only fully approved content and verify the remote scheduled record.
+8. Publish privately first where authorized; verify video ID, channel, privacy, processing and metadata in YouTube Studio.
+9. Public release requires a separate explicit owner authorization; public and unattended publishing stay disabled until that exists.
+10. Verify actual publication timestamp and rolling cycle state.
+11. Run read-only analytics, verify the correct video identity and report real metrics only.
+12. Confirm no prohibited automated engagement, spam, duplicate distribution or artificial metric activity.
 
 ### Gate 9 — Continuous operations, recovery and dashboard
 
@@ -207,6 +217,6 @@ Tasks:
 
 ## Current acceptance decision
 
-**NOT MASTER COMPLETE.** No finished Short or long-form MP4 exists in the repository media tree at the inspected SHA. WanGP GPU execution is pending; exact mirror checkpoint/VAE commercial provenance is on HOLD; the five imported Canva candidates are on HOLD; no final narration is commercially cleared; both render manifests are blocked; upload-attempt ledger reconciliation is incomplete; no exact-job private upload approval exists; no verified Metricool scheduling integration or remote schedule exists.
+**NOT MASTER COMPLETE.** No finished Short or long-form MP4 exists in the repository media tree at the inspected SHA. WanGP GPU execution is pending; exact mirror checkpoint/VAE commercial provenance is on HOLD; the five imported Canva candidates are on HOLD; no final narration is commercially cleared; both render manifests are blocked; upload-attempt ledger reconciliation is incomplete; no exact-job private upload approval exists; no safe separate SonicVhibez Metricool brand exists; the only connected brand is Nature Frontiers SA and it contains the SonicVhibez YouTube channel ID; old Metricool brand 7545638 and its eight historically observed auto-publishing records remain inaccessible/unknown.
 
 Do not report a percentage or call any of these tasks complete until the evidence listed above is present and independently checked.
