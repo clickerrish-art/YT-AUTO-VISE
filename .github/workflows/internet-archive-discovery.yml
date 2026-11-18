@@ -15,15 +15,7 @@ on:
         description: Internet Archive advanced-search query (metadata only)
         required: false
         type: string
-        default: 'DEFAULT_QUERY = (
-    collection:prelinger AND mediatype:movies AND 
-    (title:wildlife OR title:crocodile OR title:alligator OR title:elephant 
-    OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale 
-    OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect 
-    OR title:underwater OR title:coral) AND 
-    (licenseurl:"http://creativecommons.org/publicdomain/mark/1.0/" 
-    OR licenseurl:"http://creativecommons.org/publicdomain/zero/1.0/")
-)'
+        default: 'collection:prelinger AND mediatype:movies AND (title:wildlife OR title:crocodile OR title:alligator OR title:elephant OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect OR title:underwater OR title:coral) AND (licenseurl:"http://creativecommons.org/publicdomain/mark/1.0/" OR licenseurl:"http://creativecommons.org/publicdomain/zero/1.0/")'
       rows:
         description: Maximum number of candidates (1–100)
         required: false
@@ -53,15 +45,11 @@ jobs:
           ARCHIVE_ROWS: ${{ inputs.rows }}
         run: |
           set -euo pipefail
-          query="${ARCHIVE_QUERY:-DEFAULT_QUERY = (
-    collection:prelinger AND mediatype:movies AND 
-    (title:wildlife OR title:crocodile OR title:alligator OR title:elephant 
-    OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale 
-    OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect 
-    OR title:underwater OR title:coral) AND 
-    (licenseurl:"http://creativecommons.org/publicdomain/mark/1.0/" 
-    OR licenseurl:"http://creativecommons.org/publicdomain/zero/1.0/")
-)}"
+          if [ -n "${ARCHIVE_QUERY:-}" ]; then
+            query="$ARCHIVE_QUERY"
+          else
+            query='collection:prelinger AND mediatype:movies AND (title:wildlife OR title:crocodile OR title:alligator OR title:elephant OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect OR title:underwater OR title:coral) AND (licenseurl:"http://creativecommons.org/publicdomain/mark/1.0/" OR licenseurl:"http://creativecommons.org/publicdomain/zero/1.0/")'
+          fi
           rows="${ARCHIVE_ROWS:-30}"
           python scripts/discover_internet_archive_assets.py \
             --query "$query" --rows "$rows" \
