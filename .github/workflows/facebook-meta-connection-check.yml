@@ -40,12 +40,12 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: "24"
-      - name: Run Meta token, rate-limit, publisher and policy regression tests
+      - name: Run Meta regression tests (no live API verification)
         run: |
           node --check scripts/verify-meta-credentials.mjs
           node --check scripts/meta-rate-limit.mjs
           node --check scripts/facebook-autonomous-publisher.mjs
           node --test test/meta-page-adapter.test.mjs test/meta-page-reel-adapter.test.mjs test/meta-rate-limit.test.mjs test/facebook-policy-engine.test.mjs test/facebook-autonomous-publisher.test.mjs test/facebook-autonomous-publisher-workflow.test.mjs test/verify-meta-credentials.test.mjs
-      - name: Verify user and Page tokens independently (read-only; no refresh)
+      - name: Live Meta user/Page identity and permission verification (read-only GET; push or manual dispatch only)
         if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes')
         run: node scripts/verify-meta-credentials.mjs
