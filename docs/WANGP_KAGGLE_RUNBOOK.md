@@ -48,7 +48,7 @@ This is a source-clip evidence record only. It does not update the long-form ren
 Run the importer unit tests with:
 
 ```bash
-python -m unittest tests.test_import_wangp_kaggle_output
+python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 ## Acceptance criteria
