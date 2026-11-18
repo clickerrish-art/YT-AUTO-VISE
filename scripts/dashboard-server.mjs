@@ -37,6 +37,7 @@ import {
 import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, MetaPageApiError } from "./meta-page-adapter.mjs";
 import { approveInstagramCandidate } from "./instagram-approval-service.mjs";
 import { instagramApprovalFingerprint } from "./instagram-autonomous-publisher.mjs";
+import { validateProductionQualityScorecard, qualityScorecardSha256 } from "./production-quality-scorecard.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
@@ -2918,8 +2919,21 @@ const server = http.createServer(async (req, res) => {
             return json(res, 409, { error: "A complete reviewed-package artifact changed before the decision was committed: " + entry.path, publishingEnabled: false });
           }
         }
+        let qualityScorecard = null;
+        if (body.decision === "APPROVE") {
+          qualityScorecard = body.qualityScorecard;
+          const qualityErrors = validateProductionQualityScorecard(qualityScorecard, {
+            artifactSha256, metadataSha256: metadataVersion, relatedArtifacts
+          });
+          if (qualityErrors.length) return json(res, 422, {
+            error: "Production quality scorecard blocked",
+            validationErrors: qualityErrors,
+            publishingEnabled: false
+          });
+        }
         const technicalValidationSha256 = crypto.createHash("sha256").update(JSON.stringify(job.validationResults)).digest("hex");
         const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, technicalValidationSha256, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
+        if (qualityScorecard) review.qualityScorecardSha256 = qualityScorecardSha256(qualityScorecard);
         if (body.decision === "APPROVE") {
           state.jobs[index] = approveContentJobForPrivateUpload({ ...job, rightsChecks: { verified: true, evidenceSha256: review.rightsEvidenceSha256, verifiedBy: reviewer, verifiedAt: review.reviewedAt } }, review);
         } else {
@@ -2945,6 +2959,7 @@ const server = http.createServer(async (req, res) => {
             technicalValidationReceipt: structuredClone(job.validationResults),
             rightsEvidenceSha256: review.rightsEvidenceSha256,
             rightsEvidence,
+            qualityScorecard: structuredClone(qualityScorecard),
             authoringArtifactBinding,
             relatedArtifacts: structuredClone(relatedArtifacts),
             publishingEnabled: false,
