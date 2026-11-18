@@ -43,10 +43,10 @@
     "These are narration and caption drafts only; no rendered Short MP4 is represented by this report.",
     "Voice-use and commercial-use permissions are not verified by the generation workflow.",
     "Captions require human timing, punctuation, pronunciation, readability and playback review.",
-    "The Selar direct-sales disclosure is proposed draft wording and is not owner-approved.",
     "Rights, factual accuracy, final edit, thumbnail, compliance and channel identity remain separate release gates.",
     "The recorded sourceScriptBlobSha does not match the current source script blob. This artifact is historical draft evidence only and must not be used as production narration approval.",
-    "Regenerate narration from the exact current script, verify commercial-use voice rights, synchronize captions to final audio, and complete human playback/compliance review before release."
+    "Regenerate narration from the exact current script, verify commercial-use voice rights, synchronize captions to final audio, and complete human playback/compliance review before release.",
+    "The exact Selar direct-sales disclosure wording is owner-approved in content/next-short.json, but the recovered historical narration audio has not been verified to contain that wording and must not be treated as compliant audio."
   ],
   "currentSourceScriptBlobSha": "5df19a36e72e9e11cfa151038ee73ac90ca67e55",
   "recordedSourceScriptBlobSha": "f1e78a0c74f5ad5363c63dcaaa355bd6ce4c594e"
