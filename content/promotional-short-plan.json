@@ -232,25 +232,25 @@
           "channel": "SonicVhibez",
           "status": "DRAFT_ONLY",
           "targetSeconds": 55,
-          "title": "How to Make a Wildlife Documentary: 3 Storytelling Shots",
-          "primaryKeyword": "how to make a wildlife documentary",
-          "script": "How do you make a wildlife documentary from footage that feels like a story, not a random collection of clips? Plan three shots before editing. First, a wide view that establishes the habitat. Second, a medium shot that shows where the animal sits in that environment. Third, a close detail that captures something you genuinely recorded—movement, feeding, or a natural interaction. Connect the shots with one simple line of context: what are we seeing, and why does it matter? Never bait, chase, stage, or disturb an animal to force a scene. Advertisement. The Complete YouTube Wildlife Creator's Vault is one resource to review; check the listing before deciding if it fits. This product is sold through my own Selar business; purchases generate revenue for my business.",
-          "description": "How to make a wildlife documentary: plan a habitat wide shot, an animal-in-context shot and a truthful detail shot before editing.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nReview the exact Selar listing and its contents here:\nhttps://selar.com/0u19v8u99l\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nA wildlife video should document what actually happened. Do not stage animal behaviour or disturb wildlife for footage.",
+          "title": "How to Film Wildlife: 3 Story Beats for YouTube",
+          "primaryKeyword": "how to film wildlife",
+          "script": "Want wildlife footage to feel like a story, not a random clip collection? Use three beats: setup, behavior, payoff. First, establish the habitat and animal. Next, show one observable action—feeding, grooming, calling, or moving through cover. Then show what changes: the animal finds food, reacts to a sound, or leaves the frame. Never invent thoughts or motives; describe only what the footage proves. Keep natural sound when it adds context. Before editing, write one sentence: what should viewers learn from this encounter? Use it to remove shots that do not support the story. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. Explore the Complete YouTube Wildlife Creator's Vault at the link in the description.",
+          "description": "How to film wildlife: shape a clear wildlife story with setup, observable behavior and payoff—without inventing animal motives.\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nExplore the Complete YouTube Wildlife Creator's Vault:\nhttps://selar.com/0u19v8u99l\n\nFilm responsibly. Use only rights-cleared footage, verify facts and never bait, chase, stage or disturb wildlife.",
           "productUrl": "https://selar.com/0u19v8u99l",
           "productId": "wildlife-creators-vault",
           "visibility": "private",
           "keywordPhrases": [
             {
-              "phrase": "how to make a wildlife documentary"
+              "phrase": "how to film wildlife"
             },
             {
-              "phrase": "wildlife filmmaking tips"
+              "phrase": "wildlife filmmaking"
+            },
+            {
+              "phrase": "beginner wildlife filmmaking"
             },
             {
               "phrase": "wildlife documentary storytelling"
-            },
-            {
-              "phrase": "how to tell a story with wildlife footage"
             },
             {
               "phrase": "wildlife video storytelling"
@@ -259,46 +259,37 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-15T10:12:21+02:00",
-            "note": "Fresh indexed search results for wildlife documentary filmmaking and shot sequencing support the exact three-shot lesson: Concolor Media explains varied shot sizes and sequence continuity; Conservation Film Foundation teaches planning scenes, sequences and transitions; BBC Natural World editorial guidance stresses truthfulness and warns against misleading viewers with mismatched cutaways or reconstructions. No measured global search volume or competition data was accessed; this is qualitative search-intent evidence only.",
+            "researchedAt": "2026-11-18T09:19:38+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global keyword search volume or competition score was available in this run. TrendReport reports about 7,645 on-topic YouTube views per day for the week of 2026-11-14 across 62 ranking videos from 49 channels for “How to Film Wildlife”; this is ranked-video view activity, not search volume. Its report says demand was down 82% versus 20 days earlier and only 21% of ranking videos were Shorts, so this supports topic relevance but not a rising-demand or Shorts-ranking claim.",
             "sources": [
               {
-                "title": "Types of shots in wildlife video",
-                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
-                "whyRelevant": "Explains wide, medium and close shot variety plus sequence continuity, directly supporting the three-shot planning lesson."
-              },
-              {
-                "title": "Wildlife Documentary Filmmaking 101",
-                "url": "https://conservationfilmfoundation.org/outreach-action/courses/meft/lessons/lesson-1/",
-                "whyRelevant": "Recommends outlining scenes and sequences and planning transitions before filming, supporting the practical shot-list lesson."
-              },
-              {
-                "title": "Editorial Policy Guidance Note: Recording the Natural World",
-                "url": "https://downloads.bbc.co.uk/guidelines/editorialguidelines/pdfs/natural-world.pdf",
-                "whyRelevant": "BBC guidance requires truthful natural-history storytelling and cautions against misleading viewers with mismatched cutaways or reconstructions."
+                "title": "How to Film Wildlife on YouTube: 7.6K views a day (Nov 2026)",
+                "url": "https://trendreport.com/topic/how-to-film-wildlife/",
+                "whyRelevant": "Current weekly YouTube search-ranking analysis lists the exact phrase, on-topic views/day, ranking video/channel counts, related wildlife-filmmaking queries and the share of ranking videos that are Shorts."
               }
             ]
           },
           "hashtags": [
-            "#WildlifeDocumentary",
             "#WildlifeFilmmaking",
             "#WildlifeStorytelling",
+            "#WildlifeVideo",
             "#YouTubeCreator",
-            "#NatureVideo"
+            "#WildlifeEducation"
           ],
-          "thumbnailDirection": "Three-panel storyboard: habitat wide shot → animal-in-context shot → truthful close detail. Large text: “3 SHOTS / 1 STORY”. Use only final rights-cleared footage; never depict staged animal behaviour.",
+          "thumbnailDirection": "Three-panel vertical storyboard: habitat → one observable animal behavior → what changes. Large phone-readable text: “3 STORY BEATS”. Use only the final rights-cleared footage; never depict staged or disturbed wildlife.",
           "productionChecklist": [
-            "Keep the lesson practical: habitat, animal-in-context and truthful detail shots.",
-            "Use only footage that genuinely records the described behaviour; verify every factual claim.",
+            "Open with the audience problem and teach setup, observable behavior and payoff.",
+            "Use only footage that genuinely shows the described behavior; do not invent motives or unseen events.",
             "Never bait, chase, stage, approach or disturb wildlife to obtain a shot.",
+            "Verify species, location and factual claims against reliable sources before recording.",
             "Use only original or commercially cleared footage, narration, music and sound effects.",
-            "Avoid AI-generated or illustrative footage being presented as documentary evidence.",
-            "Record narration naturally and confirm a final runtime near 55 seconds.",
-            "Time captions to the final voice track; check phone-size readability and vertical safe areas.",
-            "Recheck the exact Selar listing, seller and its brand wording before promotion.",
-            "Include the exact owner-approved direct-sales disclosure in narration and description; media rights, final assets and human review remain separate release gates.",
-            "Complete human playback, factual and thumbnail review against final asset hashes.",
-            "Do not create a publication slot until the SonicVhibez destination and complete YouTube history are verified and every 72-hour gap is calculated."
+            "Keep natural sound only where it adds real context; remove distracting noise without altering evidence.",
+            "Record a natural, energetic voice track and confirm the finished runtime is close to 55 seconds.",
+            "Time captions to the final voice track and check vertical safe areas and phone-size readability.",
+            "Show ADVERTISEMENT before the exact owner-approved direct-sales disclosure in the final narration and on-screen treatment.",
+            "Recheck the exact Selar listing and seller before release; current live listing access was unavailable in this run.",
+            "Complete human factual, rights, audio, thumbnail and full-playback review against final asset hashes.",
+            "Do not schedule until the SonicVhibez destination and complete published/private/unlisted/scheduled history are verified and every 72-hour gap is calculated."
           ],
           "disclosure": {
             "status": "APPROVED",
@@ -310,28 +301,13 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-15T09:44:45+02:00",
-            "note": "Fresh qualitative evidence supports the exact three-shot lesson: the accessible Serengeti guide recommends planning a shot list and ethical filming; Concolor explains wide, medium and close-up roles in wildlife storytelling; Adobe's shot-list guide confirms wide/medium/close coverage as useful pre-production planning. The World Nomads result is member/login gated and is not relied on as primary evidence. No measured global search volume, competition score or trend percentage was available; this is qualitative intent evidence only.",
+            "researchedAt": "2026-11-18T09:19:38+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global keyword search volume or competition score was available in this run. TrendReport reports about 7,645 on-topic YouTube views per day for the week of 2026-11-14 across 62 ranking videos from 49 channels for “How to Film Wildlife”; this is ranked-video view activity, not search volume. Its report says demand was down 82% versus 20 days earlier and only 21% of ranking videos were Shorts, so this supports topic relevance but not a rising-demand or Shorts-ranking claim.",
             "sources": [
               {
-                "title": "Wildlife Filmmaking: The Essential Masterclass",
-                "url": "https://member.worldnomads.com/explore/guides/wildlife-filmmaking",
-                "whyRelevant": "Professional wildlife-filmmaking guidance covers wide shots, close-ups, cutaways, subject knowledge and editing, directly supporting the sequence lesson."
-              },
-              {
-                "title": "How To Film A Wildlife Documentary On Your Safari",
-                "url": "https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/",
-                "whyRelevant": "The guide explicitly recommends a wide-to-medium-to-close sequence and ethical filming that does not chase or provoke animals."
-              },
-              {
-                "title": "Types of shots in wildlife video",
-                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
-                "whyRelevant": "The article discusses shot-size variation and continuity when cutting between wildlife shots."
-              },
-              {
-                "title": "How to make a shot list",
-                "url": "https://www.adobe.com/creativecloud/video/discover/shot-list",
-                "whyRelevant": "Adobe's current shot-list guide supports planning wide, medium and close coverage before editing."
+                "title": "How to Film Wildlife on YouTube: 7.6K views a day (Nov 2026)",
+                "url": "https://trendreport.com/topic/how-to-film-wildlife/",
+                "whyRelevant": "Current weekly YouTube search-ranking analysis lists the exact phrase, on-topic views/day, ranking video/channel counts, related wildlife-filmmaking queries and the share of ranking videos that are Shorts."
               }
             ]
           }

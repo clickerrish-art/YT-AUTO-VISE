@@ -51,7 +51,8 @@ const PUBLICATION_TIMESTAMP_KEYS = new Set([
   "scheduledDate", "publishedDate", "publicationDate", "publishDate",
   "actualPublishedDate", "actualPublicationDate",
   "scheduledPublishDate", "plannedPublishDate", "plannedPublicationDate",
-  "scheduledPublishTime", "plannedPublishTime", "actualPublishTime"
+  "scheduledPublishTime", "plannedPublishTime", "actualPublishTime",
+  "actualPublishedTimestamp", "actualPublicationTimestamp", "actualPublishTimestamp", "scheduledPublicationTimestamp", "scheduledPublishTimestamp", "plannedPublicationTimestamp", "plannedPublishTimestamp", "publishedTime", "publicationTime", "publishTime", "scheduledTime", "plannedTime", "actualTime", "publishedDateTime", "publicationDateTime", "publishDateTime", "scheduledDateTime", "plannedDateTime", "actualDateTime", "actualPublishDateTime", "scheduledPublishDateTime", "plannedPublishDateTime"
 ]);
 
 function findPublicationTimestampPaths(value, currentPath = "plan", matches = []) {

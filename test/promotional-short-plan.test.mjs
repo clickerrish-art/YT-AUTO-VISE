@@ -170,7 +170,7 @@ test("publication timestamps at any depth and live scheduling are forbidden in t
 });
 
 test("draft plans reject alternate actual and scheduled publication timestamp field names at any depth", () => {
-  for (const key of ["actualPublishedAt", "scheduledPublishAt", "plannedPublicationAt", "scheduledStartTime"]) {
+  for (const key of ["actualPublishedTimestamp","actualPublicationTimestamp","actualPublishTimestamp","scheduledPublicationTimestamp","scheduledPublishTimestamp","plannedPublicationTimestamp","plannedPublishTimestamp","publishedTime","publicationTime","publishTime","scheduledTime","plannedTime","actualTime","publishedDateTime","publicationDateTime","publishDateTime","scheduledDateTime","plannedDateTime","actualDateTime","actualPublishDateTime","scheduledPublishDateTime","plannedPublishDateTime"]) {
     const unsafe = clone(checkedInPlan);
     unsafe.weeks[0].items[0].provider = { youtube: { [key]: "2026-12-17T10:00:00+02:00" } };
     const errors = validatePromotionalShortPlan(unsafe, products);
