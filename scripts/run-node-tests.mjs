@@ -17,6 +17,7 @@ if (files.length === 0) {
 }
 
 const failures = [];
+let totalPass = 0, totalFail = 0, totalSkipped = 0;
 console.log(`Running ${files.length} Node.js test files in isolated processes.`);
 
 for (const [index, file] of files.entries()) {
@@ -24,8 +25,21 @@ for (const [index, file] of files.entries()) {
   const result = spawnSync(process.execPath, ["--test", file], {
     cwd: process.cwd(),
     env: process.env,
-    stdio: "inherit"
+    encoding: "utf8",
+    maxBuffer: 32 * 1024 * 1024
   });
+  const output = String(result.stdout ?? "") + String(result.stderr ?? "");
+  process.stdout.write(output);
+  const pass = output.match(/ℹ pass (\d+)/);
+  const fail = output.match(/ℹ fail (\d+)/);
+  const skipped = output.match(/ℹ skipped (\d+)/);
+  if (!pass || !fail || !skipped) {
+    failures.push({ file, reason: "test runner summary was missing; pass/fail/skip totals cannot be verified" });
+  } else {
+    totalPass += Number(pass[1]);
+    totalFail += Number(fail[1]);
+    totalSkipped += Number(skipped[1]);
+  }
 
   if (result.error) {
     failures.push({ file, reason: result.error.message });
@@ -41,6 +55,9 @@ for (const [index, file] of files.entries()) {
 }
 
 console.log(`\nNode.js test-file summary: ${files.length - failures.length}/${files.length} passed.`);
+console.log(`Node.js test totals: pass ${totalPass}, fail ${totalFail}, skipped ${totalSkipped}.`);
+if (totalFail > 0) failures.push({ file: "aggregate", reason: `${totalFail} test(s) failed` });
+if (totalSkipped > 0) failures.push({ file: "aggregate", reason: `${totalSkipped} test(s) were skipped; zero skips are required` });
 if (failures.length) {
   for (const failure of failures) console.error(`- ${failure.file}: ${failure.reason}`);
   process.exitCode = 1;
