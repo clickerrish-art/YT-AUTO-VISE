@@ -98,5 +98,5 @@ for (const [file, cron, label] of workflowChecks) {
 if (errors.length) { for (const error of errors) console.error("FAIL: " + error); process.exitCode = 1; }
 else {
  console.log("PASS: rolling long_form, long_form, short cycle; 72 elapsed-hour minimum; 216-hour minimum cycle; unique queue IDs; approved Selar destination; draft-only preparation triggers; publishing disabled.");
- console.log("BLOCKED — LIVE HISTORY: upload must independently reconcile public, private, unlisted, scheduled and uncertain channel items before publication.");
+ console.log("NOTE: This local validator does not query YouTube. The separate production-readiness gate must verify fresh public/private/unlisted/scheduled history and reconcile uncertain attempts before any upload.");
 }

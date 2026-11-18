@@ -7,12 +7,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 const repoRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const copiedFiles=["config/weekly-content-plan.json","content/queue.json",".github/workflows/generate-long-form-narration.yml",".github/workflows/free-narration-artifact.yml","scripts/schedule-policy.mjs"];
-test("authoritative validator accepts the approved rolling cadence while retaining the live-history hold",()=>{
+test("authoritative validator accepts the approved rolling cadence while preserving the remote-history verification requirement",()=>{
  const result=spawnSync(process.execPath,["scripts/validate-schedule.mjs"],{cwd:repoRoot,encoding:"utf8"});
  assert.equal(result.status,0,result.stdout+result.stderr);
  assert.match(result.stdout,/PASS: rolling long_form, long_form, short cycle/);
  assert.doesNotMatch(result.stdout,/BLOCKED — CADENCE DECISION/);
- assert.match(result.stdout,/BLOCKED — LIVE HISTORY/);
+ assert.match(result.stdout,/NOTE: This local validator does not query YouTube/);\n assert.doesNotMatch(result.stdout,/BLOCKED — LIVE HISTORY/);
 });
 function runWithPlanMutation(mutate){
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),"sonicvhibez-schedule-"));
@@ -22,7 +22,7 @@ function runWithPlanMutation(mutate){
   return spawnSync(process.execPath,[path.join(repoRoot,"scripts/validate-schedule.mjs")],{cwd:temp,encoding:"utf8"});
  }finally{fs.rmSync(temp,{recursive:true,force:true});}
 }
-test("validator recognizes the recorded owner-approved rolling cadence but retains live-history hold",()=>{
+test("validator recognizes the recorded owner-approved rolling cadence but leaves remote history to the production gate",()=>{
  const plan=JSON.parse(fs.readFileSync(path.join(repoRoot,"config/weekly-content-plan.json"),"utf8"));
  assert.equal(plan.cadenceDecision.status,"OWNER_APPROVED");
  assert.equal(plan.cadenceDecision.ownerApproved,true);
@@ -32,7 +32,7 @@ test("validator recognizes the recorded owner-approved rolling cadence but retai
  const result=spawnSync(process.execPath,["scripts/validate-schedule.mjs"],{cwd:repoRoot,encoding:"utf8"});
  assert.equal(result.status,0,result.stdout+result.stderr);
  assert.doesNotMatch(result.stdout,/BLOCKED — CADENCE DECISION/);
- assert.match(result.stdout,/BLOCKED — LIVE HISTORY/);
+ assert.match(result.stdout,/NOTE: This local validator does not query YouTube/);\n assert.doesNotMatch(result.stdout,/BLOCKED — LIVE HISTORY/);
 });
 test("validator rejects missing or falsely approved cadence decisions",()=>{
  const missing=runWithPlanMutation(plan=>{delete plan.cadenceDecision;});
