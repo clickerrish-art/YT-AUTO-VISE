@@ -83,9 +83,12 @@
     "script": "scripts/render_banjo_narration.py",
     "workflow": ".github/workflows/banjo-narration-review.yml",
     "output": "banjo-short-001-narration-review.wav",
-    "status": "IMPLEMENTATION_PENDING_WORKFLOW_EXECUTION",
+    "status": "REVIEW_RENDER_GENERATED_HUMAN_REVIEW_PENDING",
     "humanVoiceQualityReview": "PENDING",
     "commercialAttributionReview": "PENDING",
-    "productionApproved": false
+    "productionApproved": false,
+    "technicalValidation": "PASS_WAV_DECODE_PCM_MONO_16BIT_NON_SILENT_NO_CLIPPING_AFTER_RECORDED_ISOLATED_PEAK_REPAIR",
+    "finalNarration": false,
+    "latestEvidencePath": "content/banjo-narration-review-evidence.json"
   }
 }

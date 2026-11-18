@@ -1,14 +1,6 @@
 name: Generate Australian male Piper voice audition
 
 on:
-  push:
-    branches: [codex/marketing-machine-audit-fixes]
-    paths:
-      - "config/narration-voice-candidates.json"
-      - "scripts/generate_piper_voice_audition.py"
-      - "tests/test_generate_piper_voice_audition.py"
-      - "content/short-001-wildlife-video-storytelling.md"
-      - ".github/workflows/piper-voice-audition.yml"
   workflow_dispatch:
 
 permissions:
