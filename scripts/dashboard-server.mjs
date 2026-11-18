@@ -520,7 +520,7 @@ const allowedTasks = new Map([
   ["validate-campaigns", ["run", "validate:campaigns"]]
 ]);
 const activeTasks = new Set();
-const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["validate-campaigns", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 180_000], ["render-short", 600_000], ["render-long-form", 600_000]]);
+const taskTimeoutMs = new Map([["validate-schedule", 30_000], ["validate-campaigns", 30_000], ["check-captions", 45_000], ["production-readiness", 60_000], ["test-suite", 600_000], ["render-short", 600_000], ["render-long-form", 600_000]]);
 function runTask(taskId, commandOverride = null, { signal } = {}) {
   const args = commandOverride ?? (allowedTasks.get(taskId) ?? productionTasks.get(taskId));
   if (!args) return Promise.reject(new Error("Task is not on the dashboard allowlist"));
