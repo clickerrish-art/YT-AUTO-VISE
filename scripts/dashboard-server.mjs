@@ -2959,8 +2959,10 @@ const server = http.createServer(async (req, res) => {
           });
         }
         const technicalValidationSha256 = crypto.createHash("sha256").update(JSON.stringify(job.validationResults)).digest("hex");
-        const review = createReviewDecision({ artifact, rightsEvidence, metadataVersion, technicalValidationSha256, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
-        if (qualityScorecard) review.qualityScorecardSha256 = qualityScorecardSha256(qualityScorecard);
+        const reviewDecision = createReviewDecision({ artifact, rightsEvidence, metadataVersion, technicalValidationSha256, reviewer, decision: body.decision, reason: body.reason ?? "", shortParentRelationshipSha256: shortParentRelationshipSha256Value });
+        const review = qualityScorecard
+          ? Object.freeze({ ...reviewDecision, qualityScorecardSha256: qualityScorecardSha256(qualityScorecard) })
+          : reviewDecision;
         if (body.decision === "APPROVE") {
           state.jobs[index] = approveContentJobForPrivateUpload({ ...job, rightsChecks: { verified: true, evidenceSha256: review.rightsEvidenceSha256, verifiedBy: reviewer, verifiedAt: review.reviewedAt } }, review);
         } else {
