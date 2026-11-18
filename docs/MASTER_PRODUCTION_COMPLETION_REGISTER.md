@@ -96,7 +96,7 @@ A promising free local candidate has been identified: `DataCraftsmanAustralia/pi
 
 Three male speakers are registered for audition: Banjo (Timothy Ferguson, speaker 5, 7.97 hours), Angus (Algy Pug, speaker 4, 1.80 hours) and Flynn (Howard Skyman, speaker 6, 0.58 hours). Banjo is the first candidate because the model author records that Timothy Ferguson's spoken outro identifies him as recording from the Gold Coast, Australia. The model author warns that the voices can sound formal/literary rather than conversational and have variable recording quality.
 
-A pinned Piper 1.8.0 audition workflow now generates all three samples using the same test text and verifies the model SHA-256. This is an audition only, not final narration.
+**Verified:** GitHub Actions run [44228884555](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44228884555) completed successfully on source SHA `4678e10369d2093d7928fc1bda06ad768542ef2f`. It installed Piper 1.8.0, passed the candidate/speaker-map tests, generated all three WAV auditions, verified the pinned model SHA-256 `f34849bce64d803d0fe90087766d5d6f2a8215a12edad43e486d77072df7dd41`, and uploaded artifact `14394291428` (`sonicvhibez-piper-australian-male-voice-auditions`). The artifact expires 2026-12-18. This is an audition only, not final narration. The owner has not yet auditioned or selected a voice.
 
 Tasks:
 1. Verify the Piper audition workflow and owner-listen to Banjo, Angus and Flynn; choose one or reject all three.
