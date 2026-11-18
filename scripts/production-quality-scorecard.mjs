@@ -98,7 +98,7 @@ export function validateProductionQualityScorecard(review, {
     errors.push("approved related artifact set is required to verify quality-review bindings");
   } else {
     const byHash = new Map(relatedArtifacts.filter(item => item && typeof item.sha256 === "string").map(item => [item.sha256, item]));
-    for (const key of ["thumbnail", "captions"]) {
+    for (const key of ["thumbnail", "captions", "narration"]) {
       const hash = review.artifactHashes?.[key];
       const artifact = byHash.get(hash);
       if (!artifact) errors.push("quality scorecard " + key + " hash is not present in the approved related artifact set");
