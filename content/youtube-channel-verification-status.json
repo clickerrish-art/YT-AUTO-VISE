@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "status": "BLOCKED_OAUTH_INVALID_GRANT",
-  "mode": "READ_ONLY_IDENTITY_AND_INVENTORY_FAILED",
+  "status": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
+  "mode": "READ_ONLY_IDENTITY_AND_INVENTORY_VERIFIED_OWNER_REVIEW_REQUIRED",
   "workflowRunId": 44152608827,
-  "workflowRunAttempt": 1,
+  "workflowRunAttempt": 2,
   "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44152608827",
   "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc",
   "checkedAt": "2026-11-17T18:53:17.277Z",
   "deterministicIdentityAndPaginationTests": {
     "status": "PASS",
-    "passed": 6,
+    "passed": 7,
     "failed": 0
   },
   "oauth": {
-    "status": "BLOCKED",
-    "errorCode": "invalid_grant",
-    "message": "The latest 17 November read-only verification was rejected with invalid_grant. No current channel identity or uploads inventory was fetched. Reauthorize the existing OAuth client and update the GitHub Actions refresh-token secret. No token value was logged."
+    "status": "PASS",
+    "errorCode": null,
+    "message": "Read-only OAuth authenticated the configured account and completed the uploads-playlist inventory. No token value was logged."
   },
   "channel": {
     "id": "UCSlkuPfHH78oGC1o418HV4w",
@@ -23,16 +23,50 @@
     "handle": "@sonicvhibez",
     "identityVerified": true
   },
-  "channelIdentityVerified": false,
-  "uploadsInventoryComplete": false,
-  "uploadsPlaylistPages": null,
-  "totalUploads": null,
-  "visibilityCounts": null,
-  "inventoryArtifact": null,
-  "videos": [],
+  "channelIdentityVerified": true,
+  "uploadsInventoryComplete": true,
+  "uploadsPlaylistPages": 1,
+  "totalUploads": 1,
+  "visibilityCounts": {
+    "public": 1,
+    "private": 0,
+    "unlisted": 0
+  },
+  "inventoryArtifact": {
+    "id": 14385238060,
+    "name": "sonicvhibez-youtube-history-inventory",
+    "sha256": "c7ead2f69e86fcc798f252a3f3da53335e54ac8ecc915a178473a17996805033",
+    "createdAt": "2026-11-18T00:45:40Z",
+    "expiresAt": "2026-11-25T00:45:40Z"
+  },
+  "videos": [
+    {
+      "id": "LjePS02hA1o",
+      "visibility": "public",
+      "youtubePublishedAt": "2026-10-22T15:05:56Z",
+      "scheduledPublishAt": null,
+      "duration": "PT20S",
+      "format": "short",
+      "ownerConfirmed": true,
+      "publicationCycleReconciled": false,
+      "ownerReview": {
+        "verifiedBy": "clickerrish-art",
+        "verifiedAt": "2026-11-10T04:35:06Z",
+        "format": "short",
+        "studioPublicationDateConfirmed": true,
+        "studioVideoUrl": "https://studio.youtube.com/video/LjePS02hA1o/edit"
+      }
+    }
+  ],
   "publicationHistoryReconciliation": {
-    "status": "STALE_PREVIOUS_VERIFICATION",
-    "reason": "The 9 November owner-reviewed inventory remains historical evidence only. The latest 17 November OAuth refresh was rejected with invalid_grant, so no current remote history was retrieved and no upload-attempt reconciliation or publication clearance is claimed."
+    "status": "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY",
+    "reconciliationPath": "content/youtube-history-reconciliation.json",
+    "reconciliationBlobSha": "627b68c655744a6891c2128d36bb8656fdb71415",
+    "verifiedAt": "2026-11-10T04:35:06Z",
+    "verifiedBy": "clickerrish-art",
+    "freshInventoryRunId": 44152608827,
+    "freshInventoryArtifactId": 14385238060,
+    "reason": "The fresh complete public/private/unlisted uploads inventory matches the exact video ID, channel, public visibility and YouTube publishedAt timestamp in the existing owner-reviewed YouTube Studio reconciliation. The owner previously confirmed the format as Short. Duration is PT20S and is a legacy exception to the current 50–60 second production target."
   },
   "secretValuesLogged": false,
   "publishingEnabled": false,
@@ -156,5 +190,20 @@
     "sha256": "70269df128ca12cefbf1f9e596c507230fb55c4d46142d474e44d959360b9656",
     "expiresAt": "2026-11-16T15:57:20Z",
     "status": "EXPIRED_HISTORICAL_ARTIFACT"
+  },
+  "verifiedAt": "2026-11-18T00:45:40.055Z",
+  "uploadAttemptReconciliation": {
+    "status": "NOT_RECONCILED",
+    "reason": "No complete current ledger of pending, uncertain, or previously attempted uploads has yet been independently reconciled. This remains a separate pre-upload blocker."
+  },
+  "latestSuccessfulReadOnlyVerification": {
+    "workflowRunId": 44152608827,
+    "jobId": 134487059540,
+    "attempt": 2,
+    "sourceCommit": "476463fe06ffb404e939abba9fee76594ab66ebc",
+    "verifiedAt": "2026-11-18T00:45:40.055Z",
+    "result": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
+    "artifactId": 14385238060,
+    "artifactSha256": "c7ead2f69e86fcc798f252a3f3da53335e54ac8ecc915a178473a17996805033"
   }
 }
