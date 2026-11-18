@@ -98,6 +98,21 @@ export function validateProductionQualityScorecard(review, {
     errors.push("approved related artifact set is required to verify quality-review bindings");
   } else {
     const byHash = new Map(relatedArtifacts.filter(item => item && typeof item.sha256 === "string").map(item => [item.sha256, item]));
+    const imageHashes = review.artifactHashes?.images;
+    if (!Array.isArray(imageHashes) || imageHashes.length === 0 || imageHashes.some(hash => !SHA256.test(hash ?? ""))) {
+      errors.push("quality scorecard must bind every final image with SHA-256 values");
+    }
+    const imageArtifacts = relatedArtifacts.filter(item => item && /\.(jpg|jpeg|png|webp|gif|avif)$/i.test(item.path ?? ""));
+    const reviewedImages = new Set(Array.isArray(imageHashes) ? imageHashes : []);
+    for (const image of imageArtifacts) {
+      if (!reviewedImages.has(image.sha256)) errors.push("final image artifact is not bound to the quality scorecard: " + (image.path ?? "unknown path"));
+    }
+    for (const hash of reviewedImages) {
+      if (!imageArtifacts.some(item => item.sha256 === hash)) errors.push("quality scorecard image hash is not present as an approved final image artifact");
+    }
+    if (review.artifactHashes?.thumbnail && !reviewedImages.has(review.artifactHashes.thumbnail)) {
+      errors.push("thumbnail hash must also be included in the complete final image review set");
+    }
     for (const key of ["thumbnail", "captions", "narration"]) {
       const hash = review.artifactHashes?.[key];
       const artifact = byHash.get(hash);
