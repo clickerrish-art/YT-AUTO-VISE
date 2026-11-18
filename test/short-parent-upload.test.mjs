@@ -26,7 +26,7 @@ const qualityScorecard = {
   factualEditorialEvidenceRef: "fixture/factual-review",
   scores: Object.fromEntries(["photorealismVisualCredibility", "sharpnessImageClarity", "compositionVisualSimplicity", "motionContinuityTechnicalExecution", "storyOriginalityFactualIntegrity", "hookPacingRetentionEngineering", "narrationVoicePerformance", "audioCaptionsAccessibility"].map(key => [key, 90])),
   criticalGates: Object.fromEntries(["photorealism", "sharpness", "composition", "editorialSpecificity", "continuity", "thumbnailIntegrity", "technicalExport", "factualAccuracy", "narrationIntelligibility", "rightsAndDisclosure"].map(key => [key, true])),
-  artifactHashes: { video: sha("a"), metadata: sha("b"), thumbnail: sha("8"), captions: sha("7"), narration: sha("6") }
+  artifactHashes: { video: sha("a"), metadata: sha("b"), thumbnail: sha("8"), images: [sha("8")], captions: sha("7"), narration: sha("6") }
 };
 const baseApproval = {
   decision: "APPROVE", jobId: "child-job-001", contentType: "short",
