@@ -15,7 +15,7 @@ on:
         description: Internet Archive advanced-search query (metadata only)
         required: false
         type: string
-        default: 'mediatype:movies AND (wildlife OR animal OR crocodile OR elephant OR lion OR shark OR whale OR bird OR reptile OR ocean OR nature)'
+        default: 'mediatype:movies AND (title:wildlife OR title:crocodile OR title:alligator OR title:elephant OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect OR title:underwater OR title:coral OR subject:wildlife OR subject:crocodile OR subject:elephant OR subject:lion OR subject:shark OR subject:whale OR subject:bird OR subject:reptile OR subject:nature)'
       rows:
         description: Maximum number of candidates (1–100)
         required: false
@@ -45,7 +45,7 @@ jobs:
           ARCHIVE_ROWS: ${{ inputs.rows }}
         run: |
           set -euo pipefail
-          query="${ARCHIVE_QUERY:-mediatype:movies AND (wildlife OR animal OR crocodile OR elephant OR lion OR shark OR whale OR bird OR reptile OR ocean OR nature)}"
+          query="${ARCHIVE_QUERY:-mediatype:movies AND (title:wildlife OR title:crocodile OR title:alligator OR title:elephant OR title:lion OR title:tiger OR title:leopard OR title:shark OR title:whale OR title:dolphin OR title:bird OR title:reptile OR title:butterfly OR title:insect OR title:underwater OR title:coral OR subject:wildlife OR subject:crocodile OR subject:elephant OR subject:lion OR subject:shark OR subject:whale OR subject:bird OR subject:reptile OR subject:nature)}"
           rows="${ARCHIVE_ROWS:-30}"
           python scripts/discover_internet_archive_assets.py \
             --query "$query" --rows "$rows" \
