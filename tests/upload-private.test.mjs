@@ -15,12 +15,13 @@ const APPROVED_CAPTIONS = "1\n00:00:00,000 --> 00:00:00,500\nAdvertisement.\n\n2
 const TEST_PARENT_ID = "PARENT00001";
 const PARENT_SOURCE_EVIDENCE_PATH = "test/fixtures/parent-quality-evidence.json";
 const PARENT_SOURCE_EVIDENCE_SHA256 = crypto.createHash("sha256").update(fs.readFileSync(PARENT_SOURCE_EVIDENCE_PATH)).digest("hex");
+const fixtureReviewedAt = new Date().toISOString();
 function makeQualityScorecard(video, metadata, thumbnail, captions) {
   const dimensions = ["photorealismVisualCredibility", "sharpnessImageClarity", "compositionVisualSimplicity", "motionContinuityTechnicalExecution", "storyOriginalityFactualIntegrity", "hookPacingRetentionEngineering", "narrationVoicePerformance", "audioCaptionsAccessibility"];
   const critical = ["photorealism", "sharpness", "composition", "editorialSpecificity", "continuity", "thumbnailIntegrity", "technicalExport", "factualAccuracy", "narrationIntelligibility", "rightsAndDisclosure"];
   const digest = value => crypto.createHash("sha256").update(value).digest("hex");
   return {
-    policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "Test Operator", reviewedAt: new Date().toISOString(),
+    policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "Test Operator", reviewedAt: fixtureReviewedAt,
     fullVideoPlayback: true, fullPlaybackEvidenceRef: "fixture/full-playback",
     thumbnailInspectedAtMobile: true, thumbnailInspectedAtDesktop: true, imageInspectionEvidenceRef: "fixture/image-inspection",
     factualEditorialEvidenceRef: "fixture/factual-review",
