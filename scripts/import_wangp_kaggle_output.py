@@ -42,7 +42,7 @@ def validate_manifest(manifest: dict, video: Path) -> list[str]:
     if manifest["channel"] != "SonicVhibez": errors.append("channel must be SonicVhibez")
     if manifest["status"] != "GENERATED_TEST_UNREVIEWED": errors.append("status must be GENERATED_TEST_UNREVIEWED")
     if manifest["wanGpCommit"] != EXPECTED_WAN_GP_COMMIT: errors.append("WanGP commit does not match the inspected pin")
-    if manifest["modelRevision"] != EXPECTED_MODEL_REVISION: errors.append("model revision does not match the inspected pin")
+    if manifest["modelRepository"] != "DeepBeepMeep/Wan2.2": errors.append("model repository does not match the inspected pin")\n    if manifest["modelRevision"] != EXPECTED_MODEL_REVISION: errors.append("model revision does not match the inspected pin")\n    if manifest["checkpointFilename"] != "wan2.2_text2video_5B_quanto_mbf16_int8.safetensors": errors.append("checkpoint filename does not match the inspected artifact")
     if manifest["checkpointSha256"] != EXPECTED_CHECKPOINT_SHA256: errors.append("checkpoint SHA-256 does not match the inspected artifact")
     if manifest["vaeSha256"] != EXPECTED_VAE_SHA256: errors.append("VAE SHA-256 does not match the inspected artifact")
     if manifest.get("loras") != []: errors.append("test must use no LoRAs; LoRA licence/provenance is not approved")
