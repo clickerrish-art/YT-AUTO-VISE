@@ -59,12 +59,23 @@ class InternetArchiveDiscoveryTests(unittest.TestCase):
             {"identifier": "wildlife-doc", "title": "African wildlife documentary", "mediatype": "movies"},
             {"identifier": "unrelated", "title": "Evening talk show", "mediatype": "movies"},
             {"identifier": "youtube-QLncyLAMgbU", "title": "H1Z1 Deer on the Roof", "mediatype": "movies"},
-            {"identifier": "animal-talk", "title": "Animal Talk Show", "mediatype": "movies"}
+            {"identifier": "animal-talk", "title": "Animal Talk Show", "mediatype": "movies"},
+            {"identifier": "fighter", "title": "The King of Fighters: Lion vs Bird", "mediatype": "movies"},
+            {"identifier": "sports", "title": "Whale Branch Football", "mediatype": "movies"},
+            {"identifier": "photo", "title": "Underwater Photography", "mediatype": "movies"},
+            {"identifier": "subject-only", "title": "Technology Part 2", "subject": ["nature"], "mediatype": "movies"}
         ]}}
         def opener(request, timeout):
             return FakeResponse(payload)
         results = search_archive("mediatype:movies AND wildlife", opener=opener)
         self.assertEqual([item["identifier"] for item in results], ["wildlife-doc"])
+
+    def test_real_wildlife_title_survives_but_generic_subject_and_nonwildlife_titles_do_not(self):
+        from scripts.discover_internet_archive_assets import is_wildlife_relevant
+        self.assertTrue(is_wildlife_relevant({"title": "The Wildlife Of Tim Faulkner"}))
+        self.assertFalse(is_wildlife_relevant({"title": "Technology Part 2", "subject": ["nature"]}))
+        self.assertFalse(is_wildlife_relevant({"title": "Underwater Photography"}))
+        self.assertFalse(is_wildlife_relevant({"title": "Butterfly Gallery"}))
 
     def test_invalid_identifier_is_rejected(self):
         self.assertIsNone(candidate_from_doc({"identifier": "../private"}))
