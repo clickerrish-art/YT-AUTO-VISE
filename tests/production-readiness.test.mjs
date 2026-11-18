@@ -235,20 +235,44 @@ test("readiness reports malformed render-manifest asset paths without crashing J
   }
 });
 
-test("readiness blocks imported Canva wildlife assets until exact source, local MP4 and human review are verified", () => {
+test("readiness blocks selected imported Canva wildlife assets until exact source, local MP4 and human review are verified", () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-media-inventory-"));
+  try {
+    const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
+    inventory.assets[0].status = "HOLD";
+    inventory.assets[0].excludedFromProduction = false;
+    const inventoryPath = path.join(directory, "sonicvhibez-imported-media-inventory.json");
+    fs.writeFileSync(inventoryPath, JSON.stringify(inventory, null, 2));
+    const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
+      cwd: process.cwd(),
+      env: { ...process.env, SONICVHIBEZ_IMPORTED_MEDIA_INVENTORY_PATH: inventoryPath },
+      encoding: "utf8"
+    });
+    assert.equal(result.status, 2);
+    const report = JSON.parse(result.stdout);
+    const blocker = report.blockers.find(item => /selected imported Canva wildlife asset\(s\) remain unverified/.test(item.message));
+    assert.ok(blocker, "selected unverified imported Canva assets must be an explicit production blocker");
+    assert.equal(blocker.severity, "critical");
+    assert.equal(blocker.controlOwner, "external_owner_or_human_reviewer");
+    assert.ok(blocker.evidence.path.endsWith("sonicvhibez-imported-media-inventory.json"));
+    assert.match(blocker.message, /VAHZ9kg2rvg/);
+    assert.match(blocker.resolution, /original MP4/);
+    assert.match(blocker.resolution, /SHA-256/);
+    assert.match(blocker.resolution, /Candidate URLs are not proof/);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("explicitly excluded Canva imports remain quarantined and do not block the AI-generated production path", () => {
+  const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
+  assert.equal(inventory.releaseAuthorized, false);
+  assert.ok(inventory.assets.every(asset => asset.status === "EXCLUDED_NOT_USED" && asset.excludedFromProduction === true));
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
     cwd: process.cwd(), encoding: "utf8"
   });
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
-  const blocker = report.blockers.find(item => /imported Canva wildlife asset\(s\) remain unverified/.test(item.message));
-  assert.ok(blocker, "unverified imported Canva assets must be an explicit production blocker");
-  assert.equal(blocker.severity, "critical");
-  assert.equal(blocker.controlOwner, "external_owner_or_human_reviewer");
-  assert.equal(blocker.evidence.path, "content/sonicvhibez-imported-media-inventory.json");
-  assert.match(blocker.message, /VAHZ9kg2rvg/);
-  assert.match(blocker.message, /VAHZ9oFCiak/);
-  assert.match(blocker.resolution, /original MP4/);
-  assert.match(blocker.resolution, /SHA-256/);
-  assert.match(blocker.resolution, /Candidate URLs are not proof/);
+  assert.equal(report.blockers.some(item => /imported Canva wildlife asset\(s\) remain unverified/.test(item.message)), false);
+  assert.ok(report.notes.some(note => /5 assets; 5 excluded from production \(not rights-cleared\); 0 selected\/unresolved; release not authorized/.test(note)));
 });
