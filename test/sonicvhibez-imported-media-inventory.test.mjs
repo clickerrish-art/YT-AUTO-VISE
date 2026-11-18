@@ -12,21 +12,25 @@ test("all five previously imported Canva wildlife clips are inventoried with exa
   assert.deepEqual(inventory.assets.map(asset => asset.canvaMetadata.durationSeconds), [14, 13, 25, 21, 9]);
 });
 
-test("candidate Pexels pages never become verified source or rights evidence without visual matching", () => {
+test("all imported Canva clips remain excluded, unlicensed and unavailable to production", () => {
   for (const asset of inventory.assets) {
     assert.equal(asset.originalSourceUrl, null);
     assert.equal(asset.creatorConfirmed, false);
     assert.equal(asset.rightsConfirmed, false);
     assert.equal(asset.localMediaPath, null);
-    assert.equal(asset.status, "HOLD");
+    assert.equal(asset.humanVisualReview, "NOT_DONE");
+    assert.equal(asset.status, "EXCLUDED_NOT_USED");
+    assert.equal(asset.excludedFromProduction, true);
     if (asset.candidateSourceUrl) assert.match(asset.candidateSourceUrl, /^https:\/\/www\.pexels\.com\/video\//);
   }
   assert.equal(inventory.releaseAuthorized, false);
-  assert.equal(inventory.status, "HOLD_SOURCE_PROVENANCE_AND_LOCAL_MEDIA_MISSING");
+  assert.equal(inventory.status, "EXCLUDED_NOT_USED_FROM_PRODUCTION");
 });
 
-test("Pexels general license policy is not mistaken for proof of a specific asset's provenance", () => {
+test("general Pexels license policy and candidate pages are not treated as asset-specific rights clearance", () => {
   assert.equal(inventory.policyReference.reviewStatus, "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY");
-  assert.match(inventory.notes, /Candidate URLs are research leads, not verified provenance/);
+  assert.match(inventory.notes, /quarantined as EXCLUDED_NOT_USED/);
+  assert.match(inventory.notes, /not cleared for any use/);
+  assert.ok(inventory.blockingEvidence.some(item => /not rights-cleared/i.test(item)));
   assert.equal(inventory.assets.find(asset => asset.canvaAssetId === "VAHZ9oFCiak").sourceMatchStatus, "UNRESOLVED_SOURCE_URL_AND_CREATOR_NOT_RECORDED");
 });
