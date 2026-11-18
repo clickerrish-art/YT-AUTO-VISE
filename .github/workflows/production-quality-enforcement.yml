@@ -6,16 +6,10 @@ on:
     paths:
       - "scripts/production-quality-scorecard.mjs"
       - "scripts/upload-private.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "public/dashboard.html"
       - "test/**"
       - "tests/**"
-      - ".github/workflows/production-quality-enforcement.yml"
-      - "docs/PRODUCTION-QUALITY-ENFORCEMENT.md"
-  push:
-    branches: [codex/marketing-machine-audit-fixes]
-    paths:
-      - "scripts/production-quality-scorecard.mjs"
-      - "scripts/upload-private.mjs"
-      - "test/production-quality-scorecard.test.mjs"
       - ".github/workflows/production-quality-enforcement.yml"
       - "docs/PRODUCTION-QUALITY-ENFORCEMENT.md"
   workflow_dispatch:
