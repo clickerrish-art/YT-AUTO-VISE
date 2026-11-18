@@ -52,11 +52,43 @@ test("read-only verification checks every page and every video without exposing 
   };
   const result = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube });
   assert.equal(result.status, "PASS_READ_ONLY_IDENTITY_AND_INVENTORY");
+  assert.equal(result.uploadScopeVerified, false, "a fake YouTube API client must not imply upload scope");
   assert.equal(result.totalUploads, 51);
   assert.deepEqual(result.visibilityCounts, { public: 0, private: 50, unlisted: 1 });
   assert.equal(calls.length, 2);
   assert.equal(calls[1].pageToken, "page-2");
   assert.equal(JSON.stringify(result).includes("video-"), false);
+});
+
+test("read-only verification independently reports the OAuth scope required for video insertion", async () => {
+  const youtube = {
+    channels: { list: async () => ({ data: { items: [channel] } }) },
+    playlistItems: { list: async () => ({ data: { pageInfo: { totalResults: 0 }, items: [] } }) }
+  };
+  const makeOAuth = scopes => ({
+    setCredentials() {},
+    getAccessToken: async () => ({ token: "test-access-token" }),
+    getTokenInfo: async token => {
+      assert.equal(token, "test-access-token");
+      return { scopes };
+    }
+  });
+  const uploadResult = await verifySonicVhibezChannel({
+    env,
+    youtubeFactory: () => youtube,
+    oauthFactory: () => makeOAuth(["https://www.googleapis.com/auth/youtube.upload"])
+  });
+  assert.equal(uploadResult.uploadScopeVerified, true);
+  assert.equal(uploadResult.acceptedUploadScope, "https://www.googleapis.com/auth/youtube.upload");
+  assert.deepEqual(uploadResult.grantedYouTubeScopes, ["https://www.googleapis.com/auth/youtube.upload"]);
+
+  const readOnlyResult = await verifySonicVhibezChannel({
+    env,
+    youtubeFactory: () => youtube,
+    oauthFactory: () => makeOAuth(["https://www.googleapis.com/auth/youtube.readonly"])
+  });
+  assert.equal(readOnlyResult.uploadScopeVerified, false);
+  assert.equal(readOnlyResult.acceptedUploadScope, null);
 });
 
 test("read-only verification refuses a different authenticated channel before reading uploads", async () => {
