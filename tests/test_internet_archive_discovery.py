@@ -5,7 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts.discover_internet_archive_assets import (
-    candidate_from_doc, classify_license, search_archive
+    candidate_from_doc, classify_license, search_archive, DEFAULT_QUERY
 )
 
 
@@ -95,6 +95,12 @@ class InternetArchiveDiscoveryTests(unittest.TestCase):
         self.assertEqual(len(results), 1)
         self.assertFalse(results[0]["downloaded"])
         self.assertFalse(results[0]["productionApproved"])
+
+    def test_default_query_is_restricted_to_prelinger_public_domain_items(self):
+        self.assertIn("collection:prelinger", DEFAULT_QUERY)
+        self.assertIn("licenseurl:", DEFAULT_QUERY)
+        self.assertIn("publicdomain/mark/1.0", DEFAULT_QUERY)
+        self.assertIn("publicdomain/zero/1.0", DEFAULT_QUERY)
 
     def test_rejects_oversized_query_and_invalid_row_count(self):
         with self.assertRaises(ValueError):
