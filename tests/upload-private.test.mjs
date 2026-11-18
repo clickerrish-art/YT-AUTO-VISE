@@ -26,7 +26,7 @@ function makeQualityScorecard(video, metadata, thumbnail, captions) {
     factualEditorialEvidenceRef: "fixture/factual-review",
     scores: Object.fromEntries(dimensions.map(key => [key, 90])),
     criticalGates: Object.fromEntries(critical.map(key => [key, true])),
-    artifactHashes: { video, metadata, thumbnail, captions, narration: digest("fixture-narration-bytes") }
+    artifactHashes: { video, metadata, thumbnail, images: [thumbnail], captions, narration: digest("fixture-narration-bytes") }
   };
 }
 
