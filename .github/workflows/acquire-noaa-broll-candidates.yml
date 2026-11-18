@@ -5,6 +5,9 @@ on:
     branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - ".github/workflows/acquire-noaa-broll-candidates.yml"
+  schedule:
+    # Weekly rights-review intake; never renders or publishes automatically.
+    - cron: '23 4 * * 2'
   workflow_dispatch:
     inputs:
       include_lobster:
@@ -34,8 +37,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Download only selected official NOAA Fisheries B-roll package files
         env:
-          INCLUDE_LOBSTER: ${{ github.event_name == 'push' || inputs.include_lobster }}
-          INCLUDE_TURTLE: ${{ github.event_name == 'push' || inputs.include_turtle }}
+          INCLUDE_LOBSTER: ${{ github.event_name == 'push' || github.event_name == 'schedule' || inputs.include_lobster }}
+          INCLUDE_TURTLE: ${{ github.event_name == 'push' || github.event_name == 'schedule' || inputs.include_turtle }}
           INCLUDE_SEAL: ${{ inputs.include_seal }}
         run: |
           set -euo pipefail
