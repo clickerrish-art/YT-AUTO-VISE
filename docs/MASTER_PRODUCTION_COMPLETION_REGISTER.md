@@ -154,14 +154,16 @@ Tasks:
 
 ### Gate 7 — Reconcile YouTube upload attempts and prepare private upload
 
-**Status: PARTIALLY VERIFIED / BLOCKED**
+**Status: PASS for historical identity/inventory and prior-attempt reconciliation; current upload remains BLOCKED by media/approval gates**
 
-Historical identity and full public/private/unlisted inventory passed read-only verification on 2026-11-18, source commit `9aaffeee6b3ad75b19e92774fb1091d4209389ac`. It found one public 20-second legacy Short. The owner attested there were no other manual/local/external attempts, but the automated GitHub Actions workflow-dispatch/private-upload ledger is not yet reconciled.
+Read-only YouTube verification passed on 2026-11-18, source commit `9aaffeee6b3ad75b19e92774fb1091d4209389ac`, workflow run `44211269635`. It authenticated the approved SonicVhibez channel and inventoried the complete uploads playlist: one public 20-second legacy Short (video ID `LjePS02hA1o`, published 2026-10-22T15:05:56Z), no private or unlisted videos. The owner attested there were no other manual/local/external upload attempts.
+
+Automated ledger validation also passed: workflow run `44229290895`, job `134550082550`, source SHA `3ab59402ce801c96431d24e8fe56d227edfec409`. It inspected one prior manual workflow-dispatch run across both private-upload entry points and found zero executed private-upload jobs. The earlier `upload-private.yml` run had its private-upload job skipped; no `upload-artifact-privately.yml` run existed. The first future authorized private upload can safely initialize the ledger with `previous_ledger_run_id=NONE`. No upload is authorized by this reconciliation.
 
 Tasks:
-1. Rerun read-only channel identity and complete uploads inventory against current code and credentials.
-2. Inspect all pages of workflow-dispatch history, private-upload jobs, retries, uncertain outcomes and remote video IDs.
-3. Reconcile owner attestation with automated ledger evidence; do not retry uncertain remote uploads.
+1. Historical channel identity and full uploads inventory are verified; refresh read-only inventory immediately before any upload because the previous inventory is not a permanent authorization.
+2. Automated prior-upload ledger reconciliation is complete: zero private-upload jobs executed; use `previous_ledger_run_id=NONE` for the first future private upload.
+3. Keep the legacy 20-second Short in history as a legacy exception; it does not meet the current 50–60 second standard.
 4. Verify OAuth credentials remain valid without logging secret values.
 5. Confirm exact channel ID and destination is SonicVhibez.
 6. Prepare one private-only upload authorization bound to exact job, final MP4 hash, metadata hash, thumbnail hash, caption hash, rights evidence and human approval.
@@ -218,6 +220,6 @@ Tasks:
 
 ## Current acceptance decision
 
-**NOT MASTER COMPLETE.** No finished Short or long-form MP4 exists in the repository media tree at the inspected SHA. WanGP GPU execution is pending; exact mirror checkpoint/VAE commercial provenance is on HOLD; the five imported Canva candidates are on HOLD; no final narration is commercially cleared; both render manifests are blocked; upload-attempt ledger reconciliation is incomplete; no exact-job private upload approval exists; no safe separate SonicVhibez Metricool brand exists; the only connected brand is Nature Frontiers SA and it contains the SonicVhibez YouTube channel ID; old Metricool brand 7545638 and its eight historically observed auto-publishing records remain inaccessible/unknown.
+**NOT MASTER COMPLETE.** No finished Short or long-form MP4 exists in the repository media tree at the inspected SHA. WanGP GPU execution is pending; exact mirror checkpoint/VAE commercial provenance is on HOLD; the five imported Canva candidates are on HOLD; no final narration is commercially cleared; both render manifests are blocked; prior upload-attempt ledger reconciliation is complete with zero executed private-upload jobs; no exact-job private upload approval exists; no safe separate SonicVhibez Metricool brand exists; the only connected brand is Nature Frontiers SA and it contains the SonicVhibez YouTube channel ID; old Metricool brand 7545638 and its eight historically observed auto-publishing records remain inaccessible/unknown.
 
 Do not report a percentage or call any of these tasks complete until the evidence listed above is present and independently checked.
