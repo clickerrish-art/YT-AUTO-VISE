@@ -1,7 +1,7 @@
 # SonicVhibez master production completion register
 
 **Scope:** first fully reviewed SonicVhibez production package and safe, verified publishing path.  
-**Last inspected implementation SHA:** `c36f19a57e90b049607afacfbbcebda0c0bb358c`  
+**Last inspected implementation SHA:** `5a3760b7f2b17af250a37dcbb3e3db857eb5cd45`  
 **Register status:** `BLOCKED — NOT MASTER COMPLETE`
 
 This is an evidence register, not a declaration that the project is complete. A task moves to PASS only when the exact implementation SHA, source evidence, test result and/or human approval are recorded. Never turn a missing file, draft, passing unit test, queued workflow, metadata search result or owner attestation into production proof.
@@ -114,9 +114,9 @@ Tasks:
 
 ### Gate 5 — Complete factual and editorial content
 
-**Status: BLOCKED**
+**Status: BLOCKED — DRAFTS REQUIRE EDITORIAL AND FACTUAL APPROVAL**
 
-Current scripts are drafts, not approved production scripts.
+Current scripts are drafts, not approved production scripts. The two long-form episodes are creator-education tutorials (not animal-encounter documentaries); the Short is a three-shot wildlife-storytelling tutorial. This content direction may serve the Wildlife Creator's Vault promotion, but it is not the realistic animal-encounter format also requested for SonicVhibez. Do not render the current drafts as animal-encounter content or imply they document real wildlife events. Owner/editorial approval of the first content direction is required before final production.
 
 Tasks:
 1. Select the first long-form topic and Short topic in the approved rolling cycle.
@@ -210,6 +210,8 @@ Tasks:
 5. Verify artifact retention, recovery and provenance survive session expiry.
 6. Keep external publishing mutations disabled during acceptance tests.
 7. Confirm deployment and production health checks without treating CI success as live provider proof.
+
+The Short upload metadata title has been aligned to the exact title in the production script: `Wildlife Documentary Storytelling: 3 Shots, One Clear Story`.
 
 ## Required owner inputs (only when the corresponding gate is ready)
 
