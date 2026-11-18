@@ -83,7 +83,7 @@ test("approved disclosure must precede the product name and link in both narrati
 });
 
 test("every promotional product requires fresh seller evidence tied to its exact HTTPS listing", () => {
-  const now = new Date("2026-11-18T07:49:03.000Z");
+  const now = new Date("2026-11-18T08:36:54.000Z");
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
 
   const staleProducts = clone(products);
@@ -451,10 +451,10 @@ test("December 7 wildlife video-editing Short uses fresh vidIQ estimates and the
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
   assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf(product.promotionGate.disclosure.text));
-  assert.match(item.description, /^Wildlife video editing/);
+  assert.match(item.description, /^ADVERTISEMENT\n/);
   assert.match(item.description, /^ADVERTISEMENT$/m);
   assert.ok(item.description.includes(product.promotionGate.disclosure.text));
-  assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 128);
+  assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 129);
   assert.ok(item.script.includes('You can explore the Complete YouTube Wildlife Creator’s Vault using the link in the description.'));
   assert.equal(item.script.includes('is a planning resource'), false);
   assert.equal(item.currentIntentEvidence.provider, "web_search");
@@ -486,10 +486,10 @@ test("December 14 wildlife audio recording Short uses current qualitative intent
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
   assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf(product.promotionGate.disclosure.text));
-  assert.match(item.description, /^Wildlife audio recording/);
+  assert.match(item.description, /^ADVERTISEMENT\n/);
   assert.match(item.description, /^ADVERTISEMENT$/m);
   assert.ok(item.description.includes(product.promotionGate.disclosure.text));
-  assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 131);
+  assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 132);
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
 });
 
@@ -508,7 +508,9 @@ test("December 14 Shorts analytics lesson uses current official metric definitio
   assert.equal(item.status, "DRAFT_ONLY");
   assert.equal(item.disclosure.status, "HOLD");
   assert.ok(item.description.includes("DISCLOSURE HOLD"));
-  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf("YouTube Success Blueprint"));
+  assert.match(item.script, /^\[INTERNAL HOLD — NOT SPOKEN\./);
+  assert.ok(item.script.toLowerCase().indexOf("[internal hold") < item.script.indexOf("YouTube Success Blueprint"));
+  assert.equal(item.script.includes("This product is sold through my own Selar business; purchases generate revenue for my business."), false);
   assert.ok(item.script.trim().split(/\s+/).filter(Boolean).length >= 90);
   assert.ok(item.script.trim().split(/\s+/).filter(Boolean).length <= 135);
 });
