@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "channel": "SonicVhibez",
+  "provider": "wangp_kaggle",
+  "primary": true,
+  "status": "SELECTED_SETUP_AND_ACCEPTANCE_PENDING",
+  "source": {
+    "application": "WanGP",
+    "repository": "https://github.com/deepbeepmeep/WanGP",
+    "kaggleAdapterRepository": "https://github.com/Square-Zero-Labs/Wan2GP-on-Kaggle",
+    "kaggleNotebook": "https://github.com/Square-Zero-Labs/Wan2GP-on-Kaggle/blob/main/wan2gp-kaggle.ipynb",
+    "adapterLicense": "Apache-2.0",
+    "wanGpCommit": null,
+    "pinBeforeProduction": true
+  },
+  "runtime": {
+    "platform": "Kaggle",
+    "acceleratorPreference": ["GPU T4", "GPU P100"],
+    "internetRequired": true,
+    "executionMode": "owner_started_session_batch",
+    "unattended": false,
+    "alwaysOn": false,
+    "modelCachePath": "/kaggle/temp/WanGP-data",
+    "outputPath": "/kaggle/working/WanGP-outputs",
+    "persistOutputsBeforeSessionEnds": true,
+    "ownerPcModelStorageRequired": false
+  },
+  "generation": {
+    "preferredModel": "Wan 2.2 TextImage2Video 5B FastWan",
+    "resolution": "480p",
+    "targetAspectRatio": "16:9",
+    "initialShotDurationSeconds": 5,
+    "visualStyle": "photorealistic wildlife documentary",
+    "rejectStyles": ["cartoon", "anime", "illustration", "plastic-looking CGI"],
+    "seedMustBeRecorded": true,
+    "modelAndLoraLicenseReviewRequired": true,
+    "commercialUseApproved": false
+  },
+  "narration": {
+    "separateFromVideoGeneration": true,
+    "voiceProfile": "realistic male Australian English",
+    "commercialVoiceRightsRequired": true
+  },
+  "safety": {
+    "humanFullPlaybackReviewRequired": true,
+    "factualReviewRequired": true,
+    "syntheticMediaDisclosureReviewRequired": true,
+    "publishingEnabled": false,
+    "youtubeChannel": "SonicVhibez",
+    "neverTargetNatureFrontiers": true
+  },
+  "requiredGenerationEvidence": [
+    "wanGpCommit",
+    "modelId",
+    "modelLicenseUrl",
+    "loraIdsAndLicenseUrls",
+    "prompt",
+    "negativePrompt",
+    "seed",
+    "generationSettings",
+    "kaggleSessionReference",
+    "outputRelativePath",
+    "outputSha256",
+    "ffprobeReport",
+    "humanVisualReview"
+  ]
+}
