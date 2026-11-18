@@ -1,6 +1,12 @@
 name: Verify SonicVhibez upload ledger (read-only)
 
 on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths:
+      - .github/workflows/verify-upload-ledger-readonly.yml
+      - scripts/validate-upload-ledger-run.mjs
   workflow_dispatch:
     inputs:
       previous_ledger_run_id:
@@ -32,5 +38,5 @@ jobs:
       - name: Verify all prior private-upload workflow attempts and ledger state (read-only)
         env:
           GH_TOKEN: ${{ github.token }}
-          PREVIOUS_LEDGER_RUN_ID: ${{ inputs.previous_ledger_run_id }}
+          PREVIOUS_LEDGER_RUN_ID: ${{ inputs.previous_ledger_run_id || 'NONE' }}
         run: node scripts/validate-upload-ledger-run.mjs
