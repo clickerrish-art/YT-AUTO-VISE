@@ -156,12 +156,23 @@ async function main() {
     const result = await validatePreviousUploadLedger();
     if (result.mode === "initialize") {
       console.log(
-        "PASS: no prior private-upload job executed; earlier read-only or skipped workflow runs do not require a ledger. A new durable ledger may be initialized."
+        "PASS: no prior private-upload job executed; earlier read-only or skipped workflow runs do not require a ledger. A new durable ledger may be initialized. " +
+        JSON.stringify({
+          mode: result.mode,
+          inspectedWorkflowRuns: result.inspectedWorkflowRuns,
+          executedPrivateUploadRuns: result.executedPrivateUploadRuns
+        })
       );
     } else {
       console.log(
-        "PASS: verified the latest retained private-upload ledger in run " +
-        result.previousUploadRunId + " (artifact " + result.artifactId + ")."
+        "PASS: verified the latest retained private-upload ledger. " +
+        JSON.stringify({
+          mode: result.mode,
+          previousUploadRunId: result.previousUploadRunId,
+          artifactId: result.artifactId,
+          inspectedWorkflowRuns: result.inspectedWorkflowRuns,
+          executedPrivateUploadRuns: result.executedPrivateUploadRuns
+        })
       );
     }
   } catch (error) {
