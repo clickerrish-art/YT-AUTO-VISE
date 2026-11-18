@@ -297,7 +297,7 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
     if (!Array.isArray(evidence.permittedUses) || !evidence.permittedUses.includes("YouTube")) throw new Error("rights evidence must explicitly permit YouTube use");
     if (evidence.verificationStatus !== "VERIFIED" || typeof evidence.verifiedBy !== "string" || !evidence.verifiedBy.trim() || !Number.isFinite(strictIsoTimestamp(evidence.verifiedAt))) throw new Error("rights evidence must retain reviewer identity, VERIFIED status, and a valid verification timestamp");
   }
-  if (approval.qualityScorecardSha256 !== qualityScorecardSha256(approval.qualityScorecard)) {
+  if (!approval.qualityScorecard || approval.qualityScorecardSha256 !== qualityScorecardSha256(approval.qualityScorecard)) {
     throw new Error("production quality scorecard checksum does not match the approval record");
   }
   const qualityErrors = validateProductionQualityScorecard(approval.qualityScorecard, {
