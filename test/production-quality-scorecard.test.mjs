@@ -88,6 +88,14 @@ test("rejects absent or incorrectly typed thumbnail, caption and narration bindi
   assert.match(validateProductionQualityScorecard(review, options()).join(" "), /captions hash is not present/);
 });
 
+test("requires narration hash to match an approved audio file", () => {
+  const review = validReview();
+  const withoutNarration = relatedArtifacts.filter(item => !item.path.endsWith(".mp3"));
+  assert.match(validateProductionQualityScorecard(review, { ...options(), relatedArtifacts: withoutNarration }).join(" "), /narration hash is not present/);
+  const wrongType = relatedArtifacts.map(item => item.path.endsWith(".mp3") ? { ...item, path: "media/narration.txt" } : item);
+  assert.match(validateProductionQualityScorecard(review, { ...options(), relatedArtifacts: wrongType }).join(" "), /narration binding must reference an audio artifact/);
+});
+
 test("rejects a scorecard signed by a different reviewer than the approval identity", () => {
   assert.match(validateProductionQualityScorecard(validReview(), { ...options(), reviewer: "Different Operator" }).join(" "), /must match the authenticated approval reviewer/);
 });
