@@ -1,0 +1,36 @@
+name: Verify SonicVhibez upload ledger (read-only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      previous_ledger_run_id:
+        description: Latest prior run that executed private-upload and retained the ledger; NONE when no prior private-upload job executed
+        required: true
+        default: NONE
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: sonicvhibez-upload-ledger-readonly
+  cancel-in-progress: false
+
+jobs:
+  verify-upload-ledger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out selected implementation branch
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Verify all prior private-upload workflow attempts and ledger state (read-only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIOUS_LEDGER_RUN_ID: ${{ inputs.previous_ledger_run_id }}
+        run: node scripts/validate-upload-ledger-run.mjs
