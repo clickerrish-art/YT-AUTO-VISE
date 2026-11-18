@@ -40,9 +40,9 @@ class PiperVoiceAuditionTests(unittest.TestCase):
     def test_extracts_current_short_script_narration_without_description(self):
         markdown = """# Short
 
-## Narration draft (sample)
+## Narration draft (production-length fixture)
 
-This is the first narration sentence. This is the second sentence with enough words to pass the minimum count for the script parser. This is another sentence to ensure the extraction remains above the minimum threshold and is clean.
+Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep separate moments in their original recorded order; label any reconstruction clearly. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
 
 ## Draft description
 
