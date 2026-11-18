@@ -144,3 +144,27 @@ Read-only cross-checks:
 **Identity conclusion:** owner-designated ID, Metricool ID, and repository destination ID agree. This is a consistent configuration/owner-confirmation match, **not** a successful live Meta OAuth identity verification. Final Meta identity verification remains **BLOCKED_EXTERNAL** until a valid Meta user access token is restored and the read-only `/me`, `/me/accounts`, and `/{page-id}?fields=id,name` checks succeed. Meta's Page API documents these read requirements and token/permission constraints; see the official [Page Graph API reference](https://developers.facebook.com/docs/graph-api/reference/page/) and [User Accounts edge](https://developers.facebook.com/docs/graph-api/reference/user/accounts/).
 
 **Safety:** no posts were read or changed through a write endpoint; no post was created, scheduled, edited, paused, canceled, or published; no account connection, credential, permission, destination, or publishing flag was modified. The Facebook/Instagram publishing posture remains disabled, dry-run, and emergency-stopped.
+
+
+### Fresh Metricool brand-separation check — 2026-11-18 (read-only)
+
+A fresh call to the connected Metricool account's brand-settings endpoint returned exactly one brand:
+
+- Label: **Nature Frontiers SA**
+- Brand ID: `8094526`
+- Timezone: `Africa/Johannesburg`
+- Facebook Page ID: `1431329126735709`
+- Instagram username: `naturefrontieers2026`
+- YouTube channel ID: `UCSlkuPfHH78oGC1o418HV4w` (the verified SonicVhibez channel)
+
+This is a critical cross-brand configuration risk. The Nature Frontiers brand must never be used for SonicVhibez YouTube scheduling or publishing. The currently connected account does not return a separate SonicVhibez brand.
+
+Read-only scheduled-post reconciliation:
+- Brand `8094526`, 2026-11-18 through 2027-01-31, expanded range: **empty**.
+- Old brand `7545638`, same date range: **HTTP 403 — Access denied to blog 7545638**.
+
+The old brand's previously documented eight future records (`draft=false`, `autoPublish=true`) remain unresolved. The empty result on the current brand does not prove that the eight old records were canceled, transferred, or published. Do not assume any final state.
+
+**Required owner intervention:** restore access to the old brand or inspect the eight exact historical records in Metricool UI and record their current provider state; establish a separate SonicVhibez Metricool brand connected only to the approved SonicVhibez YouTube channel; disconnect that YouTube channel from Nature Frontiers. The available connected Metricool actions are read-only for brand settings and scheduled-post listing; no brand-connection mutation was attempted.
+
+**No Metricool records or settings were changed.** No post was created, scheduled, edited, paused, canceled or published.
