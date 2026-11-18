@@ -19,6 +19,15 @@ const relationship = {
 };
 relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
 const rightsEvidence = { assets: [{ assetPath: "media/scene.mp4", licenseEvidenceLocation: "rights/license.txt", assetSha256: sha("c"), licenseEvidenceSha256: sha("d"), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "operator-1", verifiedAt: "2026-10-26T10:00:00.000Z" }] };
+const qualityScorecard = {
+  policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "Test Operator", reviewedAt: new Date().toISOString(),
+  fullVideoPlayback: true, fullPlaybackEvidenceRef: "fixture/full-playback",
+  thumbnailInspectedAtMobile: true, thumbnailInspectedAtDesktop: true, imageInspectionEvidenceRef: "fixture/image-inspection",
+  factualEditorialEvidenceRef: "fixture/factual-review",
+  scores: Object.fromEntries(["photorealismVisualCredibility", "sharpnessImageClarity", "compositionVisualSimplicity", "motionContinuityTechnicalExecution", "storyOriginalityFactualIntegrity", "hookPacingRetentionEngineering", "narrationVoicePerformance", "audioCaptionsAccessibility"].map(key => [key, 90])),
+  criticalGates: Object.fromEntries(["photorealism", "sharpness", "composition", "editorialSpecificity", "continuity", "thumbnailIntegrity", "technicalExport", "factualAccuracy", "narrationIntelligibility", "rightsAndDisclosure"].map(key => [key, true])),
+  artifactHashes: { video: sha("a"), metadata: sha("b"), thumbnail: sha("8"), captions: sha("7"), narration: sha("6") }
+};
 const baseApproval = {
   decision: "APPROVE", jobId: "child-job-001", contentType: "short",
   artifactSha256: sha("a"), metadataVersion: sha("b"), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "operator-1",
@@ -27,10 +36,10 @@ const baseApproval = {
   relatedArtifacts: [
     { path: "media/child.mp4", sha256: sha("a") },
     { path: "media/thumb.jpg", sha256: sha("8") },
-    { path: "captions/child.srt", sha256: sha("7") },
+    { path: "captions/child.srt", sha256: sha("7") },\n    { path: "audio/child-narration.mp3", sha256: sha("6") },
     { path: "metadata/child.json", sha256: sha("b") }
   ],
-  shortParentRelationship: relationship,
+  qualityScorecard,\n  shortParentRelationship: relationship,
   shortParentRelationshipSha256: shortParentRelationshipSha256(relationship)
 };
 
