@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "complete": true,
   "channelId": "UCSlkuPfHH78oGC1o418HV4w",
-  "verifiedAt": "2026-11-10T04:35:06Z",
+  "verifiedAt": "2026-11-18T00:52:01.423Z",
   "verifiedBy": "clickerrish-art",
-  "verificationReference": "YouTube read-only inventory workflow run 42609557970, attempt 4; owner confirmed the only upload is a Short and its YouTube Studio publication date matches the API inventory.",
+  "verificationReference": "YouTube read-only inventory workflow run 44211269635, attempt 1; authenticated channel ID and complete one-upload inventory confirmed. Owner confirmed on 2026-11-18 that the only upload is a Short and its YouTube Studio publication date matches the API inventory. Automated upload-ledger validation run 44229290895 found one prior workflow_dispatch run and zero executed private-upload jobs.",
   "videos": [
     {
       "id": "LjePS02hA1o",
@@ -51,10 +51,10 @@
     "note": "Owner-confirmed historical Short remains in publication history but does not satisfy the current 50–60 second Short production specification."
   },
   "uploadAttemptReconciliation": {
-    "status": "OWNER_ATTESTED_NO_OTHER_ATTEMPTS_PENDING_AUTOMATED_LEDGER_VALIDATION",
-    "inspectedAt": "2026-11-18T00:56:00Z",
+    "status": "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS",
+    "inspectedAt": "2026-11-18T03:18:20Z",
     "evidence": {
-      "workflowDispatchRunsInspected": 5,
+      "workflowDispatchRunsInspected": 1,
       "privateUploadWorkflowRunId": 42569826008,
       "privateUploadJobConclusion": "skipped",
       "readOnlyVerificationJobConclusion": "failure",
@@ -64,9 +64,21 @@
       "evidenceReferences": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42569826008",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs?event=workflow_dispatch"
-      ]
+      ],
+      "automatedLedgerValidation": {
+        "runId": 44229290895,
+        "jobId": 134550082550,
+        "sourceCommit": "3ab59402ce801c96431d24e8fe56d227edfec409",
+        "completedAt": "2026-11-18T03:18:20Z",
+        "conclusion": "success",
+        "mode": "initialize",
+        "inspectedWorkflowRuns": 1,
+        "executedPrivateUploadRuns": 0,
+        "previousLedgerRunId": "NONE",
+        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44229290895"
+      }
     },
-    "note": "The owner has confirmed there were no manual, local, or external YouTube upload attempts beyond LjePS02hA1o. The GitHub Actions workflow history previously inspected contained one upload-private.yml run; its private-upload job was skipped and its read-only verification job failed. No upload-artifact-privately.yml run or executed private-upload job was found in that inspection. Owner attestation closes the out-of-band attempt question. Automated all-pages workflow/job ledger validation remains to be run before any future private upload. This does not authorize a new upload.",
+    "note": "Automated read-only GitHub Actions validation completed successfully. It inspected all prior workflow_dispatch runs from both private-upload entry points, found one prior workflow_dispatch run, and confirmed zero private-upload jobs actually executed. The earlier upload-private.yml run had private-upload skipped; the upload-artifact-privately.yml entry point had no prior run. Combined with the owner's attestation of no manual/local/external attempts, prior upload-attempt reconciliation is complete. The first future authorized private-upload must use previous_ledger_run_id=NONE and will create its durable ledger artifact. This does not authorize a new upload.",
     "ownerAttestation": {
       "status": "CONFIRMED",
       "confirmedAt": "2026-11-18",
