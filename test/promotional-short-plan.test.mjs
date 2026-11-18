@@ -49,6 +49,39 @@ test("owner-approved direct-sales disclosure is carried verbatim in the wildlife
     .some(error => /disclosure approval must match the exact owner-approved product registry record/.test(error)));
 });
 
+
+
+test("approved disclosure must precede the product name and link in both narration and description", () => {
+  const baseline = clone(checkedInPlan);
+  const item = baseline.weeks.find(week => week.weekOf === "2026-11-16")
+    .items.find(candidate => candidate.id === "sonicvhibez-short-005-wildlife-story-sequence");
+  const product = products.find(candidate => candidate.id === "wildlife-creators-vault");
+  const disclosure = product.promotionGate.disclosure.text;
+  const productName = product.name.split(/\s+[–—]\s+/)[0].trim();
+
+  const reorderedScript = clone(baseline);
+  const scriptItem = reorderedScript.weeks.find(week => week.weekOf === "2026-11-16")
+    .items.find(candidate => candidate.id === item.id);
+  const scriptWithoutDisclosure = scriptItem.script.replace(disclosure, "");
+  const scriptNameIndex = scriptWithoutDisclosure.indexOf(productName);
+  scriptItem.script = scriptWithoutDisclosure.slice(0, scriptNameIndex)
+    + productName + " " + disclosure
+    + scriptWithoutDisclosure.slice(scriptNameIndex + productName.length);
+  assert.ok(validatePromotionalShortPlan(reorderedScript, products)
+    .some(error => /script must place the exact owner-approved disclosure before the product name or link/.test(error)));
+
+  const reorderedDescription = clone(baseline);
+  const descriptionItem = reorderedDescription.weeks.find(week => week.weekOf === "2026-11-16")
+    .items.find(candidate => candidate.id === item.id);
+  const descriptionWithoutDisclosure = descriptionItem.description.replace(disclosure, "");
+  const descriptionNameIndex = descriptionWithoutDisclosure.indexOf(productName);
+  descriptionItem.description = descriptionWithoutDisclosure.slice(0, descriptionNameIndex)
+    + productName + " " + disclosure
+    + descriptionWithoutDisclosure.slice(descriptionNameIndex + productName.length);
+  assert.ok(validatePromotionalShortPlan(reorderedDescription, products)
+    .some(error => /description must place ADVERTISEMENT and the exact owner-approved disclosure before the product name or link/.test(error)));
+});
+
 test("every promotional product requires fresh seller evidence tied to its exact HTTPS listing", () => {
   const now = new Date("2026-11-18T07:49:03.000Z");
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
@@ -78,17 +111,39 @@ test("every promotional product requires fresh seller evidence tied to its exact
     .some(error => /verified seller name is required/.test(error)));
 });
 
-test("the 90-Day Blueprint Short remains held and carries its proposed direct-sales disclosure", () => {
+test("the 90-Day Blueprint Short stays held without presenting unapproved wording as narration", () => {
   const item = checkedInPlan.weeks.find(week => week.weekOf === "2026-11-16")
     .items.find(candidate => candidate.id === "sonicvhibez-short-006-niche-selection");
+  const product = products.find(candidate => candidate.id === "youtube-success-blueprint-90-day");
   assert.equal(item.productUrl, "https://selar.com/91j893378q");
   assert.equal(item.disclosure.status, "HOLD");
+  assert.match(item.script, /^\[INTERNAL HOLD — NOT SPOKEN\./);
+  assert.equal(item.script.includes(product.promotionGate.disclosure.text), false);
+  assert.ok(item.script.toLowerCase().indexOf("[internal hold") < item.script.indexOf(product.name));
   assert.match(item.description, /DISCLOSURE HOLD — proposed wording, not approved for this product/);
-  assert.match(item.description, /This product is sold through my own Selar business; purchases generate revenue for my business\./);
-  assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf("The YouTube Success Blueprint 90-Day Creator System"));
+  assert.ok(item.description.indexOf("DISCLOSURE HOLD") < item.description.indexOf(product.name));
+  assert.ok(item.description.indexOf("DISCLOSURE HOLD") < item.description.indexOf(item.productUrl));
+  assert.ok(item.description.indexOf("proposed wording, not approved") < item.description.indexOf(product.promotionGate.disclosure.text));
   const spokenWords = item.script.trim().split(/\s+/).filter(Boolean).length;
   assert.ok(spokenWords >= 90 && spokenWords <= 135);
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+
+  const unsafeScript = clone(checkedInPlan);
+  const unsafeScriptItem = unsafeScript.weeks.find(week => week.weekOf === "2026-11-16")
+    .items.find(candidate => candidate.id === item.id);
+  unsafeScriptItem.script = unsafeScriptItem.script
+    .replace(/^\[INTERNAL HOLD[^\]]+\]\s*/i, "")
+    .replace("Choosing a YouTube niche?", product.promotionGate.disclosure.text + " Choosing a YouTube niche?");
+  assert.ok(validatePromotionalShortPlan(unsafeScript, products)
+    .some(error => /candidate script must start with a non-spoken internal hold/.test(error)
+      || /candidate script must not present unapproved disclosure wording/.test(error)));
+
+  const unsafeDescription = clone(checkedInPlan);
+  const unsafeDescriptionItem = unsafeDescription.weeks.find(week => week.weekOf === "2026-11-16")
+    .items.find(candidate => candidate.id === item.id);
+  unsafeDescriptionItem.description = `Explore ${product.name}: ${product.url}\n\n` + unsafeDescriptionItem.description;
+  assert.ok(validatePromotionalShortPlan(unsafeDescription, products)
+    .some(error => /candidate description must place DISCLOSURE HOLD before the product name and link/.test(error)));
 });
 
 test("candidate seller verification is required while direct Selar sales are owner-confirmed and disclosure remains unresolved", () => {

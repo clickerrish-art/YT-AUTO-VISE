@@ -31,6 +31,15 @@ function getSecureProductHost(value) {
   }
 }
 
+function firstTextIndex(value, candidates) {
+  const haystack = String(value ?? "").toLowerCase();
+  const indexes = (Array.isArray(candidates) ? candidates : [])
+    .filter(candidate => typeof candidate === "string" && candidate.trim())
+    .map(candidate => haystack.indexOf(candidate.toLowerCase()))
+    .filter(index => index >= 0);
+  return indexes.length ? Math.min(...indexes) : -1;
+}
+
 function isRealMonday(value) {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const [year, month, day] = value.split("-").map(Number);
@@ -196,6 +205,10 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
         && typeof productDisclosure.text === "string" && productDisclosure.text.trim()
         && isValidZonedIsoTimestamp(productDisclosure.approvedAt)
         && typeof productDisclosure.approvalReference === "string" && productDisclosure.approvalReference.trim();
+      const productName = typeof product?.name === "string" ? product.name.trim() : "";
+      const productNameCore = productName.split(/\s+[–—]\s+/)[0].trim();
+      const productReferences = [productName, productNameCore, product?.url]
+        .filter(value => typeof value === "string" && value.trim());
       if (hasOwnerApprovedDisclosure && !validOwnerApprovedDisclosure) {
         errors.push(`${label}: product registry owner-approved disclosure evidence is incomplete`);
       }
@@ -211,19 +224,57 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
         const scriptText = String(item?.script ?? "");
         const advertisementIndex = scriptText.indexOf("Advertisement.");
         const disclosureIndex = scriptText.indexOf(productDisclosure.text);
+        const scriptProductReferenceIndex = firstTextIndex(scriptText, productReferences);
         if (advertisementIndex < 0 || disclosureIndex < 0 || advertisementIndex > disclosureIndex) {
           errors.push(`${label}: script must place an advertisement identifier before the exact owner-approved direct-sales disclosure`);
         }
+        if (scriptProductReferenceIndex >= 0 && disclosureIndex >= scriptProductReferenceIndex) {
+          errors.push(`${label}: script must place the exact owner-approved disclosure before the product name or link`);
+        }
         const description = String(item?.description ?? "");
-        if (!/^ADVERTISEMENT$/m.test(description) || !description.includes(productDisclosure.text)) {
+        const descriptionAdvertisementIndex = description.search(/^ADVERTISEMENT$/m);
+        const descriptionDisclosureIndex = description.indexOf(productDisclosure.text);
+        const descriptionProductReferenceIndex = firstTextIndex(description, productReferences);
+        if (!/^ADVERTISEMENT$/m.test(description) || descriptionDisclosureIndex < 0) {
           errors.push(`${label}: description must show an ADVERTISEMENT identifier and the exact owner-approved disclosure`);
+        }
+        if (descriptionProductReferenceIndex >= 0
+            && (descriptionAdvertisementIndex < 0
+              || descriptionAdvertisementIndex > descriptionProductReferenceIndex
+              || descriptionDisclosureIndex < 0
+              || descriptionDisclosureIndex >= descriptionProductReferenceIndex)) {
+          errors.push(`${label}: description must place ADVERTISEMENT and the exact owner-approved disclosure before the product name or link`);
         }
         if (/DISCLOSURE HOLD/i.test(description)) {
           errors.push(`${label}: an owner-approved disclosure must not be labelled as a disclosure hold`);
         }
       } else {
-        if (!/DISCLOSURE HOLD/i.test(item?.description ?? "")) {
-          errors.push(`${label}: description must retain an explicit disclosure hold`);
+        const scriptText = String(item?.script ?? "");
+        const internalHoldIndex = scriptText.toLowerCase().indexOf("[internal hold");
+        const scriptProductReferenceIndex = firstTextIndex(scriptText, productReferences);
+        if (!/^\[INTERNAL HOLD — NOT SPOKEN\./i.test(scriptText)
+            || internalHoldIndex < 0
+            || (scriptProductReferenceIndex >= 0 && internalHoldIndex > scriptProductReferenceIndex)) {
+          errors.push(`${label}: candidate script must start with a non-spoken internal hold before any product mention`);
+        }
+        if (typeof productDisclosure.text === "string" && productDisclosure.text.trim()
+            && scriptText.includes(productDisclosure.text)) {
+          errors.push(`${label}: candidate script must not present unapproved disclosure wording as approved narration`);
+        }
+        const description = String(item?.description ?? "");
+        const descriptionHoldIndex = description.toLowerCase().indexOf("disclosure hold");
+        const descriptionProductReferenceIndex = firstTextIndex(description, productReferences);
+        if (descriptionHoldIndex < 0
+            || (descriptionProductReferenceIndex >= 0 && descriptionHoldIndex > descriptionProductReferenceIndex)) {
+          errors.push(`${label}: candidate description must place DISCLOSURE HOLD before the product name and link`);
+        }
+        if (typeof productDisclosure.text === "string" && productDisclosure.text.trim()
+            && description.includes(productDisclosure.text)) {
+          const proposedLabelIndex = description.toLowerCase().indexOf("proposed wording, not approved");
+          const proposedTextIndex = description.indexOf(productDisclosure.text);
+          if (proposedLabelIndex < 0 || proposedLabelIndex > proposedTextIndex) {
+            errors.push(`${label}: unapproved disclosure text must be labelled as proposed and not approved before it appears`);
+          }
         }
         if (item?.disclosure?.status !== "HOLD"
             || item.disclosure.relationshipStatus !== expectedRelationshipStatus
