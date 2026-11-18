@@ -54,6 +54,8 @@ The reviewer must also record:
 - reviewer identity and timezone-aware review timestamp;
 - evidence reference for full video playback and image inspection;
 - factual/editorial review reference;
+- `artifactHashes.images`: SHA-256 for every final image in the approved related-artifact set, including the thumbnail and any scene stills;
+- exact narration audio SHA-256 matched to an approved audio artifact;
 - rights evidence references and exact asset hashes;
 - defects found, corrections made and final disposition (APPROVED or REJECTED).
 
