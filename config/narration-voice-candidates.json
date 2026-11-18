@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "AMERICAN_MALE_STORYTELLER_CANDIDATE_REVIEW_PENDING",
+  "status": "AMERICAN_MALE_STORYTELLER_REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
   "provider": "piper_local",
   "model": {
     "repository": "rhasspy/piper-voices",
@@ -27,7 +27,9 @@
       "Voice model is medium quality; do not assume it meets the user's clean, clear, naturalness requirement before review."
     ],
     "commercialUseStatus": "PUBLIC_DOMAIN_SOURCE_RECORDINGS_MODEL_CARD_VALIDATION_REQUIRED; OWNER_REVIEW_REQUIRED",
-    "productionApproved": false
+    "productionApproved": false,
+    "modelSha256": "b9739443232a80a59c7d18810dd856899bf16a7964725f5ab81ea49b1351cb71",
+    "modelCardSha256": "60eaf4d10009d1bd4a1aa555d337dae00f60421d72fee415b9139a021e7cb5d0"
   },
   "candidates": [
     {
@@ -44,7 +46,7 @@
     }
   ],
   "audition": {
-    "status": "AMERICAN_MALE_STORYTELLER_REVIEW_RENDER_PENDING",
+    "status": "AMERICAN_MALE_STORYTELLER_REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
     "generatedByWorkflow": true,
     "chosenVoice": "norman",
     "chosenVoiceId": "en_US-norman-medium",
@@ -57,15 +59,24 @@
       "Record owner approval against exact final narration WAV SHA-256 before production use."
     ],
     "productionApproved": false,
-    "finalNarration": false
+    "finalNarration": false,
+    "renderedAt": "2026-11-18T06:44:17Z",
+    "workflowRunId": 44253500939,
+    "artifactId": 14404553729,
+    "artifactName": "sonicvhibez-american-wildlife-encounter-voice-review",
+    "audioSha256": "2c81da407501eb8e91391a360ce5a19ec6f324b08f4222b15a1ef032136962ec",
+    "durationSeconds": 51.432,
+    "sourceScriptSha256": "54b1c9aa9103b8a79511cc38fc27c27d4e35416d460f188701485406aaedfc73",
+    "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
+    "commercialAttributionReview": "PENDING_OWNER_REVIEW"
   },
   "rendering": {
     "script": "scripts/render_american_narration.py",
     "workflow": ".github/workflows/american-narration-review.yml",
     "output": "american-short-001-narration-review.wav",
-    "status": "REVIEW_RENDER_NOT_YET_GENERATED",
-    "humanVoiceQualityReview": "PENDING",
-    "commercialAttributionReview": "PENDING",
+    "status": "REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
+    "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
+    "commercialAttributionReview": "PENDING_OWNER_REVIEW",
     "productionApproved": false,
     "finalNarration": false,
     "latestEvidencePath": "content/american-narration-review-evidence.json"
