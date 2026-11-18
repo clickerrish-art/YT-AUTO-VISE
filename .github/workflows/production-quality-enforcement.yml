@@ -1,0 +1,47 @@
+name: Production quality enforcement
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/production-quality-scorecard.mjs"
+      - "scripts/upload-private.mjs"
+      - "test/production-quality-scorecard.test.mjs"
+      - ".github/workflows/production-quality-enforcement.yml"
+      - "docs/PRODUCTION-QUALITY-ENFORCEMENT.md"
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "scripts/production-quality-scorecard.mjs"
+      - "scripts/upload-private.mjs"
+      - "test/production-quality-scorecard.test.mjs"
+      - ".github/workflows/production-quality-enforcement.yml"
+      - "docs/PRODUCTION-QUALITY-ENFORCEMENT.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run scorecard negative and positive regression tests
+        run: node --test test/production-quality-scorecard.test.mjs
+      - name: Run complete Node regression suite and require zero skips
+        shell: bash
+        run: |
+          set -o pipefail
+          node --test 2>&1 | tee "$RUNNER_TEMP/production-quality-node-tests.log"
+          grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/production-quality-node-tests.log"
+      - name: Audit production dependencies
+        run: npm audit --audit-level=high
