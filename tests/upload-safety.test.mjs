@@ -119,8 +119,8 @@ test("upload approval rejects mismatched job, artifact, metadata, and visibility
   assert.throws(() => validateUploadApproval({ ...approval, visibility: "public" }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /private-only/);
   assert.throws(() => validateUploadApproval({ ...approval, rightsEvidenceSha256: "c".repeat(64) }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /rights evidence checksum/);
   assert.throws(() => validateUploadApproval({ ...approval, rightsEvidence: { ...rightsEvidence, permittedUses: ["Personal use only"] } }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /rights evidence checksum/);
-  assert.throws(() => validateUploadApproval({ ...approval, relatedArtifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64) }] }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /thumbnail checksum/);
-  assert.throws(() => validateUploadApproval({ ...approval, relatedArtifacts: approval.relatedArtifacts.filter(item => !item.path.endsWith(".srt")) }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /captions checksum/);
+  assert.throws(() => validateUploadApproval({ ...approval, relatedArtifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64) }] }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /(?:thumbnail checksum|quality scorecard.*thumbnail hash)/);
+  assert.throws(() => validateUploadApproval({ ...approval, relatedArtifacts: approval.relatedArtifacts.filter(item => !item.path.endsWith(".srt")) }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /(?:captions checksum|quality scorecard.*captions hash)/);
 });
 
 
