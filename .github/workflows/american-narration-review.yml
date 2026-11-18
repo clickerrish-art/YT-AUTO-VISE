@@ -6,6 +6,7 @@ on:
     paths:
       - "config/narration-voice-candidates.json"
       - "scripts/render_american_narration.py"
+      - "content/drafts/nile-crocodile-eyes-at-the-waterline.md"
       - "scripts/generate_piper_voice_audition.py"
       - "tests/test_render_american_narration.py"
       - "content/short-001-wildlife-video-storytelling.md"
