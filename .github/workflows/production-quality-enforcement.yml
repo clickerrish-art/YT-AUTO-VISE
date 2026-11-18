@@ -42,7 +42,8 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node --test 2>&1 | tee "$RUNNER_TEMP/production-quality-node-tests.log"
-          grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/production-quality-node-tests.log"
+          npm test 2>&1 | tee "$RUNNER_TEMP/production-quality-node-tests.log"
+          grep -Fq 'Node.js test totals: pass ' "$RUNNER_TEMP/production-quality-node-tests.log"
+          grep -Fq 'fail 0, skipped 0.' "$RUNNER_TEMP/production-quality-node-tests.log"
       - name: Audit production dependencies
         run: npm audit --audit-level=high
