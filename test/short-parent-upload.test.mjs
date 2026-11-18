@@ -36,10 +36,12 @@ const baseApproval = {
   relatedArtifacts: [
     { path: "media/child.mp4", sha256: sha("a") },
     { path: "media/thumb.jpg", sha256: sha("8") },
-    { path: "captions/child.srt", sha256: sha("7") },\n    { path: "audio/child-narration.mp3", sha256: sha("6") },
+    { path: "captions/child.srt", sha256: sha("7") },
+    { path: "audio/child-narration.mp3", sha256: sha("6") },
     { path: "metadata/child.json", sha256: sha("b") }
   ],
-  qualityScorecard,\n  shortParentRelationship: relationship,
+  qualityScorecard,
+  shortParentRelationship: relationship,
   shortParentRelationshipSha256: shortParentRelationshipSha256(relationship)
 };
 
