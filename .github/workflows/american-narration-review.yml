@@ -36,7 +36,7 @@ jobs:
       - name: Test American narration renderer
         run: PYTHONPATH=. python -m unittest discover -s tests -p "test_render_american_narration.py" -v
       - name: Render American male wildlife-encounter review audio
-        run: python scripts/render_american_narration.py --source-script content/drafts/nile-crocodile-eyes-at-the-waterline.md --output artifacts/american-narration-review
+        run: python scripts/render_american_narration.py --source-script content/short-001-wildlife-video-storytelling.md --output artifacts/american-narration-review
       - name: Retain review WAV and provenance
         if: always()
         uses: actions/upload-artifact@v4
