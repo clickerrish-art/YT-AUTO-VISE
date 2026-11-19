@@ -2529,9 +2529,9 @@ test("blocked production forms serialize every field and surface blockers withou
 });
 
 
-test("every required dashboard field blocks empty form submission without an API mutation", async ({ page }) => {
+test("every required dashboard field blocks empty form submission without an API mutation", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
-  const beforeResponse = await page.request.get("/api/state", { headers });
+  const beforeResponse = await request.get("/api/state", { headers });
   expect(beforeResponse.status()).toBe(200);
   const before = await beforeResponse.json();
   const postRequests = [];
