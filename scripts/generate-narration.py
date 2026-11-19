@@ -18,6 +18,18 @@ APPROVED_DISCLOSURE_TEXT = "This product is sold through my own Selar business; 
 SHORTS = {"short-001": "Short 001", "short-002": "Short 002"}
 MIN_WORDS, MAX_WORDS = 125, 150
 
+NONCOMMERCIAL_AUDITION_NOTICE = (
+    "Edge TTS output is not owner-approved or commercially cleared. "
+    "It may be generated only as an explicitly acknowledged internal audition; "
+    "never use it in monetized YouTube, advertising or Selar promotion."
+)
+
+def require_noncommercial_audition(acknowledged: bool) -> bool:
+    if acknowledged is not True:
+        raise SystemExit("BLOCKED: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+                         "Pass --allow-noncommercial-audition only for an internal audition.")
+    return True
+
 def _has_timezone(value: str) -> bool:
     try:
         parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
@@ -139,7 +151,8 @@ def measured_duration(path: Path) -> float:
         raise RuntimeError("Narration duration must be positive")
     return duration
 
-async def generate_one(short_id: str, narration: str, voice: str, rate: str) -> dict:
+async def generate_one(short_id: str, narration: str, voice: str, rate: str, allow_noncommercial_audition: bool = False) -> dict:
+    require_noncommercial_audition(allow_noncommercial_audition)
     OUTPUT.mkdir(parents=True, exist_ok=True)
     if OUTPUT.is_symlink():
         raise ValueError("Narration output directory cannot be a symlink")
@@ -178,7 +191,10 @@ async def generate_one(short_id: str, narration: str, voice: str, rate: str) -> 
             "transcriptSha256": hashlib.sha256(transcript.encode()).hexdigest(),
             "captionsSha256": hashlib.sha256(captions.encode()).hexdigest(),
             "humanReviewRequired": True, "rightsStatus": "NOT_VERIFIED",
-            "status": "DRAFT_REVIEW_REQUIRED", "publishingEnabled": False
+            "licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+            "commercialUseAllowed": False, "productionUseAllowed": False,
+            "voiceApprovalStatus": "NOT_OWNER_APPROVED",
+            "status": "INTERNAL_AUDITION_ONLY", "publishingEnabled": False
         }
         paths["json"].write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
         print(f"{'PASS' if report['withinTargetDuration'] else 'REVIEW'}: {short_id}: {duration:.2f}s; {len(boundaries)} word boundaries")
@@ -192,7 +208,11 @@ async def main() -> int:
     parser.add_argument("--voice", default="en-US-GuyNeural")
     parser.add_argument("--rate", default="-5%")
     parser.add_argument("--extract-only", action="store_true")
+    parser.add_argument("--allow-noncommercial-audition", action="store_true",
+                        help="Explicitly acknowledge that Edge TTS output is internal audition only and cannot be used commercially.")
     args = parser.parse_args()
+    if not args.extract_only:
+        require_noncommercial_audition(args.allow_noncommercial_audition)
     if not MASTER.is_file() or MASTER.is_symlink():
         raise SystemExit("Narration master missing or unsafe")
     if not has_owner_approved_selar_disclosure():
@@ -205,12 +225,15 @@ async def main() -> int:
         if args.extract_only:
             print(f"--- {short_id} ({len(narration.split())} words) ---\n{narration}\n")
         else:
-            reports.append(await generate_one(short_id, narration, args.voice, args.rate))
+            reports.append(await generate_one(short_id, narration, args.voice, args.rate, args.allow_noncommercial_audition))
     if not args.extract_only:
         OUTPUT.mkdir(parents=True, exist_ok=True)
         (OUTPUT / "generation-summary.json").write_text(json.dumps({
-            "status": "DRAFT_REVIEW_REQUIRED", "publishingEnabled": False,
-            "humanReviewRequired": True, "items": reports
+            "status": "INTERNAL_AUDITION_ONLY",
+            "licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+            "commercialUseAllowed": False, "productionUseAllowed": False,
+            "voiceApprovalStatus": "NOT_OWNER_APPROVED",
+            "publishingEnabled": False, "humanReviewRequired": True, "items": reports
         }, indent=2) + "\n", encoding="utf-8")
         if any(not r["withinTargetDuration"] for r in reports):
             print("REVIEW REQUIRED: one or more reads are outside 50–60 seconds; no automatic time-stretching was applied.")
