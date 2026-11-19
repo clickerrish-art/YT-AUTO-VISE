@@ -9,6 +9,15 @@ on:
       - content/short-001-roderic-narration-generation.json
       - scripts/acquire-short-001-assets.mjs
       - .github/workflows/acquire-short-001-assets.yml
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches:
+      - main
+    paths:
+      - content/approved-pexels-footage.json
+      - content/short-001-roderic-narration-generation.json
+      - scripts/acquire-short-001-assets.mjs
+      - .github/workflows/acquire-short-001-assets.yml
   workflow_dispatch:
 
 permissions:
