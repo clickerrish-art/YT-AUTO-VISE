@@ -1,3 +1,64 @@
+# Latest master-completion snapshot — 19 November 2026
+
+**Live implementation branch HEAD:** `1a9f6ffaf39eca903435560d67cef756617399ce`  
+**Current master acceptance register:** 89 requirements — **70 PASS / 8 NOT_TESTED / 11 BLOCKED / 0 FAIL**.  
+**Release decision:** **HOLD**. This is not a production-complete or risk-free release.
+
+## Exact verification checkpoints
+
+- Full automation/security run [44548858784](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784), source/test SHA `02537b567c81ad972158d617915621f1599716fe`: **1,027/1,027 Node tests across 178/178 files; 86/86 Python tests; zero failures/skips; zero npm audit vulnerabilities**. The subsequent current-branch automation run [44551312412](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412) is in progress and includes the new review-preview fail-closed Python test; do not promote that test to PASS until the run finishes.
+- Dashboard Chromium E2E [44551028827](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028827), exact candidate `fb4f64af8508791ff44c9f1e95ad47c533e8b26e`: **37/37 journeys passed**. Coverage now includes stable identity/accessibility for 121 controls and 17 forms; required-empty validation for 54 required controls; 7 pattern-constrained IDs/hashes plus 1 URL; 6 minlength controls; and 23 maxlength controls. The dashboard matrix remains **NOT_TESTED overall** because positive success paths, permissions, persistence, refresh/restart, concurrency, complete error feedback and per-control accessibility acceptance are not yet exhaustive.
+- API route acceptance matrix is reconciled to exact source/test SHA `02537b567c81ad972158d617915621f1599716fe`: **42 authorized application-level routes PASS**, **48/48 protected-route missing/invalid-auth checks PASS**, and **6 provider/production routes remain BLOCKED**. The route-positive test files were included in the full 178-file regression. These are local application tests, not live provider acceptance or publication.
+- Queue readiness [44551028726](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028726): PASS; 16 queue items, approved Selar destination, rolling `long_form → long_form → short` order, 72 elapsed-hour minimum, 216-hour minimum cycle, draft-only preparation and publishing disabled.
+- Cloudflare durable-state unit checks [44551028716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028716) and deployment recovery smoke [44551028945](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028945): PASS. The controlled staging backup/restore drill [43701290286](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43701290286) also passed: explicit backup and automatic pre-restore backup retained, restore audit receipt present, exact pre-test state restored, and state stable after Node restart. This is staging evidence, not production deployment.
+- Nature Frontiers daily local draft package [44551028566](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028566) and Instagram fail-closed safety [44551028449](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028449): PASS. The daily package is research-only (2 Reel + 1 feed); no Meta provider-side draft, upload, schedule or publish was performed. Publishing remains disabled, dry-run enabled and emergency stop active.
+- Non-destructive branch reconciliation [44551028866](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028866): **REQUIRES_REVIEW**; no history mutation performed.
+- Production readiness [44551028774](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028774): **HOLD / 22 blockers**. The live OAuth refresh still returns `invalid_grant`.
+
+## Scheduler and worker status
+
+- Owner approval is now correctly recorded from the explicit 18 November 2026 decision: rolling `long_form → long_form → short`, no weekly publication target, Africa/Johannesburg, at least 72 elapsed hours between actual publications, and no two publications on the same Johannesburg calendar day.
+- The queue validator and cadence tests pass. The 72-hour spacing and 216-hour cycle minimum remain invariants; owner approval cannot weaken them.
+- Worker code-level regression includes HTTP 409 conflict, persisted retry/backoff, failed persistence, restart recovery, leases, cancellation and dead-letter behavior in the exact full regression. No real remote YouTube dispatch or publication is claimed.
+- **Still blocked:** fresh authenticated complete YouTube public/private/unlisted history, actual remote publication timestamps, verified channel identity/scope, and complete local/workflow/owner upload-attempt reconciliation. Do not retry an uncertain upload.
+
+## Media and production status
+
+- Short 001: four source clips were explicitly owner-selected and downloaded. Their MP4 bytes match the recorded SHA-256 values and FFprobe confirms valid H.264 streams. Pexels' published platform license and source pages have been reviewed; this confirms the platform-license terms only, not every possible third-party right. Three clips were used in a **silent 54.67-second visual review preview**; the fourth was excluded because the preview shows an enclosure/barrier and a partial foreground person.
+- The preview is a review-only attachment, 720×1280 H.264, with no audio, no narration, no music, no fabricated encounter and no claim of original-camera footage. It is not stored in the repository and is **not** the final narrated Short. The evidence record is in `content/short-001-visual-review-evidence.json`.
+- The available Roderic HeyGen Free-plan audition is internal/personal non-commercial only; it is not licensed for monetized production or Selar promotion. No paid upgrade or silent voice substitution was made. Production narration remains blocked pending commercial rights or explicit owner authorization for a zero-cost commercially licensed alternative.
+- Short final media, narration, music, full human playback, factual/compliance review, exact-hash approval and upload metadata remain incomplete.
+- Long-form 001 still lacks the required genuine footage, commercially usable narration, final captions, rights evidence, final render, full playback and hash-bound approval.
+- The 22 readiness blockers are exact and actionable: missing Short footage/narration paths (2), Short footage/narration license evidence and rights/compliance confirmations (4), missing long-form footage/narration/captions and corresponding rights/compliance evidence (7), metadata human/rights/compliance approval (3), exact-hash production approval path (1), missing final Short MP4 (1), and YouTube OAuth/scope/history/upload-attempt reconciliation (4).
+
+## Nature Frontiers / Meta
+
+- Nature Frontiers remains separate from SonicVhibez and is not a YouTube destination.
+- Current tests confirm safe local configuration: publishing disabled, dry-run enabled, emergency stop active, no guessed Page/Instagram account ID and no provider action.
+- The local 2-Reel + 1-feed plan is not a Facebook/Instagram provider draft and contains no fabricated media or rights.
+- Legacy Metricool brand access and reconciliation of historical `draft=false` / `autoPublish=true` records remain unresolved. Do not enable auto-publishing or mutate provider schedules.
+
+## Deployment, state and Git
+
+- Staging backup/restore and deployment recovery smoke are PASS, but there is no verified SonicVhibez production publisher Worker. R2/object-storage access remains unavailable/blocked; no paid infrastructure or account activation was introduced.
+- Branch protection is still disabled (`protected=false`). Owner/admin action is required to configure required checks and branch protection.
+- PR #1 remains **OPEN / DRAFT / UNMERGED**. `main` remains `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38`; it has not been modified. No merge, rebase, reset, force-push or destructive reconciliation was performed.
+- GIT-002 remains open: review the 9 commits unique to `main` and the branch-only history in safe batches; do not reconcile until semantic review is complete.
+
+## Required owner inputs to finish
+
+1. Reauthorize the existing YouTube OAuth client and update the GitHub Actions `YOUTUBE_REFRESH_TOKEN` secret securely; do not paste tokens into chat. Verify `youtube.upload` scope, channel identity and complete remote history.
+2. Resolve production narration rights: commercially license the approved Roderic voice, or explicitly authorize a zero-cost commercially licensed alternative. The Free-plan Roderic audition cannot be used in monetized production.
+3. Complete full human playback and editorial/compliance review of the source footage, final Short, long-form video, captions, thumbnail and metadata; approve exact hashes only after final files exist.
+4. Provide/approve genuine long-form source footage and commercially usable narration, plus required caption and license evidence.
+5. Repository admin: enable branch protection and required checks; complete GIT-002 semantic review.
+6. Owner/admin: authorize a durable off-account backup/storage path and production Worker deployment; resolve R2 access or approve a free alternative.
+7. Restore access to the historical Metricool Nature Frontiers brand and reconcile all uncertain auto-publish records before any provider publishing is enabled.
+
+**No YouTube upload, public/private publication, Meta publication, Metricool mutation, R2 activation, production Worker deployment or PR merge has been performed.**
+
+---
+
 # Latest master-completion snapshot — 18 November 2026
 
 **Code/test evidence SHA:** `8d3f24b46af34af3238ca7714e96606af0c3940f`  
