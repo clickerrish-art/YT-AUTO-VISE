@@ -60,7 +60,7 @@ test("read-only verification checks every page and every video without exposing 
   };
   const result = await verifySonicVhibezChannel({ env, oauthFactory: testOAuthFactory, youtubeFactory: () => youtube });
   assert.equal(result.status, "PASS_READ_ONLY_IDENTITY_AND_INVENTORY");
-  assert.equal(result.oauthScopesVerified, false, "a fake YouTube API client must not imply OAuth scopes");
+  assert.equal(result.oauthScopesVerified, true, "both exact OAuth scopes must be verified before the API client is used");
   assert.equal(result.totalUploads, 51);
   assert.deepEqual(result.visibilityCounts, { public: 0, private: 50, unlisted: 1 });
   assert.equal(calls.length, 2);
