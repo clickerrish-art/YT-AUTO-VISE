@@ -2290,7 +2290,7 @@
     "prState": "open",
     "draft": true,
     "merged": false,
-    "verdict": "Full automation/security PASS on exact source/test tree 4dec5f: 1,022 Node tests across 176 files, 86 Python tests, zero skips, npm audit 0 vulnerabilities. Browser E2E 33/33; API 42/42 positive application routes PASS and 48/48 auth-negative PASS; six provider/production routes remain BLOCKED. Production readiness HOLD with 22 blockers. Four approved Pexels clips acquired (53.0337 seconds) with hashes, but rights/human review and canonical production integration remain pending. PR #1 remains open/draft/unmerged; main unchanged.",
+    "verdict": "Full automation/security PASS on exact source/test tree 4dec5f: 1,022 Node tests across 176 files, 86 Python tests, zero skips, npm audit 0 vulnerabilities. Browser E2E 33/33; API 42/42 positive application routes PASS and 48/48 auth-negative PASS; six provider/production routes remain BLOCKED. Production readiness HOLD with 22 blockers. Four approved Pexels clips acquired (53.0337 seconds) with hashes, but rights/human review and canonical production integration remain pending. PR #1 remains open/draft/unmerged; main unchanged. Nature Frontiers historical reconciliation remains BLOCKED: seven current-brand Facebook items identified, but legacy brand 7545638 and its 20 drafts/eight autoPublish records are inaccessible; no publishing was activated.",
     "ci": {
       "automationSecurity": {
         "status": "PASS",
@@ -2382,6 +2382,19 @@
       "natureFrontiersInstagramPublishingSafety": {
         "status": "PASS",
         "runId": 44527617166
+      },
+      "metricoolReadOnlyReconciliation": {
+        "status": "PARTIAL",
+        "brandId": 8094526,
+        "publishedFacebookItems": 7,
+        "publishedInstagramItems": 0,
+        "futureScheduledPosts": 0,
+        "legacyBrandId": 7545638,
+        "legacyBrandAccess": "403_FORBIDDEN",
+        "legacyRecordsExpected": 8,
+        "legacyScheduledDraftsReported": 20,
+        "readOnlyEvidenceFile": "content/metricool-nature-frontiers-reconciliation-2026-11-19.json",
+        "publishingEnabled": false
       }
     },
     "engineeringGates": {
@@ -2399,7 +2412,8 @@
       "DASH_CTRL_FORM_PATHS_001": "PASS — all 17 form journeys exercised; 11 succeed locally, six fail closed.",
       "DASH_CTRL_STANDALONE_001": "PASS — 17 standalone controls exercised.",
       "DASH_CTRL_BLOCKED_API_001": "PASS — six production-blocked forms map to guarded routes.",
-      "DASH_CTRL_RIGHTS_USE_001": "PASS — explicit per-asset YouTube-use attestation remains separate from overall approval."
+      "DASH_CTRL_RIGHTS_USE_001": "PASS — explicit per-asset YouTube-use attestation remains separate from overall approval.",
+      "NATURE_FRONTIERS_HISTORY_001": "BLOCKED — current brand 8094526 has 7 published Facebook items, 0 Instagram items and 0 future scheduled posts; old brand 7545638 (20 scheduled drafts, eight autoPublish records) is inaccessible (403), no support reply found, and its history is unresolved. Current brand wrongly links SonicVhibez YouTube channel."
     }
   },
   "candidateSourceTestSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
@@ -3306,8 +3320,8 @@
     {
       "id": "NATURE-FRONTIERS-HISTORY-001",
       "status": "BLOCKED",
-      "detail": "Eight historical Metricool records with draft=false/autoPublish=true remain unreconciled. Current future schedule is zero posts, and the connected brand exposes the SonicVhibez YouTube channel identity.",
-      "requiredResolution": "Owner provides Metricool historical export/read-only access; reconcile all eight records, correct cross-brand identity, preserve publishingEnabled=false and emergencyStop=true."
+      "detail": "Read-only Metricool reconciliation on 19 Nov found current Nature Frontiers brand 8094526 (created 14 Nov) with 3 Facebook feed posts, 2 Facebook Reels, 2 Facebook Stories, zero Instagram posts/reels/stories, and zero future scheduled posts through 31 Dec. The current brand incorrectly links the SonicVhibez YouTube channel UCSlkuPfHH78oGC1o418HV4w. Legacy brand 7545638, which the owner reported had 20 scheduled draft posts and eight draft=false/autoPublish=true records, returns 403 access denied; no Metricool support reply was found to the owner's 13 Nov request. Historical records remain unreconciled.",
+      "requiredResolution": "Owner/Metricool support must restore or export legacy brand 7545638 and its 20 scheduled drafts/eight autoPublish records without deletion; verify whether brand 8094526 replaced it without history loss; remove the SonicVhibez YouTube mapping from Nature Frontiers; reconcile by post ID and timestamp. Keep publishing disabled, dryRun=true and emergencyStop=true."
     },
     {
       "id": "SONICVHIBEZ-PRODUCTION-DEPLOY-001",
