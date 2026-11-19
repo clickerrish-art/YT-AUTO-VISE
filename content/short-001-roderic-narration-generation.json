@@ -37,7 +37,7 @@
       "usageBased": null,
       "remainingCredits": null,
       "paidUpgradeUsed": false,
-      "costConclusion": "Generated while the connected HeyGen account reports the free subscription plan. No paid upgrade, wallet balance or usage-based billing route was reported. The provider did not expose a remaining free quota count."
+      "costConclusion": "Generated while the connected HeyGen account reported the Free plan, with no paid upgrade or usage-based billing route reported. However, HeyGen Free-plan output is licensed only for personal, non-commercial and internal evaluation; it is not cleared for monetized YouTube, advertising, Selar promotion or other revenue-generating use."
     }
   },
   "source": {
@@ -69,6 +69,24 @@
     "commercialVoiceRightsEvidence": false,
     "finalMediaHumanReviewed": false,
     "productionQualityScore": null,
-    "releaseEligible": false
+    "releaseEligible": false,
+    "commercialUseAllowed": false,
+    "productionUseBlocked": true,
+    "note": "Audio is retained as an internal voice-quality audition only. Do not render into or publish with a commercial SonicVhibez video."
+  },
+  "license": {
+    "provider": "HeyGen",
+    "termsUrl": "https://www.heygen.com/terms",
+    "voiceTermsUrl": "https://www.heygen.com/voice-terms",
+    "planAtGeneration": "free",
+    "outputLicense": "PERSONAL_NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+    "commercialUseAllowed": false,
+    "monetizationAllowed": false,
+    "advertisingAllowed": false,
+    "revenueGeneratingProductPromotionAllowed": false,
+    "productionUseBlocked": true,
+    "permittedUse": "Internal audition and evaluation only",
+    "reviewStatus": "VERIFIED_AGAINST_CURRENT_PUBLISHED_TERMS_2026-11-19",
+    "note": "The Roderic recording must not be used in SonicVhibez production under the current Free-plan terms. A commercial HeyGen license or an explicitly approved zero-cost commercially licensed alternative is required."
   }
 }
