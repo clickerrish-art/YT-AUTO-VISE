@@ -166,7 +166,7 @@ for (const item of document.items) {
   }
   const quality = validateProductionQualityApprovalFile({
     approvalPath: item.qualityApprovalPath, videoPath: item.videoPath, metadataPath: item.metadataPath,
-    jobId: item.id, contentType: item.contentType, rootDir: process.cwd()
+    jobId: item.id, contentType: item.contentType, rootDir: projectRoot
   });
   if (!quality.valid) {
     throw new Error("BLOCKED: publication-eligible queue item " + item.id + " failed the production quality gate: " + quality.errors.join("; "));
