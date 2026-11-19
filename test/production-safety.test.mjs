@@ -38,9 +38,10 @@ test("long-form Edge TTS generation is manual-only and explicitly non-commercial
   assert.ok(narrationWorkflow.includes("--allow-noncommercial-audition"));
   assert.ok(narrationWorkflow.includes("NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"));
   assert.ok(narrationWorkflow.includes("actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"));
-  assert.equal(/\\bschedule:/m.test(narrationWorkflow), false);
-  assert.equal(/\\bpush:/m.test(narrationWorkflow), false);
-});;
+  const workflowLines = narrationWorkflow.split(String.fromCharCode(10)).map(line => line.trim());
+  assert.equal(workflowLines.includes("schedule:"), false);
+  assert.equal(workflowLines.includes("push:"), false);
+});;;
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
   assert.match(qualityWorkflow, /node --test/);
