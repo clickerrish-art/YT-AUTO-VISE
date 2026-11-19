@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-11-19T15:24:00Z",
+  "checkedAt": "2026-11-19T15:30:00Z",
   "status": "BLOCKED_PRODUCTION_NOT_DEPLOYED_STAGING_SOURCE_MATCHED_BUT_OIDC_TRUST_AND_R2_UNAVAILABLE",
   "mode": "READ_ONLY_CLOUDFLARE_API_AND_D1_SELECT_ONLY; no Cloudflare resources changed during this reconciliation",
   "accountId": "bba3ba6fc08653dc66349b5a313f518d",
@@ -111,12 +111,8 @@
     "currentRepoWorkerSource": {
       "path": "cloudflare/worker.js",
       "deployed": false,
-      "implementedRoutes": [
-        "GET /healthz",
-        "GET /api/state",
-        "POST /api/state/bootstrap"
-      ],
-      "missingRunnerBridgeRoutes": [
+      "role": "Unified Worker entrypoint; delegates the full API contract to cloudflare/staging-snapshot/worker.js and preserves the previous state-only implementation at cloudflare/state-only-worker.js.",
+      "delegatedRunnerBridgeRoutes": [
         "GET /api/runner/ready",
         "GET /api/runner/session/status",
         "POST /api/runner/session",
@@ -130,7 +126,11 @@
         "POST /api/runner/artifacts/part",
         "POST /api/runner/artifacts/complete"
       ],
-      "compatibilityDecision": "Do not deploy the state-only file over the full staging Worker until the bridge/API contract is reconciled."
+      "runnerGate": "All repository-runner routes except operator-only session status/release return 503 RUNNER_OIDC_DISABLED unless env.RUNNER_OIDC_ENABLED === 'true'.",
+      "defaultRunnerEnabled": false,
+      "providerRoutes": "The delegated snapshot continues to return 503 EXTERNAL_PROVIDER_NOT_CONNECTED for provider publishing routes and 503 REPOSITORY_RUNNER_NOT_CONNECTED for production work that needs the repository runner.",
+      "sourceTestCommit": "5cbb52ca62e1031ab00f0fd7d2d384566e6b558a",
+      "note": "The wrapper is source code only and has not been deployed. The live Cloudflare Worker remains the previously verified snapshot, without the new RUNNER_OIDC_ENABLED default-off wrapper gate."
     },
     "bindings": {
       "d1": {
@@ -247,8 +247,21 @@
       "path": ".github/workflows/cloudflare-staging-auth-smoke.yml",
       "supportsWorkflowDispatch": true,
       "readOnly": true,
-      "status": "NOT_RUN",
-      "note": "This is a live read-only smoke and has not yet been run against the current live Worker."
+      "status": "PASS",
+      "runId": 44555237191,
+      "checkedOutSha": "5cbb52ca62e1031ab00f0fd7d2d384566e6b558a",
+      "result": {
+        "backupListing": "PASS",
+        "backupInventoryUnchanged": "PASS",
+        "retainedBackupCount": 5,
+        "unauthenticatedRunnerStatusRejected": "PASS",
+        "authenticatedRunnerStatusRead": "PASS",
+        "authenticatedCloudflareBackupList": "PASS",
+        "runnerSessionActive": false,
+        "stagingD1Mutation": false,
+        "backupRestoreStep": "SKIPPED"
+      },
+      "note": "Read-only authenticated smoke against the live staging Worker. It confirms the existing operator token and Cloudflare Access secrets are valid, the backup list is readable and unchanged, and runner session status rejects unauthenticated requests. This does not verify OIDC runner dispatch or R2 artifact availability."
     },
     "stagingBackupRestoreDrill": {
       "path": ".github/workflows/cloudflare-staging-backup-restore-smoke.yml",
@@ -279,11 +292,11 @@
   },
   "requiredNextActions": [
     "Owner/admin enables branch protection and required checks before any OIDC trust-policy change.",
-    "Reconcile the source/deployment contract: the deployed staging Worker matches cloudflare/staging-snapshot/*, while cloudflare/worker.js is state-only and lacks the runner-bridge endpoints. Do not deploy the smaller file over staging.",
-    "Create and review a manual-only, explicit-opt-in runner workflow on the intended protected implementation branch; align the Worker OIDC ref/workflow to that exact workflow and source SHA only after protection is verified.",
-    "Run the existing read-only authenticated staging smoke through workflow_dispatch and record its exact run/artifact; it has not yet been run against the live Worker in this checkpoint.",
+    "Review and, only after branch protection, deploy the new cloudflare/worker.js unified wrapper to staging; it delegates the eight-module snapshot API and defaults RUNNER_OIDC_ENABLED to false. The live Worker has not yet received this gate.",
+    "Create and review a manual-only, explicit-opt-in runner workflow on the intended protected implementation branch; align the Worker OIDC ref/workflow to that exact protected ref and workflow.",
+    "Resolve the current branch/workflow mismatch: the deployed OIDC trust still pins the old unprotected codex/cloudflare-adapter-integration-20261108 branch; no workflow_dispatch runs were found there.",
     "Enable and verify R2 in the Cloudflare Dashboard, or remove the unavailable ARTIFACTS binding and approve a durable free alternative. Enabling R2 may have account/billing implications and requires owner action.",
-    "Verify persisted runner lease/backoff and artifact accounting after the R2/runner contract is aligned; staging D1 currently has no runner state/control/artifact rows.",
+    "After the wrapper and protected workflow are deployed, run an authenticated runner readiness/lease/backoff/artifact smoke. The current read-only staging smoke passed, but runner OIDC dispatch and R2 are not verified.",
     "Provision a separate SonicVhibez production Worker and production D1 only after source provenance, protected OIDC, secrets, storage and recovery are verified.",
     "Keep the Nature Frontiers health-only Worker/D1 separate; its production D1 schema currently has zero records and it has no provider publishing capability. Do not connect its YouTube identity to SonicVhibez publishing."
   ]
