@@ -1,7 +1,7 @@
 # Long-form 001 — Two Eyes Above the Water
 
 **Brand:** SonicVhibez  
-**Status:** SCRIPT DRAFT — owner review required; not narrated, rendered, approved, queued, scheduled or published  
+**Status:** OWNER-APPROVED NARRATION — 2026-11-20; production remains on HOLD pending voice, footage, rights and review gates  
 **Target format:** YouTube long-form, 16:9, 6–10 minutes  
 **Working title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Thumbnail direction:** Nile crocodile eye at dusk, tight waterline close-up, eye on the right, dark open negative space on the left, exact words “TOO BIG?”; no blood, victim, gore or fabricated attack  
@@ -90,7 +90,7 @@ The river may look empty. That does not mean it is empty. And understanding the 
 
 ## Production gates — currently HOLD
 
-- [ ] Owner approves the exact narration text and topic.
+- [x] Owner approved the exact narration text and topic in chat on 2026-11-20 (response: “proceed”).
 - [ ] Source footage is actually acquired, per-file hashed, decoded and inspected; source selection alone is not clearance.
 - [ ] Exact model/checkpoint/voice commercial-use permissions are verified for any generated or synthetic assets.
 - [ ] Keep the user's selected HeyGen narrator voice, Roderic — Authoritative & Refined, if available on the free plan; do not substitute Norman or another voice silently. If unavailable at zero cost, hold.
