@@ -159,6 +159,13 @@ export function inventoryDashboardSources(html, server) {
       ariaLabel: typeof attributes["aria-label"] === "string" ? attributes["aria-label"] : null,
       disabled: Object.hasOwn(attributes, "disabled"),
       required: Object.hasOwn(attributes, "required"),
+      readOnly: Object.hasOwn(attributes, "readonly"),
+      pattern: typeof attributes.pattern === "string" ? attributes.pattern : null,
+      minLength: typeof attributes.minlength === "string" ? Number(attributes.minlength) : null,
+      maxLength: typeof attributes.maxlength === "string" ? Number(attributes.maxlength) : null,
+      min: typeof attributes.min === "string" ? attributes.min : null,
+      max: typeof attributes.max === "string" ? attributes.max : null,
+      step: typeof attributes.step === "string" ? attributes.step : null,
     });
   }
 
