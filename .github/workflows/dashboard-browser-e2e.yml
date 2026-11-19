@@ -48,10 +48,10 @@ jobs:
         with:
           version: "9.0"
           token: ${{ github.token }}
-      - name: Install free Edge TTS and verify media tools
+      - name: Verify local media tools for deterministic narration test fixture
         run: |
           set -euo pipefail
-          timeout 240s python -m pip install --disable-pip-version-check --retries 2 --timeout 20 edge-tts
+          python3 --version
           command -v ffmpeg
           command -v ffprobe
           ffmpeg -version
