@@ -61,8 +61,8 @@
     "note": "Owner-confirmed historical Short remains in publication history but does not satisfy the current 50–60 second Short production specification."
   },
   "uploadAttemptReconciliation": {
-    "status": "GITHUB_ACTIONS_ATTEMPTS_VERIFIED_OWNER_ATTESTATION_REFRESH_REQUIRED",
-    "inspectedAt": "2026-11-19T23:04:27Z",
+    "status": "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS",
+    "inspectedAt": "2026-11-19T23:07:11.763Z",
     "evidence": {
       "workflowDispatchRunsInspected": 1,
       "privateUploadWorkflowRunId": 42569826008,
@@ -76,22 +76,22 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs?event=workflow_dispatch"
       ],
       "automatedLedgerValidation": {
-        "runId": 44229290895,
-        "jobId": 134550082550,
-        "sourceCommit": "3ab59402ce801c96431d24e8fe56d227edfec409",
-        "completedAt": "2026-11-18T03:18:20Z",
+        "runId": 44634815964,
+        "jobId": 135950489953,
+        "sourceCommit": "dcd66956effb02ede85839d79e0bbc7a3ba0dff7",
+        "completedAt": "2026-11-19T23:07:11.763Z",
         "conclusion": "success",
         "mode": "initialize",
         "inspectedWorkflowRuns": 1,
         "executedPrivateUploadRuns": 0,
         "previousLedgerRunId": "NONE",
-        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44229290895"
+        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44634815964"
       },
       "uploadWorkflowDispatchRunsFound": 1,
       "repositoryWorkflowDispatchRunsInspected": 5,
       "latestUploadWorkflowDispatchAt": "2026-11-09T05:53:10Z",
       "currentGitHubScan": {
-        "inspectedAt": "2026-11-19T23:04:27Z",
+        "inspectedAt": "2026-11-19T23:07:11.763Z",
         "repositoryWorkflowDispatchRuns": 5,
         "uploadPrivateWorkflowDispatchRuns": 1,
         "uploadArtifactPrivatelyWorkflowDispatchRuns": 0,
@@ -111,15 +111,16 @@
         "ownerAttestationRequiredForManualOrLocalAttemptsAfter": "2026-11-18"
       }
     },
-    "note": "Read-only GitHub Actions history was rechecked: five repository workflow_dispatch runs were inspected; only one belonged to the private-upload workflow, its private-upload job was skipped, the upload-artifact-privately workflow had no prior dispatch, and zero private-upload jobs executed. The local uploader ledger defaults to run-logs/upload-attempts.json, and /run-logs/ and /state/ are gitignored; GitHub cannot inspect the user's local copy. The owner's latest manual/local/third-party attempt attestation is dated 2026-11-18, so any out-of-band attempt after that date remains unverified until the owner confirms it. Do not authorize another upload while this attestation window is unresolved.",
+    "note": "GitHub Actions attempt history is verified: the sole prior private-upload workflow dispatch had its private-upload job skipped, the upload-artifact-privately entry point has no prior run, and the automated read-only ledger validator succeeded on 2026-11-19 with zero executed private-upload runs. The separate local attempt ledger is run-logs/upload-attempts.json and both /run-logs/ and /state/ are gitignored. The owner's last manual/local/third-party attempt attestation is dated 2026-11-18; therefore local or manual attempts after that date remain unverified and publication must stay blocked until the owner refreshes that attestation.",
     "ownerAttestation": {
-      "status": "CONFIRMED_THROUGH_2026-11-18",
+      "status": "CONFIRMED",
       "confirmedAt": "2026-11-18",
       "statement": "The owner confirmed there were no manual, local, or external YouTube upload attempts other than the inventoried video LjePS02hA1o.",
       "scope": "Manual, local, and third-party/out-of-band upload attempts",
       "appliesToVideoId": "LjePS02hA1o",
-      "note": "This is an owner attestation, not an automated GitHub Actions ledger validation. It covers manual, local and third-party/out-of-band attempts through 2026-11-18 only; it does not attest to later attempts.",
-      "validThrough": "2026-11-18"
+      "note": "The owner confirmed no manual, local or third-party/out-of-band attempts through 2026-11-18. The GitHub workflow scan was refreshed on 2026-11-19, but no owner attestation covers manual/local attempts after 2026-11-18. Keep publication blocked until that gap is explicitly closed.",
+      "validThrough": "2026-11-18",
+      "freshnessStatus": "STALE_FOR_LOCAL_OR_MANUAL_ATTEMPTS_AFTER_2026-11-18"
     }
   },
   "currentFreshnessStatus": "FRESH_READ_ONLY_INVENTORY_AS_OF_2026-11-19T22:48:58.854Z",
