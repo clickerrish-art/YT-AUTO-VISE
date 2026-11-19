@@ -5,6 +5,13 @@ on:
     branches: [main]
     paths:
       - "scripts/production-quality-scorecard.mjs"
+      - "scripts/production-quality-approval.mjs"
+      - "scripts/validate-production-quality-approval.mjs"
+      - "scripts/render-short.mjs"
+      - "scripts/render-long-form.mjs"
+      - "scripts/validate-short-export.mjs"
+      - "scripts/validate-long-form-export.mjs"
+      - "scripts/validate-content-quality.mjs"
       - "scripts/upload-private.mjs"
       - "scripts/dashboard-server.mjs"
       - "scripts/run-node-tests.mjs"
@@ -39,8 +46,9 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node --test test/production-quality-scorecard.test.mjs 2>&1 | tee "$RUNNER_TEMP/production-quality-scorecard-tests.log"
-          grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/production-quality-scorecard-tests.log"
+          node --test test/production-quality-scorecard.test.mjs test/production-quality-approval.test.mjs 2>&1 | tee "$RUNNER_TEMP/production-quality-tests.log"
+          grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/production-quality-tests.log"
+          grep -Fq 'ℹ fail 0' "$RUNNER_TEMP/production-quality-tests.log"
       - name: Confirm full regression gate is required
         run: echo "The Validate SonicVhibez automation workflow runs the complete Node, Python and browser regression suites with zero Node skips on this same pull request commit."
       - name: Audit production dependencies
