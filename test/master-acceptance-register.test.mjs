@@ -17,7 +17,7 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
     result[row.status] = (result[row.status] || 0) + 1;
     return result;
   }, {});
-  assert.deepEqual(counts, { PASS: 71, NOT_TESTED: 8, BLOCKED: 10 });
+  assert.deepEqual(counts, { PASS: 72, NOT_TESTED: 7, BLOCKED: 10 });
 });
 
 test("the owner-approved rolling publication cadence is no longer marked blocked", () => {
@@ -40,11 +40,13 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(api.currentHeadEvidenceNote, /six provider\/production routes remain BLOCKED/);
 
   const dashboard = byId("DASH-001");
-  assert.equal(dashboard.status, "NOT_TESTED");
-  assert.equal(dashboard.currentHeadEvidenceSha, "71fe8547bbb605ed258aafa080cd5061b201ec16");
-  assert.match(dashboard.currentHeadEvidenceNote, /39\/39 Chromium journeys passed/);
-  assert.match(dashboard.currentHeadEvidenceNote, /121 controls and 17 forms/);
-  assert.match(dashboard.currentHeadEvidenceNote, /23 maxlength controls/);
+  assert.equal(dashboard.status, "PASS");
+  assert.equal(dashboard.currentHeadStatus, "PASS");
+  assert.equal(dashboard.currentHeadEvidenceSha, "3edcdde4d20cbb4a69017e9c3e156f743c17bec0");
+  assert.match(dashboard.currentHeadEvidenceNote, /121\/121 controls/);
+  assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
+  assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
+  assert.match(dashboard.currentHeadEvidenceNote, /41\/41 Chromium tests/);
 });
 
 test("Nature Frontiers stays blocked after read-only Metricool reconciliation", () => {
@@ -77,6 +79,6 @@ test("master completion register mirrors the acceptance totals and release hold"
     path.join(root, "docs", "MASTER_PRODUCTION_COMPLETION_REGISTER.md"),
     "utf8"
   );
-  assert.match(master, /71 PASS \/ 8 NOT_TESTED \/ 10 BLOCKED \/ 0 FAIL/);
+  assert.match(master, /72 PASS \/ 7 NOT_TESTED \/ 10 BLOCKED \/ 0 FAIL/);
   assert.match(master, /Release decision:\s*\*\*HOLD\*\*/);
 });
