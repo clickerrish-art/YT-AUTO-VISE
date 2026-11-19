@@ -25,7 +25,7 @@
       "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
       "topic": "Nile crocodile waterline posture, sensory systems and shoreline ambush behaviour",
       "targetMinutes": 8,
-      "status": "SCRIPT_APPROVED_PRODUCTION_HOLD",
+      "status": "NARRATION_GENERATED_AWAITING_AUDIO_REVIEW_AND_FILE_INGESTION",
       "scriptPath": "content/drafts/long-form-001-two-eyes-above-water.md",
       "footageRegisterPath": "content/assets/long-form-001-footage-sourcing.md",
       "releaseStatus": "HOLD_FOR_VOICE_FOOTAGE_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
@@ -33,7 +33,11 @@
       "publicationCyclePosition": 1,
       "scheduledAt": null,
       "publishingEnabled": false,
-      "productionNotes": "Owner approved exact narration on 2026-11-20. Roderic voice is not currently returned by HeyGen's live public English male catalogue. Do not substitute or incur cost. Pexels candidates are sourcing leads only; no media downloaded or cleared. Not queued for publication."
+      "productionNotes": "Owner approved exact script on 2026-11-20. HeyGen Free generated one 398.083-second WAV using exact public voice Roderic — Authoritative & Refined (b5c5b28db1ea408abc7d851202983bdb); word/character timing data returned. Audio has not yet been downloaded, locally decoded, hash-verified or fully listened to. Five Pexels sourcing candidates are registered but none acquired or rights-reviewed. Hold render, upload and publication until all gates pass.",
+      "narrationStatus": "GENERATED_NOT_YET_DOWNLOADED_OR_HUMAN_REVIEWED",
+      "narrationDurationSeconds": 398.08299319727894,
+      "narrationVoice": "Roderic - Authoritative & Refined",
+      "narrationStatusPath": "content/assets/long-form-001-narration-status.md"
     },
     {
       "id": "long-story-wildlife-footage",
