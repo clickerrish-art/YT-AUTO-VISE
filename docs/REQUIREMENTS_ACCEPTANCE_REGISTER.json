@@ -474,7 +474,8 @@
         "Live exact-candidate staging backup/restore workflow 43701290286 passed against the deployed Cloudflare Worker/D1 through the real Node dashboard. It started at D1 revision 2, created and verified an explicit backup, restored that exact snapshot with confirmRestore=true, advanced revision exactly once to 3, retained both explicit and automatic pre-restore backups (five total), verified the DASHBOARD_STATE_RESTORED receipt naming the exact backup ID, and proved the restored state matched the pre-test snapshot except for that single audit event. It then stopped and restarted the Node dashboard, recovered revision 3 and the backup inventory, and verified remote state remained stable. Publishing remained disabled and content jobs remained zero.",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43701290286",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609912",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44552068277"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44552068277",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44555237191"
       ],
       "nextAction": "Keep the staging backup/restore test and exact pre-restore audit evidence. Complete runner-state/backoff/artifact persistence only after R2 access or an owner-approved durable alternative is available; do not treat staging D1 PASS as production deployment acceptance.",
       "assessmentCommitSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
@@ -482,8 +483,8 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "PASS for the staging D1 backup/restore acceptance: the controlled staging-only drill 43701290286 passed on exact source SHA 41bd4de95d876c9778a4993a0e67ac207d1379ff, retaining the automatic pre-restore backup and audit receipt, restoring the exact pre-test state and verifying state stability after Node restart. Current read-only D1 SELECT confirms six application tables, one dashboard_state row at revision 3, five retained backups, and zero runner_state/control/artifact/part rows. The D1 list API's num_tables=0 metadata is stale; sqlite_master SELECT is authoritative. R2 is disabled at account level, so remote runner artifact storage remains unavailable and is tracked under DEPLOY-001.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:24:00Z"
+      "currentHeadEvidenceNote": "PASS for the staging D1 backup/restore acceptance: the controlled staging-only drill 43701290286 passed on exact source SHA 41bd4de95d876c9778a4993a0e67ac207d1379ff, retaining the automatic pre-restore backup and audit receipt, restoring the exact pre-test state and verifying state stability after Node restart. Current read-only D1 SELECT confirms six application tables, one dashboard_state row at revision 3, five retained backups, and zero runner_state/control/artifact/part rows. The D1 list API's num_tables=0 metadata is stale; sqlite_master SELECT is authoritative. R2 is disabled at account level, so remote runner artifact storage remains unavailable and is tracked under DEPLOY-001. Latest live read-only staging smoke 44555237191 also passed: backup listing and unchanged inventory PASS, five retained backups, unauthenticated runner status rejected, authenticated runner status read PASS, no active runner session and no D1 mutation.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:30:00Z"
     },
     {
       "id": "YT-001",
@@ -640,16 +641,19 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763980",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
         "Latest exact-candidate deployment-recovery run 43698639458 passed 2/2 isolated rollback/recovery tests with zero skips; deployment smoke run 43698633966 also passed. This verifies tested release rollback behavior, not a full authorized production-like deployment, monitoring, live Cloudflare Node-to-Worker access, or an operator-executed backup/restore cycle; full deployment acceptance remains NOT_TESTED.",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/content/cloudflare-deployment-reconciliation-2026-11-19.json"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/content/cloudflare-deployment-reconciliation-2026-11-19.json",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44555237191",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/cloudflare/worker.js",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/cloudflare/staging-snapshot/README.md"
       ],
-      "nextAction": "Owner/admin must enable branch protection and approve the intended manual-only runner workflow on the protected implementation branch; reconcile the current state-only cloudflare/worker.js with the deployed runner API contract; align OIDC trust to the exact protected ref/workflow; enable and verify R2 or approve a durable alternative; then deploy and verify staging from an exact reviewed SHA before any separate production Worker provisioning.",
+      "nextAction": "Owner/admin must enable branch protection and approve the manual-only runner workflow on the protected implementation branch; review and deploy the unified wrapper to staging only after its fail-closed behavior is tested; align OIDC trust to the exact protected ref/workflow; enable R2 or approve a durable alternative; run live runner readiness/lease/backoff/artifact smoke; then consider a separate production Worker. Do not enable production dispatch or publishing.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "6302fae3cda5255296dcc50de69254e70dc61481",
-      "currentHeadEvidenceNote": "Read-only Cloudflare reconciliation: the live sonicvhibez-durable-state-staging Worker is deployed but its eight live multipart modules match cloudflare/staging-snapshot/* byte-for-byte at GitHub commit 6302fae3cda5255296dcc50de69254e70dc61481. The current cloudflare/worker.js is a different state-only Worker and lacks the /api/runner/* endpoints used by scripts/cloudflare-runner-bridge.mjs; do not deploy it over staging. Live OIDC trust remains pinned to the old, unprotected codex/cloudflare-adapter-integration-20261108 branch and its repository-runner.yml; that branch exists, but no workflow_dispatch runs were found. R2 is disabled at account level (HTTP 403, code 10042), despite the staging Worker ARTIFACTS binding. No SonicVhibez production publisher Worker exists. A separate Nature Frontiers health-only Worker is deployed but is not a publisher. Production deployment remains BLOCKED pending protected-branch/workflow alignment, R2 or approved alternative storage, exact source deployment and recovery verification.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:24:00Z"
+      "currentHeadEvidenceSha": "5cbb52ca62e1031ab00f0fd7d2d384566e6b558a",
+      "currentHeadEvidenceNote": "Read-only Cloudflare reconciliation verifies that the live staging Worker’s eight modules match cloudflare/staging-snapshot/* at GitHub commit 6302fae3cda5255296dcc50de69254e70dc61481. A unified source wrapper was added at 5cbb52ca62e1031ab00f0fd7d2d384566e6b558a; it delegates the runner API to the tracked snapshot and defaults RUNNER_OIDC_ENABLED to false. This wrapper has NOT been deployed. Read-only authenticated staging smoke 44555237191 passed against the existing live Worker: five backups retained, backup inventory unchanged, unauthenticated runner status rejected, authenticated status read passed, runner session inactive and no D1 mutation. Remaining blockers: live OIDC trust still pins the old unprotected branch/workflow, current implementation branch lacks the manual runner workflow, R2 is disabled at account level (403/code 10042), and no SonicVhibez production publisher Worker exists.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:30:00Z"
     },
     {
       "id": "MEDIA-SEC-001",
