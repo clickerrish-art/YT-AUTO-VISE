@@ -28,7 +28,7 @@
     "message": "Both exact YouTube OAuth scopes were independently verified. This grants API scope only; it does not authorize an upload or metadata write."
   },
   "channel": {
-    "id": "UCSlkuPfHH78oC1o418HV4w",
+    "id": "UCSlkuPfHH78oGC1o418HV4w",
     "title": "SonicVibes",
     "handle": "@sonicvhibez",
     "identityVerified": true
