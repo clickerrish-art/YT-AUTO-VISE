@@ -109,6 +109,7 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
       tag: element.tagName.toLowerCase(),
       type: element.type || null,
       form: element.form?.id || null,
+      ancestorForm: element.closest("form")?.id || null,
       name,
       disabled: element.disabled,
       readOnly: Boolean(element.readOnly),
@@ -128,10 +129,14 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
     form: control.form || null
   }));
   for (const control of matrix.controls) {
-    const match = live.find(item => item.id === (control.id || null) && item.tag === control.tag &&
-      item.form === (control.form || null) && (control.id || item.index === control.index - 1));
+    const match = control.id
+      ? live.find(item => item.id === control.id && item.tag === control.tag)
+      : live.find(item => item.id === null && item.tag === control.tag &&
+        item.form === (control.form || null) && item.index === control.index - 1);
     expect(match, `DASH-C${String(control.index).padStart(3, "0")} must resolve to one live control`).toBeTruthy();
     expect(match.name, `DASH-C${String(control.index).padStart(3, "0")} must expose an accessible name`).toBeTruthy();
+    expect(match.ancestorForm, `#${control.id} must be nested in its declared form`).toBe(control.form || null);
+    expect(match.form, `#${control.id} must be associated with its declared form`).toBe(control.form || null);
     if (control.tag === "button") {
       if (control.form) {
         expect(formJourneys[control.form], `button in #${control.form} must have a behavioral journey`).toBeTruthy();
@@ -234,7 +239,7 @@ test("dashboard authorization rejects missing and invalid credentials with actio
   await page.locator("#token").fill("incorrect-test-token");
   await page.locator("#connect").click();
   await expect(page.locator("#app")).toBeHidden();
-  await expect(page.locator("#message")).toContainText(/unauthor|token|forbidden/i);
+  await expect(page.locator("#message")).toContainText(/auth|token|forbidden/i);
   await expect(page.locator("#message")).not.toContainText("incorrect-test-token");
 
   const validRead = await request.get("/api/state", {
