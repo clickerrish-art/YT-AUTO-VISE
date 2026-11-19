@@ -37,6 +37,14 @@
 21. Complete owner-reviewed public/private/unlisted SonicVhibez history is stale or inconsistent with the latest authenticated verification.
 22. Local, workflow and owner-attested upload-attempt reconciliation is stale or incomplete. Never retry an uncertain upload.
 
+## Nature Frontiers Metricool history — read-only reconciliation, 19 November 2026
+
+- Current Metricool brand inventory returns only **Nature Frontiers SA, brand 8094526**, timezone Africa/Johannesburg. Read-only analytics for 1 October–19 November show **3 Facebook feed posts, 2 Facebook Reels, 2 Facebook Stories, zero Instagram feed posts/Reels/Stories**, and the scheduled-post query returns **zero future posts through 31 December**.
+- The current brand's YouTube connection is **SonicVhibez** channel `UCSlkuPfHH78oGC1o418HV4w` / `@sonicvhibez`. This is a cross-brand configuration error. Nature Frontiers must never use SonicVhibez as its YouTube target.
+- The owner previously contacted Metricool support about legacy Nature Frontiers brand **7545638**, which had **20 scheduled draft posts** and obsolete Facebook/Instagram mappings. The current connector returns **403 access denied** for brand 7545638. No support reply was found in the connected mailbox. The eight previously flagged `draft=false` / `autoPublish=true` records therefore remain unresolved; do not infer that they were published, approved or safe.
+- Evidence is retained in `content/metricool-nature-frontiers-reconciliation-2026-11-19.json`. No Metricool post, schedule, brand mapping or publishing setting was changed. Publishing remains disabled, dry-run remains true, emergency stop remains true.
+- **Owner/support input required:** restore or export legacy brand 7545638 and its 20 drafts/eight records without deleting or recreating them; confirm whether 8094526 replaced it without history loss; correct the cross-brand YouTube mapping; then reconcile every record by platform, post ID, date, status and auto-publish flag.
+
 ## New read-only deployment findings — 19 November 2026
 
 - SonicVhibez has a Cloudflare staging Worker `sonicvhibez-durable-state-staging` and a staging D1 database with six application tables. No SonicVhibez production Worker was found. The staging Worker has no cron schedules and there are no Durable Object namespaces.
