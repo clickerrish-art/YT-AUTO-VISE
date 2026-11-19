@@ -1,3 +1,39 @@
+# Latest exact production-readiness result — 19 November 2026
+
+**Tested source/test SHA:** `3912a7c8af6d0e72950a2b18566a3267e789cc5f`; readiness run [44488024703](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024703). Result: **HOLD, 21 blockers**. Human-readable and JSON exit-code evidence agreed (both exit 2). No upload, schedule or publication was attempted.
+
+The read-only readiness run found five imported Canva wildlife assets; all five remain excluded from production as not rights-cleared, zero are selected/unresolved, and release is not authorized. The final Short MP4 is still missing. YouTube OAuth returned `invalid_grant`; the upload-capable scope is not independently verified. Complete current channel history and upload-attempt reconciliation remain stale/incomplete.
+
+## Current blockers
+
+1. Short render manifest footagePath missing: media/next-short-footage.mp4.
+2. Short render manifest narrationPath missing: media/next-short-narration.mp3.
+3. Short footage licence evidence is not real and human-verified.
+4. Short narration licence evidence is not real and human-verified.
+5. Short rightsConfirmed is not owner-confirmed.
+6. Short complianceReviewed is not human-confirmed.
+7. Long-form footage missing: media/long-form-001-footage.mp4.
+8. Long-form narration missing: media/long-form-drafts/long-001-narration-final.mp3.
+9. Long-form captions missing: long-form-001-captions-final.srt.
+10. Long-form footage licence evidence is not real and human-verified.
+11. Long-form narration licence evidence is not real and human-verified.
+12. Long-form rightsConfirmed is not owner-confirmed.
+13. Long-form complianceReviewed is not human-confirmed.
+14. Metadata is not human-reviewed and READY_FOR_PRIVATE_UPLOAD.
+15. Metadata rights confirmation is missing.
+16. Metadata compliance review is missing.
+17. Final Short MP4 missing: media/next-short.mp4.
+18. YouTube OAuth refresh is blocked by invalid_grant.
+19. YouTube upload-capable scope is not independently verified.
+20. Complete owner-reviewed public/private/unlisted SonicVhibez history is missing, stale or inconsistent.
+21. Local, workflow and owner-attested upload-attempt reconciliation is missing, stale or incomplete.
+
+Queue readiness [44488024512](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024512) passed with 16 held queue items and publishing disabled. This is a local queue check, not proof of a remote destination schedule or publication history. No external upload, scheduling or publishing operation occurred.
+
+The exact current implementation branch is `codex/marketing-machine-audit-fixes`; `main` remains untouched. Current tested source/test SHA is recorded separately from this documentation refresh. The latest Metricool brand remains Nature Frontiers SA rather than a distinct SonicVhibez brand; no promotion may use it.
+
+---
+
 # Latest exact production-readiness result — 18 November 2026
 
 Candidate code/test SHA: `8d3f24b46af34af3238ca7714e96606af0c3940f`; readiness run [44272072084](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44272072084). Result: **HOLD, exit 2, 19 blockers**, with human-readable and JSON diagnostics agreeing. No upload was attempted.

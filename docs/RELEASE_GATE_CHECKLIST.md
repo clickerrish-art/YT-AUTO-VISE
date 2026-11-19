@@ -1,3 +1,75 @@
+# 19 November 2026 — current exact-source release gate
+
+**Tested source/test SHA:** `3912a7c8af6d0e72950a2b18566a3267e789cc5f`  
+**Implementation branch:** `codex/marketing-machine-audit-fixes`  
+**Main:** `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38` (untouched)  
+**Merge base:** `45352b73bb6cc4787b2a49988b575afb754ab627`  
+**Divergence at tested source SHA:** 4464 ahead / 9 behind.  
+**PR #1:** OPEN / DRAFT / UNMERGED / mergeable=true; 445 changed files.  
+**PR #7:** OPEN / DRAFT / UNMERGED / mergeable=false; 19 changed files. PR #7 head `7449c1b61dcd26811ee6e6d416a02180a7f1c1ec` has no exact-head Actions runs returned in this check.
+
+## Exact-SHA verification
+
+- Automation/security: **171/171 Node test files passed; Python 84/84 passed; zero skips** — [44488024623](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024623).
+- Content quality: **1,015/1,015 Node tests passed; zero skips; npm audit reported 0 vulnerabilities** — [44488024846](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024846).
+- Dashboard Chromium E2E: **33/33 passed** — [44488024652](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024652).
+- Production-quality scorecard tests: **12/12 passed; zero skips** — [44488024710](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024710).
+- Queue readiness: **PASS**, 16 items remain held and publishing is disabled — [44488024512](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024512).
+- Metadata validation: PASS — [44488024620](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024620).
+- Isolated main/candidate baseline: PASS — [44488024852](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024852).
+- Cloudflare durable-state unit checks: PASS — [44488024675](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024675).
+- Runner-bridge safety: PASS — [44488024662](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024662).
+- Deployment recovery smoke: PASS — [44488024713](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024713).
+- Branch inventory: PASS — [44488024695](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024695).
+- Nature Frontiers local draft package: PASS, 16 topics — [44488024888](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024888).
+- Cloudflare durable-state PR checks: PASS — [44488024844](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024844).
+- Production readiness: **HOLD — 21 blockers**, expected fail-closed result — [44488024703](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024703).
+
+The combined-status endpoint returned no legacy status contexts; the links above are the actual exact-SHA GitHub Actions runs. The production-readiness workflow is a fail-closed HOLD, not a passing production gate.
+
+## Acceptance status — conservative, no new PASS promoted
+
+- Requirements register: its checked-in per-row `CurrentHeadStatus` fields last count **67 PASS / 0 FAIL / 9 NOT_TESTED / 13 BLOCKED** (last recorded 18 November). The 19 November exact-SHA regression suite passed, but this run did not re-evaluate all 89 requirements individually; these counts are retained as last-recorded, not claimed as newly revalidated.
+- API matrix: 48 protected routes; exact-SHA authentication-negative checks **48/48 PASS**. Positive route acceptance is conservatively **0 PASS / 42 NOT_TESTED / 6 BLOCKED** for this current-head refresh; API-001 remains NOT_TESTED overall.
+- Dashboard: **120 controls, 17 forms, 103 form-owned, 17 standalone**; the last field-level form snapshot is 11 PASS / 6 BLOCKED. Browser E2E is 33/33 PASS on the exact source/test SHA. DASH-001 remains NOT_TESTED overall.
+- SCHED-001 remains NOT_TESTED because current complete YouTube public/private/unlisted history, upload-attempt reconciliation and the correct destination schedule cannot be inspected.
+- DEPLOY-001 and GIT-002 remain NOT_TESTED; no merge, branch rewrite or main edit was performed.
+
+## Production HOLD — 21 blockers
+
+1. Short render manifest footagePath missing: media/next-short-footage.mp4.
+2. Short render manifest narrationPath missing: media/next-short-narration.mp3.
+3. Short footage licence evidence is not real and human-verified.
+4. Short narration licence evidence is not real and human-verified.
+5. Short rightsConfirmed is not owner-confirmed.
+6. Short complianceReviewed is not human-confirmed.
+7. Long-form footage missing: media/long-form-001-footage.mp4.
+8. Long-form narration missing: media/long-form-drafts/long-001-narration-final.mp3.
+9. Long-form captions missing: long-form-001-captions-final.srt.
+10. Long-form footage licence evidence is not real and human-verified.
+11. Long-form narration licence evidence is not real and human-verified.
+12. Long-form rightsConfirmed is not owner-confirmed.
+13. Long-form complianceReviewed is not human-confirmed.
+14. Metadata is not human-reviewed and READY_FOR_PRIVATE_UPLOAD.
+15. Metadata rights confirmation is missing.
+16. Metadata compliance review is missing.
+17. Final Short MP4 missing: media/next-short.mp4.
+18. YouTube OAuth refresh is blocked by invalid_grant.
+19. YouTube upload-capable scope is not independently verified.
+20. Complete owner-reviewed public/private/unlisted SonicVhibez history is missing, stale or inconsistent.
+21. Local, workflow and owner-attested upload-attempt reconciliation is missing, stale or incomplete.
+
+## Safety and operating constraints
+
+- Public publishing, private upload and scheduling remain disabled. No media was rendered, uploaded, scheduled or published in this run.
+- Keep the three supplied Selar links in their current approval states: Wildlife Creator's Vault approved; Prompt Pack and 90-Day Blueprint remain disclosure-held candidates.
+- Metricool exposes only Nature Frontiers SA brand `8094526`; its future scheduled-post query returned zero posts, but its draft inventory is not exposed. Do not use it for SonicVhibez promotions.
+- Keep Safari affiliate campaign inactive until its exact HTTPS destination, disclosure and explicit owner approval are supplied.
+- Scheduled GitHub workflows execute from `main`; PR-branch cron definitions are not active production automation.
+- Preserve `test/restore-facebook-draft-history.test.mjs` and `tests/restore-state.test.mjs`. No secrets were changed or requested.
+
+---
+
 # 18 November 2026 — current exact-head release gate
 
 **Source/test SHA:** `3c67fbef9a48ba77774240a30bdb7aecde43320c`  

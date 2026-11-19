@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-18T11:15:00+02:00",
+  "generatedAt": "2026-11-19T10:40:29.392+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
+  "testedSourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
   "liveMainSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
@@ -193,11 +193,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -224,11 +224,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -255,11 +255,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -283,11 +283,11 @@
         "scenario": "Authenticated GET /api/instagram/status returns HTTP 200 and safe read-only status; publishing remains disabled, dry-run and emergency stop remain active, Instagram business account remains unset, configured Page ID is numeric, and operator token is absent from response."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -314,11 +314,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -345,11 +345,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -376,11 +376,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -407,11 +407,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -438,11 +438,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -469,11 +469,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -497,11 +497,11 @@
         "scenario": "Real local dashboard server: unauthenticated request rejected; authenticated GET returns HTTP 200 with Nature Frontiers register, registered asset and rights/inspection/approval statuses; no stateFile path is exposed."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -528,11 +528,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -557,11 +557,11 @@
         "scenario": "Read-only authenticated Node-to-Cloudflare integration through the real dashboard server; state and backup list retrieved; remote state hash/revision unchanged; weak W/\"2\" ETag revision matched by the client."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "GET",
@@ -588,11 +588,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -623,11 +623,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -654,11 +654,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -685,11 +685,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -716,11 +716,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -746,9 +746,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Overall route remains BLOCKED by genuine provider/owner prerequisites stated in its route notes. Authentication-negative behavior is PASS; no live provider write was claimed."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
     },
     {
       "method": "POST",
@@ -775,11 +775,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -799,9 +799,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Overall route remains BLOCKED by genuine provider/owner prerequisites stated in its route notes. Authentication-negative behavior is PASS; no live provider write was claimed."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
     },
     {
       "method": "POST",
@@ -821,9 +821,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Overall route remains BLOCKED by genuine provider/owner prerequisites stated in its route notes. Authentication-negative behavior is PASS; no live provider write was claimed."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
     },
     {
       "method": "POST",
@@ -849,9 +849,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Overall route remains BLOCKED by genuine provider/owner prerequisites stated in its route notes. Authentication-negative behavior is PASS; no live provider write was claimed."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
     },
     {
       "method": "POST",
@@ -878,11 +878,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -910,11 +910,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -941,11 +941,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -972,11 +972,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1005,11 +1005,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1036,11 +1036,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1067,11 +1067,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1098,11 +1098,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1137,11 +1137,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1168,11 +1168,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1198,11 +1198,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1230,9 +1230,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Overall route remains BLOCKED by genuine provider/owner prerequisites stated in its route notes. Authentication-negative behavior is PASS; no live provider write was claimed."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
     },
     {
       "method": "POST",
@@ -1259,11 +1259,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1290,11 +1290,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1321,11 +1321,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1352,11 +1352,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1382,11 +1382,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1414,11 +1414,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1459,11 +1459,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1492,11 +1492,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1520,11 +1520,11 @@
         "scenario": "Real Node dashboard POST /api/state/backup returned HTTP 201; explicit backup was retained in D1 after restore and restart; automatic pre-restore backup was also retained; final backup inventory contained five records."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1549,11 +1549,11 @@
         "scenario": "Live Node dashboard backup/restore; explicit confirmation, revision-checked restore, exact state preservation plus one audit receipt, automatic pre-restore backup, Node restart recovery and stable remote D1 state."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1581,11 +1581,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     },
     {
       "method": "POST",
@@ -1611,9 +1611,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Overall route remains BLOCKED by genuine provider/owner prerequisites stated in its route notes. Authentication-negative behavior is PASS; no live provider write was claimed."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
     },
     {
       "method": "POST",
@@ -1640,11 +1640,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-      "currentHeadEvidenceRunId": 44272071799,
-      "currentHeadEvidenceNote": "Revalidated in exact-head automation/security run 44272071799 (983 Node/84 Python, zero skips, npm audit zero); route-specific acceptance test remains in the full suite."
+      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "currentHeadEvidenceRunId": 44488024623,
+      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
     }
   ],
   "liveEvidenceRefresh": {
@@ -1712,15 +1712,15 @@
     "note": "The readiness artifact confirms one public upload and prior upload-attempt reconciliation, but current OAuth invalid_grant prevents a fresh complete live history/schedule read. SCHED-001 remains NOT_TESTED."
   },
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
-    "automationRun": 44263192728,
+    "exactSourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+    "automationRun": 44488024623,
     "nodeTestFiles": {
       "passed": 171,
       "failed": 0,
       "skipped": 0
     },
     "nodeTests": {
-      "passed": 983,
+      "passed": 1015,
       "failed": 0,
       "skipped": 0
     },
@@ -1730,10 +1730,18 @@
       "skipped": 0
     },
     "npmAuditVulnerabilities": 0,
-    "dashboardE2ERun": 44263192946,
+    "dashboardE2ERun": 44488024652,
     "dashboardJourneys": {
       "passed": 33,
       "total": 33
+    },
+    "queueReadinessRun": 44488024512,
+    "queueReadinessStatus": "PASS",
+    "metadataRun": 44488024620,
+    "productionReadiness": {
+      "status": "HOLD",
+      "blockers": 21,
+      "run": 44488024703
     },
     "routeMatrix": {
       "routes": 48,
@@ -1742,17 +1750,7 @@
       "overallBlocked": 6,
       "authenticationNegativePass": 48
     },
-    "metadataRun": 44263193030,
-    "queueReadinessRun": 44263192685,
-    "queueReadinessStatus": "IN_PROGRESS",
-    "cloudflareDurableStateRun": 44263192982,
-    "deploymentRecoveryRun": 44263192945,
-    "productionReadiness": {
-      "status": "HOLD",
-      "blockers": 19,
-      "run": 44263192630
-    },
-    "note": "Exact-SHA tests pass. Route-level positive business acceptance, complete YouTube schedule/history, DASH-001, SCHED-001 and production readiness remain NOT_TESTED/BLOCKED."
+    "note": "Exact-SHA test evidence is current. Positive route business acceptance remains 0 PASS / 42 NOT_TESTED / 6 BLOCKED; do not use historical route PASS rows as current acceptance."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-15",
@@ -1847,33 +1845,42 @@
     "patchEquivalentCommits": 0
   },
   "currentHeadEvidence": {
-    "sourceTestSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
-    "automationRunId": 44272071799,
-    "nodeTests": 983,
+    "sourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+    "automationRunId": 44488024623,
+    "nodeTestFiles": 171,
+    "nodeTests": 1015,
     "pythonTests": 84,
     "skipped": 0,
     "authNegativePass": 48,
-    "overallPass": 42,
+    "overallPass": 0,
+    "overallNotTested": 42,
     "overallBlocked": 6,
-    "note": "All 48 authentication-negative checks pass. 42 positive route acceptances pass; six provider/owner-gated routes remain blocked."
+    "note": "All 48 authentication-negative checks passed on this exact SHA. Positive route business acceptance was not re-run individually on this SHA; 42 remain NOT_TESTED and six remain BLOCKED. Historical overallAcceptance fields and counts are preserved."
   },
   "latestRegressionEvidence": {
-    "recordedAt": "2026-11-18T09:49:03+02:00",
-    "testedSourceTestSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
-    "automationRun": 44263192728,
-    "nodeTestsPassed": 983,
+    "recordedAt": "2026-11-19T10:40:29.392+02:00",
+    "testedSourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+    "automationRun": 44488024623,
+    "nodeTestsPassed": 1015,
     "nodeTestFilesPassed": 171,
     "pythonTestsPassed": 84,
     "chromiumJourneysPassed": 33,
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "note": "Exact-SHA regression evidence only. It does not promote route-level positive acceptance; current route snapshot remains 0 PASS / 42 NOT_TESTED / 6 BLOCKED, with 48 authentication-negative checks passing."
+    "routeMatrix": {
+      "routes": 48,
+      "overallPass": 0,
+      "overallNotTested": 42,
+      "overallBlocked": 6,
+      "authenticationNegativePass": 48
+    },
+    "note": "Exact-SHA regression evidence; positive route business acceptance was not individually re-run."
   },
   "currentHeadCounts": {
     "routes": 48,
     "authNegativePass": 48,
-    "overallPass": 42,
-    "overallNotTested": 0,
+    "overallPass": 0,
+    "overallNotTested": 42,
     "overallBlocked": 6
   }
 }
