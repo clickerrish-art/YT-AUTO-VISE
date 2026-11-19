@@ -68,11 +68,12 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /SonicVhibez production readiness/);
   const reconciliation = currentYouTubeReconciliationExpectation();
   const historyCurrent = reconciliation.historyMatches && reconciliation.historyFresh;
-  if (historyCurrent) assert.match(result.stdout, /YouTube history: verified 1 upload\(s\)/);
+  if (historyCurrent) assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete owner-reviewed public\/private\/unlisted SonicVhibez history evidence is missing, stale, or inconsistent/);
   else assert.match(result.stdout, /LIVE BLOCKER: complete owner-reviewed public\/private\/unlisted SonicVhibez history evidence is missing, stale, or inconsistent/);
-  assert.match(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/);
-  assert.match(result.stdout, /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/);
+  assert.doesNotMatch(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/);
+  assert.doesNotMatch(result.stdout, /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/);
   assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
+  assert.match(result.stdout, /LIVE BLOCKER: local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete/);
   assert.match(result.stdout, /HOLD:/);
   assert.match(result.stdout, /public publishing disabled/);
   assert.match(result.stdout, /content\/render-manifest\.json/);
@@ -110,8 +111,8 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and age-awar
   const reconciliation = currentYouTubeReconciliationExpectation();
   assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\/private\/unlisted SonicVhibez history/.test(blocker.message)), !(reconciliation.historyMatches && reconciliation.historyFresh));
   assert.equal(report.notes.some(note => /YouTube history: verified 1 upload/.test(note)), reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh);
-  assert.ok(report.blockers.some(blocker => /YouTube OAuth upload scope is not independently verified/.test(blocker.message)));
-  assert.ok(report.blockers.some(blocker => /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/.test(blocker.message)));
+  assert.equal(report.blockers.some(blocker => /YouTube OAuth upload scope is not independently verified/.test(blocker.message)), false);
+  assert.equal(report.blockers.some(blocker => /latest read-only YouTube OAuth attempt is BLOCKED \\(OAuth error invalid_grant\\)/.test(blocker.message)), false);
   assert.equal(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"), false, "the verified read-only OAuth inventory must not remain incorrectly marked as invalid_client");
   const invalidGrantBlocker = report.blockers.find(blocker => /invalid_grant/i.test(blocker.message));
   if (invalidGrantBlocker) {
@@ -144,7 +145,7 @@ test("readiness JSON distinguishes fresh and stale external reconciliation from 
   if (historyBlocker) assert.equal(historyBlocker.evidence.kind, "external-reconciliation-required");
   if (attemptsBlocker) assert.equal(attemptsBlocker.evidence.kind, "external-reconciliation-required");
   assert.equal(report.notes.some(note => /prior upload-attempt reconciliation passed/.test(note)), reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh);
-  assert.ok(report.blockers.some(blocker => blocker.evidence.kind === "repository-path-check" && /YouTube OAuth upload scope/.test(blocker.evidence.observed)));
+  assert.equal(report.blockers.some(blocker => blocker.evidence.kind === "repository-path-check" && /YouTube OAuth upload scope/.test(blocker.evidence.observed)), false);
   const readinessSource = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
   assert.match(readinessSource, /const attempts = reconciliation\.uploadAttemptReconciliation/);
   assert.match(readinessSource, /MAX_HISTORY_EVIDENCE_AGE_MS = 24 \* 60 \* 60 \* 1000/);

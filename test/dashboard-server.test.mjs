@@ -289,8 +289,9 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(readiness.blockers.some(item => /SONICVHIBEZ_CHANNEL_ID|channel ID/i.test(item)));
   assert.equal(readiness.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), false, "production readiness must recognize the recorded owner-approved rolling cadence");
   assert.equal(readiness.blockers.some(item => /complete SonicVhibez public, private and unlisted history/i.test(item)), false, "the verified owner-reviewed history reconciliation must satisfy the history gate");
-  assert.ok(readiness.blockers.some(item => /YouTube OAuth upload scope is not independently verified/i.test(item)), "unverified upload scope must remain a blocker until OAuth reauthorization is verified");
-  assert.ok(readiness.blockers.some(item => /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/i.test(item)), "the latest rejected refresh-token grant must be surfaced by dashboard readiness");
+  assert.equal(readiness.blockers.some(item => /YouTube OAuth upload scope is not independently verified/i.test(item)), false, "the fresh read-only verification must satisfy the OAuth scope gate");
+  assert.equal(readiness.blockers.some(item => /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/i.test(item)), false, "a superseded invalid_grant attempt must not override the later successful read-only verification");
+  assert.ok(readiness.blockers.some(item => /local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete/i.test(item)), "the stale local attempt attestation must remain a blocker");
   const operationalReadinessResponse = await fetchDashboard(base + "/operational-readyz");
   const operationalReadiness = await operationalReadinessResponse.json();
   assert.equal(operationalReadinessResponse.status, 200, "local service readiness must not inherit external publication blockers");
