@@ -1,11 +1,11 @@
 # SonicVhibez Short 001 — production brief
 
-**Status:** SCRIPT DRAFT — narration and approved disclosure aligned 10 November 2026; not rendered, uploaded, scheduled, or published  
+**Status:** SCRIPT DRAFT — approved disclosure retained; a 55.722-second Roderic sample exists for internal audition only. HeyGen Free-plan output is non-commercial and not production-cleared; captions currently align to that audition, not to a licensed production voice. Not rendered, uploaded, scheduled, or published  
 **Weekly allowance:** Existing item 1 of 2; this is a revision, not a third Short  
 **Channel:** SonicVhibez only  
 **Target runtime:** 55 seconds  
 **Format:** 9:16 vertical  
-**Voice:** friendly, natural documentary narration  
+**Preferred voice:** Roderic — Authoritative & Refined. The current HeyGen Free-plan sample is restricted to personal/non-commercial internal evaluation. Do not use it in commercial SonicVhibez production. No alternative voice may be substituted without explicit owner approval  
 **Product URL:** https://selar.com/0u19v8u99l
 
 ## YouTube title
@@ -73,7 +73,7 @@ Use one genuine, rights-cleared animal image in its actual habitat. Keep the ani
 - [ ] Confirm every video, still, music and sound-effect asset is cleared for commercial YouTube use.
 - [ ] Preserve real chronology; do not splice separate clips to imply an encounter that did not happen.
 - [ ] Fact-check every animal-behavior claim against reliable sources.
-- [ ] Record narration and retime the existing captions to the actual voice track.
+- [ ] Resolve commercial narration rights: obtain a commercial Roderic licence or explicit owner approval for a zero-cost commercially licensed alternative; generate the production voice and retime captions to that exact audio.
 - [ ] Confirm final runtime is about 55 seconds without unnatural time-stretching.
 - [ ] Check captions at phone size, audio levels, framing and vertical safe areas.
 - [x] Seller identity verified as Click 47 from the exact Selar listing; the listing includes Nature Frontiers branding, while SonicVhibez promotion authorization is separately recorded by the owner.
@@ -85,4 +85,4 @@ Use one genuine, rights-cleared animal image in its actual habitat. Keep the ani
 
 **Destination guard:** SonicVhibez only; never Nature Frontiers.  
 **SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed. No income outcome is guaranteed.  
-**Release state:** HOLD — the exact direct-sales disclosure is owner-approved for this product, but genuine media rights, final assets, human review, upload-attempt reconciliation, destination inspection and spacing verification remain outstanding.
+**Release state:** HOLD — the exact direct-sales disclosure is owner-approved for this product, but the current Roderic Free-plan sample is non-commercial only; production narration rights, genuine media rights, final assets, human review, upload-attempt reconciliation, destination inspection and spacing verification remain outstanding.
