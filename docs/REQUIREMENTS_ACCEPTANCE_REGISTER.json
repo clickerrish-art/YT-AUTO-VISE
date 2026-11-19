@@ -3137,5 +3137,179 @@
     },
     "DASH_001": "NOT_TESTED",
     "fieldLevelSnapshotReconciledOnCurrentSha": false
-  }
+  },
+  "latestVerifiedExecution": {
+    "recordedDate": "2026-11-19",
+    "currentBranchHead": "282d405ee09c4e93ff0dd61142b3aa0273f6de4e",
+    "codeAndTestVerificationCommit": "df1ac7739afe4aed47987ae5e743c3d45720431c",
+    "postVerificationChanges": "Only source-register, render-manifest and narration-licensing data/documentation updates; no executable source changes remain after the tested commit.",
+    "mainHead": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
+    "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
+    "branchAhead": 4507,
+    "branchBehind": 9,
+    "compareApiChangedFilesReturned": 300,
+    "compareApiFileListMayBeCapped": true,
+    "deletedFilesInReturnedCompare": 0,
+    "workflowRuns": {
+      "fullAutomation": {
+        "runId": 44510566685,
+        "status": "success",
+        "nodeTests": 1021,
+        "nodeTestFiles": 176,
+        "nodeFailures": 0,
+        "nodeSkipped": 0,
+        "pythonTests": 84,
+        "pythonFailures": 0,
+        "npmAuditVulnerabilities": 0
+      },
+      "contentQuality": {
+        "runId": 44510566544,
+        "status": "success",
+        "nodeTests": 1023,
+        "passed": 1023,
+        "failed": 0,
+        "skipped": 0
+      },
+      "queueReadiness": {
+        "runId": 44510566573,
+        "status": "success",
+        "nodeTests": 1023,
+        "passed": 1023,
+        "failed": 0,
+        "skipped": 0,
+        "proposalItems": 16,
+        "publishingEnabled": false
+      },
+      "productionQuality": {
+        "runId": 44510566437,
+        "status": "success",
+        "tests": 23,
+        "passed": 23,
+        "failed": 0,
+        "skipped": 0
+      },
+      "dashboardBrowserE2E": {
+        "runId": 44510566447,
+        "status": "success",
+        "tests": 33,
+        "passed": 33,
+        "failed": 0
+      },
+      "metadataValidation": {
+        "runId": 44510566445,
+        "status": "success"
+      },
+      "deploymentRecovery": {
+        "runId": 44510566528,
+        "status": "success"
+      },
+      "signedApproval": {
+        "runId": 44510566439,
+        "status": "success"
+      },
+      "durableState": {
+        "runId": 44510566536,
+        "status": "success"
+      },
+      "runnerBridgeSafety": {
+        "runId": 44510566677,
+        "status": "success"
+      },
+      "baselineComparison": {
+        "runId": 44510566400,
+        "status": "success",
+        "mainNodeTests": 54,
+        "mainPythonTests": 8,
+        "mainNpmAuditModerateVulnerabilities": 4,
+        "candidateNodeTests": 1021,
+        "candidatePythonTests": 84,
+        "candidateNpmAuditVulnerabilities": 0
+      },
+      "productionReadiness": {
+        "runId": 44510566415,
+        "status": "HOLD",
+        "blockers": 21
+      }
+    },
+    "queuePolicy": {
+      "sequence": [
+        "long_form",
+        "long_form",
+        "short"
+      ],
+      "minimumElapsedHoursBetweenPublications": 72,
+      "fullCycleMinimumHours": 216,
+      "timezone": "Africa/Johannesburg",
+      "draftPreparationOnlyDays": [
+        "Tuesday",
+        "Saturday"
+      ],
+      "isolatedProposalItems": 16,
+      "appliedToProduction": false
+    },
+    "youtube": {
+      "publicPublishingEnabled": false,
+      "privateUploadPerformed": false,
+      "latestOAuthStatus": "invalid_grant",
+      "uploadScopeVerified": false,
+      "completeChannelHistoryVerified": false,
+      "uploadAttemptReconciliationFresh": false
+    }
+  },
+  "acceptanceReconciliation": {
+    "status": "REQUIRED",
+    "note": "The stored 89-row aggregate counts and current-head snapshots conflict. Do not treat aggregate PASS counts as current-head acceptance until every requirement is reconciled against the exact current SHA.",
+    "storedRequirementCounts": {
+      "total": 89,
+      "PASS": 71,
+      "NOT_TESTED": 9,
+      "BLOCKED": 9
+    },
+    "storedCurrentHeadSnapshot": {
+      "total": 89,
+      "PASS": 67,
+      "FAIL": 0,
+      "NOT_TESTED": 9,
+      "BLOCKED": 13,
+      "asOf": "2026-11-18T11:15:00+02:00",
+      "sourceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
+      "freshlyReconciled": false,
+      "countBasis": "Last checked-in CurrentHeadStatus row values; not item-by-item re-evaluated on 3912a7. The new exact-SHA CI run does not automatically promote requirement acceptance."
+    },
+    "apiRouteAggregate": {
+      "routes": 48,
+      "PASS": 42,
+      "NOT_TESTED": 0,
+      "BLOCKED": 6,
+      "authenticationNegativePass": 48
+    },
+    "apiRouteCurrentHeadSnapshot": {
+      "routes": 48,
+      "PASS": 0,
+      "NOT_TESTED": 42,
+      "BLOCKED": 6,
+      "authenticationNegativePass": 48,
+      "asOf": "2026-11-19T10:40:29.392+02:00",
+      "testedSourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
+      "run": 44488024623,
+      "note": "Current-head positive route acceptance is conservatively NOT_TESTED; 48 authentication-negative checks passed in the exact-SHA regression suite."
+    }
+  },
+  "additionalOpenBlockers": [
+    {
+      "id": "VOICE-LICENCE-001",
+      "status": "BLOCKED",
+      "detail": "The Roderic sample was generated on the connected HeyGen Free plan. Published Terms restrict Free-plan output to personal, non-commercial and internal evaluation; it cannot be used in monetized YouTube content, advertising or Selar promotion.",
+      "evidenceFile": "content/short-001-roderic-narration-generation.json",
+      "requiredResolution": "Obtain a commercial licence for the approved Roderic voice, or obtain the owner's explicit approval for a zero-cost commercially licensed alternative such as local Kokoro-82M (Apache-2.0). No voice substitution is authorized without approval."
+    },
+    {
+      "id": "MEDIA-ACQUISITION-001",
+      "status": "BLOCKED",
+      "detail": "17 Pexels source selections and direct download URLs are registered, representing 563 seconds of source-page duration. No original MP4 bytes or local file hashes are present in the production workspace.",
+      "evidenceFile": "content/approved-pexels-footage.json",
+      "requiredResolution": "Download the approved clips at zero cost, verify actual media metadata, inspect every asset and record local SHA-256 hashes before rendering."
+    }
+  ],
+  "updatedAt": "2026-11-19"
 }
