@@ -2723,3 +2723,40 @@ test("all declared maximum-length fields cap user-entered values without an API 
   expect(afterResponse.status()).toBe(200);
   expect(await afterResponse.json()).toEqual(before);
 });
+
+
+test("read-only hash controls and the disabled backup action cannot be changed or invoked", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const mutationRequests = [];
+  page.on("request", outgoing => {
+    if (outgoing.method() === "POST" && new URL(outgoing.url()).pathname.startsWith("/api/")) {
+      mutationRequests.push(new URL(outgoing.url()).pathname);
+    }
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const readOnly = page.locator('input[readonly], textarea[readonly]');
+  await expect(readOnly).toHaveCount(7);
+  for (const control of await readOnly.all()) {
+    await expect(control).not.toBeEditable();
+    const beforeValue = await control.inputValue();
+    expect(await control.evaluate(element => element.readOnly)).toBe(true);
+    expect(await control.inputValue()).toBe(beforeValue);
+  }
+
+  const backup = page.locator("#createStateBackup");
+  await expect(backup).toBeDisabled();
+  await backup.evaluate(element => element.click());
+  expect(mutationRequests).toEqual([]);
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect(await afterResponse.json()).toEqual(before);
+});
