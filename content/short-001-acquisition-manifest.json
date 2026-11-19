@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "contentId": "short-001-wildlife-video-storytelling",
+  "status": "ACQUIRED_FOR_OWNER_REVIEW_NOT_RELEASE_CLEARED",
+  "createdAt": "2026-11-19T12:47:41.692Z",
+  "sourceSelection": "Four clips explicitly approved by the owner",
+  "acquisition": {
+    "workflowRunId": 44527128075,
+    "workflowRunNumber": 11,
+    "artifactId": 14532410683,
+    "artifactName": "sonicvhibez-short-001-approved-pexels-source",
+    "artifactSha256": "e1f6cb488dcaa2e256251c17f963240b1feaa5d3436a29de414025420c5362d5",
+    "artifactExpiresAt": "2026-11-26T12:47:41Z"
+  },
+  "pexelsLicense": {
+    "url": "https://www.pexels.com/license/",
+    "generalLicenseIsNotProofOfAllThirdPartyRights": true,
+    "sourceSelectionApprovalIsNotFinalReleaseApproval": true,
+    "standaloneUnmodifiedRedistributionAllowed": false
+  },
+  "assets": [
+    {
+      "assetId": "pexels-29765785",
+      "title": "Resting Lions in African Safari Habitat",
+      "contributor": "Lorenzo Boldorini",
+      "ownerSelectionStatus": "EXPLICITLY_APPROVED",
+      "sourcePage": "https://www.pexels.com/video/resting-lions-in-african-safari-habitat-29765785/",
+      "directDownloadUrl": "https://videos.pexels.com/video-files/29765785/12791465_1080_1920_25fps.mp4",
+      "sourcePageDurationSeconds": 12,
+      "actual": {
+        "durationSeconds": 12.16,
+        "sizeBytes": 24028876,
+        "video": {
+          "codec": "h264",
+          "width": 1080,
+          "height": 1920,
+          "fps": 25
+        }
+      },
+      "downloadedBytes": 24028876,
+      "sha256": "f01daff991cb07920e63f1a5914e3f4bc94cb32ec56cb676a5951c38aba256a6",
+      "mediaFile": "media/pexels-29765785.mp4",
+      "previewFrame": "preview/pexels-29765785.jpg",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "releaseEligible": false
+    },
+    {
+      "assetId": "pexels-11760785",
+      "title": "An African Elephant Mother and her Baby in a Grassland",
+      "contributor": "ROMAN ODINTSOV",
+      "ownerSelectionStatus": "EXPLICITLY_APPROVED",
+      "sourcePage": "https://www.pexels.com/video/an-african-elephant-mother-and-her-baby-in-a-grassland-11760785/",
+      "directDownloadUrl": "https://videos.pexels.com/video-files/11760785/11760785-uhd_2160_4096_30fps.mp4",
+      "sourcePageDurationSeconds": 19,
+      "actual": {
+        "durationSeconds": 18.623333,
+        "sizeBytes": 21909387,
+        "video": {
+          "codec": "h264",
+          "width": 2160,
+          "height": 4096,
+          "fps": 29.97002997002997
+        }
+      },
+      "downloadedBytes": 21909387,
+      "sha256": "3417c7da10506e28124faece24b908e842a58b3e99d340d013f62c375d8c4e57",
+      "mediaFile": "media/pexels-11760785.mp4",
+      "previewFrame": "preview/pexels-11760785.jpg",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "releaseEligible": false
+    },
+    {
+      "assetId": "pexels-11528208",
+      "title": "A Lion Walking in a Field",
+      "contributor": "lifeofhicham",
+      "ownerSelectionStatus": "EXPLICITLY_APPROVED",
+      "sourcePage": "https://www.pexels.com/video/a-lion-walkin-in-a-field-11528208/",
+      "directDownloadUrl": "https://videos.pexels.com/video-files/11528208/11528208-uhd_2158_3840_30fps.mp4",
+      "sourcePageDurationSeconds": 7,
+      "actual": {
+        "durationSeconds": 6.868333,
+        "sizeBytes": 23170674,
+        "video": {
+          "codec": "h264",
+          "width": 2158,
+          "height": 3840,
+          "fps": 30
+        }
+      },
+      "downloadedBytes": 23170674,
+      "sha256": "ace119137620bbdf6b372504f8e1dbae9bdd7ee9febe86a667d597ac6d46bada",
+      "mediaFile": "media/pexels-11528208.mp4",
+      "previewFrame": "preview/pexels-11528208.jpg",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "releaseEligible": false
+    },
+    {
+      "assetId": "pexels-31702128",
+      "title": "Lion in Kenyan Wildlife Park Habitat",
+      "contributor": "MC G'Zay",
+      "ownerSelectionStatus": "EXPLICITLY_APPROVED",
+      "sourcePage": "https://www.pexels.com/video/lion-in-kenyan-wildlife-park-habitat-31702128/",
+      "directDownloadUrl": "https://videos.pexels.com/video-files/31702128/13507644_1080_1920_30fps.mp4",
+      "sourcePageDurationSeconds": 15,
+      "actual": {
+        "durationSeconds": 15.382033,
+        "sizeBytes": 15187894,
+        "video": {
+          "codec": "h264",
+          "width": 1080,
+          "height": 1920,
+          "fps": 29.97002997002997
+        }
+      },
+      "downloadedBytes": 15187894,
+      "sha256": "11bcc1f2e1a22b40ab6df792303706302d8d57f5fa01d8f0d36559705ef4262c",
+      "mediaFile": "media/pexels-31702128.mp4",
+      "previewFrame": "preview/pexels-31702128.jpg",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "releaseEligible": false,
+      "preliminaryVisualFlag": "Sampled frames show a visible chain-link barrier/enclosure. Do not portray this as a wild free-ranging lion; owner/editor must decide whether to exclude or explicitly contextualize."
+    }
+  ],
+  "independentVerification": {
+    "sha256RecheckedAgainstDownloadedBytes": true,
+    "ffprobeRechecked": true,
+    "sampledFrames": [
+      "10%",
+      "50%",
+      "90%"
+    ],
+    "contactSheetGenerated": true,
+    "fullPlaybackCompleted": false,
+    "ownerHumanReviewCompleted": false
+  },
+  "previews": {
+    "contactSheet": "preview/short-001-contact-sheet.jpg"
+  },
+  "release": {
+    "rightsConfirmed": false,
+    "humanComplianceReview": false,
+    "finalVideoHumanReview": false,
+    "metadataApproval": false,
+    "publicPublishingEnabled": false,
+    "privateUploadAuthorized": false,
+    "releaseEligible": false
+  }
+}
