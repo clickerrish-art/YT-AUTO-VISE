@@ -1,36 +1,60 @@
 # Latest exact production-readiness result — 19 November 2026
 
-**Tested source/test SHA:** `3912a7c8af6d0e72950a2b18566a3267e789cc5f`; readiness run [44488024703](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024703). Result: **HOLD, 21 blockers**. Human-readable and JSON exit-code evidence agreed (both exit 2). No upload, schedule or publication was attempted.
+**Readiness run:** [44510566415](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566415). Result: **HOLD, 21 blockers**. No upload, schedule or publication was attempted.
 
-The read-only readiness run found five imported Canva wildlife assets; all five remain excluded from production as not rights-cleared, zero are selected/unresolved, and release is not authorized. The final Short MP4 is still missing. YouTube OAuth returned `invalid_grant`; the upload-capable scope is not independently verified. Complete current channel history and upload-attempt reconciliation remain stale/incomplete.
+**Exact verification refs**
+- Current branch head: `34e64a9805d2efdd7f597f48a1e2a2a305193a18`.
+- Code/test verification SHA: `df1ac7739afe4aed47987ae5e743c3d45720431c`. Subsequent branch commits update source, render and acceptance evidence only; no executable source changes remain after the tested commit.
+- Full automation [44510566685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566685): 1,021 Node tests across 176 files, 84 Python tests, zero failures/skips, npm audit zero vulnerabilities.
+- Content quality [44510566544](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566544): 1,023/1,023 passed, zero skips.
+- Queue readiness [44510566573](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566573): 1,023/1,023 passed, zero skips; 16-item isolated proposal, publishing disabled.
+- Production quality [44510566437](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566437): 23/23 passed.
+- Dashboard browser E2E [44510566447](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566447): 33/33 passed.
+- Metadata validation [44510566445](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566445), deployment recovery [44510566528](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566528), signed approval [44510566439](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566439), durable state [44510566536](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566536) and runner bridge [44510566677](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566677): PASS.
+- Main/candidate baseline [44510566400](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566400): candidate 1,021 Node / 84 Python / zero vulnerabilities; main baseline 54 Node / 8 Python / four moderate npm vulnerabilities. Main remains untouched.
 
-## Current blockers
+## Current blockers (21)
 
-1. Short render manifest footagePath missing: media/next-short-footage.mp4.
-2. Short render manifest narrationPath missing: media/next-short-narration.mp3.
-3. Short footage licence evidence is not real and human-verified.
-4. Short narration licence evidence is not real and human-verified.
-5. Short rightsConfirmed is not owner-confirmed.
-6. Short complianceReviewed is not human-confirmed.
-7. Long-form footage missing: media/long-form-001-footage.mp4.
-8. Long-form narration missing: media/long-form-drafts/long-001-narration-final.mp3.
-9. Long-form captions missing: long-form-001-captions-final.srt.
-10. Long-form footage licence evidence is not real and human-verified.
-11. Long-form narration licence evidence is not real and human-verified.
-12. Long-form rightsConfirmed is not owner-confirmed.
-13. Long-form complianceReviewed is not human-confirmed.
-14. Metadata is not human-reviewed and READY_FOR_PRIVATE_UPLOAD.
-15. Metadata rights confirmation is missing.
-16. Metadata compliance review is missing.
-17. Final Short MP4 missing: media/next-short.mp4.
-18. YouTube OAuth refresh is blocked by invalid_grant.
-19. YouTube upload-capable scope is not independently verified.
-20. Complete owner-reviewed public/private/unlisted SonicVhibez history is missing, stale or inconsistent.
-21. Local, workflow and owner-attested upload-attempt reconciliation is missing, stale or incomplete.
+1. `RDY-93F84DBDCB44` — Short footage file `media/next-short-footage.mp4` is missing.
+2. `RDY-7EC64DE8E92E` — Short narration file `media/next-short-narration.mp3` is missing.
+3. `RDY-D90DC5FF4ECE` — Short footage licence evidence is not real and human-verified.
+4. `RDY-463DB1D16F39` — Short narration licence evidence is not real and human-verified.
+5. `RDY-33CDEB9448E4` — Short `rightsConfirmed` is not owner-confirmed.
+6. `RDY-E76C6F6896E0` — Short `complianceReviewed` is not human-confirmed.
+7. `RDY-F0C5955F99EB` — Long-form footage file `media/long-form-001-footage.mp4` is missing.
+8. `RDY-C2B8E199C3D9` — Long-form narration file `media/long-form-drafts/long-001-narration-final.mp3` is missing.
+9. `RDY-46866CA44098` — Long-form captions file `long-form-001-captions-final.srt` is missing.
+10. `RDY-E9140B0CF9A9` — Long-form footage licence evidence is not real and human-verified.
+11. `RDY-0682CC58ECF0` — Long-form narration licence evidence is not real and human-verified.
+12. `RDY-EF19160F89FB` — Long-form `rightsConfirmed` is not owner-confirmed.
+13. `RDY-9F64A4A468D6` — Long-form `complianceReviewed` is not human-confirmed.
+14. `RDY-59F6FCE1F9B0` — Metadata is not human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
+15. `RDY-4E9BD4C5E14F` — Metadata rights confirmation is missing.
+16. `RDY-36AA230A31D7` — Metadata compliance review is missing.
+17. `RDY-3DA0707998B8` — Final Short MP4 `media/next-short.mp4` is missing.
+18. `RDY-B5E6F37EADD2` — Latest YouTube OAuth refresh returned `invalid_grant`.
+19. `RDY-8D340A6DA7D7` — Upload-capable `youtube.upload` scope is not independently verified.
+20. `RDY-6D8D12937BFC` — Complete owner-reviewed public/private/unlisted SonicVhibez history is missing, stale or inconsistent.
+21. `RDY-D849996022ED` — Local, workflow and owner-attested upload-attempt reconciliation is missing, stale or incomplete.
 
-Queue readiness [44488024512](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024512) passed with 16 held queue items and publishing disabled. This is a local queue check, not proof of a remote destination schedule or publication history. No external upload, scheduling or publishing operation occurred.
+## Media and voice evidence
 
-The exact current implementation branch is `codex/marketing-machine-audit-fixes`; `main` remains untouched. Current tested source/test SHA is recorded separately from this documentation refresh. The latest Metricool brand remains Nature Frontiers SA rather than a distinct SonicVhibez brand; no promotion may use it.
+- `content/approved-pexels-footage.json` registers 17 Pexels sources (four explicitly approved, 13 approved in principle), direct free-download URLs and 563 seconds of source-page duration. **Zero original MP4s and zero local hashes are present.** Downloaded files still require technical probes, visual inspection and per-file rights review. Pexels licence: https://www.pexels.com/license/.
+- Short 001 has 15 gapless, non-overlapping word-timed SRT cues. The SRT SHA-256 matches both the narration record and render manifest.
+- A 55.722-second Roderic sample exists only as an internal audition. It was generated on HeyGen Free; published terms restrict Free-plan output to personal, non-commercial internal evaluation. It is **not licensed** for monetized YouTube, advertising or Selar promotion. Do not use it in production. Terms: https://www.heygen.com/terms and https://www.heygen.com/voice-terms.
+- A commercially licensed Roderic plan or explicit owner approval for a zero-cost commercially licensed alternative is required. No narrator substitution is authorized without approval.
+- The long-form script remains a draft and requires owner approval. The 17 Pexels source-page durations provide 9m23s nominal raw footage, but usable duration must be checked after download and edit.
+
+## Additional acceptance blockers
+
+- The 89-row acceptance aggregate and current-head snapshot disagree (71/9/9 versus 67/9/13). The API aggregate and current-head snapshot also disagree (42 PASS/6 BLOCKED versus 0 PASS/42 NOT_TESTED/6 BLOCKED). Reconcile every row against the exact current SHA before claiming overall acceptance.
+- API-001: 48/48 authentication-negative tests passed; six positive routes remain BLOCKED: Facebook draft approval, Facebook publishing, Facebook Page verification, Instagram approval, production job creation and upload reconciliation.
+- DASH-001, SCHED-001, GIT-002, DEPLOY-001, YT-READBACK-001, API-001, SEO-001, E2E-001 and SCHED-WORKER-DISPATCH-001 remain NOT_TESTED in the stored register.
+- SEC-001 branch protection could not be independently verified (HTTP 403).
+- YOUTUBE-RELATED-001 remains in conflict with private-only publishing: native related-video linking needs an eligible public/unlisted parent. Do not change visibility without explicit owner approval.
+- Nature Frontiers remains a separate Meta brand; publishing stays disabled, dry-run and emergency-stopped. No Meta write or auto-publish is authorized.
+
+**Safety:** PR #1 remains open/draft/unmerged; `main` remains unchanged. Public/unattended YouTube publishing is disabled. No upload, schedule or publication was attempted.
 
 ---
 
