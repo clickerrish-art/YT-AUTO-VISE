@@ -30,14 +30,14 @@
     "rightsEvidenceComplete": false,
     "finalVideoReviewComplete": false,
     "releaseEligible": false,
-    "note": "Four explicitly approved primary Pexels MP4s were downloaded, ffprobed and SHA-256 hashed in workflow run 44564081260 on exact source SHA ff95d7873d36ac5b4159b1ac6858791e36c39b7c. Their bytes are retained in artifact 14550112825 until 26 Nov 2026, not committed to the repository or production workspace. The artifact manifest and exact file hashes were independently checked. This is acquisition evidence only; rights, human visual review, final edit approval and release remain false.",
+    "note": "Four explicitly approved primary Pexels MP4s were downloaded, ffprobed, SHA-256 hashed and fully decoded in workflow run 44576264343 on exact source SHA fe903d3e7eda9e00fc0ed2ca841b1c75f938438a. Their bytes are retained in artifact 14556226994 until 26 Nov 2026, not committed to the repository or production workspace. The artifact manifest and exact file hashes were independently checked. The visible-enclosure clip is excluded from the visual review preview; a dark collar/strap is visible on one lion in the resting-lions clip and requires context review. This is acquisition and technical-integrity evidence only; rights, full human playback, owner review, final edit approval and release remain false.",
     "workflowArtifactAvailable": true,
-    "latestWorkflowRunId": 44564081260,
-    "latestArtifactId": 14550112825,
+    "latestWorkflowRunId": 44576264343,
+    "latestArtifactId": 14556226994,
     "latestArtifactName": "sonicvhibez-short-001-approved-pexels-source",
-    "latestArtifactSha256": "839bc77ae2b7f8d8f2487f1e5be7ada1bb27932b5080ab456ece890e9b17377e",
-    "latestArtifactExpiresAt": "2026-11-26T16:17:08Z",
-    "exactHeadSha": "ff95d7873d36ac5b4159b1ac6858791e36c39b7c"
+    "latestArtifactSha256": "5cf86f3f9bbc2fcc4353b0b05141de2e23fe681d10152a02b80712e20287ad52",
+    "latestArtifactExpiresAt": "2026-11-26T17:21:30Z",
+    "exactHeadSha": "fe903d3e7eda9e00fc0ed2ca841b1c75f938438a"
   },
   "durationSummary": {
     "primaryClipDurationSeconds": 53,
