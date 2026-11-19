@@ -21,6 +21,21 @@
   ],
   "items": [
     {
+      "id": "long-form-001-two-eyes-above-water",
+      "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
+      "topic": "Nile crocodile waterline posture, sensory systems and shoreline ambush behaviour",
+      "targetMinutes": 8,
+      "status": "SCRIPT_APPROVED_PRODUCTION_HOLD",
+      "scriptPath": "content/drafts/long-form-001-two-eyes-above-water.md",
+      "footageRegisterPath": "content/assets/long-form-001-footage-sourcing.md",
+      "releaseStatus": "HOLD_FOR_VOICE_FOOTAGE_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "publicationFormat": "long_form",
+      "publicationCyclePosition": 1,
+      "scheduledAt": null,
+      "publishingEnabled": false,
+      "productionNotes": "Owner approved exact narration on 2026-11-20. Roderic voice is not currently returned by HeyGen's live public English male catalogue. Do not substitute or incur cost. Pexels candidates are sourcing leads only; no media downloaded or cleared. Not queued for publication."
+    },
+    {
       "id": "long-story-wildlife-footage",
       "title": "How to Turn Wildlife Footage Into a Documentary Story",
       "topic": "wildlife documentary storytelling",
