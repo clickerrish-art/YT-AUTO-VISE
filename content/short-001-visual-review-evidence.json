@@ -44,7 +44,8 @@
       "sha256": "f01daff991cb07920e63f1a5914e3f4bc94cb32ec56cb676a5951c38aba256a6",
       "durationSeconds": 12.16,
       "used": true,
-      "usage": "Behaviour-observation example; not implied to be a continuation of the walking-lion clip"
+      "usage": "Behaviour-observation example; not implied to be a continuation of the walking-lion clip",
+      "preliminaryVisualFlag": "A dark collar/strap is visible on one lion in sampled frames; its function is unverified. Do not imply an uncollared or unmonitored wild encounter; owner/editor context review is required."
     }
   ],
   "excludedAssets": [
@@ -68,7 +69,8 @@
       "This record confirms the published Pexels license terms and source-page attribution, not all possible third-party rights.",
       "The three used clips have been technically decoded and SHA-256 matched to the owner-approved acquisition manifest.",
       "A contact sheet and representative frames were visually sampled; complete human playback review of every source clip remains pending.",
-      "The preview is a materially edited composite, not standalone redistribution of source clips."
+      "The preview is a materially edited composite, not standalone redistribution of source clips.",
+      "Independent 10%, 50% and 90% frame sampling observed a dark collar/strap on one lion in the resting-lions clip; its function is unverified and must be context-reviewed before any use."
     ]
   },
   "productionBoundaries": {
@@ -83,7 +85,8 @@
     "finalOwnerApproval": false,
     "rightsConfirmed": false,
     "releaseEligible": false,
-    "uploadedOrPublished": false
+    "uploadedOrPublished": false,
+    "collarContextReviewComplete": false
   },
   "reviewNotice": "This is a silent visual review draft only. It is not the final 50–60 second narrated Short, is not approved for publication, and must not be uploaded or scheduled."
 }
