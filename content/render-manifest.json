@@ -9,8 +9,8 @@
   "narrationPath": "../media/next-short-narration.mp3",
   "captionsPath": "short-001-wildlife-video-storytelling.srt",
   "qualityEvidencePath": "short-quality-evidence.json",
-  "footageLicenseEvidence": "",
-  "narrationLicenseEvidence": "",
+  "footageLicenseEvidence": "short-001-pexels-rights-evidence.json",
+  "narrationLicenseEvidence": "american-narration-review-evidence.json",
   "rightsConfirmed": false,
   "complianceReviewed": false,
   "containsSyntheticMedia": true,
@@ -19,10 +19,12 @@
   "sourceScriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
   "captionSourceBlobSha256": "6a09a58188301ed134912010c6276c6a167544be",
   "notes": [
-    "Roderic narration was generated once as a HeyGen Free-plan internal audition (55.722 seconds); it is explicitly NOT commercially licensed and must not be used in production or monetized publishing.",
-    "The 15-cue SRT is aligned to the returned word timestamps, gapless and non-overlapping; the final cue ends 122ms before the audition audio ends.",
-    "The 17-source Pexels register records source pages, free direct-download URLs and source-page licence metadata. Original MP4 bytes and local SHA-256 hashes are still absent from the production workspace.",
-    "Four primary Pexels clips were explicitly approved by the owner; 13 additional clips are recorded as approved in principle only. Each file still requires download, technical probe, visual inspection and final rights review.",
-    "No final video, thumbnail, narration licence evidence, final metadata approval, human video review, private-upload authorization or publishing action is recorded."
+    "The Roderic HeyGen Free-plan audition is internal/non-commercial only and must not be used in production or monetized publishing.",
+    "Norman (Piper en_US-norman-medium) has a new 53.023-second Short 001 review WAV; Piper's official commercial-use list identifies this voice as trained from scratch on public-domain recordings. Exact owner listening and final release approval remain pending.",
+    "The existing SRT was aligned to the previous Roderic audition and is NOT approved or synchronized to the Norman review WAV; regenerate and verify captions against the final approved narration.",
+    "Pexels platform license permits commercial use and modification; source hashes and creator/source pages are documented in short-001-pexels-rights-evidence.json. Third-party rights, releases, location permissions and owner final approval remain unverified.",
+    "Three Pexels clips were used only in a 56.71-second silent 720x1280 visual review preview, with repeated footage for timing; this is not the final edit or a release-ready export.",
+    "The fourth primary clip is excluded from the preview because visible enclosure/barrier and partial foreground person appear.",
+    "No final video, approved narration, synchronized final captions, thumbnail, final metadata approval, exact-hash human video review, private-upload authorization or publishing action is recorded."
   ]
 }
