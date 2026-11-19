@@ -5,7 +5,9 @@ on:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/verify-youtube-channel.mjs"
+      - "scripts/youtube-oauth-scope.mjs"
       - "test/verify-youtube-channel.test.mjs"
+      - "test/youtube-oauth-scope.test.mjs"
       - "scripts/production-readiness.mjs"
       - "content/youtube-history-reconciliation.json"
       - ".github/workflows/production-readiness.yml"
