@@ -112,7 +112,8 @@ jobs:
           cp "$RUNNER_TEMP/production-readiness.json" "$RUNNER_TEMP/queue-proposal/production-readiness.json"
       - name: Replenish draft topics in the isolated proposal only
         env:
-          QUEUE_PATH: ${{ runner.temp }}/queue-proposal/queue.json
+          QUEUE_TRUST_ROOT: ${{ runner.temp }}/queue-proposal
+          QUEUE_PATH: queue.json
         run: node scripts/replenish-queue.mjs
       - name: Retain queue proposal for operator review
         uses: actions/upload-artifact@v6
