@@ -148,10 +148,10 @@ test("requires the technical receipt to bind the exact captions, thumbnail and f
 test("Short and long-form renderers require exact final approval for release and label unapproved renders provisional", () => {
   for (const renderer of ["scripts/render-short.mjs", "scripts/render-long-form.mjs"]) {
     const source = fs.readFileSync(renderer, "utf8");
-    assert.match(source, /validate-production-quality-approval\\.mjs/);
-    assert.match(source, /if \\(m\\.productionQualityApprovalPath !== undefined\\)/);
+    assert.match(source, /validate-production-quality-approval\.mjs/);
+    assert.match(source, /if \(m\.productionQualityApprovalPath !== undefined\)/);
     assert.match(source, /productionQualityApprovalPath and metadataPath must both identify the exact reviewed release package/);
-    assert.match(source, /spawnSync\\(process\\.execPath, \\[releaseValidatorPath, output, metadataPath, approvalPath\\]/);
+    assert.match(source, /spawnSync\(process\.execPath, \[releaseValidatorPath, output, metadataPath, approvalPath\]/);
     assert.match(source, /FINAL QUALITY RELEASE VALIDATED/);
     assert.match(source, /PROVISIONAL RENDER COMPLETE/);
     assert.match(source, /NOT approved for release/);
