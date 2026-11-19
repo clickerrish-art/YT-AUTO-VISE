@@ -99,7 +99,7 @@ jobs:
           Path("media/long-form-drafts/duration-report.json").write_text(
               json.dumps(reports, indent=2) + "\n", encoding="utf-8"
           )
-          print("Audio-duration check complete. REVIEW means human editing is needed; no upload occurred.")
+          print("Audio-duration check complete. REVIEW means human editing is needed. No YouTube upload or platform publication occurred; only a seven-day internal-audition artifact is created.")
           PY
       - name: Validate generated caption structure
         run: |
@@ -107,12 +107,13 @@ jobs:
       - name: Package draft audio, extracted text and duration report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: sonicvhibez-long-form-narration-drafts
+          name: sonicvhibez-long-form-narration-internal-audition-only
           path: |
             media/long-form-drafts/*.mp3
             media/long-form-drafts/*.txt
             media/long-form-drafts/*.srt
             media/long-form-drafts/duration-report.json
+            media/long-form-drafts/narration-audition-manifest.json
             content/long-form-scripts.md
           if-no-files-found: error
           retention-days: 7
@@ -139,5 +140,5 @@ jobs:
                   for item in invalid
               )
               raise SystemExit("BLOCKED: one or more narration drafts failed runtime or caption-coverage checks. Draft artifact was uploaded for review. " + details)
-          print("PASS: both narration drafts meet the 6–10 minute target and final captions align within five seconds. Human review and rights checks are still required.")
+          print("PASS: both non-commercial internal audition drafts meet the 6–10 minute target and caption coverage. They are not production-cleared and must never be published.")
           PY
