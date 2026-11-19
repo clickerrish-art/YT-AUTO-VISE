@@ -41,8 +41,10 @@ function launchDashboard({ stateDir, token }) {
 
 async function waitForReady(instance) {
   // CI runners can be heavily contended while the dashboard imports its full server module graph.
-  // Keep polling at 100 ms, allow up to 60 seconds, and retain child-process errors in diagnostics.
-  for (let attempt = 0; attempt < 600; attempt++) {
+  // Keep polling at 100 ms and allow up to 120 seconds before failing with process diagnostics.
+  const readinessTimeoutMs = 120_000;
+  const deadline = Date.now() + readinessTimeoutMs;
+  while (Date.now() < deadline) {
     if (instance.child.exitCode !== null) throw new Error("Dashboard exited before readiness: " + instance.logs);
     let started;
     for (const line of instance.logs.split(/\r?\n/)) {
@@ -63,7 +65,7 @@ async function waitForReady(instance) {
     }
     await new Promise(resolve => setTimeout(resolve, 100));
   }
-  throw new Error("Dashboard did not become ready: " + instance.logs);
+  throw new Error("Dashboard did not become ready within " + readinessTimeoutMs + "ms (pid=" + (instance.child.pid ?? "unknown") + ", exitCode=" + instance.child.exitCode + ", signal=" + instance.child.signalCode + "): " + (instance.logs || "<no stdout/stderr output>"));
 }
 
 async function stopChild(child, signal = "SIGTERM") {
