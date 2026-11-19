@@ -42,7 +42,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
   let oauth;
   let googleClient;
   let oauthScopeStatus = Object.freeze({ allowed: false, missingScopes: ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.readonly"], requiredScopes: ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.readonly"], grantedYouTubeScopes: [] });
-  let uploadScopeCheckedAt = null;
+  let oauthScopesCheckedAt = null;
   if (oauthFactory) {
     oauth = oauthFactory({ clientId, clientSecret, refreshToken });
   } else if (!youtubeFactory) {
@@ -58,7 +58,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     }
     const tokenInfo = await oauth.getTokenInfo(accessToken.token);
     oauthScopeStatus = assertRequiredYoutubeOAuthScopes(tokenInfo);
-    uploadScopeCheckedAt = new Date().toISOString();
+    oauthScopesCheckedAt = new Date().toISOString();
   }
   if (!oauth || !oauthScopeStatus.allowed) {
     throw new Error("both required YouTube OAuth scopes must be verified before read-only channel access");
@@ -189,7 +189,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     const inventory = {
       schemaVersion: 1, complete: true, mode: "READ_ONLY_OWNER_REVIEW_REQUIRED",
       oauthScopesVerified: oauthScopeStatus.allowed,
-      uploadScopeCheckedAt,
+      oauthScopesCheckedAt,
       requiredOAuthScopes: oauthScopeStatus.requiredScopes,
       grantedYouTubeScopes: oauthScopeStatus.grantedYouTubeScopes,
       channelId: configuredChannelId, channelTitle: channel.snippet?.title ?? "",
@@ -217,7 +217,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     totalUploads: verifiedVideoCount,
     visibilityCounts: Object.freeze(counts),
     oauthScopesVerified: oauthScopeStatus.allowed,
-    uploadScopeCheckedAt,
+    oauthScopesCheckedAt,
     requiredOAuthScopes: oauthScopeStatus.requiredScopes,
     grantedYouTubeScopes: Object.freeze([...oauthScopeStatus.grantedYouTubeScopes]),
     note: "Inventory completeness and both required OAuth scopes were verified; format classification, publication-cycle reconciliation and timestamp approval remain separate release gates."
@@ -237,7 +237,7 @@ async function main() {
       ", private=" + result.visibilityCounts.private +
       ", unlisted=" + result.visibilityCounts.unlisted,
     "Both required OAuth scopes verified: " + result.oauthScopesVerified,
-    "OAuth scopes checked at: " + (result.uploadScopeCheckedAt ?? "NOT_CHECKED"),
+    "OAuth scopes checked at: " + (result.oauthScopesCheckedAt ?? "NOT_CHECKED"),
     "Required OAuth scopes: " + result.requiredOAuthScopes.join(", "),
     "Granted YouTube scopes: " + (result.grantedYouTubeScopes.join(", ") || "none"),
     result.note
