@@ -177,13 +177,6 @@ const known = new Set(document.items.map(item => item.id));
 const additions = seed.filter(item => !known.has(item.id));
 document.items.push(...additions);
 atomicWriteJson(queuePath, document, { mode: 0o600 });
-} catch (error) {
-  console.error(error.message || String(error));
-  process.exitCode = 1;
-} finally {
-  if (releaseQueueLock) releaseQueueLock();
-}
-
 console.log(JSON.stringify({
   queuePath,
   addedItems: additions.length,
@@ -191,3 +184,10 @@ console.log(JSON.stringify({
   publishingEnabled: document.publishingEnabled === true,
   note: "Adds topic briefs only; it does not render media, verify rights, upload, schedule, or publish."
 }, null, 2));
+} catch (error) {
+  console.error(error.message || String(error));
+  process.exitCode = 1;
+} finally {
+  if (releaseQueueLock) releaseQueueLock();
+}
+
