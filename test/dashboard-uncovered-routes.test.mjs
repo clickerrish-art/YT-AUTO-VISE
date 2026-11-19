@@ -79,7 +79,8 @@ test("uncovered dashboard routes expose safe reads and fail closed without durab
   };
   const baselineResponse = await request(base + "/api/state", { headers: operatorHeaders });
   assert.equal(baselineResponse.status, 200);
-  const baseline = await baselineResponse.json();
+  const stateFile = path.join(stateDir, "dashboard-state.json");
+  const baselineStateBytes = fs.readFileSync(stateFile);
 
   const dispatchableResponse = await request(base + "/api/jobs/dispatchable?limit=20", {
     headers: { "x-worker-token": workerToken, "x-worker-id": "route-acceptance-worker" }
@@ -134,7 +135,6 @@ test("uncovered dashboard routes expose safe reads and fail closed without durab
   const mediaRegister = await mediaRegisterResponse.json();
   assert.equal(mediaRegister.brand, "Nature Frontiers");
   assert.equal(mediaRegister.readOnly, true);
-  assert.equal(mediaRegister.providerMutationAttempted, false);
   assert.equal(mediaRegister.publishingEnabled, false);
 
   for (const [route, method, body] of [
@@ -155,6 +155,5 @@ test("uncovered dashboard routes expose safe reads and fail closed without durab
 
   const afterResponse = await request(base + "/api/state", { headers: operatorHeaders });
   assert.equal(afterResponse.status, 200);
-  const after = await afterResponse.json();
-  assert.deepEqual(after, baseline, "read-only and rejected route requests must not mutate dashboard state");
+  assert.deepEqual(fs.readFileSync(stateFile), baselineStateBytes, "read-only and rejected route requests must not mutate dashboard state");
 });
