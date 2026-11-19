@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-19T11:35:32Z",
+  "generatedAt": "2026-11-19T12:53:05Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
@@ -15,14 +15,14 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 4532,
+    "branchAheadBy": 4550,
     "branchBehindBy": 9,
-    "changedFiles": 451,
+    "changedFiles": 454,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — branch objects report protected=false, but the detailed protection endpoint returns HTTP 403.",
     "comparisonSourceSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679603"
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527617041"
   },
   "counts": {
     "routes": 48,
@@ -195,9 +195,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -226,9 +226,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -257,9 +257,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -285,9 +285,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -316,9 +316,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -347,9 +347,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -378,9 +378,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -409,9 +409,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -440,9 +440,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -471,9 +471,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -499,9 +499,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -530,9 +530,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -559,9 +559,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -590,9 +590,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -625,9 +625,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -656,9 +656,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -687,9 +687,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -718,9 +718,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -746,9 +746,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -777,9 +777,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -799,9 +799,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -821,9 +821,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -849,9 +849,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -880,9 +880,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -912,9 +912,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -943,9 +943,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -974,9 +974,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1007,9 +1007,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1038,9 +1038,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1069,9 +1069,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1100,9 +1100,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1139,9 +1139,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1170,9 +1170,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1200,9 +1200,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1230,9 +1230,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1261,9 +1261,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1292,9 +1292,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1323,9 +1323,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1354,9 +1354,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1384,9 +1384,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1416,9 +1416,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1461,9 +1461,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1494,9 +1494,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1522,9 +1522,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1551,9 +1551,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1583,9 +1583,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1611,9 +1611,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1642,9 +1642,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-      "currentHeadEvidenceRunId": 44515679877,
-      "currentHeadEvidenceNote": "Latest verified authentication-negative evidence is run 44515679877 on source/test tree a31859736a552c2960be05d3b0bafd8b89954b07, when that tree was the PR head. The branch subsequently gained 13 commits affecting 10 files, including production-readiness source/tests and a Pexels acquisition script/workflow; no full Actions run exists for the current branch tip. API route handlers were not changed in that diff. Positive route-specific acceptance was not individually rerun: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+      "currentHeadEvidenceRunId": 44527617194,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     }
   ],
   "liveEvidenceRefresh": {
@@ -1886,18 +1886,19 @@
     "overallBlocked": 6
   },
   "latestCurrentHeadAuthenticationEvidence": {
-    "sourceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-    "runId": 44515679877,
+    "sourceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+    "runId": 44527617194,
     "status": "PASS",
-    "nodeTests": 1021,
+    "nodeTests": 1022,
     "nodeFiles": 176,
     "pythonTests": 86,
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "note": "Full automation/security regression on the exact PR head confirms authentication-negative behavior for all 48 protected API routes. This is not positive route acceptance: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
+    "note": "Full automation/security regression on the exact current source/test tree confirms missing and invalid operator authentication are rejected before route validation or mutation for all 48 protected API routes. This does not prove authorized positive behavior: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
   },
-  "latestBranchTipAtEvidenceRefresh": "9bddd8ee33f623ae6455d448ce7544a64e02c52a",
+  "latestBranchTipAtEvidenceRefresh": "916e0b90a1c5fb2ffb091ba22747bc783a480a79",
   "latestApplicationSourceChangeSha": "a3a3a7a69cd84043da160667fcb6f0d3f4a22246",
   "latestFullyTestedSourceTestTreeSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-  "sourceTestEvidenceStatus": "STALE_FOR_CURRENT_BRANCH_TIP — the 445156 automation run verifies the a318 tree only. Thirteen subsequent commits affected ten files, including production-readiness source/tests and a new Pexels acquisition script/workflow; none has an associated Actions run or combined status. API route files were not among the changed files, so the 48/48 authentication-negative result remains evidence for the unchanged route handlers, but it does not certify the full current branch tree."
+  "sourceTestEvidenceStatus": "PASS on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db: full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips, npm audit 0 vulnerabilities. This verifies the API authentication-negative matrix on the current source/test tree, not positive route acceptance.",
+  "latestApplicationSourceTestTreeSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db"
 }
