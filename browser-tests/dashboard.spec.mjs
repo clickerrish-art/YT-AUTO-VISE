@@ -2527,3 +2527,60 @@ test("blocked production forms serialize every field and surface blockers withou
   expect(after.uploads).toEqual(before.uploads);
   expect(after.publishingEnabled).toBe(false);
 });
+
+
+test("every required dashboard field blocks empty form submission without an API mutation", async ({ page }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await page.request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const postRequests = [];
+  page.on("request", outgoing => {
+    if (outgoing.method() === "POST" && new URL(outgoing.url()).pathname.startsWith("/api/")) {
+      postRequests.push(new URL(outgoing.url()).pathname);
+    }
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const forms = await page.evaluate(() => [...document.forms].map(form => ({
+    id: form.id,
+    required: [...form.elements]
+      .filter(control => control.required && !control.disabled)
+      .map(control => ({ id: control.id, tag: control.tagName, type: control.type }))
+  })));
+  expect(forms).toHaveLength(17);
+
+  for (const form of forms) {
+    expect(form.id).toBeTruthy();
+    expect(form.required.length, `form #${form.id} must expose required controls`).toBeGreaterThan(0);
+    for (const control of form.required) {
+      expect(control.id, `required control in #${form.id} must have a stable ID`).toBeTruthy();
+      const locator = page.locator("#" + control.id);
+      await locator.evaluate(element => {
+        if (element.type === "checkbox" || element.type === "radio") {
+          element.checked = false;
+        } else {
+          element.value = "";
+        }
+        element.dispatchEvent(new Event("input", { bubbles: true }));
+        element.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      expect(await locator.evaluate(element => element.checkValidity()),
+        `required control #${control.id} in #${form.id} must reject an empty value`).toBe(false);
+    }
+
+    const formLocator = page.locator("#" + form.id);
+    expect(await formLocator.evaluate(element => element.checkValidity()),
+      `form #${form.id} must be invalid while its required controls are empty`).toBe(false);
+    await formLocator.evaluate(element => element.requestSubmit());
+  }
+
+  expect(postRequests, "invalid forms must not send API mutation requests").toEqual([]);
+  const afterResponse = await page.request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect(await afterResponse.json()).toEqual(before);
+});
