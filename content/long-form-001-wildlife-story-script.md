@@ -3,7 +3,8 @@
 **Working title:** How to Turn Wildlife Footage Into a Documentary Story  
 **Channel:** SonicVhibez  
 **Format:** 16:9 long-form, target 7–8 minutes  
-**Status:** SCRIPT DRAFT — research/source review, media rights, narration, captions, thumbnail and human approval still required  
+**Status:** SCRIPT DRAFT — research/source review, media rights, commercially licensed narration, captions, thumbnail and human approval still required  
+**Narration rights:** Roderic is the preferred voice, but the current HeyGen Free-plan sample is non-commercial internal-evaluation only. No production narrator is licensed; no alternative voice may be substituted without explicit owner approval  
 **Audience:** Beginner wildlife filmmakers and faceless YouTube creators  
 **Core promise:** A repeatable editing method for turning a collection of animal clips into a clear, honest mini-story.
 
@@ -33,7 +34,7 @@ Narration uses AI-generated text-to-speech. Any realistic AI-generated wildlife 
 ### 0:00–0:25 — Hook
 
 **Voice-over:**  
-You can have stunning wildlife footage and still end up with a video that feels forgettable. The missing piece is often not a better camera or a more dramatic animal. It is a story. In this video, we’ll turn a folder of clips into a clear mini-documentary using a simple three-part structure: set up a question, show what the footage actually reveals, and finish with a meaningful payoff.
+Beautiful footage isn't a story. Give it a question, a middle, and a payoff. That is how you turn a folder of wildlife clips into a mini-documentary—without inventing an encounter or forcing an animal to perform. Let's build one, step by step.
 
 **Visuals:**  
 Open on three distinct, rights-cleared shots: a wide habitat view, an animal behaving naturally, and a detail shot. Cut to a blank three-part timeline. Avoid fabricated animal encounters.
