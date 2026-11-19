@@ -147,8 +147,10 @@ async function main() {
     if (Math.abs(probe.durationSeconds - asset.durationSeconds) > 1.5) {
       throw new Error(asset.id + ": source duration mismatch; page=" + asset.durationSeconds + "s file=" + probe.durationSeconds.toFixed(3) + "s");
     }
-    if (probe.video.width !== asset.width || probe.video.height !== asset.height) {
-      throw new Error(asset.id + ": resolution mismatch; expected " + asset.width + "x" + asset.height + ", got " + probe.video.width + "x" + probe.video.height);
+    const expectedAspect = asset.width / asset.height;
+    const actualAspect = probe.video.width / probe.video.height;
+    if (Math.abs(actualAspect - expectedAspect) > 0.01 || Math.min(probe.video.width, probe.video.height) < 1080) {
+      throw new Error(asset.id + ": aspect ratio or minimum resolution mismatch; expected aspect " + expectedAspect.toFixed(4) + ", got " + actualAspect.toFixed(4) + " at " + probe.video.width + "x" + probe.video.height);
     }
     if (probe.video.fps !== null && Math.abs(probe.video.fps - asset.fps) > 0.6) {
       throw new Error(asset.id + ": frame-rate mismatch; expected " + asset.fps + ", got " + probe.video.fps);
