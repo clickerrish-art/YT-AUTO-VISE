@@ -127,7 +127,7 @@ test("uncovered dashboard routes expose safe reads and fail closed without durab
 
   const missingPreview = await request(base + "/api/jobs/review/preview", { headers: operatorHeaders });
   assert.equal(missingPreview.status, 400);
-  const unknownPreview = await request(base + "/api/jobs/review/preview?jobId=missing-route-acceptance-job&kind=video&sha256=${"a".repeat(64)}", { headers: operatorHeaders });
+  const unknownPreview = await request(base + "/api/jobs/review/preview?jobId=missing-route-acceptance-job&kind=video&sha256=" + "a".repeat(64), { headers: operatorHeaders });
   assert.equal(unknownPreview.status, 404);
 
   const mediaRegisterResponse = await request(base + "/api/nature-frontiers/media-register", { headers: operatorHeaders });
