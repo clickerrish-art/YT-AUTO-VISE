@@ -45,6 +45,15 @@
 - Evidence is retained in `content/metricool-nature-frontiers-reconciliation-2026-11-19.json`. No Metricool post, schedule, brand mapping or publishing setting was changed. Publishing remains disabled, dry-run remains true, emergency stop remains true.
 - **Owner/support input required:** restore or export legacy brand 7545638 and its 20 drafts/eight records without deleting or recreating them; confirm whether 8094526 replaced it without history loss; correct the cross-brand YouTube mapping; then reconcile every record by platform, post ID, date, status and auto-publish flag.
 
+## Cloudflare deployment reconciliation — read-only, 19 November 2026
+
+- The account has **no SonicVhibez production Worker**. The only SonicVhibez Worker is `sonicvhibez-durable-state-staging`, last deployed from the Cloudflare Dashboard on 14 November (version `9a9bfd4c`); there is no exact Git source-SHA provenance. The separate `nature-frontiers-publisher` production Worker must remain a different brand/environment.
+- Staging Worker bindings include D1 `sonicvhibez-state-staging` and R2 `sonicvhibez-artifacts-staging`. Direct read-only D1 SQL confirms six application tables, one dashboard-state row (revision 2), five backups (latest 15 November), and zero rows in runner state/control/artifact tables. The D1 list endpoint's `num_tables=0` metadata conflicts with direct `sqlite_master` results; the direct query is retained as the table evidence.
+- The staging Worker's OIDC verifier is hard-coded to trust `refs/heads/codex/cloudflare-adapter-integration-20261108` and that branch's `repository-runner.yml`, not the current implementation branch `codex/marketing-machine-audit-fixes`. **Do not broaden this trust** until branch protection and the intended runner workflow are owner-verified.
+- R2 bucket listing returns HTTP 403 / code 10042 (“Please enable R2 through the Cloudflare Dashboard”) even though the staging Worker has an R2 binding. Bucket access and artifact accounting are therefore not verified. No Durable Object namespaces exist.
+- The authenticated staging smoke supports `workflow_dispatch` but has not run. The staging backup/restore drill also supports dispatch, requires `confirm=YES`, and mutates staging D1; it has not been run because explicit approval for that persistent-state mutation is still required.
+- Evidence is retained in `content/cloudflare-deployment-reconciliation-2026-11-19.json`. No Cloudflare resource, secret, database, bucket, Worker or publishing setting was changed.
+
 ## New read-only deployment findings — 19 November 2026
 
 - SonicVhibez has a Cloudflare staging Worker `sonicvhibez-durable-state-staging` and a staging D1 database with six application tables. No SonicVhibez production Worker was found. The staging Worker has no cron schedules and there are no Durable Object namespaces.
