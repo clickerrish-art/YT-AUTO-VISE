@@ -1,3 +1,67 @@
+# Current verified checkpoint — 19 November 2026
+
+**Exact tested branch tree:** `a31859736a552c2960be05d3b0bafd8b89954b07`. The acceptance-document refresh commits after this SHA do not change application source or tests.
+
+- Full automation/security [44515679877](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679877): 1,021 Node tests / 176 files and 86 Python tests; zero failures/skips; npm audit 0 vulnerabilities.
+- Dashboard browser E2E [44515679716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679716): 33/33 Chromium journeys passed.
+- Queue readiness [44515679755](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679755): PASS, 16-item isolated queue, publishing disabled.
+- Production readiness [44515679772](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679772): **HOLD, 21 blockers**. No upload, schedule, or publication was attempted.
+- Branch reconciliation [44515679603](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679603): clean working tree, 4,532 branch-only commits, nine main-only commits, 451 changed files and no branch deletions. Main's nine main-only commits have zero net file-tree changes relative to merge base.
+- API: 48/48 protected routes pass missing/invalid-credential rejection on the exact tested tree. 42 authorized positive route acceptances remain NOT_TESTED; six provider/production-gated routes remain BLOCKED.
+- Dashboard: 121 controls / 17 forms; 33 browser journeys pass, but DASH-001 remains NOT_TESTED pending exhaustive per-control behavior acceptance.
+
+## Current production blockers (21)
+
+1. Short footage file `media/next-short-footage.mp4` is missing.
+2. Short narration file `media/next-short-narration.mp3` is missing.
+3. Short footage rights evidence is not real and human-verified.
+4. Short narration rights evidence is not real and human-verified.
+5. Short `rightsConfirmed` is not owner-confirmed.
+6. Short `complianceReviewed` is not human-confirmed.
+7. Long-form footage file `media/long-form-001-footage.mp4` is missing.
+8. Long-form narration file `media/long-form-drafts/long-001-narration-final.mp3` is missing.
+9. Long-form captions file `long-form-001-captions-final.srt` is missing.
+10. Long-form footage rights evidence is not real and human-verified.
+11. Long-form narration rights evidence is not real and human-verified.
+12. Long-form `rightsConfirmed` is not owner-confirmed.
+13. Long-form `complianceReviewed` is not human-confirmed.
+14. Metadata is not human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
+15. Metadata rights confirmation is missing.
+16. Metadata compliance review is missing.
+17. Final Short MP4 `media/next-short.mp4` is missing.
+18. Latest read-only YouTube OAuth attempt returned `invalid_grant`; the refresh token must be reauthorized securely.
+19. Upload-capable `youtube.upload` scope is not independently verified.
+20. Complete owner-reviewed public/private/unlisted SonicVhibez history is stale or inconsistent with the latest authenticated verification.
+21. Local, workflow and owner-attested upload-attempt reconciliation is stale or incomplete. Never retry an uncertain upload.
+
+## New read-only deployment findings — 19 November 2026
+
+- SonicVhibez has a Cloudflare staging Worker `sonicvhibez-durable-state-staging` and a staging D1 database with six application tables. No SonicVhibez production Worker was found. The staging Worker has no cron schedules and there are no Durable Object namespaces.
+- The staging Worker references the `sonicvhibez-artifacts-staging` R2 bucket, but the account's R2 API returns HTTP 403 asking that R2 be enabled in the Cloudflare Dashboard. Do not treat the binding as proof that R2 storage is operational.
+- Nature Frontiers has a deployed production Worker and a production D1 schema with seven application tables. Read-only counts showed zero rows in content, targets, approvals, media-rights, publication-attempt, audit and webhook tables. No cron schedules were configured.
+- The current Metricool Nature Frontiers SA brand (ID `8094526`, Africa/Johannesburg) returned zero scheduled posts for 19 November–19 December 2026. This does not reconcile the eight historical `draft=false / autoPublish=true` records. The connected Metricool brand also exposes the SonicVhibez YouTube channel ID; do not use that connection as a Nature Frontiers publishing destination.
+- Nature Frontiers Facebook/Instagram configuration remains fail-closed: publishing disabled, dry-run enabled and emergency stop active. Do not activate publishing while the historical records, Meta identity, account linkage, rights and approvals remain unresolved.
+
+## Media and narration constraints
+
+- The Pexels register contains 17 sources: four primary clips explicitly approved by the owner and 13 supplemental clips approved in principle. The four primary source pages list 53 seconds of vertical footage in total. No original MP4 bytes or local SHA-256 hashes are present in the production workspace; source-page licence metadata is not a substitute for file inspection, third-party-rights checks and final human review.
+- The Roderic HeyGen Free-plan sample (55.722 seconds) is an internal audition only and is not licensed for commercial/monetized production. Do not use it in the final Short or Long-form video.
+- Historical Long-form Edge TTS narration was generated from the wrong script using an unapproved voice and is quarantined. No commercially cleared narration or final long-form captions are available.
+- No final Short or Long-form export, final thumbnail, exact-hash human review, rights confirmation or private-upload authorization exists.
+
+## Owner-held inputs still required
+
+1. Reauthorize the existing Google OAuth client for the same SonicVhibez account with offline access and an upload-capable `youtube.upload` scope; update only the GitHub Actions `YOUTUBE_REFRESH_TOKEN` secret. Never paste credentials into chat or source files.
+2. Provide commercially cleared narration or explicitly approve a zero-cost alternative voice with verified commercial rights. Do not silently substitute Roderic or another voice.
+3. Supply/enable an accessible way to acquire the approved original Pexels MP4 files into the production workspace so they can be hashed, probed and visually reviewed.
+4. Provide the Metricool/Meta historical export or read-only history access needed to reconcile the eight Nature Frontiers records.
+5. An owner must independently inspect the final rendered videos, captions, thumbnails, metadata and claims, then approve the exact final artifact hashes.
+6. An owner must verify GitHub branch-protection settings in repository settings; the connected GitHub protection endpoint returned HTTP 403, so protection remains UNVERIFIED.
+
+**Safety:** PR #1 remains open, draft and unmerged; `main` has not been modified by this work. Public/unattended publishing stays disabled. No production resource was changed during the Cloudflare inspection.
+
+---
+
 # Latest exact production-readiness result — 19 November 2026, 12:22 SAST
 
 **Readiness run:** [44523195947](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44523195947). **Exact branch source/test commit:** `15be5841b107239d1b9d4197a761c0eb5b333043`. Result: **HOLD, 22 blockers**. The readiness workflow's diagnostic and upload steps completed; the final gate correctly failed because mandatory prerequisites remain. No upload, schedule or publication was attempted.
