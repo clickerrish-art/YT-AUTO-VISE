@@ -328,7 +328,7 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
       !Number.isFinite(receiptVideo.durationSeconds) || receiptVideo.durationSeconds < 360 || receiptVideo.durationSeconds > 600) {
     throw new Error("technical-validation receipt does not prove the required 1920x1080, 6–10 minute long-form export");
   }
-  if (receipt.captionsPath !== "string" || !/^[a-f0-9]{64}$/.test(receipt.captionsSha256 ?? "") ||
+  if (typeof receipt.captionsPath !== "string" || !/^[a-f0-9]{64}$/.test(receipt.captionsSha256 ?? "") ||
       !approval.relatedArtifacts.some(item => item.path === receipt.captionsPath && item.sha256 === receipt.captionsSha256 && /\.srt$/i.test(item.path))) {
     throw new Error("technical-validation receipt must bind the exact approved captions path and SHA-256");
   }
@@ -345,7 +345,7 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
   if (!Array.isArray(receipt.checks) || requiredChecks.some(check => !receipt.checks.includes(check))) {
     throw new Error("technical-validation receipt is missing required export, metadata, caption or thumbnail checks");
   }
-  if (typeof receipt.checkedAt !== "string" || !/(Z|[+-]\\d{2}:\\d{2})$/.test(receipt.checkedAt) ||
+  if (typeof receipt.checkedAt !== "string" || !/(Z|[+-]\d{2}:\d{2})$/.test(receipt.checkedAt) ||
       !Number.isFinite(Date.parse(receipt.checkedAt)) || Date.parse(receipt.checkedAt) > Date.now()) {
     throw new Error("technical-validation receipt must have a valid non-future timezone-aware checkedAt timestamp");
   }
