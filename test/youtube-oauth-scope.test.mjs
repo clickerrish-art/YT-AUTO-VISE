@@ -1,42 +1,48 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  assertYoutubeVideoInsertScope,
-  youtubeVideoInsertScopeStatus
+  assertRequiredYoutubeOAuthScopes,
+  youtubeOAuthScopeStatus,
+  REQUIRED_YOUTUBE_OAUTH_SCOPES
 } from "../scripts/youtube-oauth-scope.mjs";
 
-const acceptedScopes = [
-  "https://www.googleapis.com/auth/youtube.upload",
-  "https://www.googleapis.com/auth/youtube",
-  "https://www.googleapis.com/auth/youtube.force-ssl",
-  "https://www.googleapis.com/auth/youtubepartner"
-];
+const uploadScope = "https://www.googleapis.com/auth/youtube.upload";
+const readOnlyScope = "https://www.googleapis.com/auth/youtube.readonly";
 
-test("YouTube videos.insert accepts only documented upload-capable OAuth scopes", () => {
-  for (const scope of acceptedScopes) {
-    const status = youtubeVideoInsertScopeStatus({ scopes: ["openid", scope] });
-    assert.equal(status.allowed, true);
-    assert.equal(status.acceptedScope, scope);
-    assert.deepEqual(status.grantedYouTubeScopes, [scope]);
-    assert.equal(assertYoutubeVideoInsertScope({ scopes: [scope] }).allowed, true);
-  }
+test("both exact YouTube OAuth scopes are mandatory and pass together", () => {
+  const status = youtubeOAuthScopeStatus({ scopes: ["openid", uploadScope, readOnlyScope] });
+  assert.equal(status.allowed, true);
+  assert.deepEqual(status.missingScopes, []);
+  assert.deepEqual(status.requiredScopes, [uploadScope, readOnlyScope]);
+  assert.deepEqual(assertRequiredYoutubeOAuthScopes({ scopes: [uploadScope, readOnlyScope] }).missingScopes, []);
 });
 
-test("read-only YouTube scope is insufficient for videos.insert", () => {
-  const status = youtubeVideoInsertScopeStatus({
-    scopes: ["https://www.googleapis.com/auth/youtube.readonly"]
-  });
+test("missing youtube.upload fails even when youtube.readonly is granted", () => {
+  const tokenInfo = { scopes: [readOnlyScope] };
+  const status = youtubeOAuthScopeStatus(tokenInfo);
   assert.equal(status.allowed, false);
-  assert.equal(status.acceptedScope, null);
-  assert.throws(
-    () => assertYoutubeVideoInsertScope({ scopes: ["https://www.googleapis.com/auth/youtube.readonly"] }),
-    /lacks an OAuth scope accepted by YouTube videos\.insert/
-  );
+  assert.deepEqual(status.missingScopes, [uploadScope]);
+  assert.throws(() => assertRequiredYoutubeOAuthScopes(tokenInfo), new RegExp(uploadScope.replaceAll(".", "\\.")));
 });
 
-test("missing or malformed token scope information fails closed", () => {
-  for (const value of [undefined, null, {}, { scopes: "youtube.upload" }, { scopes: [] }]) {
-    assert.equal(youtubeVideoInsertScopeStatus(value).allowed, false);
-    assert.throws(() => assertYoutubeVideoInsertScope(value), /lacks an OAuth scope accepted/);
+test("missing youtube.readonly fails even when youtube.upload is granted", () => {
+  const tokenInfo = { scopes: [uploadScope] };
+  const status = youtubeOAuthScopeStatus(tokenInfo);
+  assert.equal(status.allowed, false);
+  assert.deepEqual(status.missingScopes, [readOnlyScope]);
+  assert.throws(() => assertRequiredYoutubeOAuthScopes(tokenInfo), new RegExp(readOnlyScope.replaceAll(".", "\\.")));
+});
+
+test("missing, malformed, or unrelated scope information fails closed", () => {
+  for (const value of [undefined, null, {}, { scopes: "youtube.upload youtube.readonly" }, { scopes: [] }, { scopes: ["openid"] }]) {
+    assert.equal(youtubeOAuthScopeStatus(value).allowed, false);
+    assert.throws(() => assertRequiredYoutubeOAuthScopes(value), /missing required OAuth scope/);
   }
+});
+
+test("scope status reports only the granted YouTube scopes without accepting substitutes", () => {
+  const status = youtubeOAuthScopeStatus({ scopes: [uploadScope, readOnlyScope, "https://www.googleapis.com/auth/youtube"] });
+  assert.equal(status.allowed, true);
+  assert.deepEqual(status.grantedYouTubeScopes, [uploadScope, readOnlyScope, "https://www.googleapis.com/auth/youtube"]);
+  assert.deepEqual(REQUIRED_YOUTUBE_OAUTH_SCOPES, [uploadScope, readOnlyScope]);
 });
