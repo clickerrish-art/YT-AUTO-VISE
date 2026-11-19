@@ -32,14 +32,15 @@ test("Short metadata template contains required disclosures and stays gated", ()
 });
 
 test("long-form Edge TTS generation is manual-only and explicitly non-commercial", () => {
-  assert.match(narrationWorkflow, /workflow_dispatch:[\\s\\S]*allow_noncommercial_audition/);
-  assert.match(narrationWorkflow, /default: false/);
-  assert.match(narrationWorkflow, /--allow-noncommercial-audition/);
-  assert.match(narrationWorkflow, /NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY/);
-  assert.match(narrationWorkflow, /actions\\/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02/);
-  assert.doesNotMatch(narrationWorkflow, /(^|\\n)\\s*schedule:/);
-  assert.doesNotMatch(narrationWorkflow, /(^|\\n)\\s*push:/);
-});
+  assert.ok(narrationWorkflow.includes("workflow_dispatch:"));
+  assert.ok(narrationWorkflow.includes("allow_noncommercial_audition:"));
+  assert.ok(narrationWorkflow.includes("default: false"));
+  assert.ok(narrationWorkflow.includes("--allow-noncommercial-audition"));
+  assert.ok(narrationWorkflow.includes("NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"));
+  assert.ok(narrationWorkflow.includes("actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"));
+  assert.equal(/\\bschedule:/m.test(narrationWorkflow), false);
+  assert.equal(/\\bpush:/m.test(narrationWorkflow), false);
+});;
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
   assert.match(qualityWorkflow, /node --test/);
