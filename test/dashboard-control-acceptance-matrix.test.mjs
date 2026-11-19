@@ -38,7 +38,7 @@ test("dashboard control acceptance register exactly matches the live source inve
   for (const [index, source] of inventory.controls.entries()) {
     const accepted = matrix.controls[index];
     assert.equal(accepted.acceptanceId, `DASH-C${String(index + 1).padStart(3, "0")}`);
-    for (const field of ["tag", "id", "name", "type", "form", "disabled", "required", "line"]) {
+    for (const field of ["tag", "id", "name", "type", "form", "disabled", "required", "readOnly", "pattern", "minLength", "maxLength", "min", "max", "step", "line"]) {
       assert.equal(accepted[field], source[field], `control ${accepted.acceptanceId} field ${field} drifted`);
     }
     assert.equal(accepted.index, source.index);
@@ -59,6 +59,13 @@ test("dashboard control acceptance register exactly matches the live source inve
         item.observedResult === "PASS" &&
         item.testSha === "4b5783ae03470002052eb0312a4284f09cedfd95"
       ), `required control ${accepted.acceptanceId} must retain its exact-SHA validation evidence`);
+    }
+    if (accepted.pattern || accepted.type === "url") {
+      assert.ok(accepted.observedCoverage.some(item =>
+        item.dimension === "native_pattern_or_url_validation" &&
+        item.observedResult === "PASS" &&
+        item.testSha === "88b0fac8ff10e340df3bf3dea75c2e4e9f343cca"
+      ), `constrained control ${accepted.acceptanceId} must retain its exact-SHA native validation evidence`);
     }
   }
 
