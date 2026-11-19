@@ -64,7 +64,7 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
   const worker = byId("SCHED-WORKER-DISPATCH-001");
   assert.equal(worker.status, "NOT_TESTED");
   assert.equal(worker.currentHeadStatus, "NOT_TESTED");
-  assert.equal(worker.currentHeadEvidenceSha, "71741365f54d3a4a7dda52e7bd12715a06c32453");
+  assert.equal(worker.currentHeadEvidenceSha, "4f38aa392f97e944c97c3d3c312be08e57686069");
   assert.match(worker.currentHeadEvidenceNote, /HTTP 409 preflight cooldown/);
   assert.match(worker.currentHeadEvidenceNote, /failed cooldown persistence causing a non-retryable stop and retained process lock/);
   assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
@@ -80,7 +80,7 @@ test("master completion register mirrors the acceptance totals and release hold"
     "utf8"
   );
   assert.match(master, /72 PASS \/ 7 NOT_TESTED \/ 10 BLOCKED \/ 0 FAIL/);
-  assert.match(master, /DASH-001 is PASS/);
+  assert.match(master, /DASH-001:\s*PASS/);
   assert.doesNotMatch(master, /\$\{(?:run|url)\./);
   assert.match(master, /Release decision:\s*\*\*HOLD\*\*/);
 });
