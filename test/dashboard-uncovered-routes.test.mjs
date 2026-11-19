@@ -131,7 +131,7 @@ test("uncovered dashboard routes expose safe reads and fail closed without durab
   assert.equal(unknownPreview.status, 404);
 
   const mediaRegisterResponse = await request(base + "/api/nature-frontiers/media-register", { headers: operatorHeaders });
-  assert.equal(mediaRegisterResponse.status, 200, await mediaRegisterResponse.text());
+  assert.equal(mediaRegisterResponse.status, 200);
   const mediaRegister = await mediaRegisterResponse.json();
   assert.equal(mediaRegister.brand, "Nature Frontiers");
   assert.equal(mediaRegister.readOnly, true);
