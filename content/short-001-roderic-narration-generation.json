@@ -27,7 +27,18 @@
     "wordAndCharacterTimingsReturned": true,
     "model": "SERVER_SELECTED_NOT_RETURNED",
     "paidUpgradeRequested": false,
-    "costVerification": "Provider response did not disclose a monetary charge or plan balance; do not claim monetary cost is independently verified. No paid model or upgrade was explicitly selected."
+    "costVerification": "Provider response did not disclose a monetary charge or plan balance; do not claim monetary cost is independently verified. No paid model or upgrade was explicitly selected.",
+    "accountPlanEvidence": {
+      "checkedAt": "2026-11-19",
+      "source": "Authenticated HeyGen current-user account response",
+      "billingType": "subscription",
+      "plan": "free",
+      "wallet": null,
+      "usageBased": null,
+      "remainingCredits": null,
+      "paidUpgradeUsed": false,
+      "costConclusion": "Generated while the connected HeyGen account reports the free subscription plan. No paid upgrade, wallet balance or usage-based billing route was reported. The provider did not expose a remaining free quota count."
+    }
   },
   "source": {
     "scriptPath": "content/short-001-wildlife-video-storytelling.md",
