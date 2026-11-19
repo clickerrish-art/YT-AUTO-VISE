@@ -158,6 +158,7 @@ export function inventoryDashboardSources(html, server) {
       form: typeof attributes.form === "string" ? attributes.form : (formStack.at(-1) ?? null),
       ariaLabel: typeof attributes["aria-label"] === "string" ? attributes["aria-label"] : null,
       disabled: Object.hasOwn(attributes, "disabled"),
+      required: Object.hasOwn(attributes, "required"),
     });
   }
 
