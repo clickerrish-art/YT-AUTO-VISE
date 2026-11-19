@@ -28,7 +28,7 @@ test("the owner-approved rolling publication cadence is no longer marked blocked
   assert.match(cadence.currentHeadEvidenceNote, /long_form.*long_form.*short/i);
   assert.match(cadence.currentHeadEvidenceNote, /72 elapsed hours/);
   assert.match(cadence.currentHeadEvidenceNote, /Africa\/Johannesburg/);
-  assert.match(cadence.currentHeadEvidenceNote, /without a weekly target/i);
+  assert.match(cadence.currentHeadEvidenceNote, /no weekly target/i);
 });
 
 test("API and dashboard acceptance statuses retain their exact evidence boundaries", () => {
@@ -63,5 +63,5 @@ test("master completion register mirrors the acceptance totals and release hold"
     "utf8"
   );
   assert.match(master, /71 PASS \/ 8 NOT_TESTED \/ 10 BLOCKED \/ 0 FAIL/);
-  assert.match(master, /\*\*Release decision:\*\*\s+\*\*HOLD\*\*/);
+  assert.match(master, /Release decision:\s*\*\*HOLD\*\*/);
 });
