@@ -36,7 +36,16 @@
     "supportReplyFound": false,
     "legacyScheduledDraftPostsReported": 20,
     "historicalAutoPublishRecordsReported": 8,
-    "status": "UNAVAILABLE_TO_CURRENT_METRICOOL_CONNECTOR"
+    "status": "UNAVAILABLE_TO_CURRENT_METRICOOL_CONNECTOR",
+    "supportFollowUp": {
+      "status": "SENT_AWAITING_METRICOOL_RESPONSE",
+      "sentAt": "2026-11-19T16:14:02.058Z",
+      "messageId": "1a1f49610773c9d8",
+      "threadId": "1a1f493a97cf5a29",
+      "to": "help@metricool.com",
+      "requested": "Restore read access or provide complete export of the 20 scheduled draft posts, eight historical autoPublish records, analytics history and current Facebook/Instagram connection IDs.",
+      "safety": "Explicitly requested read/export only. No publish, reschedule, edit, delete, recreate, account mapping change or auto-publish enablement authorized."
+    }
   },
   "analyticsWindow": {
     "from": "2026-10-01T00:00:00+02:00",
