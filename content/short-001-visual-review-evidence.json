@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "contentId": "short-001-wildlife-video-storytelling",
+  "status": "VISUAL_REVIEW_ONLY_NOT_RELEASE_ELIGIBLE",
+  "renderedDate": "2026-11-19",
+  "deliveryLocation": "ChatGPT conversation attachment; not stored in the repository",
+  "output": {
+    "file": "sonicvhibez-short-001-visual-review.mp4",
+    "sha256": "b3b2c0c95af6962249a8969257e6c40b73fb91b0c9f598632afa1f59c399cb41",
+    "durationSeconds": 54.666667,
+    "width": 720,
+    "height": 1280,
+    "frameRate": 24,
+    "videoCodec": "h264",
+    "audio": "none"
+  },
+  "sourceAssets": [
+    {
+      "assetId": "pexels-11528208",
+      "title": "A Lion Walking in a Field",
+      "contributor": "lifeofhicham",
+      "sourcePage": "https://www.pexels.com/video/a-lion-walkin-in-a-field-11528208/",
+      "sha256": "ace119137620bbdf6b372504f8e1dbae9bdd7ee9febe86a667d597ac6d46bada",
+      "durationSeconds": 6.868333,
+      "used": true,
+      "usage": "Habitat-establishing example; not presented as a specific encounter"
+    },
+    {
+      "assetId": "pexels-11760785",
+      "title": "An African Elephant Mother and her Baby in a Grassland",
+      "contributor": "ROMAN ODINTSOV",
+      "sourcePage": "https://www.pexels.com/video/an-african-elephant-mother-and-her-baby-in-a-grassland-11760785/",
+      "sha256": "3417c7da10506e28124faece24b908e842a58b3e99d340d013f62c375d8c4e57",
+      "durationSeconds": 18.623333,
+      "used": true,
+      "usage": "Meaningful-detail example; not implied to be the same location or story as the lion clips"
+    },
+    {
+      "assetId": "pexels-29765785",
+      "title": "Resting Lions in African Safari Habitat",
+      "contributor": "Lorenzo Boldorini",
+      "sourcePage": "https://www.pexels.com/video/resting-lions-in-african-safari-habitat-29765785/",
+      "sha256": "f01daff991cb07920e63f1a5914e3f4bc94cb32ec56cb676a5951c38aba256a6",
+      "durationSeconds": 12.16,
+      "used": true,
+      "usage": "Behaviour-observation example; not implied to be a continuation of the walking-lion clip"
+    }
+  ],
+  "excludedAssets": [
+    {
+      "assetId": "pexels-31702128",
+      "title": "Lion in Kenyan Wildlife Park Habitat",
+      "contributor": "MC G'Zay",
+      "sourcePage": "https://www.pexels.com/video/lion-in-kenyan-wildlife-park-habitat-31702128/",
+      "sha256": "11bcc1f2e1a22b40ab6df792303706302d8d57f5fa01d8f0d36559705ef4262c",
+      "reason": "The acquisition preview shows a visible chain-link barrier/enclosure and a partial foreground person; excluded so the video cannot imply a free-ranging wild encounter or include an unreviewed identifiable person."
+    }
+  ],
+  "licenseEvidence": {
+    "provider": "Pexels",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "termsUrl": "https://www.pexels.com/terms-of-service/",
+    "reviewed": true,
+    "summary": "Pexels states that videos may be used for free, including commercial use, and attribution is not required. The license prohibits standalone redistribution and misleading endorsement/authorship claims. Pexels warns that additional third-party rights may still apply and that users are responsible for determining whether further consent is needed.",
+    "officialHelpUrl": "https://help.pexels.com/hc/en-us/articles/360042295214-Can-I-use-the-photos-and-videos-for-a-commercial-project",
+    "limitations": [
+      "This record confirms the published Pexels license terms and source-page attribution, not all possible third-party rights.",
+      "The three used clips have been technically decoded and SHA-256 matched to the owner-approved acquisition manifest.",
+      "A contact sheet and representative frames were visually sampled; complete human playback review of every source clip remains pending.",
+      "The preview is a materially edited composite, not standalone redistribution of source clips."
+    ]
+  },
+  "productionBoundaries": {
+    "voice": "No narration included. The available Roderic HeyGen Free-plan audition is restricted to personal/non-commercial internal evaluation and is not licensed for monetized production.",
+    "music": "No music included.",
+    "sourceAudio": "All source audio removed.",
+    "enclosureClipUsed": false,
+    "syntheticWildlifeFootage": false,
+    "claimsOfOriginalCameraFootage": false,
+    "claimsOfOneContinuousEncounter": false,
+    "humanFullPlaybackReview": false,
+    "finalOwnerApproval": false,
+    "rightsConfirmed": false,
+    "releaseEligible": false,
+    "uploadedOrPublished": false
+  },
+  "reviewNotice": "This is a silent visual review draft only. It is not the final 50–60 second narrated Short, is not approved for publication, and must not be uploaded or scheduled."
+}
