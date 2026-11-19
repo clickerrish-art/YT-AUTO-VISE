@@ -8,13 +8,13 @@ The current project direction is a mature, approximately 45-year-old American ma
 
 ## Exact review artifact
 
-- Workflow: [American narration review run 44253500939](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44253500939)
-- Artifact: `sonicvhibez-american-wildlife-encounter-voice-review` (ID `14404553729`)
-- Artifact SHA-256: `8c4777fa068ff42f565081a3e83d416597abed0562aaabbc9c5711a964cd9a50`
-- Exact audio SHA-256: `2c81da407501eb8e91391a360ce5a19ec6f324b08f4222b15a1ef032136962ec`
-- Source script: `content/drafts/nile-crocodile-eyes-at-the-waterline.md`
-- Source script SHA-256: `54b1c9aa9103b8a79511cc38fc27c27d4e35416d460f188701485406aaedfc73`
-- Audio: 51.432 seconds, WAV PCM 16-bit, mono, 22,050 Hz
+- Workflow: [American narration review run 44563576507](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44563576507)
+- Artifact: `sonicvhibez-american-wildlife-encounter-voice-review` (ID `14550782584`)
+- Artifact SHA-256: `f1cb09dc70baf54156435e55ddc0656010848e492ec5969c014f352f6ac45d93`
+- Exact audio SHA-256: `f68b0b9b453948688f08f800dbf61ccd9188d1976308d94f27bb2cd58b543813`
+- Source script: `content/short-001-wildlife-video-storytelling.md`
+- Source script SHA-256: `20f807f0a1c6afd62ced948cfc8d8ed21478d479a76cc287eae62411bc185c53`
+- Audio: 53.023 seconds, WAV PCM 16-bit, mono, 22,050 Hz
 - Measured peak: −0.77 dBFS; RMS: −18.59 dBFS; clipped samples: 0
 - Artifact retention: 30 days from 18 November 2026. The evidence JSON is retained in the repository; the WAV itself must be downloaded and stored separately if it is to be retained permanently.
 
@@ -35,7 +35,7 @@ The pinned model card identifies the voice as trained from scratch on public-dom
 
 ## Required owner decision
 
-1. Listen to the complete 51.432-second WAV and approve or reject Norman for production.
+1. Listen to the complete 53.023-second WAV and approve or reject Norman for production.
 2. Assess naturalness, warmth, clarity, energetic storytelling, pronunciation and suitability for wildlife encounters.
 3. If Norman is rejected, keep the production voice unselected; do not silently substitute another voice.
 4. If the owner prefers a personal voice, supply a clean recording of their own voice and explicitly approve its use for the intended voice workflow. No owner-recorded voice sample is currently in the repository.
