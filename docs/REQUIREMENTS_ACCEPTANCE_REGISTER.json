@@ -390,16 +390,18 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048112",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048096",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42041048186",
-        "Latest exact-candidate queue-readiness run 43698639332 passed: 16 held queue items, rolling long_form → long_form → short cycle, minimum 72 elapsed hours between planned publications, 216-hour complete cycle, unique queue IDs, Africa/Johannesburg policy, publication disabled. Automation/security run 43698639445 passed 141/141 Node test files with zero skips, including schedule-policy and YouTube history-gate regression tests. Production-readiness run 43698639367 still blocks on OAuth invalid_grant and independently unreconciled public/private/unlisted remote history and uncertain attempts. Therefore schedule logic is verified but actual publication-history acceptance remains NOT_TESTED."
+        "Latest exact-candidate queue-readiness run 43698639332 passed: 16 held queue items, rolling long_form → long_form → short cycle, minimum 72 elapsed hours between planned publications, 216-hour complete cycle, unique queue IDs, Africa/Johannesburg policy, publication disabled. Automation/security run 43698639445 passed 141/141 Node test files with zero skips, including schedule-policy and YouTube history-gate regression tests. Production-readiness run 43698639367 still blocks on OAuth invalid_grant and independently unreconciled public/private/unlisted remote history and uncertain attempts. Therefore schedule logic is verified but actual publication-history acceptance remains NOT_TESTED.",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44593757480",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44593757629"
       ],
-      "nextAction": "Queue-readiness run 44510566573 passed 1,023/1,023 tests and generated a 16-item isolated proposal with publishing disabled. Policy tests cover Africa/Johannesburg, rolling long_form → long_form → short, minimum 72 elapsed hours and no same Johannesburg calendar day; Tuesday/Saturday remain draft-prep-only. Actual remote publication timestamps and complete channel history are absent; OAuth returns invalid_grant. Verify the owner-authorized channel history, DST, leases, cancellation, retry/backoff, dead-letter, restart and actual publication times before marking PASS. No schedule or upload is active.",
+      "nextAction": "Owner must securely refresh the existing YouTube OAuth refresh token with youtube.upload scope, verify SonicVhibez channel identity, retrieve complete paginated public/private/unlisted history and actual publication timestamps, and reconcile every upload attempt before any dispatch. Then prove live worker dispatch and the 72-hour/Johannesburg calendar-day gate against authoritative remote timestamps. Never retry an uncertain upload.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Schedule-policy and history-gate tests pass in the full suite, including Africa/Johannesburg, 72 elapsed hours, no same-calendar-day, long_form→long_form→short, DST and history consistency. Live remote history cannot be refreshed because the latest YouTube OAuth attempt returned invalid_grant; actual publication cadence and complete private/unlisted history remain unverified.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadEvidenceSha": "f52191a5712990e7341388320f9407a79886b92e",
+      "currentHeadEvidenceNote": "NOT_TESTED overall on exact branch source/test SHA f52191a5712990e7341388320f9407a79886b92e. Full automation 44593757480 passed 1,037 Node and 87 Python tests with zero failures/skips and npm audit zero vulnerabilities; queue readiness 44593757629 passed with 16 draft-only items and publishing disabled. Local policy/worker tests cover Africa/Johannesburg, rolling long_form → long_form → short, at least 72 elapsed hours, no same Johannesburg calendar day, DST, due-slot dispatch, lease heartbeat/expiry, retry/backoff persistence, cancellation, dead-letter and restart safety. Live acceptance remains blocked by invalid_grant on YouTube OAuth, incomplete current authenticated public/private/unlisted channel history, and missing authoritative remote publication timestamps. No real dispatch or publication is claimed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T19:03:00Z"
     },
     {
       "id": "SCHED-WORKER-MULTIPROCESS-001",
@@ -410,16 +412,17 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
-        "Verified on exact candidate 6ccbb86372a186a02880507a474b024b14564fcb; automation/security workflow 43697598032 passed 141/141 Node test files with explicit zero skips. test/dashboard-api-worker-lease-multiprocess.integration.test.mjs proves two independent dashboard processes cannot claim the same job and SIGKILL/restart recovers to RECOVERY_REQUIRED for reconciliation; no automatic retry is authorized."
+        "Verified on exact candidate 6ccbb86372a186a02880507a474b024b14564fcb; automation/security workflow 43697598032 passed 141/141 Node test files with explicit zero skips. test/dashboard-api-worker-lease-multiprocess.integration.test.mjs proves two independent dashboard processes cannot claim the same job and SIGKILL/restart recovers to RECOVERY_REQUIRED for reconciliation; no automatic retry is authorized.",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44593757480"
       ],
       "nextAction": "This acceptance proves the cross-process lease-exclusivity and SIGKILL/restart-recovery slice only. Keep SCHED-001 NOT_TESTED until worker heartbeat, expiry, retries, concurrent job execution, queue ordering, actual publication history, and full operational recovery are independently accepted.",
       "assessmentCommitSha": "d9bdfbb4a79d4a1030edb208d8754fda88852c9b",
       "acceptanceCriterion": "Two independent local dashboard processes sharing one isolated persistent state race to claim one queued job; exactly one obtains a lease and one claim audit event is persisted. After both processes are SIGKILLed, a fresh process must recover the job to RECOVERY_REQUIRED, clear the lease, and append exactly one recovery audit event.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
-      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "PASS on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation run 44527617194 includes worker multi-process lease exclusivity, restart persistence, conflict/backoff persistence, cancellation and dead-letter recovery tests.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadEvidenceSha": "f52191a5712990e7341388320f9407a79886b92e",
+      "currentHeadEvidenceNote": "PASS on exact source/test SHA f52191a5712990e7341388320f9407a79886b92e. Full automation run 44593757480 passed 1,037 Node tests across the repository and 87 Python tests with zero failures/skips and zero npm audit vulnerabilities. The worker multi-process suite includes lease exclusivity, durable retry/backoff state across separate process restart, cancellation and dead-letter recovery. This proves local process/state behavior, not a live deployed worker or remote YouTube publication.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T19:03:00Z"
     },
     {
       "id": "STATE-001",
@@ -2109,16 +2112,20 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/6d2a9e3cb183666efbd1615c8d3b2e0f7161df02",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41511698812",
-        "Latest exact-candidate automation/security run 43698639445 passed 141/141 Node test files with zero skips, including test/worker-runner.test.mjs and test/worker-backoff-persistence.test.mjs. Coverage includes queued/approved-plan-only listing, sequential least-privilege dispatch, bounded Retry-After handling, persisted HTTP 409/429 cooldown across restart, shutdown interruption, uncertain-outcome quarantine, and fail-stop with retained process lock when cooldown/quarantine persistence fails. No live continuously running worker deployment or real render dispatch was executed; operational run remains NOT_TESTED."
+        "Latest exact-candidate automation/security run 43698639445 passed 141/141 Node test files with zero skips, including test/worker-runner.test.mjs and test/worker-backoff-persistence.test.mjs. Coverage includes queued/approved-plan-only listing, sequential least-privilege dispatch, bounded Retry-After handling, persisted HTTP 409/429 cooldown across restart, shutdown interruption, uncertain-outcome quarantine, and fail-stop with retained process lock when cooldown/quarantine persistence fails. No live continuously running worker deployment or real render dispatch was executed; operational run remains NOT_TESTED.",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44593757480",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44593757629",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44593740627",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44593740539"
       ],
-      "nextAction": "Worker/queue safety and isolated readiness tests pass, including the 16-item proposal with publishing disabled. The dedicated continuous worker acceptance remains NOT_TESTED for real queued media execution, bounded persisted backoff on conflicts, crash/restart reconciliation, cancellation/lease expiry/dead-letter behavior and production runtime monitoring. This does not close SCHED-001 or authorize publication.",
+      "nextAction": "Owner/admin must verify branch protection and required checks before any staging OIDC trust change; then deploy/authorize the runner bridge in staging, prove a read-only/no-op worker session and durable D1 runner state, and verify monitoring/restart behavior. Do not create production publishing or enable paid infrastructure as part of this step.",
       "assessmentCommitSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
       "acceptanceCriterion": "The worker uses a separate scoped token, can only list dispatchable jobs and invoke the renderer, filters unapproved render plans, applies bounded conflict backoff, preserves state for read-only listings and stops its poll wait promptly.",
-      "lastVerifiedStatus": "PASS",
+      "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "Worker unit/backoff/lease tests pass, but the deployed staging Worker's OIDC trust is pinned to the old branch codex/cloudflare-adapter-integration-20261108, while the implementation branch is codex/marketing-machine-audit-fixes. No runner D1 rows exist. Do not change trust until branch protection is verified.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadEvidenceSha": "f52191a5712990e7341388320f9407a79886b92e",
+      "currentHeadEvidenceNote": "PASS for local worker dispatch safety on exact branch source/test SHA f52191a5712990e7341388320f9407a79886b92e, verified by full automation run 44593757480: 1,037 Node tests, 87 Python tests, zero failures/skips, npm audit zero vulnerabilities. Real local worker-runner tests cover HTTP 409 preflight cooldown, persisted cooldown across restart, failed cooldown persistence causing a non-retryable stop and retained process lock, restart rejection before another API poll, ambiguous POST transport/5xx/unreadable-response quarantine, dead-letter/operator-only retry, lease heartbeat/completion fencing, expiry and cancellation. Queue readiness 44593757629 passed with a 16-item draft-only proposal and publishing disabled; runner-bridge safety 44593740627 and deployment recovery 44593740539 passed. Live worker dispatch remains NOT_TESTED: staging OIDC trust is still pinned to refs/heads/codex/cloudflare-adapter-integration-20261108, runner D1 tables have no operational rows, and no SonicVhibez production publisher Worker exists. These tests do not claim live YouTube dispatch or publication.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T19:03:00Z"
     },
     {
       "id": "DEPLOY-SERVICE-READINESS-001",
@@ -2433,8 +2440,8 @@
     "engineeringGates": {
       "DASH_001": "NOT_TESTED — 121 controls/17 forms; 33 journeys pass, but exhaustive per-control behavior/persistence/concurrency matrix incomplete.",
       "API_001": "BLOCKED — 42/42 positive application-level routes PASS; 48/48 auth-negative PASS; six provider/production-gated routes remain BLOCKED.",
-      "SCHED_001": "NOT_TESTED — code-level policy/history/worker tests pass; live YouTube OAuth invalid_grant and complete remote history missing.",
-      "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — unit/backoff tests pass, but staging OIDC trust accepts only refs/heads/codex/cloudflare-adapter-integration-20261108; current branch differs, runner D1 tables are empty, and no production worker exists.",
+      "SCHED_001": "NOT_TESTED — local schedule and worker safety tests pass (JHB timezone, 72 elapsed hours, no same local day, long_form→long_form→short, DST, retry/backoff persistence, leases, cancellation, dead-letter and restart); live OAuth/history/remote timestamps are still unavailable.",
+      "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — local HTTP 409 cooldown, failed persistence fail-stop/process lock, restart, ambiguous dispatch quarantine and lease lifecycle pass; staging OIDC trust is pinned to the old branch, runner D1 has no operational rows, and no production publisher Worker exists.",
       "STATE_001": "PASS — application-level durable state, backup/restore and restart tests pass; production deployment remains separate.",
       "DEPLOY_001": "NOT_TESTED — no SonicVhibez production Worker; staging Worker was Dashboard-deployed 14 Nov with no exact source SHA, OIDC trust pinned to an old branch, R2 API 403, and no production D1/monitoring/rollback.",
       "GIT_002": "NOT_TESTED — 454-file semantic review incomplete; branch protection owner verification unverified.",
@@ -3443,5 +3450,5 @@
       "requiredResolution": "Owner enables/verifies R2 in Cloudflare Dashboard or removes the unused binding; then rerun a read-only artifact accounting check."
     }
   ],
-  "updatedAt": "2026-11-19T18:54:00Z"
+  "updatedAt": "2026-11-19T19:03:00Z"
 }

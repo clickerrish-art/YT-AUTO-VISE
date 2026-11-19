@@ -57,6 +57,21 @@ test("Nature Frontiers stays blocked after read-only Metricool reconciliation", 
   assert.match(meta.nextAction, /Keep publishing disabled/);
 });
 
+
+test("worker dispatch backoff failure is fail-closed while live runtime remains blocked", () => {
+  const worker = byId("SCHED-WORKER-DISPATCH-001");
+  assert.equal(worker.status, "NOT_TESTED");
+  assert.equal(worker.currentHeadStatus, "NOT_TESTED");
+  assert.equal(worker.currentHeadEvidenceSha, "f52191a5712990e7341388320f9407a79886b92e");
+  assert.match(worker.currentHeadEvidenceNote, /HTTP 409 preflight cooldown/);
+  assert.match(worker.currentHeadEvidenceNote, /failed cooldown persistence causing a non-retryable stop and retained process lock/);
+  assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
+
+  const scheduler = byId("SCHED-001");
+  assert.equal(scheduler.status, "NOT_TESTED");
+  assert.match(scheduler.currentHeadEvidenceNote, /complete current authenticated public\/private\/unlisted channel history/);
+});
+
 test("master completion register mirrors the acceptance totals and release hold", () => {
   const master = fs.readFileSync(
     path.join(root, "docs", "MASTER_PRODUCTION_COMPLETION_REGISTER.md"),
