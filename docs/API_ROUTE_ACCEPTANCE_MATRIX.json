@@ -193,11 +193,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -224,11 +227,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -255,11 +261,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -283,11 +292,15 @@
         "scenario": "Authenticated GET /api/instagram/status returns HTTP 200 and safe read-only status; publishing remains disabled, dry-run and emergency stop remain active, Instagram business account remains unset, configured Page ID is numeric, and operator token is absent from response."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-server.test.mjs",
+        "test/instagram-approval-service.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -314,11 +327,15 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
+        "test/dashboard-dispatchable-ordering.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -345,11 +362,15 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-server.test.mjs",
+        "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -376,11 +397,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -407,11 +431,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-queue-diagnostics.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -438,11 +465,15 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-review-approval.integration.test.mjs",
+        "test/dashboard-review-preview.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -469,11 +500,15 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-review-approval.integration.test.mjs",
+        "test/dashboard-review-preview.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -497,11 +532,14 @@
         "scenario": "Real local dashboard server: unauthenticated request rejected; authenticated GET returns HTTP 200 with Nature Frontiers register, registered asset and rights/inspection/approval statuses; no stateFile path is exposed."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/nature-frontiers-media-register-api.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -528,11 +566,15 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly.integration.test.mjs",
+        "test/state-recovery-dashboard.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -557,11 +599,14 @@
         "scenario": "Read-only authenticated Node-to-Cloudflare integration through the real dashboard server; state and backup list retrieved; remote state hash/revision unchanged; weak W/\"2\" ETag revision matched by the client."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-cloudflare-state.integration.test.mjs"
+      ]
     },
     {
       "method": "GET",
@@ -588,11 +633,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -623,11 +671,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/campaign-management-api.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -654,11 +705,15 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
+        "test/dashboard-api-request-boundaries.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -685,11 +740,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-draft-update-concurrency.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -716,11 +774,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/facebook-dashboard.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -775,11 +836,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/facebook-dashboard.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -878,11 +942,15 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
+        "test/dashboard-api-job-cancellation.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -910,11 +978,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-server.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -941,11 +1012,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-server.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -972,11 +1046,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1005,11 +1082,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-worker-completion.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1036,11 +1116,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1067,11 +1150,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1098,11 +1184,15 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceRunId": 44527617064,
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-server.test.mjs",
+        "browser-tests/dashboard.spec.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1137,11 +1227,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1168,11 +1261,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1198,11 +1294,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-parent-relationship.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1259,11 +1358,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/production-plan-api.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1290,11 +1392,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/production-plan-api.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1321,11 +1426,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-render-recovery-reconcile.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1352,11 +1460,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-job-retry.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1382,11 +1493,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-review-approval.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1414,11 +1528,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-rights-verification.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1459,11 +1576,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-job-cancellation.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1492,11 +1612,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-validation-idempotency.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1520,11 +1643,14 @@
         "scenario": "Real Node dashboard POST /api/state/backup returned HTTP 201; explicit backup was retained in D1 after restore and restart; automatic pre-restore backup was also retained; final backup inventory contained five records."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-cloudflare-state.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1549,11 +1675,14 @@
         "scenario": "Live Node dashboard backup/restore; explicit confirmation, revision-checked restore, exact state preservation plus one audit receipt, automatic pre-restore backup, Node restart recovery and stable remote D1 state."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-cloudflare-state.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1581,11 +1710,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-task-runner.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1640,11 +1772,14 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
+      "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
       "currentHeadEvidenceRunId": 44527617194,
-      "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
+      "currentHeadEvidenceNote": "Authorized application-level route behavior is exercised by the listed current integration/browser tests on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. Full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips and npm audit zero vulnerabilities; browser E2E run 44527617064 passed 33/33 where applicable. Provider calls use controlled local fixtures/mocks; this is not proof of live external provider acceptance or production publishing.",
+      "currentHeadEvidenceTestFiles": [
+        "test/worker-quarantine-release.test.mjs"
+      ]
     }
   ],
   "liveEvidenceRefresh": {
@@ -1881,8 +2016,8 @@
   "currentHeadCounts": {
     "routes": 48,
     "authNegativePass": 48,
-    "overallPass": 0,
-    "overallNotTested": 42,
+    "overallPass": 42,
+    "overallNotTested": 0,
     "overallBlocked": 6
   },
   "latestCurrentHeadAuthenticationEvidence": {
@@ -1900,5 +2035,46 @@
   "latestApplicationSourceChangeSha": "a3a3a7a69cd84043da160667fcb6f0d3f4a22246",
   "latestFullyTestedSourceTestTreeSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
   "sourceTestEvidenceStatus": "PASS on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db: full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips, npm audit 0 vulnerabilities. This verifies the API authentication-negative matrix on the current source/test tree, not positive route acceptance.",
-  "latestApplicationSourceTestTreeSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db"
+  "latestApplicationSourceTestTreeSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+  "latestCurrentHeadPositiveEvidence": {
+    "sourceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+    "automationRunId": 44527617194,
+    "browserRunId": 44527617064,
+    "status": "PASS",
+    "positiveRoutesCovered": 42,
+    "remainingPositiveNotTested": 0,
+    "providerProductionBlocked": 6,
+    "testFiles": [
+      "test/dashboard-api-readonly-concurrency.integration.test.mjs",
+      "test/dashboard-server.test.mjs",
+      "test/instagram-approval-service.test.mjs",
+      "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
+      "test/dashboard-dispatchable-ordering.integration.test.mjs",
+      "test/dashboard-narration-reconciliation-recovery.integration.test.mjs",
+      "test/dashboard-api-queue-diagnostics.integration.test.mjs",
+      "test/dashboard-api-review-approval.integration.test.mjs",
+      "test/dashboard-review-preview.integration.test.mjs",
+      "test/nature-frontiers-media-register-api.test.mjs",
+      "test/dashboard-api-readonly.integration.test.mjs",
+      "test/state-recovery-dashboard.integration.test.mjs",
+      "test/dashboard-cloudflare-state.integration.test.mjs",
+      "test/campaign-management-api.integration.test.mjs",
+      "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
+      "test/dashboard-api-request-boundaries.test.mjs",
+      "test/facebook-dashboard.test.mjs",
+      "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
+      "test/dashboard-api-job-cancellation.integration.test.mjs",
+      "test/dashboard-api-worker-completion.integration.test.mjs",
+      "browser-tests/dashboard.spec.mjs",
+      "test/dashboard-api-parent-relationship.integration.test.mjs",
+      "test/production-plan-api.test.mjs",
+      "test/dashboard-api-render-recovery-reconcile.integration.test.mjs",
+      "test/dashboard-api-job-retry.integration.test.mjs",
+      "test/dashboard-api-rights-verification.integration.test.mjs",
+      "test/dashboard-api-validation-idempotency.integration.test.mjs",
+      "test/dashboard-task-runner.test.mjs",
+      "test/worker-quarantine-release.test.mjs"
+    ],
+    "note": "The previously stale matrix was reconciled against existing route-specific integration/browser tests. 39 authorized application-level routes have positive behavior evidence on the exact current source/test tree. Three positive routes have no positive route-level test yet and remain NOT_TESTED. Six provider/production-gated routes remain BLOCKED. No live external provider action or publication was performed."
+  }
 }
