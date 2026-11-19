@@ -14,7 +14,7 @@ const html = fs.readFileSync(path.join(root, "public", "dashboard.html"), "utf8"
 const server = fs.readFileSync(path.join(root, "scripts", "dashboard-server.mjs"), "utf8");
 const inventorySource = fs.readFileSync(path.join(root, "scripts", "dashboard-inventory.mjs"), "utf8");
 const gitBlobSha = content => createHash("sha1")
-  .update(Buffer.from("blob " + Buffer.byteLength(content) + "\\0"))
+  .update(Buffer.from("blob " + Buffer.byteLength(content) + "\0"))
   .update(content)
   .digest("hex");
 const inventory = inventoryDashboardSources(
