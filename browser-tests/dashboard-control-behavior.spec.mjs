@@ -80,7 +80,6 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
     expect(standaloneJourneys[control.id], `standalone control #${control.id} must map to a behavioral journey`).toBeTruthy();
     expect(browserJourneySource).toContain(`test("${standaloneJourneys[control.id]}"`);
   }
-  }
 
   const headers = { "x-operator-token": operatorToken };
   const beforeResponse = await request.get("/api/state", { headers });
