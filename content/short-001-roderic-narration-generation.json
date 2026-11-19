@@ -44,7 +44,7 @@
     "scriptPath": "content/short-001-wildlife-video-storytelling.md",
     "scriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
     "captionsPath": "content/short-001-wildlife-video-storytelling.srt",
-    "captionsBlobSha256": "9894a39581f0ca797dc4799029fe4475a8783fb3"
+    "captionsBlobSha256": "6a09a58188301ed134912010c6276c6a167544be"
   },
   "spokenText": "Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep separate moments in their original recorded order; label any reconstruction clearly. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.",
   "captions": {
@@ -58,7 +58,9 @@
     "narrationDurationSeconds": 55.72229024943311,
     "finalCueToAudioEndMs": 122,
     "contiguous": true,
-    "nonOverlapping": true
+    "nonOverlapping": true,
+    "firstCueEndSeconds": 2.3,
+    "secondCueStartSeconds": 2.3
   },
   "release": {
     "audioDownloadedToWorkspace": false,
