@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { acquireDashboardStateFileLock } from "../scripts/dashboard-state-file-lock.mjs";
 import { spawnSync } from "node:child_process";
 
 test("queue replenishment is idempotent and never enables publishing", () => {
@@ -22,7 +23,7 @@ test("queue replenishment is idempotent and never enables publishing", () => {
   try {
     const run = () => spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
       encoding: "utf8",
-      env: { ...process.env, QUEUE_PATH: queuePath }
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
     });
     const first = run();
     assert.equal(first.status, 0, first.stderr);
@@ -62,7 +63,7 @@ test("queue replenishment refuses a queue that has publishing enabled", () => {
   try {
     const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
       encoding: "utf8",
-      env: { ...process.env, QUEUE_PATH: queuePath }
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
     });
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /must not enable publishing/);
@@ -78,7 +79,7 @@ test("a missing queue is initialized from the authoritative rolling publication 
   try {
     const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
       encoding: "utf8",
-      env: { ...process.env, QUEUE_PATH: queuePath }
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
     });
     assert.equal(result.status, 0, result.stderr);
     const created = JSON.parse(fs.readFileSync(queuePath, "utf8"));
@@ -102,7 +103,7 @@ test("queue replenishment normalizes an omitted publishing flag to explicit fals
   try {
     const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
       encoding: "utf8",
-      env: { ...process.env, QUEUE_PATH: queuePath }
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
     });
     assert.equal(result.status, 0, result.stderr);
     assert.equal(JSON.parse(fs.readFileSync(queuePath, "utf8")).publishingEnabled, false);
@@ -124,11 +125,61 @@ test("queue replenishment refuses a publication-eligible item without an exact h
   fs.writeFileSync(queuePath, JSON.stringify(original));
   try {
     const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
-      encoding: "utf8", env: { ...process.env, QUEUE_PATH: queuePath }
+      encoding: "utf8", env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
     });
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /lacks its human-approved quality record/i);
     assert.deepEqual(JSON.parse(fs.readFileSync(queuePath, "utf8")), original,
       "a blocked publication queue must not be rewritten or silently normalized");
   } finally { fs.rmSync(tempDir, { recursive: true, force: true }); }
+});
+
+
+test("queue replenishment refuses concurrent writers and preserves the current queue", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-lock-"));
+  const queuePath = path.join(tempDir, "queue.json");
+  const original = { publishingEnabled: false, items: [{ id: "concurrent-preserve", status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" }] };
+  fs.writeFileSync(queuePath, JSON.stringify(original));
+  const release = acquireDashboardStateFileLock(queuePath);
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /queue is busy|state is busy|lock/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(queuePath, "utf8")), original,
+      "a concurrent queue writer must not overwrite the active transaction");
+  } finally {
+    release();
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("queue replenishment rejects symlink and path-traversal targets", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-path-"));
+  const targetPath = path.join(tempDir, "target.json");
+  const linkPath = path.join(tempDir, "queue-link.json");
+  fs.writeFileSync(targetPath, JSON.stringify({ sentinel: "preserve" }));
+  fs.symlinkSync(targetPath, linkPath);
+  try {
+    const symlinkResult = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: linkPath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.notEqual(symlinkResult.status, 0);
+    assert.match(symlinkResult.stderr, /single-link regular file|symlink/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(targetPath, "utf8")), { sentinel: "preserve" });
+
+    const traversalPath = path.join(tempDir, "..", "outside-queue.json");
+    const traversalResult = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: traversalPath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.notEqual(traversalResult.status, 0);
+    assert.match(traversalResult.stderr, /contained within its explicit trust root/i);
+    assert.equal(fs.existsSync(path.resolve(traversalPath)), false);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
 });
