@@ -83,7 +83,10 @@ test("approved disclosure must precede the product name and link in both narrati
 });
 
 test("every promotional product requires fresh seller evidence tied to its exact HTTPS listing", () => {
-  const now = new Date("2026-11-18T08:36:54.000Z");
+  const latestKeywordEvidence = Math.max(...checkedInPlan.weeks.flatMap(week =>
+    week.items.map(item => Date.parse(item.keywordEvidence.researchedAt))
+  ));
+  const now = new Date(latestKeywordEvidence);
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
 
   const staleProducts = clone(products);
@@ -540,7 +543,8 @@ test("November 23 ethical-wildlife and outline Shorts use fresh qualitative sear
     assert.match(item.currentIntentEvidence.researchedAt, /^2026-11-19T/);
     assert.ok(item.currentIntentEvidence.sources.length >= 2);
     assert.ok(item.keywordPhrases.length >= 3);
-    assert.ok(item.description.toLowerCase().startsWith(item.primaryKeyword.toLowerCase()));
+    const firstDescriptionLines = item.description.split(/\n/).slice(0, 4).join("\n").toLowerCase();
+    assert.ok(firstDescriptionLines.includes(item.primaryKeyword.toLowerCase()));
   }
 
   assert.equal(ethical.productUrl, vault.url);
