@@ -2497,9 +2497,9 @@
   "latestChangeTestReason": "Exact source/test tree 4dec5f passed 1,022 Node tests across 176 files, 86 Python tests, zero skips, npm audit 0 vulnerabilities, 33/33 browser journeys, and the required metadata/content/queue/recovery checks. Production readiness remains HOLD with 22 genuine owner/evidence blockers.",
   "requirementCounts": {
     "total": 89,
-    "PASS": 70,
+    "PASS": 71,
     "NOT_TESTED": 8,
-    "BLOCKED": 11,
+    "BLOCKED": 10,
     "FAIL": 0
   },
   "apiRouteCounts": {
@@ -3255,7 +3255,7 @@
     "STATE_001": "PASS — application-level durable state, backup/restore and restart tests pass; production deployment remains separate.",
     "DEPLOY_001": "NOT_TESTED — recovery smoke passes; no SonicVhibez production Worker, R2 disabled, production rollback/monitoring unproven.",
     "GIT_002": "NOT_TESTED — 454-file semantic review incomplete; branch protection owner verification unverified.",
-    "SCHED_003": "BLOCKED — weekly 2 long-form + 1 Short conflicts with 72-hour minimum; no owner-approved cadence.",
+    "SCHED_003": "PASS — owner-approved rolling long_form → long_form → short cycle, no weekly target; ≥72 elapsed hours and no same Johannesburg calendar day. This resolves cadence decision only; live history and worker acceptance remain open.",
     "API_NEG_001": "PASS — 48/48 protected routes reject missing/invalid credentials.",
     "DASH_CTRL_WIRING_001": "PASS — 121 controls, 17 forms, 104 form-owned, 17 standalone.",
     "DASH_CTRL_A11Y_001": "PASS — 33/33 Chromium journeys.",
@@ -3298,7 +3298,7 @@
   },
   "acceptanceReconciliation": {
     "status": "REQUIRED",
-    "note": "The stored 89-row aggregate counts and current-head snapshots conflict. Do not treat aggregate PASS counts as current-head acceptance until every requirement is reconciled against the exact current SHA.",
+    "note": "Requirement-row totals have been reconciled to the stored rows (71 PASS / 8 NOT_TESTED / 10 BLOCKED), and SCHED-003 is aligned to its explicit owner-approved evidence. Other current-head snapshots remain stale and must be re-evaluated item-by-item against the exact current source/test SHA; no aggregate promotion is implied.",
     "storedRequirementCounts": {
       "total": 89,
       "PASS": 71,
