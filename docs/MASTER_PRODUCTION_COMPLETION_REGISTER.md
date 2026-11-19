@@ -1,7 +1,7 @@
 # Latest master-completion snapshot — 19 November 2026
 
 **Latest branch inventory checkpoint:** `6f72fb738036a3cc36b4293ae32c0bd65cd6b255`; current application/test evidence checkpoint: `dab8fef70b6842b522f26ec5a3ba4807e33ae051` (later changes to the master register and API matrix are documentation-only).  
-**Current master acceptance register:** 89 requirements — **70 PASS / 8 NOT_TESTED / 11 BLOCKED / 0 FAIL**.  
+**Current master acceptance register:** 89 requirements — **71 PASS / 8 NOT_TESTED / 10 BLOCKED / 0 FAIL**. SCHED-003 is now PASS from explicit owner approval; the live YouTube history gate remains open.  
 **Release decision:** **HOLD**. This is not a production-complete or risk-free release.
 
 ## Exact verification checkpoints
