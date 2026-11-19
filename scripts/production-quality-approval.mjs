@@ -90,13 +90,13 @@ export function validateProductionQualityApproval(approval, {
       errors.push("technical-validation receipt must contain the exact final export path and SHA-256");
     }
     if (typeof receipt.captionsPath !== "string" || !/^[a-f0-9]{64}$/.test(receipt.captionsSha256 ?? "") ||
-        !relatedArtifacts.some(item => item.path === receipt.captionsPath && item.sha256 === receipt.captionsSha256 && /\\.srt$/i.test(item.path))) {
+        !relatedArtifacts.some(item => item.path === receipt.captionsPath && item.sha256 === receipt.captionsSha256 && /\.srt$/i.test(item.path))) {
       errors.push("technical-validation receipt must bind the exact reviewed captions path and SHA-256");
     }
     if (!receipt.thumbnail || typeof receipt.thumbnail.path !== "string" ||
         !/^[a-f0-9]{64}$/.test(receipt.thumbnail.sha256 ?? "") ||
         receipt.thumbnail.width !== 1280 || receipt.thumbnail.height !== 720 ||
-        !relatedArtifacts.some(item => item.path === receipt.thumbnail.path && item.sha256 === receipt.thumbnail.sha256 && /\\.(jpg|jpeg|png|webp)$/i.test(item.path))) {
+        !relatedArtifacts.some(item => item.path === receipt.thumbnail.path && item.sha256 === receipt.thumbnail.sha256 && /\.(jpg|jpeg|png|webp)$/i.test(item.path))) {
       errors.push("technical-validation receipt must bind the exact 1280x720 reviewed thumbnail");
     }
     const requiredChecks = [
