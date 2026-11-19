@@ -1,6 +1,6 @@
 ## Latest exact candidate dashboard evidence — 19 November 2026
 
-- **Code/test SHA:** `df1ac7739afe4aed47987ae5e743c3d45720431c`; current branch head `751e0a417fe45b2e85fe8892fbd2f20560c0f13c` contains subsequent source-register, licence, SEO and evidence-document updates only.
+- **Code/test SHA:** `df1ac7739afe4aed47987ae5e743c3d45720431c`. Subsequent commits add source-register, licence, SEO and evidence updates; they also change the enhanced Short narration generator/workflow guard, which remains NOT_TESTED on PR #1 because that PR stays draft. The separate PR #8 main-branch guard passed its focused tests.
 - Browser E2E [44510566447](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566447): **33/33 Chromium journeys passed** on the code/test SHA above.
 - Full automation [44510566685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566685): **1,021 Node tests across 176 files and 84 Python tests passed; zero failures/skips; npm audit 0 vulnerabilities**.
 - Content quality [44510566544](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566544): **1,023/1,023 passed, zero skips**.
