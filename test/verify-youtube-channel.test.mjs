@@ -92,7 +92,7 @@ test("read-only verification requires both exact OAuth scopes before any YouTube
   assert.equal(passed.oauthScopesVerified, true);
   assert.deepEqual(passed.requiredOAuthScopes, [uploadScope, readOnlyScope]);
   assert.deepEqual(passed.grantedYouTubeScopes, [uploadScope, readOnlyScope]);
-  assert.match(passed.oauthScopesCheckedAt, /^\\d{4}-\\d{2}-\\d{2}T/);
+  assert.match(passed.oauthScopesCheckedAt, /^\d{4}-\d{2}-\d{2}T/);
 
   for (const scopes of [[uploadScope], [readOnlyScope], []]) {
     calls.length = 0;
