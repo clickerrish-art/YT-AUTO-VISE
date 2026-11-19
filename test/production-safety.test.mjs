@@ -41,7 +41,7 @@ test("long-form Edge TTS generation is manual-only and explicitly non-commercial
   const workflowLines = narrationWorkflow.split(String.fromCharCode(10)).map(line => line.trim());
   assert.equal(workflowLines.includes("schedule:"), false);
   assert.equal(workflowLines.includes("push:"), false);
-});;;
+});
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
   assert.match(qualityWorkflow, /node --test/);
