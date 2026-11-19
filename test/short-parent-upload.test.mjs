@@ -19,6 +19,19 @@ const relationship = {
 };
 relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
 const rightsEvidence = { assets: [{ assetPath: "media/scene.mp4", licenseEvidenceLocation: "rights/license.txt", assetSha256: sha("c"), licenseEvidenceSha256: sha("d"), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "operator-1", verifiedAt: "2026-10-26T10:00:00.000Z" }] };
+const technicalValidationReceipt = {
+  passed: true,
+  checkedAt: new Date().toISOString(),
+  metadataVersion: sha("b"),
+  captionsPath: "captions/child.srt",
+  captionsSha256: sha("7"),
+  artifacts: [{ path: "media/child.mp4", sha256: sha("a"), durationSeconds: 55, width: 1080, height: 1920 }],
+  thumbnail: { path: "media/thumb.jpg", sha256: sha("8"), width: 1280, height: 720 },
+  checks: [
+    "metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration",
+    "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"
+  ]
+};
 const qualityScorecard = {
   policyId: "SV-PQS-001", decision: "APPROVED", reviewer: "operator-1", reviewedAt: new Date().toISOString(),
   fullVideoPlayback: true, fullPlaybackEvidenceRef: "fixture/full-playback",
@@ -30,7 +43,7 @@ const qualityScorecard = {
 };
 const baseApproval = {
   decision: "APPROVE", jobId: "child-job-001", contentType: "short",
-  artifactSha256: sha("a"), metadataVersion: sha("b"), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "operator-1",
+  artifactSha256: sha("a"), metadataVersion: sha("b"), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify(technicalValidationReceipt)).digest("hex"), technicalValidationReceipt, reviewer: "operator-1",
   rightsEvidence,
   rightsEvidenceSha256: crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex"), publishingEnabled: false, visibility: "private",
   relatedArtifacts: [
