@@ -2076,5 +2076,27 @@
       "test/worker-quarantine-release.test.mjs"
     ],
     "note": "The previously stale matrix was reconciled against existing route-specific integration/browser tests. 39 authorized application-level routes have positive behavior evidence on the exact current source/test tree. Three positive routes have no positive route-level test yet and remain NOT_TESTED. Six provider/production-gated routes remain BLOCKED. No live external provider action or publication was performed."
+  },
+  "currentHeadReconciliation": {
+    "status": "NOT_TESTED",
+    "observedImplementationHeadSha": "93b4d4ff82c6df5a9aac67ecc16772853b2efb37",
+    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44531885210",
+    "regressionRunResults": {
+      "nodePassed": 1024,
+      "nodeFailed": 0,
+      "nodeSkipped": 0,
+      "nodeTestFilesPassed": 176,
+      "pythonPassed": 86,
+      "npmAuditVulnerabilities": 0
+    },
+    "explanation": "The exact-HEAD regression run passed, including the matrix schema/route-inventory consistency test. That does not demonstrate that each of the 42 historical positive route claims was individually exercised on this implementation HEAD. The existing 42 PASS rows remain bound to testedSourceTestSha and must not be promoted to current-HEAD positive acceptance until endpoint-specific positive evidence is reconciled.",
+    "preservedBlockedRoutes": [
+      "POST /api/facebook/drafts/approve",
+      "POST /api/facebook/publish",
+      "POST /api/facebook/verify-page",
+      "POST /api/instagram/approve",
+      "POST /api/jobs/produce",
+      "POST /api/uploads/reconcile"
+    ]
   }
 }
