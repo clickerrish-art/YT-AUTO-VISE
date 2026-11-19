@@ -21,7 +21,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: acquire-short-001-media-${{ github.ref }}
@@ -51,12 +51,50 @@ jobs:
           token: ${{ github.token }}
 
       - name: Acquire approved Pexels footage and existing Roderic narration
+        id: acquire
+        continue-on-error: true
         run: node scripts/acquire-short-001-assets.mjs
 
       - name: Upload acquired source files, hashes and contact sheet
+        id: upload
+        if: steps.acquire.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: sonicvhibez-short-001-acquired-media
           path: artifacts/short-001/
           if-no-files-found: error
           retention-days: 7
+
+      - name: Persist acquisition result and artifact ID
+        if: always()
+        env:
+          ACQUIRE_OUTCOME: ${{ steps.acquire.outcome }}
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const result = {
+            schemaVersion: 1,
+            runId: Number(process.env.GITHUB_RUN_ID),
+            runNumber: Number(process.env.GITHUB_RUN_NUMBER),
+            branch: process.env.BRANCH_NAME,
+            headSha: process.env.HEAD_SHA,
+            acquisitionOutcome: process.env.ACQUIRE_OUTCOME,
+            artifactId: process.env.ARTIFACT_ID ? Number(process.env.ARTIFACT_ID) : null,
+            artifactName: process.env.ARTIFACT_ID ? 'sonicvhibez-short-001-acquired-media' : null,
+            recordedAt: new Date().toISOString(),
+            releaseEligible: false
+          };
+          fs.writeFileSync('content/short-001-acquisition-run.json', JSON.stringify(result, null, 2) + '\n');
+          NODE
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/short-001-acquisition-run.json
+          git commit -m "Record Short 001 media acquisition result" || true
+          git push origin "HEAD:$BRANCH_NAME"
+
+      - name: Fail job if acquisition failed
+        if: steps.acquire.outcome != 'success'
+        run: exit 1
