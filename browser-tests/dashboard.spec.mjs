@@ -2473,6 +2473,8 @@ test("blocked production forms serialize every field and surface blockers withou
   await page.locator("#metadataPath").fill("content/fixture-metadata.json");
   await page.locator("#metadataSha").fill("b".repeat(64));
   await page.locator("#rightsJson").fill(JSON.stringify({ fixture: true }));
+  const qualityScorecard = { fixtureScorecard: true, decision: "APPROVE" };
+  await page.locator("#qualityScorecardJson").fill(JSON.stringify(qualityScorecard));
   await page.locator("#reviewReason").fill("Fixture review reason — not human approval.");
   await submit("reviewform");
   await expect(page.locator("#reviewresult")).toContainText("Review blocked: mocked production prerequisite blocker");
@@ -2498,7 +2500,7 @@ test("blocked production forms serialize every field and surface blockers withou
       metadataPath: "content/fixture-metadata.json",
       metadataVersion: "b".repeat(64),
       rightsEvidence: { fixture: true },
-      qualityScorecard: null,
+      qualityScorecard,
       reason: "Fixture review reason — not human approval."
     } },
     { path: "/api/uploads/reconcile", method: "POST", body: {
@@ -2755,6 +2757,37 @@ test("read-only hash controls and the disabled backup action cannot be changed o
   await expect(backup).toBeDisabled();
   await backup.evaluate(element => element.click());
   expect(mutationRequests).toEqual([]);
+
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect(await afterResponse.json()).toEqual(before);
+});
+
+
+test("review quality scorecard control rejects malformed JSON before calling the API", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  let reviewPosts = 0;
+  page.on("request", outgoing => {
+    if (outgoing.method() === "POST" && new URL(outgoing.url()).pathname === "/api/jobs/review") reviewPosts += 1;
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+  await page.locator("#reviewdecision").selectOption("APPROVE");
+  await page.locator("#rightsJson").fill(JSON.stringify({ fixture: true }));
+  await page.locator("#qualityScorecardJson").fill("{invalid-json");
+  await page.locator("#reviewform").evaluate(form =>
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
+  );
+
+  await expect(page.locator("#reviewresult")).toContainText("Review blocked:");
+  await expect(page.locator("#reviewresult")).not.toContainText("Review recorded");
+  expect(reviewPosts).toBe(0);
 
   const afterResponse = await request.get("/api/state", { headers });
   expect(afterResponse.status()).toBe(200);
