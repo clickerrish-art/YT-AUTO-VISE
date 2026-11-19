@@ -8,7 +8,7 @@ import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, valida
 import { evaluateNextPublication } from "../scripts/schedule-policy.mjs";
 
 const evaluateWithVerifiedInventories = options => evaluateNextPublication({
-  pendingAttempts: [], pendingAttemptsVerified: true,
+  pendingAttempts: [],
   pendingAttemptsVerified: true,
   scheduledItems: [],
   scheduledItemsVerified: true,
