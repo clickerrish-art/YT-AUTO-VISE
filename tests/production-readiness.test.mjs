@@ -6,7 +6,59 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-test("readiness report identifies blockers, preserves safety defaults, and exits non-zero", () => {
+function currentYouTubeReconciliationExpectation() {
+  const verification = JSON.parse(fs.readFileSync("content/youtube-channel-verification-status.json", "utf8"));
+  const reconciliation = JSON.parse(fs.readFileSync("content/youtube-history-reconciliation.json", "utf8"));
+  const now = Date.now();
+  const isFresh = value => {
+    const timestamp = Date.parse(value);
+    return Number.isFinite(timestamp) && timestamp <= now && now - timestamp <= 24 * 60 * 60 * 1000;
+  };
+  const publication = verification.publicationHistoryReconciliation;
+  const attempts = reconciliation.uploadAttemptReconciliation;
+  const verificationAttempts = verification.uploadAttemptReconciliation;
+  const ledgerValidation = attempts?.evidence?.automatedLedgerValidation;
+  const inventoryArtifact = verification.inventoryArtifact;
+  const channel = verification.channel;
+  const historyMatches = verification.channelIdentityVerified === true &&
+    verification.uploadsInventoryComplete === true &&
+    typeof channel?.id === "string" &&
+    ["SonicVhibez", "SonicVibes"].includes(channel.title) &&
+    channel.handle === "@sonicvhibez" &&
+    publication?.status === "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY" &&
+    publication.freshInventoryRunId === verification.workflowRunId &&
+    publication.freshInventoryArtifactSha256 === inventoryArtifact?.sha256 &&
+    reconciliation.complete === true &&
+    reconciliation.channelId === channel.id &&
+    reconciliation.verifiedAt === verification.checkedAt &&
+    reconciliation.latestInventoryEvidence?.verifiedAt === reconciliation.verifiedAt &&
+    reconciliation.latestInventoryEvidence?.complete === true &&
+    reconciliation.latestInventoryEvidence?.workflowRunId === verification.workflowRunId &&
+    reconciliation.latestInventoryEvidence?.artifactSha256 === inventoryArtifact?.sha256 &&
+    reconciliation.latestInventoryEvidence?.totalUploads === verification.totalUploads;
+  const historyFresh = isFresh(verification.checkedAt) &&
+    isFresh(reconciliation.verifiedAt) &&
+    Date.parse(inventoryArtifact?.expiresAt ?? "") > now;
+  const attemptsReconciled = attempts?.status === "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS" &&
+    reconciliation.uploadAttemptReconciliation?.status === attempts.status &&
+    reconciliation.uploadAttemptReconciliation?.inspectedAt === attempts.inspectedAt &&
+    verificationAttempts?.status === attempts.status &&
+    verificationAttempts?.inspectedAt === attempts.inspectedAt &&
+    verificationAttempts?.evidence?.automatedLedgerValidation?.runId === ledgerValidation?.runId &&
+    verificationAttempts?.ownerAttestation?.status === "CONFIRMED" &&
+    attempts.ownerAttestation?.status === "CONFIRMED" &&
+    attempts.ownerAttestation.confirmedAt === attempts.inspectedAt?.slice(0, 10) &&
+    attempts.evidence?.executedPrivateUploadJobs === 0 &&
+    attempts.evidence?.uploadArtifactPrivatelyWorkflowRunsFound === 0 &&
+    ledgerValidation?.conclusion === "success" &&
+    ledgerValidation.executedPrivateUploadRuns === 0 &&
+    ledgerValidation.previousLedgerRunId === "NONE" &&
+    attempts.evidence?.nextPrivateUploadPreviousLedgerRunId === "NONE";
+  const attemptsFresh = isFresh(attempts?.inspectedAt);
+  return { historyMatches, historyFresh, attemptsReconciled, attemptsFresh };
+}
+
+test("readiness report identifies blockers, preserves safety defaults, and reports history evidence according to its actual age", () => {
   const env = { ...process.env };
   for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) delete env[key];
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs"], {
@@ -30,7 +82,7 @@ test("readiness report identifies blockers, preserves safety defaults, and exits
   assert.match(result.stdout, /never uploads, schedules, or publishes/i);
 });
 
-test("readiness JSON exposes stable blocker IDs, severity, evidence and actionable resolution without side effects", () => {
+test("readiness JSON exposes stable blocker IDs, severity, evidence and age-aware external reconciliation findings", () => {
   const env = { ...process.env };
   for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) delete env[key];
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
@@ -73,15 +125,16 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and actionab
 
 
 
-test("readiness JSON distinguishes external reconciliation from code-controlled findings", () => {
+test("readiness JSON distinguishes fresh and stale external reconciliation from code-controlled findings", () => {
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
     cwd: process.cwd(), encoding: "utf8",
     env: { ...process.env, YOUTUBE_CLIENT_ID: "", YOUTUBE_CLIENT_SECRET: "", YOUTUBE_REFRESH_TOKEN: "", SONICVHIBEZ_CHANNEL_ID: "" }
   });
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
-  assert.equal(report.blockers.some(blocker => blocker.evidence.kind === "external-reconciliation-required"), false, "complete fresh owner-reviewed history and attempt evidence is already present");
-  assert.ok(report.notes.some(note => /prior upload-attempt reconciliation passed/.test(note)));
+  const reconciliation = currentYouTubeReconciliationExpectation();
+  assert.equal(report.blockers.some(blocker => blocker.evidence.kind === "external-reconciliation-required"), !(reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh));
+  assert.equal(report.notes.some(note => /prior upload-attempt reconciliation passed/.test(note)), reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh);
   assert.ok(report.blockers.some(blocker => blocker.evidence.kind === "repository-path-check" && /YouTube OAuth upload scope/.test(blocker.evidence.observed)));
   const readinessSource = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
   assert.match(readinessSource, /const attempts = reconciliation\.uploadAttemptReconciliation/);
