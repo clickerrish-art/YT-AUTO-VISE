@@ -1845,17 +1845,19 @@
     "patchEquivalentCommits": 0
   },
   "currentHeadEvidence": {
-    "sourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-    "automationRunId": 44488024623,
-    "nodeTestFiles": 171,
-    "nodeTests": 1015,
+    "sourceTestSha": "df1ac7739afe4aed47987ae5e743c3d45720431c",
+    "automationRunId": 44510566685,
+    "nodeTestFiles": 176,
+    "nodeTests": 1021,
     "pythonTests": 84,
     "skipped": 0,
+    "npmAuditVulnerabilities": 0,
     "authNegativePass": 48,
     "overallPass": 0,
     "overallNotTested": 42,
     "overallBlocked": 6,
-    "note": "All 48 authentication-negative checks passed on this exact SHA. Positive route business acceptance was not re-run individually on this SHA; 42 remain NOT_TESTED and six remain BLOCKED. Historical overallAcceptance fields and counts are preserved."
+    "routeAcceptanceMatrixExecutionStatus": "NOT_RUN_INDEPENDENTLY_ON_THIS_SHA",
+    "note": "The 48/48 protected-route authentication-negative checks and full 1,021-Node/84-Python regression passed on this exact code/test SHA. Route-specific integration tests cited in per-route notes are included in the suite and reran; however, the dedicated 42-route positive acceptance matrix was not executed individually on this SHA. Keep those 42 as NOT_TESTED until that matrix runs with valid route-specific payloads and verifies response contracts, persistence/audit, idempotency/concurrency, restart and fail-closed provider boundaries. Six provider/production routes remain BLOCKED."
   },
   "latestRegressionEvidence": {
     "recordedAt": "2026-11-19T10:40:29.392+02:00",
