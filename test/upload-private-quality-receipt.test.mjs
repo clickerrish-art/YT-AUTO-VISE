@@ -7,6 +7,7 @@ import {
   qualityScorecardSha256
 } from "../scripts/production-quality-scorecard.mjs";
 import { validateUploadApproval } from "../scripts/upload-private.mjs";
+import { shortParentEvidenceSha256, shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const hash = value => crypto.createHash("sha256").update(value).digest("hex");
 const now = new Date().toISOString();
@@ -136,8 +137,52 @@ test("accepts a correctly bound vertical Short receipt", () => {
   Object.assign(f.approval.technicalValidationReceipt.artifacts[0], {
     durationSeconds: 55, width: 1080, height: 1920
   });
+  const channelId = "UC1234567890123456789012";
+  const relationship = {
+    childContentId: f.approval.jobId,
+    childMediaSha256: f.video.sha256,
+    childMetadataSha256: f.metadata.sha256,
+    childRevision: "short-revision-1",
+    childPublicationCycleId: "cycle-001",
+    parentContentId: "parent-long-form-001",
+    parentRevision: "parent-revision-1",
+    parentMediaSha256: hash("parent-video"),
+    parentMetadataSha256: hash("parent-metadata"),
+    parentApprovalSha256: hash("parent-approval"),
+    parentSourceEvidencePath: "content/parent-source-quality.json",
+    parentSourceEvidenceSha256: hash("parent-source-quality"),
+    parentRemoteVideoId: "abcdefghijk",
+    parentCanonicalUrl: "https://www.youtube.com/watch?v=abcdefghijk",
+    parentRemoteTitle: "Approved parent long-form video",
+    parentChannelTitle: "SonicVhibez",
+    parentChannelId: channelId,
+    parentRemoteVerified: true,
+    parentPrivacyStatus: "private",
+    parentApproved: true,
+    parentRevisionApproved: true,
+    parentPublicationCycleId: "cycle-001",
+    sourceSegments: [{ sceneId: "scene-001", startSeconds: 10, endSeconds: 20 }],
+    relationshipApproved: true,
+    relationshipReviewNotes: "The selected segment is relevant and accurately represents the parent.",
+    relationshipReviewer: "Human Reviewer",
+    relationshipApprovedAt: now,
+    relationshipEvidenceSha256: "",
+    nativeRelatedVideo: {
+      status: "BLOCKED_EXTERNAL",
+      blocker: "The parent is private, so native related-video association is not eligible."
+    }
+  };
+  relationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(relationship);
+  f.approval.shortParentRelationship = relationship;
+  f.approval.shortParentRelationshipSha256 = shortParentRelationshipSha256(relationship);
   f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
-  assert.equal(validate(f.approval, f.video, f.metadata, "short"), true);
+  assert.equal(validateUploadApproval(f.approval, {
+    jobId: f.approval.jobId,
+    artifactSha256: f.video.sha256,
+    metadataVersion: f.metadata.sha256,
+    channelId,
+    contentType: "short"
+  }), true);
 });
 
 test("rejects a receipt with the wrong format dimensions or duration", () => {
