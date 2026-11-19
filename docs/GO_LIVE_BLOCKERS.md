@@ -1,6 +1,6 @@
 # Current verified checkpoint — 19 November 2026
 
-**Exact tested branch tree:** `a31859736a552c2960be05d3b0bafd8b89954b07`. The acceptance-document refresh commits after this SHA do not change application source or tests.
+**Last fully tested source/test tree:** `a31859736a552c2960be05d3b0bafd8b89954b07`. **Latest branch commit at this checkpoint:** `a3a3a7a69cd84043da160667fcb6f0d3f4a22246`. Since the tested tree, 13 commits changed 10 files, including `scripts/production-readiness.mjs`, its tests, and a new Pexels-only acquisition script/workflow. Those later source/test/workflow changes have no Actions run or combined check status and are **NOT_TESTED**. The 445156 automation/browser evidence below applies to a318 only.
 
 - Full automation/security [44515679877](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679877): 1,021 Node tests / 176 files and 86 Python tests; zero failures/skips; npm audit 0 vulnerabilities.
 - Dashboard browser E2E [44515679716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679716): 33/33 Chromium journeys passed.
@@ -48,6 +48,9 @@
 - The Roderic HeyGen Free-plan sample (55.722 seconds) is an internal audition only and is not licensed for commercial/monetized production. Do not use it in the final Short or Long-form video.
 - Historical Long-form Edge TTS narration was generated from the wrong script using an unapproved voice and is quarantined. No commercially cleared narration or final long-form captions are available.
 - No final Short or Long-form export, final thumbnail, exact-hash human review, rights confirmation or private-upload authorization exists.
+- The Pexels-only acquisition script `scripts/acquire-short-001-assets.mjs` and workflow `.github/workflows/acquire-short-001-assets.yml` were restored after the previous workflow failed because its script was missing. The new workflow downloads only the four explicitly approved clips, checks MP4 signatures/duration/resolution/frame rate, hashes the files, creates previews and uploads a seven-day review artifact. It has `contents:read` only, does not download narration, does not write to the repository, and cannot approve rights or release.
+- **Acquisition workflow execution is NOT_TESTED.** The GitHub API commits that added the workflow did not trigger Actions; the latest branch commit has no associated workflow runs/checks. A normal user-originated push to the existing branch is required to trigger its `push` event. Do not report the four MP4s as downloaded until the artifact exists and its files are inspected.
+- The new `UPLOAD_APPROVAL_PATH` requirement in `scripts/production-readiness.mjs` adds an exact-hash-bound production-quality approval gate. The last readiness result (21 blockers, run 44515679772) predates this code change; the current blocker count must be recomputed after the new source/test changes are executed.
 
 ## Owner-held inputs still required
 
