@@ -23,7 +23,7 @@ jobs:
       - name: Check out implementation branch
         uses: actions/checkout@v7
         with:
-          ref: codex/marketing-machine-audit-fixes
+          ref: ${{ github.sha }}
       - name: Set up Node.js
         uses: actions/setup-node@v7
         with:
@@ -60,8 +60,16 @@ jobs:
           NODE
           then
             refresh=true
-          elif [ "$EVENT_NAME" = "push" ] && git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" | grep -qx "package.json"; then
-            refresh=true
+          elif [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            if ! git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+              git fetch --no-tags --depth=1 origin "$BEFORE_SHA" || {
+                echo "Cannot inspect the push base commit; refusing to assume the lockfile is current."
+                exit 1
+              }
+            fi
+            if git diff --name-only "$BEFORE_SHA" "$CURRENT_SHA" -- package.json | grep -qx "package.json"; then
+              refresh=true
+            fi
           fi
           echo "refresh=$refresh" >> "$GITHUB_OUTPUT"
       - name: Generate or refresh lockfile without lifecycle scripts
