@@ -1,0 +1,91 @@
+export const DEFAULT_WEEKLY_PLAN = Object.freeze({
+  "version": 3,
+  "channel": "SonicVhibez",
+  "timezone": "Africa/Johannesburg",
+  "publishingEnabled": false,
+  "schedule": [
+    {
+      "day": "Tuesday",
+      "format": "long_form",
+      "cronUtc": "0 15 * * 2",
+      "targetDurationMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "status": "DRAFT_ONLY"
+    },
+    {
+      "day": "Saturday",
+      "format": "short",
+      "cronUtc": "0 15 * * 6",
+      "targetDurationSeconds": {
+        "min": 50,
+        "max": 60
+      },
+      "status": "DRAFT_ONLY"
+    }
+  ],
+  "product": {
+    "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
+    "url": "https://selar.com/0u19v8u99l",
+    "approvedProductUrlsOnly": true
+  },
+  "releaseGates": [
+    "Enforce the rolling long-form, long-form, Short cycle with at least 72 elapsed hours between actual publications; fail closed if channel history or uncertain attempts cannot be reconciled",
+    "Inspect the complete SonicVhibez public, private and unlisted upload history and all queued timestamps; verify at least 72 full hours before any next publication",
+    "Verify footage, music, narration and image rights with retained evidence",
+    "Human-review factual accuracy, captions, thumbnail, disclosures and YouTube altered/synthetic-media settings",
+    "Render and pass format-specific media preflight",
+    "Validate metadata and channel ID against the connected SonicVhibez account",
+    "Upload privately first and verify the result in YouTube Studio"
+  ],
+  "notes": [
+    "Africa/Johannesburg is UTC+2 without daylight-saving changes; 15:00 UTC corresponds to 17:00 SAST.",
+    "Tuesday 17:00 to Saturday 17:00 is 96 hours; Saturday 17:00 to the next Tuesday 17:00 is 72 hours.",
+    "These are draft-production slots only. Before any publication operation, independently inspect all actual and planned YouTube timestamps and enforce the 72-hour minimum.",
+    "Schedule triggers draft production only; it does not enable public publishing.",
+    "Public publishing and unattended public scheduling remain disabled.",
+    "A previously supplied channel identifier does not satisfy the repository channel-ID format check; do not treat it as verified. Populate the channel ID only after authenticated YouTube OAuth confirms the exact @sonicvhibez channel identity.",
+    "Publication policy is a rolling sequence: long_form, long_form, short; at least 72 elapsed hours between consecutive actual publications, minimum 216 hours for three cyclic gaps.",
+    "Tuesday/Saturday workflow cron slots are draft-preparation triggers only and are not the authoritative publication schedule.",
+    "Before upload, reconcile public/private/unlisted channel history, scheduled items and every pending or uncertain upload attempt; missing or incomplete history blocks publication.",
+    "Public and unattended publishing remain disabled; private upload requires a separate explicit authorization and all release gates.",
+    "Authoritative publication policy is publicationCycle; schedule entries are draft-preparation triggers only."
+  ],
+  "requestedWeeklyCadence": {
+    "longFormPerWeek": 2,
+    "shortsPerWeek": 1,
+    "totalPublicationsPerWeek": 3,
+    "status": "CONFLICTS_WITH_72_HOUR_MINIMUM"
+  },
+  "cadenceDecision": {
+    "status": "OWNER_APPROVED",
+    "ownerApproved": true,
+    "approvedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
+    "approvedAt": "2026-11-07T00:57:33+02:00",
+    "approvalReference": "User approval in ChatGPT conversation on 2026-11-07 (Africa/Johannesburg)",
+    "explanation": "Owner approved the rolling long_form → long_form → short sequence with at least 72 elapsed hours between consecutive actual publications and no weekly publication target. Tuesday/Saturday remain draft-preparation triggers only. Public/unattended publishing remains disabled."
+  },
+  "spacingPolicy": {
+    "minimumHoursBetweenPosts": 72,
+    "minimumCycleHours": 216,
+    "status": "ROLLING_CYCLE_POLICY",
+    "cadenceInfeasible": false,
+    "explanation": "Two long-form videos followed by one Short repeat in a rolling cycle. Each consecutive actual publication must be at least 72 elapsed hours apart, so a complete three-gap cycle requires at least 216 hours. No weekly publication count is promised."
+  },
+  "minimumPublicationSpacingHours": 72,
+  "publicationCycle": {
+    "id": "sonicvhibez-rolling-cycle-v1",
+    "formats": [
+      "long_form",
+      "long_form",
+      "short"
+    ],
+    "minimumHoursBetweenConsecutivePublications": 72,
+    "minimumCycleHours": 216,
+    "timezone": "Africa/Johannesburg",
+    "publicationRequiresVerifiedHistory": true,
+    "publicationEnabled": false,
+    "description": "Rolling three-publication sequence: long-form, long-form, Short. Each next actual publication waits at least 72 elapsed hours from the prior actual publication; the earliest full cycle is 216 hours (9 days), not a weekly target."
+  }
+});

@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "project": "Nature Frontiers",
+  "checkedAt": "2026-11-19T13:04:43.799Z",
+  "status": "PARTIAL_UNRESOLVED_LEGACY_BRAND",
+  "mode": "READ_ONLY_ONLY_PUBLISHING_DISABLED",
+  "currentMetricoolBrand": {
+    "id": 8094526,
+    "label": "Nature Frontiers SA",
+    "timezone": "Africa/Johannesburg",
+    "createdAt": "2026-11-14T00:14:26",
+    "firstConnectionDate": "2026-11-14T00:19:56",
+    "networks": {
+      "facebookPageId": "1431329126735709",
+      "instagramProfessionalHandle": "naturefrontieers2026",
+      "youtubeChannelId": "UCSlkuPfHH78oGC1o418HV4w",
+      "youtubeChannelHandle": "@sonicvhibez"
+    },
+    "safetyNote": "The YouTube connection belongs to SonicVhibez, not Nature Frontiers. Do not use this Metricool brand as a YouTube publishing target; remove/correct this cross-brand mapping only after owner/support confirms the intended mapping."
+  },
+  "legacyBrand": {
+    "id": 7545638,
+    "ownerSupportRequests": [
+      {
+        "date": "2026-11-13T20:52:34Z",
+        "subject": "Please reconcile Nature Frontiers Facebook and Instagram connections",
+        "scope": "Replace obsolete Facebook and Instagram mappings without deleting the brand, losing analytics history or disturbing 20 existing scheduled draft posts."
+      },
+      {
+        "date": "2026-11-13T21:50:59Z",
+        "subject": "Re: Please reconcile Nature Frontiers Facebook and Instagram connections",
+        "scope": "Owner explicitly authorized only replacement of Facebook/Instagram mappings after confirming exact IDs; publishing, scheduled content and brand history were explicitly excluded."
+      }
+    ],
+    "currentConnectorAccess": "403_FORBIDDEN_ACCESS_DENIED_TO_BLOG_7545638",
+    "supportReplyFound": false,
+    "legacyScheduledDraftPostsReported": 20,
+    "historicalAutoPublishRecordsReported": 8,
+    "status": "UNAVAILABLE_TO_CURRENT_METRICOOL_CONNECTOR",
+    "supportFollowUp": {
+      "status": "SENT_AWAITING_METRICOOL_RESPONSE",
+      "sentAt": "2026-11-19T16:14:02.058Z",
+      "messageId": "1a1f49610773c9d8",
+      "threadId": "1a1f493a97cf5a29",
+      "to": "help@metricool.com",
+      "requested": "Restore read access or provide complete export of the 20 scheduled draft posts, eight historical autoPublish records, analytics history and current Facebook/Instagram connection IDs.",
+      "safety": "Explicitly requested read/export only. No publish, reschedule, edit, delete, recreate, account mapping change or auto-publish enablement authorized."
+    },
+    "youtubeMappingCorrectionRequest": {
+      "status": "SENT_AWAITING_METRICOOL_RESPONSE",
+      "sentAt": "2026-11-19T16:18:58.194Z",
+      "messageId": "1a1f49a96f2707a9",
+      "threadId": "1a1f49a91bda1c1a",
+      "requestedAction": "Disconnect only the SonicVhibez YouTube channel ID UCSlkuPfHH78oGC1o418HV4w from Nature Frontiers brand 8094526.",
+      "preserve": [
+        "Nature Frontiers Facebook Page 1431329126735709",
+        "Nature Frontiers Instagram account naturefrontieers2026",
+        "all scheduled content",
+        "all historical analytics",
+        "legacy brand 7545638"
+      ],
+      "prohibited": [
+        "publish",
+        "reschedule",
+        "edit content",
+        "delete posts",
+        "delete/recreate brands",
+        "enable auto-publishing",
+        "change Facebook/Instagram connections"
+      ]
+    }
+  },
+  "analyticsWindow": {
+    "from": "2026-10-01T00:00:00+02:00",
+    "to": "2026-11-19T23:59:59+02:00",
+    "timezone": "Africa/Johannesburg",
+    "publishedMetaItems": {
+      "facebookFeedPosts": [
+        {
+          "publishedAt": "2026-11-13T19:23:11+02:00",
+          "postId": "1431329126735709_927095510487741",
+          "type": "photo",
+          "url": "https://facebook.com/122095775391554605/posts/927095510487741",
+          "text": ""
+        },
+        {
+          "publishedAt": "2026-11-13T19:22:01+02:00",
+          "postId": "1431329126735709_122095771209554605",
+          "type": "post",
+          "url": "https://facebook.com/122095775391554605/posts/122095771209554605",
+          "text": "Welcome to Nature Frontiers SA! Wild Africa, cinematic documentaries, and the science behind the survival."
+        },
+        {
+          "publishedAt": "2026-11-13T18:40:17+02:00",
+          "postId": "1431329126735709_122095749285554605",
+          "type": "photo",
+          "url": "https://facebook.com/122095775391554605/posts/122095749285554605",
+          "text": ""
+        }
+      ],
+      "facebookReels": [
+        {
+          "publishedAt": "2026-11-14T09:58:03+02:00",
+          "reelId": "893809587091407",
+          "url": "https://www.facebook.com/reel/893809587091407/",
+          "caption": "Mongoose vs King Cobra Fight\n\nIts a showdown. They both have an option to walk away but the conflict was inevitable.\n\n#mongoose #kingcobra #snakes #animalfight #AnimalBehavior"
+        },
+        {
+          "publishedAt": "2026-11-13T22:01:16+02:00",
+          "reelId": "2187141935216256",
+          "url": "https://www.facebook.com/reel/2187141935216256/",
+          "caption": "MONGOOSE vs King Cobra fight."
+        }
+      ],
+      "facebookStories": [
+        {
+          "publishedAt": "2026-11-14T10:00:43+02:00",
+          "type": "photo",
+          "storyId": null,
+          "storyUrl": null
+        },
+        {
+          "publishedAt": "2026-11-18T18:13:27+02:00",
+          "type": "photo",
+          "storyId": null,
+          "storyUrl": null
+        }
+      ],
+      "instagramFeedPosts": [],
+      "instagramReels": [],
+      "instagramStories": []
+    },
+    "publishedMetaItemCount": 7,
+    "futureScheduledPosts": {
+      "from": "2026-11-19T00:00:00+02:00",
+      "to": "2026-12-31T23:59:59+02:00",
+      "count": 0
+    }
+  },
+  "unresolved": {
+    "eightAutoPublishRecords": "The eight historical records previously flagged with draft=false and autoPublish=true cannot be matched to the current brand's published analytics or future schedule because legacy brand 7545638 is inaccessible. Do not infer they were published, safe or approved.",
+    "twentyScheduledDrafts": "The 20 scheduled draft posts reported for legacy brand 7545638 have not been retrieved or reconciled. Preserve them; do not delete, recreate, publish or change them.",
+    "legacyAnalytics": "Historical analytics for brand 7545638 remain inaccessible through the current connector."
+  },
+  "publishingSafety": {
+    "publishingEnabled": false,
+    "dryRun": true,
+    "emergencyStop": true,
+    "campaignId": null,
+    "createUpdateDeleteAttempted": false,
+    "publishAttempted": false,
+    "scheduleMutationAttempted": false,
+    "crossBrandYoutubePublishingAllowed": false
+  },
+  "requiredNextActions": [
+    "Owner or Metricool support must restore/read-export legacy brand 7545638 and its 20 scheduled draft posts, eight autoPublish records and analytics history.",
+    "Confirm whether current brand 8094526 is intended to replace 7545638 without loss of history; do not assume it is.",
+    "Remove the SonicVhibez YouTube channel mapping from Nature Frontiers after support/owner confirms the correct brand connections.",
+    "Reconcile all historical records by post/reel/story ID, platform, publish time, status, draft and autoPublish fields.",
+    "Keep publishing disabled, dryRun true and emergencyStop true until reconciliation and owner approval are complete."
+  ],
+  "evidenceSources": {
+    "metricoolBrandSettingsReadOnly": true,
+    "metricoolScheduledPostsReadOnly": true,
+    "metricoolAnalyticsConnectors": [
+      "facebook/posts",
+      "facebook/reels",
+      "facebook/stories",
+      "instagram/posts",
+      "instagram/reels",
+      "instagram/stories"
+    ],
+    "legacyBrandProbe": "403_FORBIDDEN",
+    "gmailSupportThreadId": "1a1d6aefd1f23437",
+    "noSupportReplyFound": true
+  },
+  "currentBrandReadOnlyCheck": {
+    "checkedAt": "2026-11-19T16:18:58.194Z",
+    "brandId": 8094526,
+    "brandName": "Nature Frontiers SA",
+    "timezone": "Africa/Johannesburg",
+    "facebookPageId": "1431329126735709",
+    "instagramAccount": "naturefrontieers2026",
+    "youtubeChannelId": "UCSlkuPfHH78oGC1o418HV4w",
+    "youtubeMappingStatus": "CROSS_BRAND_MISMATCH_SONICVHIBEZ_CHANNEL",
+    "scheduledPostsQuery": {
+      "from": "2026-11-19T00:00:00+02:00",
+      "to": "2026-12-31T23:59:59+02:00",
+      "timezone": "Africa/Johannesburg",
+      "resultCount": 0
+    },
+    "noMutationsPerformed": true
+  }
+}

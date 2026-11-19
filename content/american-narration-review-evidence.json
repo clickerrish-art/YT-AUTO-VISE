@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "channel": "SonicVhibez",
+  "status": "AMERICAN_MALE_STORYTELLER_REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
+  "generatedAt": "2026-11-19T16:13:33Z",
+  "workflow": {
+    "name": "Render American male storyteller narration review",
+    "runId": 44563576507,
+    "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44563576507",
+    "checkoutCommit": "552d91e1ef8ba86facf98a55adf1c8ae51e2c1d1",
+    "artifactId": 14550782584,
+    "artifactName": "sonicvhibez-american-wildlife-encounter-voice-review",
+    "artifactSha256": "f1cb09dc70baf54156435e55ddc0656010848e492ec5969c014f352f6ac45d93",
+    "retentionDays": 30,
+    "expectedArtifactExpiry": "2026-12-19T16:13:31Z"
+  },
+  "source": {
+    "scriptPath": "content/short-001-wildlife-video-storytelling.md",
+    "scriptSha256": "20f807f0a1c6afd62ced948cfc8d8ed21478d479a76cc287eae62411bc185c53",
+    "narrationSha256": "4d823613cbf10f1e3927ae6611527de215da73ff47e4c65185348ba4997157a9",
+    "wordCount": 129
+  },
+  "voice": {
+    "id": "en_US-norman-medium",
+    "name": "Norman",
+    "gender": "male",
+    "accent": "American English (en_US)",
+    "vocalDirection": "Mature approximately-45-year-old character; clean, clear, warm, confident, passionate wildlife storyteller; natural conversational pacing; controlled emphasis; never robotic or overacted.",
+    "provider": "piper_local"
+  },
+  "model": {
+    "repository": "rhasspy/piper-voices",
+    "revision": "8e602cc224300e0961258a0c885bccbfcc515a7f",
+    "modelPath": "en/en_US/norman/medium/en_US-norman-medium.onnx",
+    "modelMd5": "829cea515dc724d694b83b71e8083f9f",
+    "modelSha256": "b9739443232a80a59c7d18810dd856899bf16a7964725f5ab81ea49b1351cb71",
+    "modelBytes": 63531379,
+    "modelCardSha256": "60eaf4d10009d1bd4a1aa555d337dae00f60421d72fee415b9139a021e7cb5d0",
+    "modelCardUrl": "https://huggingface.co/rhasspy/piper-voices/blob/8e602cc224300e0961258a0c885bccbfcc515a7f/en/en_US/norman/medium/MODEL_CARD",
+    "sourceRecordings": "LibriVox public-domain recordings, according to pinned model card",
+    "engine": "OHF-Voice/piper1-gpl",
+    "engineVersion": "1.8.0",
+    "engineLicense": "GPL-3.0-or-later",
+    "commercialUseStatus": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_LISTENING_AND_FINAL_RELEASE_REVIEW_REQUIRED",
+    "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md",
+    "commercialUseEvidence": "The Piper commercial-use list explicitly lists en_US-norman-medium under voices trained from scratch, dataset license Public domain. The Piper project says this is not legal advice and leaves derivative-work determinations to the user."
+  },
+  "audio": {
+    "artifactFile": "american-wildlife-encounter-narration-review.wav",
+    "sha256": "f68b0b9b453948688f08f800dbf61ccd9188d1976308d94f27bb2cd58b543813",
+    "bytes": 2338348,
+    "format": "WAV PCM s16le",
+    "durationSeconds": 53.023,
+    "sampleRateHz": 22050,
+    "channels": 1,
+    "sampleWidthBits": 16,
+    "peakDbfs": -0.77,
+    "rmsDbfs": -19.21,
+    "clippedSampleCount": 0,
+    "headroomProcessing": {
+      "applied": true,
+      "gainDb": -0.766,
+      "peakBefore": 32767,
+      "peakAfter": 30000
+    },
+    "targetDurationSeconds": {
+      "minimum": 50,
+      "maximum": 60
+    }
+  },
+  "includedFiles": {
+    "attributionTextSha256": "7a575d83b5f62e062133be37a1d3790154232b04d848bcb5943f23ecabb065fd",
+    "modelCardSha256": "60eaf4d10009d1bd4a1aa555d337dae00f60421d72fee415b9139a021e7cb5d0"
+  },
+  "review": {
+    "humanVoiceQuality": "PENDING_OWNER_LISTENING",
+    "commercialAttribution": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED",
+    "ownerSelectedForProduction": false,
+    "productionApproved": false,
+    "finalNarration": false,
+    "publishingEnabled": false,
+    "releaseStatus": "HOLD"
+  },
+  "limitations": [
+    "The requested approximately-45-year-old sound is a vocal direction, not a verified human age.",
+    "The model card rates the voice as medium quality; technical audio metrics do not establish naturalness, warmth or passionate delivery.",
+    "Piper has limited expressive controls; owner listening is required.",
+    "No separate denoising claim is made; this is generated TTS, not a recording of the user's voice.",
+    "Piper's official commercial-use list includes this exact voice as public-domain trained-from-scratch; the project states it is not legal advice and leaves derivative-work determinations to the user.",
+    "The GPL-3.0-or-later license applies to the Piper engine software; this artifact does not redistribute the engine or ONNX weights.",
+    "The WAV is retained in a 30-day Actions artifact; this JSON preserves provenance but does not preserve the WAV bytes permanently."
+  ]
+}

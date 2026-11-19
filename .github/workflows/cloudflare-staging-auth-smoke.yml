@@ -1,0 +1,57 @@
+name: Cloudflare staging authenticated smoke
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "scripts/cloudflare-staging-auth-smoke.mjs"
+      - "scripts/cloudflare-staging-backup-restore-smoke.mjs"
+      - "scripts/cloudflare-dashboard-state-client.mjs"
+      - "scripts/cloudflare-dashboard-state-store.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "cloudflare/worker.js"
+      - "cloudflare/staging-snapshot/worker.js"
+      - "cloudflare/migrations/**"
+      - ".github/workflows/cloudflare-staging-auth-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  authenticated-staging-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      DASHBOARD_STAGING_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
+      DASHBOARD_OPERATOR_TOKEN: ${{ secrets.DASHBOARD_OPERATOR_TOKEN }}
+      CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_ID }}
+      CLOUDFLARE_ACCESS_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_SECRET }}
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Require protected staging credentials
+        run: |
+          if [ -z "$DASHBOARD_OPERATOR_TOKEN" ]; then
+            echo "::error::Add the existing staging Worker operator token as the GitHub Actions secret DASHBOARD_OPERATOR_TOKEN. Do not paste it into logs or chat."
+            exit 1
+          fi
+          if [ -z "$CLOUDFLARE_ACCESS_CLIENT_ID" ] || [ -z "$CLOUDFLARE_ACCESS_CLIENT_SECRET" ]; then
+            echo "::error::Add CLOUDFLARE_ACCESS_CLIENT_ID and CLOUDFLARE_ACCESS_CLIENT_SECRET as GitHub Actions secrets. Do not paste them into logs or chat."
+            exit 1
+          fi
+      - name: Run read-only authenticated staging checks
+        run: node scripts/cloudflare-staging-auth-smoke.mjs
+      - name: Syntax-check one-time backup and restore acceptance
+        run: node --check scripts/cloudflare-staging-backup-restore-smoke.mjs
+      # Explicit push-commit marker is required for any future staging write drill.
+      - name: Run one-time staging backup and restore acceptance
+        if: github.event_name == 'push' && contains(github.event.head_commit.message, '[staging-backup-restore]')
+        env:
+          DASHBOARD_STAGING_BACKUP_RESTORE_CONFIRMATION: "YES"
+        run: node scripts/cloudflare-staging-backup-restore-smoke.mjs

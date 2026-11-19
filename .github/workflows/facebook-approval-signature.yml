@@ -1,0 +1,57 @@
+name: Nature Frontiers signed editorial approval checks
+
+on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths:
+      - "scripts/approve-facebook-candidate.mjs"
+      - "scripts/facebook-policy-engine.mjs"
+      - "test/approve-facebook-candidate.test.mjs"
+      - "test/facebook-policy-engine.test.mjs"
+      - "config/facebook-publishing.json"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/facebook-approval-signature.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "scripts/approve-facebook-candidate.mjs"
+      - "scripts/facebook-policy-engine.mjs"
+      - "test/approve-facebook-candidate.test.mjs"
+      - "test/facebook-policy-engine.test.mjs"
+      - "config/facebook-publishing.json"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/facebook-approval-signature.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nature-frontiers-approval-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  signed-approval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Check approval signer and policy syntax
+        run: |
+          node --check scripts/approve-facebook-candidate.mjs
+          node --check scripts/facebook-policy-engine.mjs
+          node --check test/approve-facebook-candidate.test.mjs
+          node --check test/facebook-policy-engine.test.mjs
+      - name: Verify signed approval, claim evidence and fail-closed mutation handling
+        run: node --test test/approve-facebook-candidate.test.mjs test/facebook-policy-engine.test.mjs

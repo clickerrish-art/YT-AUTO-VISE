@@ -4,11 +4,26 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-test("approved product config contains only the owner-provided vault URL", () => {
+test("all supplied Selar links are owner-authorized for SonicVhibez while two remain held candidates", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
-  assert.equal(config.products.length, 1);
-  assert.equal(config.products[0].url, "https://selar.com/0u19v8u99l");
-  assert.equal(config.products[0].status, "approved");
+  const approved = config.products.filter(product => product.status === "approved");
+  const candidates = config.products.filter(product => product.status === "candidate");
+  assert.equal(approved.length, 1);
+  assert.equal(approved[0].url, "https://selar.com/0u19v8u99l");
+  assert.deepEqual(candidates.map(product => product.url).sort(), [
+    "https://selar.com/539497q11t",
+    "https://selar.com/91j893378q"
+  ].sort());
+  assert.ok(candidates.every(product => product.promotionGate.seller.status === "VERIFIED"));
+  assert.ok(candidates.every(product => product.promotionGate.seller.name === "Click 47"));
+  assert.ok(candidates.every(product => product.promotionGate.seller.sourceUrl === product.url));
+  assert.ok(candidates.every(product => product.promotionGate.seller.evidenceReference.includes("2026-11-09")));
+  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.status === "OWNER_CONFIRMED"));
+  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.brand === "SonicVhibez"));
+  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.confirmedAt === "2026-11-07T09:15:59+02:00"));
+  assert.ok(candidates.every(product => product.promotionGate.brandAuthorization.approvalReference.includes("2026-11-07")));
+  assert.ok(candidates.every(product => product.promotionGate.compensation.status === "OWNER_CONFIRMED"));
+  assert.ok(candidates.every(product => product.promotionGate.disclosure.status === "UNVERIFIED"));
 });
 
 test("example template starts private and cannot pass review by default", () => {
@@ -36,6 +51,12 @@ test("all prepared production metadata templates remain blocked until review is 
     assert.match(result.stderr, /rightsConfirmed/);
     assert.match(result.stderr, /complianceReviewed/);
     assert.match(result.stderr, /READY_FOR_PRIVATE_UPLOAD/);
+    const metadata = JSON.parse(fs.readFileSync(templatePath, "utf8"));
+    assert.equal(metadata.hasPaidPromotion, true);
+    assert.equal(metadata.promotionDisclosure.status, "UNVERIFIED");
+    assert.equal(metadata.promotionDisclosure.type, "direct_sales_revenue");
+    assert.match(metadata.description, /my own Selar business/i);
+    assert.doesNotMatch(metadata.description, /may receive compensation|affiliate\/paid relationship/i);
   }
 });
 
@@ -132,6 +153,9 @@ test("media preflight blocks when human rights and compliance review are missing
   fs.writeFileSync(mediaPath, "not real media");
   fs.writeFileSync(metadataPath, JSON.stringify({
     channel: "SonicVhibez",
+    title: "Test-only metadata fixture",
+    description: "Test-only description for rights-gate coverage.",
+    tags: ["wildlife", "test", "fixture"],
     visibility: "private",
     rightsConfirmed: false,
     complianceReviewed: false

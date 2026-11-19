@@ -1,0 +1,52 @@
+name: Build NOAA lobster thumbnail review
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths:
+      - scripts/create-noaa-lobster-thumbnail-review.py
+      - .github/workflows/noaa-lobster-thumbnail-review.yml
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: noaa-lobster-thumbnail-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  thumbnail-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v4
+
+      - name: Download previously acquired NOAA B-roll package
+        uses: actions/download-artifact@v4
+        with:
+          name: sonicvhibez-noaa-broll-candidates
+          run-id: 42594716333
+          repository: ${{ github.repository }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: media/rights-review
+
+      - name: Install free image tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install --disable-pip-version-check Pillow
+
+      - name: Generate and validate review-only thumbnail
+        run: python scripts/create-noaa-lobster-thumbnail-review.py
+
+      - name: Upload review-only thumbnail and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: noaa-california-spiny-lobster-thumbnail-review
+          path: media/review-only/thumbnails/
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,514 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import crypto from "node:crypto";
+import os from "node:os";
+import path from "node:path";
+import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, validateHistoryReconciliationSnapshot, assertNextPublicationAllowed, fetchCompleteYoutubeHistorySnapshot, readRegularFileNoFollow } from "../scripts/youtube-history-gate.mjs";
+import { evaluateNextPublication } from "../scripts/schedule-policy.mjs";
+
+const evaluateWithVerifiedInventories = options => evaluateNextPublication({
+  pendingAttempts: [],
+  pendingAttemptsVerified: true,
+  scheduledItems: [],
+  scheduledItemsVerified: true,
+  ...options
+});
+
+
+const channelId = "UC1234567890123456789012";
+const remoteVideos = [
+  { id: "vid-a", snippet: { channelId, publishedAt: "2026-10-01T15:00:00.000Z" }, status: { privacyStatus: "private" } },
+  { id: "vid-b", snippet: { channelId, publishedAt: "2026-10-04T15:00:00.000Z" }, status: { privacyStatus: "unlisted" } }
+];
+const reconciliation = {
+  complete: true, channelId, verifiedBy: "Owner Reviewer", verifiedAt: "2026-10-24T10:00:00.000Z",
+  videos: [
+    { id: "vid-a", format: "short", visibility: "private", uploadedAt: "2026-10-01T15:00:00.000Z", publicationState: "NEVER_PUBLISHED" },
+    { id: "vid-b", format: "long_form", visibility: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z" }
+  ]
+};
+
+function verifiedHistorySnapshot(history, scheduledItems = []) {
+  return {
+    complete: true,
+    channelId,
+    history,
+    scheduledItems,
+    privateUploads: [],
+    verifiedAt: "2026-10-24T10:00:00.000Z",
+    verifiedBy: "Owner Reviewer",
+    reconciliationSha256: "a".repeat(64)
+  };
+}
+
+
+test("history reconciliation records private uploads without advancing the actual-publication cycle", () => {
+  const snapshot = validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation });
+  assert.equal(snapshot.history.length, 1);
+  assert.deepEqual(snapshot.history.map(item => item.status), ["unlisted"]);
+  assert.equal(snapshot.history[0].actualPublishedAt, "2026-10-04T15:00:00.000Z");
+  assert.deepEqual(snapshot.privateUploads, [{
+    id: "vid-a",
+    status: "private",
+    uploadedAt: "2026-10-01T15:00:00.000Z",
+    format: "short"
+  }]);
+
+  const previouslyPublished = structuredClone(reconciliation);
+  previouslyPublished.videos[0] = {
+    id: "vid-a",
+    format: "short",
+    visibility: "private",
+    uploadedAt: "2026-10-01T15:00:00.000Z",
+    publicationState: "PREVIOUSLY_PUBLISHED",
+    actualPublishedAt: "2026-10-02T15:00:00.000Z",
+    publicationEvidenceReference: "owner-reviewed-youtube-studio-publication-history-export-vid-a"
+  };
+  const previousPublicationSnapshot = validateHistoryReconciliationSnapshot({
+    channelId, remoteVideos, reconciliation: previouslyPublished
+  });
+  assert.deepEqual(previousPublicationSnapshot.history[0], {
+    id: "vid-a",
+    status: "private",
+    actualPublishedAt: "2026-10-02T15:00:00.000Z",
+    format: "short"
+  });
+  assert.equal(previousPublicationSnapshot.privateUploads.length, 0);
+
+  const misclassifiedPrivate = structuredClone(reconciliation);
+  misclassifiedPrivate.videos[0].actualPublishedAt = "2026-10-01T15:00:00.000Z";
+  assert.throws(
+    () => validateHistoryReconciliationSnapshot({ channelId, remoteVideos, reconciliation: misclassifiedPrivate }),
+    /never-published private upload cannot claim a publication timestamp/
+  );
+});
+
+test("history reconciliation separates future scheduled videos from actual publication history and enforces their slots", () => {
+  const scheduledVideo = {
+    id: "vid-scheduled",
+    snippet: { channelId, publishedAt: "2026-10-05T00:00:00.000Z" },
+    status: { privacyStatus: "private", publishAt: "2026-11-18T15:00:00.000Z" }
+  };
+  const scheduledReconciliation = {
+    ...reconciliation,
+    verifiedAt: "2026-10-04T23:59:59.000Z",
+    videos: [
+      ...reconciliation.videos,
+      { id: "vid-scheduled", format: "short", visibility: "private", scheduledAt: "2026-11-18T15:00:00.000Z" }
+    ]
+  };
+  const snapshot = validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos: [...remoteVideos, scheduledVideo],
+    reconciliation: scheduledReconciliation,
+    now: new Date("2026-10-05T00:00:00.000Z")
+  });
+  assert.equal(snapshot.history.length, 1, "private uploads and future scheduled items must not advance the actual-publication cycle");
+  assert.equal(snapshot.privateUploads.length, 1);
+  assert.deepEqual(snapshot.scheduledItems, [{
+    id: "vid-scheduled",
+    status: "scheduled",
+    scheduledAt: "2026-11-18T15:00:00.000Z",
+    format: "short"
+  }]);
+  const tooSoon = evaluateWithVerifiedInventories({
+    history: snapshot.history, historyVerified: true, scheduledItems: snapshot.scheduledItems,
+    pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-20T15:00:00.000Z", jobId: "job-4", format: "long_form"
+  });
+  assert.equal(tooSoon.valid, false);
+  assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
+  const validSlot = evaluateWithVerifiedInventories({
+    history: snapshot.history, historyVerified: true, scheduledItems: snapshot.scheduledItems,
+    pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-4", format: "long_form"
+  });
+  assert.equal(validSlot.valid, true, "a 72-hour gap from the scheduled item passes the slot policy");
+  const approvedSlot = assertNextPublicationAllowed({
+    historySnapshot: snapshot, expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-4", format: "long_form"
+  });
+  assert.equal(approvedSlot.valid, true, "a future slot after the recorded approval and 72-hour scheduled-item gap is permitted");
+  assert.throws(() => validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos: [...remoteVideos, scheduledVideo],
+    reconciliation: { ...scheduledReconciliation, videos: reconciliation.videos },
+    now: new Date("2026-10-05T00:00:00.000Z")
+  }), /does not cover every remote channel video/);
+  assert.throws(() => validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos: [...remoteVideos, scheduledVideo],
+    reconciliation: scheduledReconciliation,
+    now: new Date("2026-11-19T00:00:00.000Z")
+  }), /past publishAt/);
+});
+
+test("history reconciliation fails closed on missing remote videos, duplicate IDs or mismatched timestamps", () => {
+  const wrongChannel = structuredClone(remoteVideos);
+  wrongChannel[0].snippet.channelId = "UC0000000000000000000000";
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: wrongChannel, reconciliation }), /does not match the authenticated channel ID/);
+  const missingChannel = structuredClone(remoteVideos);
+  delete missingChannel[1].snippet.channelId;
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: missingChannel, reconciliation }), /does not match the authenticated channel ID/);
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: { ...reconciliation, videos: reconciliation.videos.slice(0, 1) } }), /does not cover every remote channel video/);
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: [...remoteVideos, remoteVideos[0]], reconciliation }), /duplicate video ID/);
+  const changed = structuredClone(reconciliation);
+  changed.videos[0].uploadedAt = "2026-10-01T16:00:00.000Z";
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: changed }), /timestamp\/visibility does not match/);
+});
+
+
+test("history reconciliation rejects normalized invalid dates and timezone-free timestamps", () => {
+  for (const invalid of ["2026-02-30T15:00:00.000Z", "2026-10-01T15:00:00", "2026-10-01T15:00:00+14:30", "2026-13-01T15:00:00Z"]) {
+    const badRemote = structuredClone(remoteVideos);
+    badRemote[0].snippet.publishedAt = invalid;
+    assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos: badRemote, reconciliation }), /timestamp/);
+  }
+  for (const invalid of ["2026-02-30T10:00:00.000Z", "2026-10-24T10:00:00"]) {
+    const badReconciliation = { ...reconciliation, verifiedAt: invalid };
+    assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: badReconciliation }), /verification timestamp/);
+  }
+  const badRecord = structuredClone(reconciliation);
+  badRecord.videos[0].uploadedAt = "2026-02-30T15:00:00.000Z";
+  assert.throws(() => validateHistoryReconciliation({ channelId, remoteVideos, reconciliation: badRecord }), /requires visibility and uploadedAt/);
+});
+
+test("history reconciliation rejects future verification and actual publication timestamps", () => {
+  const futureVerification = { ...reconciliation, verifiedAt: "2026-10-24T10:00:00.000Z" };
+  assert.throws(() => validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos,
+    reconciliation: futureVerification,
+    now: new Date("2026-10-24T09:59:59.999Z")
+  }), /verification timestamp.*future/);
+
+  const pastVerification = { ...reconciliation, verifiedAt: "2026-10-04T14:00:00.000Z" };
+  assert.throws(() => validateHistoryReconciliationSnapshot({
+    channelId,
+    remoteVideos,
+    reconciliation: pastVerification,
+    now: new Date("2026-10-04T14:59:59.999Z")
+  }), /actual publication timestamp.*future/);
+});
+
+test("unresolved or uncertain upload attempts block new uploads", () => {
+  assert.equal(assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-1", status: "PRIVATE_UPLOAD_VERIFIED" }] }), true);
+  assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-2", status: "RECOVERY_REQUIRED" }] }), /unresolved upload attempts/);
+  assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-3", status: "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED" }] }), /unresolved upload attempts/);
+  assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-4", status: "UPLOAD_OUTCOME_UNCERTAIN" }] }), /unresolved upload attempts/);
+  for (const status of ["", "UNKNOWN_STATE", "UPLOADED", null]) {
+    assert.throws(
+      () => assertNoUnresolvedUploadAttempts({ attempts: [{ jobId: "job-unknown", status }] }),
+      /unknown or missing status/
+    );
+  }
+  assert.throws(() => assertNoUnresolvedUploadAttempts({ attempts: [{}] }), /unknown or missing status/);
+  assert.throws(() => assertNoUnresolvedUploadAttempts({}), /missing or invalid/);
+});
+
+test("owner-approved cycle gate enforces verified history, next format and the 72-hour gap", () => {
+  const history = [{ id: "vid-b", status: "unlisted", actualPublishedAt: "2026-11-07T15:00:00.000Z", format: "long_form" }];
+  const valid = evaluateWithVerifiedInventories({ history, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "long_form" });
+  assert.equal(valid.valid, true, "the policy accepts the next-format slot exactly 72 elapsed hours after the prior publication");
+  const tooSoon = evaluateWithVerifiedInventories({ history, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-10T14:59:59.999Z", jobId: "job-3", format: "long_form" });
+  assert.equal(tooSoon.valid, false);
+  assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
+  const wrongFormat = evaluateWithVerifiedInventories({ history, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "short" });
+  assert.equal(wrongFormat.valid, false);
+  assert.ok(wrongFormat.errors.some(error => /next format must be long_form/.test(error)));
+  const approved = assertNextPublicationAllowed({
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-3", format: "long_form"
+  });
+  assert.equal(approved.valid, true, "the configured owner approval permits a future slot without waiving the 72-hour minimum");
+});
+
+
+test("owner-approved cycle starts after a legacy Short while retaining it for 72-hour spacing", () => {
+  const legacyHistory = [{
+    id: "legacy-public-short",
+    status: "public",
+    actualPublishedAt: "2026-10-22T15:05:56.000Z",
+    format: "short"
+  }];
+  const valid = evaluateWithVerifiedInventories({
+    history: legacyHistory, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-11-10T15:05:56.000Z", jobId: "first-cycle-long-form",
+    format: "long_form", cycleStartAt: "2026-11-01T00:00:00.000Z"
+  });
+  assert.equal(valid.valid, true, "a new cycle starts after the legacy Short while retaining it for spacing");
+  const wrongFormat = evaluateWithVerifiedInventories({
+    history: legacyHistory, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-11-10T15:05:56.000Z", jobId: "wrong-first-cycle-short",
+    format: "short", cycleStartAt: "2026-11-01T00:00:00.000Z"
+  });
+  assert.equal(wrongFormat.valid, false);
+  assert.ok(wrongFormat.errors.some(error => /next format must be long_form/.test(error)));
+  const tooSoon = evaluateWithVerifiedInventories({
+    history: legacyHistory, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-10-24T15:05:55.999Z", jobId: "too-soon",
+    format: "long_form", cycleStartAt: "2026-10-22T15:05:56.000Z"
+  });
+  assert.equal(tooSoon.valid, false);
+  assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
+  const approved = assertNextPublicationAllowed({
+    historySnapshot: verifiedHistorySnapshot(legacyHistory), expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-11-20T15:05:56.000Z",
+    jobId: "first-approved-cycle-long-form", format: "long_form"
+  });
+  assert.equal(approved.valid, true, "the approved cycle starts on its recorded date and retains the legacy Short for spacing");
+});
+
+test("private upload gate accepts approved cadence but unresolved attempts still block", () => {
+  const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
+  const approved = assertNextPublicationAllowed({
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-11-20T15:00:00.000Z",
+    jobId: "job-owner-cadence", format: "long_form"
+  });
+  assert.equal(approved.valid, true);
+  const unresolved = evaluateWithVerifiedInventories({
+    history, historyVerified: true,
+    pendingAttempts: [{ jobId: "uncertain-job", status: "RECOVERY_REQUIRED" }],
+    proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-owner-cadence", format: "long_form"
+  });
+  assert.equal(unresolved.valid, false);
+  assert.ok(unresolved.errors.some(error => /unresolved\/uncertain outcome and must be reconciled/.test(error)));
+});
+
+
+test("complete history fetch verifies authenticated playlist ownership and every paginated playlist item", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "youtube-history-gate-"));
+  const reconciliationPath = path.join(directory, "history.json");
+  const ids = Array.from({ length: 51 }, (_, index) => "video-" + String(index).padStart(3, "0"));
+  const remote = ids.map(id => ({
+    id,
+    snippet: { channelId, publishedAt: "2026-10-01T15:00:00.000Z" },
+    status: { privacyStatus: "private" }
+  }));
+  fs.writeFileSync(reconciliationPath, JSON.stringify({
+    complete: true,
+    channelId,
+    verifiedBy: "Owner Reviewer",
+    verifiedAt: "2026-10-24T10:00:00.000Z",
+    videos: ids.map(id => ({
+      id,
+      format: "long_form",
+      visibility: "private",
+      uploadedAt: "2026-10-01T15:00:00.000Z",
+      publicationState: "NEVER_PUBLISHED"
+    }))
+  }));
+  const pageCalls = [];
+  const youtube = {
+    playlistItems: {
+      list: async args => {
+        pageCalls.push(args);
+        if (args.pageToken === "page-2") {
+          return { data: {
+            pageInfo: { totalResults: 51 },
+            items: [{ contentDetails: { videoId: ids[50] } }]
+          } };
+        }
+        return { data: {
+          pageInfo: { totalResults: 51 },
+          nextPageToken: "page-2",
+          items: ids.slice(0, 50).map(videoId => ({ contentDetails: { videoId } }))
+        } };
+      }
+    },
+    videos: {
+      list: async ({ id }) => ({
+        data: { items: id.split(",").map(videoId => remote.find(item => item.id === videoId)) }
+      })
+    }
+  };
+  try {
+    const snapshot = await fetchCompleteYoutubeHistorySnapshot(
+      youtube,
+      { id: channelId, contentDetails: { relatedPlaylists: { uploads: "uploads-playlist" } } },
+      reconciliationPath,
+      channelId
+    );
+    assert.equal(snapshot.history.length, 0);
+    assert.equal(snapshot.privateUploads.length, 51);
+    assert.equal(snapshot.reconciliationSha256, crypto.createHash("sha256").update(fs.readFileSync(reconciliationPath)).digest("hex"), "snapshot must bind the exact reviewed reconciliation document bytes");
+    assert.equal(pageCalls.length, 2);
+    assert.equal(pageCalls[0].maxResults, 50);
+    assert.equal(pageCalls[1].pageToken, "page-2");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("complete history fetch rejects a playlist object from another authenticated channel", async () => {
+  await assert.rejects(
+    fetchCompleteYoutubeHistorySnapshot(
+      { playlistItems: { list: async () => { throw new Error("must not call YouTube"); } } },
+      { id: "UC0000000000000000000000", contentDetails: { relatedPlaylists: { uploads: "wrong-playlist" } } },
+      "unused-history.json",
+      channelId
+    ),
+    /does not match the configured SonicVhibez channel ID/
+  );
+});
+
+test("complete history fetch rejects missing IDs, inconsistent totals and incomplete video details", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "youtube-history-gate-"));
+  const reconciliationPath = path.join(directory, "history.json");
+  fs.writeFileSync(reconciliationPath, JSON.stringify(reconciliation));
+  const channel = { id: channelId, contentDetails: { relatedPlaylists: { uploads: "uploads-playlist" } } };
+  try {
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => ({ data: {
+        pageInfo: { totalResults: 1 },
+        items: [{ contentDetails: {} }]
+      } }) },
+      videos: { list: async () => ({ data: { items: [] } }) }
+    }, channel, reconciliationPath, channelId), /missing its remote video ID/);
+
+    let page = 0;
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => ({ data: {
+        pageInfo: { totalResults: page++ === 0 ? 2 : 3 },
+        ...(page === 1 ? { nextPageToken: "next" } : {}),
+        items: [{ contentDetails: { videoId: "video-a" } }]
+      } }) },
+      videos: { list: async () => ({ data: { items: [] } }) }
+    }, channel, reconciliationPath, channelId), /total changed during pagination/);
+
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => ({ data: {
+        pageInfo: { totalResults: 1 },
+        items: [{ contentDetails: { videoId: "video-a" } }]
+      } }) },
+      videos: { list: async () => ({ data: { items: [] } }) }
+    }, channel, reconciliationPath, channelId), /video details omitted one or more requested playlist video IDs/);
+
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => ({ data: {
+        pageInfo: { totalResults: 1 },
+        items: [{ contentDetails: { videoId: "video-a" } }]
+      } }) },
+      videos: { list: async () => ({ data: { items: [{
+        id: "video-b",
+        snippet: { channelId, publishedAt: "2026-10-01T15:00:00.000Z" },
+        status: { privacyStatus: "private" }
+      }] } }) }
+    }, channel, reconciliationPath, channelId), /did not match the requested playlist video IDs/);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+
+test("channel-history evidence is read through a pinned no-follow descriptor and rejects symlink paths", () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "youtube-history-pinned-"));
+  const targetPath = path.join(directory, "history.json");
+  const linkPath = path.join(directory, "history-link.json");
+  const bytes = Buffer.from(JSON.stringify(reconciliation));
+  fs.writeFileSync(targetPath, bytes);
+  try {
+    assert.deepEqual(readRegularFileNoFollow(targetPath), bytes);
+    fs.symlinkSync(targetPath, linkPath);
+    assert.throws(() => readRegularFileNoFollow(linkPath), /ELOOP|symbolic link|changed while opening/i);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+
+
+test("complete history fetch rejects repeated page tokens and duplicate playlist video IDs", async () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "youtube-history-pagination-"));
+  const reconciliationPath = path.join(directory, "history.json");
+  fs.writeFileSync(reconciliationPath, JSON.stringify(reconciliation));
+  const channel = { id: channelId, contentDetails: { relatedPlaylists: { uploads: "uploads-playlist" } } };
+  const firstPageIds = Array.from({ length: 50 }, (_, index) => "page-one-" + index);
+  let repeatedTokenCalls = 0;
+  try {
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => {
+        repeatedTokenCalls += 1;
+        return { data: {
+          pageInfo: { totalResults: 100 },
+          nextPageToken: "repeat-token",
+          items: (repeatedTokenCalls === 1 ? firstPageIds : Array.from({ length: 50 }, (_, index) => "page-two-" + index))
+            .map(videoId => ({ contentDetails: { videoId } }))
+        } };
+      } },
+      videos: { list: async () => { throw new Error("video details must not be requested for a looping page token"); } }
+    }, channel, reconciliationPath, channelId), /repeated a pagination token/);
+    assert.equal(repeatedTokenCalls, 2, "the repeated token must be rejected before a third page request");
+
+    let duplicatePage = 0;
+    await assert.rejects(fetchCompleteYoutubeHistorySnapshot({
+      playlistItems: { list: async () => {
+        duplicatePage += 1;
+        return { data: {
+          pageInfo: { totalResults: 51 },
+          ...(duplicatePage === 1 ? { nextPageToken: "second-page" } : {}),
+          items: (duplicatePage === 1 ? firstPageIds : [firstPageIds[0]])
+            .map(videoId => ({ contentDetails: { videoId } }))
+        } };
+      } },
+      videos: { list: async () => { throw new Error("video details must not be requested for duplicate playlist IDs"); } }
+    }, channel, reconciliationPath, channelId), /duplicate video IDs/);
+    assert.equal(duplicatePage, 2, "duplicate IDs across pages must fail before video-detail reconciliation");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+
+test("publication scheduler independently requires a current hash-bound production quality approval", () => {
+  const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
+  const base = {
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-11-20T15:00:00.000Z", jobId: "quality-gated-job", format: "long_form",
+    requireQualityApproval: true
+  };
+  assert.throws(() => assertNextPublicationAllowed(base), /requires the exact human-approved production quality record/);
+  assert.throws(() => assertNextPublicationAllowed({ ...base, qualityApproval: {}, videoPath: "missing.mp4", metadataPath: "missing.json" }), /production quality gate blocked publication/);
+});
+
+test("production publication gate requires complete channel, scheduled, private-upload and attempt inventories", () => {
+  const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
+  const snapshot = verifiedHistorySnapshot(history);
+  const base = {
+    historySnapshot: snapshot,
+    expectedChannelId: channelId,
+    pendingAttempts: [], pendingAttemptsVerified: true,
+    proposedAt: "2026-11-10T15:00:00.000Z",
+    jobId: "job-explicit-inventories",
+    format: "long_form"
+  };
+
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, historySnapshot: undefined }),
+    /complete owner-verified YouTube history snapshot/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, historySnapshot: { ...snapshot, scheduledItems: undefined } }),
+    /complete owner-verified YouTube history snapshot/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, pendingAttempts: undefined }),
+    /upload attempt ledger must be explicitly inspected/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, pendingAttemptsVerified: false }),
+    /upload attempt ledger must be independently inspected and reconciled/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, expectedChannelId: "UC" + "Z".repeat(22) }),
+    /must match the authenticated SonicVhibez channel ID/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, timeZone: "UTC" }),
+    /timeZone override must match authoritative timezone Africa\/Johannesburg/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, minSpacingHours: 71 }),
+    /minSpacingHours override must match authoritative spacing policy of 72 hours/
+  );
+});

@@ -1,0 +1,19 @@
+{
+  "format": "long_form",
+  "scenes": [
+    {
+      "sceneId": "parent-scene-01",
+      "assetId": "parent-scene-01",
+      "startSeconds": 0,
+      "endSeconds": 30
+    },
+    {
+      "sceneId": "parent-scene-02",
+      "assetId": "parent-scene-02",
+      "startSeconds": 30,
+      "endSeconds": 60
+    }
+  ],
+  "fixtureOnly": true,
+  "note": "Synthetic unit-test fixture. Not production source evidence or permission evidence."
+}

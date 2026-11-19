@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { validateProductPromotionGate } from "./product-promotion-gate.mjs";
 
 const errors = [];
 const metadataPath = process.argv[2] ?? "content/next-short.json";
@@ -11,7 +12,7 @@ if (!fs.existsSync(metadataPath)) {
 
 const item = JSON.parse(fs.readFileSync(metadataPath, "utf8"));
 const configuredChannelId = process.env.SONICVHIBEZ_CHANNEL_ID;
-const approvedUrls = new Set(products.filter(p => p.status === "approved").map(p => p.url));
+const selectedProduct = products.find(p => p?.status === "approved" && p?.url === item.productUrl);
 
 if (!configuredChannelId || !configuredChannelId.trim()) {
   errors.push("SONICVHIBEZ_CHANNEL_ID must be configured with the verified SonicVhibez channel ID");
@@ -25,19 +26,19 @@ if (!item.title || item.title.length > 100) errors.push("title is required and m
 if (!item.description || item.description.length < 20) errors.push("description is required (minimum 20 characters)");
 if (item.description && !item.description.includes(item.productUrl ?? "")) errors.push("description must include the approved product URL");
 if (!Array.isArray(item.tags) || item.tags.length < 3 || item.tags.some(t => typeof t !== "string" || !t.trim())) errors.push("provide at least three non-empty tags");
-if (!item.productUrl || !approvedUrls.has(item.productUrl)) errors.push("productUrl must exactly match an approved URL in config/products.json");
+if (!item.productUrl || !selectedProduct) errors.push("productUrl must exactly match an approved URL in config/products.json");
+else errors.push(...validateProductPromotionGate(selectedProduct, item).map(message => "product promotion gate: " + message));
 if (item.madeForKids !== false) errors.push("madeForKids must be explicitly false for this promotional workflow");
 if (item.visibility !== "private") errors.push("new content must begin as private; public publishing is not authorized by this checker");
 if (item.rightsConfirmed !== true) errors.push("rightsConfirmed must be true before media can proceed");
-if (item.complianceReviewed !== true) errors.push("complianceReviewed must be true before media can proceed");
-if (item.hasPaidPromotion !== true) errors.push("hasPaidPromotion must be true and the promotion relationship disclosed");
-if (item.description && !/paid promotion|affiliate|may receive compensation/i.test(item.description)) errors.push("description must clearly disclose the promotional or affiliate relationship");
+if (item.complianceReviewed !== true) errors.push("complianceReviewed must be true before content can proceed");
+if (typeof item.hasPaidPromotion !== "boolean") errors.push("hasPaidPromotion must be an explicit boolean matching the verified promotion relationship");
 if (item.containsSyntheticMedia !== true) errors.push("containsSyntheticMedia must be true for the planned realistic AI-generated wildlife visuals");
 if (item.description && !/AI DISCLOSURE|AI-generated|synthetic/i.test(item.description)) errors.push("description must include an accurate AI/synthetic-media disclosure");
 
 if (errors.length) {
-  console.error("BLOCKED — content did not pass safety checks:");
-  for (const error of errors) console.error(`- ${error}`);
+  console.error("BLOCKED — metadata did not pass safety checks:");
+  for (const error of errors) console.error("- " + error);
   process.exit(1);
 }
 

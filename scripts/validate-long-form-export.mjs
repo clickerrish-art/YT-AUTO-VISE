@@ -6,16 +6,22 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 
 const [mediaArg = "media/long-form-next.mp4"] = process.argv.slice(2);
-const mediaPath = path.resolve(mediaArg);
-if (!fs.existsSync(mediaPath) || !fs.statSync(mediaPath).isFile() || fs.statSync(mediaPath).size === 0) {
-  console.error("BLOCKED: export file is missing or empty: " + mediaPath);
+let mediaPath;
+try { mediaPath = resolveRegularFileNoSymlinks(mediaArg, process.cwd(), "Long-form export"); }
+catch {
+  console.error("BLOCKED: export file is missing or empty, unsafe, or contains a symbolic link.");
+  process.exit(2);
+}
+if (fs.statSync(mediaPath).size === 0) {
+  console.error("BLOCKED: export file is empty.");
   process.exit(2);
 }
 const probe = spawnSync("ffprobe", [
   "-v", "error",
-  "-show_entries", "format=duration:stream=codec_type,codec_name,width,height",
+  "-show_entries", "format=duration:stream=codec_type,codec_name,width,height,avg_frame_rate",
   "-of", "json", mediaPath
 ], { encoding: "utf8" });
 if (probe.error || probe.status !== 0) {
@@ -37,6 +43,11 @@ if (!video) errors.push("video stream is missing");
 else {
   if (video.width !== 1920 || video.height !== 1080) errors.push("video must be 1920×1080; found " + video.width + "×" + video.height);
   if (video.codec_name !== "h264") errors.push("video codec must be H.264; found " + video.codec_name);
+  const rateParts = String(video.avg_frame_rate ?? "").split("/").map(Number);
+  const fps = rateParts.length === 2 && rateParts[1] > 0 ? rateParts[0] / rateParts[1] : NaN;
+  if (!Number.isFinite(fps) || fps < 23.9 || fps > 60) {
+    errors.push("video frame rate must be between 23.9 and 60 fps; found " + (Number.isFinite(fps) ? fps.toFixed(3) : "unknown"));
+  }
 }
 if (!audio) errors.push("audio stream is missing");
 else if (audio.codec_name !== "aac") errors.push("audio codec must be AAC; found " + audio.codec_name);
@@ -45,6 +56,17 @@ if (errors.length) {
   errors.forEach(e => console.error("- " + e));
   process.exit(1);
 }
+
+// ffprobe can read metadata from a damaged file; decode the complete stream to catch corruption.
+const decode = spawnSync("ffmpeg", [
+  "-v", "error", "-xerror", "-i", mediaPath, "-f", "null", "-"
+], { encoding: "utf8" });
+if (decode.error || decode.status !== 0) {
+  console.error("BLOCKED: full-file FFmpeg decode failed; export may be corrupt.");
+  const detail = (decode.stderr || "").trim();
+  if (detail) console.error(detail.slice(0, 1200));
+  process.exit(1);
+}
 console.log("PASS: long-form export technical checks passed.");
-console.log("Duration: " + (duration / 60).toFixed(2) + " minutes | Resolution: 1920×1080 | Video: H.264 | Audio: AAC");
-console.log("Human review is still required for factual accuracy, rights, captions, thumbnail, disclosures, and channel identity.");
+console.log("Duration: " + (duration / 60).toFixed(2) + " minutes | Resolution: 1920×1080 | Video: H.264 | Audio: AAC | FPS: " + (Number(video.avg_frame_rate.split("/")[0]) / Number(video.avg_frame_rate.split("/")[1])).toFixed(2));
+console.log("Full-file decode passed. Human review is still required for factual accuracy, rights, captions, thumbnail, disclosures, and channel identity.");

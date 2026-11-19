@@ -1,15 +1,16 @@
 {
   "channel": "SonicVhibez",
   "channelId": "REPLACE_WITH_VERIFIED_SONICVHIBEZ_CHANNEL_ID",
-  "title": "3 Steps to Plan a Wildlife Documentary Short",
-  "description": "Plan a wildlife Short around one subject, a clear beginning-middle-end, and editing that stays faithful to the footage. Explore the Complete YouTube Wildlife Creator's Vault — Premium Combo PDF: https://selar.com/0u19v8u99l",
+  "title": "How to Make a Wildlife Documentary Short: 3 Planning Steps",
+  "description": "Learn how to make a wildlife documentary Short with one subject, habitat context, a clear story arc and rights-checked footage.\\n\\nPromotional resource: Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF\\nhttps://selar.com/0u19v8u99l\\n\\nDISCLOSURE HOLD: The owner confirms Selar is their own business and customer payments are received directly through Selar. This is direct sales revenue, not an affiliate commission. The product listing uses Nature Frontiers branding, so SonicVhibez brand fit still requires owner confirmation. Proposed viewer-facing disclosure (not yet approved): This product is sold through my own Selar business; purchases generate revenue for my business. Do not publish until all remaining review gates pass.",
   "tags": [
+    "how to make wildlife documentary",
     "wildlife documentary",
-    "wildlife filmmaking tips",
-    "YouTube Shorts tips",
-    "wildlife video editing",
-    "animal behavior",
-    "nature documentary"
+    "wildlife stories",
+    "wildlife video",
+    "wildlife filmmaking",
+    "wildlife storytelling",
+    "YouTube Shorts"
   ],
   "productUrl": "https://selar.com/0u19v8u99l",
   "madeForKids": false,
@@ -17,5 +18,12 @@
   "rightsConfirmed": false,
   "complianceReviewed": false,
   "mediaPath": "",
-  "scriptPath": "content/short-002-plan-wildlife-documentary.md"
+  "scriptPath": "content/short-002-plan-wildlife-documentary.md",
+  "notes": "Existing weekly Short 2 of 2; SEO packaging refreshed from vidIQ research dated 2026-11-06. Seller identity is verified as Click 47 from the live Selar listing; the Vault listing uses Nature Frontiers branding. Hold: the fit of the Nature Frontiers-branded listing for SonicVhibez still needs owner confirmation; channel identity, rights-cleared media and human review also remain unverified. The direct Selar sales relationship is owner-confirmed, but its viewer-facing disclosure is not yet approved.",
+  "hasPaidPromotion": true,
+  "promotionDisclosure": {
+    "status": "UNVERIFIED",
+    "type": "direct_sales_revenue",
+    "text": "This product is sold through my own Selar business; purchases generate revenue for my business."
+  }
 }

@@ -1,6 +1,6 @@
-# SonicVhibez footage acquisition queue — candidates, not yet cleared
+# SonicVhibez footage acquisition queue — candidates and conditional owner authorizations
 
-**Status: SOURCE CANDIDATES ONLY. No footage has been downloaded, inspected, or approved by this file.** Do not change any rights or release flags based on this list.
+**Current status (10 November 2026):** The NOAA Spiny Lobsters in California package has **owner-authorized conditional use** for SonicVhibez, limited to the exact source SHA recorded in `content/asset-candidates/noaa-spiny-lobsters-california.json`, with the exact credit **“NOAA’s Office of National Marine Sanctuaries”** and complete removal of source audio. This is not a production clearance or final-video approval. The asset remains outside the approved production register; `rightsEvidenceReviewed`, `humanApproved`, `rightsConfirmed` and `complianceReviewed` remain false. Publishing remains disabled. The leatherback package and all other candidates remain unapproved.
 
 ## Preferred acquisition source
 
@@ -27,6 +27,51 @@ These are relevant candidates for short establishing shots, not approved assets:
 
 The detail URLs above are candidates; if a link redirects, search the exact package title from the official library. The page-level reuse statement is not a substitute for the package's actual slate and credits.
 
+## Acquisition evidence — 9 November 2026
+
+A review-only acquisition run downloaded two official NOAA Fisheries B-roll package files. Latest repeat workflow run: `42594716333`; artifact: `sonicvhibez-noaa-broll-candidates` (artifact ID `13662524700`, 266,154,848 bytes). Its two MP4 SHA-256 values match the earlier acquisition run `42589870532` (artifact ID `13660453540`), confirming reproducible downloads. The latest artifact is retained in GitHub Actions; these source files are not committed to the repository.
+
+| Candidate | Technical inspection | SHA-256 | Opening-slate attribution observed |
+|---|---|---|---|
+| B-Roll: Spiny Lobsters in California | MP4, H.264/AAC, 1280×720, 380.810 s, 100,223,664 bytes | `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb` | “NOAA’s Office of National Marine Sanctuaries” |
+| B-Roll: Leatherback Turtle Tagging | MP4, H.264/AAC, 1280×720, 628.724 s, 166,534,262 bytes | `a2b0252cd5fdda4bfe09d5953df55fbebf748c8bba3b0139f2f8ebc755b2f568` | “NOAA Fisheries” |
+
+The official NOAA Fisheries B-roll library states that B-roll packages are public domain for download and use with NOAA Fisheries credit, and that each package’s opening slate provides specific attribution, possible third-party contributions and applicable permit numbers. The package pages identify the lobster footage as California spiny lobster (*Panulirus interruptus*) and the turtle footage as NOAA researchers tagging leatherback turtles in the Gulf of Mexico near Destin, Florida. Official policy: https://videos.fisheries.noaa.gov/category/videos/b-roll-packages---all
+
+**Review status: DOWNLOADED; OPENING SLATES AND TECHNICAL HEADERS INSPECTED; NOT APPROVED FOR PRODUCTION.** The full packages have not yet received exhaustive clip-by-clip visual/credit review, the source audio has not been cleared, and no owner/human rights approval has been recorded. Keep `rightsEvidenceReviewed=false`, `humanApproved=false`, and `rightsConfirmed=false`. Do not extract, render, or publish these clips until the remaining review is complete.
+
+
+## Independent visual sample review — 9 November 2026
+
+The latest retained acquisition artifact was downloaded for a second, independent review:
+- GitHub Actions artifact: `sonicvhibez-noaa-broll-candidates`, run `42594716333`, artifact ID `13662524700` (266,763,096 bytes as downloaded).
+- Both MP4 SHA-256 values were recomputed locally and match the values above exactly.
+- `ffprobe` independently confirmed H.264 video, AAC audio, 1280×720 resolution, and durations matching the opening slates (lobster 380.810 s / 6:20.8; turtle 628.724 s / 10:28.7).
+- A 12-frame visual contact sheet was sampled across each full package, including the opening slate. This is a content overview only, not exhaustive clip-by-clip review.
+
+### Observations and attribution
+
+- **Spiny lobster package:** the opening slate explicitly requests credit to **“NOAA’s Office of National Marine Sanctuaries”** and states the footage is courtesy of NOAA. The sampled frames show underwater rocky reef habitat, fish and California spiny lobsters. Use the exact requested credit; do not replace it with a generic NOAA Fisheries credit.
+- **Leatherback turtle package:** the opening slate explicitly requests credit to **“NOAA Fisheries.”** Additional sampled in-video title cards describe NOAA Fisheries researchers capturing a leatherback turtle near Destin, Florida, using a breakaway hoop net, then assessing the animal and applying a satellite tag. Sampled footage shows boats and researchers conducting the operation. Narration must retain this specific context and must not imply a different species, location, or behaviour.
+
+
+### Embedded attribution-card inspection — leatherback package
+
+A timeline scan identified seven full black interstitial cards at approximately 5–10 s, 108–113 s, 135–140 s, 262–267 s, 489–494 s, 526–531 s and 577–582 s. The cards were extracted and their text checked. Each requests **“NOAA Fisheries”** credit. The final three cards additionally identify **Videographer: Lisa Belskis**. Two further narrative cards were checked around 160 s and 317 s; they describe the capture near Destin, Florida, the breakaway hoop-net method, health assessment and satellite-tagging, and also request NOAA Fisheries credit.
+
+The lobster package's sampled species card identifies **California spiny lobster (*Panulirus interruptus*)** and repeats the requested credit to **NOAA's Office of National Marine Sanctuaries**.
+
+This improves attribution discovery but does not establish that no other contributor, rights restriction, or audio condition exists elsewhere in either package. The complete clip/credit inventory remains open.
+
+### What this review does not establish
+
+- The 12-frame sample does not inspect every shot, transition, contributor, or embedded credit card.
+- AAC source audio remains uncleared and must be removed unless its separate reuse rights are documented.
+- The package-level NOAA public-domain statement and visible slates do not establish that every individual shot is free of third-party restrictions.
+- No asset-register entries, rights-confirmed flags, human approvals, render manifests, or production permissions were created by this review.
+
+**Disposition: retain both as source candidates for further review only.** The next clearance step is a full timeline/credit inspection and shot-level selection, followed by the actual asset-register evidence and human approval. No clip may be rendered or published on the basis of this sample review alone.
+
 ## Download and clearance checklist
 
 For each selected package:
@@ -44,3 +89,118 @@ For each selected package:
 - Do not mark `rightsEvidenceReviewed`, `humanApproved`, `rightsConfirmed`, or `complianceReviewed` true until the actual evidence and final edit have been inspected by a human.
 - Do not claim this repository contains licensed wildlife footage or a completed wildlife video yet.
 - Keep public publishing disabled.
+
+## Full timeline review — NOAA Spiny Lobsters package — 10 November 2026
+
+The retained acquisition artifact was downloaded and the complete 380.810-second source was inspected at one-second intervals (381 decoded frames, 1280×720, H.264 video, AAC 48 kHz stereo). Four contact sheets cover the complete one-second sample.
+
+- Source package: **B-Roll: Spiny Lobsters in California's Channel Islands**.
+- Official source page: https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california
+- NOAA's B-roll library states that B-roll packages are public domain and may be downloaded and used with credit; the package's own slate supplies the specific attribution. This is distinct from NOAA narrative videos, which may contain third-party licensed clips that cannot be extracted.
+- Exact opening-slate instruction: **“Please credit ‘NOAA’s Office of National Marine Sanctuaries’.”** The slate says all footage is courtesy of the National Oceanic and Atmospheric Administration.
+- SHA-256 recomputed from the downloaded source: `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`.
+- Artifact: workflow run `42594716333`, artifact ID `13662524700`, file `noaa-spiny-lobsters-california.download`.
+- The one-second visual review shows underwater reef habitat, fish, and California spiny lobsters. It shows no people, animal handling, baiting, staged interaction, or graphic animal harm. No additional attribution cards or third-party credits were observed in the one-second timeline sample after the opening slate.
+- The source contains AAC audio. It is **not cleared for reuse**; remove the entire source audio track from any derivative. Do not use the NOAA seal/logo as SonicVhibez branding, and do not imply NOAA endorses SonicVhibez or the Selar product.
+
+**Disposition: best current candidate for a marine-wildlife creator-education edit, but still not approved for production.** The one-second visual sample is not a frame-by-frame legal clearance and cannot rule out sub-second material or restrictions not visible in the video. A human must review the original package/source terms and final edit, approve the exact clip selection and credit, and sign off the finished video. Until then, do not add it as an approved asset, set `humanApproved`, `rightsConfirmed` or `complianceReviewed` true, or render/publish it as production content. The leatherback tagging package remains a separate, context-sensitive candidate and is not cleared by this review.
+
+
+
+## Owner authorization — NOAA Spiny Lobsters package — 10 November 2026
+
+**Owner decision: APPROVED FOR CONDITIONAL SONICVHIBEZ USE**, recorded in the ChatGPT conversation on 10 November 2026. The owner explicitly approved using this specific NOAA Spiny Lobsters in California's Channel Islands B-roll package, provided the exact package credit is displayed and the entire source audio track is removed.
+
+Approved source identity (must match before any derivative is created):
+- Official source page: https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california
+- Acquired source filename: `noaa-spiny-lobsters-california.download`
+- SHA-256: `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`
+- Exact required credit: **“NOAA’s Office of National Marine Sanctuaries”**.
+- Source audio: **REMOVE COMPLETELY**; no source AAC audio may be used.
+- NOAA seals/logos may not be used as SonicVhibez branding, and the edit must not imply NOAA endorsement of SonicVhibez or the Selar product.
+
+**Scope and remaining controls:** this owner authorization applies only to the identified spiny-lobster package and the conditions above. It is not a blanket approval for the leatherback package, other NOAA material, music, third-party assets, or any other source. It does not itself establish legal clearance of every individual shot, substitute for inspection of selected in/out points and final edit, or authorize publication. The one-second full-timeline visual sample remains a sampling method, not frame-by-frame review. Before production use, inspect each selected shot and its transitions/credits, retain the exact source and credit evidence, verify the final edit contains the exact credit and no source audio, and complete the separate final-video human/compliance review. Until those checks are complete, keep the asset out of the approved production register and keep `rightsConfirmed=false`, `complianceReviewed=false`, and publishing disabled.
+
+
+## Silent source-review assembly — 10 November 2026
+
+A 64-second, 16:9 silent review assembly was created from the exact owner-authorized source. Selected source ranges: 160–175 s, 245–260 s, 320–335 s and 360–375 s. The output is H.264, 1280×720, contains no audio stream, displays the exact credit **“NOAA’s Office of National Marine Sanctuaries”** throughout the footage, and carries persistent “REVIEW ONLY — NOT FOR PUBLICATION” labeling plus a not-approved end slate.
+
+- Review output: `NOAA-spiny-lobster-review-cut.mp4` (local review artifact; not committed as a production asset).
+- SHA-256: `74fe43b1beae68574d2f75fd7b95737bde87be1ebad48451d4b50b94645b9181`.
+- Source SHA-256: `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`.
+- Verification: ffprobe reports one H.264 video stream and no audio streams; extracted footage frame and end slate were visually checked.
+
+This assembly is only a source/credit/audio-removal proof. It has no narration, script, captions, product promotion, final metadata, or final-video compliance review. It is not the planned Short or a publishable video. Keep the asset outside the approved production register and keep all rights/final-review flags false until selected-shot review and full final-video approval are complete.
+
+---
+
+## Pexels wildlife clips — conditional owner-approved candidates, HOLD — 16 November 2026
+
+The owner previously authorized stock footage only **if each clip is individually verified safe**. This is conditional source-review permission, not blanket production approval.
+
+### Candidate 1 — King cobra feeding on another snake
+
+- Source page: https://www.pexels.com/video/king-cobra-eating-another-snake-in-the-wild-30175165/
+- Page title: **King Cobra Eating Another Snake in the Wild**
+- Contributor shown on page: **Regan Dsouza**
+- Pexels listing: Free
+- Page metadata: 1920×1080, 16:9, 10 seconds, 25 fps; page date 10 January 2025.
+- Page description: “King cobra feeding on another snake in natural habitat.”
+- Current license references checked: https://www.pexels.com/license/ and https://help.pexels.com/hc/en-us/articles/360042295214-Can-I-use-the-photos-and-videos-for-a-commercial-project
+- License summary: Pexels states that its photos/videos may be used and modified for commercial projects without required attribution. Prohibitions include standalone redistribution/sale, implied endorsement, and trademark use. The terms also warn that depicted third-party rights may require separate permission.
+
+### Candidate 2 — Slow worm moving through grass
+
+- Source page: https://www.pexels.com/video/nature-animal-lizard-reptile-4106826/
+- Page title shown: **A Snake Crawling In The Ground**
+- Contributor shown on page: **Muhammadrizwan Saeed**
+- Pexels listing: Free
+- Page metadata: 1920×1080, 16:9, 17 seconds, 29.97 fps; page date 8 April 2020.
+- Important factual correction: the page description identifies the animal as a **slow worm (*Anguis fragilis*)**, not a snake. Any script, title, caption or narration must identify it accurately as a legless lizard/slow worm, not a snake.
+- Current license references checked: https://www.pexels.com/license/ and https://help.pexels.com/hc/en-us/articles/360042295214-Can-I-use-the-photos-and-videos-for-a-commercial-project
+- License summary: same Pexels commercial-use and restriction summary as Candidate 1.
+
+### Verification result and stop conditions
+
+<badge>HOLD — NOT CLEARED</badge>
+
+The source listing pages and current Pexels license/help pages were inspected on 2026-11-16. The browser download attempt could not start because the optional TinyFish browser wallet is below zero; the local runtime also cannot resolve `videos.pexels.com`. **Neither full-resolution MP4 was downloaded or visually inspected.**
+
+Therefore the following remain unknown for both clips:
+- Actual frame-by-frame content, exact animal identity/behaviour throughout, distress or unsafe handling, misleading cuts, overlays/watermarks, and any third-party material.
+- Embedded audio/music rights and whether the final edit must remove the source audio.
+- Whether any additional rights, restrictions or context beyond the Pexels listing apply to the downloaded file.
+
+Do not enter either clip in `content/asset-register.json`, create a production render manifest, edit, schedule, approve or publish either clip yet. After a lawful local download, inspect the entire clip at full resolution, verify the exact file hash, check all frames/audio/overlays and retain the page/license evidence. Only then can each candidate be considered separately for rights review and human editorial approval.
+
+**Editorial constraint:** never present the slow worm as a snake, never imply the cobra clip depicts a different species or event, and never label either stock clip as footage filmed by SonicVhibez.
+
+## NOAA Spiny Lobster visual-review cut — 16 November 2026
+
+The retained GitHub Actions source artifact `sonicvhibez-noaa-broll-candidates` (run `42594716333`, artifact `13662524700`) was downloaded again for the conditional source-review task.
+
+- The source MP4 SHA-256 recomputed locally matches the recorded value exactly: `1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb`.
+- `ffprobe` confirms H.264, 1280×720, 59.94 fps, 380.810 seconds, AAC 48 kHz stereo.
+- Selected ranges were sampled at 2 fps: 160–175 s (reef habitat establishing shot), 245–257 s (close lobster/crevice), 320–335 s (lobster from above), and 360–373 s (side view of lobster).
+- The selected samples show California spiny lobster and rocky reef habitat. No people, handling, baiting, staged interaction, graphic animal harm, watermark or additional credit card was observed in these selected ranges. This is not a full continuous playback review.
+- A silent 55-second 9:16 visual-review cut was created from those exact ranges: `NOAA-california-spiny-lobster-visual-review-1080x1920.mp4`.
+- Output SHA-256: `4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261`; H.264, 1080×1920, 30 fps, 55.000 seconds, 20,090,415 bytes, no audio stream, full-file decode PASS.
+- The cut carries a persistent **REVIEW ONLY - NOT APPROVED FOR PUBLICATION** warning and the exact credit **“Footage courtesy of NOAA’s Office of National Marine Sanctuaries”** throughout.
+- The review cut is shared as a conversation attachment and is not committed as a production media file.
+
+**Disposition remains HOLD.** This review cut is not a production master, has no narration or captions, and has not completed full human playback, final voice/caption review, final compliance review or final human approval. The source audio remains excluded. Keep all rights/production flags false and do not upload, schedule or publish it. Do not substitute it for `media/next-short.mp4`.
+
+### NOAA lobster narrated review render — 16 November 2026
+
+A second, explicitly synthetic **review-only** render was generated to inspect the narration/caption pacing against the same silent visual cut.
+
+- File: `NOAA-california-spiny-lobster-narration-review-1080x1920.mp4`
+- SHA-256: `aa84154b6938750f646377e9493dae81552249d9a07ba7d521d9b29addf8f1ba`
+- Duration: 55.000 seconds; H.264 1080×1920 at 30 fps; AAC mono 22.05 kHz.
+- Narration: eSpeak `en-us`, synthetic, 135 WPM. The render explicitly displays **AI-GENERATED NARRATION - REVIEW ONLY** as well as the persistent publication hold.
+- Source audio remains absent; only the synthetic review narration is present.
+- Captions were reflowed into 12 timed cues, 108 words, maximum 38 characters per line, maximum 3 lines in the one long location cue, zero overlaps and 80 ms inter-cue gaps. Caption text matches the script word-for-word. Timings are derived from the exact eSpeak segment durations, not yet human-verified against a final natural voice.
+- Full-file decode: PASS. Sampled frames confirm the review warning, AI narration disclosure, captions and NOAA credit remain visible and do not overlap.
+
+**Disposition remains HOLD.** The synthetic voice is not approved for publication and must be replaced with owner-approved natural narration. Human full-playback review, final voice/caption timing, factual/editorial review, rights confirmation and compliance approval remain outstanding. Neither the silent nor narrated review render is a production master or a substitute for `media/next-short.mp4`.

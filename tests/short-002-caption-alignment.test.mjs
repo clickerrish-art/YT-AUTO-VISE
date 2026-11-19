@@ -7,13 +7,13 @@ test("Short 002 narration master remains aligned with timed caption beats", () =
   const srt = fs.readFileSync("content/short-002-plan-wildlife-documentary.srt", "utf8").toLowerCase();
   const requiredBeats = [
     ["opening hook", "planning a wildlife documentary short"],
-    ["three-step promise", "three simple steps"],
+    ["three-step promise", "plan three things before editing"],
     ["one subject and question", "one subject"],
-    ["behavior examples", "finds food"],
-    ["story structure", "open with a hook"],
+    ["behavior examples", "feed, move, communicate"],
+    ["story structure", "build a simple story"],
     ["faithful editing", "separate clips"],
     ["rights check", "check every asset"],
-    ["supported claims", "every claim supported"],
+    ["supported claims", "fact-check each claim"],
     ["approved product call to action", "wildlife creator"]
   ];
   for (const [label, phrase] of requiredBeats) {

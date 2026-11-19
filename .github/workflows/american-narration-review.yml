@@ -1,0 +1,51 @@
+name: Render American male storyteller narration review
+
+on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - "config/narration-voice-candidates.json"
+      - "scripts/render_american_narration.py"
+      - "content/drafts/nile-crocodile-eyes-at-the-waterline.md"
+      - "scripts/generate_piper_voice_audition.py"
+      - "tests/test_render_american_narration.py"
+      - "content/short-001-wildlife-video-storytelling.md"
+      - ".github/workflows/american-narration-review.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonicvhibez-american-narration-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned Piper engine
+        run: python -m pip install --disable-pip-version-check "piper-tts==1.8.0"
+      - name: Test American narration renderer
+        run: PYTHONPATH=. python -m unittest discover -s tests -p "test_render_american_narration.py" -v
+      - name: Render American male wildlife-encounter review audio
+        run: python scripts/render_american_narration.py --source-script content/short-001-wildlife-video-storytelling.md --output artifacts/american-narration-review
+      - name: Retain review WAV and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-american-wildlife-encounter-voice-review
+          path: |
+            artifacts/american-narration-review/american-wildlife-encounter-narration-review.wav
+            artifacts/american-narration-review/american-narration-review.json
+            artifacts/american-narration-review/ATTRIBUTION.txt
+            artifacts/american-narration-review/MODEL_CARD
+          if-no-files-found: error
+          retention-days: 30

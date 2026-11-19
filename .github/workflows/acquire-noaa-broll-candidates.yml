@@ -2,9 +2,12 @@ name: Acquire NOAA B-roll candidates for rights review
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - ".github/workflows/acquire-noaa-broll-candidates.yml"
+  schedule:
+    # Weekly rights-review intake; never renders or publishes automatically.
+    - cron: '23 4 * * 2'
   workflow_dispatch:
     inputs:
       include_lobster:
@@ -34,8 +37,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Download only selected official NOAA Fisheries B-roll package files
         env:
-          INCLUDE_LOBSTER: ${{ github.event_name == 'push' || inputs.include_lobster }}
-          INCLUDE_TURTLE: ${{ github.event_name == 'push' || inputs.include_turtle }}
+          INCLUDE_LOBSTER: ${{ github.event_name == 'push' || github.event_name == 'schedule' || inputs.include_lobster }}
+          INCLUDE_TURTLE: ${{ github.event_name == 'push' || github.event_name == 'schedule' || inputs.include_turtle }}
           INCLUDE_SEAL: ${{ inputs.include_seal }}
         run: |
           set -euo pipefail
@@ -54,6 +57,14 @@ jobs:
               "$download_url" --output "$output"
             test -s "$output"
             file "$output" | tee "media/rights-review/${slug}-file-type.txt"
+            mime_type="$(file --brief --mime-type "$output")"
+            printf 'Detected MIME type: %s\\n' "$mime_type" | tee "media/rights-review/${slug}-mime-type.txt"
+            case "$mime_type" in
+              text/*|application/json|application/xml)
+                echo "Refusing a text/error response instead of a binary source package."
+                exit 1
+                ;;
+            esac
             sha256sum "$output" | tee "media/rights-review/${slug}-sha256.txt"
             cat >> media/rights-review/SOURCE-REVIEW-REQUIRED.txt <<EOF
           Candidate: $title

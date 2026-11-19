@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "status": "BLOCKED_NOT_RENDERABLE",
+  "channel": "SonicVhibez",
+  "contentType": "long_form",
+  "targetAspectRatio": "16:9",
+  "targetDurationSeconds": {
+    "min": 360,
+    "max": 600
+  },
+  "title": "How to Turn Wildlife Footage Into a Documentary Story",
+  "footagePath": "../media/long-form-001-footage.mp4",
+  "narrationPath": "../media/long-form-drafts/long-001-narration-final.mp3",
+  "captionsPath": "long-form-001-captions-final.srt",
+  "qualityEvidencePath": "long-form-001-quality-evidence.json",
+  "footageLicenseEvidence": "",
+  "narrationLicenseEvidence": "",
+  "rightsConfirmed": false,
+  "complianceReviewed": false,
+  "containsSyntheticMedia": true,
+  "hasPaidPromotion": true,
+  "sourceScriptPath": "long-form-001-wildlife-story-script.md",
+  "sourceScriptBlobSha256": "d1b60f7bc0487ceba7efba56b65aa1d9ec760030",
+  "priorNarrationEvidencePath": "long-form-narration-review-evidence.json",
+  "priorNarrationStatus": "SUPERSEDED_WRONG_SCRIPT_AND_UNAPPROVED_VOICE",
+  "notes": "Fail-closed production manifest, not evidence of a completed render. The canonical draft for Long-form 001 is long-form-001-wildlife-story-script.md at the exact recorded source SHA. The historical narration evidence was generated from the older long-form-scripts.md source using Edge TTS en-US-GuyNeural; that voice was not owner-approved and must not be used as production narration. The preferred Roderic voice is not commercially licensed on the connected HeyGen Free plan; its 55.722-second Short sample is internal audition only. No commercially cleared narration or final captions exist for this long-form script. The 17-source Pexels register has direct free-download URLs and 563 seconds of page-listed raw duration, but no original MP4 bytes or local hashes. Verify all source files, rights, factual claims, final audio/caption synchronization, thumbnail and full-length human review before changing status. Private-only, unscheduled; no upload authorization."
+}

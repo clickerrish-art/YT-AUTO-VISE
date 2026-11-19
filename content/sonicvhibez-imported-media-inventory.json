@@ -1,0 +1,232 @@
+{
+  "channel": "SonicVhibez",
+  "importedIntoCanvaAt": "2026-11-04",
+  "sourcePlatformReportedByProject": "Pexels",
+  "policyReference": {
+    "url": "https://www.pexels.com/license/",
+    "reviewStatus": "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY",
+    "notes": "Official Pexels License and Terms were rechecked on 2026-11-17. Pexels content is generally free for commercial use and modification, but standalone redistribution/resale, implied endorsement, trademark use, and additional third-party rights remain restricted. This general policy does not prove that a candidate page is the exact source of a Canva import or that all depicted-content permissions are unnecessary.",
+    "termsUrl": "https://www.pexels.com/terms-of-service/",
+    "lastVerified": "2026-11-17"
+  },
+  "status": "EXCLUDED_NOT_USED_FROM_PRODUCTION",
+  "releaseAuthorized": false,
+  "assets": [
+    {
+      "canvaAssetId": "VAHZ9kg2rvg",
+      "subject": "African elephant close-up",
+      "canvaMetadata": {
+        "width": 3840,
+        "height": 2160,
+        "durationSeconds": 14
+      },
+      "candidateSourceUrl": "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/",
+      "candidateCreator": "Magda Ehlers",
+      "candidateMetadata": {
+        "width": 3840,
+        "height": 2160,
+        "durationSeconds": 14
+      },
+      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "EXCLUDED_NOT_USED",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "pageTitle": "Majestic African Elephant in Natural Habitat",
+        "url": "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/",
+        "creator": "Magda Ehlers",
+        "width": 3840,
+        "height": 2160,
+        "durationSeconds": 14,
+        "publishedDate": "2026-05-03",
+        "licenseLabel": "Pexels License — Free",
+        "metadataMatch": "EXACT",
+        "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
+      },
+      "excludedFromProduction": true,
+      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "excludedAt": "2026-11-18"
+    },
+    {
+      "canvaAssetId": "VAHZ9hEjS0U",
+      "subject": "Aerial zebras and wildebeest",
+      "canvaMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 13
+      },
+      "candidateSourceUrl": "https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/",
+      "candidateCreator": "Taryn Elliott",
+      "candidateMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 14
+      },
+      "sourceMatchStatus": "METADATA_DURATION_MISMATCH_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "EXCLUDED_NOT_USED",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "pageTitle": "An Aerial Footage of Zebras and Wildebeests",
+        "url": "https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/",
+        "creator": "Taryn Elliott",
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 14,
+        "publishedDate": "2020-08-20",
+        "licenseLabel": "Pexels License — Free",
+        "metadataMatch": "DURATION_MISMATCH_CANVA_13S_PEXELS_14S",
+        "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
+      },
+      "excludedFromProduction": true,
+      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "excludedAt": "2026-11-18"
+    },
+    {
+      "canvaAssetId": "VAHZ9niQJoo",
+      "subject": "Zebras and wildebeest grazing",
+      "canvaMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 25
+      },
+      "candidateSourceUrl": "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/",
+      "candidateCreator": "Taryn Elliott",
+      "candidateMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 25
+      },
+      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "EXCLUDED_NOT_USED",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "pageTitle": "Zebras and Wildebeests Grazing in the Meadows",
+        "url": "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/",
+        "creator": "Taryn Elliott",
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 25,
+        "publishedDate": "2020-08-20",
+        "licenseLabel": "Pexels License — Free",
+        "metadataMatch": "EXACT",
+        "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
+      },
+      "excludedFromProduction": true,
+      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "excludedAt": "2026-11-18"
+    },
+    {
+      "canvaAssetId": "VAHZ9i3Hx6U",
+      "subject": "Giraffes in the wild",
+      "canvaMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 21
+      },
+      "candidateSourceUrl": "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/",
+      "candidateCreator": "Taryn Elliott",
+      "candidateMetadata": {
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 21
+      },
+      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "EXCLUDED_NOT_USED",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "pageTitle": "Giraffe in the Open Fields",
+        "url": "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/",
+        "creator": "Taryn Elliott",
+        "width": 1920,
+        "height": 1080,
+        "durationSeconds": 21,
+        "publishedDate": "2020-08-28",
+        "licenseLabel": "Pexels License — Free",
+        "metadataMatch": "EXACT",
+        "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
+      },
+      "excludedFromProduction": true,
+      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "excludedAt": "2026-11-18"
+    },
+    {
+      "canvaAssetId": "VAHZ9oFCiak",
+      "subject": "African lion close-up",
+      "canvaMetadata": {
+        "width": 3840,
+        "height": 2160,
+        "durationSeconds": 9
+      },
+      "candidateSourceUrl": null,
+      "candidateCreator": null,
+      "candidateMetadata": null,
+      "sourceMatchStatus": "UNRESOLVED_SOURCE_URL_AND_CREATOR_NOT_RECORDED",
+      "originalSourceUrl": null,
+      "creatorConfirmed": false,
+      "downloadDate": null,
+      "localMediaPath": null,
+      "rightsConfirmed": false,
+      "humanVisualReview": "NOT_DONE",
+      "status": "EXCLUDED_NOT_USED",
+      "sourcePageEvidence": {
+        "checkedAt": "2026-11-17",
+        "searchNote": "No exact Pexels source page matching the Canva metadata (3840x2160, 9 seconds) was verified. Similar lion pages surfaced with different metadata and were rejected as source matches.",
+        "unmatchedCandidates": [
+          {
+            "url": "https://www.pexels.com/video/video-of-a-lion-8476160/",
+            "creator": "Nicky Pe",
+            "width": 3840,
+            "height": 2160,
+            "durationSeconds": 21
+          },
+          {
+            "url": "https://www.pexels.com/video/majestic-lion-in-natural-habitat-40581226/",
+            "creator": "Richard Lathrop",
+            "width": 2160,
+            "height": 3840,
+            "durationSeconds": 34
+          }
+        ]
+      },
+      "excludedFromProduction": true,
+      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "excludedAt": "2026-11-18"
+    }
+  ],
+  "blockingEvidence": [
+    "All five imported Canva/Pexels candidates are explicitly excluded from production and remain not rights-cleared.",
+    "No original MP4, exact source match, SHA-256 or human visual review is claimed for these excluded assets.",
+    "Reactivation requires full source provenance, local original media, hash verification, rights review and human visual approval."
+  ],
+  "notes": "All five imported Canva wildlife assets are quarantined as EXCLUDED_NOT_USED. They are retained for audit only and are not cleared for any use. The active production path must use separately verified realistic AI-generated scenes.",
+  "historicalBlockingEvidence": [
+    "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
+    "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
+    "The fifth Canva lion clip has no verified exact Pexels source page/creator; similar Pexels pages with mismatching durations or dimensions were rejected.",
+    "Candidate Pexels pages and general Pexels commercial-use terms are not sufficient to clear an imported clip without exact visual matching, original MP4, download/source evidence, hash and human review.",
+    "No footage rights or human visual review is marked complete."
+  ]
+}

@@ -1,0 +1,36 @@
+name: Generate Australian male Piper voice audition
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonicvhibez-piper-voice-audition
+  cancel-in-progress: false
+
+jobs:
+  audition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned local Piper engine
+        run: python -m pip install --disable-pip-version-check "piper-tts==1.8.0"
+      - name: Validate candidate mapping and model hash logic
+        run: python -m unittest discover -s tests -p "test_generate_piper_voice_audition.py" -v
+      - name: Generate three male Australian voice samples
+        run: python scripts/generate_piper_voice_audition.py --source-script content/short-001-wildlife-video-storytelling.md --output artifacts/piper-audition
+      - name: Retain review-only voice samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-piper-australian-male-voice-auditions
+          path: artifacts/piper-audition/
+          if-no-files-found: error
+          retention-days: 30

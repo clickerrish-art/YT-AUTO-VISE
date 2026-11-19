@@ -1,0 +1,61 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+
+const html = fs.readFileSync(path.join(process.cwd(), "public", "dashboard.html"), "utf8");
+const server = fs.readFileSync(path.join(process.cwd(), "scripts", "dashboard-server.mjs"), "utf8");
+
+test("Nature Frontiers media register is exposed through an authenticated provider-independent read-only API", () => {
+  assert.match(server, /GET.*\/api\/nature-frontiers\/media-register/);
+  assert.match(server, /validateMediaRegister\(register\)/);
+  assert.match(server, /readOnly:\s*true/);
+  assert.match(server, /publishingEnabled:\s*false/);
+  assert.match(server, /reviewStatus:/);
+  assert.match(server, /rights\.permittedUsage/);
+  assert.match(server, /inspection:\s*\{[\s\S]*?status:/);
+  assert.match(server, /approval:\s*\{[\s\S]*?status:/);
+  assert.match(server, /usage\.platformPostIds/);
+  assert.match(server, /source\?\.listingEvidence/);
+  assert.match(server, /licenseEvidence/);
+  assert.match(server, /listingLicenseClaim/);
+  assert.match(server, /approvedFileSha256/);
+  assert.match(server, /additionalPermissionsEvidence/);
+  assert.match(server, /inspectedFileSha256/);
+  assert.match(server, /approvedUsage/);
+  assert.match(server, /Operator authentication required/);
+});
+
+test("Nature Frontiers dashboard renders source, claims, file integrity, rights, inspection and approval as text", () => {
+  assert.match(html, /Nature Frontiers — provider-independent media register/);
+  assert.match(html, /api\("\/api\/nature-frontiers\/media-register"\)/);
+  assert.match(html, /id="nfRegisterAssets"/);
+  assert.match(html, /id="nfRightsCleared"/);
+  assert.match(html, /id="nfApproved"/);
+  assert.match(html, /renderNatureFrontiersRegister\(\)/);
+  assert.match(html, /cells\[0\]\.textContent=/);
+  assert.match(html, /cells\[3\]\.textContent=.*Permitted use/);
+  assert.match(html, /cells\[4\]\.textContent=/);
+  assert.match(html, /cells\[5\]\.textContent=.*Approval/);
+  assert.match(html, /cells\[6\]\.textContent=.*Remote receipts/);
+  assert.match(html, /listingStatus/);
+  assert.match(html, /listingEvidence/);
+  assert.match(html, /evidenceUrls/);
+  assert.match(html, /SHA-256/);
+  assert.match(html, /Licence evidence/);
+  assert.match(html, /Listing licence claim/);
+  assert.match(html, /Approved file SHA-256/);
+  assert.match(html, /Additional permissions evidence/);
+  assert.match(html, /inspectedFileSha256/);
+  assert.match(html, /proposedSeries/);
+  assert.match(html, /approvedBy/);
+  assert.match(html, /approvedAt/);
+  assert.match(html, /approvedUsage/);
+  assert.match(html, /editorial\?\.status/);
+  assert.match(html, /listingDescription/);
+  assert.match(html, /contributor/);
+  assert.match(html, /platformPostIds/);
+  assert.match(html, /publishing state unknown/);
+  assert.match(html, /cannot inspect, clear rights, approve, schedule or publish assets/);
+  assert.doesNotMatch(html, /nfRegisterAssets[\s\S]{0,2000}\.innerHTML\s*=/);
+});

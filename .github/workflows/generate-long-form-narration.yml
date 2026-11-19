@@ -9,7 +9,8 @@ on:
       - ".github/workflows/generate-long-form-narration.yml"
   workflow_dispatch:
   schedule:
-    - cron: "0 15 * * 2,6"
+    # Draft production on Tuesday at 17:00 SAST (15:00 UTC); this is a draft-only slot.
+    - cron: "0 15 * * 2"
 
 permissions:
   contents: read
@@ -24,7 +25,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -35,9 +36,10 @@ jobs:
       - name: Generate two narration drafts
         run: python scripts/generate_long_form_narration.py
       - name: Set up Node for caption validation
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: '24'
+          package-manager-cache: false
       - name: Verify audio files, required text/captions, and report duration
         run: |
           python - <<'PY'

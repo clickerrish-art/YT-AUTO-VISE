@@ -1,8 +1,113 @@
 import fs from "node:fs";
 import path from "node:path";
+import { validateProductionQualityApprovalFile } from "./production-quality-approval.mjs";
+import { atomicWriteJson } from "./atomic-json-file.mjs";
+import { acquireDashboardStateFileLock } from "./dashboard-state-file-lock.mjs";
+import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
 
-const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
-fs.mkdirSync(path.dirname(queuePath), { recursive: true });
+const projectRoot = fs.realpathSync(process.env.PROJECT_ROOT ?? process.cwd());
+const planPath = path.resolve(projectRoot, process.env.WEEKLY_CONTENT_PLAN_PATH ?? "config/weekly-content-plan.json");
+const queueTrustRoot = fs.realpathSync(process.env.QUEUE_TRUST_ROOT ?? projectRoot);
+const queueInput = process.env.QUEUE_PATH ?? "content/queue.json";
+const queuePath = path.resolve(queueTrustRoot, queueInput);
+
+function assertWithinRoot(root, candidate, label) {
+  const relative = path.relative(root, candidate);
+  if (!relative || relative === "." || relative === ".." ||
+      relative.startsWith(".." + path.sep) || path.isAbsolute(relative)) {
+    throw new Error(label + " must be contained within its explicit trust root");
+  }
+}
+
+function assertSafeDirectoryAncestors(root, directory, { allowMissing = false } = {}) {
+  if (path.resolve(root) !== path.resolve(directory)) assertWithinRoot(root, directory, "Queue directory");
+  let cursor = root;
+  for (const component of path.relative(root, directory).split(path.sep).filter(Boolean)) {
+    cursor = path.join(cursor, component);
+    let stat;
+    try {
+      stat = fs.lstatSync(cursor);
+    } catch (error) {
+      if (allowMissing && error?.code === "ENOENT") return;
+      throw error;
+    }
+    if (stat.isSymbolicLink() || !stat.isDirectory()) {
+      throw new Error("Queue directory path contains a symlink or non-directory component");
+    }
+  }
+}
+
+function readQueueFile() {
+  let stat;
+  try {
+    stat = fs.lstatSync(queuePath);
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
+  if (stat.isSymbolicLink() || !stat.isFile() || stat.nlink !== 1 ||
+      !isSafeRegularFileWithinRoot(queueTrustRoot, queuePath)) {
+    throw new Error("Queue file must be a single-link regular file within its explicit trust root");
+  }
+  const noFollow = fs.constants.O_NOFOLLOW ?? 0;
+  const fd = fs.openSync(queuePath, fs.constants.O_RDONLY | noFollow);
+  try {
+    return fs.readFileSync(fd, "utf8");
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
+try {
+  assertWithinRoot(queueTrustRoot, queuePath, "Queue path");
+  assertWithinRoot(projectRoot, planPath, "Publication policy path");
+  if (!isSafeRegularFileWithinRoot(projectRoot, planPath)) {
+    throw new Error("Authoritative publication policy must be a regular, non-symlink file inside the project root");
+  }
+  assertSafeDirectoryAncestors(queueTrustRoot, path.dirname(queuePath), { allowMissing: true });
+  fs.mkdirSync(path.dirname(queuePath), { recursive: true });
+  assertSafeDirectoryAncestors(queueTrustRoot, path.dirname(queuePath));
+} catch (error) {
+  console.error("BLOCKED: unsafe queue or policy path: " + error.message);
+  process.exit(2);
+}
+
+let authoritativeCadence;
+try {
+  const plan = JSON.parse(fs.readFileSync(planPath, "utf8"));
+  const cycle = plan.publicationCycle;
+  const draftSlots = Array.isArray(plan.schedule) ? plan.schedule.filter(slot => slot?.status === "DRAFT_ONLY") : [];
+  if (plan.publishingEnabled !== false || plan.timezone !== "Africa/Johannesburg" ||
+      !cycle || cycle.id !== "sonicvhibez-rolling-cycle-v1" ||
+      JSON.stringify(cycle.formats) !== JSON.stringify(["long_form", "long_form", "short"]) ||
+      cycle.minimumHoursBetweenConsecutivePublications !== 72 || cycle.minimumCycleHours !== 216 ||
+      cycle.timezone !== plan.timezone || cycle.publicationRequiresVerifiedHistory !== true || cycle.publicationEnabled !== false ||
+      draftSlots.length !== 2 ||
+      !draftSlots.some(slot => slot.day === "Tuesday" && slot.format === "long_form") ||
+      !draftSlots.some(slot => slot.day === "Saturday" && slot.format === "short")) {
+    throw new Error("weekly content plan does not match the fail-closed rolling publication policy");
+  }
+  authoritativeCadence = {
+    publicationCycleId: cycle.id,
+    formats: [...cycle.formats],
+    minimumHoursBetweenConsecutivePublications: cycle.minimumHoursBetweenConsecutivePublications,
+    minimumCycleHours: cycle.minimumCycleHours,
+    timezone: plan.timezone,
+    draftPreparationFallback: {
+      days: draftSlots.map(slot => slot.day),
+      breakdown: {
+        longForm: draftSlots.filter(slot => slot.format === "long_form").length,
+        short: draftSlots.filter(slot => slot.format === "short").length
+      },
+      status: "DRAFT_ONLY",
+      notPublicationCadence: true
+    },
+    note: "Draft preparation only. Actual publication follows the rolling three-publication cycle and verified remote history; no weekly publication count is promised."
+  };
+} catch (error) {
+  console.error(`BLOCKED: cannot load authoritative publication policy: ${error.message}`);
+  process.exit(2);
+}
 
 const seed = [
   { id: "wildlife-short-story-structure", title: "How to Tell a Better Wildlife Story", topic: "wildlife video storytelling", keywords: ["wildlife video storytelling","wildlife filmmaking","nature documentary tips"], hook: "Wildlife footage becomes a story when every shot answers one clear question.", outline: ["Choose one animal behavior to explain","Plan a wide shot, detail, and behavior shot","Use only rights-cleared footage and music"], productUrl: "https://selar.com/0u19v8u99l", targetSeconds: 55, status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" },
@@ -19,26 +124,59 @@ const seed = [
   { id: "wildlife-short-description-seo", title: "Write a Clear YouTube Description for Wildlife Videos", topic: "YouTube wildlife video descriptions and metadata", keywords: ["YouTube description SEO","wildlife video keywords","YouTube metadata tips"], hook: "Metadata works best when it accurately describes what viewers will learn.", outline: ["Put the topic and viewer benefit first","Use relevant phrases naturally","Keep links accurate and disclose promotion clearly"], productUrl: "https://selar.com/0u19v8u99l", targetSeconds: 55, status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" }
 ];
 
-let document = { cadence: { postsPerWeek: 2, days: ["Tuesday", "Friday"], timezone: "Africa/Johannesburg" }, publishingEnabled: false, items: [] };
-if (fs.existsSync(queuePath)) {
+let releaseQueueLock;
+try {
+  releaseQueueLock = acquireDashboardStateFileLock(queuePath);
+} catch (error) {
+  console.error("BLOCKED: queue is busy or its lock cannot be safely recovered: " + error.message);
+  process.exit(2);
+}
+
+try {
+let document = { cadence: authoritativeCadence, publishingEnabled: false, items: [] };
+const rawQueue = readQueueFile();
+if (rawQueue !== null) {
   try {
-    const parsed = JSON.parse(fs.readFileSync(queuePath, "utf8"));
+    const parsed = JSON.parse(rawQueue);
     if (Array.isArray(parsed)) document.items = parsed;
     else if (parsed && Array.isArray(parsed.items)) document = parsed;
     else throw new Error("expected an array or an object with an items array");
   } catch (error) {
-    console.error(`BLOCKED: cannot safely read queue: ${error.message}`);
-    process.exit(2);
+    throw new Error("BLOCKED: cannot safely read queue: " + error.message);
   }
 }
 if (document.publishingEnabled === true) {
-  console.error("BLOCKED: queue replenishment must not enable publishing.");
-  process.exit(1);
+  throw new Error("BLOCKED: queue replenishment must not enable publishing.");
 }
+if (document.publishingEnabled !== undefined && document.publishingEnabled !== false) {
+  throw new Error("BLOCKED: queue publishingEnabled must be the boolean false when present.");
+}
+document.publishingEnabled = false;
+// Keep the queue's operational policy synchronized with the authoritative plan.
+// Retire the former weekly-count fields instead of carrying them into a new file.
+document.cadence = { ...(document.cadence && typeof document.cadence === "object" ? document.cadence : {}), ...authoritativeCadence };
+delete document.cadence.postsPerWeek;
+delete document.cadence.days;
+delete document.cadence.breakdown;
+const publicationEligibleStatuses = new Set(["READY_FOR_PUBLICATION", "APPROVED_FOR_PUBLICATION", "QUEUED_FOR_PUBLICATION", "SCHEDULED", "READY_FOR_PRIVATE_UPLOAD", "APPROVED_FOR_PRIVATE_UPLOAD", "PRIVATE_UPLOAD_VERIFIED"]);
+for (const item of document.items) {
+  if (!publicationEligibleStatuses.has(String(item?.status ?? "").toUpperCase())) continue;
+  if (typeof item.qualityApprovalPath !== "string" || typeof item.videoPath !== "string" || typeof item.metadataPath !== "string") {
+    throw new Error("BLOCKED: publication-eligible queue item " + (item.id ?? "(unknown)") + " lacks its human-approved quality record, exact video and metadata paths.");
+  }
+  const quality = validateProductionQualityApprovalFile({
+    approvalPath: item.qualityApprovalPath, videoPath: item.videoPath, metadataPath: item.metadataPath,
+    jobId: item.id, contentType: item.contentType, rootDir: projectRoot
+  });
+  if (!quality.valid) {
+    throw new Error("BLOCKED: publication-eligible queue item " + item.id + " failed the production quality gate: " + quality.errors.join("; "));
+  }
+}
+
 const known = new Set(document.items.map(item => item.id));
 const additions = seed.filter(item => !known.has(item.id));
 document.items.push(...additions);
-fs.writeFileSync(queuePath, JSON.stringify(document, null, 2) + "\n");
+atomicWriteJson(queuePath, document, { mode: 0o600 });
 console.log(JSON.stringify({
   queuePath,
   addedItems: additions.length,
@@ -46,3 +184,10 @@ console.log(JSON.stringify({
   publishingEnabled: document.publishingEnabled === true,
   note: "Adds topic briefs only; it does not render media, verify rights, upload, schedule, or publish."
 }, null, 2));
+} catch (error) {
+  console.error(error.message || String(error));
+  process.exitCode = 1;
+} finally {
+  if (releaseQueueLock) releaseQueueLock();
+}
+
