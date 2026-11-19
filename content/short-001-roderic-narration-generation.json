@@ -44,7 +44,7 @@
     "scriptPath": "content/short-001-wildlife-video-storytelling.md",
     "scriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
     "captionsPath": "content/short-001-wildlife-video-storytelling.srt",
-    "captionsBlobSha256": "ccf23a9970126c35297be3b3f37074ea73c72d10"
+    "captionsBlobSha256": "9894a39581f0ca797dc4799029fe4475a8783fb3"
   },
   "spokenText": "Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep separate moments in their original recorded order; label any reconstruction clearly. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.",
   "captions": {
@@ -52,7 +52,13 @@
     "cueCount": 15,
     "retimed": true,
     "humanSyncReview": "PENDING",
-    "note": "Caption cues were retimed from the returned word-level timestamps and fit within the 55.722-second audio duration. Final listen-through and rendered-caption sync review remain required."
+    "note": "Cue boundaries were aligned to the returned word-level timestamps, extended across natural pauses to preserve the repository's gapless SRT format, and verified to end 122ms before the 55.722-second audio ends. Final listen-through and rendered-caption sync review remain required.",
+    "firstCueStartSeconds": 0,
+    "lastCueEndSeconds": 55.6,
+    "narrationDurationSeconds": 55.72229024943311,
+    "finalCueToAudioEndMs": 122,
+    "contiguous": true,
+    "nonOverlapping": true
   },
   "release": {
     "audioDownloadedToWorkspace": false,
