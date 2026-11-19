@@ -2,7 +2,7 @@
 
 **Latest branch inventory checkpoint:** `6f72fb738036a3cc36b4293ae32c0bd65cd6b255`; current source/test candidate: `4679cbaba90f328762cba8e6a9f1bf0d760bef2c`. The latest fully verified regression remains on `dab8fef70b6842b522f26ec5a3ba4807e33ae051`; current candidate regression [44554962446](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44554962446) is pending.  
 **Current master acceptance register:** 89 requirements — **71 PASS / 8 NOT_TESTED / 10 BLOCKED / 0 FAIL**. SCHED-003 is now PASS from explicit owner approval; the live YouTube history gate remains open.  
-**Release decision:** **HOLD**. This is not a production-complete or risk-free release.
+Release decision: **HOLD**. This is not a production-complete or risk-free release.
 
 ## Exact verification checkpoints
 
