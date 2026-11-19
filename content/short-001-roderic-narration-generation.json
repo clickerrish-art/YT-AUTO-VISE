@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "contentId": "short-001-wildlife-video-storytelling",
+  "status": "DRAFT_NARRATION_GENERATED_AUDIO_FILE_NOT_YET_SAVED_OR_HUMAN_REVIEWED",
+  "generatedDate": "2026-11-19",
+  "provider": "HeyGen Voice",
+  "voice": {
+    "name": "Roderic - Authoritative & Refined",
+    "voiceId": "b5c5b28db1ea408abc7d851202983bdb",
+    "language": "en",
+    "catalogLocale": "en-GB",
+    "mode": "instant",
+    "catalogStatus": "ACTIVE",
+    "selection": "Previously owner-approved voice; re-verified active in current public voice catalogue"
+  },
+  "synthesis": {
+    "requestId": "525a7c6bb8f14a139a85655cab0f2176",
+    "responseAudioId": "9cdd35a448864c5183781975071b608f",
+    "durationSeconds": 55.72229024943311,
+    "mimeType": "audio/wav",
+    "filename": "heygen-speech.wav",
+    "audioUrl": "https://resource2.heygen.ai/text_to_speech/525a7c6bb8f14a139a85655cab0f2176/b5c5b28db1ea408abc7d851202983bdb/id=9cdd35a448864c5183781975071b608f.wav",
+    "downloadUrl": "https://resource2.heygen.ai/text_to_speech/525a7c6bb8f14a139a85655cab0f2176/b5c5b28db1ea408abc7d851202983bdb/id%3D9cdd35a448864c5183781975071b608f.wav?response-content-disposition=attachment%3B+filename%2A%3DUTF-8%27%27heygen-speech.wav%3B",
+    "localPath": null,
+    "localSha256": null,
+    "wordAndCharacterTimingsReturned": true,
+    "model": "SERVER_SELECTED_NOT_RETURNED",
+    "paidUpgradeRequested": false,
+    "costVerification": "Provider response did not disclose a monetary charge or plan balance; do not claim monetary cost is independently verified. No paid model or upgrade was explicitly selected."
+  },
+  "source": {
+    "scriptPath": "content/short-001-wildlife-video-storytelling.md",
+    "scriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
+    "captionsPath": "content/short-001-wildlife-video-storytelling.srt",
+    "captionsBlobSha256": "ccf23a9970126c35297be3b3f37074ea73c72d10"
+  },
+  "spokenText": "Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep separate moments in their original recorded order; label any reconstruction clearly. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.",
+  "captions": {
+    "timingSource": "HeyGen create_speech word timestamps for this exact audio response",
+    "cueCount": 15,
+    "retimed": true,
+    "humanSyncReview": "PENDING",
+    "note": "Caption cues were retimed from the returned word-level timestamps and fit within the 55.722-second audio duration. Final listen-through and rendered-caption sync review remain required."
+  },
+  "release": {
+    "audioDownloadedToWorkspace": false,
+    "audioSha256": null,
+    "fullAudioHumanReviewed": false,
+    "commercialVoiceRightsEvidence": false,
+    "finalMediaHumanReviewed": false,
+    "productionQualityScore": null,
+    "releaseEligible": false
+  }
+}
