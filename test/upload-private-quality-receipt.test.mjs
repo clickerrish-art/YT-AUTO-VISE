@@ -17,7 +17,7 @@ function fixture() {
   const thumbnail = { path: "media/thumbnail.jpg", sha256: hash("thumbnail") };
   const captions = { path: "content/captions.srt", sha256: hash("captions") };
   const narration = { path: "audio/narration.mp3", sha256: hash("narration") };
-  const relatedArtifacts = [video, metadata, thumbnail, captions, narration];
+  const relatedArtifacts = [video, metadata, thumbnail, captions, narration].map(item => ({ ...item }));
   const qualityScorecard = {
     policyId: "SV-PQS-001",
     decision: "APPROVED",
@@ -46,7 +46,7 @@ function fixture() {
     metadataVersion: metadata.sha256,
     captionsPath: captions.path,
     captionsSha256: captions.sha256,
-    artifacts: [video],
+    artifacts: [{ ...video }],
     thumbnail: { ...thumbnail, width: 1280, height: 720 },
     checks: [
       "metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration",
