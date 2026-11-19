@@ -35,10 +35,11 @@ export function validateProductionQualityApproval(approval, {
     errors.push("production quality approval must preserve publishingEnabled=false and private visibility");
   }
   let actualVideoSha256 = null;
+  let actualVideoPath = null;
   let actualMetadataSha256 = null;
   try {
-    const safeVideo = resolveEvidenceFile(videoPath, rootDir, "Final export");
-    actualVideoSha256 = sha256File(safeVideo);
+    actualVideoPath = resolveEvidenceFile(videoPath, rootDir, "Final export");
+    actualVideoSha256 = sha256File(actualVideoPath);
     if (approval.artifactSha256 !== actualVideoSha256) errors.push("approval video hash does not match the exact final export bytes");
   } catch (error) { errors.push("final export cannot be verified: " + error.message); }
   try {
@@ -75,6 +76,39 @@ export function validateProductionQualityApproval(approval, {
         const safe = resolveEvidenceFile(item.path, rootDir, "Reviewed related artifact");
         if (sha256File(safe) !== item.sha256) errors.push("reviewed related-artifact bytes changed after approval: " + item.path);
       } catch (error) { errors.push("reviewed related artifact is unavailable or unsafe: " + item.path + " (" + error.message + ")"); }
+    }
+  }
+  if (approval.technicalValidationReceipt && relatedArtifacts && actualVideoPath && actualVideoSha256 && actualMetadataSha256) {
+    const receipt = approval.technicalValidationReceipt;
+    const root = fs.realpathSync(rootDir);
+    const expectedVideoPath = path.relative(root, actualVideoPath).split(path.sep).join("/");
+    if (receipt.metadataVersion !== actualMetadataSha256) {
+      errors.push("technical-validation receipt metadata hash does not match the exact final metadata");
+    }
+    if (!Array.isArray(receipt.artifacts) || !receipt.artifacts.some(item =>
+      item?.path === expectedVideoPath && item?.sha256 === actualVideoSha256)) {
+      errors.push("technical-validation receipt must contain the exact final export path and SHA-256");
+    }
+    if (typeof receipt.captionsPath !== "string" || !/^[a-f0-9]{64}$/.test(receipt.captionsSha256 ?? "") ||
+        !relatedArtifacts.some(item => item.path === receipt.captionsPath && item.sha256 === receipt.captionsSha256 && /\\.srt$/i.test(item.path))) {
+      errors.push("technical-validation receipt must bind the exact reviewed captions path and SHA-256");
+    }
+    if (!receipt.thumbnail || typeof receipt.thumbnail.path !== "string" ||
+        !/^[a-f0-9]{64}$/.test(receipt.thumbnail.sha256 ?? "") ||
+        receipt.thumbnail.width !== 1280 || receipt.thumbnail.height !== 720 ||
+        !relatedArtifacts.some(item => item.path === receipt.thumbnail.path && item.sha256 === receipt.thumbnail.sha256 && /\\.(jpg|jpeg|png|webp)$/i.test(item.path))) {
+      errors.push("technical-validation receipt must bind the exact 1280x720 reviewed thumbnail");
+    }
+    const requiredChecks = [
+      "metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration",
+      "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"
+    ];
+    if (!Array.isArray(receipt.checks) || requiredChecks.some(check => !receipt.checks.includes(check))) {
+      errors.push("technical-validation receipt is missing one or more required export, metadata, caption or thumbnail checks");
+    }
+    const checkedAt = Date.parse(receipt.checkedAt ?? "");
+    if (!Number.isFinite(checkedAt) || checkedAt > now.getTime()) {
+      errors.push("technical-validation receipt must have a valid non-future checkedAt timestamp");
     }
   }
   if (actualVideoSha256 && actualMetadataSha256 && relatedArtifacts) {
