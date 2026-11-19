@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "BLOCKED_NOT_RENDERABLE",
+  "status": "BLOCKED_NOT_RENDERABLE_COMMERCIAL_NARRATION_AND_FOOTAGE_MISSING",
   "channel": "SonicVhibez",
   "contentType": "long_form",
   "targetAspectRatio": "16:9",
@@ -8,10 +8,10 @@
     "min": 360,
     "max": 600
   },
-  "title": "How to Turn Wildlife Footage Into a Documentary Story",
-  "footagePath": "../media/long-form-001-footage.mp4",
-  "narrationPath": "../media/long-form-drafts/long-001-narration-final.mp3",
-  "captionsPath": "long-form-001-captions-final.srt",
+  "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
+  "footagePath": "../artifacts/long-form-001/rights-cleared-footage.mp4",
+  "narrationPath": "../artifacts/long-form-001/production-narration.wav",
+  "captionsPath": "long-form-001-captions.srt",
   "qualityEvidencePath": "long-form-001-quality-evidence.json",
   "footageLicenseEvidence": "",
   "narrationLicenseEvidence": "",
@@ -19,9 +19,9 @@
   "complianceReviewed": false,
   "containsSyntheticMedia": true,
   "hasPaidPromotion": true,
-  "sourceScriptPath": "long-form-001-wildlife-story-script.md",
+  "sourceScriptPath": "drafts/long-form-001-two-eyes-above-water.md",
   "sourceScriptBlobSha256": "d1b60f7bc0487ceba7efba56b65aa1d9ec760030",
   "priorNarrationEvidencePath": "long-form-narration-review-evidence.json",
-  "priorNarrationStatus": "SUPERSEDED_WRONG_SCRIPT_AND_UNAPPROVED_VOICE",
-  "notes": "Fail-closed production manifest, not evidence of a completed render. The canonical draft for Long-form 001 is long-form-001-wildlife-story-script.md at the exact recorded source SHA. The historical narration evidence was generated from the older long-form-scripts.md source using Edge TTS en-US-GuyNeural; that voice was not owner-approved and must not be used as production narration. The preferred Roderic voice is not commercially licensed on the connected HeyGen Free plan; its 55.722-second Short sample is internal audition only. No commercially cleared narration or final captions exist for this long-form script. The 17-source Pexels register has direct free-download URLs and 563 seconds of page-listed raw duration, but no original MP4 bytes or local hashes. Verify all source files, rights, factual claims, final audio/caption synchronization, thumbnail and full-length human review before changing status. Private-only, unscheduled; no upload authorization."
+  "priorNarrationStatus": "LEGACY_UNAPPROVED_NARRATION_DO_NOT_USE",
+  "notes": "Fail-closed production manifest for the owner-approved Nile crocodile documentary. The approved script is drafts/long-form-001-two-eyes-above-water.md. A single 398.083-second Roderic HeyGen narration was generated on the Free plan for internal evaluation only; official Free-plan terms restrict that output to personal, non-commercial and internal evaluation and prohibit monetized/commercial publication. Do not use that WAV in the release. The user's zero-cost rule prevents a paid-plan upgrade; obtain owner approval for another zero-cost narrator with independently verified commercial-use rights, or keep production on HOLD. Five Pexels footage candidates are only sourcing leads; no MP4 originals have been acquired, hashed or visually reviewed. No captions, quality evidence, final video or thumbnail are complete. rightsConfirmed and complianceReviewed remain false. This manifest does not authorize upload or scheduling."
 }
