@@ -1,18 +1,18 @@
 # Current verified checkpoint — 19 November 2026
 
-**Last fully tested source/test tree:** `a31859736a552c2960be05d3b0bafd8b89954b07`. **Latest branch commit at this checkpoint:** `a3a3a7a69cd84043da160667fcb6f0d3f4a22246`. Since the tested tree, 13 commits changed 10 files, including `scripts/production-readiness.mjs`, its tests, and a new Pexels-only acquisition script/workflow. Those later source/test/workflow changes have no Actions run or combined check status and are **NOT_TESTED**. The 445156 automation/browser evidence below applies to a318 only.
+**Exact tested source/test tree:** `4dec5f719e0b717893547fbbbe687c7f9f9658db` (the latest source/test tree; subsequent commits only update evidence/data files). Full automation/security run 44527617194 passed on this exact tree. Current branch inventory run 44527617041 records 4,550 branch-only commits, nine main-only commits, 454 changed files, zero deletions and a clean working tree. The nine main-only commits are add/revert pairs with no net main-tree change relative to merge base.
 
-- Full automation/security [44515679877](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679877): 1,021 Node tests / 176 files and 86 Python tests; zero failures/skips; npm audit 0 vulnerabilities.
-- Dashboard browser E2E [44515679716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679716): 33/33 Chromium journeys passed.
-- Queue readiness [44515679755](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679755): PASS, 16-item isolated queue, publishing disabled.
-- Production readiness [44515679772](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679772): **HOLD, 21 blockers**. No upload, schedule, or publication was attempted.
-- Branch reconciliation [44515679603](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679603): clean working tree, 4,532 branch-only commits, nine main-only commits, 451 changed files and no branch deletions. Main's nine main-only commits have zero net file-tree changes relative to merge base.
+- Full automation/security [44527617194](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527617194): **1,022 Node tests / 176 files and 86 Python tests; zero failures/skips; npm audit 0 vulnerabilities**. The authenticated Cloudflare staging smoke step was skipped because the run was a pull-request event, not a push event.
+- Dashboard browser E2E [44527617064](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527617064): **33/33 Chromium journeys passed**.
+- Queue readiness [44527617205](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527617205): PASS, 16-item isolated queue, publishing disabled.
+- Production readiness [44527616996](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527616996): **HOLD, 22 blockers**. The new exact-hash approval gate is active. No upload, schedule, or publication was attempted.
+- Branch reconciliation [44527617041](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527617041): clean working tree, 4,550 branch-only commits, nine main-only commits, 454 changed files, zero deletions and 17 critical-module changes. Main's nine main-only commits have zero net file-tree changes relative to merge base.
 - API: 48/48 protected routes pass missing/invalid-credential rejection on the exact tested tree. 42 authorized positive route acceptances remain NOT_TESTED; six provider/production-gated routes remain BLOCKED.
 - Dashboard: 121 controls / 17 forms; 33 browser journeys pass, but DASH-001 remains NOT_TESTED pending exhaustive per-control behavior acceptance.
 
-## Current production blockers (21)
+## Current production blockers (22)
 
-1. Short footage file `media/next-short-footage.mp4` is missing.
+1. Short footage file `media/next-short-footage.mp4` is missing from the canonical production media directory. Four original Pexels clips now exist in the review artifact; they have not been promoted into the production manifest path.
 2. Short narration file `media/next-short-narration.mp3` is missing.
 3. Short footage rights evidence is not real and human-verified.
 4. Short narration rights evidence is not real and human-verified.
@@ -28,11 +28,12 @@
 14. Metadata is not human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
 15. Metadata rights confirmation is missing.
 16. Metadata compliance review is missing.
-17. Final Short MP4 `media/next-short.mp4` is missing.
-18. Latest read-only YouTube OAuth attempt returned `invalid_grant`; the refresh token must be reauthorized securely.
-19. Upload-capable `youtube.upload` scope is not independently verified.
-20. Complete owner-reviewed public/private/unlisted SonicVhibez history is stale or inconsistent with the latest authenticated verification.
-21. Local, workflow and owner-attested upload-attempt reconciliation is stale or incomplete. Never retry an uncertain upload.
+17. Exact-hash-bound human production-quality approval is missing; `UPLOAD_APPROVAL_PATH` is not configured with an owner-signed approval for the final artifact hashes.
+18. Final Short MP4 `media/next-short.mp4` is missing.
+19. Latest read-only YouTube OAuth attempt returned `invalid_grant`; the refresh token must be reauthorized securely.
+20. Upload-capable `youtube.upload` scope is not independently verified.
+21. Complete owner-reviewed public/private/unlisted SonicVhibez history is stale or inconsistent with the latest authenticated verification.
+22. Local, workflow and owner-attested upload-attempt reconciliation is stale or incomplete. Never retry an uncertain upload.
 
 ## New read-only deployment findings — 19 November 2026
 
@@ -44,19 +45,19 @@
 
 ## Media and narration constraints
 
-- The Pexels register contains 17 sources: four primary clips explicitly approved by the owner and 13 supplemental clips approved in principle. The four primary source pages list 53 seconds of vertical footage in total. No original MP4 bytes or local SHA-256 hashes are present in the production workspace; source-page licence metadata is not a substitute for file inspection, third-party-rights checks and final human review.
+- The Pexels register contains 17 sources: four primary clips explicitly approved by the owner and 13 supplemental clips approved in principle. All four primary MP4s were acquired in artifact [14531991114](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527616852), independently re-probed and SHA-256 rechecked; total duration is 53.0337 seconds. Hashes are stored in `content/short-001-acquisition-manifest.json`. They remain review-only and are not copied into the canonical production media directory. The fourth clip shows a visible chain-link barrier/enclosure in sampled frames; do not portray it as wild free-ranging wildlife. Owner/editor review must decide whether to exclude it or explicitly contextualize it. Pexels licence metadata is not a substitute for third-party-rights checks and final human review.
 - The Roderic HeyGen Free-plan sample (55.722 seconds) is an internal audition only and is not licensed for commercial/monetized production. Do not use it in the final Short or Long-form video.
 - Historical Long-form Edge TTS narration was generated from the wrong script using an unapproved voice and is quarantined. No commercially cleared narration or final long-form captions are available.
 - No final Short or Long-form export, final thumbnail, exact-hash human review, rights confirmation or private-upload authorization exists.
-- The Pexels-only acquisition script `scripts/acquire-short-001-assets.mjs` and workflow `.github/workflows/acquire-short-001-assets.yml` were restored after the previous workflow failed because its script was missing. The new workflow downloads only the four explicitly approved clips, checks MP4 signatures/duration/resolution/frame rate, hashes the files, creates previews and uploads a seven-day review artifact. It has `contents:read` only, does not download narration, does not write to the repository, and cannot approve rights or release.
-- **Acquisition workflow execution is NOT_TESTED.** The GitHub API commits that added the workflow did not trigger Actions; the latest branch commit has no associated workflow runs/checks. A normal user-originated push to the existing branch is required to trigger its `push` event. Do not report the four MP4s as downloaded until the artifact exists and its files are inspected.
-- The new `UPLOAD_APPROVAL_PATH` requirement in `scripts/production-readiness.mjs` adds an exact-hash-bound production-quality approval gate. The last readiness result (21 blockers, run 44515679772) predates this code change; the current blocker count must be recomputed after the new source/test changes are executed.
+- The Pexels-only acquisition script `scripts/acquire-short-001-assets.mjs` and workflow `.github/workflows/acquire-short-001-assets.yml` now pass: run 44527616852 acquired four explicitly approved MP4s, checked MP4 signatures/duration/resolution/frame rate, hashed each file, generated four preview frames and a contact sheet, and uploaded a seven-day artifact. It has `contents:read` only, does not download narration, does not write to the repository, and cannot approve rights or release.
+- A separate **53.0337-second, 540x960, 24fps visual-only rough cut** was created for owner review at `short-001-visual-rough-cut.mp4`. It is muted, contains no narration, music, captions or branding, and is not a final export.
+- The `UPLOAD_APPROVAL_PATH` exact-hash-bound production-quality approval gate is included in the current source/test tree and its tests pass in full automation run 44527617194. The actual owner approval file is still missing, so readiness correctly reports blocker 17.
 
 ## Owner-held inputs still required
 
 1. Reauthorize the existing Google OAuth client for the same SonicVhibez account with offline access and an upload-capable `youtube.upload` scope; update only the GitHub Actions `YOUTUBE_REFRESH_TOKEN` secret. Never paste credentials into chat or source files.
 2. Provide commercially cleared narration or explicitly approve a zero-cost alternative voice with verified commercial rights. Do not silently substitute Roderic or another voice.
-3. Supply/enable an accessible way to acquire the approved original Pexels MP4 files into the production workspace so they can be hashed, probed and visually reviewed.
+3. Review the four acquired Pexels clips, decide whether to exclude or contextualize the enclosure shot, verify all third-party rights, and authorize copying approved files into the canonical production media directory.
 4. Provide the Metricool/Meta historical export or read-only history access needed to reconcile the eight Nature Frontiers records.
 5. An owner must independently inspect the final rendered videos, captions, thumbnails, metadata and claims, then approve the exact final artifact hashes.
 6. An owner must verify GitHub branch-protection settings in repository settings; the connected GitHub protection endpoint returned HTTP 403, so protection remains UNVERIFIED.
@@ -67,7 +68,7 @@
 
 # Latest exact production-readiness result — 19 November 2026, 12:22 SAST
 
-**Readiness run:** [44523195947](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44523195947). **Exact branch source/test commit:** `15be5841b107239d1b9d4197a761c0eb5b333043`. Result: **HOLD, 22 blockers**. The readiness workflow's diagnostic and upload steps completed; the final gate correctly failed because mandatory prerequisites remain. No upload, schedule or publication was attempted.
+**Readiness run:** [44527616996](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527616996). **Exact branch source/test tree:** `4dec5f719e0b717893547fbbbe687c7f9f9658db`. Result: **HOLD, 22 blockers**. The readiness workflow's diagnostics completed; the final gate correctly failed because mandatory prerequisites remain, including the new exact-hash approval gate. No upload, schedule or publication was attempted.
 
 ## Current exact blockers (22)
 
