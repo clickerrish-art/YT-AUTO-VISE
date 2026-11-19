@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "contentId": "short-001-wildlife-video-storytelling",
+  "createdAt": "2026-11-19",
+  "status": "PLATFORM_LICENSE_DOCUMENTED_THIRD_PARTY_AND_OWNER_REVIEW_PENDING",
+  "sourceLicense": {
+    "name": "Pexels License",
+    "url": "https://www.pexels.com/license/",
+    "reviewedAt": "2026-11-19",
+    "commercialUseAllowed": true,
+    "modificationAllowed": true,
+    "attributionRequired": false,
+    "restrictions": [
+      "Do not redistribute unmodified stock files as standalone assets.",
+      "Do not imply endorsement by depicted people or brands.",
+      "Pexels licensing does not replace checks for third-party rights, releases, trademarks, property permissions or other restrictions."
+    ]
+  },
+  "selectedAssets": [
+    {
+      "id": "pexels-29765785",
+      "title": "Resting Lions in African Safari Habitat",
+      "creator": "Lorenzo Boldorini",
+      "sourceUrl": "https://www.pexels.com/video/resting-lions-in-african-safari-habitat-29765785/",
+      "sha256": "f01daff991cb07920e63f1a5914e3f4bc94cb32ec56cb676a5951c38aba256a6",
+      "durationSeconds": 12.16,
+      "technicalProbe": "PASS_H264_MP4",
+      "visualReview": "SAMPLED; lion tracking collars visible; avoid unsupported claims about animal status or behaviour"
+    },
+    {
+      "id": "pexels-11760785",
+      "title": "An African Elephant Mother and her Baby in a Grassland",
+      "creator": "ROMAN ODINTSOV",
+      "sourceUrl": "https://www.pexels.com/video/an-african-elephant-mother-and-her-baby-in-a-grassland-11760785/",
+      "sha256": "3417c7da10506e28124faece24b908e842a58b3e99d340d013f62c375d8c4e57",
+      "durationSeconds": 18.623,
+      "technicalProbe": "PASS_H264_MP4",
+      "visualReview": "SAMPLED; elephant mother and calf visible"
+    },
+    {
+      "id": "pexels-11528208",
+      "title": "A Lion Walking in a Field",
+      "creator": "lifeofhicham",
+      "sourceUrl": "https://www.pexels.com/video/a-lion-walkin-in-a-field-11528208/",
+      "sha256": "ace119137620bbdf6b372504f8e1dbae9bdd7ee9febe86a667d597ac6d46bada",
+      "durationSeconds": 6.868,
+      "technicalProbe": "PASS_H264_MP4",
+      "visualReview": "SAMPLED; lion tracking collar visible; avoid unsupported claims about animal status or behaviour"
+    }
+  ],
+  "excludedAssets": [
+    {
+      "id": "pexels-31702128",
+      "sourceUrl": "https://www.pexels.com/video/lion-in-kenyan-wildlife-park-habitat-31702128/",
+      "reason": "Excluded from this preview because visible enclosure/barrier and partial foreground person appear in the footage."
+    }
+  ],
+  "thirdPartyRights": {
+    "creatorIdentityAndSourcePages": "RECORDED",
+    "platformLicense": "COMMERCIAL_USE_AND_MODIFICATION_PERMITTED_BY_PEXELS_LICENSE",
+    "identifiablePeopleModelReleases": "NOT_INDEPENDENTLY_VERIFIED",
+    "propertyAndTrademarkPermissions": "NOT_INDEPENDENTLY_VERIFIED",
+    "wildlifeFacilityOrLocationPermissions": "NOT_INDEPENDENTLY_VERIFIED",
+    "creatorOrPlatformAdditionalRestrictions": "NOT_INDEPENDENTLY_VERIFIED",
+    "ownerFinalRightsApproval": "PENDING"
+  },
+  "usage": {
+    "previewOnly": true,
+    "finalProductionUseAuthorized": false,
+    "rightsConfirmed": false,
+    "humanReviewCompleted": false,
+    "publishingEnabled": false
+  },
+  "limitations": [
+    "Pexels platform license is not a guarantee that all third-party rights, releases or permissions are present.",
+    "The three selected clips total approximately 37.65 seconds and were repeated to produce a 56.71-second visual-only timing preview; repeated footage is not a final edit decision.",
+    "The preview is 720x1280 and silent; final target is 1080x1920 with approved narration and synchronized captions.",
+    "No music, final thumbnail, final metadata, human video approval or private-upload authorization is included."
+  ]
+}
