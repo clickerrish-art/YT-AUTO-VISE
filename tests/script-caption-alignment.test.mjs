@@ -21,11 +21,14 @@ test("Short 001 narration draft remains aligned with timed caption beats", () =>
   }
 });
 
-test("Short 001 timed captions end at 55 seconds", () => {
+test("Short 001 timed captions finish within 250ms of the generated narration duration", () => {
   const srt = fs.readFileSync("content/short-001-wildlife-video-storytelling.srt", "utf8");
-  const timestamps = [...srt.matchAll(/(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})/g)];
+  const evidence = JSON.parse(fs.readFileSync("content/short-001-roderic-narration-generation.json", "utf8"));
+  const timestamps = [...srt.matchAll(/(\\d{2}):(\\d{2}):(\\d{2}),(\\d{3}) --> (\\d{2}):(\\d{2}):(\\d{2}),(\\d{3})/g)];
   assert.ok(timestamps.length > 0, "expected timed caption entries");
   const last = timestamps[timestamps.length - 1];
   const endSeconds = Number(last[5]) * 3600 + Number(last[6]) * 60 + Number(last[7]) + Number(last[8]) / 1000;
-  assert.equal(endSeconds, 55);
+  const narrationDuration = evidence.synthesis.durationSeconds;
+  assert.ok(endSeconds <= narrationDuration, "captions must not outlast the generated narration");
+  assert.ok(narrationDuration - endSeconds <= 0.25, "final caption must cover the final spoken word and finish within 250ms of audio end");
 });
