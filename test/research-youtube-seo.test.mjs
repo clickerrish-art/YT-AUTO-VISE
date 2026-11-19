@@ -23,6 +23,17 @@ const channel = {
 };
 const ids = ["video000001", "video000002"];
 
+function fakeOAuthFactory() {
+  return {
+    setCredentials() {},
+    async getAccessToken() { return { token: "mock-access-token" }; },
+    async getTokenInfo() { return { scopes: [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly"
+    ] }; }
+  };
+}
+
 function fakeYoutube({ wrongIdentity = false } = {}) {
   const calls = { search: [], writes: [] };
   const api = {
@@ -102,6 +113,7 @@ test("monthly research verifies the real channel and writes JSON plus Markdown r
     const result = await researchSonicVhibezSeo({
       env,
       youtubeFactory: () => api,
+      oauthFactory: fakeOAuthFactory,
       now: new Date("2026-11-09T16:00:00Z"),
       outputDir: path.relative(process.cwd(), directory)
     });
@@ -133,7 +145,7 @@ test("monthly research verifies the real channel and writes JSON plus Markdown r
 test("SEO research refuses an unverified channel before running YouTube search", async () => {
   const { api, calls } = fakeYoutube({ wrongIdentity: true });
   await assert.rejects(
-    researchSonicVhibezSeo({ env, youtubeFactory: () => api }),
+    researchSonicVhibezSeo({ env, youtubeFactory: () => api, oauthFactory: fakeOAuthFactory }),
     /title\/handle did not match the approved SonicVhibez identity/
   );
   assert.equal(calls.search.length, 0);
@@ -152,6 +164,7 @@ test("SEO research rejects an unsafe output directory", async () => {
     researchSonicVhibezSeo({
       env,
       youtubeFactory: () => api,
+      oauthFactory: fakeOAuthFactory,
       outputDir: "../outside"
     }),
     /SEO_REPORT_DIR must be a safe repository-relative directory/

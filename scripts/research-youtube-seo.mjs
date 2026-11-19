@@ -164,6 +164,7 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
 export async function researchSonicVhibezSeo({
   env = process.env,
   youtubeFactory,
+  oauthFactory,
   now = new Date(),
   outputDir = "artifacts/seo/monthly"
 } = {}) {
@@ -183,7 +184,7 @@ export async function researchSonicVhibezSeo({
     youtube = google.youtube({ version: "v3", auth: oauth });
   }
 
-  const identity = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube });
+  const identity = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube, ...(oauthFactory ? { oauthFactory } : {}) });
   if (identity.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY" ||
       identity.channelId !== configuredChannelId) {
     throw new Error("refusing SEO research because read-only SonicVhibez identity/history verification did not pass");

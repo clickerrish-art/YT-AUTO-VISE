@@ -20,6 +20,17 @@ const env = {
   SEO_METADATA_WRITE_ENABLED: "YES",
   SEO_METADATA_DRY_RUN: "YES"
 };
+function fakeOAuthFactory() {
+  return {
+    setCredentials() {},
+    async getAccessToken() { return { token: "mock-access-token" }; },
+    async getTokenInfo() { return { scopes: [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/youtube.force-ssl"
+    ] }; }
+  };
+}
 const currentSnippet = {
   channelId,
   title: "Existing approved wildlife title",
@@ -92,6 +103,7 @@ test("SEO metadata dry run verifies SonicVhibez and proposes only snippet metada
       env,
       approvalPath: path.basename(file),
       youtubeFactory: () => api,
+      oauthFactory: fakeOAuthFactory,
       now,
       dryRun: true
     });

@@ -93,6 +93,7 @@ export async function updateApprovedYoutubeSeo({
   env = process.env,
   approvalPath = "config/seo-metadata-approval.json",
   youtubeFactory,
+  oauthFactory,
   now = new Date(),
   dryRun = env.SEO_METADATA_DRY_RUN !== "NO"
 } = {}) {
@@ -121,7 +122,7 @@ export async function updateApprovedYoutubeSeo({
     youtube = google.youtube({ version: "v3", auth: oauth });
   }
 
-  const identity = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube });
+  const identity = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube, ...(oauthFactory ? { oauthFactory } : {}) });
   if (identity.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY" || identity.channelId !== channelId) {
     throw new Error("refusing SEO metadata update because complete authenticated SonicVhibez identity/history verification did not pass");
   }
