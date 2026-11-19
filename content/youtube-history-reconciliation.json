@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "complete": true,
   "channelId": "UCSlkuPfHH78oGC1o418HV4w",
-  "verifiedAt": "2026-11-18T00:52:01.423Z",
+  "verifiedAt": "2026-11-19T22:48:58.854Z",
   "verifiedBy": "clickerrish-art",
-  "verificationReference": "YouTube read-only inventory workflow run 44211269635, attempt 1; authenticated channel ID and complete one-upload inventory confirmed. Owner confirmed on 2026-11-18 that the only upload is a Short and its YouTube Studio publication date matches the API inventory. Automated upload-ledger validation run 44229290895 found one prior workflow_dispatch run and zero executed private-upload jobs.",
+  "verificationReference": "Fresh read-only YouTube inventory workflow run 44632065508, attempt 1, exact source commit e7ae8d46232b9df01d6335cddba174a641a823e7. Authenticated @sonicvhibez identity and complete uploads playlist rechecked; the sole remote video ID, public visibility, PT20S duration and YouTube publishedAt timestamp exactly match the prior owner-reviewed reconciliation. Owner confirmed on 2026-11-18 that this sole upload is a Short and that the YouTube Studio publication date matches the API inventory; owner accepted it as historical publication evidence.",
   "videos": [
     {
       "id": "LjePS02hA1o",
@@ -19,18 +19,19 @@
         "youtubePublishedAt": "2026-10-22T15:05:56Z",
         "scheduledPublishAt": null,
         "duration": "PT20S",
-        "format": "short"
+        "format": "short",
+        "comparisonStatus": "EXACT_VIDEO_ID_VISIBILITY_AND_PUBLISHED_AT_MATCH"
       }
     }
   ],
   "latestInventoryEvidence": {
-    "workflowRunId": 44211269635,
+    "workflowRunId": 44632065508,
     "workflowRunAttempt": 1,
-    "jobId": 134489957947,
-    "sourceCommit": "9aaffeee6b3ad75b19e92774fb1091d4209389ac",
-    "verifiedAt": "2026-11-18T00:52:01.423Z",
-    "artifactId": 14385812917,
-    "artifactSha256": "ef87dc8a4137c4f5a39fd92572e850ee4a6f61fa24474ebdc80d5952d7224206",
+    "jobId": 135941004862,
+    "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
+    "verifiedAt": "2026-11-19T22:48:58.854Z",
+    "artifactId": 14582711324,
+    "artifactSha256": "a235d90228e1af3ae969751ba097af890a887f7231d6c580a0836564766b2f91",
     "complete": true,
     "uploadsPlaylistPages": 1,
     "totalUploads": 1,
@@ -38,7 +39,16 @@
       "public": 1,
       "private": 0,
       "unlisted": 0
-    }
+    },
+    "oauthScopesVerified": true,
+    "requiredOAuthScopes": [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly"
+    ],
+    "grantedOAuthScopes": [
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/youtube.upload"
+    ]
   },
   "durationPolicyException": {
     "status": "LEGACY_EXCEPTION_NOT_CURRENT_STANDARD",
@@ -51,8 +61,8 @@
     "note": "Owner-confirmed historical Short remains in publication history but does not satisfy the current 50–60 second Short production specification."
   },
   "uploadAttemptReconciliation": {
-    "status": "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS",
-    "inspectedAt": "2026-11-18T03:18:20Z",
+    "status": "GITHUB_ACTIONS_ATTEMPTS_VERIFIED_OWNER_ATTESTATION_REFRESH_REQUIRED",
+    "inspectedAt": "2026-11-19T23:04:27Z",
     "evidence": {
       "workflowDispatchRunsInspected": 1,
       "privateUploadWorkflowRunId": 42569826008,
@@ -76,29 +86,93 @@
         "executedPrivateUploadRuns": 0,
         "previousLedgerRunId": "NONE",
         "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44229290895"
+      },
+      "uploadWorkflowDispatchRunsFound": 1,
+      "repositoryWorkflowDispatchRunsInspected": 5,
+      "latestUploadWorkflowDispatchAt": "2026-11-09T05:53:10Z",
+      "currentGitHubScan": {
+        "inspectedAt": "2026-11-19T23:04:27Z",
+        "repositoryWorkflowDispatchRuns": 5,
+        "uploadPrivateWorkflowDispatchRuns": 1,
+        "uploadArtifactPrivatelyWorkflowDispatchRuns": 0,
+        "latestUploadWorkflowDispatchRunId": 42569826008,
+        "conclusion": "failure",
+        "privateUploadJobConclusion": "skipped",
+        "executedPrivateUploadJobsSincePriorOwnerAttestation": 0
+      },
+      "localLedger": {
+        "defaultPath": "run-logs/upload-attempts.json",
+        "repositoryVisibility": "GITIGNORED",
+        "localStateDirectories": [
+          "run-logs/",
+          "state/"
+        ],
+        "accessibleFromGitHubRepository": false,
+        "ownerAttestationRequiredForManualOrLocalAttemptsAfter": "2026-11-18"
       }
     },
-    "note": "Automated read-only GitHub Actions validation completed successfully. It inspected all prior workflow_dispatch runs from both private-upload entry points, found one prior workflow_dispatch run, and confirmed zero private-upload jobs actually executed. The earlier upload-private.yml run had private-upload skipped; the upload-artifact-privately.yml entry point had no prior run. Combined with the owner's attestation of no manual/local/external attempts, prior upload-attempt reconciliation is complete. The first future authorized private-upload must use previous_ledger_run_id=NONE and will create its durable ledger artifact. This does not authorize a new upload.",
+    "note": "Read-only GitHub Actions history was rechecked: five repository workflow_dispatch runs were inspected; only one belonged to the private-upload workflow, its private-upload job was skipped, the upload-artifact-privately workflow had no prior dispatch, and zero private-upload jobs executed. The local uploader ledger defaults to run-logs/upload-attempts.json, and /run-logs/ and /state/ are gitignored; GitHub cannot inspect the user's local copy. The owner's latest manual/local/third-party attempt attestation is dated 2026-11-18, so any out-of-band attempt after that date remains unverified until the owner confirms it. Do not authorize another upload while this attestation window is unresolved.",
     "ownerAttestation": {
-      "status": "CONFIRMED",
+      "status": "CONFIRMED_THROUGH_2026-11-18",
       "confirmedAt": "2026-11-18",
       "statement": "The owner confirmed there were no manual, local, or external YouTube upload attempts other than the inventoried video LjePS02hA1o.",
       "scope": "Manual, local, and third-party/out-of-band upload attempts",
       "appliesToVideoId": "LjePS02hA1o",
-      "note": "This is an owner attestation, not an automated GitHub Actions ledger validation. The read-only ledger validator must still inspect all prior workflow_dispatch runs and their private-upload job conclusions before any future upload."
+      "note": "This is an owner attestation, not an automated GitHub Actions ledger validation. It covers manual, local and third-party/out-of-band attempts through 2026-11-18 only; it does not attest to later attempts.",
+      "validThrough": "2026-11-18"
     }
   },
-  "currentFreshnessStatus": "STALE_NEEDS_REFRESH",
-  "lastSuccessfulInventoryAt": "2026-11-18T00:52:01.423Z",
+  "currentFreshnessStatus": "FRESH_READ_ONLY_INVENTORY_AS_OF_2026-11-19T22:48:58.854Z",
+  "lastSuccessfulInventoryAt": "2026-11-19T22:48:58.854Z",
   "latestRefreshAttempt": {
-    "workflowRunId": 44527616996,
-    "sourceCommit": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-    "status": "BLOCKED",
-    "errorCode": "invalid_grant",
-    "checkedAt": "2026-11-19T12:53:00Z",
+    "workflowRunId": 44632065508,
+    "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
+    "status": "PASS_READ_ONLY_IDENTITY_AND_COMPLETE_INVENTORY",
+    "checkedAt": "2026-11-19T22:48:58.854Z",
+    "oauthScopesVerified": true,
     "uploadAttempted": false,
-    "metadataWriteAttempted": false
+    "metadataWriteAttempted": false,
+    "publicationStateChanged": false
   },
-  "uploadScopeVerified": false,
-  "note": " Latest 19 November readiness refresh could not reauthenticate (invalid_grant); historical inventory remains complete as of 18 November but is stale for a new publication. Do not authorize an upload until OAuth is reauthorized, upload scope is verified, and the complete inventory is refreshed."
+  "uploadScopeVerified": true,
+  "note": "Fresh complete read-only SonicVhibez inventory as of 2026-11-19: one public, owner-reviewed legacy Short; its API publishedAt exactly matches the local reconciliation timestamp and owner-confirmed Studio publication date. Both YouTube upload and readonly OAuth scopes were verified. This does not authorize an upload. The rolling publication cycle is owner-approved but not yet evidenced by actual long-form releases. GitHub Actions upload-attempt history is clear, while local/manual attempts after the 2026-11-18 owner attestation remain unverified because the local ledger is gitignored.",
+  "ownerPublicationHistoryReview": {
+    "status": "ACCEPTED_AS_HISTORICAL_PUBLICATION_EVIDENCE",
+    "reviewedAt": "2026-11-18",
+    "videoId": "LjePS02hA1o",
+    "ownerConfirmedFormat": "short",
+    "ownerConfirmedStudioPublicationDate": "2026-10-22",
+    "ownerStatement": "The owner confirmed the only upload is a Short and its YouTube Studio publication date matches the API inventory.",
+    "scope": "Historical classification and publication-date confirmation for the one existing video; this is not approval of a new upload or publication."
+  },
+  "publicationCycleReconciliation": {
+    "status": "BLOCKED_INSUFFICIENT_PUBLISHED_HISTORY",
+    "ownerApproved": true,
+    "cycleStartAt": "2026-11-18T16:27:44Z",
+    "approvalReference": "Owner-approved rolling-cycle-without-weekly-target decision in config/weekly-content-plan.json, 2026-11-18T16:27:44Z.",
+    "requiredFormats": [
+      "long_form",
+      "long_form",
+      "short"
+    ],
+    "minimumHoursBetweenConsecutivePublications": 72,
+    "minimumCycleHours": 216,
+    "timezone": "Africa/Johannesburg",
+    "prohibitSameLocalCalendarDay": true,
+    "verifiedPublications": [
+      {
+        "videoId": "LjePS02hA1o",
+        "format": "short",
+        "actualPublishedAt": "2026-10-22T15:05:56Z",
+        "visibility": "public",
+        "cycleMembership": "PRE_CYCLE_LEGACY_HISTORY",
+        "duration": "PT20S",
+        "durationPolicy": "LEGACY_EXCEPTION_NOT_CURRENT_STANDARD"
+      }
+    ],
+    "publicationsSinceCycleApproval": 0,
+    "nextExpectedFormat": "long_form",
+    "verifiedConsecutivePublicationGaps": 0,
+    "statusReason": "The only verified remote publication is the owner-reviewed legacy Short, published before the approved cycle start. No long_form publication exists in the complete one-upload channel inventory, so the required long_form → long_form → short sequence and its actual 72-hour intervals cannot yet be demonstrated. The two long-form production manifests remain BLOCKED_NOT_RENDERABLE pending real media, narration, rights evidence and human review."
+  }
 }

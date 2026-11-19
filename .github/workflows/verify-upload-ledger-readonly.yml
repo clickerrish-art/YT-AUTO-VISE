@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/verify-upload-ledger-readonly.yml
       - scripts/validate-upload-ledger-run.mjs
+      - content/youtube-history-reconciliation.json
       - docs/MASTER_PRODUCTION_COMPLETION_REGISTER.md
   workflow_dispatch:
     inputs:
