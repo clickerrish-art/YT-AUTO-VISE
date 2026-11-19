@@ -1,12 +1,18 @@
 ## Latest exact candidate dashboard evidence — 19 November 2026
 
-- Exact source/test SHA: `3912a7c8af6d0e72950a2b18566a3267e789cc5f`.
-- Browser E2E [44488024652](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024652): **33/33 Chromium journeys passed**.
-- Automation/security [44488024623](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024623): **171/171 Node test files and 84/84 Python tests passed; zero skips**.
-- Content quality [44488024846](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44488024846): **1,015/1,015 Node tests passed; zero skips; npm audit 0 vulnerabilities**.
-- Inventory remains **120 controls, 17 forms, 103 form-owned controls and 17 standalone controls**. The last field-level form snapshot remains 11 PASS / 6 BLOCKED; it was not individually re-evaluated on this SHA.
-- **DASH-001 remains NOT_TESTED overall**: 33 browser journeys do not prove exhaustive field-level validation, authorization, persistence, restart, concurrency and feedback behavior for every control/form.
-
+- **Code/test SHA:** `df1ac7739afe4aed47987ae5e743c3d45720431c`; current branch head `751e0a417fe45b2e85fe8892fbd2f20560c0f13c` contains subsequent source-register, licence, SEO and evidence-document updates only.
+- Browser E2E [44510566447](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566447): **33/33 Chromium journeys passed** on the code/test SHA above.
+- Full automation [44510566685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566685): **1,021 Node tests across 176 files and 84 Python tests passed; zero failures/skips; npm audit 0 vulnerabilities**.
+- Content quality [44510566544](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566544): **1,023/1,023 passed, zero skips**.
+- Queue readiness [44510566573](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566573): **1,023/1,023 passed, zero skips**; isolated 16-item queue proposal, publishing disabled.
+- Inventory remains **120 controls** (27 buttons, 50 inputs, 27 selects, 16 textareas), **17 forms**, **103 form-owned controls** and **17 standalone controls**.
+- Stored field-level snapshot: **11 successful local/operator forms / 6 production-dependent forms BLOCKED**. The 17 fields in those six forms remain gated. All 17 forms have a journey; the six production-dependent forms fail closed.
+- The 33 browser journeys include keyboard-only connection, accessible names, 320px mobile no-overflow, form landmarks, malformed/impossible date rejection, safe API behavior and disabled publishing controls.
+- Control wiring, standalone bindings, rights-use controls and the six blocked-form API field mappings have historical targeted PASS evidence. These sub-gates do not replace current exhaustive per-control acceptance.
+- **DASH-001 remains NOT_TESTED overall.** The 33 journeys do not establish exhaustive field-level success, validation, error feedback, authorization, persistence, refresh/restart, concurrency and accessibility behavior for all 120 controls and 17 forms. Production-dependent forms must remain fail-closed until genuine prerequisites exist.
+- The 48 protected API routes reject missing and invalid operator authentication (**48/48 auth-negative checks**). The separate current-head positive route acceptance matrix remains 42 NOT_TESTED / 6 BLOCKED; do not infer positive route acceptance from authentication-negative tests.
+- Nature Frontiers Meta identity remains blocked by expired-token HTTP 401 / OAuth error 190 / subcode 463. YouTube OAuth remains `invalid_grant`; SCHED-001 remains NOT_TESTED.
+- No live upload, post, campaign activation, visibility change, queue activation or publication occurred.
 ---
 
 ## Latest exact candidate dashboard evidence — 18 November 2026
