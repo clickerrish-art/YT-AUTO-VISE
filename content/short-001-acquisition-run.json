@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "runId": 44512302360,
-  "runNumber": 6,
+  "runId": 44527128075,
+  "runNumber": 11,
   "branch": "codex/marketing-machine-audit-fixes",
-  "headSha": "29f95d92fd9214a68105695f46384101cd5875e0",
-  "acquisitionOutcome": "failure",
-  "artifactId": null,
-  "artifactName": null,
-  "recordedAt": "2026-11-19T11:10:06.834Z",
-  "releaseEligible": false
+  "headSha": "34d521f2e0b4bea77eecdf0ea79c04492281a192",
+  "acquisitionOutcome": "success",
+  "artifactId": 14532410683,
+  "artifactName": "sonicvhibez-short-001-approved-pexels-source",
+  "recordedAt": "2026-11-19T12:47:41.692Z",
+  "releaseEligible": false,
+  "note": "Four explicitly owner-approved Pexels clips were downloaded and independently probed/hashed. The artifact includes four MP4 files, four preview frames, a contact sheet and the acquisition manifest. Rights, full human review and production release remain pending."
 }
