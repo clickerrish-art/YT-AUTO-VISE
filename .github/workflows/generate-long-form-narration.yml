@@ -1,4 +1,4 @@
-name: Generate manual-only explicitly acknowledged non-commercial Edge TTS internal auditions (not production)
+name: Generate owner-acknowledged manual-only non-commercial Edge TTS auditions (not production)
 
 on:
   workflow_dispatch:
