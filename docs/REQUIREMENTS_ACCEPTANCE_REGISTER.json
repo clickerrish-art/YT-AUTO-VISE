@@ -2043,7 +2043,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928356",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609969"
       ],
-      "nextAction": "Nature Frontiers remains separate from SonicVhibez. Securely renew Meta credentials, verify Page/Instagram identity and permissions, implement version-controlled draft-only provider create/read-back, and reconcile the historical Metricool brand 7545638 plus eight UNKNOWN autoPublish records before any write action. The deployed Worker is health-only, not a publisher. Keep publishingEnabled=false, dryRun=true and emergencyStop=true; do not paste credentials into chat.",
+      "nextAction": "Current connected Metricool settings resolve Nature Frontiers SA to brandId 8094526 (Africa/Johannesburg). A read-only scheduled-post query for 2026-11-19 through 2026-12-19 returned zero scheduled posts; this does not expose or reconcile the eight historical draft=false/autoPublish=true records. The prior brandId 7545638 reference is stale/unconfirmed and must not be reused without owner verification. Metricool currently exposes a YouTube connection under the Nature Frontiers brand; Nature Frontiers must never be used as the SonicVhibez YouTube target, and the owner must confirm whether that separate connection should remain. Securely verify Facebook Page/Instagram identity and permissions, reconcile the eight historical records and confirm no unapproved auto-publishing before any Meta write. Keep publishingEnabled=false, dryRun=true and emergencyStop=true.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
@@ -3140,7 +3140,7 @@
   },
   "latestVerifiedExecution": {
     "recordedDate": "2026-11-19",
-    "currentBranchHead": "028fd145dac83239c1858ca3b27b81afd6670a63",
+    "currentBranchHead": "4c89425cb886b83f308b43cd63858bcdc2449db7",
     "codeAndTestVerificationCommit": "df1ac7739afe4aed47987ae5e743c3d45720431c",
     "postVerificationChanges": "Subsequent commits update Pexels source URLs, narration licensing status, render manifest, SEO research and acceptance evidence documents only; no executable source changes remain after the tested code/test commit.",
     "mainHead": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
@@ -3254,6 +3254,18 @@
       "uploadScopeVerified": false,
       "completeChannelHistoryVerified": false,
       "uploadAttemptReconciliationFresh": false
+    },
+    "metricoolReadOnlyCheck": {
+      "checkedDate": "2026-11-19",
+      "brandLabel": "Nature Frontiers SA",
+      "currentBrandId": "8094526",
+      "timezone": "Africa/Johannesburg",
+      "scheduledPostsFrom": "2026-11-19T00:00:00+02:00",
+      "scheduledPostsTo": "2026-12-19T23:59:59+02:00",
+      "scheduledPostsReturned": 0,
+      "historicalAutoPublishRecords": 8,
+      "historicalAutoPublishRecordsReconciled": false,
+      "note": "The scheduled-post connector does not expose the eight historical records or unscheduled drafts. A YouTube network connection is present on the Nature Frontiers Metricool brand; do not use it as a SonicVhibez target."
     }
   },
   "acceptanceReconciliation": {
