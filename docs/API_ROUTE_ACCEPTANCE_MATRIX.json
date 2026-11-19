@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-19T10:40:29.392+02:00",
+  "generatedAt": "2026-11-19T11:35:32Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
@@ -15,14 +15,14 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 4316,
+    "branchAheadBy": 4532,
     "branchBehindBy": 9,
-    "changedFiles": 432,
+    "changedFiles": 451,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — branch objects report protected=false, but the detailed protection endpoint returns HTTP 403.",
-    "comparisonSourceSha": "3c67fbef9a48ba77774240a30bdb7aecde43320c",
+    "comparisonSourceSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43385387613"
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679603"
   },
   "counts": {
     "routes": 48,
@@ -195,9 +195,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -226,9 +226,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -257,9 +257,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -285,9 +285,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -316,9 +316,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -347,9 +347,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -378,9 +378,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -409,9 +409,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -440,9 +440,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -471,9 +471,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -499,9 +499,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -530,9 +530,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -559,9 +559,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "GET",
@@ -590,9 +590,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -625,9 +625,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -656,9 +656,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -687,9 +687,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -718,9 +718,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -746,9 +746,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -777,9 +777,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -799,9 +799,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -821,9 +821,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -849,9 +849,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -880,9 +880,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -912,9 +912,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -943,9 +943,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -974,9 +974,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1007,9 +1007,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1038,9 +1038,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1069,9 +1069,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1100,9 +1100,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1139,9 +1139,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1170,9 +1170,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1200,9 +1200,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1230,9 +1230,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1261,9 +1261,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1292,9 +1292,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1323,9 +1323,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1354,9 +1354,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1384,9 +1384,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1416,9 +1416,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1461,9 +1461,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1494,9 +1494,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1522,9 +1522,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1551,9 +1551,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1583,9 +1583,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1611,9 +1611,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Owner/provider gate remains BLOCKED; exact-SHA negative-auth coverage passed, but the blocker remains."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     },
     {
       "method": "POST",
@@ -1642,9 +1642,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f",
-      "currentHeadEvidenceRunId": 44488024623,
-      "currentHeadEvidenceNote": "Authentication-negative behavior passed in the exact-SHA full regression suite; positive route-specific acceptance was not individually re-run on this SHA, so currentHeadStatus remains NOT_TESTED."
+      "currentHeadEvidenceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+      "currentHeadEvidenceRunId": 44515679877,
+      "currentHeadEvidenceNote": "Missing and invalid operator authentication are rejected before route validation or mutation in the exact-head full automation/security run 44515679877 (1,021 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance was not individually rerun on this SHA. Keep currentHeadStatus unchanged: 42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
     }
   ],
   "liveEvidenceRefresh": {
@@ -1884,5 +1884,16 @@
     "overallPass": 0,
     "overallNotTested": 42,
     "overallBlocked": 6
+  },
+  "latestCurrentHeadAuthenticationEvidence": {
+    "sourceSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
+    "runId": 44515679877,
+    "status": "PASS",
+    "nodeTests": 1021,
+    "nodeFiles": 176,
+    "pythonTests": 86,
+    "skipped": 0,
+    "npmAuditVulnerabilities": 0,
+    "note": "Full automation/security regression on the exact PR head confirms authentication-negative behavior for all 48 protected API routes. This is not positive route acceptance: 42 routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED."
   }
 }
