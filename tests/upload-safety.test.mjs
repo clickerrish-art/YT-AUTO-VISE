@@ -108,7 +108,20 @@ test("upload approval rejects mismatched job, artifact, metadata, and visibility
   };
   const rightsEvidence = { assetPath: "media/source.mp4", assetSha256: "e".repeat(64), licenseEvidenceLocation: "rights/source-license.txt", licenseEvidenceSha256: "f".repeat(64), permittedUses: ["YouTube"], verificationStatus: "VERIFIED", verifiedBy: "owner@example.test", verifiedAt: "2026-10-24T00:00:00.000Z" };
   const rightsEvidenceSha256 = crypto.createHash("sha256").update(JSON.stringify(rightsEvidence)).digest("hex");
-  const approval = { decision: "APPROVE", jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify({ passed: true, fixtureOnly: true })).digest("hex"), technicalValidationReceipt: { passed: true, fixtureOnly: true }, reviewer: "owner@example.test", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", qualityScorecard, qualityScorecardSha256: crypto.createHash("sha256").update(JSON.stringify(qualityScorecard)).digest("hex"), relatedArtifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64) }, { path: "media/next-short-thumbnail.jpg", sha256: "d".repeat(64) }, { path: "content/next-short.srt", sha256: "e".repeat(64) }, { path: "audio/next-short.mp3", sha256: "6".repeat(64) }, { path: "content/next-short.json", sha256: "b".repeat(64) }] };
+  const technicalValidationReceipt = {
+    passed: true,
+    checkedAt: new Date().toISOString(),
+    metadataVersion: "b".repeat(64),
+    captionsPath: "content/next-short.srt",
+    captionsSha256: "e".repeat(64),
+    artifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64), durationSeconds: 420, width: 1920, height: 1080 }],
+    thumbnail: { path: "media/next-short-thumbnail.jpg", sha256: "d".repeat(64), width: 1280, height: 720 },
+    checks: [
+      "metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration",
+      "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"
+    ]
+  };
+  const approval = { decision: "APPROVE", jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64), technicalValidationSha256: crypto.createHash("sha256").update(JSON.stringify(technicalValidationReceipt)).digest("hex"), technicalValidationReceipt, reviewer: "owner@example.test", rightsEvidenceSha256, rightsEvidence, publishingEnabled: false, visibility: "private", qualityScorecard, qualityScorecardSha256: crypto.createHash("sha256").update(JSON.stringify(qualityScorecard)).digest("hex"), relatedArtifacts: [{ path: "media/next-short.mp4", sha256: "a".repeat(64) }, { path: "media/next-short-thumbnail.jpg", sha256: "d".repeat(64) }, { path: "content/next-short.srt", sha256: "e".repeat(64) }, { path: "audio/next-short.mp3", sha256: "6".repeat(64) }, { path: "content/next-short.json", sha256: "b".repeat(64) }] };
   assert.equal(validateUploadApproval(approval, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), true);
   assert.throws(() => validateUploadApproval({ ...approval, qualityScorecard: { ...qualityScorecard, scores: { ...qualityScorecard.scores, sharpnessImageClarity: 100 } } }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /scorecard checksum/);
   assert.throws(() => validateUploadApproval({ ...approval, technicalValidationReceipt: undefined }, { jobId: "job-001", artifactSha256: "a".repeat(64), metadataVersion: "b".repeat(64) }), /technical-validation receipt is missing/);
