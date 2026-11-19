@@ -765,8 +765,8 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
       "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
-      "currentHeadEvidenceNote": "PASS on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051. The user explicitly approved the rolling long_form → long_form → short cycle on 2026-11-18T16:27:44Z, without a weekly target, with at least 72 elapsed hours between actual publications and no two releases on the same Africa/Johannesburg calendar day. Queue readiness run 44551028726 passed with 16 draft-only queue items; the full 1,027 Node / 87 Python regression passed. This resolves SCHED-003 only; SCHED-001 live history, OAuth, worker dispatch and actual remote timestamps remain blocked.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:12:00Z"
+      "currentHeadEvidenceNote": "PASS on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051. The user explicitly approved the rolling long_form → long_form → short cycle on 2026-11-18T16:27:44Z, no weekly target, with at least 72 elapsed hours between actual publications and no two releases on the same Africa/Johannesburg calendar day. Queue readiness run 44551028726 passed with 16 draft-only queue items; the full 1,027 Node / 87 Python regression passed. This resolves SCHED-003 only; SCHED-001 live history, OAuth, worker dispatch and actual remote timestamps remain blocked.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T17:39:00+02:00"
     },
     {
       "id": "SCHED-004",
