@@ -1,18 +1,16 @@
-## Latest exact candidate dashboard evidence — 19 November 2026
+## Latest exact candidate dashboard evidence — 19 November 2026 (refreshed)
 
-- **Code/test SHA:** `df1ac7739afe4aed47987ae5e743c3d45720431c`. Subsequent commits add source-register, licence, SEO and evidence updates; they also change the enhanced Short narration generator/workflow guard, which remains NOT_TESTED on PR #1 because that PR stays draft. The separate PR #8 main-branch guard passed its focused tests.
-- Browser E2E [44510566447](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566447): **33/33 Chromium journeys passed** on the code/test SHA above.
-- Full automation [44510566685](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566685): **1,021 Node tests across 176 files and 84 Python tests passed; zero failures/skips; npm audit 0 vulnerabilities**.
-- Content quality [44510566544](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566544): **1,023/1,023 passed, zero skips**.
-- Queue readiness [44510566573](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566573): **1,023/1,023 passed, zero skips**; isolated 16-item queue proposal, publishing disabled.
-- Reconciled source inventory: **121 controls** (27 buttons, 50 inputs, 27 selects, 17 textareas), **17 forms**, **104 form-owned controls** and **17 standalone controls**. The prior 120-control/103-form-owned snapshot was stale by one form-owned textarea. The inventory test `test/dashboard-inventory.test.mjs` independently asserts these exact counts.
-- Stored field-level snapshot: **11 successful local/operator forms / 6 production-dependent forms BLOCKED**. The 17 fields in those six forms remain gated. All 17 forms have a journey; the six production-dependent forms fail closed.
-- The 33 browser journeys include keyboard-only connection, accessible names, 320px mobile no-overflow, form landmarks, malformed/impossible date rejection, safe API behavior and disabled publishing controls.
-- Control wiring, standalone bindings, rights-use controls and the six blocked-form API field mappings have historical targeted PASS evidence. These sub-gates do not replace current exhaustive per-control acceptance.
-- **DASH-001 remains NOT_TESTED overall.** The 33 journeys do not establish exhaustive field-level success, validation, error feedback, authorization, persistence, refresh/restart, concurrency and accessibility behavior for all 121 controls and 17 forms. Production-dependent forms must remain fail-closed until genuine prerequisites exist.
-- The 48 protected API routes reject missing and invalid operator authentication (**48/48 auth-negative checks**). The separate current-head positive route acceptance matrix remains 42 NOT_TESTED / 6 BLOCKED; do not infer positive route acceptance from authentication-negative tests.
-- Nature Frontiers Meta identity remains blocked by expired-token HTTP 401 / OAuth error 190 / subcode 463. YouTube OAuth remains `invalid_grant`; SCHED-001 remains NOT_TESTED.
+- **Exact tested branch-tree SHA:** `a31859736a552c2960be05d3b0bafd8b89954b07`. The latest full automation/security and browser runs below checked out this exact PR head.
+- Browser E2E [44515679716](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679716): **33/33 Chromium journeys passed**.
+- Full automation/security [44515679877](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679877): **1,021 Node tests across 176 files and 86 Python tests passed; zero failures/skips; npm audit 0 vulnerabilities**. The Python suite includes the explicit non-commercial Edge TTS audition guard tests.
+- Queue readiness [44515679755](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679755): PASS; isolated 16-item queue proposal, publishing disabled.
+- Production readiness [44515679772](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44515679772): **HOLD, 21 blockers**. No upload, schedule, or publication was attempted.
+- Reconciled source inventory: **121 controls** (27 buttons, 50 inputs, 27 selects, 17 textareas), **17 forms**, **104 form-owned controls** and **17 standalone controls**. `test/dashboard-inventory.test.mjs` asserts these exact counts.
+- The 33 browser journeys cover keyboard-only connection, accessible names, 320px mobile no-overflow, form landmarks, invalid date handling, safe API errors, persistence/restart, retry controls, approval flows, backup controls, and disabled publishing. These are journey-level checks, not exhaustive per-control acceptance.
+- **DASH-001 remains NOT_TESTED overall.** All 121 controls and 17 forms still need a per-control behavior matrix proving applicable success, validation, actionable errors, authorization, durable persistence, refresh/restart, concurrency and accessibility. Six production-dependent forms remain fail-closed.
+- All **48/48 protected API routes** passed missing/invalid-credential rejection in the exact-head full regression. This does not prove authorized positive behavior: **42 positive routes remain NOT_TESTED and six provider/production-gated routes remain BLOCKED**. See `docs/API_ROUTE_ACCEPTANCE_MATRIX.json`.
 - No live upload, post, campaign activation, visibility change, queue activation or publication occurred.
+
 ---
 
 ## Latest exact candidate dashboard evidence — 18 November 2026
