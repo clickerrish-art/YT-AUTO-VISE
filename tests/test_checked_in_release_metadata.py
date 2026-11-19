@@ -41,5 +41,32 @@ class CheckedInReleaseMetadataTests(unittest.TestCase):
                 })
 
 
+    def test_short_001_visual_review_preview_cannot_be_mistaken_for_release_evidence(self):
+        preview = json.loads((ROOT / "content" / "short-001-visual-review-evidence.json").read_text(encoding="utf-8"))
+        acquisition = json.loads((ROOT / "content" / "short-001-acquisition-manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(preview.get("status"), "VISUAL_REVIEW_ONLY_NOT_RELEASE_ELIGIBLE")
+        self.assertFalse(preview["productionBoundaries"]["rightsConfirmed"])
+        self.assertFalse(preview["productionBoundaries"]["releaseEligible"])
+        self.assertFalse(preview["productionBoundaries"]["uploadedOrPublished"])
+        self.assertFalse(preview["productionBoundaries"]["humanFullPlaybackReview"])
+        self.assertEqual(preview["output"]["audio"], "none")
+        self.assertEqual(preview["output"]["width"] / preview["output"]["height"], 9 / 16)
+        self.assertGreaterEqual(preview["output"]["durationSeconds"], 50)
+        self.assertLessEqual(preview["output"]["durationSeconds"], 60)
+        used = {asset["assetId"]: asset for asset in preview["sourceAssets"]}
+        acquired = {asset["assetId"]: asset for asset in acquisition["assets"]}
+        self.assertEqual(set(used), {"pexels-11528208", "pexels-11760785", "pexels-29765785"})
+        for asset_id, asset in used.items():
+            self.assertEqual(asset["sha256"], acquired[asset_id]["sha256"])
+            self.assertTrue(acquired[asset_id]["ownerSelectionStatus"] == "EXPLICITLY_APPROVED")
+        self.assertEqual(
+            preview["excludedAssets"][0]["assetId"],
+            "pexels-31702128",
+            "the visible-enclosure/foreground-person clip must remain excluded"
+        )
+        self.assertTrue(preview["licenseEvidence"]["reviewed"])
+        self.assertFalse(acquisition["release"]["rightsConfirmed"])
+        self.assertFalse(acquisition["release"]["releaseEligible"])
+
 if __name__ == "__main__":
     unittest.main()
