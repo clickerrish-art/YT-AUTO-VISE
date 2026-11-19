@@ -54,6 +54,12 @@
 - The authenticated staging smoke supports `workflow_dispatch` but has not run. The staging backup/restore drill also supports dispatch, requires `confirm=YES`, and mutates staging D1; it has not been run because explicit approval for that persistent-state mutation is still required.
 - Evidence is retained in `content/cloudflare-deployment-reconciliation-2026-11-19.json`. No Cloudflare resource, secret, database, bucket, Worker or publishing setting was changed.
 
+## Queue replenishment hardening — 19 November 2026
+
+- The queue replenisher now validates its queue/policy paths against explicit trust roots, rejects symlink/hardlink targets, reads with `O_NOFOLLOW` where supported, and performs the read/modify/write transaction under a cross-process lock.
+- Queue writes now use `atomicWriteJson` (flush + atomic rename) instead of direct truncating writes. The regression suite adds concurrent-writer, symlink and path-traversal rejection cases.
+- **Verification pending:** these changes were added after the latest full automation run. Do not treat the new queue hardening as PASS until the exact new commit's CI completes. No live queue file was changed by this edit.
+
 ## New read-only deployment findings — 19 November 2026
 
 - SonicVhibez has a Cloudflare staging Worker `sonicvhibez-durable-state-staging` and a staging D1 database with six application tables. No SonicVhibez production Worker was found. The staging Worker has no cron schedules and there are no Durable Object namespaces.
