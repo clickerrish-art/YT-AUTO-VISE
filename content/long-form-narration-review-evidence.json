@@ -47,7 +47,7 @@
     "The recorded sourceScriptBlobSha does not match the current source script blob. This artifact is historical draft evidence only and must not be used as production narration approval.",
     "Regenerate narration from the exact current script, verify commercial-use voice rights, synchronize captions to final audio, and complete human playback/compliance review before release."
   ],
-  "currentSourceScriptBlobSha": "63b4d3473c510e49052a8b7beac406f727491fba",
+  "currentSourceScriptBlobSha": "d1b60f7bc0487ceba7efba56b65aa1d9ec760030",
   "recordedSourceScriptBlobSha": "390dfdcf15f896b135238237f9753f5cfddf710e",
   "disclosureStatus": "NOT_VERIFIED_IN_FINAL_AUDIO",
   "productionUseAllowed": false,
@@ -63,6 +63,7 @@
     "note": "Historical Edge TTS audio is not an approved voice and must not be used in SonicVhibez production. The current Roderic HeyGen Free-plan sample is also non-commercial and may only be used for internal evaluation. No narrator substitution is authorized without explicit owner approval."
   },
   "notes": [
-    "Historical audio/captions are superseded: they were generated from an older script SHA and the unapproved en-US-GuyNeural voice. Do not use them for production or release. The canonical Long-form 001 script is content/long-form-001-wildlife-story-script.md; generate new narration only after owner approval of a commercially licensed voice path."
+    "Historical audio/captions are superseded: they were generated from an older script SHA and the unapproved en-US-GuyNeural voice. Do not use them for production or release. The canonical Long-form 001 script is content/long-form-001-wildlife-story-script.md; generate new narration only after owner approval of a commercially licensed voice path.",
+    "Current canonical script SHA is d1b60f7bc0487ceba7efba56b65aa1d9ec760030. This evidence is historical only: it was generated from a different source script using unapproved en-US-GuyNeural, not the preferred Roderic voice. Do not use the old audio or captions in production."
   ]
 }
