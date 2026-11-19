@@ -188,7 +188,7 @@ test("read-only inventory rejects unsupported remote visibility instead of silen
     }] } }) }
   };
   await assert.rejects(
-    verifySonicVhibezChannel({ env, youtubeFactory: () => youtube }),
+    verifySonicVhibezChannel({ env, oauthFactory: testOAuthFactory, youtubeFactory: () => youtube }),
     /missing or unsupported visibility/
   );
 });
