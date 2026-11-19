@@ -82,6 +82,10 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
   }
   }
 
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const beforeState = await beforeResponse.json();
   const mutationRequests = [];
   page.on("request", outgoing => {
     if (outgoing.method() !== "GET" && new URL(outgoing.url()).pathname.startsWith("/api/")) {
@@ -201,4 +205,43 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
   }
 
   expect(mutationRequests, "field interaction and inspection must not submit forms or call mutation APIs").toEqual([]);
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect(await afterResponse.json(), "field interaction must not persist draft or approval state").toEqual(beforeState);
+});
+
+test("dashboard authorization rejects missing and invalid credentials with actionable feedback", async ({ page, request }) => {
+  const missing = await request.get("/api/state");
+  expect(missing.status()).toBe(401);
+  const invalid = await request.get("/api/state", {
+    headers: { "x-operator-token": "incorrect-test-token" }
+  });
+  expect(invalid.status()).toBe(401);
+
+  const invalidMutation = await request.post("/api/drafts", {
+    headers: { "content-type": "application/json", "x-operator-token": "incorrect-test-token" },
+    data: {
+      id: "unauthorized-dashboard-control-test",
+      title: "Must not be persisted",
+      topic: "Unauthorized write must be rejected",
+      contentType: "long_form",
+      scheduledDay: "Tuesday",
+      scheduledDate: "2027-01-05"
+    }
+  });
+  expect(invalidMutation.status()).toBe(401);
+
+  await page.goto("/");
+  await page.locator("#token").fill("incorrect-test-token");
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeHidden();
+  await expect(page.locator("#message")).toContainText(/unauthor|token|forbidden/i);
+  await expect(page.locator("#message")).not.toContainText("incorrect-test-token");
+
+  const validRead = await request.get("/api/state", {
+    headers: { "x-operator-token": operatorToken }
+  });
+  expect(validRead.status()).toBe(200);
+  const state = await validRead.json();
+  expect(state.queueItems.some(item => item.id === "unauthorized-dashboard-control-test")).toBe(false);
 });
