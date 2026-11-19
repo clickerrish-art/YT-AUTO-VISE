@@ -574,6 +574,7 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
       historySnapshot,
       expectedChannelId,
       pendingAttempts: ledger.attempts,
+      pendingAttemptsVerified: true,
       proposedAt: now().toISOString(),
       jobId,
       format,

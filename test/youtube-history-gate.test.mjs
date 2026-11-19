@@ -7,6 +7,15 @@ import path from "node:path";
 import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, validateHistoryReconciliationSnapshot, assertNextPublicationAllowed, fetchCompleteYoutubeHistorySnapshot, readRegularFileNoFollow } from "../scripts/youtube-history-gate.mjs";
 import { evaluateNextPublication } from "../scripts/schedule-policy.mjs";
 
+const evaluateWithVerifiedInventories = options => evaluateNextPublication({
+  pendingAttempts: [], pendingAttemptsVerified: true,
+  pendingAttemptsVerified: true,
+  scheduledItems: [],
+  scheduledItemsVerified: true,
+  ...options
+});
+
+
 const channelId = "UC1234567890123456789012";
 const remoteVideos = [
   { id: "vid-a", snippet: { channelId, publishedAt: "2026-10-01T15:00:00.000Z" }, status: { privacyStatus: "private" } },
@@ -103,19 +112,19 @@ test("history reconciliation separates future scheduled videos from actual publi
     scheduledAt: "2026-11-18T15:00:00.000Z",
     format: "short"
   }]);
-  const tooSoon = evaluateNextPublication({
+  const tooSoon = evaluateWithVerifiedInventories({
     history: snapshot.history, historyVerified: true, scheduledItems: snapshot.scheduledItems,
-    pendingAttempts: [], proposedAt: "2026-11-20T15:00:00.000Z", jobId: "job-4", format: "long_form"
+    pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-20T15:00:00.000Z", jobId: "job-4", format: "long_form"
   });
   assert.equal(tooSoon.valid, false);
   assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
-  const validSlot = evaluateNextPublication({
+  const validSlot = evaluateWithVerifiedInventories({
     history: snapshot.history, historyVerified: true, scheduledItems: snapshot.scheduledItems,
-    pendingAttempts: [], proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-4", format: "long_form"
+    pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-4", format: "long_form"
   });
   assert.equal(validSlot.valid, true, "a 72-hour gap from the scheduled item passes the slot policy");
   const approvedSlot = assertNextPublicationAllowed({
-    historySnapshot: snapshot, expectedChannelId: channelId, pendingAttempts: [],
+    historySnapshot: snapshot, expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-4", format: "long_form"
   });
   assert.equal(approvedSlot.valid, true, "a future slot after the recorded approval and 72-hour scheduled-item gap is permitted");
@@ -198,16 +207,16 @@ test("unresolved or uncertain upload attempts block new uploads", () => {
 
 test("owner-approved cycle gate enforces verified history, next format and the 72-hour gap", () => {
   const history = [{ id: "vid-b", status: "unlisted", actualPublishedAt: "2026-11-07T15:00:00.000Z", format: "long_form" }];
-  const valid = evaluateNextPublication({ history, historyVerified: true, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "long_form" });
+  const valid = evaluateWithVerifiedInventories({ history, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "long_form" });
   assert.equal(valid.valid, true, "the policy accepts the next-format slot exactly 72 elapsed hours after the prior publication");
-  const tooSoon = evaluateNextPublication({ history, historyVerified: true, pendingAttempts: [], proposedAt: "2026-11-10T14:59:59.999Z", jobId: "job-3", format: "long_form" });
+  const tooSoon = evaluateWithVerifiedInventories({ history, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-10T14:59:59.999Z", jobId: "job-3", format: "long_form" });
   assert.equal(tooSoon.valid, false);
   assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
-  const wrongFormat = evaluateNextPublication({ history, historyVerified: true, pendingAttempts: [], proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "short" });
+  const wrongFormat = evaluateWithVerifiedInventories({ history, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true, proposedAt: "2026-11-10T15:00:00.000Z", jobId: "job-3", format: "short" });
   assert.equal(wrongFormat.valid, false);
   assert.ok(wrongFormat.errors.some(error => /next format must be long_form/.test(error)));
   const approved = assertNextPublicationAllowed({
-    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [],
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-11-21T15:00:00.000Z", jobId: "job-3", format: "long_form"
   });
   assert.equal(approved.valid, true, "the configured owner approval permits a future slot without waiving the 72-hour minimum");
@@ -221,28 +230,28 @@ test("owner-approved cycle starts after a legacy Short while retaining it for 72
     actualPublishedAt: "2026-10-22T15:05:56.000Z",
     format: "short"
   }];
-  const valid = evaluateNextPublication({
-    history: legacyHistory, historyVerified: true, pendingAttempts: [],
+  const valid = evaluateWithVerifiedInventories({
+    history: legacyHistory, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-11-10T15:05:56.000Z", jobId: "first-cycle-long-form",
     format: "long_form", cycleStartAt: "2026-11-01T00:00:00.000Z"
   });
   assert.equal(valid.valid, true, "a new cycle starts after the legacy Short while retaining it for spacing");
-  const wrongFormat = evaluateNextPublication({
-    history: legacyHistory, historyVerified: true, pendingAttempts: [],
+  const wrongFormat = evaluateWithVerifiedInventories({
+    history: legacyHistory, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-11-10T15:05:56.000Z", jobId: "wrong-first-cycle-short",
     format: "short", cycleStartAt: "2026-11-01T00:00:00.000Z"
   });
   assert.equal(wrongFormat.valid, false);
   assert.ok(wrongFormat.errors.some(error => /next format must be long_form/.test(error)));
-  const tooSoon = evaluateNextPublication({
-    history: legacyHistory, historyVerified: true, pendingAttempts: [],
+  const tooSoon = evaluateWithVerifiedInventories({
+    history: legacyHistory, historyVerified: true, pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-10-24T15:05:55.999Z", jobId: "too-soon",
     format: "long_form", cycleStartAt: "2026-10-22T15:05:56.000Z"
   });
   assert.equal(tooSoon.valid, false);
   assert.ok(tooSoon.errors.some(error => /spacing conflict/.test(error)));
   const approved = assertNextPublicationAllowed({
-    historySnapshot: verifiedHistorySnapshot(legacyHistory), expectedChannelId: channelId, pendingAttempts: [],
+    historySnapshot: verifiedHistorySnapshot(legacyHistory), expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-11-20T15:05:56.000Z",
     jobId: "first-approved-cycle-long-form", format: "long_form"
   });
@@ -252,12 +261,12 @@ test("owner-approved cycle starts after a legacy Short while retaining it for 72
 test("private upload gate accepts approved cadence but unresolved attempts still block", () => {
   const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
   const approved = assertNextPublicationAllowed({
-    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [],
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-11-20T15:00:00.000Z",
     jobId: "job-owner-cadence", format: "long_form"
   });
   assert.equal(approved.valid, true);
-  const unresolved = evaluateNextPublication({
+  const unresolved = evaluateWithVerifiedInventories({
     history, historyVerified: true,
     pendingAttempts: [{ jobId: "uncertain-job", status: "RECOVERY_REQUIRED" }],
     proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-owner-cadence", format: "long_form"
@@ -454,7 +463,7 @@ test("complete history fetch rejects repeated page tokens and duplicate playlist
 test("publication scheduler independently requires a current hash-bound production quality approval", () => {
   const history = validateHistoryReconciliation({ channelId, remoteVideos, reconciliation });
   const base = {
-    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [],
+    historySnapshot: verifiedHistorySnapshot(history), expectedChannelId: channelId, pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-11-20T15:00:00.000Z", jobId: "quality-gated-job", format: "long_form",
     requireQualityApproval: true
   };
@@ -468,7 +477,7 @@ test("production publication gate requires complete channel, scheduled, private-
   const base = {
     historySnapshot: snapshot,
     expectedChannelId: channelId,
-    pendingAttempts: [],
+    pendingAttempts: [], pendingAttemptsVerified: true,
     proposedAt: "2026-11-10T15:00:00.000Z",
     jobId: "job-explicit-inventories",
     format: "long_form"
@@ -485,6 +494,10 @@ test("production publication gate requires complete channel, scheduled, private-
   assert.throws(
     () => assertNextPublicationAllowed({ ...base, pendingAttempts: undefined }),
     /upload attempt ledger must be explicitly inspected/
+  );
+  assert.throws(
+    () => assertNextPublicationAllowed({ ...base, pendingAttemptsVerified: false }),
+    /upload attempt ledger must be independently inspected and reconciled/
   );
   assert.throws(
     () => assertNextPublicationAllowed({ ...base, expectedChannelId: "UC" + "Z".repeat(22) }),

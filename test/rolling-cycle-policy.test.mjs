@@ -2,6 +2,15 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { evaluateNextPublication, validateRollingPublicationCycle } from "../scripts/schedule-policy.mjs";
 
+const evaluateWithVerifiedInventories = options => evaluateNextPublication({
+  pendingAttempts: [],
+  pendingAttemptsVerified: true,
+  scheduledItems: [],
+  scheduledItemsVerified: true,
+  ...options
+});
+
+
 const approval = {
   ownerApproved: true,
   approvedBy: "project-owner",
@@ -68,7 +77,7 @@ test("scheduled upload attempts participate in stable-ID collision checks via jo
     actualPublishedAt: "2026-10-20T15:00:00.000Z",
     format: "long_form"
   }];
-  const duplicatePendingJob = evaluateNextPublication({
+  const duplicatePendingJob = evaluateWithVerifiedInventories({
     history,
     historyVerified: true,
     pendingAttempts: [{
@@ -83,7 +92,7 @@ test("scheduled upload attempts participate in stable-ID collision checks via jo
   assert.equal(duplicatePendingJob.valid, false);
   assert.ok(duplicatePendingJob.errors.some(error => error.includes("duplicate stable job/remote ID: remote-video-1")));
 
-  const duplicateWithScheduledItem = evaluateNextPublication({
+  const duplicateWithScheduledItem = evaluateWithVerifiedInventories({
     history,
     historyVerified: true,
     scheduledItems: [{
@@ -136,7 +145,7 @@ test("rejects a weekly target in the no-weekly-target policy mode", () => {
 
 
 test("blocks remote-accepted attempts until reconciliation is complete", () => {
-  const result = evaluateNextPublication({
+  const result = evaluateWithVerifiedInventories({
     history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }],
     historyVerified: true,
     pendingAttempts: [{ jobId: "job-uncertain", status: "REMOTE_ACCEPTED_RECONCILIATION_REQUIRED" }],
@@ -149,7 +158,7 @@ test("blocks remote-accepted attempts until reconciliation is complete", () => {
 });
 
 test("fails closed on an unknown upload-attempt status", () => {
-  const result = evaluateNextPublication({
+  const result = evaluateWithVerifiedInventories({
     history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }],
     historyVerified: true,
     pendingAttempts: [{ jobId: "job-unknown", status: "REMOTE_STATE_MAYBE" }],

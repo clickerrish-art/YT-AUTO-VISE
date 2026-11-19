@@ -352,7 +352,7 @@ export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliati
 }
 
 export function assertNextPublicationAllowed({
-  historySnapshot, expectedChannelId, pendingAttempts, proposedAt, jobId, format, timeZone, minSpacingHours,
+  historySnapshot, expectedChannelId, pendingAttempts, pendingAttemptsVerified = false, proposedAt, jobId, format, timeZone, minSpacingHours,
   requireQualityApproval = false, qualityApproval = null, videoPath = null, metadataPath = null, rootDir = process.cwd(), contentType = null
 } = {}) {
   const verifiedAt = strictIsoTimestamp(historySnapshot?.verifiedAt);
@@ -372,6 +372,9 @@ export function assertNextPublicationAllowed({
   }
   if (!Array.isArray(pendingAttempts)) {
     throw new Error("upload attempt ledger must be explicitly inspected and supplied as an array");
+  }
+  if (pendingAttemptsVerified !== true) {
+    throw new Error("upload attempt ledger must be independently inspected and reconciled before publication");
   }
   if (requireQualityApproval === true) {
     if (!qualityApproval || typeof videoPath !== "string" || typeof metadataPath !== "string") {
@@ -413,7 +416,9 @@ export function assertNextPublicationAllowed({
     history: historySnapshot.history,
     historyVerified: true,
     pendingAttempts,
+    pendingAttemptsVerified: true,
     scheduledItems: historySnapshot.scheduledItems,
+    scheduledItemsVerified: true,
     proposedAt,
     jobId,
     format,

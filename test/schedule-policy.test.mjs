@@ -2,6 +2,38 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication, isValidZonedIsoTimestamp, validateCadenceDecision, validateRollingPublicationCycle } from "../scripts/schedule-policy.mjs";
 
+const evaluateWithVerifiedInventories = options => evaluateNextPublication({
+  pendingAttempts: [],
+  pendingAttemptsVerified: true,
+  scheduledItems: [],
+  scheduledItemsVerified: true,
+  ...options
+});
+
+
+
+test("next publication fails closed unless history, destination schedule and upload-attempt ledger are independently verified", () => {
+  const base = {
+    history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }],
+    historyVerified: true,
+    pendingAttempts: [],
+    scheduledItems: [],
+    proposedAt: "2026-10-23T15:00:00.000Z",
+    jobId: "job-next",
+    format: "long_form"
+  };
+  const missingScheduleVerification = evaluateNextPublication({ ...base, pendingAttemptsVerified: true });
+  assert.equal(missingScheduleVerification.valid, false);
+  assert.ok(missingScheduleVerification.errors.some(error => /complete destination schedule has not been independently inspected/.test(error)));
+
+  const missingAttemptVerification = evaluateNextPublication({ ...base, scheduledItemsVerified: true });
+  assert.equal(missingAttemptVerification.valid, false);
+  assert.ok(missingAttemptVerification.errors.some(error => /complete upload-attempt ledger has not been independently inspected and reconciled/.test(error)));
+
+  const verified = evaluateNextPublication({ ...base, scheduledItemsVerified: true, pendingAttemptsVerified: true });
+  assert.equal(verified.valid, true, verified.errors.join("; "));
+});
+
 test("strict timestamp validator requires timezone and rejects normalized invalid dates", () => {
   assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00+02:00"), true);
   assert.equal(isValidZonedIsoTimestamp("2026-10-25T10:00:00Z"), true);
@@ -131,9 +163,9 @@ test("local schedule time conversion follows IANA timezone and daylight-saving r
 
 test("rolling cycle accepts exactly 72 elapsed hours and rejects one millisecond below", () => {
   const history = [{ id: "remote-1", status: "private", actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form" }];
-  const exact = evaluateNextPublication({ history, historyVerified: true, proposedAt: "2026-10-23T15:00:00.000Z", jobId: "job-next", format: "long_form" });
+  const exact = evaluateWithVerifiedInventories({ history, historyVerified: true, proposedAt: "2026-10-23T15:00:00.000Z", jobId: "job-next", format: "long_form" });
   assert.equal(exact.valid, true, exact.errors.join("; "));
-  const below = evaluateNextPublication({ history, historyVerified: true, proposedAt: "2026-10-23T14:59:59.999Z", jobId: "job-next", format: "long_form" });
+  const below = evaluateWithVerifiedInventories({ history, historyVerified: true, proposedAt: "2026-10-23T14:59:59.999Z", jobId: "job-next", format: "long_form" });
   assert.equal(below.valid, false);
   assert.ok(below.errors.some(error => error.includes("72 elapsed hours") || error.includes("below the 72-hour minimum")));
 });
@@ -143,7 +175,7 @@ test("rolling cycle advances long-form, long-form, Short and treats private/unli
     { id: "remote-1", status: "private", actualPublishedAt: "2026-10-01T15:00:00.000Z", format: "long_form" },
     { id: "remote-2", status: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z", format: "long_form" }
   ];
-  const result = evaluateNextPublication({ history, historyVerified: true, proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-next", format: "short" });
+  const result = evaluateWithVerifiedInventories({ history, historyVerified: true, proposedAt: "2026-10-07T15:00:00.000Z", jobId: "job-next", format: "short" });
   assert.equal(result.valid, true, result.errors.join("; "));
   assert.equal(result.expectedFormat, "short");
 });
@@ -156,7 +188,7 @@ test("approved cycle start does not retroactively classify earlier remote videos
     format: "short"
   };
   const cycleStartAt = "2026-11-07T00:57:33+02:00";
-  const firstLong = evaluateNextPublication({
+  const firstLong = evaluateWithVerifiedInventories({
     history: [legacyShort], historyVerified: true, cycleStartAt,
     proposedAt: "2026-11-10T15:05:56.000Z", jobId: "cycle-long-1", format: "long_form"
   });
@@ -164,14 +196,14 @@ test("approved cycle start does not retroactively classify earlier remote videos
   assert.equal(firstLong.expectedFormat, "long_form");
   assert.equal(firstLong.cycleHistoryCount, 0);
 
-  const wrongFirstFormat = evaluateNextPublication({
+  const wrongFirstFormat = evaluateWithVerifiedInventories({
     history: [legacyShort], historyVerified: true, cycleStartAt,
     proposedAt: "2026-11-10T15:05:56.000Z", jobId: "cycle-short-wrong", format: "short"
   });
   assert.equal(wrongFirstFormat.valid, false);
   assert.equal(wrongFirstFormat.expectedFormat, "long_form");
 
-  const secondLong = evaluateNextPublication({
+  const secondLong = evaluateWithVerifiedInventories({
     history: [legacyShort, {
       id: "cycle-long-1", status: "private",
       actualPublishedAt: "2026-11-10T15:05:56.000Z", format: "long_form"
@@ -183,7 +215,7 @@ test("approved cycle start does not retroactively classify earlier remote videos
   assert.equal(secondLong.expectedFormat, "long_form");
   assert.equal(secondLong.cycleHistoryCount, 1);
 
-  const short = evaluateNextPublication({
+  const short = evaluateWithVerifiedInventories({
     history: [legacyShort,
       { id: "cycle-long-1", status: "private", actualPublishedAt: "2026-11-10T15:05:56.000Z", format: "long_form" },
       { id: "cycle-long-2", status: "private", actualPublishedAt: "2026-11-13T15:05:56.000Z", format: "long_form" }
@@ -203,7 +235,7 @@ test("pre-cycle publications still enforce elapsed-hour spacing and invalid cycl
     actualPublishedAt: "2026-11-06T12:00:00.000Z",
     format: "short"
   };
-  const tooSoon = evaluateNextPublication({
+  const tooSoon = evaluateWithVerifiedInventories({
     history: [recentLegacyShort],
     historyVerified: true,
     cycleStartAt: "2026-11-07T00:57:33+02:00",
@@ -214,7 +246,7 @@ test("pre-cycle publications still enforce elapsed-hour spacing and invalid cycl
   assert.equal(tooSoon.valid, false);
   assert.ok(tooSoon.errors.some(error => error.includes("72 elapsed hours")));
 
-  const futureAnchor = evaluateNextPublication({
+  const futureAnchor = evaluateWithVerifiedInventories({
     history: [recentLegacyShort],
     historyVerified: true,
     cycleStartAt: "2026-11-20T00:00:00.000Z",
@@ -227,7 +259,7 @@ test("pre-cycle publications still enforce elapsed-hour spacing and invalid cycl
 });
 
 test("rolling publication gate rejects channel history without a supported format classification", () => {
-  const result = evaluateNextPublication({
+  const result = evaluateWithVerifiedInventories({
     history: [{
       id: "remote-unclassified",
       status: "private",
@@ -243,7 +275,7 @@ test("rolling publication gate rejects channel history without a supported forma
 });
 
 test("rolling publication gate rejects out-of-sequence verified channel history", () => {
-  const result = evaluateNextPublication({
+  const result = evaluateWithVerifiedInventories({
     history: [
       { id: "remote-1", status: "private", actualPublishedAt: "2026-10-01T15:00:00.000Z", format: "long_form" },
       { id: "remote-2", status: "unlisted", actualPublishedAt: "2026-10-04T15:00:00.000Z", format: "short" }
@@ -258,8 +290,8 @@ test("rolling publication gate rejects out-of-sequence verified channel history"
 });
 
 test("rolling cycle fails closed for missing/incomplete history and unresolved upload attempts", () => {
-  assert.equal(evaluateNextPublication({ history: [], historyVerified: false, proposedAt: "2026-10-01T15:00:00Z", jobId: "job-next", format: "long_form" }).valid, false);
-  const unresolved = evaluateNextPublication({
+  assert.equal(evaluateWithVerifiedInventories({ history: [], historyVerified: false, proposedAt: "2026-10-01T15:00:00Z", jobId: "job-next", format: "long_form" }).valid, false);
+  const unresolved = evaluateWithVerifiedInventories({
     history: [{ id: "remote-1", status: "public", actualPublishedAt: "2026-10-01T15:00:00Z", format: "long_form" }],
     historyVerified: true, pendingAttempts: [{ jobId: "job-uncertain", status: "RECOVERY_REQUIRED" }],
     proposedAt: "2026-10-04T15:00:00Z", jobId: "job-next", format: "long_form"
@@ -269,7 +301,7 @@ test("rolling cycle fails closed for missing/incomplete history and unresolved u
 });
 
 test("rolling cycle rejects duplicate remote IDs and timezone-boundary gaps under 72 hours", () => {
-  const duplicates = evaluateNextPublication({
+  const duplicates = evaluateWithVerifiedInventories({
     history: [{ id: "same-id", status: "public", actualPublishedAt: "2026-10-01T15:00:00Z", format: "long_form" }],
     historyVerified: true, scheduledItems: [{ id: "same-id", status: "scheduled", scheduledAt: "2026-10-04T15:00:00Z" }],
     proposedAt: "2026-10-07T15:00:00Z", jobId: "job-next", format: "long_form"
@@ -296,7 +328,7 @@ test("reconciled successful upload ledger entries do not count as future schedul
     actualPublishedAt: "2026-10-20T15:00:00.000Z",
     format: "long_form"
   }];
-  const result = evaluateNextPublication({
+  const result = evaluateWithVerifiedInventories({
     history, historyVerified: true, pendingAttempts: ledger,
     proposedAt: "2026-10-23T15:00:00.000Z",
     jobId: "job-long-form-2", format: "long_form"
@@ -328,10 +360,10 @@ test("verified upload ledger attempts must bind to the exact remote history ID, 
     { ...validAttempt, actualPublishedAt: "2026-10-20T15:00:01.000Z" },
     { ...validAttempt, format: "short" }
   ]) {
-    const result = evaluateNextPublication({ ...base, pendingAttempts: [attempt] });
+    const result = evaluateWithVerifiedInventories({ ...base, pendingAttempts: [attempt] });
     assert.equal(result.valid, false, "a locally verified receipt must not bypass remote-history reconciliation");
   }
-  const result = evaluateNextPublication({ ...base, pendingAttempts: [validAttempt] });
+  const result = evaluateWithVerifiedInventories({ ...base, pendingAttempts: [validAttempt] });
   assert.equal(result.valid, true, result.errors.join("; "));
 });
 
@@ -344,14 +376,14 @@ test("publication timestamps reject normalized invalid dates, missing zones, and
     "2026-10-23T15:00:00+14:30",
     "not-a-date"
   ]) {
-    const result = evaluateNextPublication({ ...base, proposedAt });
+    const result = evaluateWithVerifiedInventories({ ...base, proposedAt });
     assert.equal(result.valid, false, `must reject malformed timestamp: ${proposedAt}`);
     assert.ok(result.errors.some(error => error.includes("proposedAt must be a valid ISO timestamp with explicit timezone")));
   }
 });
 
 test("history timestamps with invalid calendar dates fail closed instead of normalizing", () => {
-  const result = evaluateNextPublication({
+  const result = evaluateWithVerifiedInventories({
     history: [{ id: "remote-1", status: "private", actualPublishedAt: "2026-02-30T15:00:00Z", format: "long_form" }],
     historyVerified: true,
     proposedAt: "2026-10-23T15:00:00Z",
@@ -365,7 +397,7 @@ test("history timestamps with invalid calendar dates fail closed instead of norm
 
 test("verified remote history rejects createdAt and scheduledAt as substitutes for actual publication time", () => {
   for (const status of ["published", "public", "private", "unlisted"]) {
-    const result = evaluateNextPublication({
+    const result = evaluateWithVerifiedInventories({
       history: [{
         id: "remote-without-publication-time-" + status,
         status,
@@ -385,7 +417,7 @@ test("verified remote history rejects createdAt and scheduledAt as substitutes f
 });
 
 test("verified remote history accepts publishedAt as an actual timestamp when actualPublishedAt is absent", () => {
-  const result = evaluateNextPublication({
+  const result = evaluateWithVerifiedInventories({
     history: [{
       id: "remote-published-at-alias",
       status: "private",
@@ -405,7 +437,7 @@ test("verified remote history accepts publishedAt as an actual timestamp when ac
 
 test("rolling cycle rejects draft, scheduled, missing, and unknown statuses in claimed remote history", () => {
   for (const status of ["draft", "scheduled", "", "deleted", "mystery"]) {
-    const result = evaluateNextPublication({
+    const result = evaluateWithVerifiedInventories({
       history: [{
         id: "remote-invalid-status",
         status,
@@ -466,7 +498,7 @@ test("queued-for-publication and pending-schedule attempts reserve publication s
 
 test("pending-attempt schedule states are checked against the proposed publication slot", () => {
   for (const status of ["queued_for_publication", "pending_schedule"]) {
-    const result = evaluateNextPublication({
+    const result = evaluateWithVerifiedInventories({
       history: [{
         id: "remote-prior", status: "private",
         actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form"
@@ -508,11 +540,11 @@ test("next-publication gate cannot be weakened below 72 hours through an option 
     format: "long_form"
   };
   for (const minSpacingHours of [-1, 0, 71.999, 71]) {
-    const result = evaluateNextPublication({ ...args, minSpacingHours });
+    const result = evaluateWithVerifiedInventories({ ...args, minSpacingHours });
     assert.equal(result.valid, false, String(minSpacingHours));
     assert.ok(result.errors.some(error => /at least 72 elapsed hours/.test(error)));
   }
-  assert.equal(evaluateNextPublication({ ...args, minSpacingHours: 72 }).valid, true);
+  assert.equal(evaluateWithVerifiedInventories({ ...args, minSpacingHours: 72 }).valid, true);
 });
 
 
@@ -558,7 +590,7 @@ test("rolling publication gate refuses scheduled entries with unknown or missing
     { id: "unknown-schedule", status: "processing", scheduledAt: "2026-10-24T15:00:00.000Z" },
     { id: "missing-schedule-status", scheduledAt: "2026-10-24T15:00:00.000Z" }
   ]) {
-    const result = evaluateNextPublication({ ...base, scheduledItems: [item] });
+    const result = evaluateWithVerifiedInventories({ ...base, scheduledItems: [item] });
     assert.equal(result.valid, false);
     assert.ok(result.errors.some(error => error.includes("unsupported status") && error.includes("publication spacing cannot be verified")));
   }
@@ -682,7 +714,7 @@ test("rolling-cycle validator returns a structured error for an invalid timezone
 
 test("pending scheduled attempts require scheduledAt and never fall back to createdAt", () => {
   for (const status of ["scheduled", "queued_for_publication", "pending_schedule"]) {
-    const result = evaluateNextPublication({
+    const result = evaluateWithVerifiedInventories({
       history: [{
         id: "remote-prior", status: "private",
         actualPublishedAt: "2026-10-20T15:00:00.000Z", format: "long_form"

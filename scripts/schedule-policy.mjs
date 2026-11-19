@@ -282,14 +282,18 @@ export const UNCERTAIN_UPLOAD_STATUSES = Object.freeze(["uploading", "uploading_
 
 /**
  * Fail-closed gate for the next actual publication. A queue is not evidence of
- * channel history; callers must independently retrieve public/private/unlisted
- * history and reconcile all pending/uncertain inserts before setting historyVerified.
+ * channel history or an omitted schedule/attempt array is not evidence of an empty
+ * inventory. Callers must independently retrieve public/private/unlisted history,
+ * the complete destination schedule and the attempt ledger before setting the
+ * corresponding verification flags.
  */
 export function evaluateNextPublication({
   history,
   historyVerified = false,
   pendingAttempts = [],
+  pendingAttemptsVerified = false,
   scheduledItems = [],
+  scheduledItemsVerified = false,
   proposedAt,
   jobId,
   format,
@@ -299,6 +303,8 @@ export function evaluateNextPublication({
 } = {}) {
   const errors = [];
   if (historyVerified !== true) errors.push("complete channel history has not been independently verified");
+  if (pendingAttemptsVerified !== true) errors.push("complete upload-attempt ledger has not been independently inspected and reconciled");
+  if (scheduledItemsVerified !== true) errors.push("complete destination schedule has not been independently inspected");
   if (!Array.isArray(history)) errors.push("channel history must be an array");
   if (!Array.isArray(pendingAttempts)) errors.push("pendingAttempts must be an array");
   if (!Array.isArray(scheduledItems)) errors.push("scheduledItems must be an array");
