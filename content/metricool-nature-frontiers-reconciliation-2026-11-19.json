@@ -45,6 +45,29 @@
       "to": "help@metricool.com",
       "requested": "Restore read access or provide complete export of the 20 scheduled draft posts, eight historical autoPublish records, analytics history and current Facebook/Instagram connection IDs.",
       "safety": "Explicitly requested read/export only. No publish, reschedule, edit, delete, recreate, account mapping change or auto-publish enablement authorized."
+    },
+    "youtubeMappingCorrectionRequest": {
+      "status": "SENT_AWAITING_METRICOOL_RESPONSE",
+      "sentAt": "2026-11-19T16:18:58.194Z",
+      "messageId": "1a1f49a96f2707a9",
+      "threadId": "1a1f49a91bda1c1a",
+      "requestedAction": "Disconnect only the SonicVhibez YouTube channel ID UCSlkuPfHH78oGC1o418HV4w from Nature Frontiers brand 8094526.",
+      "preserve": [
+        "Nature Frontiers Facebook Page 1431329126735709",
+        "Nature Frontiers Instagram account naturefrontieers2026",
+        "all scheduled content",
+        "all historical analytics",
+        "legacy brand 7545638"
+      ],
+      "prohibited": [
+        "publish",
+        "reschedule",
+        "edit content",
+        "delete posts",
+        "delete/recreate brands",
+        "enable auto-publishing",
+        "change Facebook/Instagram connections"
+      ]
     }
   },
   "analyticsWindow": {
@@ -150,5 +173,22 @@
     "legacyBrandProbe": "403_FORBIDDEN",
     "gmailSupportThreadId": "1a1d6aefd1f23437",
     "noSupportReplyFound": true
+  },
+  "currentBrandReadOnlyCheck": {
+    "checkedAt": "2026-11-19T16:18:58.194Z",
+    "brandId": 8094526,
+    "brandName": "Nature Frontiers SA",
+    "timezone": "Africa/Johannesburg",
+    "facebookPageId": "1431329126735709",
+    "instagramAccount": "naturefrontieers2026",
+    "youtubeChannelId": "UCSlkuPfHH78oGC1o418HV4w",
+    "youtubeMappingStatus": "CROSS_BRAND_MISMATCH_SONICVHIBEZ_CHANNEL",
+    "scheduledPostsQuery": {
+      "from": "2026-11-19T00:00:00+02:00",
+      "to": "2026-12-31T23:59:59+02:00",
+      "timezone": "Africa/Johannesburg",
+      "resultCount": 0
+    },
+    "noMutationsPerformed": true
   }
 }
