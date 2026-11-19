@@ -20,6 +20,10 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.controls, 121);
   assert.equal(inventory.counts.forms, 17);
   assert.equal(inventory.counts.routes, 52);
+  assert.equal(inventory.controls.filter(control => control.form !== null).length, 104,
+    "all form-owned controls must be counted independently from standalone controls");
+  assert.equal(inventory.controls.filter(control => control.form === null).length, 17,
+    "all standalone controls must be counted independently from form-owned controls");
   assert.deepEqual(inventory.counts.controlsByTag, {
     button: 27,
     input: 50,
