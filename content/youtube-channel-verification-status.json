@@ -72,7 +72,7 @@
   "publicationHistoryReconciliation": {
     "status": "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY",
     "reconciliationPath": "content/youtube-history-reconciliation.json",
-    "reconciliationBlobSha": "aff8cd5967bb0ce572205925f16d906432fad582",
+    "reconciliationBlobSha": "595006448b68b0007730be11d39bd380f7d3eb6a",
     "verifiedAt": "2026-11-19T22:48:58.854Z",
     "verifiedBy": "clickerrish-art",
     "freshInventoryRunId": 44632065508,
@@ -317,28 +317,33 @@
     }
   },
   "latestSuccessfulReadOnlyVerification": {
-    "workflowRunId": 44211269635,
-    "jobId": 134489957947,
+    "workflowRunId": 44632065508,
+    "jobId": 135941004862,
     "attempt": 1,
-    "sourceCommit": "9aaffeee6b3ad75b19e92774fb1091d4209389ac",
-    "verifiedAt": "2026-11-18T00:52:01.423Z",
+    "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
+    "verifiedAt": "2026-11-19T22:48:58.854Z",
     "result": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
-    "artifactId": 14385812917,
-    "artifactSha256": "ef87dc8a4137c4f5a39fd92572e850ee4a6f61fa24474ebdc80d5952d7224206"
+    "artifactId": 14582711324,
+    "artifactSha256": "a235d90228e1af3ae969751ba097af890a887f7231d6c580a0836564766b2f91"
   },
   "latestAttempt": {
-    "workflowRunId": 44527616996,
-    "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527616996",
-    "sourceCommit": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-    "attemptedAt": "2026-11-19T12:53:00Z",
-    "status": "BLOCKED",
-    "errorCode": "invalid_grant",
-    "message": "The current production-readiness verification could not refresh the YouTube OAuth grant. No fresh uploads inventory or youtube.upload scope verification was performed. No upload or metadata write was attempted.",
+    "workflowRunId": 44632065508,
+    "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44632065508",
+    "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
+    "attemptedAt": "2026-11-19T22:48:58.854Z",
+    "status": "PASS",
+    "jobId": 135941004862,
+    "artifactId": 14582711324,
+    "errorCode": null,
+    "message": "Live read-only YouTube identity and complete uploads inventory succeeded; both exact OAuth scopes verified. No upload or metadata write was attempted.",
     "publishingEnabled": false,
     "uploadAttempted": false,
     "metadataWriteAttempted": false
   },
-  "identityVerificationFreshness": "STALE_NEEDS_REFRESH",
-  "uploadsInventoryFreshness": "STALE_NEEDS_REFRESH",
-  "lastSuccessfulInventoryAt": "2026-11-18T00:52:01.423Z"
+  "identityVerificationFreshness": "FRESH_AS_OF_2026-11-19T22:48:58.854Z",
+  "uploadsInventoryFreshness": "FRESH_AS_OF_2026-11-19T22:48:58.854Z",
+  "lastSuccessfulInventoryAt": "2026-11-19T22:48:58.854Z",
+  "uploadScopeVerified": true,
+  "uploadScopeCheckedAt": "2026-11-19T22:48:58.408Z",
+  "acceptedUploadScope": "https://www.googleapis.com/auth/youtube.upload"
 }

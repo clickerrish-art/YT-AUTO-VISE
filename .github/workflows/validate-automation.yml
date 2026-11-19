@@ -10,6 +10,8 @@ on:
       - "test/**"
       - "content/queue.json"
       - "content/promotional-short-plan.json"
+      - "content/youtube-history-reconciliation.json"
+      - "content/youtube-channel-verification-status.json"
       - "config/products.json"
       - "config/weekly-content-plan.json"
       - "config/campaigns.json"
