@@ -1,6 +1,6 @@
 # Latest master-completion snapshot — 19 November 2026
 
-**Latest branch inventory checkpoint:** `6f72fb738036a3cc36b4293ae32c0bd65cd6b255`; current application/test evidence checkpoint: `dab8fef70b6842b522f26ec5a3ba4807e33ae051` (later changes to the master register and API matrix are documentation-only).  
+**Latest branch inventory checkpoint:** `6f72fb738036a3cc36b4293ae32c0bd65cd6b255`; current source/test candidate: `4679cbaba90f328762cba8e6a9f1bf0d760bef2c`. The latest fully verified regression remains on `dab8fef70b6842b522f26ec5a3ba4807e33ae051`; current candidate regression [44554962446](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44554962446) is pending.  
 **Current master acceptance register:** 89 requirements — **71 PASS / 8 NOT_TESTED / 10 BLOCKED / 0 FAIL**. SCHED-003 is now PASS from explicit owner approval; the live YouTube history gate remains open.  
 **Release decision:** **HOLD**. This is not a production-complete or risk-free release.
 
@@ -42,7 +42,7 @@
 
 ## Deployment, state and Git
 
-- Staging backup/restore and deployment recovery smoke are PASS, but there is no verified SonicVhibez production publisher Worker. R2/object-storage access remains unavailable/blocked; no paid infrastructure or account activation was introduced.
+- Staging backup/restore and local deployment recovery smoke are PASS. The live staging Worker’s eight multipart modules now match `cloudflare/staging-snapshot/*` byte-for-byte at GitHub commit `6302fae3cda5255296dcc50de69254e70dc61481`, resolving source-content provenance. However, the deployed Worker still trusts the old unprotected `codex/cloudflare-adapter-integration-20261108` OIDC ref/workflow, while current `cloudflare/worker.js` is a smaller state-only implementation that lacks the runner-bridge API. R2 is disabled at account level (403/code 10042), despite the staging ARTIFACTS binding. The staging D1 has one state row and five backups but no runner state/control/artifact records. There is no SonicVhibez production publisher Worker. No Cloudflare resources were changed, no paid infrastructure was activated, and no production job was dispatched.
 - Branch protection is still disabled (`protected=false`). Owner/admin action is required to configure required checks and branch protection.
 - PR #1 remains **OPEN / DRAFT / UNMERGED**. `main` remains `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38`; it has not been modified. No merge, rebase, reset, force-push or destructive reconciliation was performed.
 - GIT-002 remains open. The exact branch inventory shows 9 commits unique to `main`; their patches were reviewed and affect only tests, documentation and workflows. The OIDC token test has one patch-equivalent counterpart on the implementation branch. The branch retains `test/restore-facebook-draft-history.test.mjs`, `tests/restore-state.test.mjs`, the OIDC/interstitial test coverage and the acceptance register. Four branch-history deletions were reviewed: the Pexels acquisition workflow/script and Cloudflare state workflow were later restored and are present in the final tree; the duplicate YouTube channel workflow remains removed and read-only verification is handled by the existing workflow. No final-tree deletions or destructive reconciliation occurred.
