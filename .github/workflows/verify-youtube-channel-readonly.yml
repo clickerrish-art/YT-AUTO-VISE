@@ -1,5 +1,8 @@
 name: Verify SonicVhibez YouTube identity and uploads inventory (read-only)
 
+# workflow_dispatch is available only after this workflow is present on the
+# repository's default branch. Until then, changes to this file on the
+# implementation branch intentionally trigger the same read-only job via push.
 on:
   push:
     branches: [codex/marketing-machine-audit-fixes]
