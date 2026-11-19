@@ -65,9 +65,9 @@
     "status": "OWNER_APPROVED",
     "ownerApproved": true,
     "approvedMode": "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
-    "approvedAt": "2026-11-17T13:49:00+02:00",
-    "approvalReference": "Owner approval in ChatGPT conversation, 2026-11-17: long-form → long-form → Short → repeat; no weekly target.",
-    "explanation": "Owner explicitly approved the repeating long_form → long_form → short cycle without a weekly publication target. Each consecutive actual publication must be at least 72 elapsed hours apart and must not share an Africa/Johannesburg calendar day. Three cycle gaps require at least 216 hours."
+    "approvedAt": "2026-11-18T16:27:44Z",
+    "approvalReference": "Owner message in ChatGPT conversation, 2026-11-18T16:27:44Z: '(Owner approved)' for rolling long-form → long-form → Short cadence; at least 72 elapsed hours, Africa/Johannesburg, no same-day releases, no weekly target.",
+    "explanation": "Owner explicitly approved the repeating long_form → long_form → short cycle without a weekly publication target. Each consecutive actual publication must be at least 72 elapsed hours apart and must not share an Africa/Johannesburg calendar day. Three cycle gaps require at least 216 hours (9 days)."
   },
   "spacingPolicy": {
     "minimumHoursBetweenPosts": 72,
