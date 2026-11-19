@@ -45,8 +45,21 @@ test("dashboard control acceptance register exactly matches the live source inve
     assert.equal(accepted.status, "NOT_TESTED",
       "source inventory alone must never promote a control to behavioral acceptance");
     assert.deepEqual(accepted.evidence, [],
-      "behavioral acceptance requires explicit exact-SHA evidence");
+      "overall behavioral acceptance requires complete dimension-specific evidence");
     assert.ok(Array.isArray(accepted.applicableDimensions));
+    assert.ok(Array.isArray(accepted.observedCoverage));
+    assert.ok(accepted.observedCoverage.some(item =>
+      item.dimension === "stable_identity_and_accessible_name" &&
+      item.observedResult === "PASS" &&
+      item.testSha === "4b5783ae03470002052eb0312a4284f09cedfd95"
+    ), `control ${accepted.acceptanceId} must retain exact-SHA accessibility evidence`);
+    if (accepted.required) {
+      assert.ok(accepted.observedCoverage.some(item =>
+        ["required_empty_value_validation", "read_only_hash_field_integrity"].includes(item.dimension) &&
+        item.observedResult === "PASS" &&
+        item.testSha === "4b5783ae03470002052eb0312a4284f09cedfd95"
+      ), `required control ${accepted.acceptanceId} must retain its exact-SHA validation evidence`);
+    }
   }
 
   for (const [index, source] of inventory.forms.entries()) {
@@ -61,6 +74,12 @@ test("dashboard control acceptance register exactly matches the live source inve
     );
     assert.equal(accepted.status, "NOT_TESTED");
     assert.deepEqual(accepted.evidence, []);
+    assert.ok(Array.isArray(accepted.observedCoverage));
+    assert.ok(accepted.observedCoverage.some(item =>
+      item.dimension === "required_empty_form_submission" &&
+      item.observedResult === "PASS" &&
+      item.testSha === "4b5783ae03470002052eb0312a4284f09cedfd95"
+    ));
   }
 
   assert.equal(matrix.status, "NOT_TESTED");
