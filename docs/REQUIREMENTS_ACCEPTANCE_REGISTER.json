@@ -356,16 +356,17 @@
         "Exact dashboard browser acceptance refresh: run 43702012574 passed 29/29 Chromium journeys on browser-test SHA 07b2014d48d43963f2fd67091253a3505d5633d5. Current form-level matrix is 11 PASS / 6 BLOCKED / 0 NOT_TESTED: campaignform, draft, facebookdraftform, authoringform, scriptreviewform, narrationform, narrationreviewform, productionplanform, productionplanreviewform, canceljobform and retryjobform. The six blocked forms require genuine production media, verified parent evidence, real rights clearance, a technically validated export, genuine human review or an uncertain remote upload receipt; no fixtures were promoted to production proof.",
         "The campaign preview-to-activation E2E now waits for the form's aria-busy single-flight lock to clear before the second submission. This fixes a test timing race without weakening the duplicate-submission guard. Browser UI/server source is unchanged after the tested dashboard source SHA 9e0f9dddb359f5ded0906d8ae156174dd4c390f9; the current branch HEAD adds only review-only thumbnail code and acceptance evidence.",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028827",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.json"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.json",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44552643732"
       ],
       "nextAction": "Complete the remaining per-control dimensions using docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.json: positive success paths, actionable errors, authorization/role enforcement, durable persistence, refresh/restart, concurrency/idempotency and keyboard/accessibility. Preserve the six production-dependent forms as blocked until genuine media, rights and human-review prerequisites exist.",
       "assessmentCommitSha": "dcd68fab0a6df4d2142b35bf0a3edfbf49b7afe8",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
       "lastVerifiedStatus": "PARTIAL",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "fb4f64af8508791ff44c9f1e95ad47c533e8b26e",
-      "currentHeadEvidenceNote": "PARTIAL on exact dashboard source/test SHA fb4f64af8508791ff44c9f1e95ad47c533e8b26e: 37/37 Chromium journeys passed. The inventory is 121 controls and 17 forms; exact browser evidence covers stable identity/accessibility across all 121, required-empty validation across 54 required controls and 17 forms, seven pattern-constrained identifier/hash fields plus one URL, six minlength controls and 23 maxlength controls. DASH-001 remains NOT_TESTED overall because every applicable control still needs exhaustive success, actionable-error, authorization, persistence, refresh/restart, concurrency/idempotency and accessibility acceptance.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:08:02Z"
+      "currentHeadEvidenceSha": "71fe8547bbb605ed258aafa080cd5061b201ec16",
+      "currentHeadEvidenceNote": "PARTIAL on exact dashboard source/test SHA 71fe8547bbb605ed258aafa080cd5061b201ec16: 39/39 Chromium journeys passed. The inventory is 121 controls and 17 forms. Exact browser evidence covers stable identity/accessibility across all controls; required-empty validation across 54 controls and 17 forms; seven identifier/hash patterns plus one URL; six minlength controls; 23 maxlength controls; seven read-only hash fields; one disabled backup action; and the qualityScorecardJson control's malformed-JSON rejection and valid-JSON serialization. DASH-001 remains NOT_TESTED overall because every applicable control still needs exhaustive success, actionable-error, authorization, durable-persistence, refresh/restart, concurrency/idempotency and accessibility acceptance.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:16:57Z"
     },
     {
       "id": "SCHED-001",
