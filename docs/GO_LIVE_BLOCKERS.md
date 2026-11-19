@@ -1,3 +1,5 @@
+> Older checkpoint sections below are retained as historical evidence. This top checkpoint and the latest exact-run references supersede earlier blocker counts, test totals, route statuses and source SHAs.
+
 # Current verified checkpoint — 19 November 2026
 
 **Exact tested source/test tree:** `4dec5f719e0b717893547fbbbe687c7f9f9658db` (the latest source/test tree; subsequent commits only update evidence/data files). Full automation/security run 44527617194 passed on this exact tree. Current branch inventory run 44527617041 records 4,550 branch-only commits, nine main-only commits, 454 changed files, zero deletions and a clean working tree. The nine main-only commits are add/revert pairs with no net main-tree change relative to merge base.
@@ -7,7 +9,7 @@
 - Queue readiness [44527617205](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527617205): PASS, 16-item isolated queue, publishing disabled.
 - Production readiness [44527616996](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527616996): **HOLD, 22 blockers**. The new exact-hash approval gate is active. No upload, schedule, or publication was attempted.
 - Branch reconciliation [44527617041](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527617041): clean working tree, 4,550 branch-only commits, nine main-only commits, 454 changed files, zero deletions and 17 critical-module changes. Main's nine main-only commits have zero net file-tree changes relative to merge base.
-- API: 48/48 protected routes pass missing/invalid-credential rejection on the exact tested tree. 42 authorized positive route acceptances remain NOT_TESTED; six provider/production-gated routes remain BLOCKED.
+- API: 48/48 protected routes pass missing/invalid-credential rejection; **42/42 authorized application-level routes PASS** on exact source/test tree `4dec5f719e0b717893547fbbbe687c7f9f9658db`, backed by 29 current integration/browser test files. Six provider/production-gated routes remain BLOCKED. Positive tests use controlled local fixtures/mocks and do not prove live external provider acceptance or publishing.
 - Dashboard: 121 controls / 17 forms; 33 browser journeys pass, but DASH-001 remains NOT_TESTED pending exhaustive per-control behavior acceptance.
 
 ## Current production blockers (22)
@@ -158,7 +160,7 @@ The new item 17 is a deliberately separate gate: the release must have a human p
 
 ## Additional acceptance blockers
 
-- The 89-row acceptance aggregate and current-head snapshot disagree (71/9/9 versus 67/9/13). The API aggregate and current-head snapshot also disagree (42 PASS/6 BLOCKED versus 0 PASS/42 NOT_TESTED/6 BLOCKED). Reconcile every row against the exact current SHA before claiming overall acceptance.
+- The 89-row requirements register remains an older snapshot and still needs row-by-row reconciliation. The API route matrix has now been reconciled on 19 November exact source/test tree `4dec5f719e0b717893547fbbbe687c7f9f9658db`: **42 PASS / 0 NOT_TESTED / 6 BLOCKED**, with 48/48 authentication-negative checks passing. API-001 is no longer NOT_TESTED at the application-route layer; it remains PARTIAL/BLOCKED by the six external provider/production gates.
 - API-001: 48/48 authentication-negative tests passed; six positive routes remain BLOCKED: Facebook draft approval, Facebook publishing, Facebook Page verification, Instagram approval, production job creation and upload reconciliation.
 - DASH-001, SCHED-001, GIT-002, DEPLOY-001, YT-READBACK-001, API-001, SEO-001, E2E-001 and SCHED-WORKER-DISPATCH-001 remain NOT_TESTED in the stored register.
 - SEC-001 branch protection could not be independently verified (HTTP 403).
