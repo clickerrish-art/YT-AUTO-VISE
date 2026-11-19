@@ -103,7 +103,7 @@ test("every promotional product requires fresh seller evidence tied to its exact
 
   const futureProducts = clone(products);
   futureProducts.find(product => product.id === "wildlife-creators-vault")
-    .promotionGate.seller.verifiedAt = "2026-11-18T10:45:00+02:00";
+    .promotionGate.seller.verifiedAt = new Date(now.getTime() + 6 * 60 * 1000).toISOString();
   assert.ok(validatePromotionalShortPlan(checkedInPlan, futureProducts, { now })
     .some(error => /cannot be more than 5 minutes in the future/.test(error)));
 
