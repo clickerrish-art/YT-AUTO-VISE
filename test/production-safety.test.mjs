@@ -31,11 +31,15 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.productUrl, "https://selar.com/0u19v8u99l");
 });
 
-test("script changes automatically trigger narration generation", () => {
-  assert.match(narrationWorkflow, /push:[\s\S]*paths:[\s\S]*content\/long-form-scripts\.md/);
-  assert.match(narrationWorkflow, /workflow_dispatch/);
-  assert.match(narrationWorkflow, /actions\/upload-artifact@v4/);
-});
+test("long-form Edge TTS generation is manual-only and explicitly non-commercial", () => {
+  assert.match(narrationWorkflow, /workflow_dispatch:[\\s\\S]*allow_noncommercial_audition/);
+  assert.match(narrationWorkflow, /default: false/);
+  assert.match(narrationWorkflow, /--allow-noncommercial-audition/);
+  assert.match(narrationWorkflow, /NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY/);
+  assert.match(narrationWorkflow, /actions\\/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02/);
+  assert.doesNotMatch(narrationWorkflow, /(^|\\n)\\s*schedule:/);
+  assert.doesNotMatch(narrationWorkflow, /(^|\\n)\\s*push:/);
+});;
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
   assert.match(qualityWorkflow, /node --test/);
