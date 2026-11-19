@@ -8,6 +8,14 @@ import {
 } from "../scripts/verify-youtube-channel.mjs";
 
 const CHANNEL_ID = "UC1111111111111111111111";
+const testOAuthFactory = () => ({
+  setCredentials() {},
+  getAccessToken: async () => ({ token: "test-access-token" }),
+  getTokenInfo: async () => ({ scopes: [
+    "https://www.googleapis.com/auth/youtube.upload",
+    "https://www.googleapis.com/auth/youtube.readonly"
+  ] })
+});
 const env = {
   YOUTUBE_CLIENT_ID: "client-id",
   YOUTUBE_CLIENT_SECRET: "client-secret",
@@ -50,7 +58,7 @@ test("read-only verification checks every page and every video without exposing 
       })) }
     }) }
   };
-  const result = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube });
+  const result = await verifySonicVhibezChannel({ env, oauthFactory: testOAuthFactory, youtubeFactory: () => youtube });
   assert.equal(result.status, "PASS_READ_ONLY_IDENTITY_AND_INVENTORY");
   assert.equal(result.oauthScopesVerified, false, "a fake YouTube API client must not imply OAuth scopes");
   assert.equal(result.totalUploads, 51);
@@ -102,7 +110,7 @@ test("read-only verification refuses a different authenticated channel before re
     playlistItems: { list: async () => { throw new Error("must not enumerate another channel"); } }
   };
   await assert.rejects(
-    verifySonicVhibezChannel({ env, youtubeFactory: () => youtube }),
+    verifySonicVhibezChannel({ env, oauthFactory: testOAuthFactory, youtubeFactory: () => youtube }),
     /does not own or manage the configured SonicVhibez channel ID/
   );
 });
@@ -113,20 +121,21 @@ test("read-only verification fails closed when pagination or video details are i
     playlistItems: { list: async () => ({ data: { pageInfo: { totalResults: 2 }, items: [{ contentDetails: { videoId: "one" } }] } }) },
     videos: { list: async () => ({ data: { items: [] } }) }
   };
-  await assert.rejects(verifySonicVhibezChannel({ env, youtubeFactory: () => badPage }), /pagination did not cover/);
+  await assert.rejects(verifySonicVhibezChannel({ env, oauthFactory: testOAuthFactory, youtubeFactory: () => badPage }), /pagination did not cover/);
 
   const missingVideo = {
     channels: { list: async () => ({ data: { items: [channel] } }) },
     playlistItems: { list: async () => ({ data: { pageInfo: { totalResults: 1 }, items: [{ contentDetails: { videoId: "one" } }] } }) },
     videos: { list: async () => ({ data: { items: [] } }) }
   };
-  await assert.rejects(verifySonicVhibezChannel({ env, youtubeFactory: () => missingVideo }), /omitted one or more/);
+  await assert.rejects(verifySonicVhibezChannel({ env, oauthFactory: testOAuthFactory, youtubeFactory: () => missingVideo }), /omitted one or more/);
 });
 
 test("read-only verification rejects a mismatched configured channel ID and missing secrets", async () => {
   await assert.rejects(
     verifySonicVhibezChannel({
       env: { ...env, SONICVHIBEZ_CHANNEL_ID: "UC0000000000000000000000" },
+      oauthFactory: testOAuthFactory,
       youtubeFactory: () => ({ channels: { list: async () => ({ data: { items: [channel] } }) } })
     }),
     /does not own or manage the configured SonicVhibez channel ID/
@@ -153,7 +162,7 @@ test("read-only verification writes a complete owner-review inventory artifact w
     ] } }) }
   };
   try {
-    const result = await verifySonicVhibezChannel({ env: { ...env, YOUTUBE_HISTORY_INVENTORY_PATH: path.relative(process.cwd(), inventoryPath) }, youtubeFactory: () => youtube });
+    const result = await verifySonicVhibezChannel({ env: { ...env, YOUTUBE_HISTORY_INVENTORY_PATH: path.relative(process.cwd(), inventoryPath) }, oauthFactory: testOAuthFactory, youtubeFactory: () => youtube });
     assert.equal(result.totalUploads, 2);
     const inventory = JSON.parse(fs.readFileSync(inventoryPath, "utf8"));
     assert.equal(inventory.complete, true);
