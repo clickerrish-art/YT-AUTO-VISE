@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "runId": 44512302360,
+  "runNumber": 6,
+  "branch": "codex/marketing-machine-audit-fixes",
+  "headSha": "29f95d92fd9214a68105695f46384101cd5875e0",
+  "acquisitionOutcome": "failure",
+  "artifactId": null,
+  "artifactName": null,
+  "recordedAt": "2026-11-19T11:10:06.834Z",
+  "releaseEligible": false
+}
