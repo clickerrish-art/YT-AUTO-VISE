@@ -2,12 +2,35 @@
 
 Read-only recovery snapshot of the deployed Worker `sonicvhibez-durable-state-staging`.
 
-- Retrieved: 2026-11-09
-- Deployment ID: `4f26b391-0009-4948-ad3e-c4081ed7a1d5`
-- Worker source annotation: `0ecea4caa817364d2f38b31b15a0f0c8033f68ca`
-- Compatibility date: `2026-11-07`
-- Main module: `worker.js`
-- Modules: `content-job-lifecycle-compat.js`, `dashboard-state-compat.js`, `draft-compat.js`, `facebook-idea-compat.js`, `weekly-plan-compat.js`, `worker.js`, `authoring-review-compat.js`, `campaigns-compat.js`.
-- Bindings present: D1 `STATE_DB`, R2 `ARTIFACTS`, secret-text bindings `DASHBOARD_OPERATOR_ID` and `DASHBOARD_OPERATOR_TOKEN`.
+## Exact source reconciliation — 19 November 2026
 
-This is a snapshot of the deployed staging code, not a declaration that it matches the current repository branch. The deployed main module is materially larger than the tracked `cloudflare/worker.js`; treat this snapshot as recovery evidence pending semantic review. Secret values were not exported. No Cloudflare resource was changed by this read-only export. Do not deploy this snapshot until its differences and migration behavior have been reviewed.
+- Live deployment version: `9a9bfd4c-208c-4dd8-93b0-5f84cdf3356c`
+- Live deployment timestamp: `2026-11-14T19:06:42.659275Z`
+- Live Worker was deployed from the Cloudflare Dashboard; no Git SHA was recorded in Cloudflare deployment metadata.
+- A read-only Cloudflare API export of the live multipart Worker script was compared with every tracked module in this directory at repository commit `6302fae3cda5255296dcc50de69254e70dc61481`.
+- **All eight deployed modules matched the tracked snapshot byte-for-byte after newline normalization**: `worker.js`, `dashboard-state-compat.js`, `draft-compat.js`, `facebook-idea-compat.js`, `weekly-plan-compat.js`, `authoring-review-compat.js`, `campaigns-compat.js`, and `content-job-lifecycle-compat.js`.
+- This gives the live staging deployment a verified source-content match to the listed GitHub commit, although its deployment provenance still says Dashboard rather than a GitHub Actions deployment.
+
+## Deployment and trust boundaries
+
+- The deployed worker's OIDC trust still pins `refs/heads/codex/cloudflare-adapter-integration-20261108` and `.github/workflows/repository-runner.yml` on that old branch.
+- That old branch still exists and is unprotected. The current implementation branch is `codex/marketing-machine-audit-fixes`; its current tree does not contain `.github/workflows/repository-runner.yml`.
+- The old workflow is manual-only, requires explicit `run_repository_runner=true`, and limits a run to one job. Read-only GitHub Actions history inspection found **zero `workflow_dispatch` runs** on that old branch. No production job dispatch is claimed.
+- Do not broaden or replace the live OIDC trust until branch protection is enabled, the intended runner workflow is reviewed and present on the protected branch, and the exact deployed source is reviewed.
+- The tracked `cloudflare/worker.js` is a separate, smaller state-only Worker. It exposes only `/healthz`, `/api/state` and `/api/state/bootstrap`; it does **not** implement the `/api/runner/*` contract required by `scripts/cloudflare-runner-bridge.mjs`. It is not the source of the currently deployed full staging Worker. Do not deploy it over staging without first reconciling the API contract.
+
+## Live bindings and current service state
+
+- D1 binding: `STATE_DB` → `sonicvhibez-state-staging`.
+- R2 binding: `ARTIFACTS` → `sonicvhibez-artifacts-staging`; account-level R2 access currently returns HTTP 403 / code 10042, “Please enable R2 through the Cloudflare Dashboard.” The binding exists but bucket access is not verified.
+- Secret-text binding names present: `DASHBOARD_OPERATOR_ID`, `DASHBOARD_OPERATOR_TOKEN`. Secret values were not exported or displayed.
+- Workers.dev subdomain is enabled; preview URLs are disabled. API state operations require the operator token; runner operations require GitHub OIDC claims matching the pinned old branch/workflow.
+- Direct read-only D1 SQL confirms application tables `dashboard_state`, `dashboard_backups`, `runner_state`, `runner_control`, `runner_artifacts`, and `runner_artifact_parts`. The D1 list endpoint's `num_tables: 0` metadata is stale.
+- Staging D1 currently contains 1 dashboard-state row, 5 backups, and 0 runner-state/control/artifact/part rows. Current state revision is 3. No live runner session or persisted remote runner backoff/artifact activity was found.
+- A controlled staging-only backup/restore drill passed in run `43701290286`; it retained the pre-restore backup and audit receipt and restored the exact pre-test state. This was an owner-authorized staging mutation, not a production change.
+
+## Safety
+
+This directory is a recovered snapshot of the live staging implementation, not a deployable release candidate. Its current OIDC trust and R2 dependency remain unresolved. Do not deploy this snapshot or the smaller `cloudflare/worker.js` over the live worker until the current protected-branch workflow, runner contract, R2 access and rollback plan are verified. No Cloudflare resource was changed by the read-only source reconciliation. No production worker was created or deployed; publishing remains disabled.
+
+Historical recovery metadata from the earlier 9 November export is retained in Git history. Secret values were never exported.
