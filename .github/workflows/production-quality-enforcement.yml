@@ -46,7 +46,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node --test test/production-quality-scorecard.test.mjs test/production-quality-approval.test.mjs 2>&1 | tee "$RUNNER_TEMP/production-quality-tests.log"
+          node --test test/production-quality-scorecard.test.mjs test/production-quality-approval.test.mjs test/upload-private-quality-receipt.test.mjs 2>&1 | tee "$RUNNER_TEMP/production-quality-tests.log"
           grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/production-quality-tests.log"
           grep -Fq 'ℹ fail 0' "$RUNNER_TEMP/production-quality-tests.log"
       - name: Confirm full regression gate is required
