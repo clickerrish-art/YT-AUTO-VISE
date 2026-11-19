@@ -2,23 +2,23 @@
   "schemaVersion": 1,
   "channel": "SonicVhibez",
   "status": "AMERICAN_MALE_STORYTELLER_REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
-  "generatedAt": "2026-11-18T06:44:17Z",
+  "generatedAt": "2026-11-19T16:13:33Z",
   "workflow": {
     "name": "Render American male storyteller narration review",
-    "runId": 44253500939,
-    "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44253500939",
-    "checkoutCommit": "95fe4d83d230925a2aa31dbbeaa1d5dfd2b0c89f",
-    "artifactId": 14404553729,
+    "runId": 44563576507,
+    "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44563576507",
+    "checkoutCommit": "552d91e1ef8ba86facf98a55adf1c8ae51e2c1d1",
+    "artifactId": 14550782584,
     "artifactName": "sonicvhibez-american-wildlife-encounter-voice-review",
-    "artifactSha256": "8c4777fa068ff42f565081a3e83d416597abed0562aaabbc9c5711a964cd9a50",
+    "artifactSha256": "f1cb09dc70baf54156435e55ddc0656010848e492ec5969c014f352f6ac45d93",
     "retentionDays": 30,
-    "expectedArtifactExpiry": "2026-12-18T06:44:17Z"
+    "expectedArtifactExpiry": "2026-12-19T16:13:31Z"
   },
   "source": {
-    "scriptPath": "content/drafts/nile-crocodile-eyes-at-the-waterline.md",
-    "scriptSha256": "54b1c9aa9103b8a79511cc38fc27c27d4e35416d460f188701485406aaedfc73",
-    "narrationSha256": "fea9738c9d7a19fe52a83f20ec2712c21b89191e3ce284f193a8300629b7c862",
-    "wordCount": 154
+    "scriptPath": "content/short-001-wildlife-video-storytelling.md",
+    "scriptSha256": "20f807f0a1c6afd62ced948cfc8d8ed21478d479a76cc287eae62411bc185c53",
+    "narrationSha256": "4d823613cbf10f1e3927ae6611527de215da73ff47e4c65185348ba4997157a9",
+    "wordCount": 129
   },
   "voice": {
     "id": "en_US-norman-medium",
@@ -41,19 +41,21 @@
     "engine": "OHF-Voice/piper1-gpl",
     "engineVersion": "1.8.0",
     "engineLicense": "GPL-3.0-or-later",
-    "commercialUseStatus": "OWNER_REVIEW_REQUIRED"
+    "commercialUseStatus": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_LISTENING_AND_FINAL_RELEASE_REVIEW_REQUIRED",
+    "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md",
+    "commercialUseEvidence": "The Piper commercial-use list explicitly lists en_US-norman-medium under voices trained from scratch, dataset license Public domain. The Piper project says this is not legal advice and leaves derivative-work determinations to the user."
   },
   "audio": {
     "artifactFile": "american-wildlife-encounter-narration-review.wav",
-    "sha256": "2c81da407501eb8e91391a360ce5a19ec6f324b08f4222b15a1ef032136962ec",
-    "bytes": 2268204,
+    "sha256": "f68b0b9b453948688f08f800dbf61ccd9188d1976308d94f27bb2cd58b543813",
+    "bytes": 2338348,
     "format": "WAV PCM s16le",
-    "durationSeconds": 51.432,
+    "durationSeconds": 53.023,
     "sampleRateHz": 22050,
     "channels": 1,
     "sampleWidthBits": 16,
     "peakDbfs": -0.77,
-    "rmsDbfs": -18.59,
+    "rmsDbfs": -19.21,
     "clippedSampleCount": 0,
     "headroomProcessing": {
       "applied": true,
@@ -72,7 +74,7 @@
   },
   "review": {
     "humanVoiceQuality": "PENDING_OWNER_LISTENING",
-    "commercialAttribution": "PENDING_OWNER_REVIEW",
+    "commercialAttribution": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED",
     "ownerSelectedForProduction": false,
     "productionApproved": false,
     "finalNarration": false,
@@ -82,9 +84,10 @@
   "limitations": [
     "The requested approximately-45-year-old sound is a vocal direction, not a verified human age.",
     "The model card rates the voice as medium quality; technical audio metrics do not establish naturalness, warmth or passionate delivery.",
-    "Piper has limited expressive controls; human listening is required.",
-    "No separate denoising claim is made; this is a generated TTS sample, not a recording of the user's voice.",
-    "The model card confirms public-domain source recordings but does not by itself settle all model-weight, engine and commercial attribution questions.",
+    "Piper has limited expressive controls; owner listening is required.",
+    "No separate denoising claim is made; this is generated TTS, not a recording of the user's voice.",
+    "Piper's official commercial-use list includes this exact voice as public-domain trained-from-scratch; the project states it is not legal advice and leaves derivative-work determinations to the user.",
+    "The GPL-3.0-or-later license applies to the Piper engine software; this artifact does not redistribute the engine or ONNX weights.",
     "The WAV is retained in a 30-day Actions artifact; this JSON preserves provenance but does not preserve the WAV bytes permanently."
   ]
 }
