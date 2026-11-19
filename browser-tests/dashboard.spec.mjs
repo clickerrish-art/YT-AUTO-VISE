@@ -2547,7 +2547,7 @@ test("every required dashboard field blocks empty form submission without an API
   await expect(page.locator("#app")).toBeVisible();
 
   const forms = await page.evaluate(() => [...document.forms].map(form => ({
-    id: form.id,
+    id: form.getAttribute("id"),
     required: [...form.elements]
       .filter(control => control.required && !control.disabled)
       .map(control => ({ id: control.id, tag: control.tagName, type: control.type }))
