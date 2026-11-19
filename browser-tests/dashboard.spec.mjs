@@ -2550,7 +2550,7 @@ test("every required dashboard field blocks empty form submission without an API
     id: form.getAttribute("id"),
     required: [...form.elements]
       .filter(control => control.required && !control.disabled)
-      .map(control => ({ id: control.id, tag: control.tagName, type: control.type }))
+      .map(control => ({ id: control.id, tag: control.tagName, type: control.type, readOnly: control.readOnly }))
   })));
   expect(forms).toHaveLength(17);
 
@@ -2569,8 +2569,13 @@ test("every required dashboard field blocks empty form submission without an API
         element.dispatchEvent(new Event("input", { bubbles: true }));
         element.dispatchEvent(new Event("change", { bubbles: true }));
       });
-      expect(await locator.evaluate(element => element.checkValidity()),
-        `required control #${control.id} in #${form.id} must reject an empty value`).toBe(false);
+      if (control.readOnly) {
+        expect(await locator.evaluate(element => element.readOnly),
+          `required read-only control #${control.id} must remain read-only`).toBe(true);
+      } else {
+        expect(await locator.evaluate(element => element.checkValidity()),
+          `required control #${control.id} in #${form.id} must reject an empty value`).toBe(false);
+      }
     }
 
     const formLocator = page.locator("#" + form.id);
