@@ -2589,3 +2589,50 @@ test("every required dashboard field blocks empty form submission without an API
   expect(afterResponse.status()).toBe(200);
   expect(await afterResponse.json()).toEqual(before);
 });
+
+
+test("all declared dashboard identifier hashes and URL fields reject malformed values", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const mutationRequests = [];
+  page.on("request", outgoing => {
+    if (outgoing.method() === "POST" && new URL(outgoing.url()).pathname.startsWith("/api/")) {
+      mutationRequests.push(new URL(outgoing.url()).pathname);
+    }
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const cases = [
+    { id: "fbid", value: "bad id", validity: "patternMismatch" },
+    { id: "fbpageid", value: "abc", validity: "patternMismatch" },
+    { id: "id", value: "bad id", validity: "patternMismatch" },
+    { id: "productionplansha", value: "not-a-sha", validity: "patternMismatch" },
+    { id: "productionplanreviewsha", value: "not-a-sha", validity: "patternMismatch" },
+    { id: "artifactSha", value: "not-a-sha", validity: "patternMismatch" },
+    { id: "metadataSha", value: "not-a-sha", validity: "patternMismatch" },
+    { id: "campaignurl", value: "not a valid URL", validity: "typeMismatch" }
+  ];
+
+  for (const item of cases) {
+    const control = page.locator("#" + item.id);
+    await control.fill(item.value);
+    const validity = await control.evaluate(element => ({
+      valid: element.checkValidity(),
+      patternMismatch: element.validity.patternMismatch,
+      typeMismatch: element.validity.typeMismatch
+    }));
+    expect(validity.valid, `#${item.id} must reject its malformed value`).toBe(false);
+    expect(validity[item.validity], `#${item.id} must report ${item.validity}`).toBe(true);
+  }
+
+  expect(mutationRequests).toEqual([]);
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect(await afterResponse.json()).toEqual(before);
+});
