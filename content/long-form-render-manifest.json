@@ -8,7 +8,7 @@
     "min": 360,
     "max": 600
   },
-  "title": "How to Plan a Wildlife Video People Want to Watch",
+  "title": "How to Turn Wildlife Footage Into a Documentary Story",
   "footagePath": "../media/long-form-001-footage.mp4",
   "narrationPath": "../media/long-form-drafts/long-001-narration-final.mp3",
   "captionsPath": "long-form-001-captions-final.srt",
@@ -19,9 +19,9 @@
   "complianceReviewed": false,
   "containsSyntheticMedia": true,
   "hasPaidPromotion": true,
-  "sourceScriptPath": "long-form-scripts.md",
-  "sourceScriptBlobSha256": "63b4d3473c510e49052a8b7beac406f727491fba",
+  "sourceScriptPath": "long-form-001-wildlife-story-script.md",
+  "sourceScriptBlobSha256": "e85622e5f64d985c632c83e74e91c60555fbfd27",
   "priorNarrationEvidencePath": "long-form-narration-review-evidence.json",
-  "priorNarrationStatus": "SUPERSEDED_SOURCE_SCRIPT_HASH_MISMATCH",
-  "notes": "This is a fail-closed production manifest, not evidence of a completed render. The current script blob SHA differs from the SHA recorded by the old narration artifact; regenerate narration from this exact current script before use. The referenced final footage, narration, captions and quality evidence do not exist in the repository. Verify commercial voice rights, footage licenses, factual sources, final audio/caption synchronization, thumbnail and full-length human review before changing status. Private-only, unscheduled; no upload authorization."
+  "priorNarrationStatus": "SUPERSEDED_WRONG_SCRIPT_AND_UNAPPROVED_VOICE",
+  "notes": "Fail-closed production manifest, not evidence of a completed render. The canonical draft for Long-form 001 is long-form-001-wildlife-story-script.md at the exact recorded source SHA. The historical narration evidence was generated from the older long-form-scripts.md source using Edge TTS en-US-GuyNeural; that voice was not owner-approved and must not be used as production narration. The preferred Roderic voice is not commercially licensed on the connected HeyGen Free plan; its 55.722-second Short sample is internal audition only. No commercially cleared narration or final captions exist for this long-form script. The 17-source Pexels register has direct free-download URLs and 563 seconds of page-listed raw duration, but no original MP4 bytes or local hashes. Verify all source files, rights, factual claims, final audio/caption synchronization, thumbnail and full-length human review before changing status. Private-only, unscheduled; no upload authorization."
 }
