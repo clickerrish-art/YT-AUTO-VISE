@@ -68,8 +68,8 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /SonicVhibez production readiness/);
   const reconciliation = currentYouTubeReconciliationExpectation();
   const historyCurrent = reconciliation.historyMatches && reconciliation.historyFresh;
-  if (historyCurrent) assert.match(result.stdout, /YouTube history: verified 1 upload\\(s\\)/);
-  else assert.match(result.stdout, /LIVE BLOCKER: complete owner-reviewed public\\/private\\/unlisted SonicVhibez history evidence is missing, stale, or inconsistent/);
+  if (historyCurrent) assert.match(result.stdout, /YouTube history: verified 1 upload\(s\)/);
+  else assert.match(result.stdout, /LIVE BLOCKER: complete owner-reviewed public\/private\/unlisted SonicVhibez history evidence is missing, stale, or inconsistent/);
   assert.match(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/);
   assert.match(result.stdout, /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/);
   assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
@@ -108,7 +108,7 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and age-awar
     assert.ok(blocker.resolution.length > 20);
   }
   const reconciliation = currentYouTubeReconciliationExpectation();
-  assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\\/private\\/unlisted SonicVhibez history/.test(blocker.message)), !(reconciliation.historyMatches && reconciliation.historyFresh));
+  assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\/private\/unlisted SonicVhibez history/.test(blocker.message)), !(reconciliation.historyMatches && reconciliation.historyFresh));
   assert.equal(report.notes.some(note => /YouTube history: verified 1 upload/.test(note)), reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh);
   assert.ok(report.blockers.some(blocker => /YouTube OAuth upload scope is not independently verified/.test(blocker.message)));
   assert.ok(report.blockers.some(blocker => /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/.test(blocker.message)));
@@ -137,7 +137,7 @@ test("readiness JSON distinguishes fresh and stale external reconciliation from 
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
   const reconciliation = currentYouTubeReconciliationExpectation();
-  const historyBlocker = report.blockers.find(blocker => /complete owner-reviewed public\\/private\\/unlisted SonicVhibez history evidence/.test(blocker.message));
+  const historyBlocker = report.blockers.find(blocker => /complete owner-reviewed public\/private\/unlisted SonicVhibez history evidence/.test(blocker.message));
   const attemptsBlocker = report.blockers.find(blocker => /local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete/.test(blocker.message));
   assert.equal(Boolean(historyBlocker), !(reconciliation.historyMatches && reconciliation.historyFresh));
   assert.equal(Boolean(attemptsBlocker), !(reconciliation.attemptsReconciled && reconciliation.attemptsFresh));
