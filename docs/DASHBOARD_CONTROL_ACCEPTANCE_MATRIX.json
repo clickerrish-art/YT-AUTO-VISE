@@ -3,9 +3,10 @@
   "generatedAt": "2026-11-19",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "sourceHead": "f8fa5c6d1b9b236eb2b585d6dc823906f310adb2",
+  "sourceHead": "ce11d80a391131d7161d78508c27b4d22ef9294f",
   "sourceBlobs": {
-    "dashboardHtml": "d89b0e370e8f435d556b2230253d1b8e85553d8e"
+    "dashboardHtml": "d89b0e370e8f435d556b2230253d1b8e85553d8e",
+    "dashboardInventoryScript": "ee9b7862d6d01edefe2770863163b9563fd46b2b"
   },
   "status": "NOT_TESTED",
   "disclaimer": "Source-derived control inventory and acceptance plan only. This file does not claim behavioral acceptance. Every control and form remains NOT_TESTED until test evidence tied to an exact source/test SHA is attached and independently verified.",
