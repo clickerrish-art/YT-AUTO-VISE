@@ -137,7 +137,6 @@ test("live update writes only snippet fields and verifies the exact result witho
       env: { ...env, SEO_METADATA_LIVE_CONFIRM: "YES", SEO_METADATA_DRY_RUN: "NO" },
       approvalPath: path.basename(file),
       youtubeFactory: () => api,
-      oauthFactory: fakeOAuthFactory,
       now,
       dryRun: false
     });

@@ -105,10 +105,11 @@ export async function updateApprovedYoutubeSeo({
   const channelId = required(env, "SONICVHIBEZ_CHANNEL_ID");
   const approval = validateSeoMetadataApproval(safeJson(approvalPath, "SEO approval file"), { channelId, now });
   let youtube;
+  let oauth;
   if (youtubeFactory) youtube = youtubeFactory({ clientId, clientSecret, refreshToken });
   else {
     const { google } = await import("googleapis");
-    const oauth = new google.auth.OAuth2(clientId, clientSecret);
+    oauth = new google.auth.OAuth2(clientId, clientSecret);
     oauth.setCredentials({ refresh_token: refreshToken });
     // Fail before any write unless the stored refresh token was re-consented
     // with the exact YouTube write scope required for metadata.
@@ -122,7 +123,12 @@ export async function updateApprovedYoutubeSeo({
     youtube = google.youtube({ version: "v3", auth: oauth });
   }
 
-  const identity = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube, ...(oauthFactory ? { oauthFactory } : {}) });
+  const verifiedOAuthFactory = oauthFactory ?? (oauth ? () => oauth : undefined);
+  const identity = await verifySonicVhibezChannel({
+    env,
+    youtubeFactory: () => youtube,
+    ...(verifiedOAuthFactory ? { oauthFactory: verifiedOAuthFactory } : {})
+  });
   if (identity.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY" || identity.channelId !== channelId) {
     throw new Error("refusing SEO metadata update because complete authenticated SonicVhibez identity/history verification did not pass");
   }

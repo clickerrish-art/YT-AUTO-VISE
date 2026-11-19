@@ -173,18 +173,24 @@ export async function researchSonicVhibezSeo({
   const refreshToken = required(env, "YOUTUBE_REFRESH_TOKEN");
   const configuredChannelId = required(env, "SONICVHIBEZ_CHANNEL_ID");
   let youtube;
+  let oauth;
   if (youtubeFactory) {
     youtube = youtubeFactory({ clientId, clientSecret, refreshToken });
   } else {
-    // Load the production client only for real API access. Tests inject a
-    // deterministic client and must not require googleapis to be installed.
+    // Load the production client only for real API access. Reuse the same
+    // OAuth client for the mandatory scope check and the YouTube API client.
     const { google } = await import("googleapis");
-    const oauth = new google.auth.OAuth2(clientId, clientSecret);
+    oauth = new google.auth.OAuth2(clientId, clientSecret);
     oauth.setCredentials({ refresh_token: refreshToken });
     youtube = google.youtube({ version: "v3", auth: oauth });
   }
 
-  const identity = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube, ...(oauthFactory ? { oauthFactory } : {}) });
+  const verifiedOAuthFactory = oauthFactory ?? (oauth ? () => oauth : undefined);
+  const identity = await verifySonicVhibezChannel({
+    env,
+    youtubeFactory: () => youtube,
+    ...(verifiedOAuthFactory ? { oauthFactory: verifiedOAuthFactory } : {})
+  });
   if (identity.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY" ||
       identity.channelId !== configuredChannelId) {
     throw new Error("refusing SEO research because read-only SonicVhibez identity/history verification did not pass");
