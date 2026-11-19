@@ -1,0 +1,53 @@
+name: Acquire SonicVhibez Short 001 media (free sources)
+
+on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths:
+      - content/approved-pexels-footage.json
+      - content/short-001-roderic-narration-generation.json
+      - scripts/acquire-short-001-assets.mjs
+      - .github/workflows/acquire-short-001-assets.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: acquire-short-001-media-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  acquire:
+    name: Download and verify approved free media
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out exact implementation branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Install pinned FFmpeg and ffprobe
+        uses: AnimMouse/setup-ffmpeg@178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3
+        with:
+          version: "9.0"
+          token: ${{ github.token }}
+
+      - name: Acquire approved Pexels footage and existing Roderic narration
+        run: node scripts/acquire-short-001-assets.mjs
+
+      - name: Upload acquired source files, hashes and contact sheet
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-short-001-acquired-media
+          path: artifacts/short-001/
+          if-no-files-found: error
+          retention-days: 7
