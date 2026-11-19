@@ -55,3 +55,48 @@ test("API acceptance matrix covers the complete source-derived protected route i
   assert.equal(matrix.inventory.branchProtectionEnabled, null,
     "unknown branch protection must not be represented as enabled or disabled");
 });
+
+
+test("current-head API route evidence is exact-SHA, complete, and preserves provider blockers", () => {
+  const currentSha = process.env.GITHUB_SHA;
+  if (!currentSha) return;
+
+  assert.equal(matrix.currentHeadReconciliation?.observedImplementationHeadSha, currentSha,
+    "API positive-route evidence must be reconciled to the exact CI checkout");
+  assert.equal(matrix.currentHeadReconciliation?.status, "PASS");
+  assert.equal(matrix.currentHeadReconciliation?.positiveRoutesReconciled, 42);
+  assert.equal(matrix.currentHeadReconciliation?.blockedRoutesPreserved, 6);
+  assert.equal(matrix.latestCurrentHeadPositiveEvidence?.sourceTestSha, currentSha);
+
+  const positive = matrix.routes.filter(route => route.overallAcceptance === "PASS");
+  const blocked = matrix.routes.filter(route => route.overallAcceptance === "BLOCKED");
+  assert.equal(positive.length, 42);
+  assert.equal(blocked.length, 6);
+
+  for (const route of positive) {
+    assert.equal(route.currentHeadStatus, "PASS", `${route.method} ${route.path} must be reconciled`);
+    assert.equal(route.currentHeadEvidenceSha, currentSha, `${route.method} ${route.path} evidence SHA must match CI`);
+    assert.ok(Number.isInteger(route.currentHeadEvidenceRunId));
+    assert.ok(route.currentHeadEvidenceTestFiles?.length,
+      `${route.method} ${route.path} must name endpoint-specific success tests`);
+    for (const testFile of route.currentHeadEvidenceTestFiles) {
+      assert.ok(fs.existsSync(path.join(root, testFile)),
+        `evidence test file must exist for ${route.method} ${route.path}: ${testFile}`);
+    }
+  }
+
+  for (const route of blocked) {
+    assert.equal(route.currentHeadStatus, "BLOCKED");
+    assert.equal(route.currentHeadEvidenceSha, currentSha);
+  }
+
+  const expectedBlocked = [
+    "POST /api/facebook/drafts/approve",
+    "POST /api/facebook/publish",
+    "POST /api/facebook/verify-page",
+    "POST /api/instagram/approve",
+    "POST /api/jobs/produce",
+    "POST /api/uploads/reconcile"
+  ];
+  assert.deepEqual(blocked.map(routeKey).sort(), expectedBlocked.sort());
+});
