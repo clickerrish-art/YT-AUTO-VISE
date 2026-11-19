@@ -20,7 +20,7 @@ MIN_WORDS, MAX_WORDS = 125, 150
 
 NONCOMMERCIAL_AUDITION_NOTICE = (
     "Edge TTS output is not owner-approved or commercially cleared. "
-    "It may be generated only as an explicitly acknowledged internal audition; "
+    "It may be generated only as an explicitly acknowledged internal audition and cannot be used commercially; "
     "never use it in monetized YouTube, advertising or Selar promotion."
 )
 
