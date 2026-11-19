@@ -4,7 +4,7 @@
  * This script never inserts, updates, schedules, or deletes YouTube content.
  */
 import { pathToFileURL } from "node:url";
-import { youtubeVideoInsertScopeStatus } from "./youtube-oauth-scope.mjs";
+import { assertRequiredYoutubeOAuthScopes } from "./youtube-oauth-scope.mjs";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -41,7 +41,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
   let youtube;
   let oauth;
   let googleClient;
-  let uploadScopeStatus = Object.freeze({ allowed: false, acceptedScope: null, grantedYouTubeScopes: [] });
+  let oauthScopeStatus = Object.freeze({ allowed: false, missingScopes: ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.readonly"], requiredScopes: ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.readonly"], grantedYouTubeScopes: [] });
   let uploadScopeCheckedAt = null;
   if (oauthFactory) {
     oauth = oauthFactory({ clientId, clientSecret, refreshToken });
@@ -57,7 +57,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
       throw new Error("Google OAuth did not return an access token for the configured YouTube refresh token");
     }
     const tokenInfo = await oauth.getTokenInfo(accessToken.token);
-    uploadScopeStatus = youtubeVideoInsertScopeStatus(tokenInfo);
+    oauthScopeStatus = assertRequiredYoutubeOAuthScopes(tokenInfo);
     uploadScopeCheckedAt = new Date().toISOString();
   }
   if (youtubeFactory) {
@@ -185,10 +185,10 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     const inventoryPath = path.resolve(process.cwd(), inventoryPathValue);
     const inventory = {
       schemaVersion: 1, complete: true, mode: "READ_ONLY_OWNER_REVIEW_REQUIRED",
-      uploadScopeVerified: uploadScopeStatus.allowed,
+      oauthScopesVerified: oauthScopeStatus.allowed,
       uploadScopeCheckedAt,
-      acceptedUploadScope: uploadScopeStatus.acceptedScope,
-      grantedYouTubeScopes: uploadScopeStatus.grantedYouTubeScopes,
+      requiredOAuthScopes: oauthScopeStatus.requiredScopes,
+      grantedYouTubeScopes: oauthScopeStatus.grantedYouTubeScopes,
       channelId: configuredChannelId, channelTitle: channel.snippet?.title ?? "",
       channelHandle: channel.snippet?.customUrl ?? "", verifiedAt: new Date().toISOString(),
       uploadsPlaylistPages: pages, totalUploads: verifiedVideoCount,
@@ -213,10 +213,10 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     uploadsPlaylistPages: pages,
     totalUploads: verifiedVideoCount,
     visibilityCounts: Object.freeze(counts),
-    uploadScopeVerified: uploadScopeStatus.allowed,
+    oauthScopesVerified: oauthScopeStatus.allowed,
     uploadScopeCheckedAt,
-    acceptedUploadScope: uploadScopeStatus.acceptedScope,
-    grantedYouTubeScopes: Object.freeze([...uploadScopeStatus.grantedYouTubeScopes]),
+    requiredOAuthScopes: oauthScopeStatus.requiredScopes,
+    grantedYouTubeScopes: Object.freeze([...oauthScopeStatus.grantedYouTubeScopes]),
     note: "Inventory completeness verified. Upload-capable OAuth scope is reported separately; format classification, publication-cycle reconciliation and timestamp approval remain separate release gates."
   });
 }
@@ -233,9 +233,9 @@ async function main() {
     "Visibility totals: public=" + result.visibilityCounts.public +
       ", private=" + result.visibilityCounts.private +
       ", unlisted=" + result.visibilityCounts.unlisted,
-    "Upload-capable OAuth scope verified: " + result.uploadScopeVerified,
-    "Upload scope checked at: " + (result.uploadScopeCheckedAt ?? "NOT_CHECKED"),
-    "Accepted videos.insert scope: " + (result.acceptedUploadScope ?? "NONE"),
+    "Both required OAuth scopes verified: " + result.oauthScopesVerified,
+    "OAuth scopes checked at: " + (result.uploadScopeCheckedAt ?? "NOT_CHECKED"),
+    "Required OAuth scopes: " + result.requiredOAuthScopes.join(", "),
     "Granted YouTube scopes: " + (result.grantedYouTubeScopes.join(", ") || "none"),
     result.note
   ].join("\n") + "\n");
