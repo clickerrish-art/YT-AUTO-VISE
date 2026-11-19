@@ -3140,7 +3140,6 @@
   },
   "latestVerifiedExecution": {
     "recordedDate": "2026-11-19",
-    "currentBranchHead": "4674b7d4aa6b3c6b8395192277066319e1fb78d8",
     "codeAndTestVerificationCommit": "df1ac7739afe4aed47987ae5e743c3d45720431c",
     "postVerificationChanges": "Subsequent commits update Pexels source URLs, narration licensing status, render manifest, SEO research and acceptance evidence documents only; no executable source changes remain after the tested code/test commit.",
     "mainHead": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
@@ -3326,7 +3325,16 @@
       "priorVoice": "en-US-GuyNeural",
       "productionNarrationAvailable": false
     },
-    "seoResearchFile": "content/SEO-001-research-2026-11-19.md"
+    "seoResearchFile": "content/SEO-001-research-2026-11-19.md",
+    "branchHeadAtEvidenceSnapshot": "4674b7d4aa6b3c6b8395192277066319e1fb78d8",
+    "branchDivergenceSnapshot": {
+      "ahead": 4510,
+      "behind": 9,
+      "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
+      "mainHead": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
+      "observedBefore": "2026-11-19T11:25Z",
+      "note": "Live divergence must be refreshed from GitHub before any integration decision."
+    }
   },
   "acceptanceReconciliation": {
     "status": "REQUIRED",
