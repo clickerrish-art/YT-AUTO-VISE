@@ -354,16 +354,18 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/8272d2e39868237c05b2951f37bcade6ae6608c4/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md",
         "Latest exact-candidate dashboard browser run 43698639466 passed 29/29 Chromium journeys; automation/security run 43698639445 passed 141/141 Node test files. Static inventory remains 118 controls, 17 forms, 49 route handlers and 45 protected API routes. Current dashboard matrix explicitly retains 0 PASS / 11 NOT_TESTED / 6 BLOCKED form outcomes and PARTIAL/NOT_TESTED control groups; 29 browser journeys are not exhaustive per-control behavior acceptance. DASH-001 remains NOT_TESTED.",
         "Exact dashboard browser acceptance refresh: run 43702012574 passed 29/29 Chromium journeys on browser-test SHA 07b2014d48d43963f2fd67091253a3505d5633d5. Current form-level matrix is 11 PASS / 6 BLOCKED / 0 NOT_TESTED: campaignform, draft, facebookdraftform, authoringform, scriptreviewform, narrationform, narrationreviewform, productionplanform, productionplanreviewform, canceljobform and retryjobform. The six blocked forms require genuine production media, verified parent evidence, real rights clearance, a technically validated export, genuine human review or an uncertain remote upload receipt; no fixtures were promoted to production proof.",
-        "The campaign preview-to-activation E2E now waits for the form's aria-busy single-flight lock to clear before the second submission. This fixes a test timing race without weakening the duplicate-submission guard. Browser UI/server source is unchanged after the tested dashboard source SHA 9e0f9dddb359f5ded0906d8ae156174dd4c390f9; the current branch HEAD adds only review-only thumbnail code and acceptance evidence."
+        "The campaign preview-to-activation E2E now waits for the form's aria-busy single-flight lock to clear before the second submission. This fixes a test timing race without weakening the duplicate-submission guard. Browser UI/server source is unchanged after the tested dashboard source SHA 9e0f9dddb359f5ded0906d8ae156174dd4c390f9; the current branch HEAD adds only review-only thumbnail code and acceptance evidence.",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028827",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.json"
       ],
-      "nextAction": "33/33 Chromium journeys passed in dashboard E2E run 44510566447 on code/test SHA df1ac. Inventory remains 120 controls and 17 forms (103 form-owned, 17 standalone); stored form snapshot is 11 successful local/operator forms and 6 production-dependent forms BLOCKED. Complete the remaining field-by-field behavior matrix for all controls: valid success, validation, error feedback, authorization, persistence, refresh/restart, relevant concurrency and accessibility. Seventeen fields inside the six blocked forms remain fail-closed. DASH-001 remains NOT_TESTED overall.",
+      "nextAction": "Complete the remaining per-control dimensions using docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.json: positive success paths, actionable errors, authorization/role enforcement, durable persistence, refresh/restart, concurrency/idempotency and keyboard/accessibility. Preserve the six production-dependent forms as blocked until genuine media, rights and human-review prerequisites exist.",
       "assessmentCommitSha": "dcd68fab0a6df4d2142b35bf0a3edfbf49b7afe8",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
-      "lastVerifiedStatus": "PARTIAL — 11 forms PASS, 6 BLOCKED; 29/29 browser journeys pass; overall control inventory remains NOT_TESTED",
+      "lastVerifiedStatus": "PARTIAL",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Current inventory is 121 controls (27 buttons, 50 inputs, 27 selects, 17 textareas), 17 forms, 104 form-owned controls and 17 standalone controls. Browser E2E passes 33/33, but exhaustive per-control validation, error feedback, authorization, persistence, refresh/restart and concurrency acceptance is not complete.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadEvidenceSha": "fb4f64af8508791ff44c9f1e95ad47c533e8b26e",
+      "currentHeadEvidenceNote": "PARTIAL on exact dashboard source/test SHA fb4f64af8508791ff44c9f1e95ad47c533e8b26e: 37/37 Chromium journeys passed. The inventory is 121 controls and 17 forms; exact browser evidence covers stable identity/accessibility across all 121, required-empty validation across 54 required controls and 17 forms, seven pattern-constrained identifier/hash fields plus one URL, six minlength controls and 23 maxlength controls. DASH-001 remains NOT_TESTED overall because every applicable control still needs exhaustive success, actionable-error, authorization, persistence, refresh/restart, concurrency/idempotency and accessibility acceptance.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:08:02Z"
     },
     {
       "id": "SCHED-001",
@@ -740,21 +742,24 @@
       "severity": "critical",
       "owner": "owner",
       "requirement": "Resolve the requested weekly cadence conflict with the 72-hour minimum before enabling any publication.",
-      "status": "BLOCKED",
+      "status": "PASS",
       "evidence": [
         "config/weekly-content-plan.json records cadenceDecision.status=OWNER_APPROVED, ownerApproved=true, approvedMode=ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET, approvedAt=2026-11-17T13:49:00+02:00, with a non-empty owner-approval reference.",
         "The approved cycle is long_form → long_form → short → repeat, no weekly target; at least 72 elapsed hours between actual publications; no two publications on the same Africa/Johannesburg calendar day; minimum complete cycle 216 hours.",
         "Exact-SHA automation/content-quality/queue tests passed on 62a7e6305c18f1d25c9e9ffd3088e4f990044af4: 977/977 Node tests, 83/83 Python tests, 16 queue items held, publishing disabled.",
-        "This PASS resolves only the cadence decision SCHED-003. SCHED-001 actual history, OAuth, dispatch, remote timestamps and live worker acceptance remain NOT_TESTED."
+        "This PASS resolves only the cadence decision SCHED-003. SCHED-001 actual history, OAuth, dispatch, remote timestamps and live worker acceptance remain NOT_TESTED.",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551028726",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412",
+        "Owner approval in ChatGPT conversation, 2026-11-18T16:27:44Z: rolling long_form → long_form → short, no weekly target, minimum 72 elapsed hours, Africa/Johannesburg, no same-day releases."
       ],
-      "nextAction": "No further owner cadence decision is required. Keep all publishing disabled; complete SCHED-001 live history/OAuth/worker/remote timestamp acceptance before any schedule or publication.",
+      "nextAction": "No further cadence decision is required. Keep all publishing disabled. Complete SCHED-001 by restoring YouTube OAuth, verifying complete remote history and reconciling actual publication timestamps before any schedule or dispatch.",
       "assessmentCommitSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
       "acceptanceCriterion": "Configuration records the requested weekly target and mathematical conflict; validator emits a visible blocked decision status; production readiness refuses to pass unless a valid owner-approved cadence decision is present.",
       "lastVerifiedStatus": "PASS",
-      "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "BLOCKED. The requested weekly cadence of two long-form videos plus one Short conflicts with the 72-hour minimum (216 elapsed hours required in a 168-hour week). No owner-approved alternative cadence, timestamp or reference exists. Do not mark PASS or enable scheduling.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadStatus": "PASS",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceNote": "PASS on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051. The user explicitly approved the rolling long_form → long_form → short cycle on 2026-11-18T16:27:44Z, without a weekly target, with at least 72 elapsed hours between actual publications and no two releases on the same Africa/Johannesburg calendar day. Queue readiness run 44551028726 passed with 16 draft-only queue items; the full 1,027 Node / 87 Python regression passed. This resolves SCHED-003 only; SCHED-001 live history, OAuth, worker dispatch and actual remote timestamps remain blocked.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:12:00Z"
     },
     {
       "id": "SCHED-004",
@@ -1945,16 +1950,18 @@
         "Exact candidate 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: automation/security workflow 43698639445 passed 141/141 Node test files with zero failures and zero skips; the full protected-route negative-auth matrix passed 45/45. API_ROUTE_ACCEPTANCE_MATRIX.json was refreshed from this exact-candidate run: 37/45 routes now PASS across every applicable route-specific positive, validation, persistence, audit, concurrency and restart dimension; 8/45 remain BLOCKED by Cloudflare Access runtime credentials, live Meta Page authorization, live YouTube reconciliation or production-media prerequisites. API-001 remains NOT_TESTED overall until all 45 routes are accepted.",
         "Cloudflare read-only account inspection on 2026-11-15 corrects the stale 8-Nov inventory: the SonicVhibez Dashboard Staging Access application now has an enabled GitHub Actions service token and matching non_identity allow policy; token last_seen_at is 2026-11-15T07:48:19Z. The repository's cloudflare-staging-auth-smoke.yml expects three GitHub Actions secrets and performs read-only health/state/runner-session checks, but no current run of that workflow is present in the latest Actions run inventory. This configuration improvement does not prove Node-to-Worker authentication, D1 write persistence, backup/restore or restart recovery. Three /api/state routes remain blocked pending a successful authenticated smoke and authorized route-level backup/restore. The API route matrix now reflects the updated Access configuration; the three Cloudflare routes remain BLOCKED and API-001 remains NOT_TESTED overall.",
         "Exact-candidate API route refresh: 38/45 routes PASS, 7/45 BLOCKED. GET /api/state/backups is now PASS from real Node-dashboard staging integration (workflow 43700604171): authenticated state/backup reads succeeded through Cloudflare Access, revision 2 and three backups were returned, and remote state was unchanged. The remaining two Cloudflare state write routes POST /api/state/backup and POST /api/state/restore are still blocked pending a separately authorized one-time staging backup/restore cycle; Meta, YouTube reconciliation and production-media routes remain external blockers.",
-        "Exact-candidate API route refresh: 40/45 routes PASS, 5/45 BLOCKED. In addition to the 38 previously accepted routes, POST /api/state/backup and POST /api/state/restore now PASS from live staging workflow 43701290286: Node dashboard created an explicit backup, restored it with revision 2→3, retained explicit and automatic pre-restore backups, verified the audit receipt and exact state, restarted the Node dashboard, and verified remote state durability. The remaining five blocked routes are external Meta Page authorization, YouTube history/reconciliation and genuine production-media/provider gates; API-001 remains NOT_TESTED overall until every route is accepted."
+        "Exact-candidate API route refresh: 40/45 routes PASS, 5/45 BLOCKED. In addition to the 38 previously accepted routes, POST /api/state/backup and POST /api/state/restore now PASS from live staging workflow 43701290286: Node dashboard created an explicit backup, restored it with revision 2→3, retained explicit and automatic pre-restore backups, verified the audit receipt and exact state, restarted the Node dashboard, and verified remote state durability. The remaining five blocked routes are external Meta Page authorization, YouTube history/reconciliation and genuine production-media/provider gates; API-001 remains NOT_TESTED overall until every route is accepted.",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
       ],
-      "nextAction": "48/48 protected-route authentication-negative checks passed. The full automation run 44510566685 passed 1,021 Node tests across 176 files and 84 Python tests, but the dedicated 42-route positive acceptance matrix was not run individually on code/test SHA df1ac. Keep 42 routes NOT_TESTED and six provider/production routes BLOCKED until valid route-specific payloads verify response contracts, persistence/audit, idempotency/concurrency, restart and fail-closed provider boundaries.",
+      "nextAction": "Resolve only the six externally blocked routes: reauthorize YouTube OAuth and verify complete upload history for upload reconciliation; verify Meta Page/Instagram identity and permissions for Facebook/Instagram approval/publishing; provide genuine production media, rights and human approval for production job execution. Do not bypass safe defaults or fabricate provider success.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
-      "lastVerifiedStatus": "NOT_TESTED",
+      "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "BLOCKED overall, but all 42 authorized application-level positive routes now PASS on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db using current real-server integration/browser tests. All 48/48 auth-negative checks pass. Six provider/production-gated routes remain BLOCKED: Facebook draft approval, Facebook publishing, Facebook Page verification, Instagram approval, production job execution and upload reconciliation.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceNote": "42/42 authorized application-level positive routes PASS on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; all 48/48 protected API routes reject missing/invalid operator authentication; six provider/production routes remain BLOCKED: POST /api/facebook/drafts/approve, POST /api/facebook/publish, POST /api/facebook/verify-page, POST /api/instagram/approve, POST /api/jobs/produce and POST /api/uploads/reconcile. The 1,027 Node / 87 Python full regression passed across 178 Node test files with zero skips and zero npm audit vulnerabilities. API-001 remains BLOCKED overall until the six external routes are legitimately enabled and verified.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:12:00Z"
     },
     {
       "id": "API-NEG-001",
@@ -2053,13 +2060,17 @@
       "status": "BLOCKED",
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41317928356",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609969"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609969",
+        "Read-only Metricool getBrandSettings: Nature Frontiers SA brand timezone Africa/Johannesburg; Facebook/Instagram connected; YouTube connection points to SonicVhibez.",
+        "Read-only Metricool getScheduledPosts, 2026-11-01 through 2027-01-31: zero future scheduled posts.",
+        "Read-only Metricool published analytics, 2026-08-01 through 2026-11-19: five Facebook content rows and zero Instagram feed/Reel rows."
       ],
-      "nextAction": "Current connected Metricool settings resolve Nature Frontiers SA to brandId 8094526 (Africa/Johannesburg). A read-only scheduled-post query for 2026-11-19 through 2026-12-19 returned zero scheduled posts; this does not expose or reconcile the eight historical draft=false/autoPublish=true records. The prior brandId 7545638 reference is stale/unconfirmed and must not be reused without owner verification. Metricool currently exposes a YouTube connection under the Nature Frontiers brand; Nature Frontiers must never be used as the SonicVhibez YouTube target, and the owner must confirm whether that separate connection should remain. Securely verify Facebook Page/Instagram identity and permissions, reconcile the eight historical records and confirm no unapproved auto-publishing before any Meta write. Keep publishingEnabled=false, dryRun=true and emergencyStop=true.",
+      "nextAction": "Owner/admin must verify Facebook Page and Instagram ownership/permissions, resolve the cross-brand YouTube connection, and provide the historical Metricool records or support access to reconcile the eight uncertain autoPublish entries. Keep publishing disabled, dryRun=true and emergencyStop=true until approved records and rights-cleared media exist.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
-      "currentHeadEvidenceNote": "Exact candidate 57769 local Nature Frontiers draft and Instagram safety workflows passed without provider writes. Read-only Meta identity run 43942301878 returned HTTP 401 / OAuth error 190 / subcode 463 due to expired session; provider-side draft/publish capability remains blocked and publishing stays disabled."
+      "currentHeadEvidenceNote": "Read-only Metricool snapshot on 2026-11-19: the connected Nature Frontiers SA brand uses Africa/Johannesburg; scheduled-post query for 2026-11-01 through 2027-01-31 returned zero future scheduled posts; published analytics returned five Facebook feed/photo/Reel items and zero Instagram feed/Reel rows in the inspected window. The brand also has a YouTube connection pointing to the SonicVhibez channel, which must not be used for Nature Frontiers. The eight historical draft=false/autoPublish=true records were not surfaced and remain unresolved. No Metricool writes or provider publishing were performed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:16:00Z"
     },
     {
       "id": "E2E-001",
