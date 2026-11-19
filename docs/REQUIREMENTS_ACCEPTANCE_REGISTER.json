@@ -3091,13 +3091,15 @@
     }
   },
   "dashboardControlMatrixCounts": {
-    "controls": 120,
+    "controls": 121,
     "forms": 17,
-    "formOwned": 103,
+    "formOwned": 104,
     "standalone": 17,
     "journeys": 33,
     "journeysPass": 33,
-    "sourceTestSha": "8d3f24b46af34af3238ca7714e96606af0c3940f"
+    "sourceTestSha": "df1ac7739afe4aed47987ae5e743c3d45720431c",
+    "inventoryCountsVerified": true,
+    "inventoryCountEvidence": "public/dashboard.html inventory recalculated from source; test/dashboard-inventory.test.mjs asserts 121 controls (27 button, 50 input, 27 select, 17 textarea), 17 forms and 52 literal routes. This dashboard source and inventory test were unchanged between df1ac7739afe4aed47987ae5e743c3d45720431c and the current branch head when checked."
   },
   "currentHeadStatusSnapshot": {
     "total": 89,
@@ -3122,9 +3124,9 @@
     "note": "Current-head positive route acceptance is conservatively NOT_TESTED; 48 authentication-negative checks passed in the exact-SHA regression suite."
   },
   "dashboardSnapshot": {
-    "controls": 120,
+    "controls": 121,
     "forms": 17,
-    "formOwnedControls": 103,
+    "formOwnedControls": 104,
     "standaloneControls": 17,
     "formsPass": 11,
     "formsBlocked": 6,
@@ -3132,11 +3134,25 @@
       "status": "PASS",
       "passed": 33,
       "total": 33,
-      "run": 44488024652,
-      "testedSourceTestSha": "3912a7c8af6d0e72950a2b18566a3267e789cc5f"
+      "run": 44510566447,
+      "testedSourceTestSha": "df1ac7739afe4aed47987ae5e743c3d45720431c"
     },
     "DASH_001": "NOT_TESTED",
-    "fieldLevelSnapshotReconciledOnCurrentSha": false
+    "fieldLevelSnapshotReconciledOnCurrentSha": false,
+    "inventoryReconciliation": {
+      "status": "PASS_SOURCE_INVENTORY_ONLY",
+      "sourceBlobSha": "d89b0e370e8f435d556b2230253d1b8e85553d8e",
+      "inventoryTestBlobSha": "c5b57307d7799f377487879cea47aa1b6d784c1c",
+      "controlsByTag": {
+        "button": 27,
+        "input": 50,
+        "select": 27,
+        "textarea": 17
+      },
+      "formOwnedControls": 104,
+      "standaloneControls": 17,
+      "note": "Corrects the prior 120-control / 103-form-owned / 17-standalone count. This does not establish exhaustive field-level dashboard acceptance."
+    }
   },
   "latestVerifiedExecution": {
     "recordedDate": "2026-11-19",
