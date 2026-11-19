@@ -90,7 +90,7 @@ The 8-of-10 target is an outcome metric, not a release exception: all individual
 
 ## 8. Enforcement and evidence status
 
-**Implemented and verified for the SonicVhibez private YouTube release path on current branch HEAD `31ab386135ea0b7810be66ab7e5dc37d4f8bc41a`:**
+**Implemented and verified for the SonicVhibez private YouTube release path on code/content commit `31ab386135ea0b7810be66ab7e5dc37d4f8bc41a`; the following commit `152379fa1a3ee5366a2221740050ce06ff232e7b` updates documentation only:**
 
 - **Renderer/export:** both Short and long-form renderers run the technical export/audio checks. When `productionQualityApprovalPath` is supplied, they invoke `validate-production-quality-approval.mjs` against the exact final video, metadata and approval record. Without that record they emit only a clearly labelled provisional render, explicitly state it is **not approved for release**, and perform no upload or publishing action.
 - **Approval queue:** the dashboard's final human-review endpoint validates the scorecard and technical receipt before transitioning a job to `APPROVED_FOR_PRIVATE_UPLOAD`. The pre-render worker-dispatch queue is a production-work queue, not a publication queue; it requires an approved render plan because the final video scorecard cannot exist before rendering.
