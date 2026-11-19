@@ -52,7 +52,7 @@ test("read-only verification checks every page and every video without exposing 
   };
   const result = await verifySonicVhibezChannel({ env, youtubeFactory: () => youtube });
   assert.equal(result.status, "PASS_READ_ONLY_IDENTITY_AND_INVENTORY");
-  assert.equal(result.uploadScopeVerified, false, "a fake YouTube API client must not imply upload scope");
+  assert.equal(result.oauthScopesVerified, false, "a fake YouTube API client must not imply OAuth scopes");
   assert.equal(result.totalUploads, 51);
   assert.deepEqual(result.visibilityCounts, { public: 0, private: 50, unlisted: 1 });
   assert.equal(calls.length, 2);
@@ -60,9 +60,10 @@ test("read-only verification checks every page and every video without exposing 
   assert.equal(JSON.stringify(result).includes("video-"), false);
 });
 
-test("read-only verification independently reports the OAuth scope required for video insertion", async () => {
+test("read-only verification requires both exact OAuth scopes before any YouTube API call", async () => {
+  const calls = [];
   const youtube = {
-    channels: { list: async () => ({ data: { items: [channel] } }) },
+    channels: { list: async () => { calls.push("channels.list"); return { data: { items: [channel] } }; } },
     playlistItems: { list: async () => ({ data: { pageInfo: { totalResults: 0 }, items: [] } }) }
   };
   const makeOAuth = scopes => ({
@@ -73,23 +74,26 @@ test("read-only verification independently reports the OAuth scope required for 
       return { scopes };
     }
   });
-  const uploadResult = await verifySonicVhibezChannel({
-    env,
-    youtubeFactory: () => youtube,
-    oauthFactory: () => makeOAuth(["https://www.googleapis.com/auth/youtube.upload"])
-  });
-  assert.equal(uploadResult.uploadScopeVerified, true);
-  assert.match(uploadResult.uploadScopeCheckedAt, /^\d{4}-\d{2}-\d{2}T/);
-  assert.equal(uploadResult.acceptedUploadScope, "https://www.googleapis.com/auth/youtube.upload");
-  assert.deepEqual(uploadResult.grantedYouTubeScopes, ["https://www.googleapis.com/auth/youtube.upload"]);
+  const uploadScope = "https://www.googleapis.com/auth/youtube.upload";
+  const readOnlyScope = "https://www.googleapis.com/auth/youtube.readonly";
 
-  const readOnlyResult = await verifySonicVhibezChannel({
-    env,
-    youtubeFactory: () => youtube,
-    oauthFactory: () => makeOAuth(["https://www.googleapis.com/auth/youtube.readonly"])
+  const passed = await verifySonicVhibezChannel({
+    env, youtubeFactory: () => youtube,
+    oauthFactory: () => makeOAuth([uploadScope, readOnlyScope])
   });
-  assert.equal(readOnlyResult.uploadScopeVerified, false);
-  assert.equal(readOnlyResult.acceptedUploadScope, null);
+  assert.equal(passed.oauthScopesVerified, true);
+  assert.deepEqual(passed.requiredOAuthScopes, [uploadScope, readOnlyScope]);
+  assert.deepEqual(passed.grantedYouTubeScopes, [uploadScope, readOnlyScope]);
+  assert.match(passed.uploadScopeCheckedAt, /^\\d{4}-\\d{2}-\\d{2}T/);
+
+  for (const scopes of [[uploadScope], [readOnlyScope], []]) {
+    calls.length = 0;
+    await assert.rejects(
+      verifySonicVhibezChannel({ env, youtubeFactory: () => youtube, oauthFactory: () => makeOAuth(scopes) }),
+      /missing required OAuth scope/
+    );
+    assert.deepEqual(calls, [], "scope failure must happen before any YouTube API read");
+  }
 });
 
 test("read-only verification refuses a different authenticated channel before reading uploads", async () => {
