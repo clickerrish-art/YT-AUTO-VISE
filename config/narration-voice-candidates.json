@@ -62,15 +62,17 @@
     ],
     "productionApproved": false,
     "finalNarration": false,
-    "renderedAt": "2026-11-18T06:44:17Z",
-    "workflowRunId": 44253500939,
-    "artifactId": 14404553729,
+    "renderedAt": "2026-11-19T16:13:33Z",
+    "workflowRunId": 44563576507,
+    "artifactId": 14550782584,
     "artifactName": "sonicvhibez-american-wildlife-encounter-voice-review",
-    "audioSha256": "2c81da407501eb8e91391a360ce5a19ec6f324b08f4222b15a1ef032136962ec",
-    "durationSeconds": 51.432,
-    "sourceScriptSha256": "54b1c9aa9103b8a79511cc38fc27c27d4e35416d460f188701485406aaedfc73",
+    "audioSha256": "f68b0b9b453948688f08f800dbf61ccd9188d1976308d94f27bb2cd58b543813",
+    "durationSeconds": 53.023,
+    "sourceScriptSha256": "20f807f0a1c6afd62ced948cfc8d8ed21478d479a76cc287eae62411bc185c53",
     "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
-    "commercialAttributionReview": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED"
+    "commercialAttributionReview": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED",
+    "artifactSha256": "f1cb09dc70baf54156435e55ddc0656010848e492ec5969c014f352f6ac45d93",
+    "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md"
   },
   "rendering": {
     "script": "scripts/render_american_narration.py",
@@ -78,7 +80,7 @@
     "output": "american-short-001-narration-review.wav",
     "status": "REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
     "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
-    "commercialAttributionReview": "PENDING_OWNER_REVIEW",
+    "commercialAttributionReview": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED",
     "productionApproved": false,
     "finalNarration": false,
     "latestEvidencePath": "content/american-narration-review-evidence.json"
