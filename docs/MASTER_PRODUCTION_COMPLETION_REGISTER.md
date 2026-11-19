@@ -34,9 +34,11 @@
 ## Nature Frontiers / Meta
 
 - Nature Frontiers remains separate from SonicVhibez and is not a YouTube destination.
-- Current tests confirm safe local configuration: publishing disabled, dry-run enabled, emergency stop active, no guessed Page/Instagram account ID and no provider action.
-- The local 2-Reel + 1-feed plan is not a Facebook/Instagram provider draft and contains no fabricated media or rights.
-- Legacy Metricool brand access and reconciliation of historical `draft=false` / `autoPublish=true` records remain unresolved. Do not enable auto-publishing or mutate provider schedules.
+- Current tests confirm safe local configuration: publishing disabled, dry-run enabled, emergency stop active, no guessed Page/Instagram account ID and no provider action. No Metricool write or post mutation was performed in this session.
+- Read-only Metricool inspection now confirms one connected brand, Nature Frontiers SA, with Africa/Johannesburg timezone, Facebook and Instagram connections, and a YouTube connection pointing to the SonicVhibez channel. Do not use that YouTube connection for Nature Frontiers; it is a cross-brand routing risk requiring owner correction.
+- Metricool scheduled-post lookup for 1 November 2026 through 31 January 2027 returned **zero future scheduled posts**. Published-post analytics for 1 August–19 November returned **five Facebook items** (feed/photo posts and Reels, 13–14 November) and **zero Instagram feed/Reel rows** in the inspected range. This is a current connector snapshot, not proof of the older records' disposition.
+- The historical eight `draft=false` / `autoPublish=true` records were not surfaced by the current Metricool scheduled-post lookup; their origin and final disposition remain unresolved. The previous legacy-brand records must not be assumed deleted, published or safe. No auto-publishing or provider schedule mutation is authorized.
+- The local 2-Reel + 1-feed plan is not a Facebook/Instagram provider draft and contains no fabricated media or rights. The approved-content auto-publishing preference remains gated on actual content approval, valid media/rights, and correction of the cross-brand YouTube connection.
 
 ## Deployment, state and Git
 
