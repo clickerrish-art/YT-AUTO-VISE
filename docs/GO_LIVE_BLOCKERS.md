@@ -1,3 +1,38 @@
+# Latest exact production-readiness result — 19 November 2026, 12:22 SAST
+
+**Readiness run:** [44523195947](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44523195947). **Exact branch source/test commit:** `15be5841b107239d1b9d4197a761c0eb5b333043`. Result: **HOLD, 22 blockers**. The readiness workflow's diagnostic and upload steps completed; the final gate correctly failed because mandatory prerequisites remain. No upload, schedule or publication was attempted.
+
+## Current exact blockers (22)
+
+1. `RDY-93F84DBDCB44` — Short footage `media/next-short-footage.mp4` is missing.
+2. `RDY-7EC64DE8E92E` — Short narration `media/next-short-narration.mp3` is missing.
+3. `RDY-D90DC5FF4ECE` — Short footage licence evidence is not real and human-verified.
+4. `RDY-463DB1D16F39` — Short narration licence evidence is not real and human-verified.
+5. `RDY-33CDEB9448E4` — Short rights confirmation is not owner-confirmed.
+6. `RDY-E76C6F6896E0` — Short compliance review is not human-confirmed.
+7. `RDY-F0C5955F99EB` — Long-form footage `media/long-form-001-footage.mp4` is missing.
+8. `RDY-C2B8E199C3D9` — Long-form narration `media/long-form-drafts/long-001-narration-final.mp3` is missing.
+9. `RDY-46866CA44098` — Long-form captions `long-form-001-captions-final.srt` are missing.
+10. `RDY-E9140B0CF9A9` — Long-form footage licence evidence is not real and human-verified.
+11. `RDY-0682CC58ECF0` — Long-form narration licence evidence is not real and human-verified.
+12. `RDY-EF19160F89FB` — Long-form rights confirmation is not owner-confirmed.
+13. `RDY-9F64A4A468D6` — Long-form compliance review is not human-confirmed.
+14. `RDY-59F6FCE1F9B0` — Metadata is not human-reviewed and marked `READY_FOR_PRIVATE_UPLOAD`.
+15. `RDY-4E9BD4C5E14F` — Metadata rights confirmation is missing.
+16. `RDY-36AA230A31D7` — Metadata compliance review is missing.
+17. `RDY-0E98CB4E03DE` — Exact-hash-bound human production-quality approval file is missing; `UPLOAD_APPROVAL_PATH` is required.
+18. `RDY-3DA0707998B8` — Final Short MP4 `media/next-short.mp4` is missing.
+19. `RDY-B5E6F37EADD2` — Latest read-only YouTube OAuth refresh returned `invalid_grant`.
+20. `RDY-8D340A6DA7D7` — Upload-capable `youtube.upload` scope is not independently verified.
+21. `RDY-6D8D12937BFC` — Complete owner-reviewed public/private/unlisted SonicVhibez history is missing, stale or inconsistent.
+22. `RDY-D849996022ED` — Local, workflow and owner-attested upload-attempt reconciliation is missing, stale or incomplete.
+
+The new item 17 is a deliberately separate gate: the release must have a human production-quality approval record bound to the exact final export, metadata, technical receipt, captions, thumbnail and rights evidence. A readiness pass cannot be inferred from a metadata approval alone.
+
+**Safety:** public/unattended publishing remains disabled; the readiness tool is read-only. Keep the owner and human-review gates intact.
+
+---
+
 # Latest exact production-readiness result — 19 November 2026
 
 **Readiness run:** [44510566415](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44510566415). Result: **HOLD, 21 blockers**. No upload, schedule or publication was attempted.
