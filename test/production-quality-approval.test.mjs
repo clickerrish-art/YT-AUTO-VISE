@@ -158,3 +158,12 @@ test("Short and long-form renderers require exact final approval for release and
     assert.match(source, /No upload or publishing action was performed/);
   }
 });
+
+test("production readiness requires the same exact-hash quality approval gate as private upload", () => {
+  const source = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
+  assert.match(source, /validateProductionQualityApprovalFile/);
+  assert.match(source, /UPLOAD_APPROVAL_PATH/);
+  assert.match(source, /if \(!qualityApproval\.valid\)/);
+  assert.match(source, /Production quality approval gate/);
+  assert.match(source, /Exact-hash-bound human production quality approval is missing/);
+});
