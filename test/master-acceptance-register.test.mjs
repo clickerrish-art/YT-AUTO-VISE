@@ -80,5 +80,7 @@ test("master completion register mirrors the acceptance totals and release hold"
     "utf8"
   );
   assert.match(master, /72 PASS \/ 7 NOT_TESTED \/ 10 BLOCKED \/ 0 FAIL/);
+  assert.match(master, /DASH-001 is PASS/);
+  assert.doesNotMatch(master, /\$\{(?:run|url)\./);
   assert.match(master, /Release decision:\s*\*\*HOLD\*\*/);
 });

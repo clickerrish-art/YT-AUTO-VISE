@@ -3102,13 +3102,13 @@
     }
   },
   "latestExactHeadSnapshot": {
-    "sourceTestSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
+    "sourceTestSha": "4f38aa392f97e944c97c3d3c312be08e57686069",
     "branch": "codex/marketing-machine-audit-fixes",
     "mainSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 4331,
+    "aheadBy": 4680,
     "behindBy": 9,
-    "changedPaths": 433,
+    "changedPaths": 467,
     "criticalModules": 17,
     "finalTreeDeletions": 0,
     "patchEquivalentCommits": 0,
@@ -3120,84 +3120,118 @@
     },
     "branchProtection": "NOT_INDEPENDENTLY_VERIFIED_HTTP_403",
     "ci": {
-      "automation": {
-        "runId": 44272071799,
-        "nodeTests": 983,
-        "nodePass": 983,
-        "pythonTests": 84,
-        "pythonPass": 84,
+      "automationSecurity": {
+        "status": "PASS",
+        "runId": 44595474749,
+        "nodeTests": 1038,
+        "nodeFiles": 181,
+        "pythonTests": 87,
         "skipped": 0,
         "npmAuditVulnerabilities": 0
       },
+      "dashboardE2E": {
+        "status": "PASS",
+        "runId": 44595474683,
+        "journeys": 41,
+        "passed": 41
+      },
+      "metadata": {
+        "status": "PASS",
+        "runId": 44595474684
+      },
       "contentQuality": {
-        "runId": 44272072115,
-        "tests": 985,
-        "pass": 985,
+        "status": "PASS",
+        "runId": 44595475031,
+        "tests": 1040,
+        "pass": 1040,
         "fail": 0,
         "skipped": 0
       },
-      "dashboardE2E": {
-        "runId": 44272072070,
-        "journeys": 33,
-        "pass": 33,
-        "fail": 0
-      },
       "queueReadiness": {
-        "runId": 44272072055,
+        "status": "PASS",
+        "runId": 44595474754,
         "items": 16,
-        "publishingEnabled": false,
-        "scheduledItems": 0,
-        "newItems": 0
+        "publishingEnabled": false
       },
-      "cloudflareState": {
-        "runId": 44272071939,
-        "tests": 9,
-        "pass": 9
+      "cloudflareDurableStateUnit": {
+        "status": "PASS",
+        "runId": 44595474871
       },
-      "runnerBridge": {
-        "runId": 44272072194,
-        "tests": 4,
-        "pass": 4
+      "cloudflareRunnerBridgeSafety": {
+        "status": "PASS",
+        "runId": 44595475574
       },
       "deploymentRecovery": {
-        "runId": 44272071892,
-        "tests": 2,
-        "pass": 2
+        "status": "PASS",
+        "runId": 44595474812
       },
-      "metaRegression": {
-        "runId": 44272071929,
-        "tests": 100,
-        "pass": 100,
-        "liveIdentityGet": "SKIPPED_ON_PULL_REQUEST"
+      "baselineComparison": {
+        "status": "PASS",
+        "runId": 44595475089,
+        "mainNpmAuditVulnerabilities": 4,
+        "candidateNpmAuditVulnerabilities": 0
       },
-      "instagramSafety": {
-        "runId": 44272072105,
-        "tests": 68,
-        "pass": 68
+      "branchInventory": {
+        "status": "PASS",
+        "runId": 44595474867,
+        "aheadBy": 4680,
+        "behindBy": 9,
+        "changedFiles": 467
       },
-      "signedApproval": {
-        "runId": 44272072175,
-        "tests": 34,
-        "pass": 34
-      },
-      "metadataValidation": {
-        "runId": 44272071849,
-        "status": "IN_PROGRESS_FFMPEG_INSTALL"
+      "productionQualityEnforcement": {
+        "status": "PASS",
+        "runId": 44595475021
       },
       "productionReadiness": {
-        "runId": 44272072084,
         "status": "HOLD",
-        "exitCode": 2,
-        "blockers": 19
+        "runId": 44595474996,
+        "blockers": 20
       },
-      "baseline": {
-        "runId": 44272071843,
-        "mainNodeTests": 54,
-        "candidateNodeTests": 983,
-        "mainPythonTests": 8,
-        "candidatePythonTests": 84,
-        "mainModerateNpmVulnerabilities": 4,
-        "candidateNpmVulnerabilities": 0
+      "cloudflareAuthenticatedStagingSmoke": {
+        "status": "SKIPPED",
+        "reason": "The automation workflow ran on a pull_request event; the live staging smoke is push-only. Prior independent read-only smoke 44555237191 passed."
+      },
+      "natureFrontiersMetaPageConnection": {
+        "status": "REGRESSION_PASS_LIVE_GET_SKIPPED",
+        "runId": 44595474792,
+        "liveIdentityGet": "SKIPPED_ON_PULL_REQUEST"
+      },
+      "natureFrontiersEditorialApprovalSafety": {
+        "status": "PASS",
+        "runId": 44595475052
+      },
+      "natureFrontiersDraftPackage": {
+        "status": "PASS",
+        "runId": 44595474776
+      },
+      "natureFrontiersInstagramPublishingSafety": {
+        "status": "PASS",
+        "runId": 44595474764
+      },
+      "metricoolReadOnlyReconciliation": {
+        "status": "PARTIAL",
+        "brandId": 8094526,
+        "publishedFacebookItems": 7,
+        "publishedInstagramItems": 0,
+        "futureScheduledPosts": 0,
+        "legacyBrandId": 7545638,
+        "legacyBrandAccess": "403_FORBIDDEN",
+        "legacyRecordsExpected": 8,
+        "legacyScheduledDraftsReported": 20,
+        "readOnlyEvidenceFile": "content/metricool-nature-frontiers-reconciliation-2026-11-19.json",
+        "publishingEnabled": false
+      },
+      "cloudflareDeploymentInventory": {
+        "status": "BLOCKED",
+        "evidenceFile": "content/cloudflare-deployment-reconciliation-2026-11-19.json",
+        "stagingWorker": "sonicvhibez-durable-state-staging",
+        "productionWorker": null,
+        "stagingD1Revision": 2,
+        "stagingBackups": 5,
+        "runnerRows": 0,
+        "r2ApiStatus": 403,
+        "durableObjectNamespaces": 0,
+        "oidcTrustedRef": "refs/heads/codex/cloudflare-adapter-integration-20261108"
       }
     },
     "api": {
@@ -3207,14 +3241,15 @@
       "overallBlocked": 6
     },
     "dashboard": {
-      "controls": 120,
+      "controls": 121,
       "forms": 17,
-      "formOwned": 103,
+      "formOwned": 104,
       "standalone": 17,
-      "journeys": 33,
-      "journeysPass": 33
+      "journeys": 41,
+      "journeysPass": 41,
+      "DASH_001": "PASS"
     },
-    "productionReadinessBlockers": 19,
+    "productionReadinessBlockers": 20,
     "cloudflare": {
       "sonicVhibezStagingD1": {
         "applicationTables": 6,
@@ -3224,7 +3259,7 @@
         "runnerArtifactParts": 0,
         "runnerControlRows": 0,
         "runnerStateRows": 0,
-        "stateRevision": 3,
+        "stateRevision": 2,
         "queueItems": 16,
         "campaigns": 3,
         "auditEvents": 4,
@@ -3261,8 +3296,9 @@
         "private": 0,
         "unlisted": 0
       },
-      "uploadAttemptReconciliation": "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS",
-      "uploadScopeVerified": false
+      "uploadAttemptReconciliation": "STALE_OR_INCOMPLETE",
+      "uploadScopeVerified": false,
+      "completeHistoryAndQueueInspection": false
     }
   },
   "dashboardControlMatrixCounts": {
