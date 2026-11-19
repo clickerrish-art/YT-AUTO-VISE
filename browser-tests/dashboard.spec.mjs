@@ -2680,3 +2680,46 @@ test("all declared minimum-length fields reject undersized values without an API
   expect(afterResponse.status()).toBe(200);
   expect(await afterResponse.json()).toEqual(before);
 });
+
+
+test("all declared maximum-length fields cap user-entered values without an API mutation", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const mutationRequests = [];
+  page.on("request", outgoing => {
+    if (outgoing.method() === "POST" && new URL(outgoing.url()).pathname.startsWith("/api/")) {
+      mutationRequests.push(new URL(outgoing.url()).pathname);
+    }
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const constrained = await page.evaluate(() => [...document.querySelectorAll("input[maxlength], textarea[maxlength]")]
+    .filter(element => element.maxLength > 0 && !element.disabled && !element.readOnly)
+    .map(element => ({ id: element.id, maxLength: element.maxLength })));
+  expect(constrained).toHaveLength(23);
+
+  for (const item of constrained) {
+    const control = page.locator("#" + item.id);
+    await control.fill("");
+    await control.pressSequentially("x".repeat(item.maxLength + 1));
+    const result = await control.evaluate(element => ({
+      length: element.value.length,
+      maxLength: element.maxLength,
+      tooLong: element.validity.tooLong
+    }));
+    expect(result.maxLength).toBe(item.maxLength);
+    expect(result.length, `#${item.id} must cap user input at maxlength`).toBe(item.maxLength);
+    expect(result.tooLong, `#${item.id} must not retain an over-limit value`).toBe(false);
+  }
+
+  expect(mutationRequests).toEqual([]);
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect(await afterResponse.json()).toEqual(before);
+});
