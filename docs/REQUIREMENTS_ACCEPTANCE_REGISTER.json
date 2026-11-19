@@ -623,7 +623,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Latest branch inventory run 44527617041: 4,550 branch-only commits, nine main-only commits, 454 final-tree changed files, zero deletions, clean working tree and 17 critical-module changes. The nine base-only commits have no net main-tree diff relative to merge base. Full semantic review of all 454 files and owner-side branch-protection verification remain incomplete. Cloudflare staging Worker OIDC trust is pinned to a different historical branch; branch-protection owner verification must precede any trust-policy update.",
+      "currentHeadEvidenceNote": "Focused spot-review examined 15 security-critical runtime paths: operator-auth, schedule-policy, YouTube history gate, private uploader, production readiness/quality approval, backup/restore, human review, Facebook publisher/pipeline, Meta adapter, content job lifecycle, dashboard route/auth boundary, and deployed Cloudflare OIDC trust. Findings: auth constant-time; scheduler timezone/72h/DST/sequence; private-only upload with exact-hash one-shot authorization and no blind retry; atomic/symlink-safe backup/restore; Facebook explicit flags and uncertain-outcome reconciliation. Full semantic review of 454 files remains incomplete; 4 critical paths (dashboard HTML, inventory script, two restore tests) remain for manual review; branch protection unverified; Cloudflare OIDC trust pinned to a different old branch.",
       "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
     },
     {
@@ -2426,6 +2426,45 @@
       "DASH_CTRL_BLOCKED_API_001": "PASS — six production-blocked forms map to guarded routes.",
       "DASH_CTRL_RIGHTS_USE_001": "PASS — explicit per-asset YouTube-use attestation remains separate from overall approval.",
       "NATURE_FRONTIERS_HISTORY_001": "BLOCKED — current brand 8094526 has 7 published Facebook items, 0 Instagram items and 0 future scheduled posts; old brand 7545638 (20 scheduled drafts, eight autoPublish records) is inaccessible (403), no support reply found, and its history is unresolved. Current brand wrongly links SonicVhibez YouTube channel."
+    },
+    "criticalModuleReview": {
+      "reviewedPaths": [
+        "scripts/operator-auth.mjs",
+        "scripts/schedule-policy.mjs",
+        "scripts/youtube-history-gate.mjs",
+        "scripts/upload-private.mjs",
+        "scripts/production-readiness.mjs",
+        "scripts/backup-state.mjs",
+        "scripts/restore-state.mjs",
+        "scripts/human-review.mjs",
+        "scripts/production-quality-approval.mjs",
+        "scripts/facebook-autonomous-publisher.mjs",
+        "scripts/facebook-pipeline.mjs",
+        "scripts/meta-page-adapter.mjs",
+        "scripts/content-job-lifecycle.mjs",
+        "scripts/dashboard-server.mjs (route/auth boundary spot-review)",
+        "cloudflare/staging-snapshot/worker.js (deployed trust policy spot-review)"
+      ],
+      "reviewedCount": 15,
+      "inventoryCriticalModuleCount": 17,
+      "status": "PARTIAL_NOT_FULL_SEMANTIC_REVIEW",
+      "findings": [
+        "Operator authentication uses constant-time token comparison and rejects missing/invalid credentials before route validation.",
+        "Schedule policy enforces Africa/Johannesburg, 72 elapsed hours, no same local calendar day, DST validity and long_form→long_form→short; cadence decision remains owner-blocked.",
+        "YouTube history gate requires complete paginated public/private/unlisted inventory and upload-attempt reconciliation.",
+        "Private uploader enforces private visibility, explicit one-shot authorization, exact-hash approval, emergency-stop and confirmation flags; it does not blindly retry uncertain remote uploads.",
+        "Backup/restore uses symlink/path checks, O_NOFOLLOW where available, locks, atomic writes/fsync and interrupted-restore journal recovery.",
+        "Facebook publisher requires explicit live flags, page identity, rights/compliance preflight and human approval; uncertain outcomes are reconciled before any retry.",
+        "Production-quality approval binds exact video/metadata hashes, quality scorecard, technical validation receipt and rights evidence.",
+        "Deployed Cloudflare staging worker's OIDC trust is pinned to an old branch; do not broaden until branch protection is verified."
+      ],
+      "remainingCriticalPaths": [
+        "public/dashboard.html",
+        "scripts/dashboard-inventory.mjs",
+        "test/restore-facebook-draft-history.test.mjs",
+        "tests/restore-state.test.mjs"
+      ],
+      "note": "This is a focused security/behavior spot-review of 15 paths, not a full semantic review of the 454-file branch diff."
     }
   },
   "candidateSourceTestSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
@@ -3350,8 +3389,8 @@
     {
       "id": "GIT-SEMANTIC-REVIEW-001",
       "status": "NOT_TESTED",
-      "detail": "The branch inventory covers 454 final-tree files and 17 critical modules; the nine base-only commits have no net main-tree changes. Full semantic review of all branch changes is incomplete.",
-      "requiredResolution": "Complete a module-by-module security/behavior review of the 454-file diff, preserving restore-history tests; do not merge, rebase or rewrite history."
+      "detail": "Latest inventory covers 454 final-tree files, 17 critical paths, zero deletions; nine main-only commits have no net main-tree changes. A focused spot-review examined 15 security-critical runtime paths and confirmed constant-time operator auth, strict schedule/history gates, private-only exact-hash uploads with no blind retry, atomic/symlink-safe backup/restore, explicit Meta publishing authorization and exact-hash production approval. Four critical paths remain for manual review; the full 454-file semantic review is not complete. Branch protection remains owner-unverified and staging OIDC trust is pinned to an old branch.",
+      "requiredResolution": "Complete review of the remaining dashboard UI/inventory and restore test paths, then continue the full 454-file semantic review. Owner verifies branch protection before changing Cloudflare OIDC trust. Do not merge or rewrite history."
     },
     {
       "id": "OWNER-INPUTS-001",
