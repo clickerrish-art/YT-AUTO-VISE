@@ -217,7 +217,7 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     uploadScopeCheckedAt,
     requiredOAuthScopes: oauthScopeStatus.requiredScopes,
     grantedYouTubeScopes: Object.freeze([...oauthScopeStatus.grantedYouTubeScopes]),
-    note: "Inventory completeness verified. Upload-capable OAuth scope is reported separately; format classification, publication-cycle reconciliation and timestamp approval remain separate release gates."
+    note: "Inventory completeness and both required OAuth scopes were verified; format classification, publication-cycle reconciliation and timestamp approval remain separate release gates."
   });
 }
 
