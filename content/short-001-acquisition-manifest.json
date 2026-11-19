@@ -17,7 +17,24 @@
     "url": "https://www.pexels.com/license/",
     "generalLicenseIsNotProofOfAllThirdPartyRights": true,
     "sourceSelectionApprovalIsNotFinalReleaseApproval": true,
-    "standaloneUnmodifiedRedistributionAllowed": false
+    "standaloneUnmodifiedRedistributionAllowed": false,
+    "officialLicenseUrl": "https://www.pexels.com/license/",
+    "officialTermsUrl": "https://www.pexels.com/terms-of-service/",
+    "officialCommercialUseHelpUrl": "https://help.pexels.com/hc/en-us/articles/360042295214-Can-I-use-the-photos-and-videos-for-a-commercial-project",
+    "platformLicenseReview": {
+      "reviewedAt": "2026-11-19T15:05:00Z",
+      "reviewedBy": "ChatGPT research; not owner sign-off",
+      "status": "PLATFORM_LICENSE_CONFIRMED_THIRD_PARTY_RIGHTS_REMAIN_UNVERIFIED",
+      "commercialUsePermittedByPlatformLicense": true,
+      "attributionRequired": false,
+      "attributionRecommended": true,
+      "modificationPermitted": true,
+      "standaloneUnmodifiedRedistributionAllowed": false,
+      "noImpliedEndorsement": true,
+      "additionalThirdPartyRightsMayApply": true,
+      "summary": "Pexels' published license permits free commercial and non-commercial use and modification without mandatory attribution. It prohibits standalone redistribution and misleading endorsement/authorship claims. Pexels' terms caution that additional third-party rights may still apply and that the user is responsible for determining whether further consent is needed.",
+      "sourcePageEvidence": "All four source pages show the Pexels Free license and list the named contributors recorded in this manifest."
+    }
   },
   "assets": [
     {
@@ -44,7 +61,16 @@
       "previewFrame": "preview/pexels-29765785.jpg",
       "rightsVerified": false,
       "humanReviewed": false,
-      "releaseEligible": false
+      "releaseEligible": false,
+      "platformLicenseReview": {
+        "status": "PEXELS_PLATFORM_LICENSE_REVIEWED",
+        "sourcePageContributorMatchesManifest": true,
+        "thirdPartyRightsReviewed": false,
+        "fullHumanPlaybackCompleted": false,
+        "rightsVerified": false,
+        "releaseEligible": false,
+        "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
+      }
     },
     {
       "assetId": "pexels-11760785",
@@ -70,7 +96,16 @@
       "previewFrame": "preview/pexels-11760785.jpg",
       "rightsVerified": false,
       "humanReviewed": false,
-      "releaseEligible": false
+      "releaseEligible": false,
+      "platformLicenseReview": {
+        "status": "PEXELS_PLATFORM_LICENSE_REVIEWED",
+        "sourcePageContributorMatchesManifest": true,
+        "thirdPartyRightsReviewed": false,
+        "fullHumanPlaybackCompleted": false,
+        "rightsVerified": false,
+        "releaseEligible": false,
+        "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
+      }
     },
     {
       "assetId": "pexels-11528208",
@@ -96,7 +131,16 @@
       "previewFrame": "preview/pexels-11528208.jpg",
       "rightsVerified": false,
       "humanReviewed": false,
-      "releaseEligible": false
+      "releaseEligible": false,
+      "platformLicenseReview": {
+        "status": "PEXELS_PLATFORM_LICENSE_REVIEWED",
+        "sourcePageContributorMatchesManifest": true,
+        "thirdPartyRightsReviewed": false,
+        "fullHumanPlaybackCompleted": false,
+        "rightsVerified": false,
+        "releaseEligible": false,
+        "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
+      }
     },
     {
       "assetId": "pexels-31702128",
@@ -123,7 +167,16 @@
       "rightsVerified": false,
       "humanReviewed": false,
       "releaseEligible": false,
-      "preliminaryVisualFlag": "Sampled frames show a visible chain-link barrier/enclosure. Do not portray this as a wild free-ranging lion; owner/editor must decide whether to exclude or explicitly contextualize."
+      "preliminaryVisualFlag": "Sampled frames show a visible chain-link barrier/enclosure. Do not portray this as a wild free-ranging lion; owner/editor must decide whether to exclude or explicitly contextualize.",
+      "platformLicenseReview": {
+        "status": "PEXELS_PLATFORM_LICENSE_REVIEWED",
+        "sourcePageContributorMatchesManifest": true,
+        "thirdPartyRightsReviewed": false,
+        "fullHumanPlaybackCompleted": false,
+        "rightsVerified": false,
+        "releaseEligible": false,
+        "previewUseStatus": "EXCLUDED_FROM_VISUAL_REVIEW_PREVIEW_DUE_TO_VISIBLE_ENCLOSURE_AND_PARTIAL_FOREGROUND_PERSON"
+      }
     }
   ],
   "independentVerification": {
@@ -150,6 +203,7 @@
     "metadataApproval": false,
     "publicPublishingEnabled": false,
     "privateUploadAuthorized": false,
-    "releaseEligible": false
+    "releaseEligible": false,
+    "note": "Pexels' published platform license and the four individual source pages were checked. This confirms the platform-license terms only; possible third-party rights, complete source playback, final edit, narration rights, and human owner/compliance approval remain outstanding. The visible-enclosure clip is excluded from the current preview."
   }
 }
