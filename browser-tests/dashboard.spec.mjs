@@ -2636,3 +2636,47 @@ test("all declared dashboard identifier hashes and URL fields reject malformed v
   expect(afterResponse.status()).toBe(200);
   expect(await afterResponse.json()).toEqual(before);
 });
+
+
+test("all declared minimum-length fields reject undersized values without an API mutation", async ({ page, request }) => {
+  const headers = { "x-operator-token": operatorToken };
+  const beforeResponse = await request.get("/api/state", { headers });
+  expect(beforeResponse.status()).toBe(200);
+  const before = await beforeResponse.json();
+  const mutationRequests = [];
+  page.on("request", outgoing => {
+    if (outgoing.method() === "POST" && new URL(outgoing.url()).pathname.startsWith("/api/")) {
+      mutationRequests.push(new URL(outgoing.url()).pathname);
+    }
+  });
+
+  await page.goto("/");
+  await page.locator("#token").fill(operatorToken);
+  await page.locator("#connect").click();
+  await expect(page.locator("#app")).toBeVisible();
+
+  const constrained = await page.evaluate(() => [...document.querySelectorAll("input[minlength], textarea[minlength]")]
+    .filter(element => element.minLength > 0 && !element.disabled && !element.readOnly)
+    .map(element => ({ id: element.id, minLength: element.minLength })));
+  expect(constrained).toHaveLength(6);
+
+  for (const item of constrained) {
+    const control = page.locator("#" + item.id);
+    await control.fill("x".repeat(item.minLength - 1));
+    const result = await control.evaluate(element => ({
+      valid: element.checkValidity(),
+      tooShort: element.validity.tooShort,
+      message: element.validationMessage,
+      length: element.value.length
+    }));
+    expect(result.length).toBe(item.minLength - 1);
+    expect(result.tooShort, `#${item.id} must report tooShort below minlength`).toBe(true);
+    expect(result.valid, `#${item.id} must reject values shorter than ${item.minLength}`).toBe(false);
+    expect(result.message.length, `#${item.id} must expose native validation feedback`).toBeGreaterThan(0);
+  }
+
+  expect(mutationRequests).toEqual([]);
+  const afterResponse = await request.get("/api/state", { headers });
+  expect(afterResponse.status()).toBe(200);
+  expect(await afterResponse.json()).toEqual(before);
+});
