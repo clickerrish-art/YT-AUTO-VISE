@@ -85,12 +85,12 @@ function fixture() {
   return { approval, video, metadata };
 }
 
-function validate(approval, video, metadata) {
+function validate(approval, video, metadata, contentType = "long_form") {
   return validateUploadApproval(approval, {
     jobId: approval.jobId,
     artifactSha256: video.sha256,
     metadataVersion: metadata.sha256,
-    contentType: "long_form"
+    contentType
   });
 }
 
@@ -118,6 +118,26 @@ test("rejects missing or mismatched captions, thumbnail and required export chec
   f.approval.technicalValidationReceipt.checks = ["mp4-sha256"];
   f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
   assert.throws(() => validate(f.approval, f.video, f.metadata), /exact approved captions/);
+
+  f.approval.technicalValidationReceipt.captionsSha256 = f.approval.relatedArtifacts.find(item => item.path.endsWith(".srt")).sha256;
+  f.approval.technicalValidationReceipt.thumbnail.sha256 = hash("other-thumbnail");
+  f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
+  assert.throws(() => validate(f.approval, f.video, f.metadata), /exact 1280x720 approved thumbnail/);
+
+  f.approval.technicalValidationReceipt.thumbnail.sha256 = f.approval.relatedArtifacts.find(item => item.path.endsWith(".jpg")).sha256;
+  f.approval.technicalValidationReceipt.checks = ["mp4-sha256"];
+  f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
+  assert.throws(() => validate(f.approval, f.video, f.metadata), /missing required export/);
+});
+
+test("accepts a correctly bound vertical Short receipt", () => {
+  const f = fixture();
+  f.approval.contentType = "short";
+  Object.assign(f.approval.technicalValidationReceipt.artifacts[0], {
+    durationSeconds: 55, width: 1080, height: 1920
+  });
+  f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
+  assert.equal(validate(f.approval, f.video, f.metadata, "short"), true);
 });
 
 test("rejects a receipt with the wrong format dimensions or duration", () => {
