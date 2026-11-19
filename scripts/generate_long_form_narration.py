@@ -3,9 +3,13 @@
 This script only creates local draft files. It never uploads or publishes.
 """
 from pathlib import Path
+import argparse
 import asyncio
+import hashlib
+import json
 import re
 import sys
+from datetime import datetime, timezone
 
 try:
     from mutagen.mp3 import MP3
@@ -21,7 +25,26 @@ except ImportError:
 SOURCE = Path("content/long-form-scripts.md")
 OUT = Path("media/long-form-drafts")
 VOICE = "en-US-GuyNeural"
+NONCOMMERCIAL_AUDITION_NOTICE = (
+    "This Edge TTS voice is not owner-approved or commercially cleared. "
+    "It may be generated only as an explicitly acknowledged internal audition and cannot be used commercially."
+)
 CAPTION_MAX_WORDS = 7
+
+def require_noncommercial_audition(acknowledged: bool) -> bool:
+    if acknowledged is not True:
+        raise SystemExit(
+            "BLOCKED: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+            "Pass --allow-noncommercial-audition only for internal evaluation."
+        )
+    return True
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 CAPTION_MAX_CHARS = 42
 
 def clean_script(text: str) -> str:
@@ -126,11 +149,14 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
         cursor = end
     return "\n".join(lines).rstrip() + "\n"
 
-async def main():
+async def main(allow_noncommercial_audition: bool = False):
+    require_noncommercial_audition(allow_noncommercial_audition)
     if not SOURCE.exists():
         raise SystemExit(f"ERROR: Missing source file: {SOURCE}")
     OUT.mkdir(parents=True, exist_ok=True)
-    episodes = extract_episodes(SOURCE.read_text(encoding="utf-8"))
+    source_text = SOURCE.read_text(encoding="utf-8")
+    episodes = extract_episodes(source_text)
+    generated_files = []
     for number, title, text in episodes:
         stem = f"long-{int(number):03d}-narration-draft"
         target = OUT / f"{stem}.mp3"
@@ -160,10 +186,49 @@ async def main():
             caption_mode = "approximate text-distributed timings; human timing review required"
             print(f"WARNING: Episode {number} had no TTS word-boundary data; using approximate caption timings.")
         srt_target.write_text(caption_text, encoding="utf-8")
+        generated_files.append({
+            "id": f"long-{int(number):03d}",
+            "title": title,
+            "audioFile": target.name,
+            "audioSha256": sha256_file(target),
+            "textFile": text_target.name,
+            "textSha256": sha256_file(text_target),
+            "captionsFile": srt_target.name,
+            "captionsSha256": sha256_file(srt_target),
+            "wordCount": len(text.split()),
+            "captionMode": caption_mode
+        })
         print(f"CREATED draft narration: {target} | {title} | {len(text.split())} words")
         print(f"CREATED narration text: {text_target}")
         print(f"CREATED draft captions: {srt_target} | {caption_mode}")
-    print("DRAFT ONLY: review pronunciation, factual accuracy, caption punctuation/timing, voice quality, and total runtime. No upload or publishing occurred.")
+    manifest = {
+        "schemaVersion": 1,
+        "status": "INTERNAL_AUDITION_ONLY",
+        "provider": "Edge TTS",
+        "voice": VOICE,
+        "voiceApprovalStatus": "NOT_OWNER_APPROVED",
+        "licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+        "commercialUseAllowed": False,
+        "productionUseAllowed": False,
+        "publishingEnabled": False,
+        "humanReviewRequired": True,
+        "sourceScriptPath": str(SOURCE),
+        "sourceScriptSha256": hashlib.sha256(source_text.encode("utf-8")).hexdigest(),
+        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "files": generated_files,
+        "notice": NONCOMMERCIAL_AUDITION_NOTICE
+    }
+    (OUT / "narration-audition-manifest.json").write_text(
+        json.dumps(manifest, indent=2) + "\\n", encoding="utf-8"
+    )
+    print("INTERNAL AUDITION ONLY: Edge TTS is not the approved Roderic voice and cannot be used commercially. No upload or publishing occurred.")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(description="Generate non-commercial Edge TTS internal audition drafts only.")
+    parser.add_argument(
+        "--allow-noncommercial-audition",
+        action="store_true",
+        help="Explicitly acknowledge that generated audio is non-commercial internal evaluation only."
+    )
+    args = parser.parse_args()
+    asyncio.run(main(args.allow_noncommercial_audition))
