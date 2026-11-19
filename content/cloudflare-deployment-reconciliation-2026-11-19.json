@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-11-19T13:08:58.133Z",
-  "status": "BLOCKED_PRODUCTION_NOT_DEPLOYED_STAGING_PROVENANCE_AND_TRUST_MISMATCH",
-  "mode": "READ_ONLY_CLOUDFLARE_API_AND_D1_SELECT_ONLY",
+  "checkedAt": "2026-11-19T15:24:00Z",
+  "status": "BLOCKED_PRODUCTION_NOT_DEPLOYED_STAGING_SOURCE_MATCHED_BUT_OIDC_TRUST_AND_R2_UNAVAILABLE",
+  "mode": "READ_ONLY_CLOUDFLARE_API_AND_D1_SELECT_ONLY; no Cloudflare resources changed during this reconciliation",
   "accountId": "bba3ba6fc08653dc66349b5a313f518d",
   "workers": [
     {
@@ -14,34 +14,124 @@
       "latestDeploymentAt": "2026-11-14T19:06:42.659275Z",
       "deploymentCount": 7,
       "workersDevSubdomainEnabled": true,
-      "workersDevHost": "kajiboye44.workers.dev",
       "previewUrlsEnabled": false,
-      "production": false
+      "production": false,
+      "liveSourceExactMatch": true,
+      "matchedRepositoryRef": "6302fae3cda5255296dcc50de69254e70dc61481",
+      "matchedModuleCount": 8
     },
     {
       "name": "nature-frontiers-publisher",
       "createdAt": "2026-11-10T22:48:43.942351Z",
       "lastDeployedFrom": "api",
       "production": true,
+      "workersDevSubdomainEnabled": true,
+      "customRoutes": [],
       "brand": "Nature Frontiers",
+      "role": "health-only, not an operational publisher",
+      "publishingEnabled": false,
+      "dryRun": true,
+      "emergencyStop": true,
+      "environmentVariableNames": [],
+      "bindings": [
+        {
+          "name": "DB",
+          "type": "d1"
+        }
+      ],
+      "responseContract": {
+        "getHealth": "200 with safe publishing flags and database schema status",
+        "nonGet": "405",
+        "otherPaths": "404"
+      },
       "mustRemainSeparateFromSonicVhibez": true
     },
     {
       "name": "nature-frontiers-browser-qc",
-      "createdAt": "2026-11-12T14:27:28.281806Z",
-      "lastDeployedFrom": "api",
       "production": false
     },
     {
       "name": "hello-world",
-      "createdAt": "2026-04-19T22:22:08.290771Z",
-      "lastDeployedFrom": "api",
       "production": false
     }
   ],
   "sonicvhibezStagingWorker": {
     "name": "sonicvhibez-durable-state-staging",
-    "sourceProvenance": "Dashboard deployment; no exact Git source SHA recorded",
+    "sourceProvenance": {
+      "deploymentMethod": "Cloudflare Dashboard",
+      "dashboardMetadataGitSha": null,
+      "independentlyVerifiedExactContentMatch": true,
+      "matchedRepositoryRef": "6302fae3cda5255296dcc50de69254e70dc61481",
+      "snapshotDirectory": "cloudflare/staging-snapshot/",
+      "moduleCount": 8,
+      "modules": [
+        {
+          "path": "cloudflare/staging-snapshot/worker.js",
+          "blobSha": "c60b99944de42a31e60dc5a427645eb61b31a8c5",
+          "exactMatch": true
+        },
+        {
+          "path": "cloudflare/staging-snapshot/dashboard-state-compat.js",
+          "blobSha": "297b0e82a5bae826099bc8c3b1940337e15a5ae5",
+          "exactMatch": true
+        },
+        {
+          "path": "cloudflare/staging-snapshot/draft-compat.js",
+          "blobSha": "c1fc338bfcdf6f931fb1d187b57e9d00ca5c8b96",
+          "exactMatch": true
+        },
+        {
+          "path": "cloudflare/staging-snapshot/facebook-idea-compat.js",
+          "blobSha": "2fabbe0fe6ede3c8ab801ccc93f2912fdcf280de",
+          "exactMatch": true
+        },
+        {
+          "path": "cloudflare/staging-snapshot/weekly-plan-compat.js",
+          "blobSha": "cab507dc967187c151361718e395878416bc590a",
+          "exactMatch": true
+        },
+        {
+          "path": "cloudflare/staging-snapshot/authoring-review-compat.js",
+          "blobSha": "c2b1e06caffc9564490513172297913f7674fc0e",
+          "exactMatch": true
+        },
+        {
+          "path": "cloudflare/staging-snapshot/campaigns-compat.js",
+          "blobSha": "f2d4cb8254d5548bdaf19fd6895db005e2ff59f7",
+          "exactMatch": true
+        },
+        {
+          "path": "cloudflare/staging-snapshot/content-job-lifecycle-compat.js",
+          "blobSha": "b72783205bc2b904139e4f4f644a178d765e92e7",
+          "exactMatch": true
+        }
+      ],
+      "note": "All live multipart Worker modules match the tracked staging snapshot byte-for-byte after newline normalization. The current cloudflare/worker.js is a different, smaller state-only worker and is not deployed."
+    },
+    "currentRepoWorkerSource": {
+      "path": "cloudflare/worker.js",
+      "deployed": false,
+      "implementedRoutes": [
+        "GET /healthz",
+        "GET /api/state",
+        "POST /api/state/bootstrap"
+      ],
+      "missingRunnerBridgeRoutes": [
+        "GET /api/runner/ready",
+        "GET /api/runner/session/status",
+        "POST /api/runner/session",
+        "POST /api/runner/session/complete",
+        "GET /api/runner/snapshot",
+        "PUT /api/runner/snapshot",
+        "GET /api/runner/backoff",
+        "PUT /api/runner/backoff",
+        "GET /api/runner/artifacts",
+        "POST /api/runner/artifacts/create",
+        "POST /api/runner/artifacts/part",
+        "POST /api/runner/artifacts/complete"
+      ],
+      "compatibilityDecision": "Do not deploy the state-only file over the full staging Worker until the bridge/API contract is reconciled."
+    },
     "bindings": {
       "d1": {
         "name": "STATE_DB",
@@ -50,21 +140,32 @@
       },
       "r2": {
         "name": "ARTIFACTS",
-        "bucketName": "sonicvhibez-artifacts-staging"
+        "bucketName": "sonicvhibez-artifacts-staging",
+        "accountLevelEnabled": false,
+        "accessVerified": false
       },
       "secretsPresent": [
         "DASHBOARD_OPERATOR_ID",
         "DASHBOARD_OPERATOR_TOKEN"
       ]
     },
+    "workersDevSubdomainEnabled": true,
+    "previewUrlsEnabled": false,
     "oidcTrust": {
       "repository": "clickerrish-art/YT-AUTO-VISE",
       "ref": "refs/heads/codex/cloudflare-adapter-integration-20261108",
       "workflow": "clickerrish-art/YT-AUTO-VISE/.github/workflows/repository-runner.yml@refs/heads/codex/cloudflare-adapter-integration-20261108",
       "eventName": "workflow_dispatch",
       "currentImplementationBranch": "codex/marketing-machine-audit-fixes",
+      "oldTrustedBranchExists": true,
+      "oldTrustedBranchProtected": false,
+      "currentBranchProtected": false,
+      "currentBranchHasRepositoryRunnerWorkflow": false,
+      "oldWorkflowRequiresExplicitOptIn": true,
+      "oldWorkflowDispatchLimit": 1,
+      "workflowDispatchRunsOnOldBranch": 0,
       "mismatch": true,
-      "securityDecision": "Do not broaden or replace the trusted ref until main/branch protection and the intended runner workflow identity are owner-verified."
+      "securityDecision": "Keep production dispatch disabled. Align the trust only after branch protection is enabled and a reviewed, manual-only runner workflow exists on the intended protected branch."
     }
   },
   "d1": {
@@ -80,9 +181,7 @@
         "runner_artifacts",
         "runner_artifact_parts"
       ],
-      "systemTables": [
-        "_cf_KV"
-      ],
+      "applicationTableCount": 6,
       "rowCounts": {
         "dashboard_state": 1,
         "dashboard_backups": 5,
@@ -92,8 +191,8 @@
         "runner_artifact_parts": 0
       },
       "dashboardState": {
-        "revision": 2,
-        "stateBytes": 4376,
+        "revision": 3,
+        "stateBytes": 11238,
         "updatedAt": "2026-11-15T08:11:30.218Z"
       },
       "backups": {
@@ -101,23 +200,44 @@
         "firstAt": "2026-11-15T07:48:50.443Z",
         "latestAt": "2026-11-15T07:48:50.443Z"
       },
-      "runnerActivity": "No persisted runner state, controls, artifacts or artifact parts."
+      "runnerActivity": "No persisted runner state, controls, artifacts or artifact parts.",
+      "metadataNote": "The D1 list endpoint reports num_tables=0, but direct read-only sqlite_master SELECT verifies six application tables."
     },
     "natureFrontiersProduction": {
       "name": "nature-frontiers-prod-state",
       "id": "9b2e439d-5fd4-4812-a938-e1739fbe8795",
       "version": "production",
-      "tableCount": 0,
       "brand": "Nature Frontiers",
-      "mustRemainSeparateFromSonicVhibez": true
+      "applicationTables": [
+        "content_items",
+        "approvals",
+        "media_rights",
+        "publication_attempts",
+        "audit_events",
+        "meta_webhook_events",
+        "content_targets"
+      ],
+      "applicationTableCount": 7,
+      "rowCounts": {
+        "content_items": 0,
+        "approvals": 0,
+        "media_rights": 0,
+        "publication_attempts": 0,
+        "audit_events": 0,
+        "meta_webhook_events": 0,
+        "content_targets": 0
+      },
+      "note": "Schema exists but no content, approval, rights, publication-attempt, audit or webhook records are stored."
     }
   },
   "r2": {
     "listApiStatus": 403,
     "errorCode": 10042,
     "message": "Please enable R2 through the Cloudflare Dashboard.",
+    "accountLevelEnabled": false,
     "stagingWorkerBindingExists": true,
-    "verifiedBucketAccess": false
+    "verifiedBucketAccess": false,
+    "productionUseBlocked": true
   },
   "durableObjects": {
     "namespaceCount": 0
@@ -127,18 +247,21 @@
       "path": ".github/workflows/cloudflare-staging-auth-smoke.yml",
       "supportsWorkflowDispatch": true,
       "readOnly": true,
-      "status": "NOT_RUN"
+      "status": "NOT_RUN",
+      "note": "This is a live read-only smoke and has not yet been run against the current live Worker."
     },
     "stagingBackupRestoreDrill": {
       "path": ".github/workflows/cloudflare-staging-backup-restore-smoke.yml",
       "supportsWorkflowDispatch": true,
       "requiresConfirmInput": "YES",
       "mutatesStagingD1": true,
-      "status": "NOT_RUN",
-      "reason": "No explicit approval to mutate persistent staging state."
+      "status": "PASS",
+      "runId": 43701290286,
+      "ownerApproval": "Explicit staging-only recovery-drill approval was given in the prior conversation; no production mutation.",
+      "result": "Exact pre-test state restored; automatic pre-restore backup and audit receipt retained; revision advanced; state stable after Node restart."
     },
     "localDeploymentRecoverySmoke": {
-      "runId": 44527617447,
+      "runId": 44552068277,
       "status": "PASS",
       "note": "Local/application recovery acceptance; not a live production deployment proof."
     }
@@ -146,19 +269,22 @@
   "safety": {
     "productionWorkerCreated": false,
     "productionDeploymentAttempted": false,
-    "stagingWorkerChanged": false,
-    "d1Mutated": false,
+    "stagingWorkerChangedThisSession": false,
+    "d1MutatedHistoricallyByAuthorizedDrill": true,
+    "d1MutatedThisSession": false,
     "r2Changed": false,
     "durableObjectCreated": false,
-    "publishingEnabled": false
+    "publishingEnabled": false,
+    "productionJobDispatched": false
   },
   "requiredNextActions": [
-    "Owner verifies branch protection before any OIDC trust-policy change.",
-    "Align staging runner OIDC trust with the intended protected branch/workflow and deploy from an exact reviewed source SHA; do not trust the unprotected implementation branch by default.",
-    "Run the read-only authenticated staging smoke through workflow_dispatch and record its exact run/artifact.",
-    "Owner explicitly approves the staging backup/restore drill (workflow_dispatch confirm=YES) before it mutates staging D1.",
-    "Enable/verify R2 in the Cloudflare Dashboard or remove the unused binding; then verify bucket access and artifact accounting.",
-    "Provision a separate SonicVhibez production Worker and production D1 only after source provenance, auth, secrets, storage and recovery are verified.",
-    "Keep Nature Frontiers production Worker/D1 separate; do not connect its YouTube identity to SonicVhibez publishing."
+    "Owner/admin enables branch protection and required checks before any OIDC trust-policy change.",
+    "Reconcile the source/deployment contract: the deployed staging Worker matches cloudflare/staging-snapshot/*, while cloudflare/worker.js is state-only and lacks the runner-bridge endpoints. Do not deploy the smaller file over staging.",
+    "Create and review a manual-only, explicit-opt-in runner workflow on the intended protected implementation branch; align the Worker OIDC ref/workflow to that exact workflow and source SHA only after protection is verified.",
+    "Run the existing read-only authenticated staging smoke through workflow_dispatch and record its exact run/artifact; it has not yet been run against the live Worker in this checkpoint.",
+    "Enable and verify R2 in the Cloudflare Dashboard, or remove the unavailable ARTIFACTS binding and approve a durable free alternative. Enabling R2 may have account/billing implications and requires owner action.",
+    "Verify persisted runner lease/backoff and artifact accounting after the R2/runner contract is aligned; staging D1 currently has no runner state/control/artifact rows.",
+    "Provision a separate SonicVhibez production Worker and production D1 only after source provenance, protected OIDC, secrets, storage and recovery are verified.",
+    "Keep the Nature Frontiers health-only Worker/D1 separate; its production D1 schema currently has zero records and it has no provider publishing capability. Do not connect its YouTube identity to SonicVhibez publishing."
   ]
 }
