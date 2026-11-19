@@ -31,7 +31,7 @@ The render passed the technical duration and clipping checks. These metrics do n
 - Model card describes a single-speaker US-English male voice, medium quality, trained from public-domain LibriVox recordings.
 - Engine: `OHF-Voice/piper1-gpl` 1.8.0, GPL-3.0-or-later.
 
-The public-domain status of the source recordings does not automatically settle all commercial-use, model-weight, engine-distribution or attribution obligations. The pinned model card and attribution file are retained in the review artifact. Owner/commercial attribution review remains pending.
+The pinned model card identifies the voice as trained from scratch on public-domain LibriVox recordings. The Piper project's current commercial-use list explicitly includes `en_US-norman-medium` under “Voices trained from scratch” with dataset license “Public domain” (https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md). This is the strongest available project-level evidence that the voice's training-data chain permits commercial use. Piper's licensing guide still cautions that it is not legal advice and leaves the derivative-work question to the user; retain the pinned MODEL_CARD and attribution record, and do not redistribute the ONNX model or Piper engine as part of the video. The engine is GPL-3.0-or-later; that software license is distinct from the generated audio and voice-model data. Owner listening/selection remains pending.
 
 ## Required owner decision
 
