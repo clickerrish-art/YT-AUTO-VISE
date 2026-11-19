@@ -311,6 +311,44 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
   if (!approval.technicalValidationReceipt || typeof approval.technicalValidationReceipt !== "object" || Array.isArray(approval.technicalValidationReceipt)) throw new Error("exact technical-validation receipt is missing");
   const actualTechnicalValidationSha256 = crypto.createHash("sha256").update(JSON.stringify(approval.technicalValidationReceipt)).digest("hex");
   if (approval.technicalValidationSha256 !== actualTechnicalValidationSha256) throw new Error("technical-validation receipt checksum does not match the approval-bound receipt");
+  const receipt = approval.technicalValidationReceipt;
+  if (receipt.metadataVersion !== metadataVersion) throw new Error("technical-validation receipt metadata hash does not match the exact upload metadata");
+  const receiptVideo = Array.isArray(receipt.artifacts)
+    ? receipt.artifacts.find(item => item?.sha256 === artifactSha256 && typeof item.path === "string")
+    : null;
+  if (!receiptVideo || !approval.relatedArtifacts?.some(item => item.path === receiptVideo.path && item.sha256 === artifactSha256)) {
+    throw new Error("technical-validation receipt must bind the exact upload video path and SHA-256");
+  }
+  if (approvedFormat === "short") {
+    if (receiptVideo.width !== 1080 || receiptVideo.height !== 1920 ||
+        !Number.isFinite(receiptVideo.durationSeconds) || receiptVideo.durationSeconds < 50 || receiptVideo.durationSeconds > 60) {
+      throw new Error("technical-validation receipt does not prove the required 1080x1920, 50–60 second Short export");
+    }
+  } else if (receiptVideo.width !== 1920 || receiptVideo.height !== 1080 ||
+      !Number.isFinite(receiptVideo.durationSeconds) || receiptVideo.durationSeconds < 360 || receiptVideo.durationSeconds > 600) {
+    throw new Error("technical-validation receipt does not prove the required 1920x1080, 6–10 minute long-form export");
+  }
+  if (receipt.captionsPath !== "string" || !/^[a-f0-9]{64}$/.test(receipt.captionsSha256 ?? "") ||
+      !approval.relatedArtifacts.some(item => item.path === receipt.captionsPath && item.sha256 === receipt.captionsSha256 && /\.srt$/i.test(item.path))) {
+    throw new Error("technical-validation receipt must bind the exact approved captions path and SHA-256");
+  }
+  if (!receipt.thumbnail || typeof receipt.thumbnail.path !== "string" ||
+      !/^[a-f0-9]{64}$/.test(receipt.thumbnail.sha256 ?? "") ||
+      receipt.thumbnail.width !== 1280 || receipt.thumbnail.height !== 720 ||
+      !approval.relatedArtifacts.some(item => item.path === receipt.thumbnail.path && item.sha256 === receipt.thumbnail.sha256 && /\.(jpg|jpeg|png|webp)$/i.test(item.path))) {
+    throw new Error("technical-validation receipt must bind the exact 1280x720 approved thumbnail");
+  }
+  const requiredChecks = [
+    "metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration",
+    "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"
+  ];
+  if (!Array.isArray(receipt.checks) || requiredChecks.some(check => !receipt.checks.includes(check))) {
+    throw new Error("technical-validation receipt is missing required export, metadata, caption or thumbnail checks");
+  }
+  if (typeof receipt.checkedAt !== "string" || !/(Z|[+-]\\d{2}:\\d{2})$/.test(receipt.checkedAt) ||
+      !Number.isFinite(Date.parse(receipt.checkedAt)) || Date.parse(receipt.checkedAt) > Date.now()) {
+    throw new Error("technical-validation receipt must have a valid non-future timezone-aware checkedAt timestamp");
+  }
   if (approval.publishingEnabled !== false || approval.visibility !== "private") throw new Error("approval must explicitly preserve private-only publishing");
   if (!Array.isArray(approval.relatedArtifacts) || !approval.relatedArtifacts.some(item => item?.sha256 === artifactSha256)) throw new Error("approval must bind the complete reviewed artifact set, including the uploaded MP4");
   if (!approval.relatedArtifacts.some(item => typeof item?.path === "string" && /\.(jpg|jpeg|png|webp)$/i.test(item.path) && /^[a-f0-9]{64}$/.test(item.sha256 ?? ""))) throw new Error("approval must include the reviewed thumbnail checksum");
