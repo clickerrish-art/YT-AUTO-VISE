@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { inventoryDashboardSources } from "../scripts/dashboard-inventory.mjs";
 
@@ -9,13 +10,22 @@ const matrix = JSON.parse(fs.readFileSync(
   path.join(root, "docs", "DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.json"),
   "utf8"
 ));
+const html = fs.readFileSync(path.join(root, "public", "dashboard.html"), "utf8");
+const server = fs.readFileSync(path.join(root, "scripts", "dashboard-server.mjs"), "utf8");
+const inventorySource = fs.readFileSync(path.join(root, "scripts", "dashboard-inventory.mjs"), "utf8");
+const gitBlobSha = content => createHash("sha1")
+  .update(Buffer.from("blob " + Buffer.byteLength(content) + "\\0"))
+  .update(content)
+  .digest("hex");
 const inventory = inventoryDashboardSources(
-  fs.readFileSync(path.join(root, "public", "dashboard.html"), "utf8"),
-  fs.readFileSync(path.join(root, "scripts", "dashboard-server.mjs"), "utf8")
+  html,
+  server
 );
 
 test("dashboard control acceptance register exactly matches the live source inventory", () => {
   assert.equal(matrix.schemaVersion, 1);
+  assert.equal(matrix.sourceBlobs.dashboardHtml, gitBlobSha(html));
+  assert.equal(matrix.sourceBlobs.dashboardInventoryScript, gitBlobSha(inventorySource));
   assert.equal(matrix.repository, "clickerrish-art/YT-AUTO-VISE");
   assert.equal(matrix.branch, "codex/marketing-machine-audit-fixes");
   assert.equal(matrix.inventory.controls, inventory.counts.controls);
