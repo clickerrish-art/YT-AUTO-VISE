@@ -195,9 +195,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -229,9 +229,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -263,9 +263,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -294,9 +294,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/instagram-approval-service.test.mjs"
@@ -329,9 +329,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
         "test/dashboard-dispatchable-ordering.integration.test.mjs"
@@ -364,9 +364,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -399,9 +399,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -433,9 +433,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-queue-diagnostics.integration.test.mjs"
       ]
@@ -467,9 +467,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
@@ -502,9 +502,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
@@ -534,9 +534,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/nature-frontiers-media-register-api.test.mjs"
       ]
@@ -568,9 +568,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs",
         "test/state-recovery-dashboard.integration.test.mjs"
@@ -601,9 +601,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -635,9 +635,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs"
       ]
@@ -673,9 +673,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/campaign-management-api.integration.test.mjs"
       ]
@@ -707,9 +707,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
         "test/dashboard-api-request-boundaries.test.mjs"
@@ -742,9 +742,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs"
       ]
@@ -776,9 +776,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ]
@@ -807,8 +807,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
       "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
@@ -838,9 +838,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ]
@@ -863,8 +863,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
       "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
@@ -885,8 +885,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
       "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
@@ -913,8 +913,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
       "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
@@ -944,9 +944,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
         "test/dashboard-api-job-cancellation.integration.test.mjs"
@@ -980,9 +980,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ]
@@ -1014,9 +1014,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ]
@@ -1048,9 +1048,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -1084,9 +1084,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-completion.integration.test.mjs"
       ]
@@ -1118,9 +1118,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -1152,9 +1152,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -1186,9 +1186,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "browser-tests/dashboard.spec.mjs"
@@ -1229,9 +1229,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -1263,9 +1263,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -1296,9 +1296,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-parent-relationship.integration.test.mjs"
       ]
@@ -1329,8 +1329,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
       "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
@@ -1360,9 +1360,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ]
@@ -1394,9 +1394,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ]
@@ -1428,9 +1428,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-render-recovery-reconcile.integration.test.mjs"
       ]
@@ -1462,9 +1462,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-retry.integration.test.mjs"
       ]
@@ -1495,9 +1495,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs"
       ]
@@ -1530,9 +1530,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-rights-verification.integration.test.mjs"
       ]
@@ -1578,9 +1578,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-cancellation.integration.test.mjs"
       ]
@@ -1614,9 +1614,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-validation-idempotency.integration.test.mjs"
       ]
@@ -1645,9 +1645,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -1677,9 +1677,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -1712,9 +1712,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-task-runner.test.mjs"
       ]
@@ -1743,8 +1743,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
       "currentHeadEvidenceNote": "Missing and invalid operator authentication rejected on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db in full automation/security run 44527617194 (1,022 Node tests across 176 files; 86 Python tests; zero skips; npm audit zero vulnerabilities). Positive route-specific acceptance remains NOT_TESTED for 42 routes; six provider/production-gated routes remain BLOCKED."
     },
     {
@@ -1774,9 +1774,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "02537b567c81ad972158d617915621f1599716fe",
-      "currentHeadEvidenceRunId": 44548858784,
-      "currentHeadEvidenceNote": "Exact endpoint-specific test file(s) for this route were included in the complete 178/178-file Node suite on source/test SHA 02537b567c81ad972158d617915621f1599716fe; 1,027 Node tests passed with zero failures/skips, 86 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-operator-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784. This is local application/fixture evidence, not live provider or production publication evidence.",
+      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+      "currentHeadEvidenceRunId": 44551312412,
+      "currentHeadEvidenceNote": "Endpoint-specific authorized-success test file(s) for this route were included in the complete 178/178-file Node regression on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; 1,027 Node tests passed with zero failures/skips, 87 Python tests passed, and npm audit found zero vulnerabilities. The 48-route missing/invalid-authentication matrix also passed. Run: https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412. This is local application/fixture evidence, not live provider or production publication evidence.",
       "currentHeadEvidenceTestFiles": [
         "test/worker-quarantine-release.test.mjs"
       ]
@@ -2021,16 +2021,16 @@
     "overallBlocked": 6
   },
   "latestCurrentHeadAuthenticationEvidence": {
-    "sourceSha": "02537b567c81ad972158d617915621f1599716fe",
-    "runId": 44548858784,
+    "sourceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+    "runId": 44551312412,
     "status": "PASS",
     "protectedRoutes": 48,
     "nodeTests": 1027,
     "nodeFiles": 178,
-    "pythonTests": 86,
+    "pythonTests": 87,
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "note": "The complete exact-source/test-SHA regression includes the source-derived negative-authentication test, which confirms missing and invalid operator credentials are rejected before route validation or mutation for all 48 protected API routes. This is separate from the 42 authorized positive routes and six externally blocked routes."
+    "note": "The complete exact-source/test-SHA regression includes the source-derived negative-authentication test for all 48 protected API routes. This is separate from the 42 authorized positive routes and six externally blocked routes."
   },
   "latestBranchTipAtEvidenceRefresh": "916e0b90a1c5fb2ffb091ba22747bc783a480a79",
   "latestApplicationSourceChangeSha": "a3a3a7a69cd84043da160667fcb6f0d3f4a22246",
@@ -2038,28 +2038,28 @@
   "sourceTestEvidenceStatus": "PASS on exact source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db: full automation/security run 44527617194 passed 1,022 Node tests across 176 files, 86 Python tests, zero skips, npm audit 0 vulnerabilities. This verifies the API authentication-negative matrix on the current source/test tree, not positive route acceptance.",
   "latestApplicationSourceTestTreeSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
   "latestCurrentHeadPositiveEvidence": {
-    "sourceTestSha": "02537b567c81ad972158d617915621f1599716fe",
-    "runId": 44548858784,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784",
+    "sourceTestSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+    "runId": 44551312412,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412",
     "positiveRouteCount": 42,
     "blockedRouteCount": 6,
     "nodeTestFilesPassed": 178,
     "nodePassed": 1027,
     "nodeFailed": 0,
     "nodeSkipped": 0,
-    "pythonPassed": 86,
+    "pythonPassed": 87,
     "npmAuditVulnerabilities": 0
   },
   "currentHeadReconciliation": {
     "status": "PASS",
-    "observedImplementationHeadSha": "02537b567c81ad972158d617915621f1599716fe",
-    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44548858784",
+    "observedImplementationHeadSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
+    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412",
     "regressionRunResults": {
       "nodePassed": 1027,
       "nodeFailed": 0,
       "nodeSkipped": 0,
       "nodeTestFilesPassed": 178,
-      "pythonPassed": 86,
+      "pythonPassed": 87,
       "npmAuditVulnerabilities": 0
     },
     "positiveRoutesReconciled": 42,
