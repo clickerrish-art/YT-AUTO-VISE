@@ -118,6 +118,22 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+      - name: Verify non-commercial audition manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("media/long-form-drafts/narration-audition-manifest.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          assert data["status"] == "INTERNAL_AUDITION_ONLY"
+          assert data["licenseStatus"] == "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"
+          assert data["commercialUseAllowed"] is False
+          assert data["productionUseAllowed"] is False
+          assert data["publishingEnabled"] is False
+          assert data["voiceApprovalStatus"] == "NOT_OWNER_APPROVED"
+          assert len(data["files"]) == 2
+          print("PASS: long-form artifacts are explicitly non-commercial internal auditions only.")
+          PY
       - name: Enforce 6–10 minute target after preserving draft artifact
         if: always()
         run: |
