@@ -219,7 +219,7 @@ async def main(allow_noncommercial_audition: bool = False):
         "notice": NONCOMMERCIAL_AUDITION_NOTICE
     }
     (OUT / "narration-audition-manifest.json").write_text(
-        json.dumps(manifest, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
     )
     print("INTERNAL AUDITION ONLY: Edge TTS is not the approved Roderic voice and cannot be used commercially. No upload or publishing occurred.")
 
