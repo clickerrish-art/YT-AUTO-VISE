@@ -63,6 +63,15 @@ class NarrationTests(unittest.TestCase):
         source = path.read_text(encoding="utf-8")
         self.assertEqual(source.count("def has_owner_approved_selar_disclosure("), 1)
 
+    def test_edge_tts_requires_explicit_noncommercial_audition_acknowledgement(self):
+        with self.assertRaisesRegex(SystemExit, "not the approved Roderic voice"):
+            module.require_noncommercial_audition(False)
+        self.assertTrue(module.require_noncommercial_audition(True))
+
+    def test_edge_tts_audition_notice_explicitly_prohibits_commercial_use(self):
+        self.assertIn("not owner-approved", module.NONCOMMERCIAL_AUDITION_NOTICE)
+        self.assertIn("cannot be used commercially", module.NONCOMMERCIAL_AUDITION_NOTICE)
+
     def test_rejects_short_narration(self):
         with self.assertRaisesRegex(ValueError, "125–150"):
             module.extract_read("## Short 001\n**Read:**\nToo short.\n**Performance notes:** x", "short-001")
