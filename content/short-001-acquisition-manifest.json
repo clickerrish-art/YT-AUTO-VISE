@@ -6,12 +6,13 @@
   "createdAt": "2026-11-19T12:47:41.692Z",
   "sourceSelection": "Four clips explicitly approved by the owner",
   "acquisition": {
-    "workflowRunId": 44527616852,
-    "workflowRunNumber": 13,
-    "artifactId": 14531991114,
+    "workflowRunId": 44576264343,
+    "workflowRunNumber": 119,
+    "artifactId": 14556226994,
     "artifactName": "sonicvhibez-short-001-approved-pexels-source",
-    "artifactSha256": "100e08d18bf580c5a463fc2e3655f163b6c5cd8a8808ba55bf3898fce39a230f",
-    "artifactExpiresAt": "2026-11-26T12:51:01Z"
+    "artifactSha256": "5cf86f3f9bbc2fcc4353b0b05141de2e23fe681d10152a02b80712e20287ad52",
+    "artifactExpiresAt": "2026-11-26T17:21:30Z",
+    "exactSourceSha": "fe903d3e7eda9e00fc0ed2ca841b1c75f938438a"
   },
   "pexelsLicense": {
     "url": "https://www.pexels.com/license/",
@@ -70,7 +71,8 @@
         "rightsVerified": false,
         "releaseEligible": false,
         "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
-      }
+      },
+      "preliminaryVisualFlag": "A dark collar/strap is visible on one lion in sampled frames; its function is unverified. Do not imply an uncollared or unmonitored wild encounter; owner/editor context review is required."
     },
     {
       "assetId": "pexels-11760785",
@@ -191,7 +193,13 @@
     "totalSourceDurationSeconds": 53.033699,
     "fullPlaybackCompleted": false,
     "ownerHumanReviewCompleted": false,
-    "note": "A visual-only 53-second preview assembly exists separately for owner review; it is not the final 1080x1920 narrated Short."
+    "note": "A visual-only 53-second preview assembly exists separately for owner review; it is not the final 1080x1920 narrated Short.",
+    "technicalFullDecode": {
+      "status": "ALL_FOUR_FILES_FULLY_DECODED",
+      "tool": "FFmpeg",
+      "method": "Each downloaded MP4 was decoded end-to-end to a null output; no decode errors were reported.",
+      "limitation": "Technical decode integrity only; not full human playback review, third-party-rights clearance, or release approval."
+    }
   },
   "previews": {
     "contactSheet": "preview/short-001-contact-sheet.jpg"
