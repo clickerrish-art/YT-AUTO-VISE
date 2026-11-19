@@ -623,7 +623,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Latest branch inventory run 44527617041: 4,550 branch-only commits, nine main-only commits, 454 final-tree changed files, zero deletions, clean working tree and 17 critical-module changes. The nine base-only commits have no net main-tree diff relative to merge base. Full semantic review of all 454 files and owner-side branch-protection verification remain incomplete.",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Latest branch inventory run 44527617041: 4,550 branch-only commits, nine main-only commits, 454 final-tree changed files, zero deletions, clean working tree and 17 critical-module changes. The nine base-only commits have no net main-tree diff relative to merge base. Full semantic review of all 454 files and owner-side branch-protection verification remain incomplete. Cloudflare staging Worker OIDC trust is pinned to a different historical branch; branch-protection owner verification must precede any trust-policy update.",
       "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
     },
     {
@@ -643,7 +643,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Deployment recovery smoke 44527617447 passed, but read-only Cloudflare inspection found no SonicVhibez production Worker, only staging; R2 is not enabled and no Durable Object namespace exists. A passing recovery test is not proof of production deployment/monitoring/rollback.",
+      "currentHeadEvidenceNote": "Read-only Cloudflare inventory on 19 Nov: no SonicVhibez production Worker; only staging Worker sonicvhibez-durable-state-staging, last deployed from Dashboard 14 Nov (version 9a9bfd4c) with no exact Git source SHA. Staging D1 has six application tables, dashboard_state revision 2, five backups last updated 15 Nov, and zero runner state/control/artifact rows. Staging R2 bucket binding exists but R2 API returns 403/code 10042 (enable R2 through Dashboard). No Durable Object namespaces. The Worker OIDC verifier trusts old branch refs/heads/codex/cloudflare-adapter-integration-20261108 and its repository-runner.yml, not current codex/marketing-machine-audit-fixes. Do not widen trust until branch protection is owner-verified. Deployment recovery smoke 44527617447 passed at application level, but live production deployment, provenance, monitoring and rollback are not verified.",
       "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
     },
     {
@@ -2096,7 +2096,7 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "NOT_TESTED_LIVE_WORKER. Worker runner and retry/backoff safety tests pass; runner bridge safety run 44527617183 passes. There is no production SonicVhibez Worker or enabled R2 artifact storage, so continuous remote dispatch and real-media execution remain unverified.",
+      "currentHeadEvidenceNote": "Worker unit/backoff/lease tests pass, but the deployed staging Worker's OIDC trust is pinned to the old branch codex/cloudflare-adapter-integration-20261108, while the implementation branch is codex/marketing-machine-audit-fixes. No runner D1 rows exist. Do not change trust until branch protection is verified.",
       "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
     },
     {
@@ -2395,15 +2395,27 @@
         "legacyScheduledDraftsReported": 20,
         "readOnlyEvidenceFile": "content/metricool-nature-frontiers-reconciliation-2026-11-19.json",
         "publishingEnabled": false
+      },
+      "cloudflareDeploymentInventory": {
+        "status": "BLOCKED",
+        "evidenceFile": "content/cloudflare-deployment-reconciliation-2026-11-19.json",
+        "stagingWorker": "sonicvhibez-durable-state-staging",
+        "productionWorker": null,
+        "stagingD1Revision": 2,
+        "stagingBackups": 5,
+        "runnerRows": 0,
+        "r2ApiStatus": 403,
+        "durableObjectNamespaces": 0,
+        "oidcTrustedRef": "refs/heads/codex/cloudflare-adapter-integration-20261108"
       }
     },
     "engineeringGates": {
       "DASH_001": "NOT_TESTED — 121 controls/17 forms; 33 journeys pass, but exhaustive per-control behavior/persistence/concurrency matrix incomplete.",
       "API_001": "BLOCKED — 42/42 positive application-level routes PASS; 48/48 auth-negative PASS; six provider/production-gated routes remain BLOCKED.",
       "SCHED_001": "NOT_TESTED — code-level policy/history/worker tests pass; live YouTube OAuth invalid_grant and complete remote history missing.",
-      "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — no SonicVhibez production Worker or enabled R2 artifact storage.",
+      "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — unit/backoff tests pass, but staging OIDC trust accepts only refs/heads/codex/cloudflare-adapter-integration-20261108; current branch differs, runner D1 tables are empty, and no production worker exists.",
       "STATE_001": "PASS — application-level durable state, backup/restore and restart tests pass; production deployment remains separate.",
-      "DEPLOY_001": "NOT_TESTED — recovery smoke passes; no SonicVhibez production Worker, R2 disabled, production rollback/monitoring unproven.",
+      "DEPLOY_001": "NOT_TESTED — no SonicVhibez production Worker; staging Worker was Dashboard-deployed 14 Nov with no exact source SHA, OIDC trust pinned to an old branch, R2 API 403, and no production D1/monitoring/rollback.",
       "GIT_002": "NOT_TESTED — 454-file semantic review incomplete; branch protection owner verification unverified.",
       "SCHED_003": "BLOCKED — weekly 2 long-form + 1 Short conflicts with 72-hour minimum; no owner-approved cadence.",
       "API_NEG_001": "PASS — 48/48 protected routes reject missing/invalid credentials.",
@@ -3326,8 +3338,8 @@
     {
       "id": "SONICVHIBEZ-PRODUCTION-DEPLOY-001",
       "status": "BLOCKED",
-      "detail": "Cloudflare read-only inspection found SonicVhibez staging Worker/D1 only; no production Worker. The staging R2 API returns 403 because R2 is not enabled; no Durable Object namespace exists.",
-      "requiredResolution": "Owner decides whether to enable R2 and provision a production Worker/D1/monitoring/rollback path. Do not deploy or activate publishing without separate approval."
+      "detail": "Read-only Cloudflare inventory on 19 Nov: no SonicVhibez production Worker; only staging Worker sonicvhibez-durable-state-staging, last deployed from Dashboard 14 Nov (version 9a9bfd4c) with no exact Git source SHA. Staging D1 has six application tables, dashboard_state revision 2, five backups last updated 15 Nov, and zero runner state/control/artifact rows. Staging R2 bucket binding exists but R2 API returns 403/code 10042 (enable R2 through Dashboard). No Durable Object namespaces. The Worker OIDC verifier trusts old branch refs/heads/codex/cloudflare-adapter-integration-20261108 and its repository-runner.yml, not current codex/marketing-machine-audit-fixes. Do not widen trust until branch protection is owner-verified.",
+      "requiredResolution": "Owner verifies branch protection; align OIDC trust with a protected branch/workflow and exact reviewed source SHA; enable/verify R2; provision a separate SonicVhibez production Worker/D1 with monitoring and rollback; do not touch Nature Frontiers production."
     },
     {
       "id": "GIT-BRANCH-PROTECTION-001",
@@ -3346,6 +3358,24 @@
       "status": "BLOCKED",
       "detail": "Final release depends on owner-held decisions and evidence: approve or exclude the visibly enclosed lion clip; confirm third-party rights; provide or approve a commercially licensed narrator; reauthorize YouTube OAuth; approve final exact hashes; provide Nature Frontiers history export; and verify branch protection.",
       "requiredResolution": "Complete each owner-held action individually. No AI-generated approval, inferred consent, voice substitution or publication is permitted."
+    },
+    {
+      "id": "CLOUDFLARE-STAGING-AUTH-SMOKE-001",
+      "status": "NOT_TESTED",
+      "detail": "The dedicated read-only authenticated staging smoke supports workflow_dispatch but has not been run. The combined PR workflow skipped its live smoke step because it was a pull_request event.",
+      "requiredResolution": "Owner triggers .github/workflows/cloudflare-staging-auth-smoke.yml using workflow_dispatch; capture the exact result without changing state."
+    },
+    {
+      "id": "CLOUDFLARE-STAGING-RECOVERY-DRILL-001",
+      "status": "NOT_TESTED",
+      "detail": "The staging backup/restore workflow supports workflow_dispatch but requires confirm=YES and creates backups/increments staging D1 revision. It has not been run to avoid an unapproved persistent-state mutation.",
+      "requiredResolution": "Owner explicitly approves the staging-only backup/restore drill, then dispatches .github/workflows/cloudflare-staging-backup-restore-smoke.yml with confirm=YES."
+    },
+    {
+      "id": "CLOUDFLARE-R2-001",
+      "status": "BLOCKED",
+      "detail": "Staging Worker has an ARTIFACTS R2 binding, but the Cloudflare R2 bucket list API returns HTTP 403/code 10042 and instructs enabling R2 through the Dashboard. Actual bucket access/artifact accounting is not verified.",
+      "requiredResolution": "Owner enables/verifies R2 in Cloudflare Dashboard or removes the unused binding; then rerun a read-only artifact accounting check."
     }
   ],
   "updatedAt": "2026-11-19T13:01:38.049Z"
