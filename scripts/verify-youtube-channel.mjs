@@ -60,6 +60,9 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
     oauthScopeStatus = assertRequiredYoutubeOAuthScopes(tokenInfo);
     uploadScopeCheckedAt = new Date().toISOString();
   }
+  if (!oauth || !oauthScopeStatus.allowed) {
+    throw new Error("both required YouTube OAuth scopes must be verified before read-only channel access");
+  }
   if (youtubeFactory) {
     youtube = youtubeFactory({ clientId, clientSecret, refreshToken });
   } else {
