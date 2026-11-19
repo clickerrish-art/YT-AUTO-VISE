@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState } from "../cloudflare/worker.js";
+import { constantTimeEqual, handleRequest, operatorIdentity, validateDashboardState } from "../cloudflare/state-only-worker.js";
 
 const TOKEN="test-operator-token-that-is-long-enough";
 const ACTOR="sonicvhibez-owner";
