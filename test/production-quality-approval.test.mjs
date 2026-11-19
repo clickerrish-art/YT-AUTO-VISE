@@ -33,7 +33,19 @@ function fixture() {
     artifactHashes: { video: video.sha256, metadata: metadata.sha256, thumbnail: thumbnail.sha256,
       images: [thumbnail.sha256], captions: captions.sha256, narration: narration.sha256 }
   };
-  const technicalValidationReceipt = { passed: true, fixtureOnly: true };
+  const technicalValidationReceipt = {
+    passed: true,
+    checkedAt: new Date().toISOString(),
+    metadataVersion: metadata.sha256,
+    captionsPath: captions.path,
+    captionsSha256: captions.sha256,
+    artifacts: [{ ...video, durationSeconds: 55, width: 1080, height: 1920 }],
+    thumbnail: { ...thumbnail, width: 1280, height: 720 },
+    checks: [
+      "metadata-sha256", "caption-structure", "mp4-sha256", "ffprobe-duration",
+      "orientation", "audio-stream", "thumbnail-sha256", "thumbnail-dimensions"
+    ]
+  };
   const rightsEvidence = { assets: [{ permittedUses: ["YouTube"], verificationStatus: "VERIFIED" }] };
   const approval = {
     decision: "APPROVE", publishingEnabled: false, visibility: "private", reviewer: "Human Reviewer",
@@ -96,5 +108,40 @@ test("requires private-only release state and an exact technical-validation rece
     });
     assert.match(errors.join(" "), /private visibility/);
     assert.match(errors.join(" "), /technical-validation receipt/);
+  } finally { f.cleanup(); }
+});
+test("rejects a technical receipt that is checksummed but belongs to different export or metadata bytes", () => {
+  const f = fixture();
+  try {
+    f.approval.technicalValidationReceipt.artifacts[0].sha256 = hash("different-video");
+    f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
+    let errors = validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    });
+    assert.match(errors.join(" "), /technical-validation receipt must contain the exact final export/);
+
+    f.approval.technicalValidationReceipt.artifacts[0].sha256 = f.video.sha256;
+    f.approval.technicalValidationReceipt.metadataVersion = hash("different-metadata");
+    f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
+    errors = validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    });
+    assert.match(errors.join(" "), /receipt metadata hash does not match/);
+  } finally { f.cleanup(); }
+});
+
+test("requires the technical receipt to bind the exact captions, thumbnail and full required check set", () => {
+  const f = fixture();
+  try {
+    f.approval.technicalValidationReceipt.captionsSha256 = hash("different-captions");
+    f.approval.technicalValidationReceipt.thumbnail.sha256 = hash("different-thumbnail");
+    f.approval.technicalValidationReceipt.checks = ["mp4-sha256"];
+    f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
+    const errors = validateProductionQualityApproval(f.approval, {
+      videoPath: f.video.path, metadataPath: f.metadata.path, rootDir: f.root
+    });
+    assert.match(errors.join(" "), /exact reviewed captions/);
+    assert.match(errors.join(" "), /exact 1280x720 reviewed thumbnail/);
+    assert.match(errors.join(" "), /missing one or more required export/);
   } finally { f.cleanup(); }
 });
