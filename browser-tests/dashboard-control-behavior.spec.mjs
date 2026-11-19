@@ -8,6 +8,31 @@ const matrix = JSON.parse(fs.readFileSync(
   "utf8"
 ));
 
+const browserJourneySource = fs.readFileSync(
+  path.join(process.cwd(), "browser-tests", "dashboard.spec.mjs"),
+  "utf8"
+);
+
+const standaloneJourneys = {
+  refresh: "operator dashboard loads the authoritative schedule and persists a draft through the UI",
+  token: "operator dashboard loads the authoritative schedule and persists a draft through the UI",
+  connect: "operator dashboard loads the authoritative schedule and persists a draft through the UI",
+  createStateBackup: "read-only hash controls and the disabled backup action cannot be changed or invoked",
+  refreshStateBackups: "Cloudflare backup controls create a checkpoint and require revision-bound restore confirmation",
+  fbverifyPage: "Facebook Page verification control retains actionable blocked feedback after refreshing status",
+  instagramRefresh: "Instagram status refresh is read-only and makes no provider request",
+  search: "operator dashboard loads the authoritative schedule and persists a draft through the UI",
+  filter: "operator dashboard loads the authoritative schedule and persists a draft through the UI",
+  narrationreviewjob: "narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call",
+  narrationreviewsha: "narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call",
+  narrationreviewaudioSha: "narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call",
+  narrationreviewtranscriptSha: "narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call",
+  narrationreviewcaptionsSha: "narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call",
+  narrationreviewreportSha: "narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call",
+  task: "validation task control runs an allowlisted check and displays its durable result",
+  runTask: "validation task control runs an allowlisted check and displays its durable result"
+};
+
 const formJourneys = {
   campaignform: "campaign form single-flights a double-click and persists the successful preview after reload",
   facebookdraftform: "Facebook draft form rejects malformed claims and media JSON without issuing a draft request",
@@ -49,6 +74,12 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
   for (const form of matrix.forms) {
     expect(formJourneys[form.id], `form #${form.id} must map to an existing behavioral journey`).toBeTruthy();
     expect(form.controlIds.length, `form #${form.id} must map all of its owned controls`).toBeGreaterThan(0);
+    expect(browserJourneySource).toContain(`test("${formJourneys[form.id]}"`);
+  }
+  for (const control of matrix.controls.filter(item => !item.form)) {
+    expect(standaloneJourneys[control.id], `standalone control #${control.id} must map to a behavioral journey`).toBeTruthy();
+    expect(browserJourneySource).toContain(`test("${standaloneJourneys[control.id]}"`);
+  }
   }
 
   const mutationRequests = [];
