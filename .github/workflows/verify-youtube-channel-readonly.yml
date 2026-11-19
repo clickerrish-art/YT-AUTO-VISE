@@ -35,8 +35,8 @@ jobs:
           package-manager-cache: false
       - name: Install locked dependencies
         run: npm ci --ignore-scripts
-      - name: Run deterministic identity and pagination tests
-        run: node --test test/verify-youtube-channel.test.mjs
+      - name: Run deterministic OAuth-scope, identity and pagination tests
+        run: node --test test/youtube-oauth-scope.test.mjs test/verify-youtube-channel.test.mjs
       - name: Verify authenticated channel, upload scope and complete uploads inventory (read-only)
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
