@@ -1959,16 +1959,18 @@
         "Exact-candidate API route refresh: 38/45 routes PASS, 7/45 BLOCKED. GET /api/state/backups is now PASS from real Node-dashboard staging integration (workflow 43700604171): authenticated state/backup reads succeeded through Cloudflare Access, revision 2 and three backups were returned, and remote state was unchanged. The remaining two Cloudflare state write routes POST /api/state/backup and POST /api/state/restore are still blocked pending a separately authorized one-time staging backup/restore cycle; Meta, YouTube reconciliation and production-media routes remain external blockers.",
         "Exact-candidate API route refresh: 40/45 routes PASS, 5/45 BLOCKED. In addition to the 38 previously accepted routes, POST /api/state/backup and POST /api/state/restore now PASS from live staging workflow 43701290286: Node dashboard created an explicit backup, restored it with revision 2→3, retained explicit and automatic pre-restore backups, verified the audit receipt and exact state, restarted the Node dashboard, and verified remote state durability. The remaining five blocked routes are external Meta Page authorization, YouTube history/reconciliation and genuine production-media/provider gates; API-001 remains NOT_TESTED overall until every route is accepted.",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44551312412",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/docs/API_ROUTE_ACCEPTANCE_MATRIX.json",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44589125374",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/3295aae6a19c1e8d07cec6ac48eb624ad2f28845/docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
       ],
       "nextAction": "Resolve only the six externally blocked routes: reauthorize YouTube OAuth and verify complete upload history for upload reconciliation; verify Meta Page/Instagram identity and permissions for Facebook/Instagram approval/publishing; provide genuine production media, rights and human approval for production job execution. Do not bypass safe defaults or fabricate provider success.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "dab8fef70b6842b522f26ec5a3ba4807e33ae051",
-      "currentHeadEvidenceNote": "42/42 authorized application-level positive routes PASS on exact source/test SHA dab8fef70b6842b522f26ec5a3ba4807e33ae051; all 48/48 protected API routes reject missing/invalid operator authentication; six provider/production routes remain BLOCKED: POST /api/facebook/drafts/approve, POST /api/facebook/publish, POST /api/facebook/verify-page, POST /api/instagram/approve, POST /api/jobs/produce and POST /api/uploads/reconcile. The 1,027 Node / 87 Python full regression passed across 178 Node test files with zero skips and zero npm audit vulnerabilities. API-001 remains BLOCKED overall until the six external routes are legitimately enabled and verified.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:12:00Z"
+      "currentHeadEvidenceSha": "e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3",
+      "currentHeadEvidenceNote": "42/42 authorized application-level positive routes PASS on exact source/test SHA e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3; all 48/48 protected API routes reject missing/invalid operator authentication. The complete 181-file Node regression (1,037 tests), 87 Python tests, zero failures/skips and zero npm audit vulnerabilities passed in run 44589125374. Six provider/production routes remain BLOCKED: POST /api/facebook/drafts/approve, POST /api/facebook/publish, POST /api/facebook/verify-page, POST /api/instagram/approve, POST /api/jobs/produce and POST /api/uploads/reconcile. Their fail-closed paths have endpoint-specific real-server test references in docs/API_ROUTE_ACCEPTANCE_MATRIX.json. API-001 remains BLOCKED overall until genuine owner/provider/production prerequisites are met.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T18:54:00Z"
     },
     {
       "id": "API-NEG-001",
@@ -2584,7 +2586,7 @@
     "overallPass": 42,
     "overallNotTested": 0,
     "overallBlocked": 6,
-    "sourceTestSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db"
+    "sourceTestSha": "e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3"
   },
   "dashboardBrowserJourneys": {
     "passed": 33,
@@ -3270,7 +3272,7 @@
     "overallPass": 42,
     "overallNotTested": 0,
     "overallBlocked": 6,
-    "sourceTestSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db"
+    "sourceTestSha": "e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3"
   },
   "dashboardSnapshot": {
     "controls": 121,
@@ -3441,5 +3443,5 @@
       "requiredResolution": "Owner enables/verifies R2 in Cloudflare Dashboard or removes the unused binding; then rerun a read-only artifact accounting check."
     }
   ],
-  "updatedAt": "2026-11-19T13:01:38.049Z"
+  "updatedAt": "2026-11-19T18:54:00Z"
 }

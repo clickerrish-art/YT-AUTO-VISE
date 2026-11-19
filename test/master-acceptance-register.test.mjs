@@ -34,7 +34,7 @@ test("the owner-approved rolling publication cadence is no longer marked blocked
 test("API and dashboard acceptance statuses retain their exact evidence boundaries", () => {
   const api = byId("API-001");
   assert.equal(api.status, "BLOCKED");
-  assert.equal(api.currentHeadEvidenceSha, "dab8fef70b6842b522f26ec5a3ba4807e33ae051");
+  assert.equal(api.currentHeadEvidenceSha, "e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3");
   assert.match(api.currentHeadEvidenceNote, /42\/42 authorized application-level positive routes PASS/);
   assert.match(api.currentHeadEvidenceNote, /48\/48 protected API routes/);
   assert.match(api.currentHeadEvidenceNote, /six provider\/production routes remain BLOCKED/);
