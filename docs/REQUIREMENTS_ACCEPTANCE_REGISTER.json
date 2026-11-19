@@ -473,16 +473,17 @@
         "Exact-candidate full test evidence: automation/security workflow 43700604234 passed 141/141 Node test files, 44 Python tests, zero skips and npm audit with zero vulnerabilities. Relevant exact-source tests include test/cloudflare-dashboard-state-store.test.mjs (lost-response reconciliation and interrupted restore), test/cloudflare-dashboard-state-client.test.mjs (revision CAS and weak/strong ETag matching), test/dashboard-cloudflare-state.integration.test.mjs (invalid/stale restore rejection), test/dashboard-api-worker-lease-multiprocess.integration.test.mjs (two-process claim exclusion and restart reconciliation), test/backup-restore.test.mjs (cross-process locks, idempotent retry, exact restore, journal recovery and failure injection), test/backup-state-failure-injection.test.mjs (SIGKILL, ENOSPC, checksum/lock recovery), and test/restore-rollback-crash.test.mjs (crash-boundary rollback).",
         "Live exact-candidate staging backup/restore workflow 43701290286 passed against the deployed Cloudflare Worker/D1 through the real Node dashboard. It started at D1 revision 2, created and verified an explicit backup, restored that exact snapshot with confirmRestore=true, advanced revision exactly once to 3, retained both explicit and automatic pre-restore backups (five total), verified the DASHBOARD_STATE_RESTORED receipt naming the exact backup ID, and proved the restored state matched the pre-test snapshot except for that single audit event. It then stopped and restarted the Node dashboard, recovered revision 3 and the backup inventory, and verified remote state remained stable. Publishing remained disabled and content jobs remained zero.",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43701290286",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609912"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609912",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44552068277"
       ],
-      "nextAction": "No further staging restore drill is pending. Preserve the five verified backups and publishing-disabled state. Keep production deployment acceptance separate; do not restore or mutate production data as part of staging acceptance.",
+      "nextAction": "Keep the staging backup/restore test and exact pre-restore audit evidence. Complete runner-state/backoff/artifact persistence only after R2 access or an owner-approved durable alternative is available; do not treat staging D1 PASS as production deployment acceptance.",
       "assessmentCommitSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "PASS for application-level durable-state, backup/restore, concurrency and restart behavior in current Node integration tests. Deployment recovery smoke 44527617447 also passed. Production Cloudflare state is separate: the Nature Frontiers production D1 tables are empty and SonicVhibez has staging only.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadEvidenceNote": "PASS for the staging D1 backup/restore acceptance: the controlled staging-only drill 43701290286 passed on exact source SHA 41bd4de95d876c9778a4993a0e67ac207d1379ff, retaining the automatic pre-restore backup and audit receipt, restoring the exact pre-test state and verifying state stability after Node restart. Current read-only D1 SELECT confirms six application tables, one dashboard_state row at revision 3, five retained backups, and zero runner_state/control/artifact/part rows. The D1 list API's num_tables=0 metadata is stale; sqlite_master SELECT is authoritative. R2 is disabled at account level, so remote runner artifact storage remains unavailable and is tracked under DEPLOY-001.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:24:00Z"
     },
     {
       "id": "YT-001",
@@ -638,16 +639,17 @@
       "evidence": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763980",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41357763805",
-        "Latest exact-candidate deployment-recovery run 43698639458 passed 2/2 isolated rollback/recovery tests with zero skips; deployment smoke run 43698633966 also passed. This verifies tested release rollback behavior, not a full authorized production-like deployment, monitoring, live Cloudflare Node-to-Worker access, or an operator-executed backup/restore cycle; full deployment acceptance remains NOT_TESTED."
+        "Latest exact-candidate deployment-recovery run 43698639458 passed 2/2 isolated rollback/recovery tests with zero skips; deployment smoke run 43698633966 also passed. This verifies tested release rollback behavior, not a full authorized production-like deployment, monitoring, live Cloudflare Node-to-Worker access, or an operator-executed backup/restore cycle; full deployment acceptance remains NOT_TESTED.",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/content/cloudflare-deployment-reconciliation-2026-11-19.json"
       ],
-      "nextAction": "Deployment-recovery workflow 44510566528 passed. Isolated replacement/restart and persistent-state verification succeeded. Full production deployment, monitoring, alerting, backup/restore in the production account, rollback rehearsal and owner-authorized operational acceptance remain NOT_TESTED. Do not incur paid infrastructure; free/local first.",
+      "nextAction": "Owner/admin must enable branch protection and approve the intended manual-only runner workflow on the protected implementation branch; reconcile the current state-only cloudflare/worker.js with the deployed runner API contract; align OIDC trust to the exact protected ref/workflow; enable and verify R2 or approve a durable alternative; then deploy and verify staging from an exact reviewed SHA before any separate production Worker provisioning.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
-      "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "Read-only Cloudflare inventory on 19 Nov: no SonicVhibez production Worker; only staging Worker sonicvhibez-durable-state-staging, last deployed from Dashboard 14 Nov (version 9a9bfd4c) with no exact Git source SHA. Staging D1 has six application tables, dashboard_state revision 2, five backups last updated 15 Nov, and zero runner state/control/artifact rows. Staging R2 bucket binding exists but R2 API returns 403/code 10042 (enable R2 through Dashboard). No Durable Object namespaces. The Worker OIDC verifier trusts old branch refs/heads/codex/cloudflare-adapter-integration-20261108 and its repository-runner.yml, not current codex/marketing-machine-audit-fixes. Do not widen trust until branch protection is owner-verified. Deployment recovery smoke 44527617447 passed at application level, but live production deployment, provenance, monitoring and rollback are not verified.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadStatus": "BLOCKED",
+      "currentHeadEvidenceSha": "6302fae3cda5255296dcc50de69254e70dc61481",
+      "currentHeadEvidenceNote": "Read-only Cloudflare reconciliation: the live sonicvhibez-durable-state-staging Worker is deployed but its eight live multipart modules match cloudflare/staging-snapshot/* byte-for-byte at GitHub commit 6302fae3cda5255296dcc50de69254e70dc61481. The current cloudflare/worker.js is a different state-only Worker and lacks the /api/runner/* endpoints used by scripts/cloudflare-runner-bridge.mjs; do not deploy it over staging. Live OIDC trust remains pinned to the old, unprotected codex/cloudflare-adapter-integration-20261108 branch and its repository-runner.yml; that branch exists, but no workflow_dispatch runs were found. R2 is disabled at account level (HTTP 403, code 10042), despite the staging Worker ARTIFACTS binding. No SonicVhibez production publisher Worker exists. A separate Nature Frontiers health-only Worker is deployed but is not a publisher. Production deployment remains BLOCKED pending protected-branch/workflow alignment, R2 or approved alternative storage, exact source deployment and recovery verification.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:24:00Z"
     },
     {
       "id": "MEDIA-SEC-001",
@@ -2064,14 +2066,15 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609969",
         "Read-only Metricool getBrandSettings: Nature Frontiers SA brand timezone Africa/Johannesburg; Facebook/Instagram connected; YouTube connection points to SonicVhibez.",
         "Read-only Metricool getScheduledPosts, 2026-11-01 through 2027-01-31: zero future scheduled posts.",
-        "Read-only Metricool published analytics, 2026-08-01 through 2026-11-19: five Facebook content rows and zero Instagram feed/Reel rows."
+        "Read-only Metricool published analytics, 2026-08-01 through 2026-11-19: five Facebook content rows and zero Instagram feed/Reel rows.",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-reconciliation-2026-11-19.json"
       ],
-      "nextAction": "Owner/admin must verify Facebook Page and Instagram ownership/permissions, resolve the cross-brand YouTube connection, and provide the historical Metricool records or support access to reconcile the eight uncertain autoPublish entries. Keep publishing disabled, dryRun=true and emergencyStop=true until approved records and rights-cleared media exist.",
+      "nextAction": "Owner/admin must verify Facebook Page and Instagram ownership/permissions, resolve the cross-brand YouTube connection, and provide the historical Metricool records or support access to reconcile the eight uncertain autoPublish entries. Keep publishing disabled, dryRun=true and emergencyStop=true until approved records and rights-cleared media exist. Do not activate the health-only Worker as a publisher; a separate provider integration, real content/rights records and owner-approved publishing controls are required.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
-      "currentHeadEvidenceNote": "Read-only Metricool snapshot on 2026-11-19: the connected Nature Frontiers SA brand uses Africa/Johannesburg; scheduled-post query for 2026-11-01 through 2027-01-31 returned zero future scheduled posts; published analytics returned five Facebook feed/photo/Reel items and zero Instagram feed/Reel rows in the inspected window. The brand also has a YouTube connection pointing to the SonicVhibez channel, which must not be used for Nature Frontiers. The eight historical draft=false/autoPublish=true records were not surfaced and remain unresolved. No Metricool writes or provider publishing were performed.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:16:00Z"
+      "currentHeadEvidenceNote": "Read-only Metricool snapshot on 2026-11-19: the connected Nature Frontiers SA brand uses Africa/Johannesburg; scheduled-post query for 2026-11-01 through 2027-01-31 returned zero future scheduled posts; published analytics returned five Facebook feed/photo/Reel items and zero Instagram feed/Reel rows in the inspected window. The brand also has a YouTube connection pointing to the SonicVhibez channel, which must not be used for Nature Frontiers. The eight historical draft=false/autoPublish=true records were not surfaced and remain unresolved. No Metricool writes or provider publishing were performed. Cloudflare read-only reconciliation adds: the Nature Frontiers production D1 schema has seven application tables but zero rows in content_items, approvals, media_rights, publication_attempts, audit_events, meta_webhook_events and content_targets. Its deployed Worker is a health-only endpoint with publishingEnabled=false, dryRun=true and emergencyStop=true; it has no provider publishing capability. The Metricool YouTube connection to SonicVhibez remains a cross-brand routing risk.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:24:00Z"
     },
     {
       "id": "E2E-001",
