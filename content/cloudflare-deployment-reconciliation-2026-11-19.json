@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-11-19T15:30:00Z",
+  "checkedAt": "2026-11-19T16:14:56.331Z",
   "status": "BLOCKED_PRODUCTION_NOT_DEPLOYED_STAGING_SOURCE_MATCHED_BUT_OIDC_TRUST_AND_R2_UNAVAILABLE",
   "mode": "READ_ONLY_CLOUDFLARE_API_AND_D1_SELECT_ONLY; no Cloudflare resources changed during this reconciliation",
   "accountId": "bba3ba6fc08653dc66349b5a313f518d",
@@ -299,5 +299,58 @@
     "After the wrapper and protected workflow are deployed, run an authenticated runner readiness/lease/backoff/artifact smoke. The current read-only staging smoke passed, but runner OIDC dispatch and R2 are not verified.",
     "Provision a separate SonicVhibez production Worker and production D1 only after source provenance, protected OIDC, secrets, storage and recovery are verified.",
     "Keep the Nature Frontiers health-only Worker/D1 separate; its production D1 schema currently has zero records and it has no provider publishing capability. Do not connect its YouTube identity to SonicVhibez publishing."
-  ]
+  ],
+  "liveReadOnlyVerification": {
+    "checkedAt": "2026-11-19T16:14:56.331Z",
+    "workerInventory": [
+      "hello-world",
+      "nature-frontiers-browser-qc",
+      "nature-frontiers-publisher",
+      "sonicvhibez-durable-state-staging"
+    ],
+    "sonicvhibezProductionWorkerExists": false,
+    "stagingWorker": {
+      "name": "sonicvhibez-durable-state-staging",
+      "latestDeploymentId": "49a60647-7b13-42f3-a0b6-a4be892635dc",
+      "latestDeploymentVersion": "9a9bfd4c-208c-4dd8-93b0-5f84cdf3356c",
+      "deployedAt": "2026-11-14T19:06:42.659275Z",
+      "source": "dash",
+      "exactCurrentBranchCommit": false
+    },
+    "natureFrontiersPublisher": {
+      "name": "nature-frontiers-publisher",
+      "role": "health-only",
+      "publishingEnabled": false,
+      "dryRun": true,
+      "emergencyStop": true
+    },
+    "stagingD1": {
+      "databaseId": "f018ee20-2d7f-41ec-9744-ee058bce80f8",
+      "dashboard_state": 1,
+      "dashboard_backups": 5,
+      "runner_state": 0,
+      "runner_control": 0,
+      "runner_artifacts": 0,
+      "runner_artifact_parts": 0
+    },
+    "natureFrontiersProductionD1": {
+      "databaseId": "9b2e439d-5fd4-4812-a938-e1739fbe8795",
+      "content_items": 0,
+      "approvals": 0,
+      "media_rights": 0,
+      "publication_attempts": 0,
+      "audit_events": 0,
+      "meta_webhook_events": 0,
+      "content_targets": 0
+    },
+    "r2": {
+      "status": 403,
+      "errorCode": 10042,
+      "accountLevelEnabled": false,
+      "message": "Please enable R2 through the Cloudflare Dashboard."
+    },
+    "productionJobDispatched": false,
+    "publishingEnabled": false,
+    "note": "Independent read-only Cloudflare API verification. No Cloudflare resources, D1 rows, R2 settings, secrets, Worker deployments or publication flags were mutated."
+  }
 }
