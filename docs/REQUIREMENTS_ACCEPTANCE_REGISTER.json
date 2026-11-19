@@ -3140,7 +3140,7 @@
   },
   "latestVerifiedExecution": {
     "recordedDate": "2026-11-19",
-    "currentBranchHead": "4c89425cb886b83f308b43cd63858bcdc2449db7",
+    "currentBranchHead": "4674b7d4aa6b3c6b8395192277066319e1fb78d8",
     "codeAndTestVerificationCommit": "df1ac7739afe4aed47987ae5e743c3d45720431c",
     "postVerificationChanges": "Subsequent commits update Pexels source URLs, narration licensing status, render manifest, SEO research and acceptance evidence documents only; no executable source changes remain after the tested code/test commit.",
     "mainHead": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
@@ -3256,17 +3256,77 @@
       "uploadAttemptReconciliationFresh": false
     },
     "metricoolReadOnlyCheck": {
-      "checkedDate": "2026-11-19",
       "brandLabel": "Nature Frontiers SA",
-      "currentBrandId": "8094526",
+      "brandId": "8094526",
       "timezone": "Africa/Johannesburg",
-      "scheduledPostsFrom": "2026-11-19T00:00:00+02:00",
-      "scheduledPostsTo": "2026-12-19T23:59:59+02:00",
+      "scheduledPostsChecked": "2026-11-19 through 2026-12-19",
       "scheduledPostsReturned": 0,
       "historicalAutoPublishRecords": 8,
-      "historicalAutoPublishRecordsReconciled": false,
-      "note": "The scheduled-post connector does not expose the eight historical records or unscheduled drafts. A YouTube network connection is present on the Nature Frontiers Metricool brand; do not use it as a SonicVhibez target."
-    }
+      "historicalRecordsReconciled": false,
+      "natureFrontiersYoutubeConnectionPresent": true,
+      "natureFrontiersYoutubeUseAuthorized": false
+    },
+    "voiceLicenseSafetyPR": {
+      "number": 8,
+      "branch": "codex/voice-license-safety",
+      "headSha": "8fa2d3e45e9ffae4496f62dbc71549858fc35910",
+      "state": "OPEN_READY_FOR_REVIEW_UNMERGED",
+      "changes": [
+        "disable scheduled/push long-form Edge TTS generation",
+        "require explicit noncommercial audition acknowledgement in long and short generators",
+        "write noncommercial audition manifests",
+        "pin workflow actions",
+        "add fail-closed regression tests"
+      ],
+      "workflowRuns": {
+        "automation": {
+          "runId": 44515050552,
+          "status": "success",
+          "nodeTests": 54,
+          "passed": 54,
+          "failed": 0,
+          "skipped": 0,
+          "pythonTests": 15,
+          "pythonPassed": 15,
+          "pythonFailed": 0,
+          "pythonSkipped": 0
+        },
+        "contentQuality": {
+          "runId": 44515050549,
+          "status": "success",
+          "nodeTests": 54,
+          "passed": 54,
+          "failed": 0,
+          "skipped": 0
+        },
+        "metadataValidation": {
+          "runId": 44515050673,
+          "status": "success"
+        }
+      },
+      "note": "No changes to main; PR #8 has not been merged. Until it is merged or the workflow is manually disabled on main, the default-branch Tuesday/Saturday Edge TTS schedule remains active."
+    },
+    "mainDependencyAudit": {
+      "status": "OPEN",
+      "npmAuditModerateVulnerabilities": 4,
+      "sourceRunId": 44515050552,
+      "currentMainGoogleapisRange": "^144.0.0",
+      "currentMainNodeEngine": ">=20",
+      "candidateGoogleapisRange": "^188.0.0",
+      "candidateNodeEngine": ">=22",
+      "candidateAuditVulnerabilities": 0,
+      "rootCauseFullyIsolated": false,
+      "note": "The PR #1 candidate reports zero audit vulnerabilities but also moves googleapis to 188 and Node to >=22. Googleapis 188 declares Node >=22. A safe remediation requires an explicit Node 22 CI/runtime migration and API regression review; do not blindly force-update dependencies."
+    },
+    "longFormCanonicalSource": {
+      "path": "content/long-form-001-wildlife-story-script.md",
+      "sha256": "d1b60f7bc0487ceba7efba56b65aa1d9ec760030",
+      "manifest": "content/long-form-render-manifest.json",
+      "priorNarrationStatus": "SUPERSEDED_WRONG_SCRIPT_AND_UNAPPROVED_VOICE",
+      "priorVoice": "en-US-GuyNeural",
+      "productionNarrationAvailable": false
+    },
+    "seoResearchFile": "content/SEO-001-research-2026-11-19.md"
   },
   "acceptanceReconciliation": {
     "status": "REQUIRED",
@@ -3321,6 +3381,18 @@
       "detail": "17 Pexels source selections and direct download URLs are registered, representing 563 seconds of source-page duration. No original MP4 bytes or local file hashes are present in the production workspace.",
       "evidenceFile": "content/approved-pexels-footage.json",
       "requiredResolution": "Download the approved clips at zero cost, verify actual media metadata, inspect every asset and record local SHA-256 hashes before rendering."
+    },
+    {
+      "id": "MAIN-NPM-AUDIT-001",
+      "status": "BLOCKED",
+      "detail": "The main-branch automation run reports four moderate npm audit vulnerabilities. The PR #1 candidate reports zero, but it also changes googleapis from ^144.0.0 to ^188.0.0 and Node engine from >=20 to >=22; googleapis 188 requires Node >=22.",
+      "requiredResolution": "Identify the exact vulnerable dependency tree, migrate CI/runtime to Node 22 deliberately, update the Google API client with API regression coverage, and rerun npm audit. No force fix or unreviewed major update."
+    },
+    {
+      "id": "VOICE-AUTO-GENERATION-001",
+      "status": "MITIGATED_IN_DRAFT_PR",
+      "detail": "Main's scheduled Tuesday/Saturday workflow still automatically generates Edge TTS en-US-GuyNeural, which is not the approved Roderic voice and is not commercially licensed. Draft PR #8 removes the schedule/push triggers and adds an explicit internal-audition-only guard.",
+      "requiredResolution": "Review and merge PR #8 or manually disable the existing default-branch workflow before its next scheduled run. PR #8 is ready for review but remains unmerged; main is unchanged."
     }
   ],
   "updatedAt": "2026-11-19"
