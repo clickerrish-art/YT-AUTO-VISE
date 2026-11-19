@@ -45,6 +45,14 @@
 - A commercially licensed Roderic plan or explicit owner approval for a zero-cost commercially licensed alternative is required. No narrator substitution is authorized without approval.
 - The long-form script remains a draft and requires owner approval. The 17 Pexels source-page durations provide 9m23s nominal raw footage, but usable duration must be checked after download and edit.
 
+## Additional safety findings — 19 November 2026
+
+- PR #8 (`codex/voice-license-safety`) is OPEN / READY FOR REVIEW / UNMERGED. It disables main's scheduled/push-triggered long-form Edge TTS generation and adds explicit non-commercial audition guards. Its automation run 44515050552 passed 54 Node and 15 Python tests with zero failures/skips; content quality 44515050549 and metadata validation 44515050673 passed. Main remains unchanged until owner review/merge.
+- Main still has a Tuesday/Saturday 15:00 UTC Edge TTS schedule. The next scheduled run is Saturday 21 November 2026 at 15:00 UTC. If PR #8 is not merged before then, the owner must manually disable that workflow to prevent automatic generation of the unapproved en-US-GuyNeural voice.
+- Main's npm audit reports four moderate vulnerabilities. The PR #1 candidate reports zero, but moves googleapis to 188.0.0 and Node to >=22; googleapis 188 requires Node >=22. Isolate the vulnerable dependency tree and complete a deliberate Node 22 CI/runtime migration before updating. Do not use `npm audit fix --force` blindly.
+- Current Metricool read-only state: Nature Frontiers SA brandId 8094526, Africa/Johannesburg; zero scheduled posts returned for 19 Nov–19 Dec 2026. This does not reconcile the eight historical `draft=false / autoPublish=true` records. A YouTube connection is present on the Nature Frontiers brand; it must not be used for SonicVhibez.
+- SEO research draft is recorded in `content/SEO-001-research-2026-11-19.md`; no vidIQ credits were spent. Owner approval, target geography and final exact-hash metadata remain open.
+
 ## Additional acceptance blockers
 
 - The 89-row acceptance aggregate and current-head snapshot disagree (71/9/9 versus 67/9/13). The API aggregate and current-head snapshot also disagree (42 PASS/6 BLOCKED versus 0 PASS/42 NOT_TESTED/6 BLOCKED). Reconcile every row against the exact current SHA before claiming overall acceptance.
