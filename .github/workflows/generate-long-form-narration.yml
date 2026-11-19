@@ -1,4 +1,4 @@
-name: Generate non-commercial Edge TTS internal auditions (not production)
+name: Generate explicitly acknowledged non-commercial Edge TTS internal auditions (not production)
 
 on:
   workflow_dispatch:
