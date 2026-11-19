@@ -1,16 +1,13 @@
-name: Generate long-form narration drafts
+name: Generate owner-acknowledged manual-only non-commercial Edge TTS auditions (not production)
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "content/long-form-scripts.md"
-      - "scripts/generate_long_form_narration.py"
-      - ".github/workflows/generate-long-form-narration.yml"
   workflow_dispatch:
-  schedule:
-    - cron: "0 15 * * 2,6"
-
+    inputs:
+      allow_noncommercial_audition:
+        description: Explicitly acknowledge this is an unapproved Edge TTS internal audition only, not commercial production narration.
+        required: true
+        type: boolean
+        default: false
 permissions:
   contents: read
 
@@ -24,18 +21,26 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Require explicit non-commercial audition acknowledgement
+        env:
+          ALLOW_NONCOMMERCIAL_AUDITION: ${{ inputs.allow_noncommercial_audition }}
+        run: |
+          if [ "$ALLOW_NONCOMMERCIAL_AUDITION" != "true" ]; then
+            echo "::error::Blocked. en-US-GuyNeural is not the approved Roderic voice and is not commercially cleared."
+            exit 1
+          fi
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.12"
       - name: Install narration client and media probe
         run: |
           python -m pip install --disable-pip-version-check edge-tts mutagen
-      - name: Generate two narration drafts
-        run: python scripts/generate_long_form_narration.py
+      - name: Generate two non-commercial internal audition drafts
+        run: python scripts/generate_long_form_narration.py --allow-noncommercial-audition
       - name: Set up Node for caption validation
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "20"
       - name: Verify audio files, required text/captions, and report duration
@@ -94,23 +99,40 @@ jobs:
           Path("media/long-form-drafts/duration-report.json").write_text(
               json.dumps(reports, indent=2) + "\n", encoding="utf-8"
           )
-          print("Audio-duration check complete. REVIEW means human editing is needed; no upload occurred.")
+          print("Audio-duration check complete. REVIEW means human editing is needed. No YouTube upload or platform publication occurred; only a seven-day internal-audition artifact is created.")
           PY
       - name: Validate generated caption structure
         run: |
           node scripts/check-captions.mjs media/long-form-drafts/long-001-captions-draft.srt media/long-form-drafts/long-002-captions-draft.srt
+      - name: Verify non-commercial audition manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("media/long-form-drafts/narration-audition-manifest.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          assert data["status"] == "INTERNAL_AUDITION_ONLY"
+          assert data["licenseStatus"] == "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"
+          assert data["commercialUseAllowed"] is False
+          assert data["productionUseAllowed"] is False
+          assert data["publishingEnabled"] is False
+          assert data["voiceApprovalStatus"] == "NOT_OWNER_APPROVED"
+          assert len(data["files"]) == 2
+          print("PASS: long-form artifacts are explicitly non-commercial internal auditions only.")
+          PY
       - name: Package draft audio, extracted text and duration report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: sonicvhibez-long-form-narration-drafts
+          name: sonicvhibez-long-form-narration-internal-audition-only
           path: |
             media/long-form-drafts/*.mp3
             media/long-form-drafts/*.txt
             media/long-form-drafts/*.srt
             media/long-form-drafts/duration-report.json
+            media/long-form-drafts/narration-audition-manifest.json
             content/long-form-scripts.md
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 7
 
       - name: Enforce 6–10 minute target after preserving draft artifact
         if: always()
@@ -134,5 +156,5 @@ jobs:
                   for item in invalid
               )
               raise SystemExit("BLOCKED: one or more narration drafts failed runtime or caption-coverage checks. Draft artifact was uploaded for review. " + details)
-          print("PASS: both narration drafts meet the 6–10 minute target and final captions align within five seconds. Human review and rights checks are still required.")
+          print("PASS: both non-commercial internal audition drafts meet the 6–10 minute target and caption coverage. They are not production-cleared and must never be published.")
           PY
