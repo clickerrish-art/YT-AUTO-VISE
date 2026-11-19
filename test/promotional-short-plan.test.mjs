@@ -563,3 +563,22 @@ test("November 23 ethical-wildlife and outline Shorts use fresh qualitative sear
   assert.ok(outline.script.trim().split(/\s+/).filter(Boolean).length <= 135);
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
 });
+
+test("draft plans reject normalized snake-case, kebab-case and nested publication timestamp aliases", () => {
+  const plan = clone(checkedInPlan);
+  plan.weeks[0].items[0].scheduled_publish_at = "2026-12-21T08:00:00Z";
+  plan.weeks[1].items[0]["publication-timestamp"] = null;
+  plan.weeks[2].items[0].publication = { timestamp: "2026-12-21T08:00:00+02:00" };
+  plan.weeks[3].items[0].planned = { dateTime: "2026-12-21T08:00:00+02:00" };
+
+  const errors = validatePromotionalShortPlan(plan, products);
+  for (const expectedPath of [
+    "plan.weeks[0].items[0].scheduled_publish_at",
+    "plan.weeks[1].items[0].publication-timestamp",
+    "plan.weeks[2].items[0].publication.timestamp",
+    "plan.weeks[3].items[0].planned.dateTime"
+  ]) {
+    assert.ok(errors.some(error => error.includes(expectedPath)), `expected publication timestamp guard for ${expectedPath}`);
+  }
+});
+

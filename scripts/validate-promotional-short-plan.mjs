@@ -64,7 +64,32 @@ const PUBLICATION_TIMESTAMP_KEYS = new Set([
   "scheduledPublishDate", "plannedPublishDate", "plannedPublicationDate",
   "scheduledPublishTime", "plannedPublishTime", "actualPublishTime",
   "actualPublishedTimestamp", "actualPublicationTimestamp", "actualPublishTimestamp", "scheduledPublicationTimestamp", "scheduledPublishTimestamp", "plannedPublicationTimestamp", "plannedPublishTimestamp", "publishedTime", "publicationTime", "publishTime", "scheduledTime", "plannedTime", "actualTime", "publishedDateTime", "publicationDateTime", "publishDateTime", "scheduledDateTime", "plannedDateTime", "actualDateTime", "actualPublishDateTime", "scheduledPublishDateTime", "plannedPublishDateTime"
+].map(normalizePublicationKey));
+
+const GENERIC_PUBLICATION_TIME_KEYS = new Set([
+  "at", "for", "date", "time", "timestamp", "datetime", "epoch", "unix"
 ]);
+const PUBLICATION_TIME_SUFFIX = /(?:at|for|date|time|timestamp|datetime|epoch|unix)(?:utc|gmt|iso|ms|seconds|epoch|unix)*$/;
+
+function normalizePublicationKey(value) {
+  return String(value ?? "").replace(/[^a-z0-9]/gi, "").toLowerCase();
+}
+
+function isPublicationTimestampKey(key, currentPath) {
+  const normalizedKey = normalizePublicationKey(key);
+  if (PUBLICATION_TIMESTAMP_KEYS.has(normalizedKey)) return true;
+
+  const hasTemporalSuffix = PUBLICATION_TIME_SUFFIX.test(normalizedKey);
+  if (hasTemporalSuffix
+      && (/(publish|publication|schedule)/.test(normalizedKey)
+        || /^(actual|planned)/.test(normalizedKey))) {
+    return true;
+  }
+
+  const normalizedPath = normalizePublicationKey(currentPath);
+  const insidePublicationContext = /(publish|publication|schedule|actual|planned)/.test(normalizedPath);
+  return insidePublicationContext && GENERIC_PUBLICATION_TIME_KEYS.has(normalizedKey);
+}
 
 function findPublicationTimestampPaths(value, currentPath = "plan", matches = []) {
   if (value === null || typeof value !== "object") return matches;
@@ -74,10 +99,7 @@ function findPublicationTimestampPaths(value, currentPath = "plan", matches = []
   }
   for (const [key, child] of Object.entries(value)) {
     const childPath = `${currentPath}.${key}`;
-    const isPresent = key === "scheduledAt" || key === "publishedAt"
-      ? true
-      : child !== null && child !== undefined;
-    if (PUBLICATION_TIMESTAMP_KEYS.has(key) && isPresent) matches.push(childPath);
+    if (isPublicationTimestampKey(key, currentPath)) matches.push(childPath);
     findPublicationTimestampPaths(child, childPath, matches);
   }
   return matches;
