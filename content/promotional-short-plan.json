@@ -1420,7 +1420,7 @@
             "provider": "web_search",
             "type": "qualitative_search_intent",
             "researchedAt": "2026-11-19T09:51:01+02:00",
-            "note": "Fresh web search on 19 November 2026 surfaced the exact phrase 'Low-Light Wildlife Photography' in a 2026 guide, a specialist explainer on ISO/Auto ISO for wildlife, and a YouTube how-to on wildlife photography in low light. These results support informational intent around exposure trade-offs at dawn, dusk and shade. No measured global search volume, competition score or rising-demand metric was available; the YouTube view count is video performance, not search volume.",
+            "note": "Qualitative search-intent evidence only; no measured volume, competition score or rising-demand metric was available. Fresh web search on 19 November 2026 surfaced the exact phrase 'Low-Light Wildlife Photography' in a 2026 guide, a specialist explainer on ISO/Auto ISO for wildlife, and a YouTube how-to on wildlife photography in low light. These results support informational intent around exposure trade-offs at dawn, dusk and shade. The YouTube view count is video performance, not search volume.",
             "sources": [
               {
                 "title": "Low-Light Wildlife Photography Guide: Settings, Focus & Field Techniques (2026)",
