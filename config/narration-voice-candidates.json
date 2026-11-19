@@ -26,10 +26,12 @@
       "Piper offers limited expressive control; passionate storyteller delivery must be assessed by listening.",
       "Voice model is medium quality; do not assume it meets the user's clean, clear, naturalness requirement before review."
     ],
-    "commercialUseStatus": "PUBLIC_DOMAIN_SOURCE_RECORDINGS_MODEL_CARD_VALIDATION_REQUIRED; OWNER_REVIEW_REQUIRED",
+    "commercialUseStatus": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_LISTENING_AND_FINAL_RELEASE_REVIEW_REQUIRED",
     "productionApproved": false,
     "modelSha256": "b9739443232a80a59c7d18810dd856899bf16a7964725f5ab81ea49b1351cb71",
-    "modelCardSha256": "60eaf4d10009d1bd4a1aa555d337dae00f60421d72fee415b9139a021e7cb5d0"
+    "modelCardSha256": "60eaf4d10009d1bd4a1aa555d337dae00f60421d72fee415b9139a021e7cb5d0",
+    "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md",
+    "rightsStatus": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED"
   },
   "candidates": [
     {
@@ -68,7 +70,7 @@
     "durationSeconds": 51.432,
     "sourceScriptSha256": "54b1c9aa9103b8a79511cc38fc27c27d4e35416d460f188701485406aaedfc73",
     "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
-    "commercialAttributionReview": "PENDING_OWNER_REVIEW"
+    "commercialAttributionReview": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED"
   },
   "rendering": {
     "script": "scripts/render_american_narration.py",
