@@ -1,4 +1,5 @@
 import importlib.util
+import asyncio
 import sys
 import types
 import unittest
@@ -22,6 +23,10 @@ class LongFormNarrationLicenseTests(unittest.TestCase):
         self.assertEqual(module.VOICE, "en-US-GuyNeural")
         self.assertIn("not owner-approved", module.NONCOMMERCIAL_AUDITION_NOTICE)
         self.assertIn("cannot be used commercially", module.NONCOMMERCIAL_AUDITION_NOTICE)
+
+    def test_main_blocks_before_any_generation_without_explicit_acknowledgement(self):
+        with self.assertRaisesRegex(SystemExit, "not the approved Roderic voice"):
+            asyncio.run(module.main(False))
 
     def test_hash_helper_is_deterministic_for_a_file(self):
         import tempfile
