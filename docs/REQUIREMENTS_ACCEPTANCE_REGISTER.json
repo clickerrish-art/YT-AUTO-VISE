@@ -2279,7 +2279,7 @@
   "currentCheckpoint": {
     "applicationCodeSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
     "testedSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-    "checkpointPrHead": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+    "checkpointPrHead": "3e0a1ef5c1e1481ffd584bb7079c43e5ac3ba412",
     "currentBranchTipBeforeRegisterRefresh": "caaa732d1704882df51b37ccf5999cf7761402e0",
     "currentMainSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
