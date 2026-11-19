@@ -171,7 +171,7 @@ test("queue replenishment rejects symlink and path-traversal targets", () => {
     assert.match(symlinkResult.stderr, /single-link regular file|symlink/i);
     assert.deepEqual(JSON.parse(fs.readFileSync(targetPath, "utf8")), { sentinel: "preserve" });
 
-    const traversalPath = path.join(tempDir, "..", "outside-queue.json");
+    const traversalPath = path.join(tempDir, "..", path.basename(tempDir) + "-outside-queue.json");
     const traversalResult = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
       encoding: "utf8",
       env: { ...process.env, QUEUE_PATH: traversalPath, QUEUE_TRUST_ROOT: tempDir }
