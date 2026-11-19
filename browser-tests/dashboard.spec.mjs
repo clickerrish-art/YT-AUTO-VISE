@@ -1464,7 +1464,7 @@ test("authoring form generates and persists a source-bound script through the re
 });
 
 
-test("narration form generates real measured TTS, persists artifacts, and reconciles without a second TTS call", async ({ page }) => {
+test("narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call", async ({ page }) => {
   test.setTimeout(300_000);
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-live-narration-"));
   const token = operatorToken;
@@ -1518,7 +1518,8 @@ test("narration form generates real measured TTS, persists artifacts, and reconc
     DASHBOARD_HOST: "127.0.0.1",
     SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${provider.address().port}/v1/chat/completions`,
     SCRIPT_GENERATION_TIMEOUT_MS: "10000",
-    AUTHORING_TTS_RATE: "+5%"
+    AUTHORING_TTS_RATE: "+5%",
+    PYTHONPATH: [path.join(process.cwd(), "tests", "fixtures", "narration-tts-stub"), process.env.PYTHONPATH].filter(Boolean).join(path.delimiter)
   };
   let child;
   let logs = "";
