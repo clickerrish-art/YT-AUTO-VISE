@@ -2709,8 +2709,9 @@ test("all declared maximum-length fields cap user-entered values without an API 
 
   for (const item of constrained) {
     const control = page.locator("#" + item.id);
-    await control.fill("");
-    await control.pressSequentially("x".repeat(item.maxLength + 1));
+    await control.fill("x".repeat(item.maxLength));
+    await control.press("End");
+    await control.pressSequentially("x");
     const result = await control.evaluate(element => ({
       length: element.value.length,
       maxLength: element.maxLength,
