@@ -1,7 +1,7 @@
 # Long-form 001 — Two Eyes Above the Water
 
 **Brand:** SonicVhibez  
-**Status:** OWNER-APPROVED NARRATION — 2026-11-20; production remains on HOLD pending voice, footage, rights and review gates  
+**Status:** OWNER-APPROVED SCRIPT; RODERIC NARRATION GENERATED — 2026-11-20; production remains on HOLD pending audio review, footage, rights, captions and final review  
 **Target format:** YouTube long-form, 16:9, 6–10 minutes  
 **Working title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Thumbnail direction:** Nile crocodile eye at dusk, tight waterline close-up, eye on the right, dark open negative space on the left, exact words “TOO BIG?”; no blood, victim, gore or fabricated attack  
@@ -93,8 +93,10 @@ The river may look empty. That does not mean it is empty. And understanding the 
 - [x] Owner approved the exact narration text and topic in chat on 2026-11-20 (response: “proceed”).
 - [ ] Source footage is actually acquired, per-file hashed, decoded and inspected; source selection alone is not clearance.
 - [ ] Exact model/checkpoint/voice commercial-use permissions are verified for any generated or synthetic assets.
-- [ ] Keep the user's selected HeyGen narrator voice, Roderic — Authoritative & Refined, if available on the free plan; do not substitute Norman or another voice silently. If unavailable at zero cost, hold.
-- [ ] Narration generated only after script approval; full audio listened to and exact wording checked.
+- [x] HeyGen public voice catalogue returned active Roderic — Authoritative & Refined (voice ID `b5c5b28db1ea408abc7d851202983bdb`); generated on the connected Free plan with that exact voice. No substitute used.
+- [x] Narration generated after owner approval; HeyGen returned 398.083 seconds (6:38) and word/character timing data. See `content/assets/long-form-001-narration-status.md`.
+- [ ] Owner/full human listen-through and exact spoken-word comparison against the approved script.
+- [ ] Download/ingest the generated WAV into the production workspace, compute SHA-256 and decode/inspect it locally before rendering.
 - [ ] Captions aligned to actual narration timing.
 - [ ] Final 16:9 export is 6–10 minutes, fully decoded, with audio and subtitle checks passed.
 - [ ] Human factual, visual, animal-welfare, rights and full-playback review is recorded against exact final-file SHA-256.
