@@ -104,20 +104,6 @@ jobs:
       - name: Validate generated caption structure
         run: |
           node scripts/check-captions.mjs media/long-form-drafts/long-001-captions-draft.srt media/long-form-drafts/long-002-captions-draft.srt
-      - name: Package draft audio, extracted text and duration report
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: sonicvhibez-long-form-narration-internal-audition-only
-          path: |
-            media/long-form-drafts/*.mp3
-            media/long-form-drafts/*.txt
-            media/long-form-drafts/*.srt
-            media/long-form-drafts/duration-report.json
-            media/long-form-drafts/narration-audition-manifest.json
-            content/long-form-scripts.md
-          if-no-files-found: error
-          retention-days: 7
-
       - name: Verify non-commercial audition manifest
         run: |
           python - <<'PY'
@@ -134,6 +120,20 @@ jobs:
           assert len(data["files"]) == 2
           print("PASS: long-form artifacts are explicitly non-commercial internal auditions only.")
           PY
+      - name: Package draft audio, extracted text and duration report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-long-form-narration-internal-audition-only
+          path: |
+            media/long-form-drafts/*.mp3
+            media/long-form-drafts/*.txt
+            media/long-form-drafts/*.srt
+            media/long-form-drafts/duration-report.json
+            media/long-form-drafts/narration-audition-manifest.json
+            content/long-form-scripts.md
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Enforce 6–10 minute target after preserving draft artifact
         if: always()
         run: |
