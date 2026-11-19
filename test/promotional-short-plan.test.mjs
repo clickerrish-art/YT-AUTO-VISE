@@ -514,3 +514,48 @@ test("December 14 Shorts analytics lesson uses current official metric definitio
   assert.ok(item.script.trim().split(/\s+/).filter(Boolean).length >= 90);
   assert.ok(item.script.trim().split(/\s+/).filter(Boolean).length <= 135);
 });
+
+
+test("November 23 ethical-wildlife and outline Shorts use fresh qualitative search evidence and preserve their separate disclosure gates", () => {
+  const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-11-23");
+  assert.ok(week);
+  assert.equal(week.items.length, 2, "the weekly cap is already full; do not add another Short");
+  const ethical = week.items.find(row => row.id === "sonicvhibez-short-007-ethical-wildlife-filming");
+  const outline = week.items.find(row => row.id === "sonicvhibez-short-008-youtube-video-outline");
+  const vault = products.find(row => row.id === "wildlife-creators-vault");
+  const promptPack = products.find(row => row.id === "video-creation-prompt-pack-premium");
+  assert.ok(ethical && outline && vault && promptPack);
+
+  for (const item of [ethical, outline]) {
+    assert.equal(item.channel, "SonicVhibez");
+    assert.equal(item.status, "DRAFT_ONLY");
+    assert.equal(item.visibility, "private");
+    assert.equal(item.targetSeconds, 55);
+    assert.equal(item.keywordEvidence.provider, "web_search");
+    assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
+    assert.match(item.keywordEvidence.researchedAt, /^2026-11-19T/);
+    assert.match(item.keywordEvidence.note, /no measured global search volume/i);
+    assert.ok(item.keywordEvidence.sources.length >= 2);
+    assert.equal(item.currentIntentEvidence.provider, "web_search");
+    assert.match(item.currentIntentEvidence.researchedAt, /^2026-11-19T/);
+    assert.ok(item.currentIntentEvidence.sources.length >= 2);
+    assert.ok(item.keywordPhrases.length >= 3);
+    assert.ok(item.description.toLowerCase().startsWith(item.primaryKeyword.toLowerCase()));
+  }
+
+  assert.equal(ethical.productUrl, vault.url);
+  assert.equal(ethical.disclosure.status, "APPROVED");
+  assert.equal(ethical.disclosure.approvalReference, vault.promotionGate.disclosure.approvalReference);
+  assert.ok(ethical.script.indexOf("Advertisement.") < ethical.script.indexOf(vault.promotionGate.disclosure.text));
+  assert.ok(ethical.script.includes(vault.promotionGate.disclosure.text));
+  assert.match(ethical.description, /^ADVERTISEMENT$/m);
+  assert.ok(ethical.description.includes(vault.promotionGate.disclosure.text));
+
+  assert.equal(outline.productUrl, promptPack.url);
+  assert.equal(outline.disclosure.status, "HOLD");
+  assert.match(outline.script, /^\[INTERNAL HOLD — NOT SPOKEN\./);
+  assert.match(outline.description, /DISCLOSURE HOLD/);
+  assert.ok(outline.script.trim().split(/\s+/).filter(Boolean).length >= 90);
+  assert.ok(outline.script.trim().split(/\s+/).filter(Boolean).length <= 135);
+  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+});
