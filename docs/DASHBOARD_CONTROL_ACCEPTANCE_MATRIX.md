@@ -1,3 +1,18 @@
+## Latest exact-HEAD evidence refresh — 19 November 2026
+
+- **Implementation/source/test HEAD:** `93b4d4ff82c6df5a9aac67ecc16772853b2efb37` (`test: isolate queue traversal sentinel path`). This section supersedes earlier entries below that identify `4dec5f71` or other historical candidates as the latest tree.
+- Full automation/security [run 44531885210](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44531885210) checked out this exact HEAD. Its Node suite reports **1,024 passed, 0 failed, 0 skipped across 176/176 test files**; Python **86/86**; npm audit **0 vulnerabilities**.
+- Dashboard browser E2E [run 44531885081](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44531885081) checked out this exact HEAD and reports **33/33 Chromium journeys passed**.
+- Current source inventory assertions in the Node suite: **121 controls** (27 buttons, 50 inputs, 27 selects, 17 textareas), **17 forms**, **104 form-owned controls**, **17 standalone controls** and **52 literal route handlers**.
+- Browser journeys are integration/journey evidence, not exhaustive per-control evidence. They cover connected dashboard draft creation/persistence, read-only diagnostics, cancellation, operator retry/dead-letter controls, approval flows, mobile layout and accessibility.
+- **DASH-001 remains NOT_TESTED overall.** No current exact-HEAD per-control matrix demonstrates all applicable success, validation, actionable error feedback, authorization, durable persistence, refresh/restart, concurrency and accessibility behavior for every one of the 121 controls and 17 forms. Do not promote inventory or journey tests to field-level acceptance.
+- The six production-dependent forms remain fail-closed. Their test fixtures do not establish production credentials, rights, human approval, provider acceptance or publishing authorization.
+- The latest production readiness run [44531885586](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44531885586) remains **HOLD (22 blockers)**. No upload, schedule, or publication was attempted.
+- API route matrix positive-acceptance evidence remains tied to its separately recorded source/test SHA; a passing full regression run does not automatically rebind those 42 positive route claims to this HEAD. Keep that reconciliation outstanding.
+- No live upload, post, campaign activation, visibility change, queue activation or publication occurred.
+
+---
+
 ## Latest exact candidate dashboard evidence — 19 November 2026 (refreshed)
 
 - **Exact current source/test tree:** `4dec5f719e0b717893547fbbbe687c7f9f9658db`. Full automation/security run 44527617194 passed on this tree: 1,022 Node tests across 176 files, 86 Python tests, zero failures/skips, npm audit 0 vulnerabilities. This includes the newer production-readiness gate/tests and Pexels-only acquisition code.
