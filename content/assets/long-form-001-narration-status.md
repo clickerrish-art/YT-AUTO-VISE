@@ -3,7 +3,7 @@
 **Project:** SonicVhibez  
 **Title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Generated:** 2026-11-20  
-**Status:** GENERATED — NOT YET DOWNLOADED, LOCALLY DECODED, LISTEN-REVIEWED OR RELEASE-CLEARED
+**Status:** GENERATED FOR INTERNAL EVALUATION ONLY — NOT ELIGIBLE FOR COMMERCIAL / MONETIZED PUBLICATION UNDER THE FREE-PLAN LICENCE
 
 ## Exact generation record
 
@@ -21,10 +21,12 @@
 - Timing response: word and character timestamps returned by HeyGen.
 - Generation calls: one successful call.
 - No paid plan upgrade or paid video-generation service was used.
+- **Commercial-use restriction:** HeyGen's Free Plan terms grant User Output only for personal, non-commercial and internal evaluation purposes. They prohibit monetization, advertising, client work and other commercial activities. This generated WAV must not be used in the SonicVhibez public/commercial release while the account is on Free.
+- Official terms reviewed 2026-11-20: https://www.heygen.com/terms (section 4, Free Plan); voice-specific terms: https://www.heygen.com/voice-terms.
 
 ## Access and verification
 
-HeyGen returned an inline audio player with play, seek and download controls. Use that player to listen to and download the generated WAV. The temporary audio URL is intentionally not copied into this public repository.
+HeyGen returned an inline audio player with play, seek and download controls. The audio may be listened to only for internal evaluation under the current Free-plan restriction. Do not place it in the public video render or use it in monetized/commercial content. The temporary audio URL is intentionally not copied into this public repository.
 
 Still required:
 1. Full listen-through and word-for-word comparison against the approved narration.
@@ -35,6 +37,8 @@ Still required:
 
 ## Release status
 
-Narration generation is not narration approval. This file does not establish audio quality, exact spoken-word accuracy, local file integrity, rights clearance for visuals, completed edit, human review, upload authorization, or a YouTube schedule.
+<NOT FOR COMMERCIAL RELEASE UNDER CURRENT FREE-PLAN TERMS.>
+
+Narration generation is not narration approval or commercial clearance. The WAV is internal-evaluation-only. A paid commercial licence is disallowed by the user's zero-cost rule; therefore the production must use a different owner-approved, zero-cost narrator with independently verified commercial rights, or remain on hold. Do not substitute a voice without owner approval. This file also does not establish audio quality, exact spoken-word accuracy, local file integrity, rights clearance for visuals, completed edit, human review, upload authorization, or a YouTube schedule.
 
 `scheduledAt: null`; publishing remains disabled.
