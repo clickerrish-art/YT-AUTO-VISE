@@ -3141,7 +3141,7 @@
   "latestVerifiedExecution": {
     "recordedDate": "2026-11-19",
     "codeAndTestVerificationCommit": "df1ac7739afe4aed47987ae5e743c3d45720431c",
-    "postVerificationChanges": "Subsequent commits update Pexels source URLs, narration licensing status, render manifest, SEO research and acceptance evidence documents only; no executable source changes remain after the tested code/test commit.",
+    "postVerificationChanges": "After code/test SHA df1ac, the branch added Pexels source-register data, narration licence metadata, the canonical long-form script/manifest correction, SEO research and evidence documents. It also changed scripts/generate-narration.py, tests/test_generate_narration.py and .github/workflows/short-narration-artifact.yml to require explicit non-commercial audition acknowledgement; these enhanced PR #1 short-generator/workflow changes have NOT been run in CI because PR #1 remains draft. The equivalent main-branch generator guard and long-form workflow safety are tested in PR #8, but that does not substitute for testing the enhanced PR #1 implementation.",
     "mainHead": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
     "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
     "branchAhead": 4510,
@@ -3334,6 +3334,16 @@
       "mainHead": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
       "observedBefore": "2026-11-19T11:25Z",
       "note": "Live divergence must be refreshed from GitHub before any integration decision."
+    },
+    "pr1ShortNarrationGuard": {
+      "status": "NOT_TESTED_ON_THIS_BRANCH",
+      "files": [
+        "scripts/generate-narration.py",
+        "tests/test_generate_narration.py",
+        ".github/workflows/short-narration-artifact.yml"
+      ],
+      "behavior": "Manual-only workflow; explicit allow_noncommercial_audition acknowledgement; generated Edge TTS outputs marked non-commercial internal audition only and productionUseAllowed=false.",
+      "note": "PR #1 remains draft, so its enhanced implementation has no exact-SHA CI run. The simpler main-branch short generator guard is verified by PR #8 runs 44515050552 and 44515050549."
     }
   },
   "acceptanceReconciliation": {
@@ -3401,6 +3411,12 @@
       "status": "MITIGATED_IN_DRAFT_PR",
       "detail": "Main's scheduled Tuesday/Saturday workflow still automatically generates Edge TTS en-US-GuyNeural, which is not the approved Roderic voice and is not commercially licensed. Draft PR #8 removes the schedule/push triggers and adds an explicit internal-audition-only guard.",
       "requiredResolution": "Review and merge PR #8 or manually disable the existing default-branch workflow before its next scheduled run. PR #8 is ready for review but remains unmerged; main is unchanged."
+    },
+    {
+      "id": "SHORT-NARRATION-GUARD-001",
+      "status": "NOT_TESTED",
+      "detail": "The enhanced Short narration generator and manual-only workflow in PR #1 were changed after the last full code/test checkpoint df1ac. PR #1 remains draft and these exact files have not been run through CI.",
+      "requiredResolution": "Run the focused Python and workflow-safety tests on an isolated PR/branch or after owner-authorized review; keep the manual-only and non-commercial fail-closed behavior."
     }
   ],
   "updatedAt": "2026-11-19"
