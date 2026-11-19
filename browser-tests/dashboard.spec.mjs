@@ -2609,13 +2609,13 @@ test("all declared dashboard identifier hashes and URL fields reject malformed v
   await expect(page.locator("#app")).toBeVisible();
 
   const cases = [
-    { id: "fbid", value: "bad id", validity: "patternMismatch" },
-    { id: "fbpageid", value: "abc", validity: "patternMismatch" },
-    { id: "id", value: "bad id", validity: "patternMismatch" },
-    { id: "productionplansha", value: "not-a-sha", validity: "patternMismatch" },
-    { id: "productionplanreviewsha", value: "not-a-sha", validity: "patternMismatch" },
-    { id: "artifactSha", value: "not-a-sha", validity: "patternMismatch" },
-    { id: "metadataSha", value: "not-a-sha", validity: "patternMismatch" },
+    { id: "fbid", value: "!", validity: "patternMismatch" },
+    { id: "fbpageid", value: "!", validity: "patternMismatch" },
+    { id: "id", value: "!", validity: "patternMismatch" },
+    { id: "productionplansha", value: "!", validity: "patternMismatch" },
+    { id: "productionplanreviewsha", value: "!", validity: "patternMismatch" },
+    { id: "artifactSha", value: "!", validity: "patternMismatch" },
+    { id: "metadataSha", value: "!", validity: "patternMismatch" },
     { id: "campaignurl", value: "not a valid URL", validity: "typeMismatch" }
   ];
 
