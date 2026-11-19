@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-19T13:08:58.133Z",
+  "status": "BLOCKED_PRODUCTION_NOT_DEPLOYED_STAGING_PROVENANCE_AND_TRUST_MISMATCH",
+  "mode": "READ_ONLY_CLOUDFLARE_API_AND_D1_SELECT_ONLY",
+  "accountId": "bba3ba6fc08653dc66349b5a313f518d",
+  "workers": [
+    {
+      "name": "sonicvhibez-durable-state-staging",
+      "createdAt": "2026-11-07T21:38:38.946531Z",
+      "modifiedAt": "2026-11-14T19:06:41.127025Z",
+      "lastDeployedFrom": "dash",
+      "latestDeploymentVersion": "9a9bfd4c-208c-4dd8-93b0-5f84cdf3356c",
+      "latestDeploymentAt": "2026-11-14T19:06:42.659275Z",
+      "deploymentCount": 7,
+      "workersDevSubdomainEnabled": true,
+      "workersDevHost": "kajiboye44.workers.dev",
+      "previewUrlsEnabled": false,
+      "production": false
+    },
+    {
+      "name": "nature-frontiers-publisher",
+      "createdAt": "2026-11-10T22:48:43.942351Z",
+      "lastDeployedFrom": "api",
+      "production": true,
+      "brand": "Nature Frontiers",
+      "mustRemainSeparateFromSonicVhibez": true
+    },
+    {
+      "name": "nature-frontiers-browser-qc",
+      "createdAt": "2026-11-12T14:27:28.281806Z",
+      "lastDeployedFrom": "api",
+      "production": false
+    },
+    {
+      "name": "hello-world",
+      "createdAt": "2026-04-19T22:22:08.290771Z",
+      "lastDeployedFrom": "api",
+      "production": false
+    }
+  ],
+  "sonicvhibezStagingWorker": {
+    "name": "sonicvhibez-durable-state-staging",
+    "sourceProvenance": "Dashboard deployment; no exact Git source SHA recorded",
+    "bindings": {
+      "d1": {
+        "name": "STATE_DB",
+        "databaseName": "sonicvhibez-state-staging",
+        "databaseId": "f018ee20-2d7f-41ec-9744-ee058bce80f8"
+      },
+      "r2": {
+        "name": "ARTIFACTS",
+        "bucketName": "sonicvhibez-artifacts-staging"
+      },
+      "secretsPresent": [
+        "DASHBOARD_OPERATOR_ID",
+        "DASHBOARD_OPERATOR_TOKEN"
+      ]
+    },
+    "oidcTrust": {
+      "repository": "clickerrish-art/YT-AUTO-VISE",
+      "ref": "refs/heads/codex/cloudflare-adapter-integration-20261108",
+      "workflow": "clickerrish-art/YT-AUTO-VISE/.github/workflows/repository-runner.yml@refs/heads/codex/cloudflare-adapter-integration-20261108",
+      "eventName": "workflow_dispatch",
+      "currentImplementationBranch": "codex/marketing-machine-audit-fixes",
+      "mismatch": true,
+      "securityDecision": "Do not broaden or replace the trusted ref until main/branch protection and the intended runner workflow identity are owner-verified."
+    }
+  },
+  "d1": {
+    "staging": {
+      "name": "sonicvhibez-state-staging",
+      "id": "f018ee20-2d7f-41ec-9744-ee058bce80f8",
+      "listMetadataTableCount": 0,
+      "directSqliteMasterApplicationTables": [
+        "dashboard_state",
+        "dashboard_backups",
+        "runner_state",
+        "runner_control",
+        "runner_artifacts",
+        "runner_artifact_parts"
+      ],
+      "systemTables": [
+        "_cf_KV"
+      ],
+      "rowCounts": {
+        "dashboard_state": 1,
+        "dashboard_backups": 5,
+        "runner_state": 0,
+        "runner_control": 0,
+        "runner_artifacts": 0,
+        "runner_artifact_parts": 0
+      },
+      "dashboardState": {
+        "revision": 2,
+        "stateBytes": 4376,
+        "updatedAt": "2026-11-15T08:11:30.218Z"
+      },
+      "backups": {
+        "count": 5,
+        "firstAt": "2026-11-15T07:48:50.443Z",
+        "latestAt": "2026-11-15T07:48:50.443Z"
+      },
+      "runnerActivity": "No persisted runner state, controls, artifacts or artifact parts."
+    },
+    "natureFrontiersProduction": {
+      "name": "nature-frontiers-prod-state",
+      "id": "9b2e439d-5fd4-4812-a938-e1739fbe8795",
+      "version": "production",
+      "tableCount": 0,
+      "brand": "Nature Frontiers",
+      "mustRemainSeparateFromSonicVhibez": true
+    }
+  },
+  "r2": {
+    "listApiStatus": 403,
+    "errorCode": 10042,
+    "message": "Please enable R2 through the Cloudflare Dashboard.",
+    "stagingWorkerBindingExists": true,
+    "verifiedBucketAccess": false
+  },
+  "durableObjects": {
+    "namespaceCount": 0
+  },
+  "workflows": {
+    "authenticatedStagingSmoke": {
+      "path": ".github/workflows/cloudflare-staging-auth-smoke.yml",
+      "supportsWorkflowDispatch": true,
+      "readOnly": true,
+      "status": "NOT_RUN"
+    },
+    "stagingBackupRestoreDrill": {
+      "path": ".github/workflows/cloudflare-staging-backup-restore-smoke.yml",
+      "supportsWorkflowDispatch": true,
+      "requiresConfirmInput": "YES",
+      "mutatesStagingD1": true,
+      "status": "NOT_RUN",
+      "reason": "No explicit approval to mutate persistent staging state."
+    },
+    "localDeploymentRecoverySmoke": {
+      "runId": 44527617447,
+      "status": "PASS",
+      "note": "Local/application recovery acceptance; not a live production deployment proof."
+    }
+  },
+  "safety": {
+    "productionWorkerCreated": false,
+    "productionDeploymentAttempted": false,
+    "stagingWorkerChanged": false,
+    "d1Mutated": false,
+    "r2Changed": false,
+    "durableObjectCreated": false,
+    "publishingEnabled": false
+  },
+  "requiredNextActions": [
+    "Owner verifies branch protection before any OIDC trust-policy change.",
+    "Align staging runner OIDC trust with the intended protected branch/workflow and deploy from an exact reviewed source SHA; do not trust the unprotected implementation branch by default.",
+    "Run the read-only authenticated staging smoke through workflow_dispatch and record its exact run/artifact.",
+    "Owner explicitly approves the staging backup/restore drill (workflow_dispatch confirm=YES) before it mutates staging D1.",
+    "Enable/verify R2 in the Cloudflare Dashboard or remove the unused binding; then verify bucket access and artifact accounting.",
+    "Provision a separate SonicVhibez production Worker and production D1 only after source provenance, auth, secrets, storage and recovery are verified.",
+    "Keep Nature Frontiers production Worker/D1 separate; do not connect its YouTube identity to SonicVhibez publishing."
+  ]
+}
