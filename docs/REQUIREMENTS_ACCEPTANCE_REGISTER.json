@@ -623,7 +623,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "Focused spot-review examined 15 security-critical runtime paths: operator-auth, schedule-policy, YouTube history gate, private uploader, production readiness/quality approval, backup/restore, human review, Facebook publisher/pipeline, Meta adapter, content job lifecycle, dashboard route/auth boundary, and deployed Cloudflare OIDC trust. Findings: auth constant-time; scheduler timezone/72h/DST/sequence; private-only upload with exact-hash one-shot authorization and no blind retry; atomic/symlink-safe backup/restore; Facebook explicit flags and uncertain-outcome reconciliation. Full semantic review of 454 files remains incomplete; 4 critical paths (dashboard HTML, inventory script, two restore tests) remain for manual review; branch protection unverified; Cloudflare OIDC trust pinned to a different old branch.",
+      "currentHeadEvidenceNote": "All 17 inventory-designated critical paths have now been spot-reviewed, plus cloudflare/staging-snapshot/worker.js and scripts/production-quality-approval.mjs. Checks covered constant-time operator auth; dashboard escaping/no token persistence/single-flight submissions; static-only inventory; schedule/timezone/history gates; private-only exact-hash upload and no blind retries; atomic/symlink-safe backup/restore; Meta explicit authorization and uncertain-outcome reconciliation. Full semantic review of the 454-file diff is still not complete. Owner-side branch protection is unverified, and deployed Cloudflare OIDC trust is pinned to a different historical branch.",
       "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
     },
     {
@@ -2429,42 +2429,47 @@
     },
     "criticalModuleReview": {
       "reviewedPaths": [
-        "scripts/operator-auth.mjs",
-        "scripts/schedule-policy.mjs",
-        "scripts/youtube-history-gate.mjs",
-        "scripts/upload-private.mjs",
-        "scripts/production-readiness.mjs",
+        "public/dashboard.html",
         "scripts/backup-state.mjs",
-        "scripts/restore-state.mjs",
-        "scripts/human-review.mjs",
-        "scripts/production-quality-approval.mjs",
+        "scripts/content-job-lifecycle.mjs",
+        "scripts/dashboard-inventory.mjs",
+        "scripts/dashboard-server.mjs",
         "scripts/facebook-autonomous-publisher.mjs",
         "scripts/facebook-pipeline.mjs",
+        "scripts/human-review.mjs",
         "scripts/meta-page-adapter.mjs",
-        "scripts/content-job-lifecycle.mjs",
-        "scripts/dashboard-server.mjs (route/auth boundary spot-review)",
-        "cloudflare/staging-snapshot/worker.js (deployed trust policy spot-review)"
-      ],
-      "reviewedCount": 15,
-      "inventoryCriticalModuleCount": 17,
-      "status": "PARTIAL_NOT_FULL_SEMANTIC_REVIEW",
-      "findings": [
-        "Operator authentication uses constant-time token comparison and rejects missing/invalid credentials before route validation.",
-        "Schedule policy enforces Africa/Johannesburg, 72 elapsed hours, no same local calendar day, DST validity and long_form→long_form→short; cadence decision remains owner-blocked.",
-        "YouTube history gate requires complete paginated public/private/unlisted inventory and upload-attempt reconciliation.",
-        "Private uploader enforces private visibility, explicit one-shot authorization, exact-hash approval, emergency-stop and confirmation flags; it does not blindly retry uncertain remote uploads.",
-        "Backup/restore uses symlink/path checks, O_NOFOLLOW where available, locks, atomic writes/fsync and interrupted-restore journal recovery.",
-        "Facebook publisher requires explicit live flags, page identity, rights/compliance preflight and human approval; uncertain outcomes are reconciled before any retry.",
-        "Production-quality approval binds exact video/metadata hashes, quality scorecard, technical validation receipt and rights evidence.",
-        "Deployed Cloudflare staging worker's OIDC trust is pinned to an old branch; do not broaden until branch protection is verified."
-      ],
-      "remainingCriticalPaths": [
-        "public/dashboard.html",
-        "scripts/dashboard-inventory.mjs",
+        "scripts/operator-auth.mjs",
+        "scripts/production-readiness.mjs",
+        "scripts/restore-state.mjs",
+        "scripts/schedule-policy.mjs",
+        "scripts/upload-private.mjs",
+        "scripts/youtube-history-gate.mjs",
         "test/restore-facebook-draft-history.test.mjs",
         "tests/restore-state.test.mjs"
       ],
-      "note": "This is a focused security/behavior spot-review of 15 paths, not a full semantic review of the 454-file branch diff."
+      "reviewedCount": 17,
+      "inventoryCriticalModuleCount": 17,
+      "status": "CRITICAL_PATHS_SPOT_REVIEWED_FULL_454_FILE_REVIEW_PENDING",
+      "additionalPathsReviewed": [
+        "cloudflare/staging-snapshot/worker.js",
+        "scripts/production-quality-approval.mjs"
+      ],
+      "findings": [
+        "Operator authentication uses constant-time token comparison and rejects missing/invalid credentials before route validation.",
+        "Dashboard UI has 17 forms and 121 controls; dynamic innerHTML values are passed through the esc() helper, no eval/localStorage usage was found, the operator token is a password input, and a WeakSet prevents concurrent duplicate form submissions at the UI boundary.",
+        "Dashboard inventory explicitly labels itself static inventory only, not route/control acceptance evidence.",
+        "Schedule policy enforces Africa/Johannesburg, 72 elapsed hours, no same local calendar day, DST validity and long_form→long_form→short; cadence decision remains owner-blocked.",
+        "YouTube history gate requires complete paginated public/private/unlisted inventory and upload-attempt reconciliation.",
+        "Private uploader enforces private visibility, exact-hash approval, one-shot authorization and emergency-stop/confirmation flags; uncertain remote uploads are not blindly retried.",
+        "Production-quality approval binds exact video/metadata hashes, quality scorecard, technical validation receipt and rights evidence.",
+        "Backup/restore uses symlink/path checks, O_NOFOLLOW where available, locks, atomic writes/fsync and interrupted-restore journal recovery; restore tests cover symlinks, interruption and concurrency.",
+        "Facebook publisher requires explicit live flags, verified Page identity, rights/compliance preflight and human approval; uncertain outcomes require reconciliation before retry.",
+        "Deployed Cloudflare staging Worker OIDC trust is pinned to an old branch, not the current implementation branch; do not broaden trust until branch protection is owner-verified."
+      ],
+      "remainingCriticalPaths": [],
+      "fullDiffReviewStatus": "NOT_COMPLETE",
+      "fullDiffFiles": 454,
+      "note": "All 17 inventory-designated critical modules have been spot-reviewed, plus the deployed Cloudflare staging worker and exact-hash approval validator. This is not a complete semantic review of all 454 branch-diff files. Owner-side branch protection remains unverified."
     }
   },
   "candidateSourceTestSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
@@ -3389,8 +3394,8 @@
     {
       "id": "GIT-SEMANTIC-REVIEW-001",
       "status": "NOT_TESTED",
-      "detail": "Latest inventory covers 454 final-tree files, 17 critical paths, zero deletions; nine main-only commits have no net main-tree changes. A focused spot-review examined 15 security-critical runtime paths and confirmed constant-time operator auth, strict schedule/history gates, private-only exact-hash uploads with no blind retry, atomic/symlink-safe backup/restore, explicit Meta publishing authorization and exact-hash production approval. Four critical paths remain for manual review; the full 454-file semantic review is not complete. Branch protection remains owner-unverified and staging OIDC trust is pinned to an old branch.",
-      "requiredResolution": "Complete review of the remaining dashboard UI/inventory and restore test paths, then continue the full 454-file semantic review. Owner verifies branch protection before changing Cloudflare OIDC trust. Do not merge or rewrite history."
+      "detail": "All 17 inventory-designated critical modules have been spot-reviewed, plus the deployed Cloudflare staging Worker and exact-hash approval validator. The review found constant-time auth, escaped dashboard dynamic content, no token persistence, UI single-flight protection, strict scheduler/history gates, private-only hash-bound upload with no blind retry, atomic/symlink-safe backup/restore and explicit Meta authorization. Full semantic review of 454 files remains incomplete; owner-side branch protection is unverified and staging OIDC trust is pinned to an old branch.",
+      "requiredResolution": "Continue full semantic review of the 454-file diff and verify main branch protection in repository Settings → Branches. Do not merge, rebase, force-push or broaden Cloudflare OIDC trust before branch protection is confirmed."
     },
     {
       "id": "OWNER-INPUTS-001",
