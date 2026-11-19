@@ -133,7 +133,12 @@ test("readiness JSON distinguishes fresh and stale external reconciliation from 
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
   const reconciliation = currentYouTubeReconciliationExpectation();
-  assert.equal(report.blockers.some(blocker => blocker.evidence.kind === "external-reconciliation-required"), !(reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh));
+  const historyBlocker = report.blockers.find(blocker => /complete owner-reviewed public\\/private\\/unlisted SonicVhibez history evidence/.test(blocker.message));
+  const attemptsBlocker = report.blockers.find(blocker => /local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete/.test(blocker.message));
+  assert.equal(Boolean(historyBlocker), !(reconciliation.historyMatches && reconciliation.historyFresh));
+  assert.equal(Boolean(attemptsBlocker), !(reconciliation.attemptsReconciled && reconciliation.attemptsFresh));
+  if (historyBlocker) assert.equal(historyBlocker.evidence.kind, "external-reconciliation-required");
+  if (attemptsBlocker) assert.equal(attemptsBlocker.evidence.kind, "external-reconciliation-required");
   assert.equal(report.notes.some(note => /prior upload-attempt reconciliation passed/.test(note)), reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh);
   assert.ok(report.blockers.some(blocker => blocker.evidence.kind === "repository-path-check" && /YouTube OAuth upload scope/.test(blocker.evidence.observed)));
   const readinessSource = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
