@@ -20,7 +20,7 @@ function assertWithinRoot(root, candidate, label) {
 }
 
 function assertSafeDirectoryAncestors(root, directory, { allowMissing = false } = {}) {
-  assertWithinRoot(root, directory, "Queue directory");
+  if (path.resolve(root) !== path.resolve(directory)) assertWithinRoot(root, directory, "Queue directory");
   let cursor = root;
   for (const component of path.relative(root, directory).split(path.sep).filter(Boolean)) {
     cursor = path.join(cursor, component);
