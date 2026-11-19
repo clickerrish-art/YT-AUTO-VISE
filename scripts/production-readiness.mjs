@@ -9,6 +9,7 @@ import { createHash } from "node:crypto";
 import { validateCadenceDecision } from "./schedule-policy.mjs";
 import { validateProductPromotionGate } from "./product-promotion-gate.mjs";
 import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
+import { validateProductionQualityApprovalFile } from "./production-quality-approval.mjs";
 
 const root = process.cwd();
 const blockers = [];
@@ -229,6 +230,22 @@ if (approvedProduct) {
     requireMetadataDisclosure: Boolean(reviewedMetadata)
   });
   promotionGateErrors.forEach(message => blockers.push("Product promotion gate: " + message));
+}
+const qualityApprovalPath = process.env.UPLOAD_APPROVAL_PATH?.trim();
+if (!qualityApprovalPath) {
+  blockers.push("Exact-hash-bound human production quality approval is missing; configure UPLOAD_APPROVAL_PATH before private-upload readiness can pass.");
+} else {
+  const qualityApproval = validateProductionQualityApprovalFile({
+    approvalPath: qualityApprovalPath,
+    videoPath,
+    metadataPath,
+    rootDir: root
+  });
+  if (!qualityApproval.valid) {
+    blockers.push("Production quality approval gate: " + qualityApproval.errors.join("; "));
+  } else {
+    notes.push("Exact-hash-bound production quality approval, full-playback review, technical receipt and rights evidence passed structural verification.");
+  }
 }
 if (!exists(videoPath)) blockers.push("Rendered MP4 media/next-short.mp4 is missing.");
 for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) {
