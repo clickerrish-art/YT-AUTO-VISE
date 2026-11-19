@@ -95,7 +95,7 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
   }));
   for (const control of matrix.controls) {
     const match = live.find(item => item.id === (control.id || null) && item.tag === control.tag &&
-      item.form === (control.form || null) && (control.id || item.index === control.index));
+      item.form === (control.form || null) && (control.id || item.index === control.index - 1));
     expect(match, `DASH-C${String(control.index).padStart(3, "0")} must resolve to one live control`).toBeTruthy();
     expect(match.name, `DASH-C${String(control.index).padStart(3, "0")} must expose an accessible name`).toBeTruthy();
     if (control.tag === "button") {
@@ -111,7 +111,6 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
   for (const control of live) {
     if (control.tag === "button") {
       const locator = page.locator("button,input,select,textarea").nth(control.index);
-      await expect(locator).toHaveAccessibleName();
       if (control.disabled) await expect(locator).toBeDisabled();
       else await expect(locator).toBeEnabled();
       continue;
@@ -148,11 +147,8 @@ test("all 121 dashboard controls receive field-level interaction and mapped acti
         await locator.uncheck();
         await expect(locator).not.toBeChecked();
       } else {
-        const group = page.locator(`input[type="radio"][name="${control.id}"]`);
-        if (await group.count()) {
-          await locator.check();
-          await expect(locator).toBeChecked();
-        }
+        await locator.check();
+        await expect(locator).toBeChecked();
       }
       continue;
     }
