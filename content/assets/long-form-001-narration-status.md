@@ -50,6 +50,17 @@ Narration generation is not narration approval or commercial clearance. The WAV 
 - Current HeyGen Terms of Service (last updated 2026-10-16) expressly limit Free-plan output to personal, non-commercial and internal-evaluation use; the restriction includes monetization, redistribution and commercial activity.
 - HeyGen Voice Supplemental Terms state that they do not expand Free-plan output rights.
 - No published no-cost commercial-use exception for this public Roderic voice was found in the official terms/pricing/support material reviewed.
-- A support request seeking a written $0 commercial-use exception for both the existing WAV and future Roderic generations was prepared as a Gmail draft addressed to support@heygen.com. Draft ID: `r-3757721327227844465`. **Not sent.**
+- A support request seeking a written $0 commercial-use exception was sent to support@heygen.com. HeyGen Support replied that it cannot provide official or legally binding licensing confirmations and directed the owner to legal@heygen.com. A formal written request covering the existing WAV and future Roderic generations was then sent to legal@heygen.com on 2026-11-20. Legal thread ID: `1a1f841532f681a1`. The thread was checked on 2026-11-20; it contains only the sent request and no Legal response.
 - Required before release: HeyGen's explicit written authorization identifying the Roderic voice, existing WAV, future generations, SonicVhibez public/commercial use, and scope/duration/conditions. Silence, verbal assumptions, or ordinary support acknowledgement are not sufficient.
 - Until that authorization is received and checked, status remains HOLD. No paid plan, no voice substitution, no new speech generation, and no commercial use of the Free-plan WAV.
+
+
+## Owner voice decision and current escalation status (2026-11-20)
+
+- Owner decision: **Roderic — Authoritative & Refined is the exclusive approved narrator throughout.**
+- Owner decision: **Banjo is explicitly disapproved for all future production and auditions.** No other voice substitution is authorized.
+- Budget: strictly zero; no paid upgrade, charge, or paid workaround is permitted.
+- Legal request: sent to `legal@heygen.com` after Support directed the owner there. The request asks whether zero-cost commercial/monetized YouTube use is permitted for both the existing Free-plan Roderic WAV and future Free-plan Roderic generations, and asks for scope, attribution and underlying voice/model licence coverage.
+- Latest check: the Legal thread contains one message (the owner's sent request) and no response. Permission is **pending and unconfirmed**, not granted.
+- Release gate: do not use the Free-plan WAV commercially unless current applicable terms or explicit written authorization from the rights holder clearly permits it. Do not treat Support's referral, silence, or the owner's narrator approval as a licence.
+- Continue only work independent of this licence gate. Keep production and publishing disabled until all release gates are independently evidenced.
