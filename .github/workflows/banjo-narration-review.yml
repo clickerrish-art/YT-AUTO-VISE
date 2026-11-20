@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   render-review:
+    if: false # Disabled: owner explicitly rejected Banjo for all future production and auditions.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
