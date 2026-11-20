@@ -23,7 +23,7 @@
 | Edit and final master | No final 6–10 minute 16:9 MP4 exists or has been verified | BLOCKED |
 | Audio / visual QC | No full human listen-through, full master playback, final audio mix or exact-hash sign-off | BLOCKED |
 | Rights / provenance | Render manifest has empty footage/narration licence evidence and `rightsConfirmed=false`, `complianceReviewed=false` | BLOCKED |
-| YouTube identity and OAuth | Last successful read-only verification (2026-11-19, run 44632065508) verified @sonicvhibez, channel ID `UCSlkuPfHH78oGC1o418HV4w`, both `youtube.readonly` and `youtube.upload` scopes, and the complete one-video public/private/unlisted inventory. The 2026-11-20 readiness run did not perform a live OAuth refresh; it found stale local/manual upload-attempt attestation after 2026-11-18. Fresh read-only verification is now triggered by long-form manifest/metadata changes | PARTIAL — remote identity/history/scopes last passed 2026-11-19; local/manual attempt attestation stale |
+| YouTube identity and OAuth | Fresh read-only verification passed 2026-11-20 11:13:10Z (run 44725743866): exact channel @sonicvhibez / `UCSlkuPfHH78oGC1o418HV4w`, both required OAuth scopes and complete one-video inventory. New artifact is recorded at `content/youtube-history-refresh-2026-11-20.json`; its format is unclassified pending owner reaffirmation. Manual/local upload-attempt attestation remains stale after 2026-11-18 | PARTIAL — live identity/scopes/history pass; owner attestation and format reaffirmation pending |
 | Publishing | No upload or publication authorized or verified; private-only one-shot policy remains | HOLD |
 | Scheduler | Fresh complete remote inventory passed on 2026-11-20: one public 20-second video. The previous owner-reviewed record classifies the same exact ID/timestamp as a legacy Short; the fresh artifact's own format field is unclassified pending owner reaffirmation. No long-form publication exists to validate the rolling cycle; manual/local/third-party attempt attestation is stale after 2026-11-18 | PARTIAL |
 | Production infrastructure | Staging state Worker exists; no SonicVhibez production publisher Worker; R2 is disabled (Cloudflare 403/code 10042) | BLOCKED |
@@ -121,7 +121,7 @@
 7. Perform only the exact authorized private upload; verify remote video ID, channel, final privacy and remote metadata. Do not enable public/unattended publishing.
 8. Only after the owner separately authorizes public release, publish and verify the public URL and actual publication timestamp.
 
-**Required owner input:** OAuth reauthorization and secure secret update. Required remote history and channel evidence are currently unavailable because the live refresh reports `invalid_grant`.
+**Required owner input:** updated owner attestation for manual/local/third-party upload attempts after 2026-11-18 and reaffirmation of the sole video's Short classification. The latest live OAuth and remote inventory check passed; reauthorization is conditional only if a later check fails.
 
 ### P8 — production infrastructure and repository release
 
@@ -200,7 +200,7 @@ These updates were executed on `codex/marketing-machine-audit-fixes`; `main` was
 
 An earlier draft of this plan incorrectly treated an older `invalid_grant` attempt as the latest OAuth state. The repository evidence was rechecked and that statement has been corrected:
 
-- Latest successful read-only verification: run `44632065508`, 2026-11-19 22:48:58Z. It verified channel `@sonicvhibez`, exact ID `UCSlkuPfHH78oGC1o418HV4w`, both required OAuth scopes (`youtube.readonly` and `youtube.upload`), and a complete one-video inventory.
+- Previous successful read-only verification: run `44632065508`, 2026-11-19 22:48:58Z. It was superseded by the fresher 2026-11-20 run `44725743866` recorded below.
 - The sole remote video is public, 20 seconds, published 2026-10-22T15:05:56Z. The owner reviewed and accepted it as a historical Short; it is a legacy exception to the current 50–60-second Short specification.
 - The reconciliation document is marked complete and matches the remote video ID, channel, visibility and timestamp.
 - The owner attestation for manual/local/third-party upload attempts is only valid through 2026-11-18. Attempts after that date are not attested; this is a hard hold before another upload.
