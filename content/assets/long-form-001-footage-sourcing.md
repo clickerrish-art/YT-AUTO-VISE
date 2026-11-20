@@ -62,3 +62,22 @@ PEX-003 is retained only as an optional portrait insert candidate; it is not a p
 - No claim is made that any candidate is rights-cleared for this specific production beyond Pexels' stated platform licence.
 - No local production workspace or verified media bytes were available through the tools used in this step.
 - Do not schedule or render with these candidates until files are acquired and all checks above pass.
+
+
+## Additional Wikimedia Commons footage leads discovered (2026-11-20)
+
+These are new source leads, not acquired or approved assets. Their Commons file pages were inspected for the listed metadata and licence statements. The original media bytes have not been downloaded, hashed, decoded or visually reviewed in this workflow.
+
+| Asset | File page / creator | File-page metadata | Licence | Preliminary editorial disposition |
+|---|---|---|---|---|
+| WMC-001 | [Nairobi National Park (August 2025) Nile crocodile](https://commons.wikimedia.org/wiki/File:Nairobi_National_Park_(August_2025)_Nile_crocodile.webm) — Addshore | 21 s, 3840×2160, VP9/Opus, 28.91 MB; recorded at Nairobi National Park on 10 Aug 2025; own work | CC BY-SA 4.0 | Strong habitat/animal candidate. ShareAlike obligations apply to adaptations; legal review required before incorporating into a commercial edit. |
+| WMC-002 | [Nile Crocodile (Crocodylus niloticus) swallowing a Tilapia](https://commons.wikimedia.org/wiki/File:Nile_Crocodile_(Crocodylus_niloticus)_swallowing_a_Tilapia.webm) — Bernard Dupont | 15 s, 1280×720, VP8/Vorbis, 10.79 MB; Kruger National Park, South Africa; source Flickr page identified | CC BY-SA 2.0 | Species and feeding context are described on the file page. ShareAlike obligations apply; inspect for graphic content and decide whether it fits the restrained, non-sensational edit. |
+| WMC-003 | [Nile crocodile ambushes a wildebeest](https://commons.wikimedia.org/wiki/File:Nile_crocodile_ambushes_a_wildebeest.webm) — Bettina May | 66 s, 1920×1080, VP8, 31.72 MB; Grumeti River, Serengeti; file page says a section of the original material was removed | CC BY 3.0 | Potentially relevant to ambush mechanics, but high editorial risk: inspect the complete clip for distress, graphic injury, animal-welfare context, edit continuity and misleading staging. Do not use merely because it is licensed. |
+
+### Rights and acquisition caveats
+
+- The file pages state the listed Creative Commons licences, but the production still needs to retain the exact file-page snapshot, attribution, licence URL, download date and original bytes.
+- CC BY-SA assets are not automatically unsuitable for commercial use, but their ShareAlike requirements can affect adaptation and distribution. Do not incorporate WMC-001 or WMC-002 until the project's rights reviewer has assessed those obligations.
+- WMC-003 is CC BY 3.0 on its file page; attribution and indication of modifications are required. Its content still requires full human welfare/editorial review.
+- No Wikimedia Commons candidate has been accepted as a production asset. No asset hashes, decode checks, complete visual inspection or final rights approvals exist.
+- The inability to ingest the source bytes into the current Comfy Cloud workspace remains unresolved. These leads do not remove the cloud-only acquisition/storage blocker.
