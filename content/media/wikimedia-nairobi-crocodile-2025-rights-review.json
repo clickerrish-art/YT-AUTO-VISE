@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "assetId": "wikimedia-nairobi-national-park-nile-crocodile-2025",
+  "project": "SonicVhibez",
+  "status": "OPEN_SOURCE_FILE_NOT_ACQUIRED",
+  "source": {
+    "platform": "Wikimedia Commons",
+    "pageUrl": "https://commons.wikimedia.org/wiki/File:Nairobi_National_Park_(August_2025)_Nile_crocodile.webm",
+    "directFileUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Nairobi_National_Park_%28August_2025%29_Nile_crocodile.webm",
+    "filename": "Nairobi National Park (August 2025) Nile crocodile.webm",
+    "creator": "Addshore",
+    "description": "Video taken at Nairobi National Park, Kenya.",
+    "dateRecorded": "2025-08-10",
+    "sourcePageCheckedAt": "2026-11-20",
+    "metadata": {
+      "durationSeconds": 21,
+      "width": 3840,
+      "height": 2160,
+      "aspectRatio": "16:9",
+      "container": "WebM",
+      "videoCodec": "VP9",
+      "audioCodec": "Opus",
+      "overallBitrateMbps": 11.73,
+      "fileSizeBytes": 28910000,
+      "frameRate": null
+    }
+  },
+  "licenseReview": {
+    "license": "Creative Commons Attribution-ShareAlike 4.0 International",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "licensePageEvidence": "https://commons.wikimedia.org/wiki/File:Nairobi_National_Park_(August_2025)_Nile_crocodile.webm",
+    "commercialUse": "PERMITTED_SUBJECT_TO_CC_BY_SA_4_0",
+    "attributionRequired": true,
+    "changesMustBeIndicated": true,
+    "shareAlikeRequiredForAdaptations": true,
+    "attributionCandidate": "Nairobi National Park (August 2025) Nile crocodile.webm by Addshore, via Wikimedia Commons, licensed under CC BY-SA 4.0. Changes, if any, must be stated.",
+    "legalReviewRequired": "Assess whether incorporation into the final edited video creates an adaptation and how ShareAlike applies to the combined work."
+  },
+  "acquisition": {
+    "attempted": true,
+    "completed": false,
+    "filePath": null,
+    "sha256": null,
+    "retrievalNotes": "Wikimedia Commons original-file link was exposed by the source page, but the local network could not resolve upload.wikimedia.org. RunComfy server-side import was attempted and rejected because the connected account has not granted assets.write permission. No paid top-up or generation was attempted."
+  },
+  "inspection": {
+    "playable": null,
+    "ffprobe": null,
+    "representativeFramesReviewed": false,
+    "fullClipReviewed": false,
+    "embeddedAudioReviewed": false,
+    "visiblePeopleLogosTrademarksReviewed": false,
+    "speciesIndependentlyConfirmed": false,
+    "behaviourConfirmed": false
+  },
+  "approvals": {
+    "commercialRightsConfirmed": false,
+    "attributionVerified": false,
+    "shareAlikeTreatmentApproved": false,
+    "humanRightsReview": "NOT_RECEIVED",
+    "scientificEditorialApproval": "NOT_RECEIVED",
+    "finalProductionApproved": false
+  },
+  "releaseDecision": "DO_NOT_USE_UNTIL_ORIGINAL_FILE_IS_ACQUIRED_AND_INSPECTED_AND_CC_BY_SA_ATTRIBUTION_AND_SHAREALIKE_OBLIGATIONS_ARE_APPROVED",
+  "evidenceNote": "This is a promising openly licensed candidate with a source-page record, not an acquired or production-approved media asset."
+}
