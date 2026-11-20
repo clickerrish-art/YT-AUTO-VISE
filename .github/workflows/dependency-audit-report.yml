@@ -40,7 +40,7 @@ jobs:
           }
           NODE
           echo "npm audit exit status: $audit_status"
-          if [ "$audit_status" -gt 1 ]; then
-            echo "npm audit could not complete successfully"
-            exit "$audit_status"
+          if [ "$audit_status" -ne 0 ]; then
+            echo "FAIL: npm audit reports vulnerabilities or could not complete."
+            exit 1
           fi
