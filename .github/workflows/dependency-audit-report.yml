@@ -16,7 +16,6 @@ jobs:
       - name: Install declared dependencies without lifecycle scripts
         run: |
           npm install --ignore-scripts
-          npm audit fix --ignore-scripts
       - name: Report exact npm advisories and dependency paths
         shell: bash
         run: |
