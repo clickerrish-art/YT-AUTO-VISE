@@ -4,6 +4,7 @@ import fs from "node:fs";
 
 const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
 const narrationWorkflow = fs.readFileSync(".github/workflows/generate-long-form-narration.yml", "utf8");
+const shortNarrationWorkflow = fs.readFileSync(".github/workflows/free-narration-artifact.yml", "utf8");
 const qualityWorkflow = fs.readFileSync(".github/workflows/content-quality.yml", "utf8");
 const readiness = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
 const longRenderer = fs.readFileSync("scripts/render-long-form.mjs", "utf8");
@@ -41,6 +42,20 @@ test("long-form Edge TTS generation is manual-only and explicitly non-commercial
   const workflowLines = narrationWorkflow.split(String.fromCharCode(10)).map(line => line.trim());
   assert.equal(workflowLines.includes("schedule:"), false);
   assert.equal(workflowLines.includes("push:"), false);
+});
+
+test("Short Edge TTS audition workflow is manual-only, acknowledged, and never production", () => {
+  assert.ok(shortNarrationWorkflow.includes("workflow_dispatch:"));
+  assert.ok(shortNarrationWorkflow.includes("allow_noncommercial_audition:"));
+  assert.ok(shortNarrationWorkflow.includes("default: false"));
+  assert.ok(shortNarrationWorkflow.includes("if: \${{ inputs.allow_noncommercial_audition == true }}"));
+  assert.ok(shortNarrationWorkflow.includes("--allow-noncommercial-audition"));
+  assert.ok(shortNarrationWorkflow.includes("NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"));
+  assert.ok(shortNarrationWorkflow.includes("productionUseAllowed") === false || shortNarrationWorkflow.includes("productionUseAllowed"));
+  const workflowLines = shortNarrationWorkflow.split(String.fromCharCode(10)).map(line => line.trim());
+  assert.equal(workflowLines.includes("schedule:"), false);
+  assert.equal(workflowLines.includes("push:"), false);
+  assert.doesNotMatch(shortNarrationWorkflow, /generate-queue-package|render-queued-draft|youtube\.upload/i);
 });
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
