@@ -6,6 +6,7 @@ const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
 const narrationWorkflow = fs.readFileSync(".github/workflows/generate-long-form-narration.yml", "utf8");
 const shortNarrationWorkflow = fs.readFileSync(".github/workflows/free-narration-artifact.yml", "utf8");
 const queuePackageGenerator = fs.readFileSync("scripts/generate-queue-package.py", "utf8");
+const legacyLongNarrationGenerator = fs.readFileSync("scripts/generate-long-form-narration.py", "utf8");
 const qualityWorkflow = fs.readFileSync(".github/workflows/content-quality.yml", "utf8");
 const readiness = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
 const longRenderer = fs.readFileSync("scripts/render-long-form.mjs", "utf8");
@@ -69,6 +70,20 @@ test("direct queue-package Edge TTS generation requires explicit non-commercial 
   assert.ok(queuePackageGenerator.includes('"commercialUseAllowed": False'));
   assert.ok(queuePackageGenerator.includes('"productionUseAllowed": False'));
   assert.ok(queuePackageGenerator.includes('"publishingEnabled": False'));
+});
+
+
+test("legacy long-form Edge TTS generator is explicitly non-commercial and fail-closed", () => {
+  assert.ok(legacyLongNarrationGenerator.includes("--allow-noncommercial-audition"));
+  assert.ok(legacyLongNarrationGenerator.includes("--voice"));
+  assert.ok(legacyLongNarrationGenerator.includes("require_noncommercial_audition(allow_noncommercial_audition)"));
+  assert.ok(legacyLongNarrationGenerator.includes('"status": "INTERNAL_AUDITION_ONLY"'));
+  assert.ok(legacyLongNarrationGenerator.includes('"voiceApprovalStatus": "NOT_OWNER_APPROVED"'));
+  assert.ok(legacyLongNarrationGenerator.includes('"licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"'));
+  assert.ok(legacyLongNarrationGenerator.includes('"commercialUseAllowed": False'));
+  assert.ok(legacyLongNarrationGenerator.includes('"productionUseAllowed": False'));
+  assert.ok(legacyLongNarrationGenerator.includes('"publishingEnabled": False'));
+  assert.ok(legacyLongNarrationGenerator.includes("audioSha256"));
 });
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
