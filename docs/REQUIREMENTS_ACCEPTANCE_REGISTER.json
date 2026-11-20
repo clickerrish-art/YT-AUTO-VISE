@@ -3411,5 +3411,53 @@
       "finalTreeDeletions": 0
     },
     "note": "Evidence refresh does not authorize upload, publication, branch merge or production deployment. OAuth identity/scopes are verified; owner upload-attempt attestation after 2026-11-18 remains stale."
+  },
+  "latestRegression": {
+    "recordedAt": "2026-11-20T17:28:06Z",
+    "sourceTestSha": "b7e35f946a362b6b6dea4cf6c3fab067fe35051f",
+    "implementationBranch": "codex/marketing-machine-audit-fixes",
+    "runs": [
+      {
+        "id": 44783247196,
+        "name": "Validate SonicVhibez automation",
+        "status": "success",
+        "jobId": 136451206943,
+        "checks": [
+          "locked dependency installation",
+          "npm audit: 0 vulnerabilities",
+          "181 Node.js test files passed",
+          "zero skipped tests required by workflow",
+          "FFmpeg renderer integration tests",
+          "campaign destination/disclosure safety",
+          "metadata safety gates",
+          "queue invariants",
+          "JavaScript syntax",
+          "Python compilation",
+          "read-only Cloudflare staging smoke"
+        ]
+      },
+      {
+        "id": 44783247282,
+        "name": "Generate and verify npm lockfile",
+        "status": "success",
+        "jobId": 136451208033,
+        "checks": [
+          "clean locked installation",
+          "npm audit: 0 vulnerabilities",
+          "complete Node.js test suite",
+          "schedule and campaign configuration",
+          "JavaScript syntax"
+        ],
+        "skippedSteps": [
+          "lockfile generation/refresh (not required)",
+          "lockfile commit (not required)",
+          "recovery artifact (not required)"
+        ]
+      }
+    ],
+    "pythonUnitTests": "NOT_RUN_ON_THIS_SHA",
+    "browserE2E": "NOT_RUN_ON_THIS_SHA",
+    "acceptancePromotion": "NONE",
+    "note": "This is exact-SHA regression evidence only. It does not promote DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 or GIT-002 and does not certify production media, rights, live publishing, or release readiness."
   }
 }
