@@ -23,9 +23,9 @@
 | Edit and final master | No final 6–10 minute 16:9 MP4 exists or has been verified | BLOCKED |
 | Audio / visual QC | No full human listen-through, full master playback, final audio mix or exact-hash sign-off | BLOCKED |
 | Rights / provenance | Render manifest has empty footage/narration licence evidence and `rightsConfirmed=false`, `complianceReviewed=false` | BLOCKED |
-| YouTube identity and OAuth | Latest production-readiness evidence reports live OAuth refresh `invalid_grant`; upload scope, channel identity, full history and upload-attempt reconciliation are not accepted | BLOCKED |
+| YouTube identity and OAuth | Last successful read-only verification (2026-11-19, run 44632065508) verified @sonicvhibez, channel ID `UCSlkuPfHH78oGC1o418HV4w`, both `youtube.readonly` and `youtube.upload` scopes, and the complete one-video public/private/unlisted inventory. The 2026-11-20 readiness run did not perform a live OAuth refresh; it found stale local/manual upload-attempt attestation after 2026-11-18. Fresh read-only verification is now triggered by long-form manifest/metadata changes | PARTIAL — remote identity/history/scopes last passed 2026-11-19; local/manual attempt attestation stale |
 | Publishing | No upload or publication authorized or verified; private-only one-shot policy remains | HOLD |
-| Scheduler | Local queue readiness is tested; actual remote publication timestamps and complete YouTube history gate are not verified | PARTIAL |
+| Scheduler | Complete remote inventory was owner-reviewed on 2026-11-19: one public 20-second legacy Short (not the current 50–60-second target). No long-form publication exists to validate the rolling cycle; manual/local/third-party attempt attestation is stale after 2026-11-18 | PARTIAL |
 | Production infrastructure | Staging state Worker exists; no SonicVhibez production publisher Worker; R2 is disabled (Cloudflare 403/code 10042) | BLOCKED |
 | Durable archive | No verified permanent production archive. Temporary Comfy output URLs expire; ChatGPT Library upload previously failed for storage limit | BLOCKED |
 | Branch/release controls | Implementation branch is in use; branch protection disabled; PR #1 remains draft/open/unmerged; no main-branch changes authorized | BLOCKED for repository release |
@@ -110,10 +110,11 @@
 
 ### P7 — YouTube identity, upload and publication
 
-1. Owner reauthorizes the existing YouTube OAuth client and securely updates the GitHub Actions `YOUTUBE_REFRESH_TOKEN` secret; never paste credentials into chat.
-2. Verify the token has the required upload scope and independently verify the exact SonicVhibez channel identity. Do not guess the channel ID.
-3. Fetch the complete paginated public, private and unlisted channel history and remote publication timestamps.
-4. Reconcile all local jobs, GitHub workflows, provider uploads, uncertain upload attempts and remote video IDs. Do not blind-retry uncertain uploads.
+1. Run the read-only YouTube identity/scope/history verification again before any upload. The latest successful check on 2026-11-19 verified `youtube.upload` and `youtube.readonly`, exact channel `@sonicvhibez` / `UCSlkuPfHH78oGC1o418HV4w`, and one public 20-second legacy Short. A fresh run is now automatically triggered by long-form manifest or metadata changes.
+2. Obtain an updated owner attestation covering any manual, local, third-party or external YouTube upload attempts since 2026-11-18. If any occurred, reconcile each exact remote video ID and timestamp before another upload.
+3. Re-fetch the complete paginated public, private and unlisted channel history and remote publication timestamps; compare against the owner-reviewed reconciliation.
+4. If the fresh read-only OAuth check fails with `invalid_grant` or the upload scope is absent, the owner must reauthorize the existing OAuth client and securely update the GitHub Actions `YOUTUBE_REFRESH_TOKEN` secret. Never paste credentials into chat.
+5. Reconcile all local jobs, GitHub workflows, provider uploads, uncertain upload attempts and remote video IDs. Do not blind-retry uncertain uploads.
 5. Reconcile the queue and actual history against the owner-approved cadence: rolling `long_form → long_form → short`, Africa/Johannesburg, at least 72 elapsed hours between actual publications and no two publications on the same Johannesburg calendar day. The minimum three-item cycle is 216 hours; do not force a weekly cadence.
 6. Confirm the final artifact, metadata, thumbnail, captions, rights and owner review hashes match the one-shot upload authorization.
 7. Perform only the exact authorized private upload; verify remote video ID, channel, final privacy and remote metadata. Do not enable public/unattended publishing.
@@ -177,12 +178,12 @@ These updates were executed on `codex/marketing-machine-audit-fixes`; `main` was
 
 ### Latest repository state at this snapshot
 
-- Implementation branch: `codex/marketing-machine-audit-fixes`, HEAD `39e0e0cb95d5319778f6381ac07cd58c8f933e35`.
+- Implementation branch: `codex/marketing-machine-audit-fixes`, HEAD `95d1b3d70f6559b845557c533b163da8657c025b` at this plan update.
 - `main`: `7efc548065385051f7c69377f87b77a35065ce74` (advanced independently; no main-branch write was made in this work).
-- Non-destructive compare: **4,746 commits ahead / 10 behind / 300 changed files**. No rebase, merge, reset, force-push or history reconciliation was performed.
+- Non-destructive compare: **4,751 commits ahead / 10 behind / 300 changed files**. No rebase, merge, reset, force-push or history reconciliation was performed.
 - PR #1 remains **OPEN / DRAFT / UNMERGED**.
 - Branch protection is disabled on both refs at the time of this read (`protected=false`); owner/admin action is required.
-- Latest commit `39e0e0cb95d5319778f6381ac07cd58c8f933e35` has runner-bridge safety in progress/success at the job level, deployment recovery in progress, and lockfile/full Node suite pending. Do not infer complete CI from a pending run.
+- Latest content/config/test changes include commit `0718b05c7b61cccafabdd00c3bb8b5fc7f702909` (corrected a stale cadence test assertion) and `a96ecfdbb6962be381acb407dcc71921f7370b30` (corrected stale OAuth/history note). The read-only verification workflow was updated in `95d1b3d70f6559b845557c533b163da8657c025b` to re-run on long-form manifest/metadata changes. The earlier full Node suite on commit `39e0e0cb95d5319778f6381ac07cd58c8f933e35` completed with **1,040 passed / 1 failed**: only `test/queue-cadence.test.mjs` failed because the test expected a weekly target in the operational queue, while the queue correctly has `weeklyTarget: null`. That test was corrected to assert the rolling-cycle contract. A final full-suite rerun is required on the latest test fix. Do not infer pass from the previous run.
 
 ### Newly explicit unresolved controls
 
@@ -192,3 +193,15 @@ These updates were executed on `codex/marketing-machine-audit-fixes`; `main` was
 - The TinyFish wallet reports a negative balance; no paid browser automation, fetch, research or top-up was used. This is not a zero-cost asset-acquisition route.
 - Cloudflare R2 remains disabled (403/code 10042); no bucket or archive was created.
 - HeyGen Legal has not replied. The Free-plan Roderic WAV remains internal-evaluation-only.
+
+
+### YouTube readiness evidence correction (2026-11-20)
+
+An earlier draft of this plan incorrectly treated an older `invalid_grant` attempt as the latest OAuth state. The repository evidence was rechecked and that statement has been corrected:
+
+- Latest successful read-only verification: run `44632065508`, 2026-11-19 22:48:58Z. It verified channel `@sonicvhibez`, exact ID `UCSlkuPfHH78oGC1o418HV4w`, both required OAuth scopes (`youtube.readonly` and `youtube.upload`), and a complete one-video inventory.
+- The sole remote video is public, 20 seconds, published 2026-10-22T15:05:56Z. The owner reviewed and accepted it as a historical Short; it is a legacy exception to the current 50–60-second Short specification.
+- The reconciliation document is marked complete and matches the remote video ID, channel, visibility and timestamp.
+- The owner attestation for manual/local/third-party upload attempts is only valid through 2026-11-18. Attempts after that date are not attested; this is a hard hold before another upload.
+- Latest production-readiness workflow run `44712917611` (2026-11-20 09:41:57Z) failed with **17 non-OAuth blockers**. It confirmed the four YouTube secrets were configured but did not perform a fresh live OAuth refresh. It reported missing short and long-form media, captions, rights/compliance evidence, metadata approval, exact-hash quality approval, rendered MP4, and stale/incomplete local/workflow/owner upload-attempt reconciliation. It did not attempt an upload or metadata write.
+- The read-only verification workflow now also triggers when `content/long-form-render-manifest.json` or `content/long-form-001-youtube-metadata-draft.md` changes. Its result must be inspected before any upload; a successful read-only check is still not upload authorization.
