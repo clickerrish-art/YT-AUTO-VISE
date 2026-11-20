@@ -42,3 +42,14 @@ Still required:
 Narration generation is not narration approval or commercial clearance. The WAV is internal-evaluation-only. The owner has explicitly confirmed Roderic — Authoritative & Refined as the exclusive narrator throughout and rejected Banjo for all future production or auditions. Do not substitute another voice. A paid commercial licence is disallowed by the zero-cost rule; therefore this production remains on hold until a zero-cost commercial-use authorization for Roderic is independently verified. Do not use the Free-plan WAV commercially, upgrade, or bypass the licence. This file also does not establish audio quality, exact spoken-word accuracy, local file integrity, rights clearance for visuals, completed edit, human review, upload authorization, or a YouTube schedule.
 
 `scheduledAt: null`; publishing remains disabled.
+
+
+## 2026-11-20 licence exception escalation
+
+- Account plan rechecked through the connected HeyGen account: Free.
+- Current HeyGen Terms of Service (last updated 2026-10-16) expressly limit Free-plan output to personal, non-commercial and internal-evaluation use; the restriction includes monetization, redistribution and commercial activity.
+- HeyGen Voice Supplemental Terms state that they do not expand Free-plan output rights.
+- No published no-cost commercial-use exception for this public Roderic voice was found in the official terms/pricing/support material reviewed.
+- A support request seeking a written $0 commercial-use exception for both the existing WAV and future Roderic generations was prepared as a Gmail draft addressed to support@heygen.com. Draft ID: `r-3757721327227844465`. **Not sent.**
+- Required before release: HeyGen's explicit written authorization identifying the Roderic voice, existing WAV, future generations, SonicVhibez public/commercial use, and scope/duration/conditions. Silence, verbal assumptions, or ordinary support acknowledgement are not sufficient.
+- Until that authorization is received and checked, status remains HOLD. No paid plan, no voice substitution, no new speech generation, and no commercial use of the Free-plan WAV.
