@@ -8,7 +8,7 @@
 
 ## Result
 
-**PARTIAL PASS — sensory claims supported with scope qualifications.** No changes were made to the owner-approved narration. The script correctly avoids claiming supernatural detection range or that every ripple triggers an attack. Two important boundaries must remain explicit in narration and visuals:
+**PARTIAL PASS — the principal sensory, ecology, locomotion, feeding and human-safety claims are supported by the sources checked, with scope qualifications.** No changes were made to the owner-approved narration. The script correctly avoids claiming supernatural detection range or that every ripple triggers an attack. Two important boundaries must remain explicit in narration and visuals:
 
 1. The 2015 wave-threshold work used conditioned animals and controlled, single-frequency surface-wave stimuli. It establishes sensitivity under experimental conditions, not a universal field detection range or the ability to identify prey species from any distance.
 2. The 2025 temporal-integration study tested young Nile crocodiles responding to controlled airborne sound and water-surface vibration sources. It does not directly observe or prove the sequence of decisions during a wild prey hunt.
@@ -35,12 +35,32 @@
 
 ## Remaining claim-review work — not yet passed
 
-- Verify the Nile crocodile's habitat and age-related diet claims against the cited IUCN/SSC Crocodile Specialist Group action plan and a current authoritative species source.
-- Verify shoreline ambush, tail propulsion, swimming posture and aquatic prey-handling claims against a suitable primary or authoritative zoological source.
-- Verify every human-safety recommendation against current IUCN Crocodile Specialist Group guidance and local authority advice; keep the script's conservative distance advice.
-- Complete an independent zoological/editorial review of the entire narration, not only the sensory section.
+- Complete an independent zoological/editorial review of the entire narration and the final scene-to-claim mapping. This desk review is not a substitute for a qualified reviewer.
 - During editing, ensure the visual plan does not depict an experimental sensory result as a filmed wild hunt or use generated imagery as authentic field footage.
 
 ## Release implications
 
 This review does not clear footage, audio, models, narration rights, music, captions, thumbnail, final export or publication. The production manifest remains fail-closed. No rights flag, compliance flag, upload authorization or schedule status is changed by this document.
+
+
+## Additional ecology, locomotion, feeding and safety checks (2026-11-20)
+
+| Script claim | Evidence checked | Assessment and visual constraint |
+|---|---|---|
+| Nile crocodiles inhabit lakes, rivers and freshwater swamps; some populations use brackish water | Fergusson (2010), IUCN/SSC Crocodile Specialist Group species account, *Crocodylus niloticus* Action Plan, pp. 84–89; lines 87–93 of PDF | Supported. This is a 2010 species account; use it for broad natural-history context, not current population status. |
+| Diet shifts with age, from insects/small aquatic invertebrates in juveniles to vertebrate prey in larger crocodiles | Fergusson (2010), p. 85; San Diego Zoo Wildlife Alliance Library fact sheet, Diet & Feeding, updated 14 Jan 2026 | Supported. Do not imply every adult routinely hunts large mammals; fish and varied prey are part of the diet. |
+| Shoreline ambush may involve waiting near approaches to water, remaining low, then launching from the water | San Diego Zoo Wildlife Alliance Library fact sheet, Diet & Feeding, lines 35–53; IUCN/SSC CSG Crocodilian Attacks safety guidance | Supported as a possible hunting strategy, not a universal sequence. Do not portray every crocodile or every hunt the same way. |
+| Strong tail provides the main forward thrust in swimming; limbs can be tucked/held alongside the body | San Diego Zoo Wildlife Alliance Library fact sheet, Behavior & Ecology, lines 151–165; IUCN/SSC CSG Locomotion page search result | Supported. Swimming modes vary by speed and context; visuals should not show the limbs rigidly tucked during every form of swimming. |
+| Large prey may be dragged into water, drowned, and dismembered in water | San Diego Zoo Wildlife Alliance Library fact sheet, Diet & Feeding, lines 35–53 | Supported. Keep the edit non-graphic and avoid implying every feeding event involves large prey or a specific death sequence. |
+| Crocodilians move between water bodies, can remain submerged for hours, and hunt close to shore | IUCN/SSC Crocodile Specialist Group, “Crocodilian Attacks,” safety tips | Supported. The CSG advises caution at all nearby rivers, streams, dams and pools within crocodilian range, even when no animal is visible. |
+| Do not enter water known to contain crocodilians; absence of a visible crocodile is not proof of safety | IUCN/SSC Crocodile Specialist Group, “Crocodilian Attacks,” safety tips | Supported. The CSG advises never swimming, diving or entering known crocodilian waters, and staying back from the water's edge. The script's conservative safety wording is appropriate. |
+
+### Additional references
+
+4. Fergusson, R.A. (2010). “Nile Crocodile *Crocodylus niloticus*.” In *Crocodiles. Status Survey and Conservation Action Plan*, 3rd ed., Crocodile Specialist Group, pp. 84–89. https://iucncsg.org/wp-content/uploads/2026/10/Crocodylus-niloticus-Action-Plan-2010.pdf
+5. San Diego Zoo Wildlife Alliance Library. “Nile Crocodiles (*Crocodylus niloticus* & *C. suchus*) Fact Sheet: Diet & Feeding.” Last updated 14 Jan 2026. https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/diet
+6. San Diego Zoo Wildlife Alliance Library. “Nile Crocodiles (*Crocodylus niloticus* & *C. suchus*) Fact Sheet: Behavior & Ecology.” Last updated 14 Jan 2026. https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/behavior
+7. IUCN/SSC Crocodile Specialist Group. “Crocodilian Attacks.” https://www.iucncsg.org/pages/Crocodilian-Attacks.html
+8. IUCN/SSC Crocodile Specialist Group. “Locomotion.” https://www.iucncsg.org/pages/Locomotion.html
+
+**Remaining scientific-review gate:** independent qualified zoological review of the entire narration and final footage/scene mapping. The current source check is a desk review, not expert sign-off.
