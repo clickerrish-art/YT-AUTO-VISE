@@ -216,3 +216,17 @@ An earlier draft of this plan incorrectly treated an older `invalid_grant` attem
 - Artifact `14623951721` is retained for seven days. ZIP SHA-256: `f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8`; JSON SHA-256: `0dd1fad51ee1ecc2f5ae192fc2d42fc94d93657198c310e9f5ad7f0ad904e316`.
 - No upload, metadata write or publishing state change occurred.
 - The remaining YouTube history blocker is the stale owner attestation for manual/local/third-party attempts after 2026-11-18, plus owner reaffirmation of the format classification. The 2026-11-20 readiness report's 17 blockers remain otherwise unresolved.
+
+
+## Exact-HEAD verification update — 2026-11-20 11:17 UTC
+
+The implementation branch and PR #1 head were re-read from GitHub immediately after workflow completion.
+
+- PR #1 remains OPEN / DRAFT / UNMERGED, base `main`, head branch `codex/marketing-machine-audit-fixes`.
+- Exact PR head SHA: `eb3ee0c78fc3896eec7b88e79dc4782dce3b4f6d`. This matches the code commit checked out by the completed Node validation run `44725961752`.
+- Workflow job `136253334705` completed successfully. Its log explicitly reports **1,041 Node tests passed, 181/181 test files passed, 0 failed, 0 skipped**.
+- The same job confirms clean locked `npm ci`, successful schedule and campaign validation, and JavaScript syntax checks.
+- Schedule validation output explicitly says the 72-hour/rolling-cycle checks are local validation only and do not query YouTube. Remote history and uncertain-upload reconciliation remain independent production gates.
+- Current compare against `main`: **4,756 commits ahead / 10 behind**, status `diverged`; compare endpoint returns a capped 300-file listing. Main SHA is `7efc548065385051f7c69377f87b77a35065ce74`; merge base is `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- No merge, rebase, reset, force-push, history rewrite, or main-branch modification was performed.
+- This update verifies the Node validation gate only. It does not clear the production readiness HOLD, complete other runtime/acceptance gates, or authorize any upload/publication.
