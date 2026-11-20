@@ -17,7 +17,7 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
     result[row.status] = (result[row.status] || 0) + 1;
     return result;
   }, {});
-  assert.deepEqual(counts, { PASS: 72, NOT_TESTED: 7, BLOCKED: 10 });
+  assert.deepEqual(counts, { PASS: 71, NOT_TESTED: 8, BLOCKED: 10 });
 });
 
 test("the owner-approved rolling publication cadence is no longer marked blocked", () => {
@@ -34,7 +34,7 @@ test("the owner-approved rolling publication cadence is no longer marked blocked
 test("API and dashboard acceptance statuses retain their exact evidence boundaries", () => {
   const api = byId("API-001");
   assert.equal(api.status, "BLOCKED");
-  assert.equal(api.currentHeadEvidenceSha, "e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3");
+  assert.equal(api.currentHeadEvidenceSha, "668a8779f8a2894f99ed935d0c8bf13f2f215e64");
   assert.match(api.currentHeadEvidenceNote, /42\/42 authorized application-level positive routes PASS/);
   assert.match(api.currentHeadEvidenceNote, /48\/48 protected API routes/);
   assert.match(api.currentHeadEvidenceNote, /six provider\/production routes remain BLOCKED/);
@@ -64,7 +64,7 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
   const worker = byId("SCHED-WORKER-DISPATCH-001");
   assert.equal(worker.status, "NOT_TESTED");
   assert.equal(worker.currentHeadStatus, "NOT_TESTED");
-  assert.equal(worker.currentHeadEvidenceSha, "4f38aa392f97e944c97c3d3c312be08e57686069");
+  assert.equal(worker.currentHeadEvidenceSha, "668a8779f8a2894f99ed935d0c8bf13f2f215e64");
   assert.match(worker.currentHeadEvidenceNote, /HTTP 409 preflight cooldown/);
   assert.match(worker.currentHeadEvidenceNote, /failed cooldown persistence causing a non-retryable stop and retained process lock/);
   assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);

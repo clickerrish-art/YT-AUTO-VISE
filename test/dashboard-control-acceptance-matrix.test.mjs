@@ -59,7 +59,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(dashboardEvidence.automation.run, automationRun);
   assert.equal(dashboardEvidence.automation.testSha, evidenceSha);
   assert.equal(dashboardEvidence.automation.nodeTestFiles, 181);
-  assert.equal(dashboardEvidence.automation.nodeTests, 1037);
+  assert.equal(dashboardEvidence.automation.nodeTests, 1042);
   assert.equal(dashboardEvidence.automation.nodeSkipped, 0);
   assert.equal(dashboardEvidence.automation.pythonTests, 87);
   assert.equal(dashboardEvidence.automation.pythonSkipped, 0);
