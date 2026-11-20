@@ -183,3 +183,57 @@ test("queue replenishment rejects symlink and path-traversal targets", () => {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
 });
+
+
+test("queue reader rejects a hard-link swap after path validation and before open", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-hardlink-race-"));
+  const trustRoot = path.join(tempDir, "trusted");
+  const queuePath = path.join(trustRoot, "queue.json");
+  const outsidePath = path.join(tempDir, "outside.json");
+  const preloaderPath = path.join(tempDir, "replace-queue-before-open.mjs");
+  fs.mkdirSync(trustRoot);
+  fs.writeFileSync(queuePath, JSON.stringify({ publishingEnabled: false, items: [] }));
+  const outsideBytes = Buffer.from(JSON.stringify({
+    publishingEnabled: false,
+    items: [{ id: "outside-trust-root", status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" }]
+  }));
+  fs.writeFileSync(outsidePath, outsideBytes);
+  fs.writeFileSync(preloaderPath, [
+    'import fs from "node:fs";',
+    'import path from "node:path";',
+    'const queuePath = path.resolve(process.env.QUEUE_PATH);',
+    'const sourcePath = path.resolve(process.env.QUEUE_RACE_SOURCE);',
+    'const markerPath = path.resolve(process.env.QUEUE_RACE_MARKER);',
+    'const originalLstatSync = fs.lstatSync.bind(fs);',
+    'let queueChecks = 0;',
+    'fs.lstatSync = function(target, ...args) {',
+    '  const result = originalLstatSync(target, ...args);',
+    '  if (path.resolve(String(target)) === queuePath && ++queueChecks === 2) {',
+    '    fs.unlinkSync(queuePath);',
+    '    fs.linkSync(sourcePath, queuePath);',
+    '    fs.writeFileSync(markerPath, "swapped");',
+    '  }',
+    '  return result;',
+    '};'
+  ].join("\n"));
+  try {
+    const markerPath = path.join(tempDir, "race-triggered.txt");
+    const result = spawnSync(process.execPath, ["--import", preloaderPath, "scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        QUEUE_PATH: queuePath,
+        QUEUE_TRUST_ROOT: trustRoot,
+        QUEUE_RACE_SOURCE: outsidePath,
+        QUEUE_RACE_MARKER: markerPath
+      }
+    });
+    assert.equal(fs.existsSync(markerPath), true, "the test must replace the queue after path validation");
+    assert.notEqual(result.status, 0, "the reader must reject a queue replaced with an external hard link");
+    assert.match(result.stderr, /changed while opening|unsafe link count|inconsistent/i);
+    assert.deepEqual(fs.readFileSync(outsidePath), outsideBytes, "external state must remain byte-for-byte unchanged");
+    assert.equal(fs.statSync(queuePath).nlink, 2, "the raced queue path should still be the external hard link after fail-closed rejection");
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});

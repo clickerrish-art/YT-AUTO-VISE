@@ -40,19 +40,38 @@ function assertSafeDirectoryAncestors(root, directory, { allowMissing = false } 
 function readQueueFile() {
   let stat;
   try {
-    stat = fs.lstatSync(queuePath);
+    stat = fs.lstatSync(queuePath, { bigint: true });
   } catch (error) {
     if (error?.code === "ENOENT") return null;
     throw error;
   }
-  if (stat.isSymbolicLink() || !stat.isFile() || stat.nlink !== 1 ||
+  if (stat.isSymbolicLink() || !stat.isFile() || stat.nlink !== 1n ||
       !isSafeRegularFileWithinRoot(queueTrustRoot, queuePath)) {
     throw new Error("Queue file must be a single-link regular file within its explicit trust root");
   }
-  const noFollow = fs.constants.O_NOFOLLOW ?? 0;
+
+  const noFollow = typeof fs.constants.O_NOFOLLOW === "number" ? fs.constants.O_NOFOLLOW : 0;
   const fd = fs.openSync(queuePath, fs.constants.O_RDONLY | noFollow);
   try {
-    return fs.readFileSync(fd, "utf8");
+    const sameIdentity = (left, right) => left.dev === right.dev && left.ino === right.ino;
+    const openedBefore = fs.fstatSync(fd, { bigint: true });
+    const pathBefore = fs.lstatSync(queuePath, { bigint: true });
+    if (!openedBefore.isFile() || openedBefore.nlink !== 1n ||
+        pathBefore.isSymbolicLink() || !pathBefore.isFile() || pathBefore.nlink !== 1n ||
+        !sameIdentity(stat, openedBefore) || !sameIdentity(openedBefore, pathBefore)) {
+      throw new Error("Queue file changed while opening or has an unsafe link count; refusing an inconsistent read");
+    }
+
+    const bytes = fs.readFileSync(fd);
+    const openedAfter = fs.fstatSync(fd, { bigint: true });
+    const pathAfter = fs.lstatSync(queuePath, { bigint: true });
+    if (!sameIdentity(openedBefore, openedAfter) || !sameIdentity(openedAfter, pathAfter) ||
+        openedBefore.size !== openedAfter.size || openedBefore.mtimeNs !== openedAfter.mtimeNs ||
+        openedBefore.ctimeNs !== openedAfter.ctimeNs || bytes.length !== Number(openedAfter.size) ||
+        openedAfter.nlink !== 1n || pathAfter.isSymbolicLink() || !pathAfter.isFile() || pathAfter.nlink !== 1n) {
+      throw new Error("Queue file changed while reading; refusing an inconsistent snapshot");
+    }
+    return bytes.toString("utf8");
   } finally {
     fs.closeSync(fd);
   }
