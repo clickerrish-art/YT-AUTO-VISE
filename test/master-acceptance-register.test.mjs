@@ -27,7 +27,7 @@ test("the owner-approved rolling publication cadence is no longer marked blocked
   assert.match(cadence.currentHeadEvidenceNote, /2026-11-18T16:27:44Z/);
   assert.match(cadence.currentHeadEvidenceNote, /long_form.*long_form.*short/i);
   assert.match(cadence.currentHeadEvidenceNote, /72 elapsed hours/);
-  assert.match(cadence.currentHeadEvidenceNote, /Africa\\/Johannesburg/);
+  assert.match(cadence.currentHeadEvidenceNote, /Africa\/Johannesburg/);
   assert.match(cadence.currentHeadEvidenceNote, /no weekly target/i);
 });
 
@@ -35,18 +35,18 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   const api = byId("API-001");
   assert.equal(api.status, "BLOCKED");
   assert.equal(api.currentHeadEvidenceSha, "668a8779f8a2894f99ed935d0c8bf13f2f215e64");
-  assert.match(api.currentHeadEvidenceNote, /42\\/42 authorized application-level positive routes PASS/);
-  assert.match(api.currentHeadEvidenceNote, /48\\/48 protected API routes/);
-  assert.match(api.currentHeadEvidenceNote, /six provider\\/production routes remain BLOCKED/);
+  assert.match(api.currentHeadEvidenceNote, /42\/42 authorized application-level positive routes PASS/);
+  assert.match(api.currentHeadEvidenceNote, /48\/48 protected API routes/);
+  assert.match(api.currentHeadEvidenceNote, /six provider\/production routes remain BLOCKED/);
 
   const dashboard = byId("DASH-001");
   assert.equal(dashboard.status, "NOT_TESTED");
   assert.equal(dashboard.currentHeadStatus, "NOT_TESTED");
   assert.equal(dashboard.currentHeadEvidenceSha, "668a8779f8a2894f99ed935d0c8bf13f2f215e64");
-  assert.match(dashboard.currentHeadEvidenceNote, /121\\/121 controls/);
-  assert.match(dashboard.currentHeadEvidenceNote, /17\\/17 forms/);
-  assert.match(dashboard.currentHeadEvidenceNote, /15\\/15 cross-cutting dimensions/);
-  assert.match(dashboard.currentHeadEvidenceNote, /41\\/41 Chromium journeys/);
+  assert.match(dashboard.currentHeadEvidenceNote, /121\/121 controls/);
+  assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
+  assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
+  assert.match(dashboard.currentHeadEvidenceNote, /41\/41 Chromium journeys/);
   assert.match(dashboard.currentHeadEvidenceNote, /overallAcceptance is NOT_TESTED/);
 });
 
@@ -71,7 +71,7 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
 
   const scheduler = byId("SCHED-001");
   assert.equal(scheduler.status, "NOT_TESTED");
-  assert.match(scheduler.currentHeadEvidenceNote, /complete one-page inventory of one public 20-second legacy Short with zero private\\/unlisted videos/);
+  assert.match(scheduler.currentHeadEvidenceNote, /complete one-page inventory of one public 20-second legacy Short with zero private\/unlisted videos/);
   assert.match(scheduler.nextAction, /fresh attestation/);
 });
 
@@ -81,7 +81,7 @@ test("master completion register mirrors the acceptance totals and release hold"
     "utf8"
   );
   assert.ok(master.includes("71 PASS / 8 NOT_TESTED / 10 BLOCKED / 0 FAIL"));
-  assert.match(master, /\\*\\*DASH-001:\\s*NOT_TESTED\\.\\*\\*/);
-  assert.doesNotMatch(master, /\\$\\{(?:run|url)\\./);
-  assert.match(master, /Release decision:\\s*\\*\\*HOLD\\*\\*/);
+  assert.match(master, /\*\*DASH-001:\s*NOT_TESTED\.\*\*/);
+  assert.doesNotMatch(master, /\$\{(?:run|url)\./);
+  assert.match(master, /Release decision:\s*\*\*HOLD\*\*/);
 });
