@@ -8,12 +8,12 @@
 
 | Asset | Source and contributor | Published metadata | Intended use | Current disposition |
 |---|---|---|---|---|
-| PEX-001 | [Crocodile resting on riverbank in South Africa](https://www.pexels.com/video/crocodile-resting-on-riverbank-in-south-africa-30026544/) — Johnny Tilly | Pexels page reports 1920×1080, 16:9, 36 seconds, 25 fps; description identifies a Nile crocodile in South Africa | Habitat / basking / shoreline coverage | Candidate only; download and inspect actual file before approval |
-| PEX-002 | [Serene river scene with crocodile swimming](https://www.pexels.com/video/serene-river-scene-with-crocodile-swim-40627960/) — Mariia Stepanova | Pexels page reports 3840×2160, 16:9, 15 seconds, 60 fps; description says crocodile, species not independently established | Generic river habitat / swimming cutaway only; do not label as Nile crocodile until visual species check | Candidate only; species and file inspection required |
-| PEX-003 | [Close-up of Nile crocodile in African waters](https://www.pexels.com/video/close-up-of-nile-crocodile-in-african-waters-31702202/) — MC G'Zay | Pexels page reports 1080×1920, 9:16, 10 seconds, 29.97 fps | Optional portrait insert within a designed 16:9 frame; not full-frame landscape | Candidate only; avoid crop loss; download and inspect actual file |
+| PEX-001 | [Crocodile resting on riverbank in South Africa](https://www.pexels.com/video/crocodile-resting-on-riverbank-in-south-africa-30026544/) — Johnny Tilly | Pexels page reports 1920×1080, 16:9, 36 seconds, 25 fps; description identifies a Nile crocodile in South Africa | Habitat / basking / shoreline coverage | Page metadata rechecked 2026-11-20; direct MP4 link resolved by Pexels download action, but this environment could not fetch the media host. Not downloaded or approved. |
+| PEX-002 | [Serene river scene with crocodile swimming](https://www.pexels.com/video/serene-river-scene-with-crocodile-swim-40627960/) — Mariia Stepanova | Pexels page reports 3840×2160, 16:9, 15 seconds, 60 fps; description says crocodile, species not independently established | Generic river habitat / swimming cutaway only; do not label as Nile crocodile until visual species check | Page metadata rechecked 2026-11-20; generic crocodile description does not establish species. Direct MP4 link resolved but media host was inaccessible to the available fetch tools. Not downloaded or approved. |
+| PEX-003 | [Close-up of Nile crocodile in African waters](https://www.pexels.com/video/close-up-of-nile-crocodile-in-african-waters-31702202/) — MC G'Zay | Pexels page reports 1080×1920, 9:16, 10 seconds, 29.97 fps | Optional portrait insert within a designed 16:9 frame; not full-frame landscape | Not selected for primary 16:9 edit: portrait 9:16 / 10-second insert would require designed framing. Page rechecked 2026-11-20; not downloaded or approved. |
 
-| PEX-004 | [Aerial view of crocodiles in Lower Zambezi River](https://www.pexels.com/video/aerial-view-of-crocodiles-in-lower-zambezi-river-31998380/) — Floating Rabbit | Pexels page reports 3840×2160, 16:9, 60 seconds, 29.97 fps; Lower Zambezi River, Zambia | Wide habitat / multiple-animal context | Candidate only; confirm species from the actual footage and inspect drone movement |
-| PEX-005 | [Basking crocodile](https://www.pexels.com/video/basking-crocodile-20443910/) — Floating Rabbit | Pexels page reports 3840×2160, 16:9, 13 seconds, 25 fps; description identifies a Nile crocodile on a sandy riverbank | Close-up / basking cutaway | Candidate only; download and inspect actual file |
+| PEX-004 | [Aerial view of crocodiles in Lower Zambezi River](https://www.pexels.com/video/aerial-view-of-crocodiles-in-lower-zambezi-river-31998380/) — Floating Rabbit | Pexels page reports 3840×2160, 16:9, 60 seconds, 29.97 fps; Lower Zambezi River, Zambia | Wide habitat / multiple-animal context | Page metadata rechecked 2026-11-20; direct MP4 link resolved but media host was inaccessible to the available fetch tools. Species must be visually verified from the actual footage. Not downloaded or approved. |
+| PEX-005 | [Basking crocodile](https://www.pexels.com/video/basking-crocodile-20443910/) — Floating Rabbit | Pexels page reports 3840×2160, 16:9, 13 seconds, 25 fps; description identifies a Nile crocodile on a sandy riverbank | Close-up / basking cutaway | Page metadata rechecked 2026-11-20; direct MP4 link resolved but media host was inaccessible to the available fetch tools. Not downloaded or approved. |
 
 ## Licence basis and limits
 
@@ -35,6 +35,30 @@ Pexels states that its videos are free to download and use, including commercial
 
 **Important:** These short candidate clips do not supply enough footage for a 6–10 minute documentary. Additional varied, verified, rights-cleared footage and original explanatory graphics are still required. The AI wildlife model/checkpoint previously considered remains blocked until its commercial-use terms are independently verified. No paid footage, stock subscription, or GPU spend is permitted.
 
-**Narration dependency:** The requested Roderic — Authoritative & Refined HeyGen public voice was not returned by the live English male voice catalogue check on 2026-11-20. Do not substitute another voice or synthesize speech until Roderic is available under the zero-cost constraint or the owner explicitly changes that instruction.
+**Narration dependency:** One Roderic — Authoritative & Refined narration was generated on the HeyGen Free plan for internal evaluation only. The owner explicitly approves Roderic exclusively and rejects Banjo for all future production/auditions; no voice substitution is authorized. Free-plan terms do not permit commercial/monetized publication. A $0 exception request was sent to HeyGen Legal (thread `1a1f841532f681a1`) and, when checked on 2026-11-20, had no response. Do not use the existing WAV commercially unless written permission or applicable terms clearly permit it.
 
 **Scheduling:** NOT QUEUED. Do not reserve or set a YouTube publication time before media, rights, narration, captions, final review, upload authorization, and live channel-history reconciliation pass.
+
+
+## Acquisition attempt and exact download endpoints (2026-11-20)
+
+Pexels' page-level metadata and Free licence labels were rechecked for all five records. Pexels states that videos are free to use, attribution is not required, and modification is permitted; it prohibits standalone redistribution and certain misleading/endorsement uses. This is a platform licence summary, not proof that every depicted element has no third-party rights. See the [Pexels licence](https://www.pexels.com/license/).
+
+The Pexels page's Free download control resolved to the following original MP4 endpoints. The web retrieval service refused the media-host URLs (non-retryable access failure), and the available local downloader could not fetch them. **No asset bytes were acquired in this run; no hashes, decode checks, visual inspections or approvals exist.** The URLs are recorded only as acquisition targets, not as evidence of download.
+
+| Asset | Resolved media endpoint | Outcome |
+|---|---|---|
+| PEX-001 | `https://videos.pexels.com/video-files/30026544/12882200_1920_1080_25fps.mp4` | Media host inaccessible to available retrieval tools |
+| PEX-002 | `https://videos.pexels.com/video-files/40627960/17356756_3840_2160_60fps.mp4` | Media host inaccessible to available retrieval tools |
+| PEX-004 | `https://videos.pexels.com/video-files/31998380/13636751_3840_2160_30fps.mp4` | Media host inaccessible to available retrieval tools |
+| PEX-005 | `https://videos.pexels.com/video-files/20443910/20443910-uhd_3840_2160_25fps.mp4` | Media host inaccessible to available retrieval tools |
+
+PEX-003 is retained only as an optional portrait insert candidate; it is not a primary landscape asset.
+
+### Updated acquisition state
+
+- PEX-001, PEX-002, PEX-004 and PEX-005 remain unacquired candidates.
+- PEX-003 is not selected for the 16:9 primary edit.
+- No claim is made that any candidate is rights-cleared for this specific production beyond Pexels' stated platform licence.
+- No local production workspace or verified media bytes were available through the tools used in this step.
+- Do not schedule or render with these candidates until files are acquired and all checks above pass.
