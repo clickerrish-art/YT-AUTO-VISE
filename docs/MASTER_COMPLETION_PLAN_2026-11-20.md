@@ -11,15 +11,15 @@
 | Workstream | Verified position | Status |
 |---|---|---|
 | Documentary script | Owner-approved script exists at `content/drafts/long-form-001-two-eyes-above-water.md`; its visual plan and research map are present | PASS — script approval only |
-| Scientific review | Sensory-system claims reviewed and evidence note committed at `content/assets/long-form-001-scientific-claim-review.md`; ecology, locomotion, feeding and safety claims still need independent review | PARTIAL |
+| Scientific review | Sensory, habitat, age-related diet, ambush, tail propulsion, prey handling and human-safety claims desk-reviewed and documented at `content/assets/long-form-001-scientific-claim-review.md`; independent qualified zoologist review still required | PARTIAL — desk review complete |
 | Narrator choice | Owner selected Roderic — Authoritative & Refined exclusively; Banjo rejected; no substitution authorized | PASS — choice only |
 | Existing narration | One 398.083-second Roderic WAV generated on HeyGen Free for internal evaluation | HOLD — not commercially cleared |
 | Roderic rights exception | Request sent to HeyGen Legal; no Legal reply in latest mailbox inspection; Support says it cannot give binding licensing confirmation | BLOCKED — external decision |
-| Genuine footage | Five Pexels candidates are sourcing leads only; no MP4 source bytes acquired, hashed, decoded or visually approved | BLOCKED |
+| Genuine footage | Five Pexels candidates plus three Wikimedia Commons candidates are now recorded with file-page metadata/licence leads; no MP4 source bytes acquired, hashed, decoded or visually approved | BLOCKED |
 | Synthetic video | Comfy Cloud LTX-2.5 workflow v1 exists; its saved prompt is still an unrelated Arctic/polar-bear demo. Earlier generated outputs are not approved footage or final scenes | PARTIAL / HOLD |
 | LTX output rights | LTX-2.x Community License and transparency requirements reviewed; exact asset provenance, model-version evidence and output-by-output disclosure review still required | PARTIAL |
 | Captions | No current, verified SRT for the approved Roderic narration; timestamp data exists at provider level but no local synchronized caption artifact is verified | BLOCKED |
-| Thumbnail | Direction exists (“TOO BIG?”); no cleared final thumbnail exists | BLOCKED |
+| Thumbnail | Direction exists (“TOO BIG?”); metadata/thumbnail direction is recorded, but no cleared final thumbnail exists | BLOCKED |
 | Edit and final master | No final 6–10 minute 16:9 MP4 exists or has been verified | BLOCKED |
 | Audio / visual QC | No full human listen-through, full master playback, final audio mix or exact-hash sign-off | BLOCKED |
 | Rights / provenance | Render manifest has empty footage/narration licence evidence and `rightsConfirmed=false`, `complianceReviewed=false` | BLOCKED |
@@ -162,3 +162,33 @@
 **HOLD.** The approved script and partial research review are useful completed work, but there is no cleared long-form source footage, no commercially cleared Roderic narration, no current captions, no final edit, no completed human QC, no durable archive and no accepted live YouTube OAuth/history evidence. The production system must not label the documentary 100% complete or publish it until these exact gates are closed.
 
 This plan records the work and blockers; it does not itself change any release flags, grant licences, authorize spend, or enable publication.
+
+
+## Verified execution updates — 20 November 2026
+
+These updates were executed on `codex/marketing-machine-audit-fixes`; `main` was not modified.
+
+1. **Scientific claim review expanded.** The evidence note now covers the script's sensory system, Nile crocodile habitats and age-related diet, shoreline ambush, tail propulsion, prey handling and CSG safety advice. It preserves the experimental limits of the 2015 and 2025 studies. The exact file was read back from GitHub after commit `4d47261e3aad268cc6dd95c9a28586db1b3d603a`. Independent zoological sign-off is still outstanding.
+2. **Footage research expanded.** Three Commons candidates were added to `content/assets/long-form-001-footage-sourcing.md`: a 21-second 4K Nairobi National Park clip (CC BY-SA 4.0), a 15-second Kruger feeding clip (CC BY-SA 2.0), and a 66-second wildebeest ambush clip (CC BY 3.0). They remain unacquired and unapproved. ShareAlike obligations and graphic-content risk are explicitly recorded.
+3. **YouTube metadata draft prepared.** `content/long-form-001-youtube-metadata-draft.md` now contains a factual description, tags, research references, thumbnail direction, and explicit AI/paid-promotion/rights/upload gates. It is not final upload metadata.
+4. **Narrator-policy drift corrected.** `config/narration-voice-candidates.json` now records the exclusive Roderic decision and Norman as historical only. `docs/NARRATION_VOICE_CLEARANCE.md` is marked superseded. The American/Norman and Banjo audition workflows have job-level `if: false` guards. GitHub Actions run `44725167828`? No — the American narration workflow was observed as **skipped** on the earlier configuration push (run `44724864981`). The runner bridge safety job passed on the latest metadata-draft commit (run `44725167830`); this does not constitute narration generation or release approval.
+5. **Deployment recovery smoke passed** on the configuration push (run `44725019030`): checkout, Node setup, locked dependency installation and persistent-state replacement/restart verification all succeeded. The latest metadata-draft commit has its own deployment recovery run still in progress at this snapshot.
+6. **Master completion plan** and scientific review were both read back from GitHub after creation/update. File readback verifies their stored content and blob hashes; it does not replace full media QA.
+
+### Latest repository state at this snapshot
+
+- Implementation branch: `codex/marketing-machine-audit-fixes`, HEAD `39e0e0cb95d5319778f6381ac07cd58c8f933e35`.
+- `main`: `7efc548065385051f7c69377f87b77a35065ce74` (advanced independently; no main-branch write was made in this work).
+- Non-destructive compare: **4,746 commits ahead / 10 behind / 300 changed files**. No rebase, merge, reset, force-push or history reconciliation was performed.
+- PR #1 remains **OPEN / DRAFT / UNMERGED**.
+- Branch protection is disabled on both refs at the time of this read (`protected=false`); owner/admin action is required.
+- Latest commit `39e0e0cb95d5319778f6381ac07cd58c8f933e35` has runner-bridge safety in progress/success at the job level, deployment recovery in progress, and lockfile/full Node suite pending. Do not infer complete CI from a pending run.
+
+### Newly explicit unresolved controls
+
+- `content/long-form-render-manifest.json` currently has `hasPaidPromotion=true`, while the approved narration contains no sponsorship segment. Do not change the manifest or YouTube disclosure until the owner confirms whether the final video contains any paid sponsorship/product placement.
+- The saved Comfy workflow is still v1 with the unrelated Arctic/polar-bear default prompt. Its resolution reference table's 0.9 MP preset is 1280×736; use explicit 1280×720 per-run overrides. No new generation was submitted because free GPU capacity was previously exhausted.
+- Comfy's existing completed job status and output link do not establish visual quality or durable storage. Earlier synthetic clips remain unreviewed.
+- The TinyFish wallet reports a negative balance; no paid browser automation, fetch, research or top-up was used. This is not a zero-cost asset-acquisition route.
+- Cloudflare R2 remains disabled (403/code 10042); no bucket or archive was created.
+- HeyGen Legal has not replied. The Free-plan Roderic WAV remains internal-evaluation-only.
