@@ -24,6 +24,16 @@ def main() -> None:
         raise SystemExit(f"Expected exactly one queued metadata file, found {len(metadata_files)}")
     meta_path = metadata_files[0]
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    if (
+        meta.get("status") == "INTERNAL_AUDITION_ONLY"
+        or meta.get("licenseStatus") == "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"
+        or meta.get("commercialUseAllowed") is False
+        or meta.get("productionUseAllowed") is False
+    ):
+        raise SystemExit(
+            "BLOCKED: non-commercial internal-audition audio cannot be rendered into a video draft. "
+            "Use only separately rights-cleared, production-authorized narration."
+        )
     stem = meta_path.stem
     audio = PACKAGE / f"{stem}.mp3"
     captions = PACKAGE / f"{stem}.srt"
