@@ -1,7 +1,7 @@
 # Long-form 001 — Two Eyes Above the Water
 
 **Brand:** SonicVhibez  
-**Status:** OWNER-APPROVED SCRIPT; RODERIC FREE-PLAN NARRATION GENERATED FOR INTERNAL EVALUATION ONLY — NOT COMMERCIALLY CLEARED  
+**Status:** OWNER-APPROVED SCRIPT; RODERIC IS THE EXCLUSIVE OWNER-APPROVED NARRATOR; CURRENT FREE-PLAN OUTPUT IS INTERNAL-EVALUATION-ONLY  
 **Target format:** YouTube long-form, 16:9, 6–10 minutes  
 **Working title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Thumbnail direction:** Nile crocodile eye at dusk, tight waterline close-up, eye on the right, dark open negative space on the left, exact words “TOO BIG?”; no blood, victim, gore or fabricated attack  
@@ -95,7 +95,7 @@ The river may look empty. That does not mean it is empty. And understanding the 
 - [ ] Exact model/checkpoint/voice commercial-use permissions are verified for any generated or synthetic assets.
 - [x] HeyGen public voice catalogue returned active Roderic — Authoritative & Refined (voice ID `b5c5b28db1ea408abc7d851202983bdb`); generated once on the connected Free plan with that exact voice. No substitute used.
 - [x] Internal-evaluation narration generated after owner approval; HeyGen returned 398.083 seconds (6:38) and word/character timing data. See `content/assets/long-form-001-narration-status.md`.
-- [ ] **Commercial-use gate BLOCKED:** HeyGen Free-plan output is licensed only for personal, non-commercial and internal evaluation; do not use this WAV in the public/commercial SonicVhibez release. The zero-cost rule prevents upgrading. Obtain owner approval for a different zero-cost voice with verified commercial-use rights before generating production narration.
+- [ ] **Commercial-use gate BLOCKED:** HeyGen Free-plan output is licensed only for personal, non-commercial and internal evaluation; do not use this WAV in the public/commercial SonicVhibez release. The owner has explicitly approved Roderic — Authoritative & Refined as the exclusive narrator throughout and rejected Banjo for all future production/auditions. Do not substitute another voice. Keep production on hold until a zero-cost commercial-use authorization for Roderic is independently verified; do not upgrade or bypass the licence.
 - [ ] Owner/full human listen-through and exact spoken-word comparison against the approved script.
 - [ ] Download/ingest the generated WAV into the production workspace, compute SHA-256 and decode/inspect it locally before rendering.
 - [ ] Captions aligned to actual narration timing.
