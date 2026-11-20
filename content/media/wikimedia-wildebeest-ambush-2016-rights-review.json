@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "assetId": "wikimedia-nile-crocodile-ambushes-wildebeest-2016",
+  "project": "SonicVhibez",
+  "status": "OPEN_SOURCE_FILE_NOT_ACQUIRED",
+  "source": {
+    "platform": "Wikimedia Commons",
+    "pageUrl": "https://commons.wikimedia.org/wiki/File:Nile_crocodile_ambushes_a_wildebeest.webm",
+    "originalSourceUrl": "https://vimeo.com/163161616",
+    "filename": "Nile crocodile ambushes a wildebeest.webm",
+    "creator": "Bettina May",
+    "description": "Nile crocodile (Crocodylus niloticus) successfully hunts a blue wildebeest (Connochaetes taurinus) at Grumeti River, Serengeti, Tanzania. Source page notes that a section of the original material has been removed.",
+    "dateRecorded": "2016-04-17",
+    "sourcePageCheckedAt": "2026-11-20",
+    "metadata": {
+      "durationSeconds": 65.68,
+      "width": 1920,
+      "height": 1080,
+      "aspectRatio": "16:9",
+      "container": "WebM",
+      "videoCodec": "VP8",
+      "fileSizeBytes": 31720000,
+      "frameRate": null
+    }
+  },
+  "licenseReview": {
+    "license": "Creative Commons Attribution 3.0 Unported",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "licensePageEvidence": "https://commons.wikimedia.org/wiki/File:Nile_crocodile_ambushes_a_wildebeest.webm",
+    "commercialUse": "PERMITTED_SUBJECT_TO_CC_BY_3_0",
+    "attributionRequired": true,
+    "changesMustBeIndicated": true,
+    "shareAlikeRequired": false,
+    "attributionCandidate": "Nile crocodile ambushes a wildebeest.webm by Bettina May, via Wikimedia Commons, licensed under CC BY 3.0. Changes, if any, must be stated."
+  },
+  "acquisition": {
+    "attempted": false,
+    "completed": false,
+    "filePath": null,
+    "sha256": null,
+    "retrievalNotes": "Candidate identified from Wikimedia Commons metadata. The original media file has not yet been downloaded; no file-level inspection or integrity check has been performed."
+  },
+  "inspection": {
+    "playable": null,
+    "ffprobe": null,
+    "representativeFramesReviewed": false,
+    "fullClipReviewed": false,
+    "embeddedAudioReviewed": false,
+    "violenceAndGraphicContentReviewed": false,
+    "speciesAndLocationIndependentlyConfirmed": false,
+    "behaviourConfirmed": false
+  },
+  "approvals": {
+    "commercialRightsConfirmed": false,
+    "attributionVerified": false,
+    "humanRightsReview": "NOT_RECEIVED",
+    "scientificEditorialApproval": "NOT_RECEIVED",
+    "finalProductionApproved": false
+  },
+  "releaseDecision": "DO_NOT_USE_UNTIL_ORIGINAL_FILE_IS_ACQUIRED_AND_INSPECTED_AND_ATTRIBUTION_AND_CONTENT_REVIEW_ARE_APPROVED",
+  "evidenceNote": "Potentially relevant real animal-encounter footage for the ambush section; not an acquired or production-approved media asset."
+}
