@@ -100,12 +100,12 @@ async def main(voice: str, allow_noncommercial_audition: bool = False):
         "notice": NONCOMMERCIAL_AUDITION_NOTICE,
     }
     (OUT / "narration-audition-manifest.json").write_text(
-        json.dumps(manifest, indent=2) + "\\n", encoding="utf-8"
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
     )
     (OUT / "README.txt").write_text(
-        "INTERNAL AUDITION ONLY — NOT APPROVED FOR COMMERCIAL OR PRODUCTION USE.\\n"
-        f"Voice: {voice} (Edge TTS; not owner-approved).\\n"
-        "No upload or publication occurred.\\n",
+        "INTERNAL AUDITION ONLY — NOT APPROVED FOR COMMERCIAL OR PRODUCTION USE.\n"
+        f"Voice: {voice} (Edge TTS; not owner-approved).\n"
+        "No upload or publication occurred.\n",
         encoding="utf-8",
     )
 
