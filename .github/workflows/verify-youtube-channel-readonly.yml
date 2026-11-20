@@ -24,7 +24,7 @@ permissions:
 
 concurrency:
   group: sonicvhibez-youtube-readonly-inventory
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   verify:
@@ -42,18 +42,12 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Run deterministic OAuth-scope, identity and pagination tests
         run: node --test test/youtube-oauth-scope.test.mjs test/verify-youtube-channel.test.mjs
-      - name: Verify authenticated channel, upload scope and complete uploads inventory (read-only)
+      # Do not upload raw private/unlisted video metadata to a public repository artifact.
+      # Until an owner-controlled private/encrypted destination exists, retain only aggregate counts in the run output.
+      - name: Verify authenticated channel, upload scope and complete uploads inventory (read-only, aggregate-only)
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
-          YOUTUBE_HISTORY_INVENTORY_PATH: artifacts/youtube-history-inventory.json
         run: node scripts/verify-youtube-channel.mjs
-      - name: Retain complete private/public/unlisted inventory for owner review
-        uses: actions/upload-artifact@v4
-        with:
-          name: sonicvhibez-youtube-history-inventory
-          path: artifacts/youtube-history-inventory.json
-          if-no-files-found: error
-          retention-days: 7
