@@ -464,8 +464,10 @@ test("private upload lock prevents concurrent workers and stale locks fail close
 });
 
 
-test("one-shot upload authorization binds one job and all final hashes to the verified channel", async () => {
-  const { validateOneShotUploadAuthorization } = await import("../scripts/upload-private.mjs");
+test("one-shot upload authorization requires an Ed25519 signature bound to the exact job and all final hashes", async () => {
+  const { validateOneShotUploadAuthorization, oneShotUploadAuthorizationPayload } = await import("../scripts/upload-private.mjs");
+  const { publicKey, privateKey } = crypto.generateKeyPairSync("ed25519");
+  const publicKeyBase64 = Buffer.from(publicKey.export({ type: "spki", format: "pem" }), "utf8").toString("base64");
   const input = {
     authorizationId: "auth-private-001",
     decision: "AUTHORIZE_ONE_PRIVATE_UPLOAD",
@@ -479,12 +481,46 @@ test("one-shot upload authorization binds one job and all final hashes to the ve
     operator: "Authorized Owner",
     authorizedAt: "2026-10-24T12:00:00.000Z"
   };
-  const validated = validateOneShotUploadAuthorization(input, { ...input, now: new Date("2026-10-24T12:30:00.000Z") });
+  input.signature = crypto.sign(null, Buffer.from(oneShotUploadAuthorizationPayload(input), "utf8"), privateKey).toString("base64");
+  const options = { ...input, publicKeyBase64, now: new Date("2026-10-24T12:30:00.000Z") };
+  const validated = validateOneShotUploadAuthorization(input, options);
   assert.equal(validated.authorizationId, input.authorizationId);
   assert.equal(validated.operator, "Authorized Owner");
-  assert.throws(() => validateOneShotUploadAuthorization({ ...input, artifactSha256: "d".repeat(64) }, { ...input, now: new Date("2026-10-24T12:30:00.000Z") }), /bind the exact job/);
-  assert.throws(() => validateOneShotUploadAuthorization({ ...input, visibility: "public" }, { ...input, now: new Date("2026-10-24T12:30:00.000Z") }), /restrict the operation to private/);
-  assert.throws(() => validateOneShotUploadAuthorization(input, { ...input, now: new Date("2026-10-26T13:00:00.000Z") }), /no older than 24 hours/);
+  assert.throws(() => validateOneShotUploadAuthorization({ ...input, artifactSha256: "d".repeat(64) }, options), /bind the exact job/);
+  assert.throws(() => validateOneShotUploadAuthorization({ ...input, visibility: "public" }, options), /restrict the operation to private/);
+  assert.throws(() => validateOneShotUploadAuthorization(input, { ...options, now: new Date("2026-10-26T13:00:00.000Z") }), /no older than 24 hours/);
+  assert.throws(() => validateOneShotUploadAuthorization(input, { ...options, publicKeyBase64: undefined }), /PUBLIC_KEY_B64 is required/);
+  assert.throws(() => validateOneShotUploadAuthorization({ ...input, operator: "Forged Owner" }, options), /Ed25519 signature is invalid/);
+  assert.throws(() => validateOneShotUploadAuthorization({ ...input, signature: undefined }, options), /Ed25519 signature is required/);
+});
+
+test("one-shot authorization signer atomically signs the record without exposing its private key", async () => {
+  const { oneShotUploadAuthorizationPayload } = await import("../scripts/upload-private.mjs");
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "youtube-one-shot-signature-"));
+  try {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync("ed25519");
+    const recordPath = path.join(root, "authorization.json");
+    const privateKeyPath = path.join(root, "owner-private.pem");
+    const record = {
+      authorizationId: "auth-private-002", decision: "AUTHORIZE_ONE_PRIVATE_UPLOAD",
+      jobId: "job-private-002", artifactSha256: "d".repeat(64),
+      metadataSha256: "e".repeat(64), approvalSha256: "f".repeat(64),
+      channelId: TEST_CHANNEL_ID, visibility: "private", publishingEnabled: false,
+      operator: "Authorized Owner", authorizedAt: new Date().toISOString()
+    };
+    fs.writeFileSync(recordPath, JSON.stringify(record), { mode: 0o600 });
+    fs.writeFileSync(privateKeyPath, privateKey.export({ type: "pkcs8", format: "pem" }), { mode: 0o600 });
+    const script = path.join(process.cwd(), "scripts", "sign-youtube-upload-authorization.mjs");
+    const result = spawnSync(process.execPath, [script, recordPath, privateKeyPath], { encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /signed with Ed25519/i);
+    const signed = JSON.parse(fs.readFileSync(recordPath, "utf8"));
+    assert.equal(crypto.verify(null, Buffer.from(oneShotUploadAuthorizationPayload(signed), "utf8"), publicKey, Buffer.from(signed.signature, "base64")), true);
+    assert.equal(fs.statSync(recordPath).mode & 0o077, 0);
+    assert.equal(fs.readFileSync(privateKeyPath, "utf8").includes("PRIVATE KEY"), true);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("private uploader requires the verified @sonicvhibez handle for every accepted display title", async () => {
