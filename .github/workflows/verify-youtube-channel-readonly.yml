@@ -13,6 +13,8 @@ on:
       - "test/youtube-oauth-scope.test.mjs"
       - "scripts/production-readiness.mjs"
       - "content/youtube-history-reconciliation.json"
+      - "content/long-form-render-manifest.json"
+      - "content/long-form-001-youtube-metadata-draft.md"
       - ".github/workflows/production-readiness.yml"
       - ".github/workflows/verify-youtube-channel-readonly.yml"
   workflow_dispatch:
