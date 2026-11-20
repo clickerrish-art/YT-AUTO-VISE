@@ -6,7 +6,7 @@
   "publicationEnabled": false,
   "schedulingEnabled": false,
   "calendarStatus": "DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES",
-  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp. Added sonicvhibez-short-013-youtube-shorts-analytics for the week beginning 2026-12-14; 55-second private DRAFT_ONLY, qualitative search-intent evidence only, 90-Day Blueprint direct-sales disclosure HOLD, and no publication timestamp. SEO evidence for the two existing drafts in the week beginning 2026-11-23 was refreshed on 2026-11-19 using current qualitative web-search results; no search volume or competition metrics were available. The weekly cap remains two, and all items remain private DRAFT_ONLY with no publication or scheduling timestamps.,Two 55-second Shorts prepared for week beginning 2026-12-21: low-light wildlife photography (Vault, owner-approved direct-sales disclosure) and YouTube script hooks (Prompt Pack, product-specific disclosure HOLD). Both remain private DRAFT_ONLY with no publication or scheduling timestamps. Fresh 19 November qualitative web-search evidence only; no measured volume or competition. Selar pages could not be re-opened in this run; seller registry evidence was last checked 9 November.",
+  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp. Added sonicvhibez-short-013-youtube-shorts-analytics for the week beginning 2026-12-14; 55-second private DRAFT_ONLY, qualitative search-intent evidence only, 90-Day Blueprint direct-sales disclosure HOLD, and no publication timestamp. SEO evidence for the two existing drafts in the week beginning 2026-11-23 was refreshed on 2026-11-19 using current qualitative web-search results; no search volume or competition metrics were available. The weekly cap remains two, and all items remain private DRAFT_ONLY with no publication or scheduling timestamps.,Two 55-second Shorts prepared for week beginning 2026-12-21: low-light wildlife photography (Vault, owner-approved direct-sales disclosure) and YouTube script hooks (Prompt Pack, product-specific disclosure HOLD). Both remain private DRAFT_ONLY with no publication or scheduling timestamps. Fresh 19 November qualitative web-search evidence only; no measured volume or competition. Selar pages could not be re-opened in this run; seller registry evidence was last checked 9 November. Fresh 20 November 2026 qualitative SEO refresh completed for the two drafts in the week beginning 2026-11-23; no search-volume or competition metrics were available and no vidIQ credits were spent. The weekly maximum remains exactly two; both items remain DRAFT_ONLY/private with no publication timestamps or scheduling.",
   "weeks": [
     {
       "weekOf": "2026-11-09",
@@ -506,28 +506,23 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-19T09:23:42+02:00",
-            "note": "Current indexed results support an informational how-to query about ethical wildlife photography, especially distance, zoom use, stress signals and avoiding baiting or habitat disturbance. Park-specific distance rules are not universal; viewers must follow the rules for their actual location and species. No search-volume estimate is claimed.",
+            "researchedAt": "2026-11-20T09:15:03+02:00",
+            "note": "Fresh public search results for ethical wildlife photography and filming show informational intent around maintaining distance, using telephoto reach, recognizing stress or avoidance, avoiding bait/flash and protecting habitat. Rules vary by species, season and location. These are qualitative search-intent signals only; no measured global search volume or competition is claimed, and no vidIQ credits were spent.",
             "sources": [
               {
-                "title": "Ethical wildlife photography – how photographers can keep themselves and animals safe",
-                "url": "https://spca.bc.ca/ways-to-help/take-action/wild-animals/ethical-wildlife-photography-how-photographers-can-keep-themselves-and-their-animals-safe/",
-                "whyRelevant": "Directly addresses the ethical wildlife photography query with guidance on distance, zoom or binoculars, animal stress signals, feeding and habitat disturbance."
+                "title": "Ethical wildlife photography for mammals — Mammal Society",
+                "url": "https://mammal.org.uk/position-statements/ethicalwildlifephotography",
+                "whyRelevant": "Specialist guidance addresses telephoto distance, avoiding disturbance, bait and flash, and accurate captions."
               },
               {
-                "title": "How To Photograph Wildlife",
-                "url": "https://www.nps.gov/articles/wwphotography.htm",
-                "whyRelevant": "U.S. National Park Service guidance supports telephoto or binocular viewing, quiet observation and stable framing without approaching wildlife."
-              },
-              {
-                "title": "Ethical Wildlife Photography — San Juan Island National Historical Park",
-                "url": "https://www.nps.gov/sajh/planyourvisit/ethical-wildlife-photography.htm",
-                "whyRelevant": "Shows why viewing distances must follow local park rules and recommends zoom lenses and leaving animals undisturbed; its 75-foot rule is specific to that park, not universal."
+                "title": "Wildlife photography best practice — The Wildlife Trusts",
+                "url": "https://www.wildlifetrusts.org/other-ways-get-involved/wildlifephotography",
+                "whyRelevant": "Recent guidance supports keeping distance, avoiding flash and playback, staying on designated paths and putting animal welfare first."
               },
               {
                 "title": "Audubon’s Guide to Ethical Bird Photography and Videography",
                 "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
-                "whyRelevant": "Specialist bird-photography guidance emphasizes telephoto distance, avoiding bait and disruptive drones or flash, and protecting habitat."
+                "whyRelevant": "Specialist bird guidance supports telephoto distance and avoiding bait, disruptive drones, flash and habitat disturbance."
               }
             ]
           }
@@ -614,23 +609,23 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-19T09:23:42+02:00",
-            "note": "Current indexed results support the exact how-to query and a template-oriented intent: creators want a usable outline before scripting, with a clear audience, promise, ordered beats, proof, visuals and one next step. These are qualitative intent signals, not measured demand or ranking data.",
+            "researchedAt": "2026-11-20T09:15:03+02:00",
+            "note": "Fresh public search results for how to outline a YouTube video show direct how-to and template intent: creators want a viewer question and promise, a planned hook, ordered sections, supporting examples or visuals and a clear ending. These are qualitative signals only; no measured global search volume or competition is claimed, and no vidIQ credits were spent.",
             "sources": [
               {
-                "title": "How to Outline a YouTube Video (Step-by-Step Template)",
+                "title": "How to Outline a YouTube Video (Step-by-Step Template) — BoostView",
+                "url": "https://boost-view.vercel.app/blog/how-to-outline-youtube-video",
+                "whyRelevant": "A November 2026 guide matches the exact query and covers a viewer promise, hook, ordered sections, visual changes and one next-video step."
+              },
+              {
+                "title": "How to Outline a YouTube Video — Tublify",
                 "url": "https://tublify.vercel.app/blog/how-to-outline-youtube-video",
-                "whyRelevant": "A recent guide for the exact query describes defining the viewer promise, selecting distinct main sections, adding visual notes and planning a useful ending before scripting."
+                "whyRelevant": "Recent template guidance organizes the outline around the viewer question, promised answer, proof or steps and logical ending."
               },
               {
-                "title": "Free Script Outline Generator — YouTube Video Beats",
-                "url": "https://hypenest.ai/tools/script-outline-generator",
-                "whyRelevant": "The guide/tool result structures an outline around a hook, main beats, examples or proof, visual notes and one closing action."
-              },
-              {
-                "title": "AI YouTube Script Outline Generator",
-                "url": "https://www.overseeros.com/blog/ai-youtube-script-outline-generator",
-                "whyRelevant": "Explains how to map a hook, section flow, proof, visual direction and retention checks into a production-ready outline."
+                "title": "YouTube Script Template: Copy, Fill In, and Record — Kabo",
+                "url": "https://kabo.sh/guides/youtube-script-template",
+                "whyRelevant": "A September 2026 creator guide supports a practical structure of hook, promise, demonstration, payoff and one next action."
               }
             ]
           },
