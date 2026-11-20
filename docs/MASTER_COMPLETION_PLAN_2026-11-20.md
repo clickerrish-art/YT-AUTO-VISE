@@ -230,3 +230,29 @@ The implementation branch and PR #1 head were re-read from GitHub immediately af
 - Current compare against `main`: **4,756 commits ahead / 10 behind**, status `diverged`; compare endpoint returns a capped 300-file listing. Main SHA is `7efc548065385051f7c69377f87b77a35065ce74`; merge base is `45352b73bb6cc4787b2a49988b575afb754ab627`.
 - No merge, rebase, reset, force-push, history rewrite, or main-branch modification was performed.
 - This update verifies the Node validation gate only. It does not clear the production readiness HOLD, complete other runtime/acceptance gates, or authorize any upload/publication.
+
+
+## Further exact-branch verification — quality gates and current external blockers
+
+### Quality gate source and test verification
+
+- Inspected `docs/PRODUCTION-QUALITY-ENFORCEMENT.md`, `scripts/production-quality-scorecard.mjs`, `scripts/production-quality-approval.mjs`, `scripts/validate-production-quality-approval.mjs`, both renderers, and `scripts/upload-private.mjs`.
+- The release scorecard enforces eight dimensions, each at least 80/100, unweighted mean at least 85/100, mandatory critical gates, full-video playback evidence, mobile/desktop image inspection, factual/editorial evidence, timezone-aware review freshness, and SHA-256 bindings for video, metadata, thumbnail, captions, narration and all related images.
+- The long-form and Short renderers validate exact export and audio bytes. If a production-quality approval path is configured, they also invoke the final approval validator; otherwise they label output provisional and explicitly NOT approved for release.
+- The private uploader independently revalidates the scorecard, technical receipt, exact artifact hashes, retained rights evidence, private-only state and separate one-shot authorization before any live insert. The one-shot authorization check is executed before the remote `youtube.videos.insert` call and rejects reuse of an authorization ID.
+- Exact Node run `44725961752` included `test/production-quality-scorecard.test.mjs`, `test/production-quality-approval.test.mjs`, `test/validate-long-form-export.test.mjs`, and `tests/upload-private.test.mjs`; the full suite passed 1,041/1,041 with zero failures/skips.
+- This verifies the code-level quality and private-upload safety checks. It does not create real media, prove a reviewer actually watched it, or satisfy the human review/rights requirements.
+
+### Readiness artifact inspected
+
+- Read-only readiness run `44712917611`, artifact `14617469583`, created 2026-11-20 09:42 UTC; artifact SHA-256 `33943d87fdd0a6f2bda1f4993b1a187e70c962a62847a2130bec5ca4dd91ee7e`.
+- Its report records 17 blockers: missing Short footage/narration, missing long-form footage/narration/captions, missing source and narration rights evidence, missing rights/compliance confirmations, unreviewed metadata, missing exact-hash-bound quality approval, missing final Short MP4, and stale/incomplete upload-attempt reconciliation.
+- The report says all four YouTube secret names are configured. This is presence-only evidence, not proof that credentials are valid or that a private upload is authorized.
+- This report predates the later 11:13 UTC read-only YouTube inventory run; use the newer inventory evidence for channel identity/scopes/history, but retain the separate owner attestation and upload-attempt reconciliation gate.
+
+### Comfy Cloud and narration rights rechecked
+
+- Comfy Cloud currently lists two saved workflows. `SONICVHIBEZ LTX WILDLIFE VIDEO` remains saved as workflow `889333a8-ed73-402a-b5d9-1e2bd491a6ce`, version 1, graph format, seven nodes.
+- The saved prompt is still an Arctic hunter/polar-bear demo; the workflow is not permanently configured for the Nile crocodile documentary. Its per-run prompt input is editable, but no saved-workflow update action is available in the connected toolset. Do not claim the permanent prompt is fixed.
+- No new generation was submitted. Prior free GPU quota exhaustion remains the last known constraint; do not spend credits or start a paid run.
+- Gmail was rechecked for the HeyGen Legal thread `1a1f841532f681a1`. It contains the owner's 2026-11-20 09:19:52 UTC request only; no Legal reply is present. Free-plan Roderic narration remains blocked from commercial release pending written permission.
