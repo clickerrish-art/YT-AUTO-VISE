@@ -8,6 +8,7 @@ import crypto from "node:crypto";
 import { shortParentEvidenceSha256, shortParentRelationshipSha256 } from "../scripts/short-parent-relationship.mjs";
 
 const TEST_CHANNEL_ID = "UC" + "A".repeat(22);
+const TEST_AUTHORIZATION_PUBLIC_KEY_B64 = Buffer.from(crypto.generateKeyPairSync("ed25519").publicKey.export({ type: "spki", format: "pem" })).toString("base64");
 const APPROVED_DISCLOSURE = "This product is sold through my own Selar business; purchases generate revenue for my business.";
 const APPROVED_PROMOTION_DISCLOSURE = { status: "APPROVED", type: "direct_sales_revenue", text: APPROVED_DISCLOSURE };
 const APPROVED_DESCRIPTION = "ADVERTISEMENT — " + APPROVED_DISCLOSURE;
@@ -98,7 +99,7 @@ test("private uploader fails closed when YouTube emergency stop is active or uns
   const { uploadPrivate } = await import("../scripts/upload-private.mjs");
   const baseEnv = {
     YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test",
-    SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES"
+    SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES", YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64: TEST_AUTHORIZATION_PUBLIC_KEY_B64
   };
   for (const stopValue of ["true", "YES", undefined]) {
     const env = { ...baseEnv };
@@ -130,6 +131,7 @@ test("production uploader rejects inputs outside the repository root before read
       env: {
         YOUTUBE_CLIENT_ID: "test", YOUTUBE_CLIENT_SECRET: "test", YOUTUBE_REFRESH_TOKEN: "test",
         SONICVHIBEZ_CHANNEL_ID: TEST_CHANNEL_ID, CONFIRM_PRIVATE_UPLOAD: "YES",
+        YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64: TEST_AUTHORIZATION_PUBLIC_KEY_B64,
         YOUTUBE_EMERGENCY_STOP: "false"
       }
     }), /Metadata file must remain inside the repository root/);
