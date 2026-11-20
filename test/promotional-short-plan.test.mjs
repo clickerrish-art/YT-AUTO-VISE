@@ -586,4 +586,3 @@ test("draft plans reject normalized snake-case, kebab-case and nested publicatio
     assert.ok(errors.some(error => error.includes(expectedPath)), `expected publication timestamp guard for ${expectedPath}`);
   }
 });
-

@@ -18,9 +18,9 @@ const gitBlobSha = content => createHash("sha1")
   .update(content)
   .digest("hex");
 const inventory = inventoryDashboardSources(html, server);
-const evidenceSha = "3edcdde4d20cbb4a69017e9c3e156f743c17bec0";
-const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44587482545";
-const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44587482415";
+const evidenceSha = "668a8779f8a2894f99ed935d0c8bf13f2f215e64";
+const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471";
+const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476";
 
 function assertEvidence(evidence, dimension, run = browserRun) {
   assert.ok(evidence.some(item =>
@@ -31,7 +31,7 @@ function assertEvidence(evidence, dimension, run = browserRun) {
   ), `missing exact-SHA PASS evidence for ${dimension}`);
 }
 
-test("dashboard control acceptance register is behaviorally accepted on an exact tested SHA", () => {
+test("dashboard control evidence is internally consistent while DASH-001 remains NOT_TESTED overall", () => {
   assert.equal(matrix.schemaVersion, 1);
   assert.equal(matrix.sourceBlobs.dashboardHtml, gitBlobSha(html));
   assert.equal(matrix.sourceBlobs.dashboardInventoryScript, gitBlobSha(inventorySource));
@@ -45,6 +45,9 @@ test("dashboard control acceptance register is behaviorally accepted on an exact
   assert.equal(matrix.forms.length, 17);
   assert.equal(matrix.sourceHead, evidenceSha);
   assert.equal(matrix.status, "PASS");
+  assert.equal(matrix.evidenceStatus, "PASS");
+  assert.equal(matrix.overallAcceptance, "NOT_TESTED");
+  assert.match(matrix.coverageNote, /DASH-001 remains NOT_TESTED overall/);
 
   const dashboardEvidence = matrix.dashboardEvidence;
   assert.equal(dashboardEvidence.status, "PASS");
@@ -61,6 +64,8 @@ test("dashboard control acceptance register is behaviorally accepted on an exact
   assert.equal(dashboardEvidence.automation.pythonTests, 87);
   assert.equal(dashboardEvidence.automation.pythonSkipped, 0);
   assert.equal(dashboardEvidence.automation.npmAuditVulnerabilities, 0);
+  assert.equal(dashboardEvidence.automation.pythonEvidenceSha, "8415e3b1d3802a512c994ee509ab31a24da67a9a");
+  assert.equal(dashboardEvidence.automation.npmAuditEvidenceSha, "8415e3b1d3802a512c994ee509ab31a24da67a9a");
 
   const crossCutting = new Map(dashboardEvidence.crossCuttingDimensions.map(item => [item.dimension, item]));
   for (const dimension of [

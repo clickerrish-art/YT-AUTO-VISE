@@ -146,7 +146,7 @@ test("read-only verification rejects a mismatched configured channel ID and miss
   );
 });
 
- 
+
 test("read-only verification writes a complete owner-review inventory artifact without logging private IDs", async () => {
   const directory = fs.mkdtempSync(path.join(process.cwd(), ".tmp-youtube-inventory-"));
   const inventoryPath = path.join(directory, "inventory.json");

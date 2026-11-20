@@ -4,6 +4,16 @@
 **Current master acceptance register:** 89 requirements — **72 PASS / 7 NOT_TESTED / 10 BLOCKED / 0 FAIL**. SCHED-003 is now PASS from explicit owner approval; the live YouTube history gate remains open.  
 Release decision: **HOLD**. This is not a production-complete or risk-free release.
 
+**Current master acceptance register:** 89 requirements — **71 PASS / 8 NOT_TESTED / 10 BLOCKED / 0 FAIL**. SCHED-003 is PASS from explicit owner approval; the live YouTube history gate remains open.
+
+## Current exact-head evidence — 20 November 2026
+
+**DASH-001: NOT_TESTED.** Browser run [44778971471](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471) passed 41/41 journeys; Node run [44778971476](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476) passed 1,042 tests across 181 files. These evidence passes do not close exhaustive per-control acceptance.
+
+**API-001: BLOCKED.** 42 positive route evidence sets and 48 authentication-negative checks pass; six provider/production routes remain blocked.
+
+**SCHED-001: NOT_TESTED.** OAuth identity and both scopes are verified; the complete read-only inventory contains one public legacy Short and no private/unlisted videos. New-cycle actual spacing is not yet demonstrated; owner upload-attempt attestation after 18 November is required.
+
 ## Exact verification checkpoints
 
 - Full automation/security run [44589125374](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44589125374), source/test SHA `e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3`: **1,037/1,037 Node tests across 181/181 files; 87/87 Python tests; zero failures/skips; zero npm audit vulnerabilities**. The exact-SHA regression includes the dashboard/API acceptance suites.
