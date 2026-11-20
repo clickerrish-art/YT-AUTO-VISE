@@ -14,7 +14,9 @@ jobs:
         with:
           node-version: 20
       - name: Install declared dependencies without lifecycle scripts
-        run: npm install --ignore-scripts
+        run: |
+          npm install --ignore-scripts
+          npm audit fix --ignore-scripts
       - name: Report exact npm advisories and dependency paths
         shell: bash
         run: |
@@ -44,3 +46,10 @@ jobs:
             echo "FAIL: npm audit reports vulnerabilities or could not complete."
             exit 1
           fi
+      - name: Preserve resolved dependency lockfile for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audited-package-lock
+          path: package-lock.json
+          if-no-files-found: warn
