@@ -127,9 +127,13 @@ test("owner-defined cadence rejects three publications compressed into a 168-hou
 });
 
 test("the requested weekly target remains planning metadata while the owner-approved rolling cycle controls publication", () => {
-  assert.equal(longFormQueue.targetPerWeek, 2);
-  assert.equal(longFormQueue.cadence.targetPerWeek, 2);
-  assert.deepEqual(longFormQueue.cadence.days, ["Tuesday", "Saturday"]);
+  // The operational queue must not carry a weekly publication target:
+  // the owner-approved rolling cycle deliberately has no weekly target.
+  assert.equal("targetPerWeek" in longFormQueue, false);
+  assert.equal("targetPerWeek" in longFormQueue.cadence, false);
+  assert.equal(longFormQueue.cadence.weeklyTarget, null);
+  assert.equal("postsPerWeek" in longFormQueue.cadence, false);
+  assert.deepEqual(longFormQueue.cadence.draftPreparationDays, ["Tuesday", "Saturday"]);
   assert.equal(longFormQueue.status, "PLANNING_ONLY");
   assert.equal(longFormQueue.publishingEnabled, false);
   assert.equal(plan.requestedWeeklyCadence.longFormPerWeek, 2);
