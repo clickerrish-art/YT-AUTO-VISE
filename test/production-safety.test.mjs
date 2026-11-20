@@ -51,7 +51,7 @@ test("Short Edge TTS audition workflow is manual-only, acknowledged, and never p
   assert.ok(shortNarrationWorkflow.includes("if: \${{ inputs.allow_noncommercial_audition == true }}"));
   assert.ok(shortNarrationWorkflow.includes("--allow-noncommercial-audition"));
   assert.ok(shortNarrationWorkflow.includes("NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"));
-  assert.ok(shortNarrationWorkflow.includes("productionUseAllowed") === false || shortNarrationWorkflow.includes("productionUseAllowed"));
+  assert.ok(shortNarrationWorkflow.includes('assert data["productionUseAllowed"] is False'));
   const workflowLines = shortNarrationWorkflow.split(String.fromCharCode(10)).map(line => line.trim());
   assert.equal(workflowLines.includes("schedule:"), false);
   assert.equal(workflowLines.includes("push:"), false);
