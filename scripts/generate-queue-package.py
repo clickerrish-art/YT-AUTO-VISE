@@ -82,9 +82,21 @@ def make_srt(text: str, duration: float) -> str:
 async def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-number", type=int, required=True)
-    ap.add_argument("--voice", default="en-US-GuyNeural")
+    ap.add_argument("--voice", default=None, help="Voice to audition; must be explicitly supplied.")
     ap.add_argument("--rate", default="-5%")
+    ap.add_argument(
+        "--allow-noncommercial-audition",
+        action="store_true",
+        help="Acknowledge that Edge TTS output is internal evaluation only and cannot be used commercially.",
+    )
     args = ap.parse_args()
+    if not args.allow_noncommercial_audition:
+        raise SystemExit(
+            "BLOCKED: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+            "Pass --allow-noncommercial-audition only for an internal audition."
+        )
+    if not args.voice:
+        raise SystemExit("BLOCKED: supply --voice explicitly for a non-commercial audition.")
     queue = json.loads(QUEUE.read_text(encoding="utf-8"))
     items = [x for x in queue.get("items", []) if x.get("id") not in {"wildlife-vault-001", "wildlife-vault-002"}]
     if not items:
@@ -97,7 +109,14 @@ async def main():
     await edge_tts.Communicate(text, args.voice, rate=args.rate).save(str(audio))
     duration = MP3(audio).info.length
     metadata = {
-        "status": "HOLD_FOR_FOOTAGE_AND_REVIEW",
+        "status": "INTERNAL_AUDITION_ONLY",
+        "provider": "Edge TTS",
+        "voice": args.voice,
+        "voiceApprovalStatus": "NOT_OWNER_APPROVED",
+        "licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+        "commercialUseAllowed": False,
+        "productionUseAllowed": False,
+        "publishingEnabled": False,
         "channel": "SonicVhibez",
         "queueItemId": item.get("id"),
         "title": item.get("title") or item.get("topic"),
@@ -127,7 +146,7 @@ async def main():
     (OUT / f"{slug}.txt").write_text(text + "\n", encoding="utf-8")
     (OUT / f"{slug}.srt").write_text(make_srt(text, duration), encoding="utf-8")
     (OUT / f"{slug}.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
-    print(f"PACKAGE: {slug}; words={len(text.split())}; narration={duration:.2f}s; status=HOLD_FOR_FOOTAGE_AND_REVIEW")
+    print(f"PACKAGE: {slug}; words={len(text.split())}; narration={duration:.2f}s; status=INTERNAL_AUDITION_ONLY")
     print(f"TITLE: {metadata['title']}")
     print("CAPTIONS: estimated timestamps; final alignment required.")
     if duration < 50 or duration > 60:
