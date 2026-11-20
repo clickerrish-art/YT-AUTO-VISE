@@ -39,6 +39,6 @@ Still required:
 
 <NOT FOR COMMERCIAL RELEASE UNDER CURRENT FREE-PLAN TERMS.>
 
-Narration generation is not narration approval or commercial clearance. The WAV is internal-evaluation-only. A paid commercial licence is disallowed by the user's zero-cost rule; therefore the production must use a different owner-approved, zero-cost narrator with independently verified commercial rights, or remain on hold. Do not substitute a voice without owner approval. This file also does not establish audio quality, exact spoken-word accuracy, local file integrity, rights clearance for visuals, completed edit, human review, upload authorization, or a YouTube schedule.
+Narration generation is not narration approval or commercial clearance. The WAV is internal-evaluation-only. The owner has explicitly confirmed Roderic — Authoritative & Refined as the exclusive narrator throughout and rejected Banjo for all future production or auditions. Do not substitute another voice. A paid commercial licence is disallowed by the zero-cost rule; therefore this production remains on hold until a zero-cost commercial-use authorization for Roderic is independently verified. Do not use the Free-plan WAV commercially, upgrade, or bypass the licence. This file also does not establish audio quality, exact spoken-word accuracy, local file integrity, rights clearance for visuals, completed edit, human review, upload authorization, or a YouTube schedule.
 
 `scheduledAt: null`; publishing remains disabled.
