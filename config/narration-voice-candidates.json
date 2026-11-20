@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "AMERICAN_MALE_STORYTELLER_REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
+  "status": "SUPERSEDED_BY_EXCLUSIVE_RODERIC_OWNER_DECISION",
   "provider": "piper_local",
   "model": {
     "repository": "rhasspy/piper-voices",
@@ -48,7 +48,7 @@
     }
   ],
   "audition": {
-    "status": "AMERICAN_MALE_STORYTELLER_REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
+    "status": "SUPERSEDED_BY_EXCLUSIVE_RODERIC_OWNER_DECISION",
     "generatedByWorkflow": true,
     "chosenVoice": "norman",
     "chosenVoiceId": "en_US-norman-medium",
@@ -90,5 +90,18 @@
     "status": "REJECTED_BY_OWNER_REQUEST",
     "productionApproved": false,
     "finalNarration": false
+  },
+  "ownerDecision": {
+    "approvedVoice": "Roderic — Authoritative & Refined",
+    "approvedVoiceId": "b5c5b28db1ea408abc7d851202983bdb",
+    "exclusivity": "EXCLUSIVE_APPROVED_VOICE_NO_SUBSTITUTIONS",
+    "rejectedVoices": [
+      "Banjo"
+    ],
+    "historicalAuditionOnly": [
+      "Norman (en_US-norman-medium)"
+    ],
+    "productionRule": "Do not generate, audition, or substitute any other voice. Roderic Free-plan output remains internal-evaluation-only unless written commercial-use permission is verified.",
+    "decidedAt": "2026-11-20"
   }
 }
