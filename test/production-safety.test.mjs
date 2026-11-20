@@ -7,6 +7,7 @@ const narrationWorkflow = fs.readFileSync(".github/workflows/generate-long-form-
 const shortNarrationWorkflow = fs.readFileSync(".github/workflows/free-narration-artifact.yml", "utf8");
 const queuePackageGenerator = fs.readFileSync("scripts/generate-queue-package.py", "utf8");
 const legacyLongNarrationGenerator = fs.readFileSync("scripts/generate-long-form-narration.py", "utf8");
+const queuedDraftRenderer = fs.readFileSync("scripts/render-queued-draft.py", "utf8");
 const qualityWorkflow = fs.readFileSync(".github/workflows/content-quality.yml", "utf8");
 const readiness = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
 const longRenderer = fs.readFileSync("scripts/render-long-form.mjs", "utf8");
@@ -84,6 +85,14 @@ test("legacy long-form Edge TTS generator is explicitly non-commercial and fail-
   assert.ok(legacyLongNarrationGenerator.includes('"productionUseAllowed": False'));
   assert.ok(legacyLongNarrationGenerator.includes('"publishingEnabled": False'));
   assert.ok(legacyLongNarrationGenerator.includes("audioSha256"));
+});
+
+test("video renderer rejects non-commercial internal-audition audio", () => {
+  assert.ok(queuedDraftRenderer.includes('meta.get("status") == "INTERNAL_AUDITION_ONLY"'));
+  assert.ok(queuedDraftRenderer.includes('meta.get("licenseStatus") == "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"'));
+  assert.ok(queuedDraftRenderer.includes('meta.get("commercialUseAllowed") is False'));
+  assert.ok(queuedDraftRenderer.includes('meta.get("productionUseAllowed") is False'));
+  assert.ok(queuedDraftRenderer.includes("non-commercial internal-audition audio cannot be rendered"));
 });
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
