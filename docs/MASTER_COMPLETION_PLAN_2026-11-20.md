@@ -273,3 +273,12 @@ Changes now committed on the implementation branch:
 **Status: IMPLEMENTED IN SOURCE; NOT YET TEST-VERIFIED.** The current GitHub connector exposes no workflow-dispatch action, and these connector-authored commits have no reported CI status checks. Do not treat the new signature gate as verified until `.github/workflows/validate.yml` is manually dispatched against the current branch or an equivalent exact-head CI run passes. Do not attempt any live upload until the owner creates and securely retains an Ed25519 key pair, configures `YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64`, and all production readiness gates pass.
 
 The owner private key must never be sent in chat, committed, uploaded to the repository, or installed on a worker. The public key is safe to configure; the matching private key remains owner-controlled. This security change does not authorize an upload.
+
+
+## Nature Frontiers / Metricool read-only verification — 2026-11-20
+
+- Metricool currently returns one brand: **Nature Frontiers SA**, brand ID `8094526`, timezone `Africa/Johannesburg`, Facebook Page ID `1431329126735709`, Instagram account `naturefrontieers2026`.
+- The same Metricool brand also exposes YouTube channel ID `UCSlkuPfHH78oGC1o418HV4w`, which is the verified SonicVhibez YouTube channel. This is a cross-brand destination-mapping risk: **do not schedule or publish SonicVhibez content through the Nature Frontiers Metricool brand, and do not treat that YouTube connection as a Nature Frontiers destination.** Correct the account mapping only through an owner-approved Metricool account action.
+- Read-only scheduled-post query for 2026-11-20 through 2026-12-20 (Africa/Johannesburg) returned zero scheduled posts.
+- This endpoint exposes only future scheduled posts. It does not reconcile the eight previously identified historical records with `draft=false` and `autoPublish=true`; those remain unresolved. No Metricool post, setting, connection or campaign was changed.
+- Nature Frontiers remains separate from SonicVhibez. Keep its publishing disabled/dry-run/emergency-stop defaults and do not enable auto-publishing until the historical records and approval state are independently reconciled.
