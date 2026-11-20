@@ -2086,5 +2086,11 @@
     "authenticationNegativeRoutesPassed": 48,
     "blockedRoutesPreserved": 6,
     "explanation": "Exact source/test SHA e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3 was exercised by the complete automation/security regression. All 42 locally accepted routes retain endpoint-specific success-test references and are included in the 181/181-file, 1,037-test Node run; the same run includes the source-derived missing/invalid-authentication matrix for all 48 protected routes. Six routes remain blocked for explicit owner/provider or genuine production-evidence prerequisites. This is local application evidence only, not live Meta/YouTube acceptance, remote publication or production deployment."
+  },
+  "dashboardBrowserE2eRefreshRequest": {
+    "requestedAt": "2026-11-20",
+    "baseHeadSha": "2634979de257206a4a83ac7f153ffc35f5e8e18d",
+    "status": "PENDING",
+    "reason": "Refresh the 41 browser journeys on the current implementation branch because dashboard-server.mjs and browser-tests/dashboard.spec.mjs changed after the prior browser evidence."
   }
 }
