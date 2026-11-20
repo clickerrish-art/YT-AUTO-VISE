@@ -9,7 +9,7 @@
     "originalSourceUrl": "https://vimeo.com/163161616",
     "filename": "Nile crocodile ambushes a wildebeest.webm",
     "creator": "Bettina May",
-    "description": "Nile crocodile (Crocodylus niloticus) successfully hunts a blue wildebeest (Connochaetes taurinus) at Grumeti River, Serengeti, Tanzania. Source page notes that a section of the original material has been removed.",
+    "description": "Nile crocodile ambushes a blue wildebeest at Grumeti River, Serengeti, Tanzania. The source page notes that a section of the original material has been removed.",
     "dateRecorded": "2016-04-17",
     "sourcePageCheckedAt": "2026-11-20",
     "metadata": {
@@ -19,8 +19,9 @@
       "aspectRatio": "16:9",
       "container": "WebM",
       "videoCodec": "VP8",
-      "fileSizeBytes": 31720000,
-      "frameRate": null
+      "fileSizeBytes": 33264307,
+      "frameRate": null,
+      "fileSizeDisplay": "33,264,307 bytes"
     }
   },
   "licenseReview": {
