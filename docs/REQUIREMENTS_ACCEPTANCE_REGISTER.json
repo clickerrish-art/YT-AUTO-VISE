@@ -3459,5 +3459,32 @@
     "browserE2E": "NOT_RUN_ON_THIS_SHA",
     "acceptancePromotion": "NONE",
     "note": "This is exact-SHA regression evidence only. It does not promote DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 or GIT-002 and does not certify production media, rights, live publishing, or release readiness."
+  },
+  "voiceSafetyPRReview": {
+    "recordedAt": "2026-11-20T15:46:33Z",
+    "pullRequest": 8,
+    "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/8",
+    "state": "OPEN",
+    "draft": false,
+    "merged": false,
+    "headBranch": "codex/voice-license-safety",
+    "headSha": "fbe665d1a2c46528c1b6ee2aec5da3880222ec57",
+    "baseBranch": "main",
+    "recordedBaseSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
+    "currentMainSha": "69b933c6e00f902035d6f5bcef97dd9dd9f7787f",
+    "mergeable": false,
+    "exactHeadWorkflowRun": {
+      "id": 44766648377,
+      "status": "success",
+      "jobId": 136392919951,
+      "checks": [
+        "Node test suite",
+        "metadata validation",
+        "production blocker reporting",
+        "timed subtitle draft validation",
+        "unreviewed metadata examples remain blocked"
+      ]
+    },
+    "note": "The PR removes automatic push/schedule triggers from Edge TTS narration workflows and adds explicit non-commercial internal-audition guards/manifests. The successful workflow run is on the exact current PR head. The PR is not mergeable against its recorded base; current main has advanced. No rebase, branch update, merge or main modification was attempted. Main still has automatic narration workflow triggers until a reviewed fix lands."
   }
 }
