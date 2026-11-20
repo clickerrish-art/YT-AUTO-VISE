@@ -386,8 +386,24 @@ export function assertReconciliationOnlyHasPriorAttempt(reconcileOnly, prior) {
   return true;
 }
 
+const ONE_SHOT_UPLOAD_AUTHORIZATION_FIELDS = Object.freeze([
+  "authorizationId", "decision", "jobId", "artifactSha256", "metadataSha256",
+  "approvalSha256", "channelId", "visibility", "publishingEnabled", "operator", "authorizedAt"
+]);
+
+/** Canonical signed payload. The signature field itself is deliberately excluded. */
+export function oneShotUploadAuthorizationPayload(record) {
+  if (!record || typeof record !== "object" || Array.isArray(record)) {
+    throw new Error("one-shot authorization record must be an object");
+  }
+  const payload = {};
+  for (const field of ONE_SHOT_UPLOAD_AUTHORIZATION_FIELDS) payload[field] = record[field] ?? null;
+  return JSON.stringify(payload);
+}
+
 export function validateOneShotUploadAuthorization(record, {
-  jobId, artifactSha256, metadataSha256, approvalSha256, channelId, now = new Date()
+  jobId, artifactSha256, metadataSha256, approvalSha256, channelId,
+  publicKeyBase64, now = new Date()
 } = {}) {
   if (!record || record.decision !== "AUTHORIZE_ONE_PRIVATE_UPLOAD") throw new Error("a separate one-shot private-upload authorization is required");
   if (typeof record.authorizationId !== "string" || !/^[A-Za-z0-9:_-]{8,120}$/.test(record.authorizationId)) throw new Error("one-shot authorization requires a stable unique authorizationId");
@@ -397,12 +413,34 @@ export function validateOneShotUploadAuthorization(record, {
   const authorizedAt = strictIsoTimestamp(record.authorizedAt);
   const nowMs = now instanceof Date ? now.getTime() : strictIsoTimestamp(now);
   if (!Number.isFinite(authorizedAt) || !Number.isFinite(nowMs) || authorizedAt > nowMs + 5 * 60_000 || nowMs - authorizedAt > 24 * 60 * 60_000) throw new Error("one-shot authorization timestamp must be valid, not future-dated and no older than 24 hours");
+  if (typeof publicKeyBase64 !== "string" || !publicKeyBase64.trim()) {
+    throw new Error("YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64 is required for a live one-shot authorization");
+  }
+  let publicKey;
+  try {
+    const pem = Buffer.from(publicKeyBase64, "base64").toString("utf8");
+    if (!pem.includes("-----BEGIN PUBLIC KEY-----")) throw new Error("invalid PEM");
+    publicKey = crypto.createPublicKey(pem);
+  } catch {
+    throw new Error("YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64 must contain a valid base64-encoded Ed25519 public key");
+  }
+  if (publicKey.asymmetricKeyType !== "ed25519") throw new Error("one-shot authorization public key must be Ed25519");
+  if (typeof record.signature !== "string") throw new Error("one-shot authorization Ed25519 signature is required");
+  const signature = Buffer.from(record.signature, "base64");
+  if (signature.length !== 64 || signature.toString("base64") !== record.signature) {
+    throw new Error("one-shot authorization signature must be canonical base64 Ed25519 data");
+  }
+  let signatureValid = false;
+  try {
+    signatureValid = crypto.verify(null, Buffer.from(oneShotUploadAuthorizationPayload(record), "utf8"), publicKey, signature);
+  } catch {}
+  if (!signatureValid) throw new Error("one-shot authorization Ed25519 signature is invalid or does not bind this exact record");
   return { authorizationId: record.authorizationId, operator: record.operator.trim(), authorizedAt: new Date(authorizedAt).toISOString() };
 }
 
 export async function uploadPrivate({ metadataPath, videoPath, approvalPath, jobId, env = process.env, youtubeFactory, now = () => new Date(), preflightRunner = (args, runEnv) => execFileSync(process.execPath, args, { env: runEnv, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }), persistJson = writeJsonAtomic }) {
   const reconcileOnly = env.RECONCILE_ONLY === "YES";
-  const requiredEnv = ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID", ...(reconcileOnly ? [] : ["CONFIRM_PRIVATE_UPLOAD"])];
+  const requiredEnv = ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID", ...(reconcileOnly ? [] : ["CONFIRM_PRIVATE_UPLOAD"]), ...(!reconcileOnly && !youtubeFactory ? ["YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64"] : [])];
   const missing = requiredEnv.filter(key => !env[key]?.trim());
   if (missing.length) throw new Error("missing required environment variables: " + missing.join(", "));
   if (!reconcileOnly && env.CONFIRM_PRIVATE_UPLOAD !== "YES") throw new Error("explicit private-upload confirmation is required (CONFIRM_PRIVATE_UPLOAD=YES)");
@@ -593,7 +631,9 @@ export async function uploadPrivate({ metadataPath, videoPath, approvalPath, job
     const record = readJson(safeAuthorizationPath, "One-shot private-upload authorization");
     oneShotAuthorization = validateOneShotUploadAuthorization(record, {
       jobId, artifactSha256: videoSha256, metadataSha256, approvalSha256,
-      channelId: expectedChannelId, now: now()
+      channelId: expectedChannelId,
+      publicKeyBase64: env.YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64,
+      now: now()
     });
     if (ledger.attempts.some(item => item.authorizationId === oneShotAuthorization.authorizationId)) throw new Error("one-shot authorization was already consumed by an upload attempt; issue a new authorization only after reviewing the prior outcome");
   }
