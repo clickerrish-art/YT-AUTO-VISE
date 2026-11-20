@@ -256,3 +256,20 @@ The implementation branch and PR #1 head were re-read from GitHub immediately af
 - The saved prompt is still an Arctic hunter/polar-bear demo; the workflow is not permanently configured for the Nile crocodile documentary. Its per-run prompt input is editable, but no saved-workflow update action is available in the connected toolset. Do not claim the permanent prompt is fixed.
 - No new generation was submitted. Prior free GPU quota exhaustion remains the last known constraint; do not spend credits or start a paid run.
 - Gmail was rechecked for the HeyGen Legal thread `1a1f841532f681a1`. It contains the owner's 2026-11-20 09:19:52 UTC request only; no Legal reply is present. Free-plan Roderic narration remains blocked from commercial release pending written permission.
+
+
+## Security hardening in progress — signed one-shot upload authorization
+
+A source review found that the previous live one-shot authorization checked the operator name, job/media/metadata/approval/channel hashes, privacy state and timestamp, but did **not** cryptographically authenticate the authorization record. A privileged repository writer could therefore forge the JSON record and its plain-text operator field. This was a material authorization-integrity weakness.
+
+Changes now committed on the implementation branch:
+
+- `1987a3b2a202982d03f4776d9febef5a4492b781`: live private-upload path now requires a base64-encoded Ed25519 public key and verifies a signature over the canonical one-shot authorization fields before the remote insert.
+- `c964e138147c27fc5421b233d1baee62768194fe`: added `scripts/sign-youtube-upload-authorization.mjs`, which signs a fresh record locally with the owner's Ed25519 private key, writes atomically, refuses symlinked paths/re-signing, and never prints or stores the private key.
+- `b40e100dbfb84c8794abf6a42fd8a562ba484541`: added tests for valid signature, mismatched/tampered record, missing key/signature, expiry, and atomic signer behavior.
+- `82f73080b37f4766a04aaae7397bbd650d232190`: documented the public-key environment variable in `.env.example`.
+- `6c94a3a74b52bba223fb01a6b325ca148a34000c`: added `docs/YOUTUBE-PRIVATE-UPLOAD-AUTHORIZATION.md` with key-generation, storage and signing instructions.
+
+**Status: IMPLEMENTED IN SOURCE; NOT YET TEST-VERIFIED.** The current GitHub connector exposes no workflow-dispatch action, and these connector-authored commits have no reported CI status checks. Do not treat the new signature gate as verified until `.github/workflows/validate.yml` is manually dispatched against the current branch or an equivalent exact-head CI run passes. Do not attempt any live upload until the owner creates and securely retains an Ed25519 key pair, configures `YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64`, and all production readiness gates pass.
+
+The owner private key must never be sent in chat, committed, uploaded to the repository, or installed on a worker. The public key is safe to configure; the matching private key remains owner-controlled. This security change does not authorize an upload.
