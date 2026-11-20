@@ -536,12 +536,17 @@ test("November 23 ethical-wildlife and outline Shorts use fresh qualitative sear
     assert.equal(item.targetSeconds, 55);
     assert.equal(item.keywordEvidence.provider, "web_search");
     assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
-    assert.match(item.keywordEvidence.researchedAt, /^2026-11-19T/);
     assert.match(item.keywordEvidence.note, /no measured global search volume/i);
     assert.ok(item.keywordEvidence.sources.length >= 2);
     assert.equal(item.currentIntentEvidence.provider, "web_search");
-    assert.match(item.currentIntentEvidence.researchedAt, /^2026-11-19T/);
     assert.ok(item.currentIntentEvidence.sources.length >= 2);
+    for (const researchedAt of [item.keywordEvidence.researchedAt, item.currentIntentEvidence.researchedAt]) {
+      const timestamp = Date.parse(researchedAt);
+      assert.ok(Number.isFinite(timestamp), "qualitative evidence must have a valid research timestamp");
+      assert.ok(timestamp <= Date.now() + 5 * 60 * 1000, "research timestamps must not be materially in the future");
+      assert.ok(Date.now() - timestamp <= 14 * 24 * 60 * 60 * 1000,
+        "qualitative keyword evidence must remain within the validator's 14-day freshness window");
+    }
     assert.ok(item.keywordPhrases.length >= 3);
     const firstDescriptionLines = item.description.split(/\n/).slice(0, 4).join("\n").toLowerCase();
     assert.ok(firstDescriptionLines.includes(item.primaryKeyword.toLowerCase()));
