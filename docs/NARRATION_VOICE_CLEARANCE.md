@@ -1,3 +1,7 @@
+> **SUPERSEDED — 2026-11-20.** This document describes an earlier Norman (en_US-norman-medium) audition candidate and is retained only as historical evidence. It is not a current voice selection or production instruction. The owner has since selected **Roderic — Authoritative & Refined** (HeyGen voice ID `b5c5b28db1ea408abc7d851202983bdb`) as the exclusive approved narrator and explicitly rejected Banjo for all future production and auditions. Do not generate, audition, or substitute Norman, Banjo, or any other voice for SonicVhibez. Roderic's existing HeyGen Free-plan WAV remains internal-evaluation-only unless HeyGen Legal grants verified written commercial-use permission. See `content/assets/long-form-001-narration-status.md` and `docs/MASTER_COMPLETION_PLAN_2026-11-20.md` for current controls.
+
+---
+
 # SonicVhibez narration voice — American male candidate review
 
 ## Current candidate
