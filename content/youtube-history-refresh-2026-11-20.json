@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "status": "READ_ONLY_VERIFIED_MATCHES_PRIOR_OWNER_REVIEW_PENDING_OWNER_REAFFIRMATION_OF_NEW_INVENTORY_AND_LOCAL_ATTEMPTS",
+  "verifiedAt": "2026-11-20T11:13:10.643Z",
+  "workflowRunId": 44725743866,
+  "workflowAttempt": 1,
+  "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
+  "jobId": 136252575433,
+  "artifact": {
+    "id": 14623951721,
+    "name": "sonicvhibez-youtube-history-inventory",
+    "retentionDays": 7,
+    "zipSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
+    "inventoryJsonSha256": "0dd1fad51ee1ecc2f5ae192fc2d42fc94d93657198c310e9f5ad7f0ad904e316"
+  },
+  "oauth": {
+    "status": "PASS",
+    "checkedAt": "2026-11-20T11:13:10.285Z",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly"
+    ],
+    "grantedScopes": [
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/youtube.upload"
+    ]
+  },
+  "channel": {
+    "id": "UCSlkuPfHH78oGC1o418HV4w",
+    "title": "SonicVibes",
+    "handle": "@sonicvhibez",
+    "identityVerified": true
+  },
+  "inventory": {
+    "complete": true,
+    "uploadsPlaylistPages": 1,
+    "totalUploads": 1,
+    "visibilityCounts": {
+      "public": 1,
+      "private": 0,
+      "unlisted": 0
+    },
+    "videos": [
+      {
+        "id": "LjePS02hA1o",
+        "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+        "visibility": "public",
+        "youtubePublishedAt": "2026-10-22T15:05:56Z",
+        "scheduledPublishAt": null,
+        "duration": "PT20S",
+        "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW"
+      }
+    ]
+  },
+  "comparisonWithExistingOwnerReviewedHistory": {
+    "reconciliationPath": "content/youtube-history-reconciliation.json",
+    "priorOwnerReviewedFormat": "short",
+    "priorOwnerReviewDate": "2026-11-18",
+    "exactMatch": {
+      "videoId": true,
+      "channelId": true,
+      "visibility": true,
+      "youtubePublishedAt": true,
+      "duration": true
+    },
+    "disposition": "The fresh read-only inventory matches the exact video record already classified as a Short in the prior owner-reviewed reconciliation. The new artifact itself labels format unclassified; owner reaffirmation is required before using this fresh artifact as a new cadence approval."
+  },
+  "uploadSafety": {
+    "uploadAttempted": false,
+    "metadataWriteAttempted": false,
+    "publishingEnabled": false,
+    "publicPublishingEnabled": false
+  },
+  "outstandingOwnerAttestation": {
+    "status": "STALE",
+    "validThrough": "2026-11-18",
+    "requiredAction": "Owner must confirm whether any manual, local, third-party or external YouTube upload attempts occurred after 2026-11-18; reconcile any such attempt by exact remote video ID and timestamp before another upload.",
+    "doNotBlindRetry": true
+  },
+  "limitations": [
+    "This is a read-only identity, scope and uploads-playlist inventory. It does not authorize an upload.",
+    "The existing one-video owner-reviewed reconciliation matches the fresh remote record, but the new artifact requires owner reaffirmation of the Short classification.",
+    "A complete uploads-playlist inventory does not reveal out-of-band attempts that never reached YouTube or are not represented in the uploads playlist.",
+    "No media, rights, caption, quality, approval or publication gate is changed by this verification."
+  ]
+}
