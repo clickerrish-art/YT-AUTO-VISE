@@ -21,8 +21,9 @@
       "videoCodec": "VP9",
       "audioCodec": "Opus",
       "overallBitrateMbps": 11.73,
-      "fileSizeBytes": 28910000,
-      "frameRate": null
+      "fileSizeBytes": null,
+      "frameRate": null,
+      "fileSizeDisplay": "28.91 MB (source-page display; exact bytes not exposed)"
     }
   },
   "licenseReview": {
