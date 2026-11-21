@@ -243,3 +243,15 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Saved a machine-readable, read-only reconciliation at `content/queue-authority-reconciliation-2026-11-21.json`; commit `7eaa528494bc5c61b684f988328e56ab12e058b1`; file was re-fetched, parsed as JSON and its fail-closed disposition verified.
 - Safe disposition: `HOLD_NO_QUEUE_MUTATION`; publishing remains disabled. Do not select either queue as authoritative, alter queue order or assign the second topic without owner confirmation. Required engineering follow-up: implement a fail-closed cross-queue identity reconciliation gate in production readiness and dispatch, with regression tests, then verify on exact HEAD. This code-level mitigation is NOT_YET_IMPLEMENTED and must not be called complete.
 - Owner decisions required: (1) confirm operational/detailed queue relationship, (2) reaffirm Nile Crocodile Long-form 001 as cycle position 1, (3) approve the second long-form topic and stable ID.
+
+
+---
+
+## Permanent project-scope notice — owner instruction, 21 November 2026
+
+- **SonicVhibez YouTube remains part of the Marketing Machine, regardless of the machine's name.**
+- YouTube was removed/disconnected from Metricool as an integration decision following project guidance. That disconnection does **not** remove YouTube from project scope, the roadmap, acceptance criteria, or the completion definition.
+- The intended architecture is a direct SonicVhibez YouTube integration owned by this project: OAuth/token lifecycle, channel identity and history reconciliation, content/metadata preparation, policy-aware scheduling, dispatch/worker execution, upload safeguards, remote verification, analytics ingestion, auditability, persistence and recovery.
+- Do not reconnect YouTube to Metricool unless the owner explicitly reverses that decision. Do not treat YouTube's absence from Metricool as a defect.
+- Keep Nature Frontiers as a separate Facebook/Instagram brand and never route it to SonicVhibez YouTube.
+- This notice supersedes any wording that could be interpreted as YouTube being removed from the Marketing Machine. All YouTube release safeguards remain in force; this notice does not authorize uploads, publication, paid services, or relaxed rights/review controls.
