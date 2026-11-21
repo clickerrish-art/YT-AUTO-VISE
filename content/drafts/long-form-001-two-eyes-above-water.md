@@ -1,7 +1,7 @@
 # Long-form 001 — Two Eyes Above the Water
 
 **Brand:** SonicVhibez  
-**Status:** OWNER-APPROVED TOPIC AND SCRIPT; PRODUCTION HOLD. HEYGEN SUPPORT CONFIRMED THAT RODERIC FREE-PLAN OUTPUT CANNOT BE PUBLICLY REDISTRIBUTED FOR BRANDED PROJECTS, EVEN IF UNMONETIZED, AND CANNOT BE USED COMMERCIALLY. DO NOT USE THE EXISTING WAV IN ANY PUBLIC BRANDED RELEASE. NO PAID PLAN OR ALTERNATE NARRATOR IS AUTHORIZED.  
+**Status:** OWNER-APPROVED TOPIC AND SCRIPT; PRODUCTION HOLD. HEYGEN SUPPORT CONFIRMED THAT RODERIC FREE-PLAN OUTPUT CANNOT BE PUBLICLY REDISTRIBUTED FOR BRANDED PROJECTS, EVEN IF UNMONETIZED, AND CANNOT BE USED COMMERCIALLY. DO NOT USE THE EXISTING WAV IN ANY PUBLIC BRANDED RELEASE. On 2026-11-22 the owner declined Roderic exclusivity and authorized auditioning zero-cost commercially licensed alternatives; no alternative voice is approved for production yet.  
 **Target format:** YouTube long-form, 16:9, 6–10 minutes  
 **Working title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Thumbnail direction:** Use a genuine original creator-captured Nile crocodile eye/waterline photograph from the approved footage only; eye on the right, dark open negative space on the left, exact words “TOO BIG?”; no AI-generated wildlife image, stock/archive image, blood, victim, gore or fabricated attack.  
@@ -11,7 +11,7 @@
 
 **Production media rule:** Original creator-captured wildlife footage only, with per-file provenance and commercial rights verified. If original footage is unavailable, use clearly labelled static scientific diagrams or blank placeholders; never substitute AI-generated wildlife visuals or stock/archive footage.
 
-**Narrator rights rule:** Roderic remains the approved narrator preference, but the HeyGen Free-plan output is internal-evaluation-only and commercially prohibited by the provider's written determination. Do not render or use production narration until written commercial rights are obtained. No alternate voice or paid upgrade is authorized.
+**Narrator rights rule:** Existing and future HeyGen Free-plan Roderic audio is internal-evaluation-only and commercially prohibited by the provider's written determination. The owner has authorized auditioning zero-cost alternatives with documented commercial-use permissions. The Norman/Piper audition is available for owner listening but is not selected or production-approved. Do not use any narration in the release until the owner approves the exact final audio hash. No paid upgrade is authorized.
 
 ## Spoken narration draft
 
