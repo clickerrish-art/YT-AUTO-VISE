@@ -1623,7 +1623,10 @@ test("narration form persists measured audio and word-boundary captions with a d
       fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload })
     ]);
     const concurrentNarrationBodies = await Promise.all(concurrentNarrationResponses.map(response => response.json()));
-    expect(concurrentNarrationResponses.map(response => response.status).sort()).toEqual([200, 201]);
+    expect(
+      concurrentNarrationResponses.map(response => response.status).sort(),
+      JSON.stringify({ concurrentNarrationBodies, serverLogs: logs })
+    ).toEqual([200, 201]);
     const createdIndex = concurrentNarrationResponses.findIndex(response => response.status === 201);
     const reusedIndex = concurrentNarrationResponses.findIndex(response => response.status === 200);
     expect(concurrentNarrationBodies[createdIndex].narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
