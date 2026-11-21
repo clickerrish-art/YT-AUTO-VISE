@@ -2215,6 +2215,13 @@ const server = http.createServer(async (req, res) => {
           return json(res, 409, { error: "Human script approval bound to this exact revision is required before narration generation" });
         }
         const prior = job.authoring.narrationStage;
+        if (prior?.status === "BLOCKED") {
+          return json(res, 409, {
+            error: "Narration is BLOCKED; resolve the owner-approved voice and commercial-rights policy before retrying or create a newly approved script revision",
+            publishable: false,
+            publishingEnabled: false
+          });
+        }
         if (prior?.status === "DRAFT_REVIEW_REQUIRED") {
           if (prior.scriptSha256 !== body.scriptSha256 || prior.scriptApprovalSha256 !== job.authoring?.scriptApproval?.approvalSha256) {
             return json(res, 409, { error: "Persisted narration draft no longer matches the exact approved script and review receipt; reconcile before retrying", recoveryRequired: true, publishable: false });
