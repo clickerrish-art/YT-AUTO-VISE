@@ -347,3 +347,15 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Machine-readable evidence: `content/metricool-youtube-scope-recheck-2026-11-21.json`, status `CONNECTION_STATE_AMBIGUOUS`. No Metricool settings were changed and no posts were created or published.
 - Release/scope control: continue to route SonicVhibez YouTube through the project's direct API only. Do not reconnect or mutate Metricool network settings without explicit owner instruction. Owner/UI verification of the lingering `youtubeData` association is required before declaring the Metricool disconnection independently verified.
 
+
+
+---
+
+## Exact queue-content approval binding and owner-input preparation — 21 November 2026
+
+- The queue identity approval now binds SHA-256 digests of both parsed operational and detailed queue documents. A title, topic, script path, order, ID, cadence or other semantic content change invalidates the prior owner approval, even when stable IDs remain unchanged.
+- Added `scripts/prepare-queue-identity-approval.mjs` and `npm run prepare:queue-approval`. It safely reads the two queue files and prints a pending approval template with both current queue hashes and the required cycle positions. It deliberately leaves every `detailedItemId`, owner identity, approval timestamp and decision reference blank; it does not write or approve anything.
+- Added tests for the pending template, exact queue hashes, rolling cycle positions 1/2/4, blank owner fields, and malformed/duplicate queues.
+- Isolated local Node 22 checks: queue policy **8/8 PASS**; approval-template builder **2/2 PASS**; syntax check passed for both isolated modules. These are focused isolated validations, not a substitute for the full repository suite.
+- Owner input still required: choose the detailed item for each operational long-form slot, confirm the canonical Nile Crocodile Long-form 001 placement and the second topic, then complete and commit the approval record. No mapping or approval was fabricated.
+
