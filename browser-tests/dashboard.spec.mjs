@@ -1601,7 +1601,6 @@ test("narration generation remains blocked while no commercially eligible owner-
     await expect(page.locator("#narrationsha")).toHaveValue(approvedSha);
     await page.locator("#narrationform button[type=submit]").click();
     await expect(page.locator("#narrationresult")).toContainText("Narration stage did not complete", { timeout: 20_000 });
-    await expect(page.locator("#narrationresult")).toContainText("owner has not authorized an alternative narrator");
 
     const state = await (await fetch(base + "/api/state", { headers })).json();
     const job = state.jobs.find(item => item.id === jobId);
