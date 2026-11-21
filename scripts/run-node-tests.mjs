@@ -7,6 +7,7 @@ import { parseNodeTestSummary } from "./node-test-summary.mjs";
 
 const roots = ["test", "tests"];
 const TEST_FILE_TIMEOUT_MS = 60_000; // A hung test file must not block the full release suite indefinitely.
+// File-backed output and process-group cleanup prevent orphaned test children from stalling later files.
 const files = roots.flatMap(root => {
   if (!fs.existsSync(root)) return [];
   return fs.readdirSync(root, { withFileTypes: true })
