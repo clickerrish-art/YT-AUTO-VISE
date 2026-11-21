@@ -1,7 +1,7 @@
 name: Queue readiness
 on:
   push:
-    branches: [main]
+    branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/replenish-queue.mjs"
       - "scripts/validate-schedule.mjs"
@@ -9,6 +9,10 @@ on:
       - "config/weekly-content-plan.json"
       - ".github/workflows/twice-weekly-check.yml"
       - "scripts/production-readiness.mjs"
+      - "test/**"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/worker-runner.mjs"
+      - "scripts/queue-identity-policy.mjs"
       - "tests/**"
       - "scripts/render-short.mjs"
       - "package.json"
@@ -23,6 +27,10 @@ on:
     paths:
       - "scripts/replenish-queue.mjs"
       - "scripts/production-readiness.mjs"
+      - "test/**"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/worker-runner.mjs"
+      - "scripts/queue-identity-policy.mjs"
       - "tests/**"
       - "scripts/render-short.mjs"
       - "package.json"
