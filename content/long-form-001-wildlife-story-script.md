@@ -20,9 +20,11 @@ A strong wildlife video is more than a sequence of beautiful animal clips. In th
 
 This is a creator-education video. Always verify animal-behaviour claims with reliable sources and respect wildlife, local rules and the rights attached to every clip.
 
-ADVERTISEMENT — Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF.
+ADVERTISEMENT.
 
 This product is sold through my own Selar business; purchases generate revenue for my business.
+
+For a structured resource to support wildlife-video planning, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
 https://selar.com/0u19v8u99l
 
 Narration uses AI-generated text-to-speech. Any realistic AI-generated wildlife scenes or meaningful alterations of real events or places will be disclosed using YouTube's altered-content setting where required. Review the current sales page and terms before purchasing.
@@ -116,10 +118,10 @@ Show a pre-publication checklist and a folder containing licence records, source
 **Voice-over:**  
 Here is the method: choose a question the footage can answer, arrange the best shots into a beginning, middle and end, edit for meaning, preserve useful natural sound, verify the narration, and make the packaging match the actual story. You do not need to make every video louder or more dramatic. You need to make each shot earn its place.
 
-If this helped, subscribe to SonicVhibez for practical creator workflows. Advertisement. If you want a structured resource for planning wildlife videos, you can review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF using the link in the description. This product is sold through my own Selar business; purchases generate revenue for my business. Check the current sales page and terms before deciding whether it suits you. No product can guarantee views, growth or monetization. Thanks for watching SonicVhibez.
+If this helped, subscribe to SonicVhibez for practical creator workflows. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. If you want a structured resource for planning wildlife videos, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF using the link in the description. Check the current sales page and terms before deciding whether it suits you. No product can guarantee views, growth or monetization. Thanks for watching SonicVhibez.
 
 **Visuals:**  
-Return to the three-part timeline. Display a clear ADVERTISEMENT identifier before the product CTA and show the exact approved direct-sales disclosure in readable, high-contrast on-screen text while it is spoken; hold long enough to read. Then show a restrained end screen with a subscribe prompt and one relevant video placeholder. Keep the product link beside the disclosure.
+Return to the three-part timeline. Display a clear ADVERTISEMENT identifier, then show the exact approved direct-sales disclosure in readable, high-contrast on-screen text before the product name or link appears. Hold long enough to read while the disclosure is spoken. Only then show the product CTA and link, followed by a restrained end screen with a subscribe prompt and one relevant video placeholder.
 
 ## Editorial and compliance checklist
 
