@@ -1,11 +1,17 @@
 # Long-form 001 — Two Eyes Above the Water
 
 **Brand:** SonicVhibez  
-**Status:** OWNER-APPROVED SCRIPT; RODERIC IS THE EXCLUSIVE OWNER-APPROVED NARRATOR; CURRENT FREE-PLAN OUTPUT IS INTERNAL-EVALUATION-ONLY  
+**Status:** OWNER-APPROVED TOPIC AND SCRIPT; PRODUCTION HOLD. RODERIC IS THE OWNER-APPROVED NARRATOR PREFERENCE, BUT HEYGEN DENIED COMMERCIAL USE OF THE FREE-PLAN OUTPUT. DO NOT USE THAT OUTPUT IN PRODUCTION WITHOUT WRITTEN RIGHTS CLEARANCE.  
 **Target format:** YouTube long-form, 16:9, 6–10 minutes  
 **Working title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
-**Thumbnail direction:** Nile crocodile eye at dusk, tight waterline close-up, eye on the right, dark open negative space on the left, exact words “TOO BIG?”; no blood, victim, gore or fabricated attack  
-**Editorial promise:** Explain how the Nile crocodile's low-profile posture, sensory system and ambush behaviour work together. Do not present a generated scene as a real encounter.
+**Thumbnail direction:** Use a genuine original creator-captured Nile crocodile eye/waterline photograph from the approved footage only; eye on the right, dark open negative space on the left, exact words “TOO BIG?”; no AI-generated wildlife image, stock/archive image, blood, victim, gore or fabricated attack.  
+**Editorial promise:** Explain how the Nile crocodile's low-profile posture, sensory system and ambush behaviour work together. Use only original creator-captured wildlife footage with verified provenance and commercial rights. AI-generated wildlife visuals, stock/archive footage and fabricated encounters are prohibited.
+
+**Promotion:** NON-COMMERCIAL EDUCATIONAL CONTENT — `hasPaidPromotion=false`. No product CTA, Selar URL, Wildlife Creator's Vault promotion or product sales disclosure belongs in this documentary.
+
+**Production media rule:** Original creator-captured wildlife footage only, with per-file provenance and commercial rights verified. If original footage is unavailable, use clearly labelled static scientific diagrams or blank placeholders; never substitute AI-generated wildlife visuals or stock/archive footage.
+
+**Narrator rights rule:** Roderic remains the approved narrator preference, but the HeyGen Free-plan output is internal-evaluation-only and commercially prohibited by the provider's written determination. Do not render or use production narration until written commercial rights are obtained. No alternate voice or paid upgrade is authorized.
 
 ## Spoken narration draft
 
@@ -82,12 +88,12 @@ The river may look empty. That does not mean it is empty. And understanding the 
 
 | Beat | Approx. runtime | Picture direction | Required treatment |
 |---|---:|---|---|
-| Hook: two eyes | 0:00–0:35 | Wide dusk river, then waterline eye close-up | Must be clearly labelled AI reconstruction if synthetic |
+| Hook: two eyes | 0:00–0:35 | Original creator-captured dusk river and waterline eye footage, only after provenance and commercial rights verification; otherwise a labelled non-photorealistic diagram | No AI-generated wildlife visuals, stock/archive footage or fabricated encounter |
 | Species and habitat | 0:35–1:35 | Real, correctly identified Nile crocodile in river/lake/swamp | Source credit and species verification |
-| Body posture | 1:35–2:35 | Side-profile diagram or real footage showing head/body relationship | Do not imply the entire body is invisible in every condition |
-| Skin sensory organs | 2:35–3:45 | Accurate close-up/diagram of sensory pits and restrained surface-wave visual | Label scientific illustration; no invented detection distance |
+| Body posture | 1:35–2:35 | Original creator-captured footage or a clearly labelled static scientific diagram | Do not imply the entire body is invisible in every condition |
+| Skin sensory organs | 2:35–3:45 | Accurate, clearly labelled scientific diagram of sensory pits and surface-wave transmission | No invented detection distance or AI-generated wildlife visual |
 | Signal processing | 3:45–4:35 | Simple sound/wave sequence graphic | Distinguish experimental findings from field behaviour |
-| Ambush mechanics | 4:35–5:55 | Shoreline position, tail propulsion, brief lunge in real footage or labelled reconstruction | No staged victim, gore or false documentary sequence |
+| Ambush mechanics | 4:35–5:55 | Original creator-captured shoreline, tail-propulsion and lunge footage only after rights verification; otherwise a labelled static diagram | No reconstruction, staged victim, gore or false documentary sequence |
 | Feeding ecology | 5:55–6:40 | Non-graphic feeding context and prey diversity | Avoid sensationalism and unsupported specifics |
 | Human safety | 6:40–7:25 | Safe-distance viewpoint, warning sign or habitat wide shot | Never model unsafe approach |
 | Closing | 7:25–7:50 | Return to calm waterline and eyes | End card: “Respect the water. Keep your distance.” |
@@ -98,7 +104,7 @@ The river may look empty. That does not mean it is empty. And understanding the 
 
 - [x] Owner approved the exact narration text and topic in chat on 2026-11-20 (response: “proceed”).
 - [ ] Source footage is actually acquired, per-file hashed, decoded and inspected; source selection alone is not clearance.
-- [ ] Exact model/checkpoint/voice commercial-use permissions are verified for any generated or synthetic assets.
+- [ ] No AI-generated wildlife visuals, stock/archive footage or fabricated wildlife encounters are used. Any production narration must have written commercial-use rights; the existing Roderic Free-plan WAV is prohibited for public/commercial release.
 - [x] HeyGen public voice catalogue returned active Roderic — Authoritative & Refined (voice ID `b5c5b28db1ea408abc7d851202983bdb`); generated once on the connected Free plan with that exact voice. No substitute used.
 - [x] Internal-evaluation narration generated after owner approval; HeyGen returned 398.083 seconds (6:38) and word/character timing data. See `content/assets/long-form-001-narration-status.md`.
 - [ ] **Commercial-use gate BLOCKED — PROVIDER DENIAL RECEIVED:** HeyGen Support explicitly denied a zero-cost commercial-use exception for existing and future Roderic Free-plan outputs in writing on 2026-11-21 (SonicVhibez thread `1a1f90019e6d7961`; Nature Frontiers thread `1a1fd2af2bfaeebd`). HeyGen stated that Free-plan outputs are restricted to personal, non-commercial and internal evaluation and cannot be used for public branded distribution or commercial activity. Do not use the existing 398.083-second WAV in the public/commercial release. The owner has approved Roderic — Authoritative & Refined as the exclusive narrator and rejected Banjo; do not substitute another voice. No zero-cost Roderic commercial-use route is currently available. Keep production on hold unless HeyGen later reverses its determination in writing or the owner explicitly changes the narrator constraint; do not upgrade or bypass the licence. See `content/heygen-roderic-commercial-rights-determination-2026-11-21.json`.
