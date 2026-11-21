@@ -36,7 +36,7 @@ Today, we look beyond the fear surrounding this animal to understand how it live
 
 ### Chapter 1 — Built for the water (0:45–1:50)
 
-The Nile crocodile is one of Africa's largest living reptiles.
+The Nile crocodile is one of Africa's largest crocodilians.
 
 Its body is protected by tough skin and reinforced bony structures. Its long, powerful tail supplies most of the forward thrust when swimming.
 
@@ -172,7 +172,7 @@ This is SonicVhibez.
 2. IUCN Crocodile Specialist Group, Nile crocodile action-plan chapter: https://iucncsg.org/wp-content/uploads/2026/07/Crocodylus-niloticus-Action-Plan.pdf
 3. San Diego Zoo Wildlife Alliance, Behaviour & Ecology: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/behavior
 4. San Diego Zoo Wildlife Alliance, Diet & Feeding: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/diet
-5. SANBI, 2023 Suricata 10 regional assessment: https://www.sanbi.org/wp-content/uploads/2024/06/2023_Suricata10.pdf
+5. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Physical Characteristics: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/characteristics\n6. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Reproduction & Development: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/reproduction\n7. Combrink, X., Warner, J.K. & Downs, C.T. (2016), “Nest predation and maternal care in the Nile crocodile (*Crocodylus niloticus*) at Lake St Lucia, South Africa”, *Behavioural Processes* 133:31–36, DOI: 10.1016/j.beproc.2016.10.014. PubMed: https://pubmed.ncbi.nlm.nih.gov/27816524/\n8. Leslie, A.J., Kemp, S.J. & Spotila, J.R., “Temperature Dependent Sex Determination in St Lucia Nile Crocodiles in Natal, South Africa” (preliminary Lake St Lucia study; see pages 274–281 in the linked compilation): https://crocodileandy.org/wp-content/uploads/2015/04/4-1-head-starting-and-translocation-juveniles.pdf\n9. SANBI, 2023 Suricata 10 regional assessment: https://www.sanbi.org/wp-content/uploads/2024/06/2023_Suricata10.pdf
 
 ## Mandatory production controls
 
