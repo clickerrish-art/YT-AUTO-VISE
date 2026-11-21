@@ -151,7 +151,9 @@ test("Nature Frontiers validator and schema enforce original creator-captured el
 test("All manual alternate-narrator entry points enforce the owner decision", () => {
   const policy = readJson("../config/narration-voice-candidates.json");
   assert.equal(policy.ownerDecision.approvedVoice, "Roderic — Authoritative & Refined");
-  assert.equal(policy.ownerDecision.alternativeVoicesAuthorized, false);
+  assert.equal(policy.ownerDecision.approvedVoiceStatus, "HISTORICAL_PREFERENCE_NOT_APPROVED_FOR_COMMERCIAL_RELEASE");
+  assert.equal(policy.ownerDecision.alternativeVoicesAuthorized, true);
+  assert.equal(policy.ownerDecision.selectionStatus, "PENDING_OWNER_LISTENING");
   assert.equal(policy.ownerDecision.paidUpgradeAuthorized, false);
   assert.equal(policy.ownerDecision.commercialRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21");
   for (const path of [
