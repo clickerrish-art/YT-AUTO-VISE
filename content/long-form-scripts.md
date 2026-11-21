@@ -12,7 +12,7 @@
 - Replace every bracketed visual cue with rights-cleared media. Do not use fabricated wildlife interactions or edit shots to imply an event that did not happen.
 - Keep the promotional segment transparent. Selar is the owner's own business and purchases generate direct sales revenue, not affiliate commission. The owner approved this exact viewer-facing disclosure on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Place an ADVERTISEMENT identifier first, speak and display the exact disclosure before the product name/link, then give the CTA. Keep YouTube's paid-promotion declaration enabled.
 - Production media must be original creator-captured wildlife footage with verified provenance and commercial rights. Do not use stock/archive footage or AI-generated wildlife visuals as substitutes; until eligible footage is supplied, use clearly labelled blank/diagram placeholders only.
-- Roderic's HeyGen Free-plan output is internal-evaluation-only and is not commercially cleared. Do not use it for production narration until written commercial rights are resolved. No alternate narrator or paid upgrade is authorized.
+- HeyGen Support confirmed on 2026-11-21 that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. Keep it internal-evaluation-only; do not use it in any public branded release. No production narration is authorized until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint. No alternate narrator or paid upgrade is authorized.
 - Review captions, audio, factual accuracy, thumbnail accuracy, paid-promotion disclosure, and YouTube synthetic/altered-media settings before any upload.
 
 ---
@@ -106,7 +106,7 @@ Thanks for watching SonicVhibez. Choose one question for your next video, check 
 
 ### Suggested description
 
-Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization. Narration is not commercially cleared. Roderic's HeyGen Free-plan sample is internal-evaluation-only; do not use it in production until written commercial rights are resolved. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited. Use only original creator-captured wildlife footage with verified provenance and commercial rights. If any other realistic altered or synthetic content appears, assess and apply YouTube's disclosure setting where required.
+Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization. HeyGen Support confirmed that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. The sample is internal-evaluation-only; do not use it in a public branded release. No production narration is authorized until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited. Use only original creator-captured wildlife footage with verified provenance and commercial rights. If any other realistic altered or synthetic content appears, assess and apply YouTube's disclosure setting where required.
 
 ADVERTISEMENT
 
@@ -204,7 +204,7 @@ Thanks for watching SonicVhibez. Start with one focused idea, keep your sources 
 
 ### Suggested description
 
-A beginner-friendly workflow for faceless wildlife videos, covering focused research, evidence-based narration, original creator-captured visuals with verified commercial rights, editing, captions, thumbnails, disclosures, and a final quality check. No workflow can guarantee views, revenue, or YouTube monetization. Roderic's HeyGen Free-plan narration is not commercially cleared and must not be used in production until written commercial rights are resolved. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited.
+A beginner-friendly workflow for faceless wildlife videos, covering focused research, evidence-based narration, original creator-captured visuals with verified commercial rights, editing, captions, thumbnails, disclosures, and a final quality check. No workflow can guarantee views, revenue, or YouTube monetization. HeyGen Support confirmed that Roderic Free-plan narration cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. Do not use it in a public branded release. No production narration is authorized until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited.
 
 ADVERTISEMENT
 
