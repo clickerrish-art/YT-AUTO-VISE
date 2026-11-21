@@ -1613,6 +1613,20 @@ test("narration generation remains blocked while no commercially eligible owner-
     expect(state.publishingEnabled).toBe(false);
     expect(state.uploads).toHaveLength(0);
 
+    // A blocked attempt must not silently retry the unauthorized voice on a later click.
+    const retryResponse = await fetch(base + "/api/jobs/narration", {
+      method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: approvedSha })
+    });
+    const retryBody = await retryResponse.json();
+    expect(retryResponse.status).toBe(409);
+    expect(retryBody.error).toMatch(/Narration is BLOCKED; resolve the owner-approved voice and commercial-rights policy/i);
+    const afterRetry = await (await fetch(base + "/api/state", { headers })).json();
+    const afterRetryJob = afterRetry.jobs.find(item => item.id === jobId);
+    expect(afterRetryJob.authoring.narrationStage.status).toBe("BLOCKED");
+    expect(afterRetry.audit.filter(event => event.action === "AUTHORING_NARRATION_STARTED" && event.jobId === jobId)).toHaveLength(1);
+    expect(afterRetry.audit.filter(event => event.action === "AUTHORING_NARRATION_BLOCKED" && event.jobId === jobId)).toHaveLength(1);
+    expect(afterRetry.publishingEnabled).toBe(false);
+
     await stopServer();
     startServer();
     await waitForServer();
