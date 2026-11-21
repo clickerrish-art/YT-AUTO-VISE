@@ -61,7 +61,7 @@ Narration generation is not narration approval or commercial clearance. The WAV 
 - Owner decision: **Banjo is explicitly disapproved for all future production and auditions.** No other voice substitution is authorized.
 - Budget: strictly zero; no paid upgrade, charge, or paid workaround is permitted.
 - Legal request: sent to `legal@heygen.com` after Support directed the owner there. The request asks whether zero-cost commercial/monetized YouTube use is permitted for both the existing Free-plan Roderic WAV and future Free-plan Roderic generations, and asks for scope, attribution and underlying voice/model licence coverage.
-- Latest check: the Legal thread contains one message (the owner's sent request) and no response. Permission is **pending and unconfirmed**, not granted.
+- Historical snapshot (2026-11-20, before the later Support response): the Legal thread contained only the owner's sent request. **Superseded on 2026-11-21:** HeyGen Support explicitly denied the requested zero-cost exception; see the final provider determination below.
 - Release gate: do not use the Free-plan WAV commercially unless current applicable terms or explicit written authorization from the rights holder clearly permits it. Do not treat Support's referral, silence, or the owner's narrator approval as a licence.
 - Continue only work independent of this licence gate. Keep production and publishing disabled until all release gates are independently evidenced.
 
