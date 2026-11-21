@@ -9,16 +9,15 @@
   "narrationPath": "../media/next-short-narration.mp3",
   "captionsPath": "short-001-wildlife-video-storytelling.srt",
   "qualityEvidencePath": "short-quality-evidence.json",
-  "footageLicenseEvidence": "short-001-pexels-rights-evidence.json",
+  "footageLicenseEvidence": "",
   "narrationLicenseEvidence": "short-001-roderic-narration-generation.json",
   "rightsConfirmed": false,
   "complianceReviewed": false,
   "containsSyntheticMedia": true,
   "hasPaidPromotion": true,
   "sourceScriptPath": "short-001-wildlife-video-storytelling.md",
-  "sourceScriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
-  "captionSourceBlobSha256": "6a09a58188301ed134912010c6276c6a167544be",
   "notes": [
+    "Pexels source clips and their platform licence evidence are retained as historical/reference-only acquisition records. They are not eligible production footage under the current original creator-captured wildlife media requirement; do not use them as substitutes. The original-camera footage package must be separately acquired and rights-verified.",
     "HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs on 2026-11-21; public branded or commercial use is prohibited. Keep this narration internal-only.",
     "The current Roderic Short narration is documented in short-001-roderic-narration-generation.json; HeyGen's written denial is recorded in heygen-roderic-commercial-rights-determination-2026-11-21.json. It remains internal-only and is not production-eligible.",
     "The existing SRT was aligned to the previous Roderic audition and is NOT approved or synchronized to the Norman review WAV; regenerate and verify captions against the final approved narration.",
@@ -30,5 +29,11 @@
   "containsAIWildlifeVisuals": false,
   "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
   "mediaProvenanceStatus": "UNVERIFIED",
-  "narrationRightsDeterminationEvidence": "heygen-roderic-commercial-rights-determination-2026-11-21.json"
+  "narrationRightsDeterminationEvidence": "heygen-roderic-commercial-rights-determination-2026-11-21.json",
+  "sourceScriptBlobSha": "81bdea0fa807bee606d029741f34718e9f0aa415",
+  "captionSourceBlobSha": "6a09a58188301ed134912010c6276c6a167544be",
+  "sourceHashType": "GIT_BLOB_SHA",
+  "captionHashType": "GIT_BLOB_SHA",
+  "referenceOnlyRightsResearchEvidence": "short-001-pexels-rights-evidence.json",
+  "footageEligibilityStatus": "EXCLUDED_PEXELS_STOCK_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
 }
