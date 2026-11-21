@@ -407,7 +407,7 @@ function controlOwnerFor(message) {
 }
 
 function evidenceInspectedFor(message) {
-  if (/imported Canva wildlife asset/i.test(message)) return {
+  if (/imported wildlife asset/i.test(message)) return {
     kind: "repository-path-check",
     path: mediaInventoryPath,
     observed: message
