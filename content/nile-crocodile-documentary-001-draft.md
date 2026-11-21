@@ -1,5 +1,6 @@
-# SonicVhibez — The Nile Crocodile
-## Production script v1 — Research draft, not approved for narration
+# SonicVhibez — Nile Crocodile Alternate Research Draft (Unqueued)
+**Queue status:** UNQUEUED ALTERNATE DRAFT. The canonical owner-approved Long-form 001 is `content/drafts/long-form-001-two-eyes-above-water.md`. This alternate draft is not assigned a publication slot and is not approved for narration, rendering or upload.
+## Not the canonical Long-form 001 script — do not use for production
 
 **Working title:** The Nile Crocodile — The Predator Beneath the Surface  
 **Channel:** SonicVhibez (YouTube target only)  
