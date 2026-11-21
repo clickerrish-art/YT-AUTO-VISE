@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "SUPERSEDED_BY_EXCLUSIVE_RODERIC_OWNER_DECISION",
+  "status": "OWNER_APPROVED_RODERIC_EXCLUSIVE_BUT_COMMERCIAL_RIGHTS_DENIED",
   "provider": "piper_local",
   "model": {
     "repository": "rhasspy/piper-voices",
@@ -31,7 +31,8 @@
     "modelSha256": "b9739443232a80a59c7d18810dd856899bf16a7964725f5ab81ea49b1351cb71",
     "modelCardSha256": "60eaf4d10009d1bd4a1aa555d337dae00f60421d72fee415b9139a021e7cb5d0",
     "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md",
-    "rightsStatus": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED"
+    "rightsStatus": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED",
+    "status": "HISTORICAL_NORMAN_AUDITION_ONLY_NOT_AUTHORIZED"
   },
   "candidates": [
     {
@@ -44,11 +45,13 @@
       "vocalDirection": "Mature approximately-45-year-old character; clean, clear, warm, confident, passionate wildlife storyteller; natural conversational pacing; controlled emphasis; never robotic or overacted.",
       "priority": 1,
       "rightsStatus": "PUBLIC_DOMAIN_SOURCE_RECORDINGS; PINNED_MODEL_CARD_AND_ATTRIBUTION_REVIEW_REQUIRED",
-      "sampleUrl": "https://huggingface.co/rhasspy/piper-voices/resolve/8e602cc224300e0961258a0c885bccbfcc515a7f/en/en_US/norman/medium/samples/speaker_0.mp3"
+      "sampleUrl": "https://huggingface.co/rhasspy/piper-voices/resolve/8e602cc224300e0961258a0c885bccbfcc515a7f/en/en_US/norman/medium/samples/speaker_0.mp3",
+      "status": "HISTORICAL_AUDITION_ONLY_NOT_AUTHORIZED",
+      "productionApproved": false
     }
   ],
   "audition": {
-    "status": "SUPERSEDED_BY_EXCLUSIVE_RODERIC_OWNER_DECISION",
+    "status": "SUPERSEDED_BY_EXCLUSIVE_RODERIC_OWNER_DECISION_AND_NOT_AUTHORIZED_FOR_FUTURE_AUDITIONS",
     "generatedByWorkflow": true,
     "chosenVoice": "norman",
     "chosenVoiceId": "en_US-norman-medium",
@@ -101,7 +104,11 @@
     "historicalAuditionOnly": [
       "Norman (en_US-norman-medium)"
     ],
-    "productionRule": "Do not generate, audition, or substitute any other voice. Roderic Free-plan output remains internal-evaluation-only unless written commercial-use permission is verified.",
-    "decidedAt": "2026-11-20"
+    "productionRule": "Roderic — Authoritative & Refined remains the exclusive owner-selected narrator. HeyGen denied zero-cost commercial-use permission for existing and future Free-plan outputs. Do not use Roderic Free-plan audio publicly or commercially. Do not generate, audition or substitute any other voice and do not upgrade to a paid plan unless the owner explicitly changes these constraints. Production narration remains blocked.",
+    "decidedAt": "2026-11-20",
+    "commercialRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21",
+    "providerDenialEvidence": "content/heygen-roderic-commercial-rights-determination-2026-11-21.json",
+    "alternativeVoicesAuthorized": false,
+    "paidUpgradeAuthorized": false
   }
 }
