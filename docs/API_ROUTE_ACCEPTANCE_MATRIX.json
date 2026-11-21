@@ -315,8 +315,8 @@
       "concurrency": "PASS — four concurrent authenticated reads return the same payload and leave persisted state byte-identical.",
       "restartRecovery": "N/A — read-only route with no durable mutation.",
       "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "The endpoint only selects candidates for dispatch. The render endpoint still revalidates the full script/narration/captions/production-plan/rights/compliance/metadata/media evidence and can reject a candidate without rendering. It does not upload or publish. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "overallAcceptance": "BLOCKED",
+      "notes": "The endpoint only selects candidates for dispatch. The render endpoint still revalidates the full script/narration/captions/production-plan/rights/compliance/metadata/media evidence and can reject a candidate without rendering. It does not upload or publish. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A. Latest guard: fail-closed queue identity reconciliation is now required before dispatch/production; integration regressions have been added but are NOT_TESTED on the current branch head.",
       "testEvidence": {
         "test": "test/dashboard-worker-api.integration.test.mjs; test/worker-runner.test.mjs; test/dashboard-api-auth-matrix.test.mjs",
         "exactTestedSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
@@ -327,11 +327,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
       "currentHeadEvidenceRunId": 44884481167,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
+      "currentHeadEvidenceNote": "Latest queue-identity guard source changes are committed on the implementation branch, but no exact-current-HEAD dashboard integration run or CI status is available. Until an owner-approved content/queue-identity-approval.json binds both queue hashes and all mappings, this route must return HTTP 409 QUEUE_IDENTITY_RECONCILIATION_REQUIRED with no dispatch/render side effect. Existing historical route passes apply only to their cited older SHAs.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
         "test/dashboard-dispatchable-ordering.integration.test.mjs"
@@ -1330,7 +1330,7 @@
       "restartRecovery": "PASS — exact-SHA real-server test gracefully stops and restarts the dashboard, retries the same legacy job, receives 409 with renderStarted=false, and verifies byte-identical durable state and no render artifacts.",
       "externalOperation": "genuine rights-cleared media and final manifests required",
       "overallAcceptance": "BLOCKED",
-      "notes": "Exact candidate e99bc24511879106157c002c09242315e6219325 passed the real-server test test/dashboard-worker-api.integration.test.mjs. A scoped worker submits a queued legacy job without the approved authoring pipeline; POST /api/jobs/produce returns 409, preserves persisted state byte-for-byte, and creates neither render manifest nor per-job media directory. This accepts the negative fail-closed behavior only. Successful rendering remains BLOCKED until genuine rights-cleared media, approved script/narration/scene evidence and complete final manifests exist.",
+      "notes": "Exact candidate e99bc24511879106157c002c09242315e6219325 passed the real-server test test/dashboard-worker-api.integration.test.mjs. A scoped worker submits a queued legacy job without the approved authoring pipeline; POST /api/jobs/produce returns 409, preserves persisted state byte-for-byte, and creates neither render manifest nor per-job media directory. This accepts the negative fail-closed behavior only. Successful rendering remains BLOCKED until genuine rights-cleared media, approved script/narration/scene evidence and complete final manifests exist. Latest guard: fail-closed queue identity reconciliation is now required before dispatch/production; integration regressions have been added but are NOT_TESTED on the current branch head.",
       "testEvidence": {
         "test": "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "exactTestedSha": "74c1f79e5dc9011eec81722e1d9eefafcbd6a4b1",
@@ -1340,11 +1340,11 @@
         "scenario": "Two simultaneous worker-authenticated POST /api/jobs/produce requests for a legacy QUEUED CONTENT_PRODUCTION job without authoring both return 409 with renderStarted=false and publishingEnabled=false; persisted state remains byte-identical; no manifest or per-job media directory is created. After graceful server restart, the same request remains 409 and state remains byte-identical."
       },
       "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
       "currentHeadEvidenceRunId": 44884481167,
-      "currentHeadEvidenceNote": "BLOCKED on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Authentication-negative protection is tested; the authorized provider/production operation remains blocked pending owner/provider identity, rights, approval or remote reconciliation evidence. No live write or publication was attempted.",
+      "currentHeadEvidenceNote": "Latest queue-identity guard source changes are committed on the implementation branch, but no exact-current-HEAD dashboard integration run or CI status is available. Until an owner-approved content/queue-identity-approval.json binds both queue hashes and all mappings, this route must return HTTP 409 QUEUE_IDENTITY_RECONCILIATION_REQUIRED with no dispatch/render side effect. Existing historical route passes apply only to their cited older SHAs.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
@@ -2143,5 +2143,35 @@
     "testsPassed": 41,
     "testsFailed": 0,
     "testsSkipped": 0
+  },
+  "latestQueueIdentityGuard": {
+    "implementationPolicy": "scripts/queue-identity-policy.mjs",
+    "readinessIntegration": "scripts/production-readiness.mjs",
+    "dashboardRoutes": [
+      "GET /api/jobs/dispatchable",
+      "POST /api/jobs/produce"
+    ],
+    "workerBehavior": "WORKER_QUEUE_IDENTITY_BLOCKED is non-retryable; stop after one read-only listing response",
+    "ownerApprovalFile": "content/queue-identity-approval.json",
+    "approvalBinds": [
+      "operationalQueueSha256",
+      "detailedQueueSha256",
+      "owner identity",
+      "timezone-qualified approval timestamp",
+      "decision reference",
+      "every long-form operational ID",
+      "detailed script ID",
+      "cycle position"
+    ],
+    "cyclePositionsForLongFormItems": "1, 2, 4, 5, 7, 8, ...",
+    "currentRepositoryDisposition": "BLOCKED_OWNER_APPROVAL_MISSING",
+    "publishingEnabled": false,
+    "isolatedPolicyTests": "8/8 PASS on isolated Node 22 runtime",
+    "templateTests": "2/2 PASS on isolated Node 22 runtime",
+    "dashboardIntegrationTest": "ADDED_NOT_TESTED",
+    "workerIntegrationTest": "ADDED_NOT_TESTED",
+    "productionReadinessIntegrationTest": "ADDED_NOT_TESTED",
+    "fullRepositoryRegression": "NOT_TESTED",
+    "exactHeadCi": "NO_WORKFLOW_RUNS_OR_COMBINED_STATUSES"
   }
 }
