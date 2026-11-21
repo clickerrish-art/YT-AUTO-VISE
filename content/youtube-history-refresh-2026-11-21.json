@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "checkedAt": "2026-11-21T09:35:04.822Z",
+  "status": "PARTIAL_OWNER_CLASSIFICATION_AND_ATTEMPT_ATTESTATION_PENDING",
+  "mode": "READ_ONLY_YOUTUBE_IDENTITY_SCOPE_AND_COMPLETE_UPLOADS_INVENTORY",
+  "source": {
+    "workflowRun": 44890253420,
+    "workflowUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44890253420",
+    "sourceCommit": "09f331aeb5715aff8e9aad69ccda3afce52e19a7"
+  },
+  "channel": {
+    "handle": "@sonicvhibez",
+    "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+    "authenticatedIdentityMatchesOwnerSuppliedChannel": true
+  },
+  "oauth": {
+    "checkedAt": "2026-11-21T09:35:04.822Z",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/youtube.upload"
+    ],
+    "bothRequiredScopesGranted": true
+  },
+  "inventory": {
+    "paginationAndVideoDetailsComplete": true,
+    "visibilityCounts": {
+      "public": 1,
+      "private": 0,
+      "unlisted": 0
+    },
+    "formatClassification": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
+    "ownerReaffirmationRequired": true,
+    "publicationCycleReconciliation": "PENDING"
+  },
+  "uploadAttemptReconciliation": {
+    "workflowRun": 44890418778,
+    "workflowUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44890418778",
+    "sourceCommit": "c31ea042bd5683b3c288c9e940e69a9a05f2db0c",
+    "previousPrivateUploadWorkflowExecutions": 0,
+    "previousLedgerRunId": null,
+    "workflowConclusion": "PASS_NO_PRIOR_PRIVATE_UPLOAD_JOB_EXECUTED",
+    "manualLocalThirdPartyAttemptAttestation": "STALE_AFTER_2026-11-18",
+    "ownerAttestationRequired": true
+  },
+  "safety": {
+    "publishingEnabled": false,
+    "uploadAttempted": false,
+    "publicPublishingAuthorized": false,
+    "unattendedPublishingAuthorized": false,
+    "uncertainUploadRetryAllowed": false
+  },
+  "nextRequiredActions": [
+    "Owner reaffirms the format classification of the existing public video against the prior reviewed record.",
+    "Owner attests to every manual, local, third-party and workflow upload attempt after 2026-11-18.",
+    "Reconcile complete remote video IDs, privacy states and actual publishedAt timestamps against the local ledger before any schedule calculation.",
+    "Any future upload requires separate exact-job, exact-media, exact-metadata and exact-approval one-shot private authorization."
+  ]
+}
