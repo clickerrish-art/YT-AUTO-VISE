@@ -110,3 +110,55 @@ Marketing measurement requirements after lawful publication: impressions, reach,
 - HOLD: any critical gate is blocked or not tested.
 
 Do not claim 100% completion while any required gate is BLOCKED or NOT_TESTED. Keep public/unattended publishing disabled. Do not change `main`, merge/close/ready PR #1, reset/rebase/force-push, invent evidence, use paid services, or run GPU generation without explicit authorization.
+
+
+---
+
+## 7. Live execution addendum — 21 November 2026
+
+This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or test-status statements above where they conflict.
+
+### Exact Git state and test evidence
+- Current implementation branch HEAD: `0c9b9bb892fbbba1034c0e8020ba7157b84c588f`.
+- `main`: `3795519ccbf58fd02d74458624b58dd2e44a88c0`; unchanged.
+- PR #1 remains OPEN / DRAFT / UNMERGED; base `main`.
+- Branch comparison: 5,024 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Exact executable-code baseline `600775c3bd3a4ce80515ccbf4caa93f6cef06bf6`, run [44908444869](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44908444869): 185/185 Node test files, 1,070 Node tests passed, zero failed/skipped; 103 Python tests passed; npm audit zero vulnerabilities. Deployment recovery run [44908444940](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44908444940) passed; artifact bridge safety run [44908444879](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44908444879) passed.
+- Current HEAD is six commits ahead of `600775c`; the only changed paths since that tested executable-code baseline are four content/evidence JSON files: the Cloudflare reconciliation, Metricool reconciliation, promotional Short plan and YouTube history refresh. No executable source or test file changed after `600775c`. The promotional plan and evidence JSON files were parsed and structurally inspected separately. **No exact-current-HEAD full CI run is recorded**, and no current-HEAD browser E2E is recorded.
+- Older full run [44905987671](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44905987671) failed on earlier SHA `02c8fb7f0990f8b235441473e16a5c3a301e3f5a`: 1,068 passed, 2 failed, zero skipped. Failures were a stale detached-process assertion and a production-readiness evidence-path matcher. Subsequent source/test changes corrected both; the 1,070-test PASS is on `600775c`, not the current evidence-only HEAD.
+- PR #1 has no PR-triggered workflow runs/statuses returned for current HEAD `0c9b9bb`; do not infer a current-head CI result.
+
+### Dashboard and API acceptance
+- DASH-001: NOT_TESTED overall. Inventory is 121 controls / 17 forms / 104 form-owned / 17 standalone. The last 41/41 browser evidence is on an older SHA, not current HEAD. The matrix's last browser E2E is not on the latest tested source SHA.
+- API-001: NOT_TESTED overall. Matrix records 48 routes, 42 local acceptance passes, 48/48 auth-negative checks, and six provider/production routes still blocked. Local fixture success is not live provider acceptance.
+- Production-quality gate: source and tests enforce eight quality dimensions, minimum 80 per dimension, overall 85/100, critical-gate approval, exact artifact/metadata/caption/thumbnail/narration hashes, technical receipt, rights evidence and human reviewer identity. The uploader and production-readiness script both validate the gate. This is a code-level structural gate; it cannot prove the reviewer actually watched the media or authenticate the truth of the review evidence.
+
+### Fresh YouTube evidence
+- Read-only run [44890253420](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44890253420) on 21 November authenticated `@sonicvhibez`, confirmed both `youtube.readonly` and `youtube.upload` scopes, complete pagination, one public video and zero private/unlisted videos. The workflow output is aggregate-only; it does not provide a retained current per-video artifact for owner reconciliation.
+- Existing public video format is still marked UNCLASSIFIED in the fresh inventory. Owner must reaffirm its format against YouTube Studio.
+- Upload-ledger run [44890418778](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44890418778) found zero prior private-upload workflow executions. It does not cover manual/local/third-party uploads after the 18 November owner attestation. A new owner attestation is required.
+- Publishing, uploads and metadata writes remain disabled.
+
+### Fresh Metricool evidence
+- Current Nature Frontiers SA brand 8094526 returns Facebook Page 1431329126735709 and Instagram `naturefrontieers2026`; current brand settings do not return a YouTube network.
+- Scheduled-post query for 21 November 2026 through 1 January 2027 returned zero posts.
+- Legacy brand 7545638 returns HTTP 403. Its 20 reported historical drafts and eight `draft=false / autoPublish=true` records remain unreconciled. No provider mutations were performed.
+
+### Fresh Cloudflare evidence
+- Current account has no SonicVhibez production publisher Worker. It has only `sonicvhibez-durable-state-staging` for SonicVhibez dashboard/state, plus separate Nature Frontiers Workers.
+- Staging Worker has seven recorded deployments, latest on 14 November, and zero cron schedules.
+- Staging D1 `sonicvhibez-state-staging`: six tables, dashboard revision 3 last updated 15 November, one dashboard state row, five backups, 16 queue items, zero jobs/uploads, and zero runner state/control/artifact rows.
+- All five retained D1 backup JSON records passed read-only SHA-256 recomputation and schema-version-1 JSON parsing. This verifies stored bytes, **not** independent restore.
+- R2 list API returns HTTP 403 / error 10042: enable R2 through Cloudflare Dashboard. R2 bucket/object access and archive/restore remain unverified. No R2 activation, bucket creation or billing change was attempted.
+- Cloudflare account-wide two-factor enforcement is false; owner/admin action required.
+- The deployed staging Worker source still pins OIDC trust to `refs/heads/codex/cloudflare-adapter-integration-20261108`. PR #4 on that branch remains open/draft/unmerged; its current `.github/workflows/repository-runner.yml` sets both jobs to `if: false`, removes `id-token: write`, and defaults both dispatch inputs to false. This is source-level containment; the stale trust remains deployed in the Worker. Runner dispatch remains prohibited until trust is retired or migrated and tested.
+- No Cloudflare resources were mutated.
+
+### Production and owner dependencies still open
+- Zero verified original-camera wildlife production packages; zero final approved videos.
+- Short 001 and Long-form 001 still lack eligible footage, commercial rights, approved narration, final renders/captions/thumbnails and exact-hash human approval.
+- HeyGen Support denied commercial use of Roderic Free-plan output. Roderic remains the owner's exclusive selected voice; no alternative voice or paid upgrade is authorized.
+- Long-form 001 topic/script identity conflicts with other packages; owner must confirm canonical topic/ID and keep the crocodile documentary educational-only without Selar promotion.
+- Six promotional Short disclosure records remain HOLD; eight Vault-specific records remain approved only for that product.
+- Owner inputs still required: original footage and creator provenance; written commercial rights; narration licensing decision; owner classification of the existing public YouTube video; fresh manual/local/third-party upload-attempt attestation after 18 November; Metricool legacy export/access; Cloudflare R2/2FA owner actions; qualified zoological and final human review.
+- No task is master-complete while a critical production, security, deployment or external-provider gate is BLOCKED or NOT_TESTED.
