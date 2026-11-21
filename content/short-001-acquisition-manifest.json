@@ -72,7 +72,8 @@
         "releaseEligible": false,
         "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
       },
-      "preliminaryVisualFlag": "A dark collar/strap is visible on one lion in sampled frames; its function is unverified. Do not imply an uncollared or unmonitored wild encounter; owner/editor context review is required."
+      "preliminaryVisualFlag": "A dark collar/strap is visible on one lion in sampled frames; its function is unverified. Do not imply an uncollared or unmonitored wild encounter; owner/editor context review is required.",
+      "productionEligibility": "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
     },
     {
       "assetId": "pexels-11760785",
@@ -107,7 +108,8 @@
         "rightsVerified": false,
         "releaseEligible": false,
         "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
-      }
+      },
+      "productionEligibility": "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
     },
     {
       "assetId": "pexels-11528208",
@@ -142,7 +144,8 @@
         "rightsVerified": false,
         "releaseEligible": false,
         "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
-      }
+      },
+      "productionEligibility": "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
     },
     {
       "assetId": "pexels-31702128",
@@ -178,7 +181,8 @@
         "rightsVerified": false,
         "releaseEligible": false,
         "previewUseStatus": "EXCLUDED_FROM_VISUAL_REVIEW_PREVIEW_DUE_TO_VISIBLE_ENCLOSURE_AND_PARTIAL_FOREGROUND_PERSON"
-      }
+      },
+      "productionEligibility": "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
     }
   ],
   "independentVerification": {
@@ -213,5 +217,19 @@
     "privateUploadAuthorized": false,
     "releaseEligible": false,
     "note": "Pexels' published platform license and the four individual source pages were checked. This confirms the platform-license terms only; possible third-party rights, complete source playback, final edit, narration rights, and human owner/compliance approval remain outstanding. The visible-enclosure clip is excluded from the current preview."
-  }
+  },
+  "productionDisposition": {
+    "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+    "productionEligible": false,
+    "policy": {
+      "originalCreatorCapturedMediaRequired": true,
+      "stockMediaAllowed": false,
+      "aiGeneratedWildlifeVisualsAllowed": false
+    },
+    "reason": "The four Pexels clips were previously selected/acquired for review, but they are stock footage, not original creator-captured wildlife media. They are retained as reference-only acquisition evidence and must not be used in production as substitutes.",
+    "nextRequiredAction": "Acquire genuine original creator-captured wildlife footage with creator identity, source provenance, original file bytes, SHA-256, full technical decode, commercial-use rights and human review."
+  },
+  "notes": [
+    "Current owner policy supersedes the historical Pexels selection: all four clips are reference-only and excluded from production because the project requires genuine original creator-captured wildlife media. The platform licence does not satisfy this requirement."
+  ]
 }
