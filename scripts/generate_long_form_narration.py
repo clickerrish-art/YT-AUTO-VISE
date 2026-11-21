@@ -3,6 +3,7 @@
 This script only creates local draft files. It never uploads or publishes.
 """
 from pathlib import Path
+import argparse
 from datetime import datetime
 import json
 import math
@@ -29,6 +30,19 @@ PRODUCTS = REPO_ROOT / "config" / "products.json"
 APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l"
 APPROVED_DISCLOSURE_TEXT = "This product is sold through my own Selar business; purchases generate revenue for my business."
 VOICE = "en-US-GuyNeural"
+NONCOMMERCIAL_AUDITION_NOTICE = (
+    "Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+    "It is restricted to explicitly acknowledged internal evaluation and must never be used in monetized YouTube, advertising or Selar promotion."
+)
+
+
+def require_noncommercial_audition(acknowledged: bool) -> bool:
+    if acknowledged is not True:
+        raise SystemExit(
+            "BLOCKED: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+            "Pass --allow-noncommercial-audition only for internal evaluation."
+        )
+    return True
 CAPTION_MAX_WORDS = 7
 CAPTION_MAX_CHARS = 42
 
@@ -233,18 +247,22 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
         cursor = end
     return "\n".join(lines).rstrip() + "\n"
 
-async def main():
+async def main(allow_noncommercial_audition: bool = False, voice: str | None = None):
+    require_noncommercial_audition(allow_noncommercial_audition)
+    if not isinstance(voice, str) or not voice.strip():
+        raise SystemExit("BLOCKED: supply --voice explicitly for a non-commercial internal audition.")
     if not SOURCE.exists():
         raise SystemExit(f"ERROR: Missing source file: {SOURCE}")
     OUT.mkdir(parents=True, exist_ok=True)
     episodes = extract_episodes(SOURCE.read_text(encoding="utf-8"))
+    generated_files = []
     for number, title, text in episodes:
         stem = f"long-{int(number):03d}-narration-draft"
         target = OUT / f"{stem}.mp3"
         text_target = OUT / f"{stem}.txt"
         srt_target = OUT / f"long-{int(number):03d}-captions-draft.srt"
         text_target.write_text(text + "\n", encoding="utf-8")
-        communicate = edge_tts.Communicate(text, VOICE, boundary="WordBoundary")
+        communicate = edge_tts.Communicate(text, voice.strip(), boundary="WordBoundary")
         boundaries = []
         with target.open("wb") as audio_file:
             async for chunk in communicate.stream():
@@ -267,10 +285,27 @@ async def main():
             caption_mode = "approximate text-distributed timings; human timing review required"
             print(f"WARNING: Episode {number} had no TTS word-boundary data; using approximate caption timings.")
         srt_target.write_text(caption_text, encoding="utf-8")
+        generated_files.append({"audio": target.name, "text": text_target.name, "captions": srt_target.name})
         print(f"CREATED draft narration: {target} | {title} | {len(text.split())} words")
         print(f"CREATED narration text: {text_target}")
         print(f"CREATED draft captions: {srt_target} | {caption_mode}")
-    print("DRAFT ONLY: review pronunciation, factual accuracy, caption punctuation/timing, voice quality, and total runtime. No upload or publishing occurred.")
+    manifest = {
+        "status": "INTERNAL_AUDITION_ONLY",
+        "voice": voice.strip(),
+        "voiceApprovalStatus": "NOT_OWNER_APPROVED",
+        "licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+        "commercialUseAllowed": False,
+        "productionUseAllowed": False,
+        "publishingEnabled": False,
+        "notice": NONCOMMERCIAL_AUDITION_NOTICE,
+        "files": generated_files
+    }
+    (OUT / "narration-audition-manifest.json").write_text(json.dumps(manifest, indent=2) + "\\n", encoding="utf-8")
+    print("INTERNAL AUDITION ONLY: review pronunciation and captions. This unapproved Edge TTS voice is not commercially cleared. No video render, upload or publishing occurred.")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(description=NONCOMMERCIAL_AUDITION_NOTICE)
+    parser.add_argument("--voice", default=None, help="Voice to audition; must be explicitly supplied.")
+    parser.add_argument("--allow-noncommercial-audition", action="store_true", help="Acknowledge internal evaluation only; no commercial or production use.")
+    args = parser.parse_args()
+    asyncio.run(main(args.allow_noncommercial_audition, args.voice))

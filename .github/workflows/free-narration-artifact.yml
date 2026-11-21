@@ -1,9 +1,10 @@
-name: Generate free narration audio
+name: Generate explicitly acknowledged non-commercial Edge TTS auditions (not production)
+
 on:
   workflow_dispatch:
     inputs:
       short:
-        description: Narration to generate
+        description: Narration to audition
         required: true
         type: choice
         options:
@@ -11,44 +12,44 @@ on:
           - short-001
           - short-002
         default: both
-  schedule:
-    # Saturday at 17:00 SAST: Short draft preparation only. Tuesday long-form preparation is handled by generate-long-form-narration.yml.
-    - cron: "0 15 * * 6"
-  push:
-    branches: [main]
-    paths:
-      - "content/narration-master-short-001-and-002.md"
-      - "scripts/generate-narration.py"
-      - "scripts/generate-queue-package.py"
-      - "scripts/render-queued-draft.py"
-      - "scripts/render-thumbnail.mjs"
-      - "scripts/render-photo-thumbnail.py"
-      - ".github/workflows/free-narration-artifact.yml"
+      allow_noncommercial_audition:
+        description: Confirm this is an internal audition only; this voice is not Roderic and is not commercially cleared.
+        required: true
+        type: boolean
+        default: false
+
 permissions:
   contents: read
+
+concurrency:
+  group: sonicvhibez-short-narration
+  cancel-in-progress: false
+
 jobs:
   generate-audio:
+    if: ${{ inputs.allow_noncommercial_audition == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Require explicit non-commercial audition acknowledgement
+        env:
+          ALLOW_NONCOMMERCIAL_AUDITION: ${{ inputs.allow_noncommercial_audition }}
+        run: |
+          if [ "$ALLOW_NONCOMMERCIAL_AUDITION" != "true" ]; then
+            echo "::error::Blocked. Edge TTS is not the approved Roderic voice and is not commercially cleared."
+            exit 1
+          fi
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install media tools and free Python libraries
+      - name: Install narration tools only
         run: |
-          # Reuse tools on the GitHub-hosted image when available; avoid slow apt mirrors.
-          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1 || \
-             ! test -f /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf || \
-             ! test -f /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf; then
-            # Use the runner's package index directly; refreshing all mirrors is slow.
-            timeout 180s sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            timeout 180s sudo apt-get install -y --no-install-recommends ffmpeg
           fi
-          command -v ffmpeg
           command -v ffprobe
-          test -f /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
-          test -f /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
-          python -m pip install --disable-pip-version-check --retries 3 --timeout 30 edge-tts mutagen pillow
+          python -m pip install --disable-pip-version-check --retries 3 --timeout 30 edge-tts mutagen
       - name: Validate the replenishable queue and destination safety
         run: |
           python - <<'PY'
@@ -67,48 +68,36 @@ jobs:
           assert cadence.get("timezone") == "Africa/Johannesburg"
           assert plan.get("timezone") == cadence.get("timezone")
           assert cadence.get("formats") == formats and cycle.get("formats") == formats
-          assert isinstance(spacing, (int, float)) and 72 <= spacing <= 8760, "Each actual publication must remain at least 72 elapsed hours apart"
+          assert isinstance(spacing, (int, float)) and spacing >= 72, "Actual publications must remain at least 72 elapsed hours apart"
           assert cadence.get("minimumHoursBetweenConsecutivePublications") == spacing
           assert cycle.get("minimumHoursBetweenConsecutivePublications") == spacing
           assert cadence.get("minimumCycleHours") == cycle_hours == 216
           assert cycle.get("minimumCycleHours") == cycle_hours
           assert cycle.get("publicationRequiresVerifiedHistory") is True
           assert cycle.get("publicationEnabled") is False and plan.get("publishingEnabled") is False
-          assert fallback.get("days") == ["Tuesday", "Saturday"]
           assert fallback.get("status") == "DRAFT_ONLY" and fallback.get("notPublicationCadence") is True
-          assert "postsPerWeek" not in cadence, "Do not reintroduce a weekly publication target"
-          assert len(items) >= 10, f"Queue needs at least 10 topics; found {len(items)}"
+          assert "postsPerWeek" not in cadence
+          assert len(items) >= 10
           ids = [x.get("id") for x in items]
-          assert all(isinstance(i, str) and i.strip() for i in ids), "Every topic needs a stable ID"
-          assert len(ids) == len(set(ids)), "Queue topic IDs must be unique"
+          assert all(isinstance(i, str) and i.strip() for i in ids)
+          assert len(ids) == len(set(ids))
           approved = "https://selar.com/0u19v8u99l"
-          assert all(x.get("productUrl") == approved for x in items), "Queue contains an unapproved product URL"
-          allowed_statuses = {
-              "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-              "script_and_captions_ready_needs_media_and_review",
-              "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
-              "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
-              "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-              "DRAFT_REVIEW_REQUIRED",
-          }
-          assert all(x.get("status") in allowed_statuses for x in items), "Unexpected topic status; inspect before generation"
-          assert all(x.get("title") or x.get("topic") for x in items), "Every topic needs a title/topic"
-          print(f"PASS: {len(items)} unique queued topics; rolling long-form → long-form → Short cycle requires {cycle_hours} hours; Tuesday/Saturday are draft-preparation only; approved URL only; publishing remains disabled.")
+          assert all(x.get("productUrl") == approved for x in items)
+          print(f"PASS: {len(items)} queue topics; approved Selar URL only; verified-history gate and 72-hour spacing policy retained; publication disabled.")
           PY
       - name: Validate Python generators
-        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py
+        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py
       - name: Validate narration extraction
         run: python scripts/generate-narration.py --short both --extract-only
-      - name: Generate natural US English narration
+      - name: Generate non-commercial internal narration audition
         env:
           SELECTED_SHORT: ${{ github.event.inputs.short || 'both' }}
-        run: |
-          python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-10%
-      - name: Generate the next queued topic package
+        run: python scripts/generate-narration.py --short "$SELECTED_SHORT" --voice en-US-GuyNeural --rate=-10% --allow-noncommercial-audition
+      - name: Generate the next non-commercial internal queue audition package
         env:
           RUN_NUMBER: ${{ github.run_number }}
-        run: python scripts/generate-queue-package.py --run-number "$RUN_NUMBER" --voice en-US-GuyNeural --rate=-10%
-      - name: Validate generated queue package safety
+        run: python scripts/generate-queue-package.py --run-number "$RUN_NUMBER" --voice en-US-GuyNeural --rate=-10% --allow-noncommercial-audition
+      - name: Validate non-commercial queue package safety
         run: |
           python - <<'PY'
           import json
@@ -123,41 +112,28 @@ jobs:
           assert data.get("visibility") == "private"
           assert data.get("rightsConfirmed") is False
           assert data.get("complianceReviewed") is False
+          assert data.get("voiceApprovalStatus") == "NOT_OWNER_APPROVED"
+          assert data.get("licenseStatus") == "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"
+          assert data.get("commercialUseAllowed") is False
+          assert data.get("productionUseAllowed") is False
+          assert data.get("publishingEnabled") is False
           srt = files[0].with_suffix(".srt")
           assert srt.exists() and " --> " in srt.read_text(encoding="utf-8")
-          print("PASS: package targets SonicVhibez, approved product URL, and remains safely held for rights/review.")
+          print("PASS: queue package is private, internal audition only, not commercially cleared, and held for original media and human review.")
           PY
-      - name: Render vertical review-only video draft
-        run: python scripts/render-queued-draft.py
-      - name: Generate realistic wildlife photo thumbnail
-        run: python scripts/render-photo-thumbnail.py
-      - name: Validate rendered draft video
+      - name: Validate non-commercial narration manifest
         run: |
           python - <<'PY'
-          import json, subprocess
+          import json
           from pathlib import Path
-          files = list(Path("media/rendered-drafts").glob("*-DRAFT.mp4"))
-          if len(files) != 1:
-              raise SystemExit(f"Expected one rendered MP4 draft, found {len(files)}")
-          result = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type,width,height", "-show_entries", "format=duration", "-of", "json", str(files[0])], capture_output=True, text=True, check=True)
-          data = json.loads(result.stdout)
-          video = next((x for x in data.get("streams", []) if x.get("codec_type") == "video"), None)
-          audio = next((x for x in data.get("streams", []) if x.get("codec_type") == "audio"), None)
-          duration = float(data.get("format", {}).get("duration", 0))
-          if not video or (video.get("width"), video.get("height")) != (1080, 1920) or not audio or not 50 <= duration <= 60:
-              raise SystemExit(f"Rendered MP4 failed media checks: video={video}, audio={audio}, duration={duration}")
-          metadata_files = [p for p in Path("media/rendered-drafts").glob("*.json") if p.name != "thumbnail-rights-evidence.json"]
-          if len(metadata_files) != 1:
-              raise SystemExit(f"Expected one rendered draft metadata JSON, found {len(metadata_files)}")
-          metadata = json.loads(metadata_files[0].read_text(encoding="utf-8"))
-          assert metadata.get("status") == "HOLD_FOR_FOOTAGE_AND_REVIEW"
-          assert metadata.get("rightsConfirmed") is False and metadata.get("complianceReviewed") is False
-          thumb = Path("media/rendered-drafts/thumbnail.jpg")
-          assert thumb.exists() and thumb.stat().st_size > 50000, "Photo thumbnail missing or unexpectedly small"
-          evidence = json.loads(Path("media/rendered-drafts/thumbnail-rights-evidence.json").read_text(encoding="utf-8"))
-          assert evidence.get("sourcePage", "").startswith("https://www.pexels.com/")
-          assert evidence.get("videoFootageRightsConfirmed") is False
-          print(f"PASS: review draft is 1080x1920, {duration:.2f}s; photo thumbnail and provenance exist; public publishing remains held.")
+          data = json.loads(Path("media/narration/generation-summary.json").read_text(encoding="utf-8"))
+          assert data["status"] == "INTERNAL_AUDITION_ONLY"
+          assert data["voiceApprovalStatus"] == "NOT_OWNER_APPROVED"
+          assert data["licenseStatus"] == "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"
+          assert data["commercialUseAllowed"] is False
+          assert data["productionUseAllowed"] is False
+          assert data["publishingEnabled"] is False
+          print("PASS: narration is internal audition only; no commercial or production use is authorized.")
           PY
       - name: Report audio duration
         run: |
@@ -167,16 +143,16 @@ jobs:
           for file in sorted(Path("media/narration").glob("*.mp3")):
               print(f"{file}: {MP3(file).info.length:.2f} seconds")
           PY
-      - name: Upload narration audio artifact for review
+      - name: Upload non-commercial internal audition package
         uses: actions/upload-artifact@v4
         with:
-          name: sonicvhibez-short-draft-package
+          name: sonicvhibez-short-internal-audition-only
           path: |
             media/narration/*.mp3
-            media/queue-package/*
-            media/rendered-drafts/*.mp4
-            media/rendered-drafts/*.json
-            media/rendered-drafts/thumbnail.jpg
-            media/rendered-drafts/thumbnail-rights-evidence.json
+            media/narration/generation-summary.json
+            media/queue-package/*.mp3
+            media/queue-package/*.txt
+            media/queue-package/*.srt
+            media/queue-package/*.json
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 7

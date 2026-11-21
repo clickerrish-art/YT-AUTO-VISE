@@ -3,7 +3,7 @@
   "project": "SonicVhibez",
   "contentId": "short-001-wildlife-video-storytelling",
   "createdAt": "2026-11-19",
-  "status": "PLATFORM_LICENSE_DOCUMENTED_THIRD_PARTY_AND_OWNER_REVIEW_PENDING",
+  "status": "PLATFORM_LICENSE_DOCUMENTED_BUT_EXCLUDED_BY_CURRENT_ORIGINAL_MEDIA_REQUIREMENT",
   "sourceLicense": {
     "name": "Pexels License",
     "url": "https://www.pexels.com/license/",
@@ -70,12 +70,20 @@
     "finalProductionUseAuthorized": false,
     "rightsConfirmed": false,
     "humanReviewCompleted": false,
-    "publishingEnabled": false
+    "publishingEnabled": false,
+    "currentProductionEligibility": false
   },
   "limitations": [
     "Pexels platform license is not a guarantee that all third-party rights, releases or permissions are present.",
     "The three selected clips total approximately 37.65 seconds and were repeated to produce a 56.71-second visual-only timing preview; repeated footage is not a final edit decision.",
     "The preview is 720x1280 and silent; final target is 1080x1920 with approved narration and synchronized captions.",
     "No music, final thumbnail, final metadata, human video approval or private-upload authorization is included."
-  ]
+  ],
+  "currentProductionPolicy": {
+    "status": "REFERENCE_ONLY_NOT_PRODUCTION_APPROVED",
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "note": "Platform licence evidence does not override the current requirement for genuine original creator-captured wildlife media."
+  }
 }

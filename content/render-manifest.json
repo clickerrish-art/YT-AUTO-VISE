@@ -26,5 +26,8 @@
     "Three Pexels clips were used only in a 56.71-second silent 720x1280 visual review preview, with repeated footage for timing; this is not the final edit or a release-ready export.",
     "The fourth primary clip is excluded from the preview because visible enclosure/barrier and partial foreground person appear.",
     "No final video, approved narration, synchronized final captions, thumbnail, final metadata approval, exact-hash human video review, private-upload authorization or publishing action is recorded."
-  ]
+  ],
+  "containsAIWildlifeVisuals": false,
+  "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+  "mediaProvenanceStatus": "UNVERIFIED"
 }

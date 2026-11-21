@@ -12,6 +12,19 @@ ROOT = Path(__file__).resolve().parents[1]
 QUEUE = ROOT / "content" / "queue.json"
 OUT = ROOT / "media" / "queue-package"
 APPROVED_URL = "https://selar.com/0u19v8u99l"
+APPROVED_DISCLOSURE_TEXT = "This product is sold through my own Selar business; purchases generate revenue for my business."
+NONCOMMERCIAL_AUDITION_NOTICE = (
+    "Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+    "It is restricted to explicitly acknowledged internal evaluation and must never be used in monetized YouTube, advertising or Selar promotion."
+)
+
+def require_noncommercial_audition(acknowledged: bool) -> bool:
+    if acknowledged is not True:
+        raise SystemExit(
+            "BLOCKED: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+            "Pass --allow-noncommercial-audition only for internal evaluation."
+        )
+    return True
 
 def sentence(s: str) -> str:
     s = re.sub(r"\s+", " ", str(s or "")).strip()
@@ -82,9 +95,13 @@ def make_srt(text: str, duration: float) -> str:
 async def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-number", type=int, required=True)
-    ap.add_argument("--voice", default="en-US-GuyNeural")
+    ap.add_argument("--voice", default=None, help="Voice to audition; must be explicitly supplied.")
     ap.add_argument("--rate", default="-5%")
+    ap.add_argument("--allow-noncommercial-audition", action="store_true", help="Acknowledge internal evaluation only; no commercial or production use.")
     args = ap.parse_args()
+    require_noncommercial_audition(args.allow_noncommercial_audition)
+    if not isinstance(args.voice, str) or not args.voice.strip():
+        raise SystemExit("BLOCKED: supply --voice explicitly for a non-commercial internal audition.")
     queue = json.loads(QUEUE.read_text(encoding="utf-8"))
     items = [x for x in queue.get("items", []) if x.get("id") not in {"wildlife-vault-001", "wildlife-vault-002"}]
     if not items:
@@ -104,10 +121,9 @@ async def main():
         "description": (
             f"{item.get('topic', '')}. Practical wildlife filmmaking, nature documentary planning, "
             "ethical wildlife video production, and storytelling for YouTube Shorts.\n\n"
-            "PAID PROMOTION: This video promotes the Complete YouTube Wildlife Creator's Vault. "
-            "The creator may receive compensation if you purchase. Check the product page for current details.\n\n"
-            "AI DISCLOSURE: Some visuals or narration may be AI-generated. Realistic AI-generated or "
-            "altered wildlife scenes must be disclosed using YouTube's altered/synthetic content setting.\n\n"
+            "ADVERTISEMENT: " + APPROVED_DISCLOSURE_TEXT + "\\n\\n"
+            "INTERNAL AUDIO AUDITION ONLY: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+            "This audio must not be used in monetized YouTube, advertising or Selar promotion.\\n\\n"
             f"Promotional resource: Complete YouTube Wildlife Creator's Vault — {APPROVED_URL}\n\n"
             "Use only footage, images, and music you have permission to publish. Captions in this draft "
             "have estimated timings and must be aligned to final narration. #WildlifeFilmmaking #NatureDocumentary #YouTubeShorts"
@@ -118,11 +134,19 @@ async def main():
         "visibility": "private",
         "targetSeconds": 55,
         "actualNarrationSeconds": round(duration, 2),
+        "voice": args.voice.strip(),
+        "voiceApprovalStatus": "NOT_OWNER_APPROVED",
+        "licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+        "commercialUseAllowed": False,
+        "productionUseAllowed": False,
+        "publishingEnabled": False,
+        "mediaSourceType": "UNVERIFIED",
+        "mediaProvenanceStatus": "UNVERIFIED",
         "containsSyntheticMedia": True,
         "hasPaidPromotion": True,
         "rightsConfirmed": False,
         "complianceReviewed": False,
-        "notes": "Automated draft only. Review audio, title, facts, captions, footage/music rights and thumbnail. Disclosures are required. Never clear review flags automatically. No video was published."
+        "notes": "Non-commercial Edge TTS audition only. Never render, upload, monetize or publish this audio. Original creator-captured wildlife media, exact asset provenance, technical checks, commercial voice clearance and human review are all still required."
     }
     (OUT / f"{slug}.txt").write_text(text + "\n", encoding="utf-8")
     (OUT / f"{slug}.srt").write_text(make_srt(text, duration), encoding="utf-8")
