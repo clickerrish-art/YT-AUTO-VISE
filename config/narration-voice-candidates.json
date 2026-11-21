@@ -95,14 +95,18 @@
     "finalNarration": false
   },
   "ownerDecision": {
+    "approvedVoice": "Roderic — Authoritative & Refined",
+    "approvedVoiceId": "b5c5b28db1ea408abc7d851202983bdb",
+    "approvedVoiceStatus": "HISTORICAL_PREFERENCE_NOT_APPROVED_FOR_COMMERCIAL_RELEASE",
     "previousApprovedVoice": "Roderic — Authoritative & Refined",
     "previousApprovedVoiceId": "b5c5b28db1ea408abc7d851202983bdb",
-    "currentDecision": "OWNER_DECLINED_RODERIC_EXCLUSIVITY_AND_AUTHORIZED_A_ZERO_COST_ALTERNATIVE_VOICE",
-    "decisionDate": "2026-11-22",
-    "decisionEvidence": "Owner answered no to retaining Roderic as mandatory narrator; owner separately declined R2 activation. This authorizes evaluation of zero-cost commercially licensed alternatives, not automatic approval of any specific voice.",
     "alternativeVoicesAuthorized": true,
-    "selectedAlternative": "PENDING_OWNER_LISTENING_AND_SELECTION",
+    "selectedAlternative": null,
+    "selectionStatus": "PENDING_OWNER_LISTENING",
     "paidUpgradeAuthorized": false,
-    "commercialUseRule": "Use only a voice whose exact model/data licence and required notices support the intended commercial distribution. No paid service, no Roderic Free-plan audio, and no production release before owner listening approval tied to final audio SHA-256."
+    "commercialRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21",
+    "decisionDate": "2026-11-22",
+    "decisionEvidence": "Owner declined to require Roderic and authorized evaluation of zero-cost commercially licensed alternatives. This permits audition only; it does not approve Norman or any other narrator for production.",
+    "commercialUseRule": "Use only a voice whose exact model/data licence and required notices support the intended commercial distribution. No paid service, no Roderic Free-plan audio, and no production release before owner listening approval tied to the exact final audio SHA-256."
   }
 }
