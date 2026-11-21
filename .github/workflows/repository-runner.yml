@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       run_staging_smoke:
-        description: "Run non-production D1 checks and a temporary R2 integrity probe (safe default)"
+        description: "Legacy staging smoke disabled pending OIDC trust migration"
         required: false
         type: boolean
-        default: true
+        default: false
       run_repository_runner:
-        description: "Explicitly opt in to dispatching one approved due production job"
+        description: "Legacy production runner disabled pending OIDC trust migration"
         required: false
         type: boolean
         default: false
