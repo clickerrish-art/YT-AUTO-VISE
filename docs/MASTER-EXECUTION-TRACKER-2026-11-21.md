@@ -179,3 +179,12 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Corrected the script's size description to “one of Africa's largest crocodilians”; dated the global 2017 and South African regional 2023 conservation assessments; expanded the claim register and added nine source references.
 - Narration text remains approximately 875 words, within the 6–10 minute long-form requirement at a normal narration pace.
 - The script remains DRAFT. No qualified zoological sign-off, original footage, commercial rights, narration clearance, final captions/render or exact-hash approval exists. This research task is complete; the documentary production task is not.
+
+
+### Promotional Shorts disclosure reconciliation — 21 November 2026
+- Rechecked all 14 promotional Short records after the product-specific review. All 14 remain private and `DRAFT_ONLY`; no publication/schedule timestamps exist. Eight disclosures remain approved only for the Wildlife Creator's Vault product URL `https://selar.com/0u19v8u99l`.
+- Clarified the six HOLD records without changing their status or adding any approval:
+  - Shorts 003, 008 and 016 map to **The Full Video Creation Prompt Pack Premium Edition** (`https://selar.com/539497q11t`). The 20 October product-page record was HOLD — VERIFY PRODUCT, price R570, Compliance Check blank. Exact viewer-facing direct-sales wording was not approved.
+  - Shorts 004, 006 and 013 map to **THE YOUTUBE SUCCESS BLUEPRINT™ Build, Grow & Monetize a YouTube Channel With a Proven 90-Day Creator System** (`https://selar.com/91j893378q`). Prior records do not contain verified current product-page details, approved claims or exact viewer-facing disclosure wording.
+- The previously approved Vault disclosure must not be reused for either product. Recheck both live listings, claims and compliance; obtain product-specific owner-approved disclosure wording before release.
+- The plan remains 14/14 draft-only, eight APPROVED (Vault only), six HOLD, zero scheduled/published. No provider mutation occurred.
