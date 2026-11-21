@@ -48,7 +48,7 @@ This desk review checks whether the draft's main natural-history statements are 
 6. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Reproduction & Development: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/reproduction
 7. Combrink, X., Warner, J.K. & Downs, C.T. (2016), “Nest predation and maternal care in the Nile crocodile (*Crocodylus niloticus*) at Lake St Lucia, South Africa”, *Behavioural Processes* 133:31–36, DOI: 10.1016/j.beproc.2016.10.014. PubMed: https://pubmed.ncbi.nlm.nih.gov/27816524/
 8. SANBI, *Suricata 10* (2023), regional assessment for *Crocodylus niloticus*: https://www.sanbi.org/wp-content/uploads/2024/06/2023_Suricata10.pdf
-9. Leslie, A.J., Kemp, S.J. & Spotila, J.R., “Temperature Dependent Sex Determination in St Lucia Nile Crocodiles in Natal, South Africa”. Research copy: https://crocodileandy.org/wp-content/uploads/2015/04/4-1-head-starting-and-translocation-juveniles.pdf
+9. Leslie, A.J., Kemp, S.J. & Spotila, J.R., “Temperature Dependent Sex Determination in St Lucia Nile Crocodiles in Natal, South Africa” (preliminary Lake St Lucia study; pages 274–281 in the linked compilation): https://crocodileandy.org/wp-content/uploads/2015/04/4-1-head-starting-and-translocation-juveniles.pdf
 
 ## Remaining gates
 
