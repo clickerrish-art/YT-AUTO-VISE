@@ -49,6 +49,11 @@ class FakeVoice:
 
 
 class BanjoNarrationTests(unittest.TestCase):
+
+    def test_alternative_voice_render_cli_is_blocked(self):
+        with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+            module.require_owner_authorized_alternative_voice()
+
     def test_direct_cli_import_works_from_repository_root(self):
         root = Path(__file__).resolve().parents[1]
         result = subprocess.run(
