@@ -386,3 +386,10 @@ The current branch corrections do not alter default-branch workflow state. The N
 25. **Worker backoff code review.** The current branch's `scripts/worker-runner.mjs` already persists 409/429 retry cooldowns, quarantines ambiguous dispatch outcomes, stops and retains the exclusive process lock when backoff persistence fails, and blocks restart before API contact. `test/worker-runner.test.mjs` contains dedicated 409 persistence-failure, lock-retention and restart-block tests. This is code-reviewed but **NOT runtime-verified on the current head**; no claim of SCHED-001 completion is made.
 
 All changed queue and candidate files were read back and JSON-parsed where applicable. Rendering, narration generation, upload, scheduling and publishing remain disabled.
+
+
+### Additional execution — manual narration entry points fail closed (2026-11-21)
+
+26. Added `scripts/narration_policy.py`, which reads the current owner decision and fails closed unless alternative voices are explicitly authorized. The current config states Roderic is exclusive, HeyGen's zero-cost commercial exception was denied, alternative voices are not authorized and paid upgrades are not authorized.
+27. Added the policy guard to the manual CLI paths for Edge TTS Short narration, Edge TTS long-form narration, generated-script narration, Piper audition, Norman/American review narration and Banjo review narration. The Piper generator checks before creating output directories or downloading model assets. Existing workflows remain disabled at job level.
+28. Updated Python regression tests to assert that even an explicit non-commercial audition acknowledgement cannot bypass the owner's no-alternative-voice decision. Tests cover the CLI entry-point policy and the no-download-before-block condition. The full Python suite has not been run on this head.
