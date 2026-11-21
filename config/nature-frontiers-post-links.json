@@ -69,21 +69,12 @@
       "commercial": true,
       "disclosureRequired": true,
       "disclosureApprovalStatus": "PENDING_OWNER_APPROVAL"
-    },
-    {
-      "url": "https://www.youtube.com/@NatureFrontiers-life?sub_confirmation=1",
-      "kind": "youtube_subscription",
-      "required": false,
-      "campaignId": null,
-      "status": "ACTIVE_NONCOMMERCIAL",
-      "commercial": false,
-      "disclosureRequired": false
     }
   ],
   "platformNotes": {
     "facebook": "Organic wildlife posts are non-commercial by default and must not carry Safari or Selar links. A campaign destination may appear only in a separate post whose exact campaign is active, owner-approved, disclosure-approved and allowlisted. Never dump every destination into one caption.",
     "instagram": "Organic wildlife posts are non-commercial by default. Do not put Safari or Selar campaign links in captions, bio or Story stickers unless the exact campaign has been approved for this brand and the campaign-specific disclosure is visible.",
-    "youtube": "Nature Frontiers channel only; do not use SonicVhibez as the destination. The channel subscription URL is optional and is not required on every post."
+    "brandScope": "Nature Frontiers is managed here for Facebook and Instagram only. It has no YouTube publishing destination; never route Nature Frontiers content to SonicVhibez or another YouTube channel."
   },
   "safety": {
     "publishingEnabled": false,
@@ -98,7 +89,8 @@
     "requireNoCommercialLinksOnOrganicPosts": true,
     "neverMixCampaignTypes": true,
     "neverRecycleMedia": true,
-    "requireUniqueStory": true
+    "requireUniqueStory": true,
+    "youtubePublishingAllowed": false
   },
   "notes": [
     "This file is a destination catalogue, not a requirement to include every URL in every post.",
@@ -106,6 +98,7 @@
     "Safari affiliate destinations remain INACTIVE until exact destination URLs, owner approval and affiliate disclosure approval are recorded in the campaign registry.",
     "Selar is ACTIVE_FOR_DRAFTS_ONLY; its direct-sales disclosure remains PENDING_OWNER_APPROVAL for public use and must never be described as an affiliate commission.",
     "A single post may not mix Safari affiliate and Selar direct-sales destinations.",
-    "Never copy a destination, disclosure, compensation type, price, offer or tracking parameter from one campaign type into another."
+    "Never copy a destination, disclosure, compensation type, price, offer or tracking parameter from one campaign type into another.",
+    "YouTube subscription destinations have been removed from this Nature Frontiers catalogue. Nature Frontiers is Facebook/Instagram only; SonicVhibez is the separate YouTube brand."
   ]
 }
