@@ -147,3 +147,22 @@ test("Nature Frontiers validator and schema enforce original creator-captured el
   assert.equal(schema.properties.policy.properties.stockMediaAllowed.const, false);
   assert.equal(schema.properties.policy.properties.aiGeneratedWildlifeVisualsAllowed.const, false);
 });
+
+test("All manual alternate-narrator entry points enforce the owner decision", () => {
+  const policy = readJson("../config/narration-voice-candidates.json");
+  assert.equal(policy.ownerDecision.approvedVoice, "Roderic — Authoritative & Refined");
+  assert.equal(policy.ownerDecision.alternativeVoicesAuthorized, false);
+  assert.equal(policy.ownerDecision.paidUpgradeAuthorized, false);
+  assert.equal(policy.ownerDecision.commercialRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21");
+  for (const path of [
+    "../scripts/generate-narration.py",
+    "../scripts/generate_long_form_narration.py",
+    "../scripts/generate-authoring-narration.py",
+    "../scripts/generate_piper_voice_audition.py",
+    "../scripts/render_american_narration.py",
+    "../scripts/render_banjo_narration.py"
+  ]) {
+    assert.ok(readText(path).includes("require_owner_authorized_alternative_voice"), path);
+  }
+  assert.ok(readText("../scripts/narration_policy.py").includes("owner has not authorized an alternative narrator"));
+});
