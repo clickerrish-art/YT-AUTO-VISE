@@ -347,3 +347,19 @@ This addendum is the current status correction for the 2026-11-20 plan. Historic
 14. **Extended regression coverage.** The production fail-closed test now asserts all Nature Frontiers Pexels/Pixabay records and Short 001 Pexels clips remain reference-only and ineligible. Commit: `5b45b3803e0b273579dab5cc5b68bf2ca84aa062`.
 
 **Verification:** GitHub read-back confirmed five SonicVhibez imported assets excluded, all 92 Nature Frontiers stock listings excluded, all four Short 001 Pexels clips excluded, and zero Nature Frontiers assets marked scheduled or published. The existing rights/inspection state was preserved. Full repository runtime tests remain NOT_TESTED on this head.
+
+
+### Git safety incident — explicit disclosure (2026-11-21)
+
+Four sequential updates to historical stock-source rights-review JSON files were accidentally submitted without a branch parameter. The GitHub connector defaults an omitted branch to `main`. These four commits therefore landed on `main`:
+
+- `ae3200a9ef9b4877fafaf246c5640b851ec712e9` — Pexels crocodile rights-review record.
+- `c1e5c0713c67b196153615e73f2defd8cce11517` — Wikimedia Kruger tilapia record.
+- `450aef056c429ffda10865c0a0b24dea3de82be9` — Wikimedia Nairobi crocodile record.
+- `3795519ccbf58fd02d74458624b58dd2e44a88c0` — Wikimedia wildebeest ambush record.
+
+Read-back confirmed those four records changed on `main`; their corrected counterparts were then separately committed and verified on `codex/marketing-machine-audit-fixes`. No other files were intentionally written to `main` in this incident. I did not attempt a rollback, reset, rebase or history rewrite. **No further writes to `main` will be made.** Any remediation of these four default-branch commits requires an owner-approved normal GitHub process.
+
+Latest comparison: main head `3795519ccbf58fd02d74458624b58dd2e44a88c0`; implementation branch is 4,872 commits ahead / 17 behind, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+
+**Immediate default-branch risk:** `.github/workflows/acquire-noaa-broll-candidates.yml` still exists and is enabled on `main` (scheduled Tuesday and manual triggers). The branch copy has been disabled, but PR #1 remains unmerged, so the branch correction does not disable the default-branch workflow. The connected GitHub actions tools expose no workflow-disable operation, and no main-branch write will be attempted. A repository owner must disable that workflow in GitHub Actions or approve a safe branch/PR remediation. This is a release blocker.
