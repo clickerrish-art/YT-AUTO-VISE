@@ -42,7 +42,7 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.productUrl, "https://selar.com/0u19v8u99l");
 });
 
-test("Edge TTS workflows are manual-only and require explicit non-commercial acknowledgement", () => {
+test("Edge TTS workflows only generate after manual non-commercial acknowledgement", () => {
   for (const workflow of [narrationWorkflow, shortNarrationWorkflow]) {
     assert.match(workflow, /workflow_dispatch/);
     assert.match(workflow, /allow_noncommercial_audition/);
@@ -75,8 +75,8 @@ test("Pexels stock thumbnail generation is disabled and historical selections ar
   assert.match(pexelsAcquisitionWorkflow, /workflow_dispatch/);
   assert.match(pexelsAcquisitionWorkflow, /reference_only/);
   assert.match(pexelsAcquisitionWorkflow, /default: false/);
-  assert.match(pexelsAcquisitionWorkflow, /if:.*inputs\\.reference_only == true/);
-  assert.doesNotMatch(pexelsAcquisitionWorkflow, /^\\s*(push|pull_request|schedule):/m);
+  assert.match(pexelsAcquisitionWorkflow, /if:.*inputs\.reference_only == true/);
+  assert.doesNotMatch(pexelsAcquisitionWorkflow, /^\s*(push|pull_request|schedule):/m);
 });
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
