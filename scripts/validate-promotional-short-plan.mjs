@@ -305,8 +305,22 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
         }
       }
       if (!Array.isArray(item?.keywordPhrases) || item.keywordPhrases.length < 3
-          || !item.keywordPhrases.some(row => typeof row?.phrase === "string" && row.phrase.toLowerCase() === item?.primaryKeyword?.toLowerCase())) {
+          || !item.keywordPhrases.some(row => typeof row?.phrase === "string" && row.phrase.trim().toLowerCase() === item?.primaryKeyword?.toLowerCase())) {
         errors.push(`${label}: keywordPhrases must include the primary phrase and at least two related phrases`);
+      }
+      if (Array.isArray(item?.keywordPhrases)) {
+        if (item.keywordPhrases.length > 8) {
+          errors.push(`${label}: keywordPhrases must not exceed eight phrases; avoid keyword stuffing`);
+        }
+        const normalizedPhrases = item.keywordPhrases.map(row =>
+          typeof row?.phrase === "string" ? row.phrase.trim().toLowerCase() : ""
+        );
+        if (normalizedPhrases.some(phrase => !phrase || phrase.length > 100)) {
+          errors.push(`${label}: each keyword phrase must be non-empty and no longer than 100 characters`);
+        }
+        if (new Set(normalizedPhrases).size !== normalizedPhrases.length) {
+          errors.push(`${label}: keywordPhrases must be unique after trimming and case normalization`);
+        }
       }
       const evidence = item?.keywordEvidence;
       const evidenceTimestampValid = isValidZonedIsoTimestamp(evidence?.researchedAt);
