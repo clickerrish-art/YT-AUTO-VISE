@@ -43,6 +43,7 @@ test("both live private-upload workflows pass and require the Ed25519 one-shot a
   assert.ok(!readOnlyJob.includes(keyBinding), "read-only channel verification does not need the signing verification key");
   assert.ok(artifactWorkflow.includes(keyBinding), "artifact uploader job must pass the public verification key");
   assert.ok(artifactWorkflow.includes(requiredLoop), "artifact uploader must fail early when the key secret is absent");
+  assert.ok(artifactWorkflow.includes("if: ${{ inputs.confirm_private_upload == 'YES' && inputs.confirm_emergency_stop_release == 'YES' }}"), "artifact uploader must require both explicit confirmations at job level");
   assert.match(uploaderSource, /YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64/);
 });
 
