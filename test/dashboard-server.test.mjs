@@ -125,6 +125,24 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(ready, true, "server did not start: " + logs);
   const unauthorized = await fetchDashboard(base + "/api/state");
   assert.equal(unauthorized.status, 401);
+  const workerHeaders = {
+    "x-worker-token": "worker-test-token-" + "y".repeat(40),
+    "x-worker-id": "queue-identity-guard-test"
+  };
+  const unresolvedDispatch = await fetchDashboard(base + "/api/jobs/dispatchable", { headers: workerHeaders });
+  const unresolvedDispatchBody = await unresolvedDispatch.json();
+  assert.equal(unresolvedDispatch.status, 409, "worker dispatch must fail closed while queue identities lack owner approval");
+  assert.equal(unresolvedDispatchBody.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+  assert.deepEqual(unresolvedDispatchBody.jobs, []);
+  assert.ok(unresolvedDispatchBody.blockers.some(message => /queue-identity-approval\.json is missing/i.test(message)));
+  const unresolvedProduce = await fetchDashboard(base + "/api/jobs/produce", {
+    method: "POST", headers: { ...workerHeaders, "content-type": "application/json" },
+    body: JSON.stringify({ jobId: "must-not-dispatch" })
+  });
+  const unresolvedProduceBody = await unresolvedProduce.json();
+  assert.equal(unresolvedProduce.status, 409, "direct worker production requests must also fail closed");
+  assert.equal(unresolvedProduceBody.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+
   const sourceInventory = inventoryDashboardSources(
     fs.readFileSync(path.join(process.cwd(), "public", "dashboard.html"), "utf8"),
     fs.readFileSync(path.join(process.cwd(), "scripts", "dashboard-server.mjs"), "utf8"),
