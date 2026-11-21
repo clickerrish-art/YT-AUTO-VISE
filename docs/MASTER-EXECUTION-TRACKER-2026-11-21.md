@@ -450,3 +450,15 @@ This section supersedes older checkpoint statements in the historical audit entr
 - A house-construction screenshot and dashboard/contact-sheet images in the Library are not wildlife source media.
 - Required owner input remains: upload the actual camera-original wildlife video/photo files and the associated creator identity, capture date/location (where safe), source-device/original-file evidence, written commercial publication rights/releases, and any restrictions. Do not upload credentials or sensitive identity documents. The assets remain on HOLD until inspected and hashed.
 
+
+
+---
+
+## Critical default-branch YouTube workflow risk — 21 November 2026
+
+- Read-only inspection of `main` found both legacy manual upload workflows (`.github/workflows/upload-private.yml` and `.github/workflows/upload-artifact-privately.yml`) still present.
+- The corresponding `main` uploader source does **not** implement Ed25519 one-shot authorization, exact content-format binding or the new signed authorization checks. The legacy workflow also lacks the two explicit upload/emergency-stop confirmations and does not pass the public verification key.
+- These are manual-dispatch workflows, not scheduled jobs, but dispatching them could bypass the intended current approval architecture. **DO NOT DISPATCH either legacy workflow.**
+- The implementation branch contains secure replacements: explicit `short|long_form` match, exact-hash one-shot signed authorization, public-key preflight, emergency-stop release plus private-upload dual confirmation, and non-cancelling shared concurrency. PR #1 remains draft/unmerged, so these replacements are not active on `main`.
+- The standing no-main-write/no-merge rule was preserved. This cannot be fully remediated without an owner/admin decision to approve and activate the secure workflow version or disable the legacy default-branch workflows. No workflow was dispatched.
+
