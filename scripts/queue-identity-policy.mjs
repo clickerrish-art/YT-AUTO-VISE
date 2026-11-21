@@ -62,6 +62,8 @@ export function validateQueueIdentity({ operationalQueue, detailedQueue, approva
   }
   const mappingByOperationalId = new Map();
   const mappedDetailedIds = new Set();
+  const mappedCyclePositions = new Set();
+  const operationalById = new Map(operationalItems.filter(item => item && typeof item.id === "string").map(item => [item.id, item]));
   for (const mapping of mappings) {
     if (!mapping || typeof mapping !== "object" ||
         typeof mapping.operationalItemId !== "string" ||
@@ -73,9 +75,16 @@ export function validateQueueIdentity({ operationalQueue, detailedQueue, approva
     if (mappingByOperationalId.has(mapping.operationalItemId)) {
       errors.push("Duplicate mapping for operational queue item: " + mapping.operationalItemId);
     } else mappingByOperationalId.set(mapping.operationalItemId, mapping);
+    const mappedOperationalItem = operationalById.get(mapping.operationalItemId);
+    if (!mappedOperationalItem || mappedOperationalItem.contentType !== "long_form") {
+      errors.push("Queue identity mapping must reference an existing operational long_form item: " + mapping.operationalItemId);
+    }
     if (mappedDetailedIds.has(mapping.detailedItemId)) {
       errors.push("A detailed long-form item cannot be assigned to multiple cycle positions: " + mapping.detailedItemId);
     } else mappedDetailedIds.add(mapping.detailedItemId);
+    if (mappedCyclePositions.has(mapping.cyclePosition)) {
+      errors.push("Duplicate publication cycle position in queue identity mappings: " + mapping.cyclePosition);
+    } else mappedCyclePositions.add(mapping.cyclePosition);
   }
 
   operationalLongForms.forEach((operationalItem, index) => {
@@ -84,14 +93,20 @@ export function validateQueueIdentity({ operationalQueue, detailedQueue, approva
       errors.push("No owner-approved detailed-queue identity mapping exists for operational item: " + operationalItem.id);
       return;
     }
-    if (mapping.cyclePosition !== index + 1) {
-      errors.push("Operational long-form queue order must be explicitly mapped to consecutive cycle positions; expected position " + (index + 1) + " for " + operationalItem.id + ".");
+    const expectedCyclePosition = Math.floor(index / 2) * 3 + (index % 2) + 1;
+    if (mapping.cyclePosition !== expectedCyclePosition) {
+      errors.push("Operational long-form queue order must follow long_form, long_form, short cycle positions; expected position " + expectedCyclePosition + " for " + operationalItem.id + ".");
     }
     const detailedItem = detailedById.get(mapping.detailedItemId);
     if (!detailedItem) {
       errors.push("Mapped detailed long-form item does not exist: " + mapping.detailedItemId);
-    } else if (typeof detailedItem.scriptPath !== "string" || !detailedItem.scriptPath.trim()) {
-      errors.push("Mapped detailed long-form item must have a concrete scriptPath: " + mapping.detailedItemId);
+    } else {
+      if (typeof detailedItem.scriptPath !== "string" || !detailedItem.scriptPath.trim()) {
+        errors.push("Mapped detailed long-form item must have a concrete scriptPath: " + mapping.detailedItemId);
+      }
+      if (detailedItem.publicationCyclePosition !== mapping.cyclePosition) {
+        errors.push("Detailed long-form item cycle position must match its owner-approved operational mapping: " + mapping.detailedItemId);
+      }
     }
   });
 
@@ -100,7 +115,7 @@ export function validateQueueIdentity({ operationalQueue, detailedQueue, approva
   }
   const firstMapping = mappingByOperationalId.get(operationalLongForms[0]?.id);
   const firstDetailedItem = firstMapping ? detailedById.get(firstMapping.detailedItemId) : null;
-  if (firstDetailedItem?.publicationCyclePosition !== 1) {
+  if (firstMapping?.cyclePosition !== 1 || firstDetailedItem?.publicationCyclePosition !== 1) {
     errors.push("Cycle position 1 must map to the detailed queue's explicitly designated publicationCyclePosition 1 item.");
   }
 
