@@ -132,7 +132,11 @@ test("campaign management API previews and deactivates the approved campaign wit
   assert.equal(preview.campaign.pendingDisclosureText, disclosureText);
   assert.match(preview.campaign.pendingDestinationVersion, /^[a-f0-9]{64}$/);
   assert.equal(preview.campaign.status, "ACTIVE_FOR_DRAFTS_ONLY");
-  assert.equal(Object.hasOwn(preview.campaign, "approval"), false);
+  assert.equal(preview.campaign.disclosureApprovalStatus, "OWNER_APPROVED");
+  assert.equal(preview.campaign.approval.approvedBy, "Owner");
+  assert.equal(preview.campaign.approval.approvedAt, "2026-11-10T07:00:36+02:00");
+  assert.equal(preview.campaign.approval.destinationVersion, preview.campaign.pendingDestinationVersion,
+    "preview must preserve the existing approval bound to the same exact destination and disclosure");
 
   let persisted = JSON.parse(fs.readFileSync(statePath, "utf8"));
   let campaign = persisted.campaigns.find(item => item.id === campaignId);
