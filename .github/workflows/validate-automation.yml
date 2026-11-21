@@ -68,9 +68,14 @@ jobs:
             const via = (item.via ?? []).map(entry => typeof entry === "string" ? entry : entry.title + " (" + entry.range + ")");
             console.log("AUDIT:", name, "severity=" + item.severity, "range=" + item.range, "fixAvailable=" + JSON.stringify(item.fixAvailable), "via=" + via.join("; "));
           }
-          const counts = report.metadata?.vulnerabilities ?? {};
+          const counts = report.metadata?.vulnerabilities;
+          const severityLevels = ["info", "low", "moderate", "high", "critical"];
+          if (!counts || severityLevels.some(level => !Number.isInteger(counts[level]) || counts[level] < 0)) {
+            console.error("FAIL: npm audit returned no complete, valid severity summary; a clean audit cannot be inferred.");
+            process.exit(1);
+          }
           console.log("npm audit summary:", JSON.stringify(counts));
-          const total = Object.values(counts).reduce((sum, value) => sum + (Number(value) || 0), 0);
+          const total = severityLevels.reduce((sum, level) => sum + counts[level], 0);
           if (total > 0) {
             console.error("FAIL: dependency audit found " + total + " known vulnerability/vulnerabilities; resolve every severity before release.");
             process.exit(1);
