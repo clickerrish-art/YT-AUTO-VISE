@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
 import { validateQueueIdentity } from "../scripts/queue-identity-policy.mjs";
 
 const operationalQueue = { items: [
@@ -11,8 +12,11 @@ const detailedQueue = { items: [
   { id: "canonical-long-one", scriptPath: "content/one.md", publicationCyclePosition: 1 },
   { id: "owner-selected-long-two", scriptPath: "content/two.md", publicationCyclePosition: 2 }
 ] };
+const sha256Json = value => crypto.createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const approval = {
   schemaVersion: 1, status: "OWNER_APPROVED", ownerApproved: true,
+  operationalQueueSha256: sha256Json(operationalQueue),
+  detailedQueueSha256: sha256Json(detailedQueue),
   approvedBy: "repository-owner", approvedAt: "2026-11-21T12:00:00+02:00",
   approvalReference: "owner-decision-001",
   mappings: [
@@ -78,6 +82,8 @@ test("queue identity maps the third long-form item to cycle position four after 
   const expandedDetailed = structuredClone(detailedQueue);
   expandedDetailed.items.push({ id: "third-long-form", scriptPath: "content/three.md", publicationCyclePosition: 4 });
   const expandedApproval = structuredClone(approval);
+  expandedApproval.operationalQueueSha256 = sha256Json(expandedOperational);
+  expandedApproval.detailedQueueSha256 = sha256Json(expandedDetailed);
   expandedApproval.mappings.push({
     operationalItemId: "dispatch-long-three",
     detailedItemId: "third-long-form",
@@ -107,4 +113,16 @@ test("queue identity rejects duplicate cycle positions, mappings to Short items 
     detailedQueue: mismatchedDetailedPosition,
     approval
   }).valid, false);
+});
+
+test("queue identity approval becomes stale when queue content changes without changing item IDs", () => {
+  const changedOperational = structuredClone(operationalQueue);
+  changedOperational.items[0].title = "A different title under the same stable ID";
+  const result = validateQueueIdentity({
+    operationalQueue: changedOperational,
+    detailedQueue,
+    approval
+  });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => /operationalQueueSha256 does not match/i.test(error)));
 });
