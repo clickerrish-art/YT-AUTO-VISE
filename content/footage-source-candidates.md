@@ -1,6 +1,6 @@
 # SonicVhibez footage acquisition queue — candidates and conditional owner authorizations
 
-**Current status (10 November 2026):** The NOAA Spiny Lobsters in California package has **owner-authorized conditional use** for SonicVhibez, limited to the exact source SHA recorded in `content/asset-candidates/noaa-spiny-lobsters-california.json`, with the exact credit **“NOAA’s Office of National Marine Sanctuaries”** and complete removal of source audio. This is not a production clearance or final-video approval. The asset remains outside the approved production register; `rightsEvidenceReviewed`, `humanApproved`, `rightsConfirmed` and `complianceReviewed` remain false. Publishing remains disabled. The leatherback package and all other candidates remain unapproved.
+**Historical status (10 November 2026; superseded 21 November 2026):** The earlier conditional NOAA source-use note below is no longer a current production authorization. Current owner policy requires genuine original creator-captured wildlife media and prohibits generic stock/archive footage and AI-generated wildlife visuals as substitutes. All NOAA, Pexels, Pixabay and Internet Archive source packages listed in this document are reference-only and excluded from current production. No source from this queue may be rendered or published under the current policy.
 
 ## Preferred acquisition source
 
