@@ -5,7 +5,7 @@ import { spawnSync } from "node:child_process";
 import { parseNodeTestSummary } from "./node-test-summary.mjs";
 
 const roots = ["test", "tests"];
-const TEST_FILE_TIMEOUT_MS = 60_000;
+const TEST_FILE_TIMEOUT_MS = 60_000; // A hung test file must not block the full release suite indefinitely.
 const files = roots.flatMap(root => {
   if (!fs.existsSync(root)) return [];
   return fs.readdirSync(root, { withFileTypes: true })
