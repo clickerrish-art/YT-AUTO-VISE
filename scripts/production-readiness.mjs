@@ -47,6 +47,7 @@ if (!exists(productsPath)) {
 }
 let minimumSpacingHours = NaN;
 let cycleFormats = [];
+let operationalQueueForIdentity;
 if (!exists(schedulePath)) {
   blockers.push("Authoritative publication-cycle policy is missing.");
 } else {
@@ -85,6 +86,7 @@ if (!queueExists) {
     blockers.push("content/queue.json is not valid JSON; queue checks cannot be trusted.");
   }
   if (queue) {
+      operationalQueueForIdentity = queue;
       if (queue.publishingEnabled !== false) blockers.push("Queue must keep publishingEnabled=false until private upload and human review are verified.");
       if (queue.cadence?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || queue.cadence?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || JSON.stringify(queue.cadence?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Queue cadence must match the configured rolling publication cycle policy.");
       if (queue.cadence?.draftPreparationFallback?.notPublicationCadence !== true) blockers.push("Tuesday/Saturday fallback must be marked draft preparation only, not publication cadence.");
@@ -118,8 +120,8 @@ try {
 } catch {
   blockers.push("content/queue-identity-approval.json is invalid JSON; owner queue identity approval cannot be trusted.");
 }
-if (queue) {
-  const identity = validateQueueIdentity({ operationalQueue: queue, detailedQueue, approval: queueIdentityApproval });
+{
+  const identity = validateQueueIdentity({ operationalQueue: operationalQueueForIdentity, detailedQueue, approval: queueIdentityApproval });
   if (!identity.valid) {
     blockers.push("QUEUE IDENTITY RECONCILIATION REQUIRED: " + identity.errors.join(" "));
   } else {
