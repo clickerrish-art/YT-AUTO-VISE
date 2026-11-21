@@ -398,6 +398,13 @@ export async function runWorkerCycle({ baseUrl = DEFAULT_API_URL, token, workerI
   if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error("worker dispatch limit must be an integer from 1 to 100");
   const headers = { "x-worker-token": token, "x-worker-id": workerId };
   const listing = await requestJson(fetchImpl, origin + "/api/jobs/dispatchable?limit=" + limit, { headers });
+  if (listing.status === 409 && listing.payload?.code === "QUEUE_IDENTITY_RECONCILIATION_REQUIRED") {
+    const error = new Error("Worker dispatch is blocked until the owner-approved content queue identities are reconciled");
+    error.code = "WORKER_QUEUE_IDENTITY_BLOCKED";
+    error.retryable = false;
+    error.blockers = Array.isArray(listing.payload.blockers) ? listing.payload.blockers : [];
+    throw error;
+  }
   if (listing.status !== 200 || !Array.isArray(listing.payload.jobs)) {
     throw new Error("Dashboard worker API returned an invalid dispatchable-job response");
   }
