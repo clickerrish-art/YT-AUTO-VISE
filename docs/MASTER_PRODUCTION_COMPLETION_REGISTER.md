@@ -876,3 +876,41 @@ The Short upload metadata title has been aligned to the exact title in the produ
 **NOT MASTER COMPLETE.** No finished Short or long-form MP4 exists in the repository media tree at the inspected SHA. WanGP GPU execution is pending; exact mirror checkpoint/VAE commercial provenance is on HOLD; the five imported Canva candidates are on HOLD; no final narration is commercially cleared; both render manifests are blocked; prior upload-attempt ledger reconciliation is complete with zero executed private-upload jobs; no exact-job private upload approval exists; no safe separate SonicVhibez Metricool brand exists; the only connected brand is Nature Frontiers SA and it contains the SonicVhibez YouTube channel ID; old Metricool brand 7545638 and its eight historically observed auto-publishing records remain inaccessible/unknown.
 
 Do not report a percentage or call any of these tasks complete until the evidence listed above is present and independently checked.
+
+
+---
+
+## Current superseding checkpoint — 2026-11-21
+
+The 19 November snapshot and historical notes above are retained for audit history. The current execution addendum is `docs/MASTER_COMPLETION_PLAN_2026-11-20.md`, section “Execution addendum — 2026-11-21”. Where earlier entries describe Roderic permission as pending, Norman/Banjo/Edge/Piper auditions as available, or Pexels footage as a possible production source, the newer determinations below supersede them.
+
+### Exact branch work verified on 2026-11-21
+
+- HeyGen Support **denied** a zero-cost commercial-use exception for existing and future Roderic Free-plan outputs. Exact determination: `content/heygen-roderic-commercial-rights-determination-2026-11-21.json`.
+- Long-form and Short manifests remain fail-closed. Roderic audio remains internal-only; no alternative narrator is authorized.
+- Unapproved Piper and Edge TTS narration workflows now have job-level `if: false` guards on the implementation branch. Existing American/Norman and Banjo review workflows were already disabled.
+- Short 001 Pexels material is reference-only and excluded by the original creator-captured-media requirement. Its render manifest no longer treats the Pexels platform licence as production footage clearance; script and caption pins match the current exact Git blob SHAs.
+- Long-form 001 script and scientific desk-review blob SHAs are pinned in its manifest. The 2025 crocodile sensory-integration paper is described with its juvenile/captive/controlled-experiment limitations.
+- The Comfy Cloud Arctic/polar-bear text-to-video demo is explicitly disqualified from production. No generation or GPU spend occurred.
+- Metricool was queried read-only. Brand 8094526 currently returned Facebook and Instagram connections without a YouTube channel in the settings response; that is not proof of a provider-side disconnect. Legacy brand 7545638 remains inaccessible (403). No Metricool mutation occurred.
+
+### Current release state
+
+**HOLD — NOT MASTER COMPLETE.** No admissible original creator-captured wildlife package, commercially eligible narrator, final Long-form 001 or Short 001 render, synchronized final captions, final thumbnail, independent zoological sign-off, complete human playback, exact-hash production approval, permanent archive, current live YouTube inventory/owner attempt attestation, or verified production publisher exists.
+
+### Current owner/provider dependencies
+
+1. Original creator-captured wildlife source files with creator identity, chain of custody and explicit commercial rights.
+2. HeyGen written reversal granting zero-cost Roderic commercial rights, or explicit owner change to the Roderic-only voice constraint.
+3. Metricool access/export for legacy brand 7545638 and written confirmation of brand 8094526's current YouTube mapping.
+4. Fresh owner attestation of manual/local/third-party YouTube upload attempts after 2026-11-18 and a fresh authenticated paginated inventory before any upload.
+5. Cloudflare R2 enablement or owner-approved zero-cost durable archive route; inspect terms/free-tier limits before creating resources.
+6. Qualified zoological reviewer and final owner review of exact media hashes.
+7. Account/admin authorization and access for production Worker, D1 runner state, OIDC trust and branch protection.
+8. Exact one-shot private-upload authorization after all prior gates; separate public-release authorization.
+
+### Branch and test integrity
+
+At the latest comparison before this register update, implementation branch `codex/marketing-machine-audit-fixes` was **4,828 commits ahead / 13 behind** `main`, with merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. `main` was not modified. PR #1 was not merged, closed or marked ready. No reset, rebase, force-push or history rewrite was performed.
+
+No full regression suite or live production acceptance was run after the 2026-11-21 repository changes. Prior test passes remain historical evidence only and do not certify this new head.
