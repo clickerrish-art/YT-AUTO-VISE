@@ -83,7 +83,9 @@ test("draft-preparation triggers are separated from narration generation and pub
   assert.match(draftWorkflow, /npm run validate:promotional-shorts/);
   assert.doesNotMatch(draftWorkflow, /upload-private|youtube[.]upload|render:short|render:long|generate-narration/i);
   assert.match(shortWorkflow, /if: false # Disabled:/);
-  assert.match(shortWorkflow, /Roderic is the exclusive owner-approved narrator/);
+  const narrationPolicy = JSON.parse(fs.readFileSync("config/narration-voice-candidates.json", "utf8"));
+  assert.equal(narrationPolicy.ownerDecision.approvedVoiceId, "b5c5b28db1ea408abc7d851202983bdb");
+  assert.equal(narrationPolicy.ownerDecision.alternativeVoicesAuthorized, false);
   assert.match(automationWorkflow, /72 <= spacing <= 8760/);
   assert.match(automationWorkflow, /minimumCycleHours/);
   assert.equal(plan.publicationCycle.publicationRequiresVerifiedHistory, true);
