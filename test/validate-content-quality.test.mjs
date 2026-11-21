@@ -40,6 +40,7 @@ function fixture(t, format = "long_form") {
   };
   const asset = {
     assetId: "asset-1", path: "footage.bin", sourceMethod: "ORIGINAL_RECORDING",
+    creatorCapturedOriginal: true, captureProvenance: "Original camera file supplied by the identified creator; original bytes retained",
     creatorOrRightsHolder: "SonicVhibez", originalSha256: footageHash,
     acquiredAt: "2026-10-25T10:00:00Z", licenseEvidenceLocation: "rights/asset-1.json",
     permittedUse: "YouTube commercial documentary use", commercialUseAllowed: true,
@@ -86,7 +87,7 @@ test("quality evidence validator binds provenance and narration to exact render 
 test("multi-scene quality evidence requires exact provenance hashes and valid source ranges", t => {
   const f = fixture(t);
   const secondPath = path.join(f.dir, "footage-second.bin");
-  fs.writeFileSync(secondPath, "second licensed source bytes");
+  fs.writeFileSync(secondPath, "second original camera source bytes");
   const secondHash = hash(fs.readFileSync(secondPath));
   f.evidence.assetProvenance.push({ ...f.evidence.assetProvenance[0], assetId: "asset-2", path: "footage-second.bin", originalSha256: secondHash, editorialPurpose: "Show the next narrative beat" });
   f.evidence.scenes.push({ assetId: "asset-2", sourceSha256: secondHash, rightsStatus: "VERIFIED", editorialPurpose: "Show the next narrative beat", startSeconds: 0, endSeconds: 10 });
