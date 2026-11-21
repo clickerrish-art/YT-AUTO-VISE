@@ -624,3 +624,30 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
   assert.ok(validatePromotionalShortPlan(invalid, products)
     .some(error => /each keyword phrase must be non-empty and no longer than 100 characters/.test(error)));
 });
+
+
+test("current search-intent evidence is mandatory, dated, sourced and fresh for current/future drafts", () => {
+  const now = new Date("2026-11-21T09:00:00+02:00");
+  const valid = clone(checkedInPlan);
+  assert.deepEqual(validatePromotionalShortPlan(valid, products, { now }), []);
+
+  const missing = clone(valid);
+  delete missing.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence;
+  assert.ok(validatePromotionalShortPlan(missing, products, { now }).some(error => /current search-intent evidence needs a valid research timestamp/.test(error)));
+
+  const stale = clone(valid);
+  stale.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-01T09:00:00+02:00";
+  assert.ok(validatePromotionalShortPlan(stale, products, { now }).some(error => /current search-intent evidence must be no more than 14 days old/.test(error)));
+
+  const future = clone(valid);
+  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-21T09:10:00+02:00";
+  assert.ok(validatePromotionalShortPlan(future, products, { now }).some(error => /current search-intent evidence cannot be more than 5 minutes in the future/.test(error)));
+
+  const insecure = clone(valid);
+  insecure.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.sources[0].url = "http://example.com/ethics";
+  assert.ok(validatePromotionalShortPlan(insecure, products, { now }).some(error => /current search-intent evidence needs a qualitative no-volume caveat and dated HTTPS sources/.test(error)));
+
+  const invented = clone(valid);
+  invented.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.estimatedMonthlySearches = 900000;
+  assert.ok(validatePromotionalShortPlan(invented, products, { now }).some(error => /do not invent volume or competition metrics/.test(error)));
+});
