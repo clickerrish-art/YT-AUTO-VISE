@@ -86,7 +86,10 @@ test("draft-preparation triggers are separated from narration generation and pub
   const narrationPolicy = JSON.parse(fs.readFileSync("config/narration-voice-candidates.json", "utf8"));
   assert.equal(narrationPolicy.ownerDecision.approvedVoiceId, "b5c5b28db1ea408abc7d851202983bdb");
   assert.equal(narrationPolicy.ownerDecision.alternativeVoicesAuthorized, true);
-  assert.equal(narrationPolicy.ownerDecision.selectionStatus, "PENDING_OWNER_LISTENING");
+  assert.equal(narrationPolicy.ownerDecision.selectionStatus, "OWNER_SELECTED_WADE_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED");
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.voiceId, "a3a4aa242aaf431ea8ec2c4b3bb332fa");
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.productionApproved, false);
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.commercialUseAllowed, false);
   assert.match(automationWorkflow, /72 <= spacing <= 8760/);
   assert.match(automationWorkflow, /minimumCycleHours/);
   assert.equal(plan.publicationCycle.publicationRequiresVerifiedHistory, true);
