@@ -130,9 +130,9 @@ Conservation must recognise both the ecological importance of crocodiles and the
 
 ### Chapter 6 — Conservation and the future (6:30–7:25)
 
-The Nile crocodile is assessed as Least Concern globally, but that does not mean every population is secure.
+The global IUCN assessment linked by the Crocodile Specialist Group (2017 assessment) lists the Nile crocodile as Least Concern. That does not mean every population is secure.
 
-In South Africa, the regional assessment is Vulnerable.
+South Africa's 2023 regional assessment lists the species as Vulnerable.
 
 Habitat changes, human conflict and local population declines remain important concerns.
 
