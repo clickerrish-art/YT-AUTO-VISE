@@ -393,3 +393,15 @@ All changed queue and candidate files were read back and JSON-parsed where appli
 26. Added `scripts/narration_policy.py`, which reads the current owner decision and fails closed unless alternative voices are explicitly authorized. The current config states Roderic is exclusive, HeyGen's zero-cost commercial exception was denied, alternative voices are not authorized and paid upgrades are not authorized.
 27. Added the policy guard to the manual CLI paths for Edge TTS Short narration, Edge TTS long-form narration, generated-script narration, Piper audition, Norman/American review narration and Banjo review narration. The Piper generator checks before creating output directories or downloading model assets. Existing workflows remain disabled at job level.
 28. Updated Python regression tests to assert that even an explicit non-commercial audition acknowledgement cannot bypass the owner's no-alternative-voice decision. Tests cover the CLI entry-point policy and the no-download-before-block condition. The full Python suite has not been run on this head.
+
+
+### Additional execution — runbook, archive, voice and YouTube-history alignment (2026-11-21)
+
+29. Rewrote the WanGP Kaggle runbook and Internet Archive intake document as disabled/reference-only records. They no longer instruct operators to launch GPU generation or use archive footage in production.
+30. Clarified the historical Pexels approval register's purpose and scope: all 17 Pexels items remain historical/reference-only, not production-approved.
+31. Updated Roderic's detailed voice-rights review and Short 001 narration-generation record to the final HeyGen denial. Corrected the 40-character source identifiers to explicitly named Git blob hashes and separated the historical generation-source pin from the current script/caption pins.
+32. Added owner-exclusive narrator authorization checks to the manual narration CLI paths and corresponding tests. Alternative voice auditions/generation now stop unless the owner explicitly authorizes them; current config denies that authorization.
+33. Updated YouTube history reconciliation to reference the successful 2026-11-20 read-only refresh. It still requires owner reaffirmation of the Short classification and fresh local/manual/third-party upload-attempt attestation; no upload is authorized.
+34. Updated the current Go-Live blockers checkpoint and queue/production records. The default-branch NOAA workflow was confirmed to have a push trigger for changes to that workflow file on main and a manual workflow_dispatch trigger; it has **no scheduled cron trigger**. The implementation-branch copy is disabled.
+
+Current branch comparison at the prior checkpoint was 4,916 ahead / 17 behind; the final current-head comparison is recorded below once all documentation commits are complete. Full runtime tests remain NOT_TESTED on this head.
