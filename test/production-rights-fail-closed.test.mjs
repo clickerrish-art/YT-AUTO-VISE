@@ -55,3 +55,16 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
     assert.ok(jobDisabled(readText(path), job), path + " job " + job + " must be disabled");
   }
 });
+
+test("Pexels and Pixabay media registers are reference-only, never production footage", () => {
+  const nature = readJson("../content/nature-frontiers-media-register.json");
+  const short = readJson("../content/short-001-acquisition-manifest.json");
+  assert.equal(nature.policy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(nature.policy.stockMediaAllowed, false);
+  assert.equal(nature.policy.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.ok(nature.assets.length > 0);
+  assert.ok(nature.assets.every(asset => asset.productionEligibility?.eligible === false));
+  assert.ok(nature.assets.every(asset => asset.productionEligibility?.status === "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY"));
+  assert.equal(short.productionDisposition.productionEligible, false);
+  assert.ok(short.assets.every(asset => asset.productionEligibility === "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"));
+});
