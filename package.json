@@ -52,7 +52,8 @@
     "nature-frontiers:review-rights": "node scripts/record-nature-frontiers-rights-review.mjs",
     "facebook:approve": "node scripts/approve-facebook-candidate.mjs",
     "nature-frontiers:plan-interstitial": "node scripts/nature-frontiers-interstitial-content.mjs",
-    "validate:quality-release": "node scripts/validate-production-quality-approval.mjs"
+    "validate:quality-release": "node scripts/validate-production-quality-approval.mjs",
+    "prepare:queue-approval": "node scripts/prepare-queue-identity-approval.mjs"
   },
   "engines": {
     "node": ">=22"
