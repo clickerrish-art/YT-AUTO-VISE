@@ -100,7 +100,7 @@
     "approvedVoiceStatus": "HISTORICAL_PREFERENCE_NOT_APPROVED_FOR_COMMERCIAL_RELEASE",
     "previousApprovedVoice": "Roderic — Authoritative & Refined",
     "previousApprovedVoiceId": "b5c5b28db1ea408abc7d851202983bdb",
-    "alternativeVoicesAuthorized": true,
+    "alternativeVoicesAuthorized": false,
     "selectedAlternative": {
       "provider": "HeyGen Voice",
       "voiceId": "a3a4aa242aaf431ea8ec2c4b3bb332fa",
@@ -125,6 +125,7 @@
     "commercialRightsStatus": "HEYGEN_FREE_PLAN_OUTPUT_RESTRICTED_TO_PERSONAL_NON_COMMERCIAL_INTERNAL_EVALUATION",
     "decisionDate": "2026-11-22",
     "decisionEvidence": "On 2026-11-22 the owner declined Roderic exclusivity and selected Wade — Resonant & Narrative (public HeyGen Voice) for further review only. This is not production approval or permission to publish. The connected Free-plan output licence restricts generated speech to personal, non-commercial internal evaluation; the requested Wade speech sample could not be generated because the workspace had insufficient remaining free speech allowance. No paid credits or upgrade were used.",
-    "commercialUseRule": "Use only a voice whose exact model/data/runtime licence and applicable service-plan terms support the intended public/commercial distribution. HeyGen Free-plan generated output is internal-evaluation-only, including Wade. No Roderic Free-plan audio, no paid service, and no production release before owner listening approval tied to the exact final audio SHA-256."
+    "commercialUseRule": "Use only a voice whose exact model/data/runtime licence and applicable service-plan terms support the intended public/commercial distribution. HeyGen Free-plan generated output is internal-evaluation-only, including Wade. No Roderic Free-plan audio, no paid service, and no production release before owner listening approval tied to the exact final audio SHA-256.",
+    "alternativeVoiceAuthorizationScope": "Wade HeyGen audition only; no authorization for Piper/Edge TTS or any other alternative narrator. Wade remains review-only, with commercialUseAllowed=false and productionApproved=false."
   }
 }
