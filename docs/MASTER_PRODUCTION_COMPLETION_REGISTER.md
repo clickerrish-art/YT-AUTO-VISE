@@ -942,7 +942,7 @@ No full regression suite or live production acceptance was run after the 2026-11
 
 Four stock-source rights-review JSON updates were accidentally written to `main` because the GitHub update calls omitted the optional branch parameter (which defaults to main). Affected commits: `ae3200a9ef9b4877fafaf246c5640b851ec712e9`, `c1e5c0713c67b196153615e73f2defd8cce11517`, `450aef056c429ffda10865c0a0b24dea3de82be9`, and `3795519ccbf58fd02d74458624b58dd2e44a88c0`. Their corrected versions were also committed on the implementation branch. No rollback, reset, rebase or history rewrite was attempted; no further writes to main will be made. Owner-directed remediation is required if those four commits must be reverted.
 
-The latest comparison shows main head `3795519ccbf58fd02d74458624b58dd2e44a88c0`; the implementation branch is 4,872 ahead / 17 behind, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+At the initial incident record, the implementation branch was 4,872 ahead / 17 behind. A later read-only comparison at 2026-11-21 09:36 UTC returned 4,924 ahead / 17 behind; main head remained `3795519ccbf58fd02d74458624b58dd2e44a88c0`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, and PR #1 head was `08af58dd597b9e3ba72bd74124d54da142551817`.
 
 The default-branch `.github/workflows/acquire-noaa-broll-candidates.yml` remains enabled because the implementation-branch disablement is not merged. It has a push trigger when this workflow file changes on main and a manual workflow_dispatch trigger; it has no scheduled cron trigger. The connected GitHub actions interface provides no workflow-disable operation; the repository owner must disable it through GitHub Actions or approve an owner-directed remediation. This remains a release blocker.
 
