@@ -2,7 +2,7 @@
 
 **SonicVhibez YouTube remains part of the Marketing Machine, regardless of the machine's name.** It is managed through this project's direct YouTube API integration, not through Metricool. Do not reconnect YouTube to Metricool unless the owner explicitly reverses that decision. Nature Frontiers remains a separate Facebook/Instagram brand and must never be routed to SonicVhibez YouTube.
 
-Public/unattended YouTube publishing and live Meta publishing remain disabled. Private YouTube upload requires a one-shot authorization bound to the exact job, media, metadata, review, rights and channel, plus remote verification. Original creator-captured wildlife media, provenance, commercial rights and exact-hash human approval are required; AI-generated wildlife visuals and generic stock footage are not substitutes.
+Public/unattended YouTube publishing and live Meta publishing remain disabled. The implementation branch's private YouTube uploader requires a one-shot authorization bound to the exact job, media, metadata, review, rights and channel, plus remote verification. **The current `main` branch still contains legacy manual upload workflows and uploader code without that signed one-shot gate; do not dispatch either legacy workflow.** The secure replacements remain in draft PR #1 and are not active on `main`. Original creator-captured wildlife media, provenance, commercial rights and exact-hash human approval are required; AI-generated wildlife visuals and generic stock footage are not substitutes.
 
 The authoritative live task/blocker register is [MASTER EXECUTION TRACKER](docs/MASTER-EXECUTION-TRACKER-2026-11-21.md). The project is not production-complete merely because code or CI passes.
 
