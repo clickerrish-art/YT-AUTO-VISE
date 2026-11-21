@@ -71,8 +71,8 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   const historyCurrent = reconciliation.historyMatches && reconciliation.historyFresh;
   if (historyCurrent) assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete owner-reviewed public\/private\/unlisted SonicVhibez history evidence is missing, stale, or inconsistent/);
   else assert.match(result.stdout, /LIVE BLOCKER: complete owner-reviewed public\/private\/unlisted SonicVhibez history evidence is missing, stale, or inconsistent/);
-  assert.match(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/,
-    "the checked-in 19 November OAuth scope evidence must expire after the 24-hour freshness window");
+  assert.doesNotMatch(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/,
+    "the 21 November read-only scope verification is fresh; the separate history gate remains stale");
   assert.doesNotMatch(result.stdout, /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/);
   assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
   assert.match(result.stdout, /LIVE BLOCKER: local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete/);
@@ -117,9 +117,7 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and age-awar
   assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\/private\/unlisted SonicVhibez history/.test(blocker.message)), !(reconciliation.historyMatches && reconciliation.historyFresh));
   assert.equal(report.notes.some(note => /YouTube history: verified 1 upload/.test(note)), reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh);
   const staleScopeBlocker = report.blockers.find(blocker => /YouTube OAuth upload scope is not independently verified/.test(blocker.message));
-  assert.ok(staleScopeBlocker, "stale OAuth scope evidence must remain a readiness blocker");
-  assert.equal(staleScopeBlocker.evidence.kind, "external-reconciliation-required");
-  assert.equal(staleScopeBlocker.evidence.path, "content/youtube-channel-verification-status.json");
+  assert.equal(staleScopeBlocker, undefined, "fresh 21 November scope evidence must satisfy only the OAuth-scope gate");
   assert.equal(report.blockers.some(blocker => /latest read-only YouTube OAuth attempt is BLOCKED \\(OAuth error invalid_grant\\)/.test(blocker.message)), false);
   assert.equal(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"), false, "the verified read-only OAuth inventory must not remain incorrectly marked as invalid_client");
   const invalidGrantBlocker = report.blockers.find(blocker => /invalid_grant/i.test(blocker.message));
