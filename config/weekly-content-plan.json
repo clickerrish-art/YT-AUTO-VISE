@@ -53,7 +53,8 @@
     "Public and unattended publishing remain disabled; private upload requires a separate explicit authorization and all release gates.",
     "Authoritative publication policy is publicationCycle; schedule entries are draft-preparation triggers only.",
     "Owner-approved cadence recorded 2026-11-17: rolling long_form → long_form → short → repeat, without a weekly target; minimum 72 elapsed hours and no same Johannesburg calendar day.",
-    "Global anti-spam policy prohibits automated audience engagement and manipulation; automation is limited to approved content operations, scheduling, publishing after release gates, and read-only analytics."
+    "Global anti-spam policy prohibits automated audience engagement and manipulation; automation is limited to approved content operations, scheduling, publishing after release gates, and read-only analytics.",
+    "Production media policy updated 2026-11-21: only genuine original creator-captured wildlife media is eligible; stock/archive footage and AI-generated wildlife visuals are prohibited as substitutes. Roderic Free-plan commercial-use exception was denied by HeyGen; no alternative narrator or paid upgrade is authorized. All slots remain draft-preparation only."
   ],
   "requestedWeeklyCadence": {
     "longFormPerWeek": 2,
@@ -128,5 +129,17 @@
       "noRetryOfUncertainRemoteMutations": true
     },
     "note": "No bot-driven likes, comments, replies, follows, DMs, engagement exchanges, artificial views/clicks, or unsolicited outreach. Human-initiated genuine interaction is outside automation and must comply with platform rules."
+  },
+  "productionPolicy": {
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "requiredMediaProvenance": "CREATOR_IDENTITY_CHAIN_OF_CUSTODY_ORIGINAL_BYTES_SHA256",
+    "narrationVoice": "Roderic — Authoritative & Refined",
+    "narrationCommercialRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION",
+    "alternativeNarratorAuthorized": false,
+    "paidUpgradeAuthorized": false,
+    "publishingEnabled": false,
+    "privateUploadRequiresExactOneShotOwnerAuthorization": true
   }
 }
