@@ -49,7 +49,7 @@ test("separate creator-education long-form script has compliant disclosure order
   assert.ok(script.includes("original creator-captured wildlife footage"));
   assert.ok(script.includes("AI-generated wildlife visuals are prohibited"));
   assert.ok(script.includes("not commercially cleared"));
-  assert.ok(script.includes("No alternate voice or paid upgrade is authorized"));
+  assert.ok(script.includes("No alternate narrator or paid upgrade is authorized"));
   assert.ok(script.includes("Queue ID: `long-story-wildlife-footage`"));
   assert.ok(script.includes("NOT ASSIGNED"));
   assert.ok(!script.includes("Long-Form Video 001"));
