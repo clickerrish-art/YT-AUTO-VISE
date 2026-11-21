@@ -18,7 +18,7 @@
 
 A strong wildlife video is more than a sequence of beautiful animal clips. In this practical guide, learn how to build a beginning, middle and ending from footage you actually have, use natural sound, write narration that adds context, and avoid misleading edits.
 
-This is a creator-education video. Always verify animal-behaviour claims with reliable sources and respect wildlife, local rules and the rights attached to every clip.
+This is a creator-education video. Always verify animal-behaviour claims with reliable sources and respect wildlife, local rules and the rights attached to every clip. Production media must be original creator-captured wildlife footage with verified provenance and commercial rights; do not use stock/archive footage or AI-generated wildlife visuals. Until eligible original footage is supplied, use clearly labelled diagrams or blank edit placeholders only.
 
 ADVERTISEMENT.
 
@@ -27,7 +27,7 @@ This product is sold through my own Selar business; purchases generate revenue f
 For a structured resource to support wildlife-video planning, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
 https://selar.com/0u19v8u99l
 
-Narration uses AI-generated text-to-speech. Any realistic AI-generated wildlife scenes or meaningful alterations of real events or places will be disclosed using YouTube's altered-content setting where required. Review the current sales page and terms before purchasing.
+Narration is not commercially cleared. The existing Roderic Free-plan sample is internal-evaluation-only; do not use it in production. Do not generate or use production narration until Roderic's commercial rights are resolved in writing. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited. If any other realistic altered or synthetic content appears in the final edit, assess and apply YouTube's disclosure setting where required. Review the current sales page and terms before purchasing.
 
 #WildlifeFilmmaking #DocumentaryStorytelling #VideoEditing
 
@@ -49,7 +49,7 @@ Open on three distinct, rights-cleared shots: a wide habitat view, an animal beh
 Before you edit, watch every clip and write down what is genuinely visible. Is the animal searching, resting, moving through its habitat, feeding, grooming, or responding to something in the environment? Do not begin with a sensational headline and force the footage to fit it. Start with a question the material can answer. For example: “How does this animal use its surroundings?” or “What changes over the course of this sequence?” If the clips do not show the answer, choose a narrower question.
 
 **Visuals:**  
-Show a simple clip log with columns for filename, visible action, location if known, usable duration, audio, and source/licence. Use placeholder footage only in the edit mock-up until licensed media is selected.
+Show a simple clip log with columns for filename, visible action, location if known, usable duration, audio, and source/licence. Use only original creator-captured footage after provenance and commercial rights are verified. Until then, use clearly labelled blank or diagram placeholders; do not substitute stock/archive or AI-generated wildlife visuals.
 
 **On-screen text:** “Let the footage set the limits.”
 
@@ -108,7 +108,7 @@ Show a simple thumbnail mock-up beside the opening shot. Add a checklist: “Acc
 **Voice-over:**  
 Before you publish, check the full video on a phone and a larger screen. Listen with headphones for clipped narration, abrupt music changes and distracting background noise. Check captions against the final voice track, not an earlier draft. Verify the spelling of species names and every factual statement. Keep a record of where each clip, image, sound effect and music track came from and what its licence permits.
 
-If you use AI-generated or altered material, make sure it does not mislead viewers about real animal behaviour. Review YouTube’s current disclosure requirements and select the appropriate settings. If you promote a product or use a commercial relationship, disclose it clearly and use the platform’s paid-promotion setting when required.
+Do not use AI-generated wildlife visuals. If any other realistic altered or synthetic material appears, make sure it does not mislead viewers about real animal behaviour and apply YouTube’s disclosure requirements where applicable. If you promote a product or use a commercial relationship, disclose it clearly and use the platform’s paid-promotion setting when required.
 
 **Visuals:**  
 Show a pre-publication checklist and a folder containing licence records, source notes, final captions and export.
