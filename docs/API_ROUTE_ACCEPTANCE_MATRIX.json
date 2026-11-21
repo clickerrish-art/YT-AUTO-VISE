@@ -27,9 +27,9 @@
   "counts": {
     "routes": 48,
     "authNegativePass": 48,
-    "overallPass": 42,
+    "overallPass": 41,
     "overallNotTested": 0,
-    "overallBlocked": 6,
+    "overallBlocked": 7,
     "authNegativePassHistorical": 45,
     "authNegativePassCurrentHead": 48
   },
@@ -2172,6 +2172,7 @@
     "workerIntegrationTest": "ADDED_NOT_TESTED",
     "productionReadinessIntegrationTest": "ADDED_NOT_TESTED",
     "fullRepositoryRegression": "NOT_TESTED",
-    "exactHeadCi": "NO_WORKFLOW_RUNS_OR_COMBINED_STATUSES"
+    "exactHeadCi": "NO_WORKFLOW_RUNS_OR_COMBINED_STATUSES",
+    "matrixCountsReconciledAt": "2026-11-21"
   }
 }
