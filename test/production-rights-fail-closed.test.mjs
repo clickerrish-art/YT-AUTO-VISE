@@ -54,7 +54,7 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
     ["../.github/workflows/acquire-noaa-broll-candidates.yml", "acquire-candidates"],
     ["../.github/workflows/acquire-short-001-assets.yml", "acquire"],
     ["../.github/workflows/noaa-lobster-thumbnail-review.yml", "thumbnail-review"],
-    ["../.github/workflows/noaa-lobster-thumbnail-review.yml", "thumbnail-review"]
+
   ]) {
     assert.ok(jobDisabled(readText(path), job), path + " job " + job + " must be disabled");
   }
