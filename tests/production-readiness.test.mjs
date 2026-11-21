@@ -395,3 +395,17 @@ test("short and long-form manifest templates require original creator-captured w
     assert.match(manifest.captureEvidencePath, /REPLACE_WITH_CAPTURE_PROVENANCE/);
   }
 });
+
+test("production readiness blocks the real repository queue until owner identity approval exists", () => {
+  const env = { ...process.env };
+  delete env.QUEUE_PATH;
+  const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
+    cwd: process.cwd(), env, encoding: "utf8"
+  });
+  assert.equal(result.status, 2, "production readiness must remain on HOLD");
+  const report = JSON.parse(result.stdout);
+  const blocker = report.blockers.find(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/.test(item.message));
+  assert.ok(blocker, "the operational and detailed queue identities must be reconciled");
+  assert.match(blocker.message, /content\/queue-identity-approval\.json is missing/i);
+  assert.equal(report.publicationEnabled, false);
+});
