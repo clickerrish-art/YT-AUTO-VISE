@@ -25,6 +25,10 @@ on:
     branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/production-readiness.mjs"
+      - "scripts/queue-identity-policy.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/worker-runner.mjs"
+      - "test/**"
       - "scripts/schedule-policy.mjs"
       - "scripts/youtube-history-gate.mjs"
       - "scripts/check-content.mjs"
