@@ -93,8 +93,6 @@ test("asset provenance requires traceable origin, hash, commercial permission an
     rightsStatus: "VERIFIED",
     verifiedBy: "editor-1",
     verifiedAt: "2026-10-25T11:00:00Z",
-    generationMethod: "Text-to-video with reviewed prompt",
-    generationTool: "Approved generator",
     editorialPurpose: "Document observed habitat behaviour"
   };
   assert.equal(validateAssetProvenance(record).valid, true);
