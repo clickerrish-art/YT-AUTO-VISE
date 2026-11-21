@@ -1,5 +1,6 @@
-# SonicVhibez — Nile Crocodile Short
-## Production script v1 — Draft, not approved for narration
+# SonicVhibez — Nile Crocodile Companion Short (Unqueued Draft)
+**Queue status:** UNQUEUED COMPANION SHORT. Canonical Short 001 is `content/short-001-wildlife-video-storytelling.md` / `content/next-short.json`. This Nile crocodile companion draft has no approved cycle slot.
+## Not canonical Short 001 — do not schedule or render as the next Short
 
 **Target:** 55 seconds  
 **Format:** 9:16 vertical  
