@@ -104,7 +104,7 @@ for (const cron of ['cron: "0 15 * * 2"', 'cron: "0 15 * * 6"']) {
 if (!draftWorkflow.includes("npm run validate:schedule")) errors.push("draft-preparation workflow must run the authoritative schedule validator");
 if (!draftWorkflow.includes("npm run validate:promotional-shorts")) errors.push("draft-preparation workflow must validate the private promotional draft plan");
 if (!/draft.only|draft preparation/i.test(draftWorkflow)) errors.push("draft-preparation workflow must identify its work as draft-only");
-if (/(upload-private|youtube\\.upload|render:short|render:long|generate-narration|generate_long_form_narration)/i.test(draftWorkflow)) {
+if (/(upload-private|youtube[.]upload|render:short|render:long|generate-narration|generate_long_form_narration)/i.test(draftWorkflow)) {
  errors.push("draft-preparation workflow must not generate narration, render media or upload/publish content");
 }
 if (errors.length) { for (const error of errors) console.error("FAIL: " + error); process.exitCode = 1; }

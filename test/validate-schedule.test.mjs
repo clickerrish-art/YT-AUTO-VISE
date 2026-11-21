@@ -15,9 +15,9 @@ test("authoritative validator accepts the approved rolling cadence while preserv
  assert.match(result.stdout,/NOTE: This local validator does not query YouTube/);
  assert.doesNotMatch(result.stdout,/BLOCKED — LIVE HISTORY/);
  const workflow=fs.readFileSync(path.join(repoRoot,".github/workflows/draft-preparation.yml"),"utf8");
- assert.match(workflow,/cron: "0 15 \\* \\* 2"/);
- assert.match(workflow,/cron: "0 15 \\* \\* 6"/);
- assert.doesNotMatch(workflow,/upload-private|youtube\\.upload|render:short|render:long|generate-narration/i);
+ assert.ok(workflow.includes('cron: "0 15 * * 2"'));
+ assert.ok(workflow.includes('cron: "0 15 * * 6"'));
+ assert.doesNotMatch(workflow,/upload-private|youtube[.]upload|render:short|render:long|generate-narration/i);
 });
 function runWithPlanMutation(mutate){
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),"sonicvhibez-schedule-"));
