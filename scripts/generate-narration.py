@@ -7,6 +7,10 @@ from __future__ import annotations
 import argparse, asyncio, hashlib, json, re, subprocess, tempfile
 from datetime import datetime
 from pathlib import Path
+try:
+    from scripts.narration_policy import require_owner_authorized_alternative_voice
+except ImportError:
+    from narration_policy import require_owner_authorized_alternative_voice
 import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +29,7 @@ NONCOMMERCIAL_AUDITION_NOTICE = (
 )
 
 def require_noncommercial_audition(acknowledged: bool) -> bool:
+    require_owner_authorized_alternative_voice()
     if acknowledged is not True:
         raise SystemExit("BLOCKED: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
                          "Pass --allow-noncommercial-audition only for an internal audition.")
