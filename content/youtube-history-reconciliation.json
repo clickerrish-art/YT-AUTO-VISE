@@ -123,8 +123,8 @@
       "freshnessStatus": "STALE_FOR_LOCAL_OR_MANUAL_ATTEMPTS_AFTER_2026-11-18"
     }
   },
-  "currentFreshnessStatus": "FRESH_READ_ONLY_INVENTORY_AS_OF_2026-11-19T22:48:58.854Z",
-  "lastSuccessfulInventoryAt": "2026-11-19T22:48:58.854Z",
+  "currentFreshnessStatus": "READ_ONLY_REFRESH_MATCHES_PRIOR_OWNER_REVIEW_PENDING_OWNER_REAFFIRMATION_AND_FRESH_LOCAL_ATTEMPT_ATTESTATION",
+  "lastSuccessfulInventoryAt": "2026-11-20T11:13:10.643Z",
   "latestRefreshAttempt": {
     "workflowRunId": 44632065508,
     "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
@@ -136,7 +136,7 @@
     "publicationStateChanged": false
   },
   "uploadScopeVerified": true,
-  "note": "Fresh complete read-only SonicVhibez inventory as of 2026-11-19: one public, owner-reviewed legacy Short; its API publishedAt exactly matches the local reconciliation timestamp and owner-confirmed Studio publication date. Both YouTube upload and readonly OAuth scopes were verified. This does not authorize an upload. The rolling publication cycle is owner-approved but not yet evidenced by actual long-form releases. GitHub Actions upload-attempt history is clear, while local/manual attempts after the 2026-11-18 owner attestation remain unverified because the local ledger is gitignored.",
+  "note": "The latest successful read-only inventory refresh is 2026-11-20 and matches the prior owner-reviewed one-video record exactly. This is not a new owner attestation and does not clear the stale local/manual/third-party attempt gap after 2026-11-18. The refresh artifact itself requires owner reaffirmation of the Short classification. No upload is authorized; keep publication blocked.",
   "ownerPublicationHistoryReview": {
     "status": "ACCEPTED_AS_HISTORICAL_PUBLICATION_EVIDENCE",
     "reviewedAt": "2026-11-18",
@@ -175,5 +175,23 @@
     "nextExpectedFormat": "long_form",
     "verifiedConsecutivePublicationGaps": 0,
     "statusReason": "The only verified remote publication is the owner-reviewed legacy Short, published before the approved cycle start. No long_form publication exists in the complete one-upload channel inventory, so the required long_form → long_form → short sequence and its actual 72-hour intervals cannot yet be demonstrated. The two long-form production manifests remain BLOCKED_NOT_RENDERABLE pending real media, narration, rights evidence and human review."
+  },
+  "latestRefreshEvidence": {
+    "path": "content/youtube-history-refresh-2026-11-20.json",
+    "workflowRunId": 44725743866,
+    "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
+    "verifiedAt": "2026-11-20T11:13:10.643Z",
+    "status": "READ_ONLY_VERIFIED_MATCHES_PRIOR_OWNER_REVIEW_PENDING_OWNER_REAFFIRMATION",
+    "totalUploads": 1,
+    "uploadsPlaylistPages": 1,
+    "videoId": "LjePS02hA1o",
+    "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+    "visibility": "public",
+    "youtubePublishedAt": "2026-10-22T15:05:56Z",
+    "duration": "PT20S",
+    "uploadAttempted": false,
+    "metadataWriteAttempted": false,
+    "publicationStateChanged": false,
+    "limitation": "Fresh inventory exactly matches the prior owner-reviewed one-video record, but the refresh artifact labels format unclassified and requires owner reaffirmation. The manual/local/third-party upload-attempt attestation remains stale after 2026-11-18."
   }
 }
