@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "channel": "SonicVhibez",
   "assetId": "NOAA-SPINY-LOBSTERS-CA-2026-11",
-  "status": "OWNER_AUTHORIZED_CONDITIONAL_SOURCE_CANDIDATE",
+  "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
   "productionApproved": false,
   "rightsConfirmed": false,
   "rightsEvidenceReviewed": false,
@@ -35,7 +35,9 @@
     "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
     "sourceAudio": "REMOVE_COMPLETELY",
     "noEndorsement": "Do not use NOAA seals/logos as SonicVhibez branding or imply NOAA endorses SonicVhibez or any promoted product.",
-    "authorizationReference": "Owner explicitly approved use of this specific package in the ChatGPT conversation on 2026-11-10, conditioned on exact NOAA credit and complete removal of the source audio."
+    "authorizationReference": "Owner explicitly approved use of this specific package in the ChatGPT conversation on 2026-11-10, conditioned on exact NOAA credit and complete removal of the source audio.",
+    "currentStatus": "SUPERSEDED_BY_2026-11-21_ORIGINAL_MEDIA_POLICY",
+    "historicalStatus": "APPROVED_WITH_CONDITIONS_ON_2026-11-10"
   },
   "termsAndReview": {
     "publicDomainStatement": "NOAA's official B-roll library states B-roll packages may be downloaded and used with NOAA credit; package-specific opening slate supplies exact attribution.",
@@ -59,7 +61,7 @@
   },
   "publication": {
     "allowed": false,
-    "note": "Owner approval is conditional source-use authorization only. It is not final-video approval, upload authorization, or permission to enable publishing."
+    "note": "Historical conditional source-use authorization is superseded. The source remains reference-only and must not be used in production under the current original-capture policy."
   },
   "reviewCut": {
     "filename": "NOAA-spiny-lobster-review-cut.mp4",
@@ -134,5 +136,11 @@
       "The final edit, shot-to-narration alignment, captions, factual claims, attribution legibility on device, rights and compliance still require human review.",
       "This review cut is not the production master and must not be renamed or substituted for media/next-short.mp4."
     ]
+  },
+  "currentProductionDisposition": {
+    "status": "EXCLUDED_REFERENCE_ONLY",
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "reason": "The earlier conditional source-use authorization from 2026-11-10 is superseded by the owner's 2026-11-21 policy requiring original creator-captured wildlife media. NOAA B-roll is an archive/stock package and is not eligible as a substitute."
   }
 }
