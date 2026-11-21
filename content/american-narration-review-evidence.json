@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "channel": "SonicVhibez",
-  "status": "AMERICAN_MALE_STORYTELLER_REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
+  "status": "ALTERNATIVE_VOICE_AUDITION_AVAILABLE_OWNER_LISTENING_REQUIRED",
   "generatedAt": "2026-11-19T16:13:33Z",
   "workflow": {
     "name": "Render American male storyteller narration review",
@@ -79,7 +79,12 @@
     "productionApproved": false,
     "finalNarration": false,
     "publishingEnabled": false,
-    "releaseStatus": "HOLD"
+    "releaseStatus": "HOLD",
+    "ownerAuthorization": {
+      "date": "2026-11-22",
+      "decision": "Owner declined Roderic exclusivity and authorized evaluation of zero-cost commercially licensed alternative voices.",
+      "appliesTo": "Audition/evaluation only; does not approve Norman or any other voice for production."
+    }
   },
   "limitations": [
     "The requested approximately-45-year-old sound is a vocal direction, not a verified human age.",
