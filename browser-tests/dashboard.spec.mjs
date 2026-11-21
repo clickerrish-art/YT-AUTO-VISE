@@ -139,6 +139,11 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   const readinessBody = await readiness.json();
   expect(readinessBody.ready).toBe(false);
   expect(readinessBody.publishingEnabled).toBe(false);
+  expect(readinessBody.blockers).toEqual(expect.arrayContaining([
+    expect.stringMatching(/footageOrigin must be creator_captured_original/),
+    expect.stringMatching(/footageCreator must identify the original camera operator/),
+    expect.stringMatching(/captureEvidencePath must reference an existing/)
+  ]));
 
   await page.setViewportSize({ width: 375, height: 812 });
   await expect(page.locator("#app")).toBeVisible();
