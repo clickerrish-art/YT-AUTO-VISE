@@ -1,5 +1,8 @@
 {
   "channel": "SonicVhibez",
+  "footageOrigin": "creator_captured_original",
+  "footageCreator": "REPLACE_WITH_ORIGINAL_CAMERA_OPERATOR",
+  "captureEvidencePath": "evidence/REPLACE_WITH_CAPTURE_PROVENANCE.json",
   "targetSeconds": 60,
   "footagePath": "../media/rights-cleared-wildlife.mp4",
   "narrationPath": "../media/narration.mp3",
