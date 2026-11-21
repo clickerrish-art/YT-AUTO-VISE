@@ -925,3 +925,14 @@ No full regression suite or live production acceptance was run after the 2026-11
 - Connector-side read-back assertions passed; both new test files passed Node syntax checks. Full repository tests have not been executed on this head, so runtime test acceptance remains NOT_TESTED.
 
 **Important boundary:** this fixes the repository-side configuration only. Metricool provider-side brand mappings and legacy data remain unresolved; no live account mutation was made.
+
+
+### Additional verified correction — wildlife media eligibility (2026-11-21)
+
+- Corrected the five-asset SonicVhibez imported-media inventory: it no longer directs production toward AI-generated wildlife scenes. It now requires genuine original creator-captured wildlife media and keeps all five imported Canva/Pexels assets excluded.
+- Updated all 92 Nature Frontiers Pexels/Pixabay register entries as reference-only and production-ineligible. Their rights remain not assessed; no rights clearance is implied. The register has zero local media files, zero approved assets, zero scheduled assets and zero published assets.
+- Marked all four Short 001 Pexels clips reference-only and production-ineligible under the original creator-captured-media policy.
+- Extended the fail-closed regression test to protect these policy decisions.
+- GitHub read-back verified all changes. Full runtime regression remains NOT_TESTED on this head.
+
+**Current media gate:** BLOCKED until genuine original creator-captured source files, creator/source provenance, exact hashes, commercial rights and complete human inspection are supplied and approved.
