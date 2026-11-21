@@ -10,7 +10,7 @@ const gitBlobSha = text => {
   const header = Buffer.from(\`blob \${body.length}\0\`, "utf8");
   return crypto.createHash("sha1").update(Buffer.concat([header, body])).digest("hex");
 };
-const jobDisabled = (yaml, job) => new RegExp(\`jobs:\\\\s*\\\\n\\\\s*\${job}:\\\\s*\\\\n\\\\s*if:\\\\s*false\\\\b\`).test(yaml);
+const jobDisabled = (yaml, job) => new RegExp("jobs:\\s*\\n\\s*" + job + ":\\s*\\n\\s*if:\\s*false\\b").test(yaml);
 
 test("Long-form manifest pins current script and scientific review and remains blocked", () => {
   const manifest = readJson("../content/long-form-render-manifest.json");
