@@ -383,7 +383,11 @@ function evidenceInspectedFor(message) {
     path: mediaInventoryPath,
     observed: message
   };
-  if (/YouTube OAuth upload scope/i.test(message)) return { kind: "repository-path-check", path: youtubeVerificationPath, observed: message };
+  if (/YouTube OAuth upload scope/i.test(message)) return {
+    kind: "external-reconciliation-required",
+    path: youtubeVerificationPath,
+    observed: "The checked-in OAuth scope result is stale or otherwise outside the 24-hour freshness window; a fresh read-only remote scope verification is required before this gate can pass."
+  };
   if (/read-only YouTube identity|OAuth error/i.test(message)) return {
     kind: "repository-path-check",
     path: youtubeVerificationPath,
