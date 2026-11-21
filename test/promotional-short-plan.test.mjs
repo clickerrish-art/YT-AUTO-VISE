@@ -6,9 +6,13 @@ import { validatePromotionalShortPlan } from "../scripts/validate-promotional-sh
 const checkedInPlan = JSON.parse(fs.readFileSync("content/promotional-short-plan.json", "utf8"));
 const products = JSON.parse(fs.readFileSync("config/products.json", "utf8")).products;
 const clone = value => structuredClone(value);
+const validatePlan = (plan, productRows = products, options = {}) => validatePromotionalShortPlan(plan, productRows, {
+  now: new Date("2026-11-21T12:00:00+02:00"),
+  ...options
+});
 
 test("creator-education Shorts stay within the two-item weekly cap across draft-only weeks", () => {
-  const errors = validatePromotionalShortPlan(checkedInPlan, products);
+  const errors = validatePlan(checkedInPlan, products);
   assert.deepEqual(errors, []);
   assert.equal(checkedInPlan.weeks[0].weekOf, "2026-11-09");
   assert.equal(checkedInPlan.weeks[0].items.length, 2);
@@ -34,18 +38,18 @@ test("owner-approved direct-sales disclosure is carried verbatim in the wildlife
   assert.match(item.description, /^ADVERTISEMENT$/m);
   assert.ok(item.description.includes(approval.text));
   assert.equal(/DISCLOSURE HOLD/i.test(item.description), false);
-  assert.deepEqual(validatePromotionalShortPlan(plan, products), []);
+  assert.deepEqual(validatePlan(plan, products), []);
 
   const alteredScript = clone(plan);
   const alteredItem = alteredScript.weeks[1].items.find(row => row.id === item.id);
   alteredItem.script = alteredItem.script.replace(approval.text, "Purchases may support this business.");
-  assert.ok(validatePromotionalShortPlan(alteredScript, products)
+  assert.ok(validatePlan(alteredScript, products)
     .some(error => /script must place an advertisement identifier before the exact owner-approved direct-sales disclosure/.test(error)));
 
   const alteredApproval = clone(plan);
   const alteredApprovalItem = alteredApproval.weeks[1].items.find(row => row.id === item.id);
   alteredApprovalItem.disclosure.approvalReference = "unrelated approval";
-  assert.ok(validatePromotionalShortPlan(alteredApproval, products)
+  assert.ok(validatePlan(alteredApproval, products)
     .some(error => /disclosure approval must match the exact owner-approved product registry record/.test(error)));
 });
 
@@ -67,7 +71,7 @@ test("approved disclosure must precede the product name and link in both narrati
   scriptItem.script = scriptWithoutDisclosure.slice(0, scriptNameIndex)
     + productName + " " + disclosure
     + scriptWithoutDisclosure.slice(scriptNameIndex + productName.length);
-  assert.ok(validatePromotionalShortPlan(reorderedScript, products)
+  assert.ok(validatePlan(reorderedScript, products)
     .some(error => /script must place the exact owner-approved disclosure before the product name or link/.test(error)));
 
   const reorderedDescription = clone(baseline);
@@ -78,7 +82,7 @@ test("approved disclosure must precede the product name and link in both narrati
   descriptionItem.description = descriptionWithoutDisclosure.slice(0, descriptionNameIndex)
     + productName + " " + disclosure
     + descriptionWithoutDisclosure.slice(descriptionNameIndex + productName.length);
-  assert.ok(validatePromotionalShortPlan(reorderedDescription, products)
+  assert.ok(validatePlan(reorderedDescription, products)
     .some(error => /description must place ADVERTISEMENT and the exact owner-approved disclosure before the product name or link/.test(error)));
 });
 
@@ -87,30 +91,30 @@ test("every promotional product requires fresh seller evidence tied to its exact
     week.items.map(item => Date.parse(item.keywordEvidence.researchedAt))
   ));
   const now = new Date(latestKeywordEvidence);
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products, { now }), []);
 
   const staleProducts = clone(products);
   staleProducts.find(product => product.id === "wildlife-creators-vault")
     .promotionGate.seller.verifiedAt = "2026-11-01T09:49:01+02:00";
-  assert.ok(validatePromotionalShortPlan(checkedInPlan, staleProducts, { now })
+  assert.ok(validatePlan(checkedInPlan, staleProducts, { now })
     .some(error => /seller evidence must be no more than 14 days old/.test(error)));
 
   const mismatchedProducts = clone(products);
   mismatchedProducts.find(product => product.id === "wildlife-creators-vault")
     .promotionGate.seller.sourceUrl = "https://selar.com/different-listing";
-  assert.ok(validatePromotionalShortPlan(checkedInPlan, mismatchedProducts, { now })
+  assert.ok(validatePlan(checkedInPlan, mismatchedProducts, { now })
     .some(error => /seller evidence sourceUrl must exactly match the product URL/.test(error)));
 
   const futureProducts = clone(products);
   futureProducts.find(product => product.id === "wildlife-creators-vault")
     .promotionGate.seller.verifiedAt = new Date(now.getTime() + 6 * 60 * 1000).toISOString();
-  assert.ok(validatePromotionalShortPlan(checkedInPlan, futureProducts, { now })
+  assert.ok(validatePlan(checkedInPlan, futureProducts, { now })
     .some(error => /cannot be more than 5 minutes in the future/.test(error)));
 
   const unnamedProducts = clone(products);
   unnamedProducts.find(product => product.id === "wildlife-creators-vault")
     .promotionGate.seller.name = " ";
-  assert.ok(validatePromotionalShortPlan(checkedInPlan, unnamedProducts, { now })
+  assert.ok(validatePlan(checkedInPlan, unnamedProducts, { now })
     .some(error => /verified seller name is required/.test(error)));
 });
 
@@ -129,7 +133,7 @@ test("the 90-Day Blueprint Short stays held without presenting unapproved wordin
   assert.ok(item.description.indexOf("proposed wording, not approved") < item.description.indexOf(product.promotionGate.disclosure.text));
   const spokenWords = item.script.trim().split(/\s+/).filter(Boolean).length;
   assert.ok(spokenWords >= 90 && spokenWords <= 135);
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 
   const unsafeScript = clone(checkedInPlan);
   const unsafeScriptItem = unsafeScript.weeks.find(week => week.weekOf === "2026-11-16")
@@ -137,7 +141,7 @@ test("the 90-Day Blueprint Short stays held without presenting unapproved wordin
   unsafeScriptItem.script = unsafeScriptItem.script
     .replace(/^\[INTERNAL HOLD[^\]]+\]\s*/i, "")
     .replace("Choosing a YouTube niche?", product.promotionGate.disclosure.text + " Choosing a YouTube niche?");
-  assert.ok(validatePromotionalShortPlan(unsafeScript, products)
+  assert.ok(validatePlan(unsafeScript, products)
     .some(error => /candidate script must start with a non-spoken internal hold/.test(error)
       || /candidate script must not present unapproved disclosure wording/.test(error)));
 
@@ -145,7 +149,7 @@ test("the 90-Day Blueprint Short stays held without presenting unapproved wordin
   const unsafeDescriptionItem = unsafeDescription.weeks.find(week => week.weekOf === "2026-11-16")
     .items.find(candidate => candidate.id === item.id);
   unsafeDescriptionItem.description = `Explore ${product.name}: ${product.url}\n\n` + unsafeDescriptionItem.description;
-  assert.ok(validatePromotionalShortPlan(unsafeDescription, products)
+  assert.ok(validatePlan(unsafeDescription, products)
     .some(error => /candidate description must place DISCLOSURE HOLD before the product name and link/.test(error)));
 });
 
@@ -154,7 +158,7 @@ test("candidate seller verification is required while direct Selar sales are own
   const candidate = candidates.find(product => product.status === "candidate");
   assert.ok(candidate);
   candidate.promotionGate.seller.status = "UNVERIFIED";
-  assert.ok(validatePromotionalShortPlan(checkedInPlan, candidates).some(error => /seller evidence must be VERIFIED/.test(error)));
+  assert.ok(validatePlan(checkedInPlan, candidates).some(error => /seller evidence must be VERIFIED/.test(error)));
 });
 
 test("external candidate links require verified affiliate classification rather than Selar seller assumptions", () => {
@@ -185,7 +189,7 @@ test("external candidate links require verified affiliate classification rather 
     item.description = item.description.replaceAll(previousUrl, externalUrl);
     item.disclosure.relationshipStatus = "UNVERIFIED";
   }
-  const errors = validatePromotionalShortPlan(plan, candidateProducts);
+  const errors = validatePlan(plan, candidateProducts);
   assert.equal(errors.some(error => /Click 47/.test(error)), false);
   assert.equal(errors.some(error => /affiliate seller name must be recorded/.test(error)), false);
   assert.equal(errors.some(error => /candidate compensation must match the URL relationship/.test(error)), false);
@@ -198,12 +202,12 @@ test("candidate commercial evidence requires valid dates and exact relationship 
   assert.ok(candidate);
   candidate.promotionGate.compensation.verifiedAt = "2026-02-31";
   const plan = clone(checkedInPlan);
-  const errors = validatePromotionalShortPlan(plan, candidateProducts);
+  const errors = validatePlan(plan, candidateProducts);
   assert.ok(errors.some(error => /calendar-valid YYYY-MM-DD confirmation date/.test(error)));
 
   candidate.promotionGate.compensation.verifiedAt = "2026-11-09";
   candidate.promotionGate.compensation.evidenceReference = "";
-  assert.ok(validatePromotionalShortPlan(plan, candidateProducts)
+  assert.ok(validatePlan(plan, candidateProducts)
     .some(error => /candidate compensation needs an exact relationship evidence reference/.test(error)));
 });
 
@@ -218,7 +222,7 @@ test("promotional draft plans reject insecure product registry URLs", () => {
   const item = plan.weeks.flatMap(week => week.items).find(row => row.productId === candidate.id);
   assert.ok(item);
   item.productUrl = insecureUrl;
-  const errors = validatePromotionalShortPlan(plan, candidateProducts);
+  const errors = validatePlan(plan, candidateProducts);
   assert.ok(errors.some(error => /product registry URL must be HTTPS and must not contain embedded credentials/.test(error)));
 });
 
@@ -226,7 +230,7 @@ test("the weekly promotional Short cap rejects a third item", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items.push(clone(plan.weeks[0].items[0]));
   plan.weeks[0].items[2].id = "third-short";
-  assert.ok(validatePromotionalShortPlan(plan, products).some(error => /exceeds the 2-Short weekly limit/.test(error)));
+  assert.ok(validatePlan(plan, products).some(error => /exceeds the 2-Short weekly limit/.test(error)));
 });
 
 test("promotional Short drafts require explicit private visibility", () => {
@@ -236,7 +240,7 @@ test("promotional Short drafts require explicit private visibility", () => {
     if (visibility === undefined) delete item.visibility;
     else item.visibility = visibility;
     assert.ok(
-      validatePromotionalShortPlan(plan, products).some(error => /visibility must be exactly private/.test(error)),
+      validatePlan(plan, products).some(error => /visibility must be exactly private/.test(error)),
       `${label} visibility must fail closed`
     );
   }
@@ -245,35 +249,35 @@ test("promotional Short drafts require explicit private visibility", () => {
 test("candidate products stay draft-only and keep the disclosure hold", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items[0].status = "READY_FOR_PRIVATE_UPLOAD";
-  assert.ok(validatePromotionalShortPlan(plan, products).some(error => /status must remain DRAFT_ONLY/.test(error)));
+  assert.ok(validatePlan(plan, products).some(error => /status must remain DRAFT_ONLY/.test(error)));
   plan.weeks[0].items[0].status = "DRAFT_ONLY";
   plan.weeks[0].items[0].disclosure.status = "APPROVED";
-  assert.ok(validatePromotionalShortPlan(plan, products).some(error => /disclosure must remain on HOLD/i.test(error)));
+  assert.ok(validatePlan(plan, products).some(error => /disclosure must remain on HOLD/i.test(error)));
 });
 
 test("publication timestamps at any depth and live scheduling are forbidden in the draft plan", () => {
   const itemTimestamp = clone(checkedInPlan);
   itemTimestamp.weeks[0].items[0].scheduledAt = "2026-11-12T10:00:00+02:00";
-  assert.ok(validatePromotionalShortPlan(itemTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
+  assert.ok(validatePlan(itemTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
 
   const rootTimestamp = clone(checkedInPlan);
   rootTimestamp.publishedAt = "2026-11-12T10:00:00+02:00";
-  assert.ok(validatePromotionalShortPlan(rootTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
+  assert.ok(validatePlan(rootTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
 
   const nestedTimestamp = clone(checkedInPlan);
   nestedTimestamp.weeks[0].review = { metadata: { publicationAt: "2026-11-12T10:00:00+02:00" } };
-  assert.ok(validatePromotionalShortPlan(nestedTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
+  assert.ok(validatePlan(nestedTimestamp, products).some(error => /publication timestamps are forbidden/.test(error)));
 
   const unsafe = clone(checkedInPlan);
   unsafe.schedulingEnabled = true;
-  assert.ok(validatePromotionalShortPlan(unsafe, products).some(error => /schedulingEnabled must remain false/.test(error)));
+  assert.ok(validatePlan(unsafe, products).some(error => /schedulingEnabled must remain false/.test(error)));
 });
 
 test("draft plans reject alternate actual and scheduled publication timestamp field names at any depth", () => {
   for (const key of ["actualPublishedTimestamp","actualPublicationTimestamp","actualPublishTimestamp","scheduledPublicationTimestamp","scheduledPublishTimestamp","plannedPublicationTimestamp","plannedPublishTimestamp","publishedTime","publicationTime","publishTime","scheduledTime","plannedTime","actualTime","publishedDateTime","publicationDateTime","publishDateTime","scheduledDateTime","plannedDateTime","actualDateTime","actualPublishDateTime","scheduledPublishDateTime","plannedPublishDateTime"]) {
     const unsafe = clone(checkedInPlan);
     unsafe.weeks[0].items[0].provider = { youtube: { [key]: "2026-12-17T10:00:00+02:00" } };
-    const errors = validatePromotionalShortPlan(unsafe, products);
+    const errors = validatePlan(unsafe, products);
     assert.ok(
       errors.some(error => error.includes(`plan.weeks[0].items[0].provider.youtube.${key}`)),
       `${key} must be treated as a publication timestamp anywhere in the draft plan`
@@ -286,7 +290,7 @@ test("the plan rejects another channel and non-Monday week boundaries", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items[0].channel = "Nature Frontiers";
   plan.weeks[0].weekOf = "2026-11-10";
-  const errors = validatePromotionalShortPlan(plan, products);
+  const errors = validatePlan(plan, products);
   assert.ok(errors.some(error => /channel must be exactly SonicVhibez/.test(error)));
   assert.ok(errors.some(error => /real Monday/.test(error)));
 });
@@ -295,7 +299,7 @@ test("SEO and keyword evidence are required before a draft can pass", () => {
   const plan = clone(checkedInPlan);
   plan.weeks[0].items[1].description = "A general creator note. " + plan.weeks[0].items[1].productUrl;
   plan.weeks[0].items[1].keywordEvidence.researchedAt = "2026-11-06T10:46:19";
-  const errors = validatePromotionalShortPlan(plan, products);
+  const errors = validatePlan(plan, products);
   assert.ok(errors.some(error => /primary keyword must appear naturally near the start/.test(error)));
   assert.ok(errors.some(error => /valid research timestamp/.test(error)));
 });
@@ -306,11 +310,11 @@ test("primary keyword must appear near the start of the SEO title", () => {
   const originalTitle = item.title;
 
   item.title = "A complete beginner guide: " + originalTitle;
-  const lateKeywordErrors = validatePromotionalShortPlan(plan, products);
+  const lateKeywordErrors = validatePlan(plan, products);
   assert.ok(lateKeywordErrors.some(error => /primary keyword must appear near the start of the title/.test(error)));
 
   item.title = "Quick tip: " + originalTitle;
-  const earlyKeywordErrors = validatePromotionalShortPlan(plan, products);
+  const earlyKeywordErrors = validatePlan(plan, products);
   assert.equal(earlyKeywordErrors.some(error => /primary keyword must appear near the start of the title/.test(error)), false);
 });
 
@@ -318,19 +322,19 @@ test("qualitative web-search intent is accepted only with dated HTTPS sources an
   const plan = clone(checkedInPlan);
   const item = plan.weeks[1].items[1];
   assert.equal(item.id, "sonicvhibez-short-006-niche-selection");
-  assert.equal(validatePromotionalShortPlan(plan, products).length, 0);
+  assert.equal(validatePlan(plan, products).length, 0);
 
   const missingSources = clone(plan);
   missingSources.weeks[1].items[0].keywordEvidence.sources = [];
-  assert.ok(validatePromotionalShortPlan(missingSources, products).some(error => /qualitative keyword evidence needs/.test(error)));
+  assert.ok(validatePlan(missingSources, products).some(error => /qualitative keyword evidence needs/.test(error)));
 
   const insecureSource = clone(plan);
   insecureSource.weeks[1].items[0].keywordEvidence.sources[0].url = "http://example.com/source";
-  assert.ok(validatePromotionalShortPlan(insecureSource, products).some(error => /qualitative keyword evidence needs/.test(error)));
+  assert.ok(validatePlan(insecureSource, products).some(error => /qualitative keyword evidence needs/.test(error)));
 
   const inventedVolume = clone(plan);
   inventedVolume.weeks[1].items[0].keywordPhrases[0].estimatedMonthlySearches = 10000;
-  assert.ok(validatePromotionalShortPlan(inventedVolume, products).some(error => /no invented volume or competition metrics/.test(error)));
+  assert.ok(validatePlan(inventedVolume, products).some(error => /no invented volume or competition metrics/.test(error)));
 });
 
 
@@ -339,13 +343,13 @@ test("keyword evidence is fresh for active and future weeks while historical dra
     week.items.map(item => Date.parse(item.keywordEvidence.researchedAt))
   );
   const now = new Date(Math.max(...evidenceTimes));
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products, { now }), []);
 
   const historical = clone(checkedInPlan);
   const archivedItem = historical.weeks.find(week => week.weekOf === "2026-11-09").items[0];
   archivedItem.keywordEvidence.researchedAt =
     new Date(now.getTime() - 45 * 24 * 60 * 60 * 1000).toISOString();
-  assert.equal(validatePromotionalShortPlan(historical, products, { now })
+  assert.equal(validatePlan(historical, products, { now })
     .some(error => /keyword evidence must be no more than 14 days old/.test(error)), false,
     "past draft-preparation weeks retain their historical evidence without pretending it is current");
 
@@ -353,14 +357,14 @@ test("keyword evidence is fresh for active and future weeks while historical dra
   const activeItem = stale.weeks.find(week => week.weekOf === "2026-11-23").items[0];
   activeItem.keywordEvidence.researchedAt =
     new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000).toISOString();
-  assert.ok(validatePromotionalShortPlan(stale, products, { now })
+  assert.ok(validatePlan(stale, products, { now })
     .some(error => /keyword evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(checkedInPlan);
   const futureItem = future.weeks.find(week => week.weekOf === "2026-11-23").items[0];
   futureItem.keywordEvidence.researchedAt =
     new Date(now.getTime() + 5 * 60 * 1000 + 1).toISOString();
-  assert.ok(validatePromotionalShortPlan(future, products, { now })
+  assert.ok(validatePlan(future, products, { now })
     .some(error => /cannot be more than 5 minutes in the future/.test(error)));
 });
 
@@ -377,7 +381,7 @@ test("December 7 wildlife B-roll Short has current qualitative evidence and appr
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
   assert.ok(item.keywordEvidence.sources.length >= 3);
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 test("December 14 YouTube Shorts analytics draft stays private and held for product-specific disclosure", () => {
   const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-14");
@@ -391,7 +395,7 @@ test("December 14 YouTube Shorts analytics draft stays private and held for prod
   assert.equal(item.disclosure.status, "HOLD");
   assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
   assert.ok(item.keywordEvidence.sources.length >= 2);
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
 
@@ -413,7 +417,7 @@ test("November 30 wildlife fact-check Short uses current qualitative evidence an
   assert.match(item.keywordEvidence.note, /no measured global search volume/i);
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
 
@@ -438,7 +442,7 @@ test("November 30 wildlife shot-list Short uses current qualitative intent and t
   assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf(product.promotionGate.disclosure.text));
   assert.match(item.description, /^ADVERTISEMENT$/m);
   assert.ok(item.description.includes(product.promotionGate.disclosure.text));
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
 
@@ -473,7 +477,7 @@ test("December 7 wildlife video-editing Short uses fresh vidIQ estimates and the
   assert.equal(item.currentIntentEvidence.provider, "web_search");
   assert.equal(item.currentIntentEvidence.sources.length, 3);
   assert.ok(item.scriptEvidence.every(source => source.url.startsWith("https://")));
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
 
@@ -503,7 +507,7 @@ test("December 14 wildlife audio recording Short uses current qualitative intent
   assert.match(item.description, /^ADVERTISEMENT$/m);
   assert.ok(item.description.includes(product.promotionGate.disclosure.text));
   assert.equal(item.script.trim().split(/\s+/).filter(Boolean).length, 132);
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
 test("December 14 Shorts analytics lesson uses current official metric definitions and stays disclosure-held", () => {
@@ -576,7 +580,7 @@ test("November 23 ethical-wildlife and outline Shorts use fresh qualitative sear
   assert.match(outline.description, /DISCLOSURE HOLD/);
   assert.ok(outline.script.trim().split(/\s+/).filter(Boolean).length >= 90);
   assert.ok(outline.script.trim().split(/\s+/).filter(Boolean).length <= 135);
-  assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
 test("draft plans reject normalized snake-case, kebab-case and nested publication timestamp aliases", () => {
@@ -586,7 +590,7 @@ test("draft plans reject normalized snake-case, kebab-case and nested publicatio
   plan.weeks[2].items[0].publication = { timestamp: "2026-12-21T08:00:00+02:00" };
   plan.weeks[3].items[0].planned = { dateTime: "2026-12-21T08:00:00+02:00" };
 
-  const errors = validatePromotionalShortPlan(plan, products);
+  const errors = validatePlan(plan, products);
   for (const expectedPath of [
     "plan.weeks[0].items[0].scheduled_publish_at",
     "plan.weeks[1].items[0].publication-timestamp",
@@ -607,21 +611,21 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
     { phrase: "wildlife camera operator tips" },
     { phrase: "wildlife nature film creator tips" }
   );
-  assert.ok(validatePromotionalShortPlan(tooMany, products)
+  assert.ok(validatePlan(tooMany, products)
     .some(error => /keywordPhrases must not exceed eight phrases/.test(error)));
 
   const duplicate = clone(checkedInPlan);
   const duplicated = duplicate.weeks.find(week => week.weekOf === "2026-11-23")
     .items.find(item => item.id === "sonicvhibez-short-007-ethical-wildlife-filming");
   duplicated.keywordPhrases[1].phrase = duplicated.keywordPhrases[0].phrase.toUpperCase();
-  assert.ok(validatePromotionalShortPlan(duplicate, products)
+  assert.ok(validatePlan(duplicate, products)
     .some(error => /keywordPhrases must be unique after trimming and case normalization/.test(error)));
 
   const invalid = clone(checkedInPlan);
   const malformed = invalid.weeks.find(week => week.weekOf === "2026-11-23")
     .items.find(item => item.id === "sonicvhibez-short-007-ethical-wildlife-filming");
   malformed.keywordPhrases[1].phrase = " ".repeat(101);
-  assert.ok(validatePromotionalShortPlan(invalid, products)
+  assert.ok(validatePlan(invalid, products)
     .some(error => /each keyword phrase must be non-empty and no longer than 100 characters/.test(error)));
 });
 
@@ -629,25 +633,25 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
 test("current search-intent evidence is mandatory, dated, sourced and fresh for current/future drafts", () => {
   const now = new Date("2026-11-21T11:30:00+02:00");
   const valid = clone(checkedInPlan);
-  assert.deepEqual(validatePromotionalShortPlan(valid, products, { now }), []);
+  assert.deepEqual(validatePlan(valid, products, { now }), []);
 
   const missing = clone(valid);
   delete missing.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence;
-  assert.ok(validatePromotionalShortPlan(missing, products, { now }).some(error => /current search-intent evidence needs a valid research timestamp/.test(error)));
+  assert.ok(validatePlan(missing, products, { now }).some(error => /current search-intent evidence needs a valid research timestamp/.test(error)));
 
   const stale = clone(valid);
   stale.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-01T09:00:00+02:00";
-  assert.ok(validatePromotionalShortPlan(stale, products, { now }).some(error => /current search-intent evidence must be no more than 14 days old/.test(error)));
+  assert.ok(validatePlan(stale, products, { now }).some(error => /current search-intent evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(valid);
   future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-21T11:40:00+02:00";
-  assert.ok(validatePromotionalShortPlan(future, products, { now }).some(error => /current search-intent evidence cannot be more than 5 minutes in the future/.test(error)));
+  assert.ok(validatePlan(future, products, { now }).some(error => /current search-intent evidence cannot be more than 5 minutes in the future/.test(error)));
 
   const insecure = clone(valid);
   insecure.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.sources[0].url = "http://example.com/ethics";
-  assert.ok(validatePromotionalShortPlan(insecure, products, { now }).some(error => /current search-intent evidence needs a qualitative no-volume caveat and dated HTTPS sources/.test(error)));
+  assert.ok(validatePlan(insecure, products, { now }).some(error => /current search-intent evidence needs a qualitative no-volume caveat and dated HTTPS sources/.test(error)));
 
   const invented = clone(valid);
   invented.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.estimatedMonthlySearches = 900000;
-  assert.ok(validatePromotionalShortPlan(invented, products, { now }).some(error => /do not invent volume or competition metrics/.test(error)));
+  assert.ok(validatePlan(invented, products, { now }).some(error => /do not invent volume or competition metrics/.test(error)));
 });

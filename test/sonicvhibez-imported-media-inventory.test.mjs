@@ -30,7 +30,7 @@ test("all imported Canva clips remain excluded, unlicensed and unavailable to pr
 test("general Pexels license policy and candidate pages are not treated as asset-specific rights clearance", () => {
   assert.equal(inventory.policyReference.reviewStatus, "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY");
   assert.match(inventory.notes, /quarantined as EXCLUDED_NOT_USED/);
-  assert.match(inventory.notes, /not cleared for any use/);
+  assert.match(inventory.notes, /not cleared for any production use/);
   assert.ok(inventory.blockingEvidence.some(item => /not rights-cleared/i.test(item)));
   assert.equal(inventory.assets.find(asset => asset.canvaAssetId === "VAHZ9oFCiak").sourceMatchStatus, "UNRESOLVED_SOURCE_URL_AND_CREATOR_NOT_RECORDED");
 });
