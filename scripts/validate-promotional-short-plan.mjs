@@ -384,6 +384,37 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
       } else {
         errors.push(`${label}: keyword evidence must use measured vidIQ estimates or qualitative web-search intent evidence`);
       }
+      const currentIntent = item?.currentIntentEvidence;
+      const currentIntentTimestampValid = isValidZonedIsoTimestamp(currentIntent?.researchedAt);
+      if (!currentIntentTimestampValid) {
+        errors.push(`${label}: current search-intent evidence needs a valid research timestamp`);
+      } else {
+        const currentIntentAgeMs = referenceNow.getTime() - Date.parse(currentIntent.researchedAt);
+        if (currentIntentAgeMs < -KEYWORD_EVIDENCE_FUTURE_SKEW_MS) {
+          errors.push(`${label}: current search-intent evidence cannot be more than 5 minutes in the future`);
+        } else if (requireFreshKeywordEvidence && currentIntentAgeMs > KEYWORD_EVIDENCE_MAX_AGE_MS) {
+          errors.push(`${label}: current search-intent evidence must be no more than 14 days old for current or future draft weeks`);
+        }
+      }
+      const currentIntentNote = typeof currentIntent?.note === "string" ? currentIntent.note.trim() : "";
+      const currentIntentSourcesValid = Array.isArray(currentIntent?.sources) && currentIntent.sources.length > 0
+        && currentIntent.sources.every(source => typeof source?.title === "string" && source.title.trim()
+          && typeof source?.url === "string" && /^https:\/\//i.test(source.url)
+          && typeof source?.whyRelevant === "string" && source.whyRelevant.trim());
+      const currentIntentHasMetrics = (() => {
+        const metricKeys = new Set(["estimatedmonthlysearches", "volume", "volumescore", "competition", "growthpct"]);
+        const visit = value => {
+          if (!value || typeof value !== "object") return false;
+          if (Array.isArray(value)) return value.some(visit);
+          return Object.entries(value).some(([key, child]) => metricKeys.has(normalizePublicationKey(key)) || visit(child));
+        };
+        return visit(currentIntent);
+      })();
+      if (currentIntent?.provider !== "web_search" || currentIntent.type !== "qualitative_search_intent"
+          || !currentIntentNote || !/qualitative|no measured volume|volume unavailable/i.test(currentIntentNote)
+          || !currentIntentSourcesValid || currentIntentHasMetrics) {
+        errors.push(`${label}: current search-intent evidence needs a qualitative no-volume caveat and dated HTTPS sources; do not invent volume or competition metrics`);
+      }
       if (!Array.isArray(item?.hashtags) || item.hashtags.length < 3
           || item.hashtags.some(tag => typeof tag !== "string" || !/^#[A-Za-z0-9]+$/.test(tag))) {
         errors.push(`${label}: provide at least three concise, valid hashtags`);
