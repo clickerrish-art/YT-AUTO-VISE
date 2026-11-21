@@ -117,6 +117,18 @@ test("requires explicit upload metadata format and exact matching human approval
   }), /must exactly match/);
 });
 
+test("rejects impossible calendar dates and invalid offsets in technical validation receipts", () => {
+  const f = fixture();
+  f.approval.technicalValidationReceipt.checkedAt = "2026-02-31T12:00:00Z";
+  f.approval.technicalValidationSha256 = hash(JSON.stringify(f.approval.technicalValidationReceipt));
+  assert.throws(() => validate(f.approval, f.video, f.metadata), /valid non-future timezone-aware checkedAt/);
+
+  const offset = fixture();
+  offset.approval.technicalValidationReceipt.checkedAt = "2026-11-21T12:00:00+15:00";
+  offset.approval.technicalValidationSha256 = hash(JSON.stringify(offset.approval.technicalValidationReceipt));
+  assert.throws(() => validate(offset.approval, offset.video, offset.metadata), /valid non-future timezone-aware checkedAt/);
+});
+
 test("rejects a checksummed receipt for a different video or metadata revision", () => {
   const f = fixture();
   f.approval.technicalValidationReceipt.artifacts[0].sha256 = hash("other-video");
