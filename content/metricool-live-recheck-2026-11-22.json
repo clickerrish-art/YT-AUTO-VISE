@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "project": "Nature Frontiers / SonicVhibez brand separation",
+  "checkedOn": "2026-11-22",
+  "status": "CROSS_BRAND_YOUTUBE_MAPPING_PRESENT_LEGACY_ACCESS_BLOCKED",
+  "mode": "READ_ONLY_LIVE_PROVIDER_RECHECK_NO_MUTATIONS",
+  "currentMetricoolBrand": {
+    "id": 8094526,
+    "label": "Nature Frontiers SA",
+    "timezone": "Africa/Johannesburg",
+    "networksReturnedByLiveBrandSettings": {
+      "facebookPageId": "1431329126735709",
+      "instagramProfessionalHandle": "naturefrontieers2026",
+      "youtubeChannelId": "UCSlkuPfHH78oGC1o418HV4w"
+    },
+    "interpretation": "The current live getBrandSettings response explicitly includes the SonicVhibez YouTube channel on the Nature Frontiers brand. This contradicts the prior 2026-11-21 snapshot that reported YouTube absent. Treat this as an active cross-brand mapping risk until corrected and independently re-read."
+  },
+  "scheduledPostsCheck": {
+    "brandId": 8094526,
+    "from": "2026-11-22T00:00:00+02:00",
+    "to": "2027-01-31T23:59:59+02:00",
+    "timezone": "Africa/Johannesburg",
+    "returnedCount": 0,
+    "scope": "Scheduled posts only; does not establish absence of drafts, published history or historical auto-publish records."
+  },
+  "legacyBrand": {
+    "id": 7545638,
+    "readProbe": "403_FORBIDDEN_ACCESS_DENIED_TO_BLOG_7545638",
+    "probeDate": "2026-11-22",
+    "reportedHistoricalScheduledDraftPosts": 20,
+    "reportedHistoricalAutoPublishRecords": 8,
+    "reconciled": false,
+    "reason": "Live scheduled-post read remains denied; no legacy export was available."
+  },
+  "safety": {
+    "providerMutationsPerformed": false,
+    "postsCreated": false,
+    "postsEdited": false,
+    "postsRescheduled": false,
+    "postsPublished": false,
+    "autoPublishingEnabled": false,
+    "brandMappingMutationAttempted": false
+  },
+  "requiredActions": [
+    "Use Metricool owner UI or Metricool support to disconnect only YouTube channel UCSlkuPfHH78oGC1o418HV4w from Nature Frontiers brand 8094526; preserve Facebook Page 1431329126735709 and Instagram naturefrontieers2026.",
+    "Re-read brand settings and verify YouTube is absent while Facebook and Instagram remain.",
+    "Restore read access to legacy brand 7545638 or obtain a complete export.",
+    "Reconcile all 20 reported scheduled drafts and eight historical draft=false/autoPublish=true records by exact remote IDs, platform, timestamp and actual remote status.",
+    "Preserve analytics and historical records; do not create, edit, delete, reschedule or publish during reconciliation."
+  ],
+  "evidenceLimitations": [
+    "getBrandSettings is a live provider response but does not expose a supported mutation in the connected Metricool tool set.",
+    "The zero scheduled-post count for the current brand does not cover drafts or published history.",
+    "The 20 and eight legacy counts are historical reported counts and have not been freshly retrieved."
+  ]
+}
