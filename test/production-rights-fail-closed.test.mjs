@@ -52,7 +52,8 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
     ["../.github/workflows/free-narration-artifact.yml", "generate-audio"],
     ["../.github/workflows/short-narration-artifact.yml", "generate"],
     ["../.github/workflows/acquire-noaa-broll-candidates.yml", "acquire-candidates"],
-    ["../.github/workflows/acquire-short-001-assets.yml", "acquire"]
+    ["../.github/workflows/acquire-short-001-assets.yml", "acquire"],
+    ["../.github/workflows/noaa-lobster-thumbnail-review.yml", "thumbnail-review"]
   ]) {
     assert.ok(jobDisabled(readText(path), job), path + " job " + job + " must be disabled");
   }
@@ -85,4 +86,23 @@ test("AI wildlife generation and stock acquisition paths are disabled", () => {
     .startsWith('raise RuntimeError("DISABLED_BY_OWNER_ORIGINAL_CAPTURE_POLICY')));
   assert.ok(acquisitionScript.includes("Pexels stock acquisition is disabled"));
   assert.ok(acquisitionScript.indexOf("Pexels stock acquisition is disabled") < acquisitionScript.indexOf("await fsp.mkdir(MEDIA_ROOT"));
+});
+
+test("NOAA and stock-library source records remain excluded from current production", () => {
+  const noaa = readJson("../content/asset-candidates/noaa-spiny-lobsters-california.json");
+  assert.equal(noaa.currentProductionDisposition.productionEligible, false);
+  assert.equal(noaa.ownerAuthorization.currentStatus, "SUPERSEDED_BY_2026-11-21_ORIGINAL_MEDIA_POLICY");
+  assert.equal(noaa.publication.allowed, false);
+  for (const path of [
+    "../content/media/pexels-crocodile-30026544-rights-review.json",
+    "../content/media/wikimedia-kruger-tilapia-2015-rights-review.json",
+    "../content/media/wikimedia-nairobi-crocodile-2025-rights-review.json",
+    "../content/media/wikimedia-wildebeest-ambush-2016-rights-review.json"
+  ]) {
+    const record = readJson(path);
+    assert.equal(record.currentProductionDisposition.productionEligible, false, path);
+    assert.equal(record.status, "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY", path);
+  }
+  const thumbnailScript = readText("../scripts/create-noaa-lobster-thumbnail-review.py");
+  assert.ok(thumbnailScript.includes("BLOCKED: NOAA B-roll is stock/archive footage"));
 });
