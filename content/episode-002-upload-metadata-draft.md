@@ -6,22 +6,19 @@
 A Beginner Workflow for Faceless Wildlife Videos
 
 ## Description
+
 You do not need to appear on camera to make a useful wildlife video—but faceless videos still need original storytelling, reliable research, relevant visuals, and careful editing. This beginner workflow covers choosing a focused topic, checking factual claims, documenting footage permissions, matching shots to narration, improving captions, and reviewing the final export.
 
-This draft currently uses illustrative marine B-roll from NOAA Fisheries source packages. The footage is background illustration and does not depict every example discussed in the narration. Source audio was removed and replaced with narration. Do not imply that the animals shown performed a behavior described in narration unless the footage supports that claim. NOAA does not endorse SonicVhibez or any product mentioned here.
+This is creator-education content for SonicVhibez. No original creator-captured production footage has yet been acquired and approved for this package. Do not use NOAA B-roll, stock/archive footage or AI-generated wildlife visuals as substitutes. Add source credits only after original footage provenance and commercial usage rights have been verified.
 
-**Paid product disclosure:** The Complete YouTube Wildlife Creator's Vault – Premium Combo PDF is a paid digital product. Review its current sales page, contents, and terms before purchasing. No product or workflow can guarantee views, revenue, watch hours, or monetization.
+ADVERTISEMENT
 
-Approved product link:
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+For a planning resource, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
 https://selar.com/0u19v8u99l
 
-## Source credits to verify against the final edit
-- Spiny lobster footage: NOAA Fisheries and NOAA National Marine Sanctuaries.
-- Leatherback turtle tagging footage: NOAA Fisheries.
-
-Official source packages:
-- https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california
-- https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6329928828112/b-roll%3A-leatherback-turtle-tagging
+No product or workflow can guarantee views, revenue, watch hours, or monetization.
 
 ## Suggested tags
 faceless wildlife videos, beginner video workflow, wildlife video editing, wildlife storytelling, video research, wildlife footage rights, copyright and licensing, YouTube creator workflow, captions and subtitles, nature video production
@@ -30,8 +27,8 @@ faceless wildlife videos, beginner video workflow, wildlife video editing, wildl
 - [ ] Human watches the full exported video with sound.
 - [ ] Human watches the full video with sound off and checks caption timing.
 - [ ] Confirm every visible shot matches the narration and is not misleading.
-- [ ] Confirm package slate, credits, and reuse restrictions for every clip actually used.
-- [ ] Verify the paid product page and approved link before publishing.
+- [ ] Verify creator provenance and commercial rights for every original clip actually used; do not use NOAA, stock/archive or AI-generated wildlife visuals.
+- [ ] Verify the exact Selar product page and link before publishing; keep the approved direct-sales disclosure before the product CTA.
 - [ ] Review thumbnail against the actual finished video.
 - [ ] Verify SonicVhibez channel authorization and upload privately first.
 - [ ] Keep public publishing disabled until all checks pass.
