@@ -1,8 +1,11 @@
 import hashlib
 import importlib.util
+import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "import_wangp_kaggle_output.py"
 spec = importlib.util.spec_from_file_location("import_wangp_kaggle_output", SCRIPT)
@@ -56,6 +59,24 @@ class WanGPKaggleImportTests(unittest.TestCase):
         self.manifest["videoSha256"] = "f" * 64
         self.assertIn("video SHA-256 does not match the manifest",
                       module.validate_manifest(self.manifest, self.video))
+
+
+    def test_main_blocks_generated_media_when_original_capture_policy_is_active(self):
+        root = Path(self.temp.name) / "repo"
+        config = root / "config" / "video-generation.json"
+        config.parent.mkdir(parents=True)
+        config.write_text(json.dumps({
+            "productionDisposition": {"enabled": False},
+            "safety": {"aiGeneratedWildlifeVisualsAllowed": False}
+        }), encoding="utf-8")
+        args = [
+            str(SCRIPT),
+            "--video", str(root / "missing.mp4"),
+            "--manifest", str(root / "missing.json"),
+            "--repo-root", str(root)
+        ]
+        with patch.object(sys, "argv", args):
+            self.assertEqual(module.main(), 2)
 
     def test_rejects_commercial_approval_claim(self):
         self.manifest["commercialUseApproved"] = True
