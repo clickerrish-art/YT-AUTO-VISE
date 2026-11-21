@@ -8,6 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.generate_piper_voice_audition import extract_short_narration, sha256_file, sha256_text
+from scripts.narration_policy import require_owner_authorized_alternative_voice
 
 REPO = "rhasspy/piper-voices"
 REVISION = "8e602cc224300e0961258a0c885bccbfcc515a7f"
@@ -145,6 +146,7 @@ def render(output: Path, source: Path) -> dict:
     return report
 
 def main():
+    require_owner_authorized_alternative_voice()
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--output",default="artifacts/american-narration-review")
     p.add_argument("--source-script",default="content/short-001-wildlife-video-storytelling.md")
