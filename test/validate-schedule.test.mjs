@@ -6,7 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 const repoRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
-const copiedFiles=["config/weekly-content-plan.json","content/queue.json",".github/workflows/generate-long-form-narration.yml",".github/workflows/free-narration-artifact.yml","scripts/schedule-policy.mjs"];
+const copiedFiles=["config/weekly-content-plan.json","content/queue.json",".github/workflows/draft-preparation.yml","scripts/schedule-policy.mjs"];
 test("authoritative validator accepts the approved rolling cadence while preserving the remote-history verification requirement",()=>{
  const result=spawnSync(process.execPath,["scripts/validate-schedule.mjs"],{cwd:repoRoot,encoding:"utf8"});
  assert.equal(result.status,0,result.stdout+result.stderr);
@@ -14,6 +14,10 @@ test("authoritative validator accepts the approved rolling cadence while preserv
  assert.doesNotMatch(result.stdout,/BLOCKED — CADENCE DECISION/);
  assert.match(result.stdout,/NOTE: This local validator does not query YouTube/);
  assert.doesNotMatch(result.stdout,/BLOCKED — LIVE HISTORY/);
+ const workflow=fs.readFileSync(path.join(repoRoot,".github/workflows/draft-preparation.yml"),"utf8");
+ assert.match(workflow,/cron: "0 15 \\* \\* 2"/);
+ assert.match(workflow,/cron: "0 15 \\* \\* 6"/);
+ assert.doesNotMatch(workflow,/upload-private|youtube\\.upload|render:short|render:long|generate-narration/i);
 });
 function runWithPlanMutation(mutate){
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),"sonicvhibez-schedule-"));

@@ -73,14 +73,20 @@ test("narration workflows have no scheduled triggers while commercial narrator r
   assert.doesNotMatch(shortWorkflow, /schedule:|cron:/);
 });
 
-test("disabled narration workflow cannot bypass the rolling publication policy", () => {
+test("draft-preparation triggers are separated from narration generation and publication", () => {
+  const draftWorkflow = fs.readFileSync(".github/workflows/draft-preparation.yml", "utf8");
   const shortWorkflow = fs.readFileSync(".github/workflows/free-narration-artifact.yml", "utf8");
   const automationWorkflow = fs.readFileSync(".github/workflows/validate-automation.yml", "utf8");
+  assert.match(draftWorkflow, /cron: "0 15 \\* \\* 2"/);
+  assert.match(draftWorkflow, /cron: "0 15 \\* \\* 6"/);
+  assert.match(draftWorkflow, /npm run validate:schedule/);
+  assert.match(draftWorkflow, /npm run validate:promotional-shorts/);
+  assert.doesNotMatch(draftWorkflow, /upload-private|youtube\\.upload|render:short|render:long|generate-narration/i);
   assert.match(shortWorkflow, /if: false # Disabled:/);
   assert.match(shortWorkflow, /Roderic is the exclusive owner-approved narrator/);
   assert.match(automationWorkflow, /72 <= spacing <= 8760/);
   assert.match(automationWorkflow, /minimumCycleHours/);
-  assert.match(automationWorkflow, /publicationRequiresVerifiedHistory/);
+  assert.equal(plan.publicationCycle.publicationRequiresVerifiedHistory, true);
 });
 
 test("owner-approved rolling cadence preserves the 72-hour minimum and records a timezone-qualified decision", () => {

@@ -127,17 +127,17 @@ test("renderer runs the complete export validator before reporting success", () 
   assert.match(source, /PROVISIONAL RENDER COMPLETE/);
 });
 
-test("long-form workflow embedded Python validation remains syntactically valid", () => {
+test("long-form narration workflow stays disabled while standalone export validation remains enforced", () => {
   const workflowPath = path.join(repoRoot, ".github", "workflows", "generate-long-form-narration.yml");
   const workflow = fs.readFileSync(workflowPath, "utf8");
-  const match = workflow.match(/python - <<'PY'\n([\s\S]*?)\n          PY/);
-  assert.ok(match, "expected the workflow to contain its Python duration-validation block");
-  const pythonSource = match[1].split("\n").map(line => line.startsWith("          ") ? line.slice(10) : line).join("\n") + "\n";
-  const syntax = spawnSync("python", ["-c", "import ast,sys; ast.parse(sys.stdin.read())"], {
-    input: pythonSource,
-    encoding: "utf8"
-  });
-  assert.equal(syntax.status, 0, `embedded workflow Python must parse: ${syntax.stderr}`);
+  assert.match(workflow, /workflow_dispatch/);
+  assert.match(workflow, /generate:/);
+  assert.match(workflow, /if: false # Disabled:/);
+  assert.doesNotMatch(workflow, /schedule:|cron:|upload-artifact|generate_long_form_narration.py/i);
+  const validator = fs.readFileSync(path.join(repoRoot, "scripts", "validate-long-form-export.mjs"), "utf8");
+  assert.match(validator, /duration < 360 \|\| duration > 600/);
+  assert.match(validator, /ffprobe/);
+  assert.match(validator, /full-file FFmpeg decode failed/);
 });
 
 test("blocks a symlinked render input before invoking media tools", () => {

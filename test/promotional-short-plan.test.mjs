@@ -87,10 +87,12 @@ test("approved disclosure must precede the product name and link in both narrati
 });
 
 test("every promotional product requires fresh seller evidence tied to its exact HTTPS listing", () => {
-  const latestKeywordEvidence = Math.max(...checkedInPlan.weeks.flatMap(week =>
-    week.items.map(item => Date.parse(item.keywordEvidence.researchedAt))
+  const latestEvidence = Math.max(...checkedInPlan.weeks.flatMap(week =>
+    week.items.flatMap(item => [item.keywordEvidence, item.currentIntentEvidence]
+      .filter(evidence => evidence?.researchedAt)
+      .map(evidence => Date.parse(evidence.researchedAt)))
   ));
-  const now = new Date(latestKeywordEvidence);
+  const now = new Date(latestEvidence + 60 * 1000);
   assert.deepEqual(validatePlan(checkedInPlan, products, { now }), []);
 
   const staleProducts = clone(products);
@@ -340,7 +342,9 @@ test("qualitative web-search intent is accepted only with dated HTTPS sources an
 
 test("keyword evidence is fresh for active and future weeks while historical drafts keep their original research record", () => {
   const evidenceTimes = checkedInPlan.weeks.flatMap(week =>
-    week.items.map(item => Date.parse(item.keywordEvidence.researchedAt))
+    week.items.flatMap(item => [item.keywordEvidence, item.currentIntentEvidence]
+      .filter(evidence => evidence?.researchedAt)
+      .map(evidence => Date.parse(evidence.researchedAt)))
   );
   const now = new Date(Math.max(...evidenceTimes));
   assert.deepEqual(validatePlan(checkedInPlan, products, { now }), []);

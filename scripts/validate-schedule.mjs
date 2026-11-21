@@ -94,16 +94,18 @@ const cadence = queue.cadence ?? {};
 if (cadence.publicationCycleId !== plan.publicationCycle?.id || JSON.stringify(cadence.formats) !== JSON.stringify(ROLLING_PUBLICATION_FORMATS)
  || cadence.minimumHoursBetweenConsecutivePublications !== minSpacing || cadence.minimumCycleHours !== minSpacing * ROLLING_PUBLICATION_FORMATS.length) errors.push("queue cadence must match the authoritative rolling publication cycle");
 if (cadence.draftPreparationFallback?.status !== "DRAFT_ONLY" || cadence.draftPreparationFallback?.notPublicationCadence !== true) errors.push("Tuesday/Saturday fallback must be explicitly draft-only and not a publication cadence");
-const workflowChecks = [
- [".github/workflows/generate-long-form-narration.yml", "0 15 * * 2", "Tuesday long-form draft preparation"],
- [".github/workflows/free-narration-artifact.yml", "0 15 * * 6", "Saturday Short draft preparation"]
-];
-for (const [file, cron, label] of workflowChecks) {
- let content;
- try { content = fs.readFileSync(path.join(root, file), "utf8"); } catch { errors.push("missing workflow: " + file); continue; }
- if (!content.includes('cron: "' + cron + '"')) errors.push(label + " workflow cron must be " + cron);
- if (!content.includes("branches: [main]")) errors.push(file + " must remain scoped to main for push-triggered generation");
- if (!/draft/i.test(content)) errors.push(file + " must identify output as draft preparation");
+const draftWorkflowPath = ".github/workflows/draft-preparation.yml";
+let draftWorkflow = "";
+try { draftWorkflow = fs.readFileSync(path.join(root, draftWorkflowPath), "utf8"); }
+catch { errors.push("missing workflow: " + draftWorkflowPath); }
+for (const cron of ['cron: "0 15 * * 2"', 'cron: "0 15 * * 6"']) {
+ if (!draftWorkflow.includes(cron)) errors.push("draft-preparation workflow must include the Tuesday and Saturday draft-only trigger " + cron);
+}
+if (!draftWorkflow.includes("npm run validate:schedule")) errors.push("draft-preparation workflow must run the authoritative schedule validator");
+if (!draftWorkflow.includes("npm run validate:promotional-shorts")) errors.push("draft-preparation workflow must validate the private promotional draft plan");
+if (!/draft.only|draft preparation/i.test(draftWorkflow)) errors.push("draft-preparation workflow must identify its work as draft-only");
+if (/(upload-private|youtube\\.upload|render:short|render:long|generate-narration|generate_long_form_narration)/i.test(draftWorkflow)) {
+ errors.push("draft-preparation workflow must not generate narration, render media or upload/publish content");
 }
 if (errors.length) { for (const error of errors) console.error("FAIL: " + error); process.exitCode = 1; }
 else {

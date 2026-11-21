@@ -1,0 +1,55 @@
+name: Validate Tuesday and Saturday draft preparation (no narration or publishing)
+
+on:
+  push:
+    branches: [main, codex/marketing-machine-audit-fixes]
+    paths:
+      - "config/weekly-content-plan.json"
+      - "content/queue.json"
+      - "content/promotional-short-plan.json"
+      - "scripts/validate-schedule.mjs"
+      - "scripts/validate-promotional-short-plan.mjs"
+      - ".github/workflows/draft-preparation.yml"
+  schedule:
+    - cron: "0 15 * * 2"
+    - cron: "0 15 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sonicvhibez-draft-preparation-validation
+  cancel-in-progress: false
+
+jobs:
+  validate-draft-preparation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Validate the draft-only schedule and rolling publication policy
+        run: npm run validate:schedule
+      - name: Validate private promotional draft plan and weekly cap
+        run: npm run validate:promotional-shorts
+      - name: Confirm publication remains disabled
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          const plan = JSON.parse(fs.readFileSync("config/weekly-content-plan.json", "utf8"));
+          const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
+          if (plan.publishingEnabled !== false || queue.publishingEnabled !== false) {
+            throw new Error("Publication must remain disabled during draft preparation.");
+          }
+          if (!queue.items.every(item => item.status && !["READY_FOR_PUBLICATION", "SCHEDULED"].includes(String(item.status).toUpperCase()))) {
+            throw new Error("A queue item entered a publication-ready or scheduled state.");
+          }
+          console.log("PASS: draft preparation validated; no narration, media render, upload or publication was run.");
+          NODE
