@@ -28,6 +28,7 @@ permissions:
 
 jobs:
   acquire-candidates:
+    if: false # Disabled: NOAA B-roll is excluded by the original creator-captured-only wildlife media policy.
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
