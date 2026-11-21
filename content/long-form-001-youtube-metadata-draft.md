@@ -16,8 +16,8 @@ This wildlife documentary explores how the Nile crocodile (*Crocodylus niloticus
 
 The goal is to understand the animal, not turn it into a monster story. Crocodiles are powerful wild predators. Never approach a crocodile or enter water known to contain crocodilians. Follow local wildlife authority advice and warning signs.
 
-**Visual disclosure — publish only after checking the final edit:**  
-If photorealistic AI-generated reconstructions are included, they are illustrative visualisations, not recordings of a specific real encounter. They must be clearly identified in the video and disclosed using YouTube's altered/synthetic-content setting where required. Remove or rewrite this paragraph if the final video contains no AI-generated reconstructions.
+**Visual media policy — mandatory:**  
+Use only genuine original creator-captured wildlife footage with verified provenance and commercial usage rights. AI-generated wildlife visuals, stock/archive footage and generic stock visuals are not permitted substitutes. If any other realistic altered or synthetic material appears in the final edit, assess YouTube's altered/synthetic-content requirements and disclose it where required. Never present altered media as a camera-recorded animal encounter.
 
 **Footage and asset credits — mandatory before upload:**  
 [Insert exact creator, source-page URL, licence and modification notice for every asset actually used. Do not publish with this placeholder.]
@@ -43,7 +43,7 @@ Nile crocodile, Crocodylus niloticus, crocodile hunting, crocodile ambush, croco
 - Eye and head on the right; open dark negative space on the left.
 - Exact thumbnail words: **TOO BIG?**
 - No blood, prey victim, gore, fabricated attack or unsafe human interaction.
-- If the thumbnail is AI-generated or materially altered, do not present it as an authentic camera photograph; review disclosure requirements and ensure it accurately represents the video.
+- Use a genuine original creator-captured crocodile image from the approved production footage. Do not use AI-generated wildlife imagery, stock/archive imagery or a fabricated encounter. Ensure the thumbnail accurately represents the final video.
 
 ## Upload metadata gates
 
