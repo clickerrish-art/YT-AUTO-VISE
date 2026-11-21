@@ -13,6 +13,8 @@ test("automation CI requires the committed lockfile and fails closed on audit er
   assert.match(workflow, /npm ci --ignore-scripts/);
   assert.doesNotMatch(workflow, /npm install --ignore-scripts/);
   assert.match(workflow, /npm audit --json/);
+  assert.match(workflow, /severityLevels = \["info", "low", "moderate", "high", "critical"\]/);
+  assert.match(workflow, /severityLevels\.some\(level => !Number\.isInteger\(counts\[level\]\)/);
   assert.match(workflow, /if \(total > 0\)/);
   assert.match(workflow, /if \(auditStatus !== 0\)/);
   assert.match(workflow, /zero known vulnerabilities/);
