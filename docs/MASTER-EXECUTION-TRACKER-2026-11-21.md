@@ -323,3 +323,15 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Branch comparison: 5,093 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
 - PR #1 remains open, draft and unmerged.
 - No npm audit was run in this environment; zero vulnerabilities on this new HEAD is NOT_TESTED. The stricter CI gate will establish that only when it runs.
+
+
+---
+
+## Direct YouTube upload-gate hardening — 21 November 2026
+
+- The direct SonicVhibez YouTube uploader now requires the upload metadata to explicitly declare `contentType` as exactly `short` or `long_form`, and requires the human approval record to match that value exactly. It no longer silently defaults an omitted format to `long_form`.
+- Technical-validation receipt `checkedAt` now uses the uploader's strict calendar-valid, timezone-qualified timestamp parser instead of permissive `Date.parse`. Impossible dates and invalid offsets cannot satisfy the artifact approval gate.
+- Added regression tests for omitted/mismatched upload format, impossible technical-receipt dates and invalid offsets.
+- Existing one-shot authorization already uses strict ISO timestamp validation, Ed25519 signature verification and exact job/video/metadata/approval/channel binding; it was inspected and left intact.
+- These new uploader regression tests have **NOT_TESTED** status until the repository test suite runs on exact HEAD. No upload, OAuth mutation, secret access, publication or paid service was used.
+
