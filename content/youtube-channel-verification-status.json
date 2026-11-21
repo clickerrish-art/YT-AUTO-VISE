@@ -16,7 +16,7 @@
     "status": "PASS",
     "uploadScopeVerified": true,
     "readOnlyScopeVerified": true,
-    "checkedAt": "2026-11-19T22:48:58.408Z",
+    "checkedAt": "2026-11-21T09:35:04.822Z",
     "requiredScopes": [
       "https://www.googleapis.com/auth/youtube.upload",
       "https://www.googleapis.com/auth/youtube.readonly"
@@ -344,6 +344,18 @@
   "uploadsInventoryFreshness": "FRESH_AS_OF_2026-11-19T22:48:58.854Z",
   "lastSuccessfulInventoryAt": "2026-11-19T22:48:58.854Z",
   "uploadScopeVerified": true,
-  "uploadScopeCheckedAt": "2026-11-19T22:48:58.408Z",
-  "acceptedUploadScope": "https://www.googleapis.com/auth/youtube.upload"
+  "uploadScopeCheckedAt": "2026-11-21T09:35:04.822Z",
+  "acceptedUploadScope": "https://www.googleapis.com/auth/youtube.upload",
+  "latestScopeVerification": {
+    "workflowRunId": 44890253420,
+    "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44890253420",
+    "sourceCommit": "09f331aeb5715aff8e9aad69ccda3afce52e19a7",
+    "checkedAt": "2026-11-21T09:35:04.822Z",
+    "status": "PASS",
+    "grantedScopes": [
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/youtube.upload"
+    ],
+    "note": "Read-only workflow log verified both exact YouTube OAuth scopes and the authenticated @sonicvhibez channel. This verifies scope only; it does not refresh the full history inventory, classify the current inventory, or authorize upload."
+  }
 }
