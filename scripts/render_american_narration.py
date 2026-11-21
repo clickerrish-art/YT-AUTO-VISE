@@ -97,6 +97,7 @@ def inspect_wav(path: Path) -> dict:
             "rmsDbfs":round(20*math.log10(rms/32768),2),"clippedSampleCount":clipped}
 
 def render(output: Path, source: Path) -> dict:
+    require_owner_authorized_alternative_voice()
     output.mkdir(parents=True,exist_ok=True)
     cache=output/".model-cache"; cache.mkdir(exist_ok=True)
     model,config,card=cache/"en_US-norman-medium.onnx",cache/"en_US-norman-medium.onnx.json",output/"MODEL_CARD"

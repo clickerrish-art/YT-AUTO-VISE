@@ -154,6 +154,7 @@ def probe_duration(audio_path: Path) -> float:
 
 async def generate(payload: object, content_format: str, output_dir: Path,
                    voice: str = "en-US-GuyNeural", rate: str = "-5%") -> dict:
+    require_owner_authorized_alternative_voice()
     if edge_tts is None:
         raise RuntimeError("Install the free edge-tts package before generating narration")
     narration, words = validate_script_payload(payload, content_format)

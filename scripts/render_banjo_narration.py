@@ -200,6 +200,7 @@ def render(
     synthesis_config_factory=None,
     attribution_downloader=download_attribution,
 ) -> dict:
+    require_owner_authorized_alternative_voice()
     output_dir.mkdir(parents=True, exist_ok=True)
     model_path = output_dir / MODEL_NAME
     config_path = output_dir / CONFIG_NAME
