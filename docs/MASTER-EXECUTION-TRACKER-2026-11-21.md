@@ -401,3 +401,39 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Current HEAD has zero GitHub Actions workflow runs and zero combined status checks. Exact-current-HEAD full Node/Python, browser E2E, npm audit, dashboard/worker integration and provider acceptance remain NOT_TESTED.
 - No publication, paid spend, secret mutation, Metricool mutation, Cloudflare mutation, queue mutation, merge, or main-branch write occurred.
 
+
+
+---
+
+## Current authoritative checkpoint — 21 November 2026
+
+This section supersedes older checkpoint statements in the historical audit entries above.
+
+### Implemented and isolated-verified
+- Queue identity policy: **8/8 isolated Node 22 tests PASS**. It requires explicit owner approval, both queue-content SHA-256 hashes, unique IDs/mappings/cycle positions, valid strict timestamp, valid detailed script paths and the rolling long-form slot sequence 1, 2, 4, 5, 7, 8, …
+- Queue approval template builder: **2/2 isolated Node 22 tests PASS**. `npm run prepare:queue-approval` prints a pending template and never writes or approves it.
+- Both queue dispatch gates, production-readiness integration, dashboard route tests and worker non-retryable stop behavior are implemented; their repository integration tests are added but NOT_TESTED on exact HEAD.
+- Direct YouTube uploader requires explicit matching `contentType` and strict technical receipt timestamps. Both private-upload workflows now pass/check the Ed25519 public verification key and require both private-upload and emergency-stop-release confirmations before the job starts. Regression tests are added but NOT_TESTED.
+- CI now uses lockfile-exact `npm ci`, rejects incomplete npm audit summaries, and blocks every known npm vulnerability severity. No npm audit has run on the current head.
+- API route acceptance matrix is reconciled to 48 routes: 41 PASS, 7 BLOCKED. Dispatchable and production routes are NOT_TESTED on the new queue guard and BLOCKED overall until owner queue approval and integration evidence exist.
+- Metricool read-only evidence shows zero scheduled posts in the checked window but a lingering `youtubeData` channel ID in the Nature Frontiers brand response. Active disconnection remains ambiguous; do not use or reconnect YouTube through Metricool.
+
+### Remaining external and owner-dependent work
+- Owner queue decision and approval mapping, generated using `npm run prepare:queue-approval`.
+- Original creator-captured wildlife footage, provenance, commercial rights and technical source files for the Short and Long-form 001.
+- Commercially cleared narration under the existing voice restriction, or explicit owner decision changing that restriction; no paid upgrade or alternate voice is authorized.
+- Qualified zoological review and final exact-hash human approval.
+- Fresh YouTube OAuth reauthorization, full remote history and upload-attempt reconciliation, owner classification/attestation, and GitHub Actions public-key secret configuration.
+- Owner/UI verification of the lingering Metricool YouTube association; legacy Metricool brand access and eight historical auto-publish records.
+- Cloudflare production Worker/OIDC/storage/restore and account-security owner/admin actions.
+- Exact product disclosure approval for the six held promotional Shorts.
+- Owner-authenticated branch push to execute current-head CI; repository owner/admin verification of branch protection and default-branch workflow risks.
+
+### Exact current repository checkpoint
+- Implementation HEAD: `ddaa727a55cebadf168aca5499d88fe8d4ef58a6`.
+- `main`: `3795519ccbf58fd02d74458624b58dd2e44a88c0`, unchanged.
+- Divergence: 5,120 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- PR #1: open, draft, unmerged.
+- Current HEAD: zero workflow runs and zero combined status checks. Full Node/Python, browser E2E, npm audit, dashboard/worker integration and provider acceptance remain NOT_TESTED.
+- No queue content was changed, no owner approval was fabricated, no upload/publication was attempted, and no Metricool/Cloudflare settings, secrets, paid services or `main` were changed.
+
