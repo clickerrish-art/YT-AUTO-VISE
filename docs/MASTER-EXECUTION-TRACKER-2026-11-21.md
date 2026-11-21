@@ -255,3 +255,22 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Do not reconnect YouTube to Metricool unless the owner explicitly reverses that decision. Do not treat YouTube's absence from Metricool as a defect.
 - Keep Nature Frontiers as a separate Facebook/Instagram brand and never route it to SonicVhibez YouTube.
 - This notice supersedes any wording that could be interpreted as YouTube being removed from the Marketing Machine. All YouTube release safeguards remain in force; this notice does not authorize uploads, publication, paid services, or relaxed rights/review controls.
+
+
+---
+
+## Queue identity guard implementation — 21 November 2026
+
+- Added `scripts/queue-identity-policy.mjs` and five focused tests in `test/queue-identity-policy.test.mjs`.
+- Production readiness now requires an explicit owner-approved `content/queue-identity-approval.json` mapping every operational long-form queue ID to a detailed long-form script ID and consecutive cycle position. It rejects missing/malformed approvals, duplicate IDs/mappings, missing scripts, invalid order, and an unconfirmed first cycle item.
+- The dashboard's read-only worker dispatch listing and direct `POST /api/jobs/produce` route now return HTTP 409 with `QUEUE_IDENTITY_RECONCILIATION_REQUIRED` until the identity gate passes. Queue and approval evidence are read through the project's no-symlink, project-root file guard.
+- The worker treats that exact 409 code as non-retryable and exits instead of continuing to poll. A regression test verifies that no POST dispatch occurs after the hold response.
+- Dashboard integration tests now cover both the dispatchable listing and direct production route. Readiness fixture-copy lists include the new policy module.
+- **Current repository data intentionally remains BLOCKED:** no owner approval file or identity mappings were created. No queue order, topic, cycle assignment or owner decision was fabricated. This engineering guard does not decide which queue is authoritative.
+- Isolated local Node validation of the policy module/test cases: **5/5 PASS**, plus `node --check` on the isolated policy module. The repository dashboard integration test, worker-runner test, readiness tests, full Node/Python suite and browser E2E have **NOT been run** in this environment; do not claim exact-current-HEAD test PASS.
+- The worker's existing HTTP 409 cooldown persistence and process-lock-on-persistence-failure safeguards were inspected and already have dedicated restart/failure tests in `test/worker-runner.test.mjs`; no duplicate replacement implementation was introduced.
+
+### Exact Git checkpoint after this implementation
+- Latest implementation commit created in this execution: `c0f1818262dc59f42ed8ba30c95361edd0ec1c98`.
+- `main` remains `3795519ccbf58fd02d74458624b58dd2e44a88c0`; comparison is 5,073 ahead / 17 behind, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- PR #1 remains subject to the standing safety rule: open, draft and unmerged. No main-branch write, merge, reset, rebase, force-push, publication or paid action was performed.
