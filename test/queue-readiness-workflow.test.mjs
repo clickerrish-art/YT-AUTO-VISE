@@ -29,7 +29,7 @@ test("queue readiness confines replenishment to its existing isolated proposal t
 });
 
 test("queue readiness CI covers the implementation branch and all queue/dispatch regression suites", () => {
-  assert.match(workflow, /push:\\s*\\n\\s+branches:\s*\\[main, codex\\/marketing-machine-audit-fixes\\]/);
+  assert.ok(workflow.includes("push:\n    branches: [main, codex/marketing-machine-audit-fixes]"), "implementation branch pushes must trigger queue regression CI");
   for (const requiredPath of [
     '      - "test/**"',
     '      - "tests/**"',
