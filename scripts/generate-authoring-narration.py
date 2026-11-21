@@ -21,6 +21,10 @@ except ImportError:
     edge_tts = None
 
 ROOT = Path(__file__).resolve().parents[1]
+try:
+    from scripts.narration_policy import require_owner_authorized_alternative_voice
+except ImportError:
+    from narration_policy import require_owner_authorized_alternative_voice
 MAX_WORDS = {"short": (125, 150), "long_form": (900, 1500)}
 CAPTION_MAX_WORDS = 7
 CAPTION_MAX_CHARS = 42
@@ -204,6 +208,7 @@ async def generate(payload: object, content_format: str, output_dir: Path,
 
 
 def main() -> int:
+    require_owner_authorized_alternative_voice()
     parser = argparse.ArgumentParser()
     parser.add_argument("--script-json", required=True, help="JSON containing generated script result")
     parser.add_argument("--format", choices=["short", "long_form"], required=True)
