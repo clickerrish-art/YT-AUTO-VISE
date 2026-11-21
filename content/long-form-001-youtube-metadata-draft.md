@@ -47,12 +47,14 @@ Nile crocodile, Crocodylus niloticus, crocodile hunting, crocodile ambush, croco
 
 ## Upload metadata gates
 
-1. **Paid promotion:** the current render manifest sets `hasPaidPromotion=true`. The script itself contains no sponsorship segment. Owner confirmation is required before changing the manifest or the YouTube paid-promotion disclosure. Do not infer either state.
+1. **Paid promotion:** owner decision recorded in issue #16 confirms this documentary is educational and has no paid product promotion. The render manifest must remain `hasPaidPromotion=false`. Do not add a Wildlife Creator's Vault CTA, Selar URL, sponsorship segment or product sales disclosure to this package. This decision applies only to the Nile crocodile documentary; separate creator-education content retains its separately approved promotion and disclosure.
 2. **Altered/synthetic content:** final video must be inspected. If realistic AI-generated or materially altered scenes are present, apply the correct YouTube disclosure. The disclosure must match the actual edit.
 3. **Audience setting:** choose only after the owner confirms the intended audience; do not guess.
 4. **Licence credits:** complete from the final rights ledger, not from the sourcing shortlist.
 5. **Thumbnail:** inspect the final exported image and compare it with the actual video; no misleading animal encounter.
 6. **Comments, visibility and schedule:** do not set public visibility or schedule. The first authorized upload is private-only and bound to the exact final media/metadata/thumbnail/rights hashes.
 7. **Final approval:** record owner approval against the exact MP4 and thumbnail SHA-256 after full human playback.
+
+**Promotion decision:** NON-COMMERCIAL EDUCATIONAL CONTENT — `hasPaidPromotion=false`; no product CTA, Selar URL or product sales disclosure.
 
 **Release state:** HOLD. This metadata draft is not upload authorization and does not reserve a publication time.
