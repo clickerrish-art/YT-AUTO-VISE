@@ -282,3 +282,48 @@ The owner private key must never be sent in chat, committed, uploaded to the rep
 - Read-only scheduled-post query for 2026-11-20 through 2026-12-20 (Africa/Johannesburg) returned zero scheduled posts.
 - This endpoint exposes only future scheduled posts. It does not reconcile the eight previously identified historical records with `draft=false` and `autoPublish=true`; those remain unresolved. No Metricool post, setting, connection or campaign was changed.
 - Nature Frontiers remains separate from SonicVhibez. Keep its publishing disabled/dry-run/emergency-stop defaults and do not enable auto-publishing until the historical records and approval state are independently reconciled.
+
+
+## Execution addendum — 2026-11-21 (supersedes earlier snapshot statements)
+
+This addendum is the current status correction for the 2026-11-20 plan. Historical statements above remain an audit trail and must not override the determinations below.
+
+### Verified work completed on 2026-11-21
+
+1. **HeyGen Roderic rights decision is no longer pending.** Support replied in writing and denied a zero-cost commercial-use exception for both existing and future Roderic Free-plan outputs. The decision is recorded in `content/heygen-roderic-commercial-rights-determination-2026-11-21.json`; the long-form and Short manifests and narration status record point to it. Keep all Free-plan Roderic audio internal-only. No paid upgrade is allowed and no alternative narrator is authorized. This is an external blocker, not a task that can be cleared by another local test.
+2. **Alternate narrator workflows are fail-closed.** Job-level `if: false` guards were added and read back for the Piper audition, Edge TTS long-form audition, Edge TTS short/queue audition, and Edge TTS short artifact workflows. The existing American/Norman and Banjo audition workflows were already disabled. This closes the known repository workflow routes for unapproved voice generation on this branch; it does not establish a commercially eligible narrator.
+3. **Short footage evidence is correctly classified.** Pexels rights research and acquired preview bytes are reference-only and explicitly excluded by the original creator-captured-media requirement. `content/render-manifest.json` no longer presents the Pexels license record as production footage-license clearance. Its script and caption source pins now match the exact current Git blob SHAs.
+4. **Long-form script and scientific review are pinned.** The current script revision is `f4949a62c1235867ab7565ba43c3cfe97efae297`; the scientific desk-review file is `5c794a85fdec74bafb14b832d366edda12007ffb`. The 2025 *Biology Open* primary study is explicitly limited to young captive Nile crocodiles tested in controlled conditions; it is not presented as proof of adult wild hunting behaviour. The long-form manifest pins both exact blob SHAs.
+5. **Comfy workflow is disqualified for production.** The saved five-second Arctic hunter/polar-bear text-to-video demo has no original-footage input and is not a production asset source. The disposition is recorded at `content/comfy-workflow-production-disposition-2026-11-21.json`. No generation or GPU spend occurred.
+6. **Metricool remains read-only and unresolved.** Current brand 8094526 settings read returned Facebook and Instagram connections, with no YouTube channel listed in that response; this alone does not prove the prior mapping was disconnected. The legacy brand 7545638 remains inaccessible (403). No provider mutation was performed. The eight historical auto-publish records and reported 20 drafts remain unreconciled pending access/provider response.
+
+### Current production gate status
+
+| Gate | Status | Exact reason |
+|---|---|---|
+| Original wildlife source media | BLOCKED | No admissible original creator-captured footage package with source provenance, file hashes and rights evidence is present. Pexels is reference-only and excluded. |
+| Commercial narrator | BLOCKED | HeyGen denied the zero-cost Roderic commercial exception; no other narrator is owner-approved. |
+| Long-form 001 | BLOCKED | Footage and commercial narration are missing; no final captions, 6–10 minute master, thumbnail, full playback or exact-hash approval. |
+| Short 001 | BLOCKED | Existing Pexels preview is reference-only; Roderic audio is non-commercial; no final edit, synchronized release captions, thumbnail or approval. |
+| Independent zoological review | NOT_TESTED | Desk review is documented; qualified independent review of the complete narration and final scene mapping remains outstanding. |
+| Metricool legacy reconciliation | BLOCKED | Brand 7545638 access denied; provider confirmation of brand 8094526 mapping is absent. |
+| YouTube OAuth/history freshness | NOT_TESTED | Last successful complete inventory was 2026-11-19; local/manual/third-party upload attestation is stale after 2026-11-18. Recheck before any upload. |
+| Publication cycle | BLOCKED | Only one pre-cycle legacy 20-second Short is verified; no post-approval long-form publications exist. |
+| Durable archive | BLOCKED | Cloudflare R2 was previously disabled (error 10042); no verified permanent archive or restore exists. |
+| Production publisher | BLOCKED | No verified SonicVhibez production publisher Worker or operational production runner state. |
+| Dashboard/API/software acceptance | PARTIAL / STALE | Prior exact-SHA tests exist, but no full current-head regression or live production acceptance was run after today's repository changes. |
+| Git/release controls | HOLD | Branch remains diverged; no main writes, merge, rebase, reset, force-push or PR state changes. |
+
+### Owner/provider inputs still required
+
+- Original creator-captured wildlife MP4s and creator/source provenance plus explicit commercial-use permission.
+- A zero-cost commercial-use path for Roderic confirmed in writing by HeyGen, **or** the owner's explicit change to the Roderic-only narrator rule. Current provider decision is denial.
+- Owner access/export for Metricool legacy brand 7545638 and provider confirmation of the YouTube mapping for brand 8094526.
+- Updated owner attestation for any manual, local, third-party or out-of-band YouTube upload attempts since 2026-11-18; if any exist, exact IDs/timestamps must be reconciled.
+- Fresh authenticated YouTube identity, OAuth scopes and complete paginated public/private/unlisted inventory before any future upload.
+- Cloudflare account owner/admin to enable R2 or approve another genuinely zero-cost durable archive route after terms/limits are checked.
+- Independent qualified zoological review and exact-hash human review of final media.
+- Production account/admin inputs for a dedicated publisher Worker, D1 runner state, current OIDC trust and branch protection; none may be fabricated or enabled without account authority.
+- Exact one-shot private-upload authorization only after all production gates pass; separate explicit public-release authorization remains required.
+
+**No release state changed:** public/unattended publishing remains disabled, manifests remain fail-closed, no media was rendered, no provider mutation was made, and no paid service or GPU generation was used.
