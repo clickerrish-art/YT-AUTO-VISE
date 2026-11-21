@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "complete": true,
   "channelId": "UCSlkuPfHH78oGC1o418HV4w",
-  "verifiedAt": "2026-11-20T11:13:10.643Z",
-  "verifiedBy": "clickerrish-art",
-  "verificationReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44725743866",
+  "verifiedAt": "2026-11-21T16:42:51.082Z",
+  "verifiedBy": "automated GitHub Actions read-only inventory",
+  "verificationReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44926048755",
   "videos": [
     {
       "id": "LjePS02hA1o",
@@ -19,19 +19,22 @@
         "youtubePublishedAt": "2026-10-22T15:05:56Z",
         "scheduledPublishAt": null,
         "duration": "PT20S",
-        "format": "short",
-        "comparisonStatus": "EXACT_VIDEO_ID_VISIBILITY_AND_PUBLISHED_AT_MATCH"
+        "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
+        "comparisonStatus": "EXACT_VIDEO_ID_VISIBILITY_AND_PUBLISHED_AT_MATCH",
+        "inventoryArtifactSha256": "cb15c6243be4de0be9e1de4f9640be1b7efee75b3ed799cfb877798a7376ca40",
+        "ownerReaffirmationRequired": true
       }
     }
   ],
   "latestInventoryEvidence": {
-    "workflowRunId": 44725743866,
+    "workflowRunId": 44926048755,
     "workflowRunAttempt": 1,
-    "jobId": 136252575433,
-    "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
-    "verifiedAt": "2026-11-20T11:13:10.643Z",
-    "artifactId": 14623951721,
-    "artifactSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
+    "jobId": 136912253740,
+    "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
+    "verifiedAt": "2026-11-21T16:42:51.082Z",
+    "artifactId": 14715925931,
+    "artifactSha256": "cb15c6243be4de0be9e1de4f9640be1b7efee75b3ed799cfb877798a7376ca40",
+    "inventoryJsonSha256": "115b95e257cfdae19cc3bee1a4a9c6c7f57f1a1b89c8628b9d7d69c6f999226a",
     "complete": true,
     "uploadsPlaylistPages": 1,
     "totalUploads": 1,
@@ -62,7 +65,7 @@
   },
   "uploadAttemptReconciliation": {
     "status": "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS",
-    "inspectedAt": "2026-11-21T09:37:06.547Z",
+    "inspectedAt": "2026-11-21T16:42:47.153Z",
     "evidence": {
       "workflowDispatchRunsInspected": 1,
       "privateUploadWorkflowRunId": 42569826008,
@@ -73,28 +76,29 @@
       "nextPrivateUploadPreviousLedgerRunId": "NONE",
       "evidenceReferences": [
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42569826008",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44926048762",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs?event=workflow_dispatch"
       ],
       "automatedLedgerValidation": {
-        "runId": 44890418778,
-        "jobId": 136804802342,
-        "sourceCommit": "c31ea042bd5683b3c288c9e940e69a9a05f2db0c",
-        "completedAt": "2026-11-21T09:37:06.547Z",
+        "runId": 44926048762,
+        "jobId": 136912254452,
+        "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
+        "completedAt": "2026-11-21T16:42:47.153Z",
         "conclusion": "success",
         "mode": "initialize",
         "inspectedWorkflowRuns": 1,
         "executedPrivateUploadRuns": 0,
         "previousLedgerRunId": "NONE",
-        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44890418778"
+        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44926048762"
       },
       "uploadWorkflowDispatchRunsFound": 1,
       "repositoryWorkflowDispatchRunsInspected": 5,
       "latestUploadWorkflowDispatchAt": "2026-11-09T05:53:10Z",
       "currentGitHubScan": {
-        "inspectedAt": "2026-11-21T09:37:06.547Z",
-        "workflowRunId": 44890418778,
-        "jobId": 136804802342,
-        "sourceCommit": "c31ea042bd5683b3c288c9e940e69a9a05f2db0c",
+        "inspectedAt": "2026-11-21T16:42:47.153Z",
+        "workflowRunId": 44926048762,
+        "jobId": 136912254452,
+        "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
         "priorUploadWorkflowRunsInspected": 1,
         "uploadPrivateWorkflowDispatchRuns": 1,
         "uploadArtifactPrivatelyWorkflowDispatchRuns": 0,
@@ -104,46 +108,46 @@
         "privateUploadJobConclusion": "skipped",
         "executedPrivateUploadJobsSincePriorOwnerAttestation": 0,
         "previousLedgerRunId": "NONE"
-      },
-      "localLedger": {
-        "defaultPath": "run-logs/upload-attempts.json",
-        "repositoryVisibility": "GITIGNORED",
-        "localStateDirectories": [
-          "run-logs/",
-          "state/"
-        ],
-        "accessibleFromGitHubRepository": false,
-        "ownerAttestationRequiredForManualOrLocalAttemptsAfter": "2026-11-18"
       }
     },
-    "note": "GitHub Actions upload-history scan refreshed on 2026-11-21: the read-only validator inspected the prior upload entry-point history, found one previous upload workflow dispatch with its private-upload job skipped, found no upload-artifact-privately dispatch, and confirmed zero executed private-upload jobs. The separate local attempt ledger is run-logs/upload-attempts.json and is gitignored. The owner's manual/local/third-party attempt attestation remains valid only through 2026-11-18; no owner attestation covers later attempts, so publication remains blocked.",
     "ownerAttestation": {
       "status": "CONFIRMED",
       "confirmedAt": "2026-11-18",
       "statement": "The owner confirmed there were no manual, local, or external YouTube upload attempts other than the inventoried video LjePS02hA1o.",
       "scope": "Manual, local, and third-party/out-of-band upload attempts",
       "appliesToVideoId": "LjePS02hA1o",
-      "note": "The owner confirmed no manual, local or third-party/out-of-band attempts through 2026-11-18. The GitHub upload-workflow scan was refreshed on 2026-11-21 and still finds zero executed private-upload jobs, but no owner attestation covers manual/local attempts after 2026-11-18. Keep publication blocked until the owner refreshes that attestation.",
+      "note": "This owner attestation covers attempts only through 2026-11-18. The 2026-11-21 automated GitHub scan again found zero executed private-upload jobs, but does not inspect manual/local/third-party activity after 2026-11-18. Keep publication blocked until the owner refreshes that attestation.",
       "validThrough": "2026-11-18",
       "freshnessStatus": "STALE_FOR_LOCAL_OR_MANUAL_ATTEMPTS_AFTER_2026-11-18"
-    }
+    },
+    "localLedger": {
+      "defaultPath": "run-logs/upload-attempts.json",
+      "repositoryVisibility": "GITIGNORED",
+      "localStateDirectories": [
+        "run-logs/",
+        "state/"
+      ],
+      "accessibleFromGitHubRepository": false,
+      "ownerAttestationRequiredForManualOrLocalAttemptsAfter": "2026-11-18"
+    },
+    "note": "Automated GitHub Actions upload-history scan refreshed on 2026-11-21: one prior upload workflow dispatch was inspected, its private-upload job was skipped, no upload-artifact-privately dispatch was found, and zero private-upload jobs executed. The separate local attempt ledger is gitignored and inaccessible from the repository. Owner attestation for manual/local/third-party attempts remains valid only through 2026-11-18."
   },
-  "currentFreshnessStatus": "READ_ONLY_REFRESH_MATCHES_PRIOR_OWNER_REVIEW_PENDING_OWNER_REAFFIRMATION_AND_FRESH_LOCAL_ATTEMPT_ATTESTATION",
-  "lastSuccessfulInventoryAt": "2026-11-20T11:13:10.643Z",
+  "currentFreshnessStatus": "FRESH_AUTOMATED_INVENTORY_PENDING_OWNER_REAFFIRMATION_AND_LOCAL_ATTEMPT_ATTESTATION",
+  "lastSuccessfulInventoryAt": "2026-11-21T16:42:51.082Z",
   "latestRefreshAttempt": {
-    "workflowRunId": 44725743866,
-    "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
+    "workflowRunId": 44926048755,
+    "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
     "status": "PASS_READ_ONLY_IDENTITY_AND_COMPLETE_INVENTORY",
-    "checkedAt": "2026-11-20T11:13:10.643Z",
-    "jobId": 136252575433,
-    "artifactId": 14623951721,
-    "artifactSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
+    "checkedAt": "2026-11-21T16:42:51.082Z",
+    "jobId": 136912253740,
+    "artifactId": 14715925931,
+    "artifactSha256": "cb15c6243be4de0be9e1de4f9640be1b7efee75b3ed799cfb877798a7376ca40",
     "uploadAttempted": false,
     "metadataWriteAttempted": false,
     "publicationStateChanged": false
   },
   "uploadScopeVerified": true,
-  "note": "The latest successful read-only inventory refresh is 2026-11-20 and matches the prior owner-reviewed one-video record exactly. This is not a new owner attestation and does not clear the stale local/manual/third-party attempt gap after 2026-11-18. The refresh artifact itself requires owner reaffirmation of the Short classification. No upload is authorized; keep publication blocked.",
+  "note": "Fresh 2026-11-21 read-only inventory (run 44926048755) confirms the authenticated @sonicvhibez channel and a complete inventory of one public video, zero private and zero unlisted videos. The sole video record exactly matches the prior owner-reviewed ID, visibility, publishedAt and duration, but the new API artifact still labels its format unclassified. Owner reaffirmation remains required. The latest automated upload-ledger scan (run 44926048762) found zero executed private-upload jobs; manual/local/third-party attempts after 2026-11-18 still require owner attestation.",
   "ownerPublicationHistoryReview": {
     "status": "ACCEPTED_AS_HISTORICAL_PUBLICATION_EVIDENCE",
     "reviewedAt": "2026-11-18",
@@ -153,7 +157,7 @@
     "ownerStatement": "The owner confirmed the only upload is a Short and its YouTube Studio publication date matches the API inventory.",
     "scope": "Historical classification and publication-date confirmation for the one existing video; this is not approval of a new upload or publication.",
     "reaffirmationRequired": true,
-    "note": "This historical owner review was completed 2026-11-18. The 2026-11-20 complete inventory matches the same remote video record, but the fresh artifact labels format unclassified; owner reaffirmation against the fresh artifact is still required."
+    "note": "Historical owner review was completed 2026-11-18. The 2026-11-21 complete inventory matches the same remote video record, but its format is still unclassified; owner reaffirmation against the exact fresh artifact remains required."
   },
   "publicationCycleReconciliation": {
     "status": "BLOCKED_INSUFFICIENT_PUBLISHED_HISTORY",
@@ -186,32 +190,25 @@
     "statusReason": "The only verified remote publication is the owner-reviewed legacy Short, published before the approved cycle start. No long_form publication exists in the complete one-upload channel inventory, so the required long_form → long_form → short sequence and its actual 72-hour intervals cannot yet be demonstrated. The two long-form production manifests remain BLOCKED_NOT_RENDERABLE pending real media, narration, rights evidence and human review."
   },
   "latestRefreshEvidence": {
-    "path": "content/youtube-history-refresh-2026-11-20.json",
-    "workflowRunId": 44725743866,
-    "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
-    "verifiedAt": "2026-11-20T11:13:10.643Z",
-    "status": "READ_ONLY_VERIFIED_MATCHES_PRIOR_OWNER_REVIEW_PENDING_OWNER_REAFFIRMATION",
-    "totalUploads": 1,
-    "uploadsPlaylistPages": 1,
-    "videoId": "LjePS02hA1o",
-    "channelId": "UCSlkuPfHH78oGC1o418HV4w",
-    "visibility": "public",
-    "youtubePublishedAt": "2026-10-22T15:05:56Z",
-    "duration": "PT20S",
-    "uploadAttempted": false,
-    "metadataWriteAttempted": false,
-    "publicationStateChanged": false,
-    "limitation": "Fresh inventory exactly matches the prior owner-reviewed one-video record, but the refresh artifact labels format unclassified and requires owner reaffirmation. The manual/local/third-party upload-attempt attestation remains stale after 2026-11-18."
+    "path": "content/youtube-history-refresh-2026-11-21.json",
+    "workflowRunId": 44926048755,
+    "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
+    "verifiedAt": "2026-11-21T16:42:51.082Z",
+    "artifactId": 14715925931,
+    "artifactSha256": "cb15c6243be4de0be9e1de4f9640be1b7efee75b3ed799cfb877798a7376ca40",
+    "inventoryJsonSha256": "115b95e257cfdae19cc3bee1a4a9c6c7f57f1a1b89c8628b9d7d69c6f999226a",
+    "status": "PARTIAL_OWNER_CLASSIFICATION_AND_ATTEMPT_ATTESTATION_PENDING"
   },
   "publicationHistoryReconciliation": {
     "status": "PENDING_OWNER_REAFFIRMATION",
     "reconciliationPath": "content/youtube-history-reconciliation.json",
-    "verifiedAt": "2026-11-20T11:13:10.643Z",
-    "verifiedBy": "clickerrish-art",
-    "freshInventoryRunId": 44725743866,
-    "freshInventoryArtifactId": 14623951721,
-    "freshInventoryArtifactSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
+    "verifiedAt": "2026-11-21T16:42:51.082Z",
+    "verifiedBy": "automated GitHub Actions read-only inventory",
+    "freshInventoryRunId": 44926048755,
+    "freshInventoryArtifactId": 14715925931,
+    "freshInventoryArtifactSha256": "cb15c6243be4de0be9e1de4f9640be1b7efee75b3ed799cfb877798a7376ca40",
     "priorOwnerReviewDate": "2026-11-18",
-    "reason": "The complete 2026-11-20 inventory matches the prior owner-reviewed video ID, channel ID, public visibility, YouTube publishedAt timestamp and 20-second duration. The fresh artifact still labels format UNCLASSIFIED_REQUIRES_OWNER_REVIEW. The owner must reaffirm that the sole public video remains a Short and confirm the Studio publication date against this exact fresh artifact before it can be treated as current owner-reviewed history."
-  }
+    "reason": "The fresh 2026-11-21 inventory exactly matches the prior owner-reviewed video ID, channel, public visibility, publishedAt and 20-second duration. Its API format remains UNCLASSIFIED_REQUIRES_OWNER_REVIEW; the owner must reaffirm the Short classification and Studio publication date against this exact artifact."
+  },
+  "uploadScopeCheckedAt": "2026-11-21T16:42:50.819Z"
 }
