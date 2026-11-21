@@ -188,12 +188,12 @@ test("failed replacement startup rolls back to the previous release without losi
   }
 });
 
-test("manual repository runner defaults to read-only staging checks and requires explicit production dispatch opt-in", () => {
+test("legacy repository runner and staging smoke remain disabled until OIDC trust migration is verified", () => {
   const workflow = fs.readFileSync(path.join(repositoryRoot, ".github", "workflows", "repository-runner.yml"), "utf8");
-  assert.ok(workflow.includes("run_staging_smoke:\n        description: \"Run non-production D1 checks and a temporary R2 integrity probe (safe default)\"\n        required: false\n        type: boolean\n        default: true"));
-  assert.ok(workflow.includes("run_repository_runner:\n        description: \"Explicitly opt in to dispatching one approved due production job\"\n        required: false\n        type: boolean\n        default: false"));
-  assert.ok(workflow.includes("inputs.run_repository_runner == true"));
-  assert.ok(workflow.includes("inputs.run_staging_smoke == true"));
+  assert.ok(workflow.includes("run_staging_smoke:\n        description: \"Legacy staging smoke disabled pending OIDC trust migration\"\n        required: false\n        type: boolean\n        default: false"));
+  assert.ok(workflow.includes("run_repository_runner:\n        description: \"Legacy production runner disabled pending OIDC trust migration\"\n        required: false\n        type: boolean\n        default: false"));
+  assert.equal((workflow.match(/if: \\$\\{\\{ false \\}\\}/g) ?? []).length, 2);
+  assert.equal((workflow.match(/id-token: write/g) ?? []).length, 0);
 });
 
 
