@@ -160,19 +160,27 @@ This is SonicVhibez.
 
 | Claim | Research basis | Editorial control |
 |---|---|---|
-| Eyes, ears and nostrils are high on the head; nostrils close underwater | San Diego Zoo Wildlife Alliance fact sheet | Do not imply this makes the animal invisible or harmless |
-| Tail supplies principal swimming thrust | San Diego Zoo Wildlife Alliance fact sheet | Use footage showing actual swimming |
-| Diet changes with age; adults eat a wide range of prey | San Diego Zoo Wildlife Alliance fact sheet; IUCN Crocodile Specialist Group | Avoid absolute claims about every individual/population |
-| Females nest and guard; parental care occurs | IUCN Crocodile Specialist Group species account | Do not imply every nest/hatchling receives identical care |
-| Global Least Concern; South African regional Vulnerable | IUCN CSG species account; SANBI 2023 assessment | Keep global and regional assessments distinct |
+| Eyes, ears and nostrils are set high on the head; nostrils close underwater | San Diego Zoo Wildlife Alliance Physical Characteristics and Behaviour & Ecology fact sheets | Do not imply this makes the animal invisible or harmless |
+| The body has leathery scales, many with bony cores (osteoderms) | San Diego Zoo Wildlife Alliance Physical Characteristics fact sheet | Use anatomical terms accurately; avoid implying every scale is bony |
+| Tail supplies principal swimming thrust | San Diego Zoo Wildlife Alliance Behaviour & Ecology fact sheet | Use footage showing actual swimming |
+| Diet changes with age; adults have a broad diet and fish are a major food source | IUCN Crocodile Specialist Group species account; San Diego Zoo Wildlife Alliance Diet & Feeding fact sheet | Avoid absolute claims about every individual or population |
+| Shoreline ambush and sudden lunges are documented hunting behaviours | San Diego Zoo Wildlife Alliance Diet & Feeding fact sheet | Use conditional language; never edit unrelated shots into a false attack or feeding sequence |
+| Females use sandy nesting sites near water | IUCN Crocodile Specialist Group species account; San Diego Zoo Wildlife Alliance Reproduction & Development fact sheet | Verify the species, location and behaviour in any footage |
+| Incubation temperature influences hatchling sex | San Diego Zoo Wildlife Alliance Reproduction & Development fact sheet; Leslie, Kemp & Spotila Lake St Lucia study | Do not quote universal temperature thresholds; local populations and study methods matter |
+| Females guard nests and can assist hatchlings | IUCN Crocodile Specialist Group species account; Combrink, Warner & Downs (2016) Lake St Lucia field study | Keep claims conditional; do not imply identical care in every nest or population |
+| Global Least Concern; South African regional Vulnerable | IUCN CSG global assessment linked as 2017; SANBI 2023 regional assessment | State assessment years and keep global and regional categories distinct |
 
 ## Source references
 
 1. IUCN Crocodile Specialist Group, Nile crocodile species account: https://iucncsg.org/crocodylians/crocodylus-niloticus/
 2. IUCN Crocodile Specialist Group, Nile crocodile action-plan chapter: https://iucncsg.org/wp-content/uploads/2026/07/Crocodylus-niloticus-Action-Plan.pdf
-3. San Diego Zoo Wildlife Alliance, Behaviour & Ecology: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/behavior
-4. San Diego Zoo Wildlife Alliance, Diet & Feeding: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/diet
-5. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Physical Characteristics: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/characteristics\n6. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Reproduction & Development: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/reproduction\n7. Combrink, X., Warner, J.K. & Downs, C.T. (2016), “Nest predation and maternal care in the Nile crocodile (*Crocodylus niloticus*) at Lake St Lucia, South Africa”, *Behavioural Processes* 133:31–36, DOI: 10.1016/j.beproc.2016.10.014. PubMed: https://pubmed.ncbi.nlm.nih.gov/27816524/\n8. Leslie, A.J., Kemp, S.J. & Spotila, J.R., “Temperature Dependent Sex Determination in St Lucia Nile Crocodiles in Natal, South Africa” (preliminary Lake St Lucia study; see pages 274–281 in the linked compilation): https://crocodileandy.org/wp-content/uploads/2015/04/4-1-head-starting-and-translocation-juveniles.pdf\n9. SANBI, 2023 Suricata 10 regional assessment: https://www.sanbi.org/wp-content/uploads/2024/06/2023_Suricata10.pdf
+3. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Behaviour & Ecology: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/behavior
+4. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Diet & Feeding: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/diet
+5. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Physical Characteristics: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/characteristics
+6. San Diego Zoo Wildlife Alliance / International Environment Library Consortium, Nile crocodile Reproduction & Development: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/reproduction
+7. Combrink, X., Warner, J.K. & Downs, C.T. (2016), “Nest predation and maternal care in the Nile crocodile (*Crocodylus niloticus*) at Lake St Lucia, South Africa”, *Behavioural Processes* 133:31–36, DOI: 10.1016/j.beproc.2016.10.014. PubMed: https://pubmed.ncbi.nlm.nih.gov/27816524/
+8. Leslie, A.J., Kemp, S.J. & Spotila, J.R., “Temperature Dependent Sex Determination in St Lucia Nile Crocodiles in Natal, South Africa” (preliminary Lake St Lucia study; pages 274–281 in the linked compilation): https://crocodileandy.org/wp-content/uploads/2015/04/4-1-head-starting-and-translocation-juveniles.pdf
+9. SANBI, *Suricata 10* (2023), regional assessment for *Crocodylus niloticus*: https://www.sanbi.org/wp-content/uploads/2024/06/2023_Suricata10.pdf
 
 ## Mandatory production controls
 
