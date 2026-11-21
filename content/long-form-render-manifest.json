@@ -31,5 +31,10 @@
   "sourceScriptHashType": "GIT_BLOB_SHA",
   "scientificReviewPath": "assets/long-form-001-scientific-claim-review.md",
   "scientificReviewBlobSha": "5c794a85fdec74bafb14b832d366edda12007ffb",
-  "scientificReviewHashType": "GIT_BLOB_SHA"
+  "scientificReviewHashType": "GIT_BLOB_SHA",
+  "narrationRightsStatus": "PROVIDER_DENIED",
+  "narrationPublicBrandedDistributionAllowed": false,
+  "narrationCommercialUseAllowed": false,
+  "narrationProductionUseAllowed": false,
+  "narrationRestrictionSummary": "HeyGen Support confirmed on 2026-11-21 that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. No production narration is authorized; no paid plan or alternate narrator is permitted under the current owner constraints."
 }
