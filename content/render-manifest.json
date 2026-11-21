@@ -19,8 +19,8 @@
   "sourceScriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
   "captionSourceBlobSha256": "6a09a58188301ed134912010c6276c6a167544be",
   "notes": [
-    "The Roderic HeyGen Free-plan audition is internal/non-commercial only and must not be used in production or monetized publishing.",
-    "Norman (Piper en_US-norman-medium) was a historical audition only and is superseded by the owner's exclusive Roderic decision; it must not be used or substituted in production. The current Roderic Short narration is documented in short-001-roderic-narration-generation.json and remains internal-only under the verified HeyGen Free-plan terms; commercial rights are not cleared.",
+    "HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs on 2026-11-21; public branded or commercial use is prohibited. Keep this narration internal-only.",
+    "The current Roderic Short narration is documented in short-001-roderic-narration-generation.json; HeyGen's written denial is recorded in heygen-roderic-commercial-rights-determination-2026-11-21.json. It remains internal-only and is not production-eligible.",
     "The existing SRT was aligned to the previous Roderic audition and is NOT approved or synchronized to the Norman review WAV; regenerate and verify captions against the final approved narration.",
     "Pexels platform license permits commercial use and modification; source hashes and creator/source pages are documented in short-001-pexels-rights-evidence.json. Third-party rights, releases, location permissions and owner final approval remain unverified.",
     "Three Pexels clips were used only in a 56.71-second silent 720x1280 visual review preview, with repeated footage for timing; this is not the final edit or a release-ready export.",
@@ -29,5 +29,6 @@
   ],
   "containsAIWildlifeVisuals": false,
   "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
-  "mediaProvenanceStatus": "UNVERIFIED"
+  "mediaProvenanceStatus": "UNVERIFIED",
+  "narrationRightsDeterminationEvidence": "heygen-roderic-commercial-rights-determination-2026-11-21.json"
 }
