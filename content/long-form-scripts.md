@@ -10,7 +10,9 @@
 - These are educational creator-workflow videos, not wildlife-science documentaries. If examples introduce species-specific claims, verify them against reputable sources and cite those sources in the published description.
 - Use original or explicitly licensed footage, stills, music, sound effects, and fonts. Retain the license or permission record for each asset.
 - Replace every bracketed visual cue with rights-cleared media. Do not use fabricated wildlife interactions or edit shots to imply an event that did not happen.
-- Keep the promotional segment transparent. Selar is the owner's own business and purchases generate direct sales revenue, not affiliate commission. The owner approved this exact viewer-facing disclosure on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Include it verbatim in spoken narration and as readable on-screen text immediately alongside each product CTA. The narration generator may include the paid-product paragraph only when the product registry confirms this owner approval. Keep YouTube's paid-promotion declaration enabled.
+- Keep the promotional segment transparent. Selar is the owner's own business and purchases generate direct sales revenue, not affiliate commission. The owner approved this exact viewer-facing disclosure on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Place an ADVERTISEMENT identifier first, speak and display the exact disclosure before the product name/link, then give the CTA. Keep YouTube's paid-promotion declaration enabled.
+- Production media must be original creator-captured wildlife footage with verified provenance and commercial rights. Do not use stock/archive footage or AI-generated wildlife visuals as substitutes; until eligible footage is supplied, use clearly labelled blank/diagram placeholders only.
+- Roderic's HeyGen Free-plan output is internal-evaluation-only and is not commercially cleared. Do not use it for production narration until written commercial rights are resolved. No alternate narrator or paid upgrade is authorized.
 - Review captions, audio, factual accuracy, thumbnail accuracy, paid-promotion disclosure, and YouTube synthetic/altered-media settings before any upload.
 
 ---
@@ -96,7 +98,7 @@ Planning does not guarantee views or income. It gives you a repeatable process f
 
 **[Visual: display a clear ADVERTISEMENT identifier, then the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
 
-Advertisement. If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
+Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. Check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
 
 Thanks for watching SonicVhibez. Choose one question for your next video, check that you can answer it honestly, and plan the story before you open the editing timeline.
 
@@ -104,10 +106,13 @@ Thanks for watching SonicVhibez. Choose one question for your next video, check 
 
 ### Suggested description
 
-Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization. Narration uses AI-generated text-to-speech; any realistic AI-generated wildlife scenes or meaningful alterations of real events or places must be disclosed using YouTube's AI use setting.
+Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization. Narration is not commercially cleared. Roderic's HeyGen Free-plan sample is internal-evaluation-only; do not use it in production until written commercial rights are resolved. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited. Use only original creator-captured wildlife footage with verified provenance and commercial rights. If any other realistic altered or synthetic content appears, assess and apply YouTube's disclosure setting where required.
 
-ADVERTISEMENT — Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
-This product is sold through my own Selar business; purchases generate revenue for my business.  
+ADVERTISEMENT
+
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+For a structured creator-workflow resource, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
 https://selar.com/0u19v8u99l
 
 Review the current sales page and terms before purchasing. Verify all factual claims and media permissions before publishing your own videos.
@@ -127,7 +132,7 @@ wildlife video planning, wildlife filmmaking, nature documentary, YouTube storyt
 
 ### Narration script
 
-**[OPEN — 0:00–0:35 | Visual: editing timeline, narration waveform, and a licensed nature shot]**
+**[OPEN — 0:00–0:35 | Visual: editing timeline, narration waveform, and an original creator-captured nature shot with verified commercial rights]**
 
 You do not need to appear on camera to make a useful wildlife video. But faceless does not mean effortless, and it does not mean that a slideshow of reused clips automatically becomes original work. A strong video still needs a clear idea, reliable research, meaningful narration, visuals you are allowed to use, and careful editing.
 
@@ -191,7 +196,7 @@ The repeatable process is simple: research one focused question, write narration
 
 **[Visual: display a clear ADVERTISEMENT identifier, then the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
 
-Advertisement. If you want a paid resource for organizing your creator process, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** at the link in the description: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business. Read the current sales page and terms before purchasing, and decide whether it meets your needs. It does not guarantee views, revenue, or monetization.
+Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. If you want a paid resource for organizing your creator process, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** at the link in the description: https://selar.com/0u19v8u99l. Read the current sales page and terms before purchasing, and decide whether it meets your needs. It does not guarantee views, revenue, or monetization.
 
 Thanks for watching SonicVhibez. Start with one focused idea, keep your sources and rights evidence organized, and make the next video a little clearer than the last.
 
@@ -199,10 +204,13 @@ Thanks for watching SonicVhibez. Start with one focused idea, keep your sources 
 
 ### Suggested description
 
-A beginner-friendly workflow for faceless wildlife videos, covering focused research, evidence-based narration, licensed visuals and audio, editing, captions, thumbnails, disclosures, and a final quality check. No workflow can guarantee views, revenue, or YouTube monetization. Narration uses AI-generated text-to-speech; any realistic AI-generated wildlife scenes or meaningful alterations of real events or places must be disclosed using YouTube's AI use setting.
+A beginner-friendly workflow for faceless wildlife videos, covering focused research, evidence-based narration, original creator-captured visuals with verified commercial rights, editing, captions, thumbnails, disclosures, and a final quality check. No workflow can guarantee views, revenue, or YouTube monetization. Roderic's HeyGen Free-plan narration is not commercially cleared and must not be used in production until written commercial rights are resolved. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited.
 
-ADVERTISEMENT — Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
-This product is sold through my own Selar business; purchases generate revenue for my business.  
+ADVERTISEMENT
+
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+For a structured creator-workflow resource, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
 https://selar.com/0u19v8u99l
 
 Review the current sales page and terms before purchasing. Check all factual claims, asset licenses, and relevant platform policies before publishing.
