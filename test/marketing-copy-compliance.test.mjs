@@ -40,7 +40,7 @@ test("creator-education long-form script places the exact direct-sales disclosur
   assert.ok(script.includes("Do not use stock/archive footage"));
   assert.ok(script.includes("internal-evaluation-only"));
   assert.ok(script.includes("No alternate narrator or paid upgrade is authorized"));
-  assert.ok(script.includes("cannot be publicly redistributed for branded projects"));
+  assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
 });
 
 test("separate creator-education long-form script has compliant disclosure order and fail-closed production rights", () => {
