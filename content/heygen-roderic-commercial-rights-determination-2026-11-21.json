@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-21",
+  "project": "SonicVhibez and Nature Frontiers",
+  "voice": {
+    "name": "Roderic – Authoritative & Refined",
+    "voiceId": "b5c5b28db1ea408abc7d851202983bdb"
+  },
+  "request": {
+    "scope": "Zero-cost written commercial-use permission for existing Roderic narration and future Roderic generations on HeyGen Free plan; no subscription or billing changes requested.",
+    "sonicVhibezSupportThread": "1a1f90019e6d7961",
+    "natureFrontiersSupportThread": "1a1fd2af2bfaeebd"
+  },
+  "providerDetermination": {
+    "status": "DENIED",
+    "zeroCostCommercialExceptionAvailable": false,
+    "existingFreePlanOutputsCommerciallyUsable": false,
+    "futureFreePlanGenerationsCommerciallyUsable": false,
+    "publicBrandedDistributionAllowed": false,
+    "monetizationAdvertisingOrRevenueGeneratingUseAllowed": false,
+    "applicableTerms": "HeyGen Terms of Service Section 4 (Free Plan) and Voice Supplemental Terms Section 6, as quoted by HeyGen Support in its written response.",
+    "responseDatesUtc": [
+      "2026-11-20T21:37:41Z",
+      "2026-11-21T08:33:22Z"
+    ],
+    "summary": "HeyGen Support explicitly stated that it cannot grant a zero-cost commercial-use exception for Free-plan users, for existing or future narration. The existing and future Free-plan outputs are restricted to personal, non-commercial and internal evaluation; public branded distribution and commercial use are not permitted."
+  },
+  "safety": {
+    "paidPlanRequested": false,
+    "paidUpgradeUsed": false,
+    "accountOrBillingChanged": false,
+    "narrationUsedInProduction": false,
+    "publicationAuthorized": false
+  },
+  "decision": "KEEP_ALL_FREE_PLAN_RODERIC_AUDIO_OUT_OF_PUBLIC_OR_COMMERCIAL_PRODUCTION",
+  "nextRequiredAction": "A commercially licensed voice would require a paid plan, which is outside the user's zero-cost constraint. Do not substitute another voice without explicit owner approval. The Roderic-only production preference and zero-cost constraint therefore create an external rights blocker; no compliant production narration is currently available."
+}
