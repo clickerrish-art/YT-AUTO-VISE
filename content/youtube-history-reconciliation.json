@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "complete": true,
   "channelId": "UCSlkuPfHH78oGC1o418HV4w",
-  "verifiedAt": "2026-11-19T22:48:58.854Z",
+  "verifiedAt": "2026-11-20T11:13:10.643Z",
   "verifiedBy": "clickerrish-art",
-  "verificationReference": "Fresh read-only YouTube inventory workflow run 44632065508, attempt 1, exact source commit e7ae8d46232b9df01d6335cddba174a641a823e7. Authenticated @sonicvhibez identity and complete uploads playlist rechecked; the sole remote video ID, public visibility, PT20S duration and YouTube publishedAt timestamp exactly match the prior owner-reviewed reconciliation. Owner confirmed on 2026-11-18 that this sole upload is a Short and that the YouTube Studio publication date matches the API inventory; owner accepted it as historical publication evidence.",
+  "verificationReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44725743866",
   "videos": [
     {
       "id": "LjePS02hA1o",
@@ -25,13 +25,13 @@
     }
   ],
   "latestInventoryEvidence": {
-    "workflowRunId": 44632065508,
+    "workflowRunId": 44725743866,
     "workflowRunAttempt": 1,
-    "jobId": 135941004862,
-    "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
-    "verifiedAt": "2026-11-19T22:48:58.854Z",
-    "artifactId": 14582711324,
-    "artifactSha256": "a235d90228e1af3ae969751ba097af890a887f7231d6c580a0836564766b2f91",
+    "jobId": 136252575433,
+    "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
+    "verifiedAt": "2026-11-20T11:13:10.643Z",
+    "artifactId": 14623951721,
+    "artifactSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
     "complete": true,
     "uploadsPlaylistPages": 1,
     "totalUploads": 1,
@@ -131,11 +131,13 @@
   "currentFreshnessStatus": "READ_ONLY_REFRESH_MATCHES_PRIOR_OWNER_REVIEW_PENDING_OWNER_REAFFIRMATION_AND_FRESH_LOCAL_ATTEMPT_ATTESTATION",
   "lastSuccessfulInventoryAt": "2026-11-20T11:13:10.643Z",
   "latestRefreshAttempt": {
-    "workflowRunId": 44632065508,
-    "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
+    "workflowRunId": 44725743866,
+    "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
     "status": "PASS_READ_ONLY_IDENTITY_AND_COMPLETE_INVENTORY",
-    "checkedAt": "2026-11-19T22:48:58.854Z",
-    "oauthScopesVerified": true,
+    "checkedAt": "2026-11-20T11:13:10.643Z",
+    "jobId": 136252575433,
+    "artifactId": 14623951721,
+    "artifactSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
     "uploadAttempted": false,
     "metadataWriteAttempted": false,
     "publicationStateChanged": false
@@ -149,7 +151,9 @@
     "ownerConfirmedFormat": "short",
     "ownerConfirmedStudioPublicationDate": "2026-10-22",
     "ownerStatement": "The owner confirmed the only upload is a Short and its YouTube Studio publication date matches the API inventory.",
-    "scope": "Historical classification and publication-date confirmation for the one existing video; this is not approval of a new upload or publication."
+    "scope": "Historical classification and publication-date confirmation for the one existing video; this is not approval of a new upload or publication.",
+    "reaffirmationRequired": true,
+    "note": "This historical owner review was completed 2026-11-18. The 2026-11-20 complete inventory matches the same remote video record, but the fresh artifact labels format unclassified; owner reaffirmation against the fresh artifact is still required."
   },
   "publicationCycleReconciliation": {
     "status": "BLOCKED_INSUFFICIENT_PUBLISHED_HISTORY",
@@ -198,5 +202,16 @@
     "metadataWriteAttempted": false,
     "publicationStateChanged": false,
     "limitation": "Fresh inventory exactly matches the prior owner-reviewed one-video record, but the refresh artifact labels format unclassified and requires owner reaffirmation. The manual/local/third-party upload-attempt attestation remains stale after 2026-11-18."
+  },
+  "publicationHistoryReconciliation": {
+    "status": "PENDING_OWNER_REAFFIRMATION",
+    "reconciliationPath": "content/youtube-history-reconciliation.json",
+    "verifiedAt": "2026-11-20T11:13:10.643Z",
+    "verifiedBy": "clickerrish-art",
+    "freshInventoryRunId": 44725743866,
+    "freshInventoryArtifactId": 14623951721,
+    "freshInventoryArtifactSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
+    "priorOwnerReviewDate": "2026-11-18",
+    "reason": "The complete 2026-11-20 inventory matches the prior owner-reviewed video ID, channel ID, public visibility, YouTube publishedAt timestamp and 20-second duration. The fresh artifact still labels format UNCLASSIFIED_REQUIRES_OWNER_REVIEW. The owner must reaffirm that the sole public video remains a Short and confirm the Studio publication date against this exact fresh artifact before it can be treated as current owner-reviewed history."
   }
 }
