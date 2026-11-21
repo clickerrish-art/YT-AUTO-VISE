@@ -586,3 +586,31 @@ test("draft plans reject normalized snake-case, kebab-case and nested publicatio
     assert.ok(errors.some(error => error.includes(expectedPath)), `expected publication timestamp guard for ${expectedPath}`);
   }
 });
+
+test("keyword phrase clusters are concise, unique and cannot be padded with keyword stuffing", () => {
+  const tooMany = clone(checkedInPlan);
+  const crowded = tooMany.weeks.find(week => week.weekOf === "2026-11-23")
+    .items.find(item => item.id === "sonicvhibez-short-007-ethical-wildlife-filming");
+  crowded.keywordPhrases.push(
+    { phrase: "wildlife video creator tips" },
+    { phrase: "wildlife photography video tips" },
+    { phrase: "wildlife camera operator tips" },
+    { phrase: "wildlife nature film creator tips" }
+  );
+  assert.ok(validatePromotionalShortPlan(tooMany, products)
+    .some(error => /keywordPhrases must not exceed eight phrases/.test(error)));
+
+  const duplicate = clone(checkedInPlan);
+  const duplicated = duplicate.weeks.find(week => week.weekOf === "2026-11-23")
+    .items.find(item => item.id === "sonicvhibez-short-007-ethical-wildlife-filming");
+  duplicated.keywordPhrases[1].phrase = duplicated.keywordPhrases[0].phrase.toUpperCase();
+  assert.ok(validatePromotionalShortPlan(duplicate, products)
+    .some(error => /keywordPhrases must be unique after trimming and case normalization/.test(error)));
+
+  const invalid = clone(checkedInPlan);
+  const malformed = invalid.weeks.find(week => week.weekOf === "2026-11-23")
+    .items.find(item => item.id === "sonicvhibez-short-007-ethical-wildlife-filming");
+  malformed.keywordPhrases[1].phrase = " ".repeat(101);
+  assert.ok(validatePromotionalShortPlan(invalid, products)
+    .some(error => /each keyword phrase must be non-empty and no longer than 100 characters/.test(error)));
+});
