@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "assetId": "wikimedia-kruger-nile-crocodile-tilapia-2015",
+  "project": "SonicVhibez",
+  "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+  "source": {
+    "platform": "Wikimedia Commons",
+    "pageUrl": "https://commons.wikimedia.org/wiki/File:Nile_Crocodile_(Crocodylus_niloticus)_swallowing_a_Tilapia.webm",
+    "originalSourceUrl": "https://www.flickr.com/photos/berniedup/16637524937/",
+    "filename": "Nile Crocodile (Crocodylus niloticus) swallowing a Tilapia.webm",
+    "creator": "Bernard DUPONT",
+    "description": "Nile crocodile swallowing the head of a large tilapia (Oreochromis sp.) at Sabie Bridge, H10 Road east of Lower Sabie, Kruger National Park, South Africa.",
+    "dateRecorded": "2015-01-23",
+    "sourcePageCheckedAt": "2026-11-20",
+    "metadata": {
+      "durationSeconds": 14.984,
+      "width": 1280,
+      "height": 720,
+      "aspectRatio": "16:9",
+      "container": "WebM",
+      "videoCodec": "VP8",
+      "audioCodec": "Vorbis",
+      "fileSizeBytes": 11315590,
+      "frameRate": null
+    }
+  },
+  "licenseReview": {
+    "license": "Creative Commons Attribution-ShareAlike 2.0 Generic",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "licensePageEvidence": "https://commons.wikimedia.org/wiki/File:Nile_Crocodile_(Crocodylus_niloticus)_swallowing_a_Tilapia.webm",
+    "commercialUse": "PERMITTED_SUBJECT_TO_CC_BY_SA_2_0",
+    "attributionRequired": true,
+    "changesMustBeIndicated": true,
+    "shareAlikeRequiredForAdaptations": true,
+    "sourceLicenseVerification": "Commons page records the original Flickr source and states that the Flickr licence was reviewed by a trusted user on 2015-06-16.",
+    "attributionCandidate": "Nile Crocodile (Crocodylus niloticus) swallowing a Tilapia.webm by Bernard DUPONT, via Wikimedia Commons, licensed under CC BY-SA 2.0. Changes, if any, must be stated.",
+    "legalReviewRequired": "Assess how ShareAlike applies if this clip is incorporated into the final edited documentary."
+  },
+  "acquisition": {
+    "attempted": false,
+    "completed": false,
+    "filePath": null,
+    "sha256": null,
+    "retrievalNotes": "Source page and licence metadata inspected. Original media bytes have not been downloaded; no local integrity, playback or frame inspection has been performed."
+  },
+  "inspection": {
+    "playable": null,
+    "ffprobe": null,
+    "representativeFramesReviewed": false,
+    "fullClipReviewed": false,
+    "embeddedAudioReviewed": false,
+    "feedingContentAndGraphicDetailReviewed": false,
+    "visiblePeopleLogosTrademarksReviewed": false,
+    "speciesAndLocationIndependentlyConfirmed": false,
+    "behaviourConfirmed": false
+  },
+  "approvals": {
+    "commercialRightsConfirmed": false,
+    "attributionVerified": false,
+    "shareAlikeTreatmentApproved": false,
+    "humanRightsReview": "NOT_RECEIVED",
+    "scientificEditorialApproval": "NOT_RECEIVED",
+    "finalProductionApproved": false
+  },
+  "releaseDecision": "DO_NOT_USE_IN_CURRENT_PRODUCTION — REFERENCE ONLY; ORIGINAL CREATOR-CAPTURED MEDIA REQUIRED",
+  "evidenceNote": "Strong species/location match for a feeding scene; source-page licensing is not file inspection or final editorial approval. Keep the scene non-graphic and restrained if ever approved. Historical page-level licence research is retained for audit only and does not make this stock-library asset production-eligible.",
+  "historicalStatus": "OPEN_SOURCE_FILE_NOT_ACQUIRED",
+  "currentProductionDisposition": {
+    "status": "EXCLUDED_REFERENCE_ONLY",
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "reason": "This Pexels/Wikimedia Commons stock-library source is not eligible under the current owner policy. Genuine original creator-captured wildlife media is required; stock footage cannot substitute, regardless of the platform licence."
+  }
+}
