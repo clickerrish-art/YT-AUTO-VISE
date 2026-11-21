@@ -944,7 +944,7 @@ Four stock-source rights-review JSON updates were accidentally written to `main`
 
 The latest comparison shows main head `3795519ccbf58fd02d74458624b58dd2e44a88c0`; the implementation branch is 4,872 ahead / 17 behind, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
 
-The default-branch `.github/workflows/acquire-noaa-broll-candidates.yml` remains enabled because the implementation-branch disablement is not merged. It has a Tuesday schedule and manual trigger. The connected GitHub actions interface provides no workflow-disable operation; the repository owner must disable it through GitHub Actions or approve an owner-directed remediation. This remains a release blocker.
+The default-branch `.github/workflows/acquire-noaa-broll-candidates.yml` remains enabled because the implementation-branch disablement is not merged. It has a push trigger when this workflow file changes on main and a manual workflow_dispatch trigger; it has no scheduled cron trigger. The connected GitHub actions interface provides no workflow-disable operation; the repository owner must disable it through GitHub Actions or approve an owner-directed remediation. This remains a release blocker.
 
 
 ### Additional verified correction — source-led wildlife production (2026-11-21)
