@@ -27,3 +27,18 @@ test("queue readiness confines replenishment to its existing isolated proposal t
     "replenishment must operate on a copy, not the repository queue");
   assert.match(workflow, /permissions:\s*\n\s+contents:\s*read/);
 });
+
+test("queue readiness CI covers the implementation branch and all queue/dispatch regression suites", () => {
+  assert.match(workflow, /push:\\s*\\n\\s+branches:\s*\\[main, codex\\/marketing-machine-audit-fixes\\]/);
+  for (const requiredPath of [
+    '      - "test/**"',
+    '      - "tests/**"',
+    '      - "scripts/dashboard-server.mjs"',
+    '      - "scripts/worker-runner.mjs"',
+    '      - "scripts/queue-identity-policy.mjs"'
+  ]) {
+    assert.ok(workflow.includes(requiredPath), "CI path filter must include " + requiredPath);
+  }
+  assert.match(workflow, /run repository regression tests|Run repository regression tests/i);
+  assert.match(workflow, /run: node --test/);
+});
