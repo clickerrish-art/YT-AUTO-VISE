@@ -114,6 +114,28 @@ test("worker dispatches listed jobs sequentially and records fail-closed conflic
   assert.ok(cooldowns.get("job-two").nextAttemptAt > Date.now());
 });
 
+test("worker stops without polling or dispatching when queue identity reconciliation is blocked", async () => {
+  const requests = [];
+  const fetchImpl = async (url, options = {}) => {
+    requests.push({ url: String(url), method: options.method ?? "GET" });
+    return new Response(JSON.stringify({
+      code: "QUEUE_IDENTITY_RECONCILIATION_REQUIRED",
+      blockers: ["Owner approval is missing"],
+      jobs: [],
+      publishingEnabled: false
+    }), { status: 409, headers: { "content-type": "application/json" } });
+  };
+  await assert.rejects(
+    runWorkerCycle({ baseUrl: "http://127.0.0.1:8787", token, workerId, fetchImpl }),
+    error => error?.code === "WORKER_QUEUE_IDENTITY_BLOCKED" &&
+      error.retryable === false && /owner-approved content queue identities/i.test(error.message)
+  );
+  assert.equal(requests.length, 1, "a queue identity hold must stop after the read-only listing response");
+  assert.equal(requests[0].method, "GET");
+  assert.equal(requests.some(request => request.method === "POST"), false,
+    "no production dispatch may be attempted while queue identity is unresolved");
+});
+
 test("worker rejects an invalid configured dispatch limit before acquiring a process lock", async () => {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-invalid-dispatch-limit-"));
   try {
