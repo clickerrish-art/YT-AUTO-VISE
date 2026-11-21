@@ -1,4 +1,5 @@
-# Nile Crocodile Documentary 001 — Source-to-Claim Fact-Check Ledger
+# Nile Crocodile Alternate Draft — Source-to-Claim Fact-Check Ledger (Unqueued)
+**Scope:** This ledger applies only to `content/nile-crocodile-documentary-001-draft.md`, an unqueued alternate research draft. The canonical owner-approved Long-form 001 is `content/drafts/long-form-001-two-eyes-above-water.md`. This ledger is not a review or approval of the canonical script and must not be used as production sign-off.
 
 **Checked:** 21 November 2026  
 **Project:** SonicVhibez  
