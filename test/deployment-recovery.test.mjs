@@ -192,8 +192,8 @@ test("legacy repository runner and staging smoke remain disabled until OIDC trus
   const workflow = fs.readFileSync(path.join(repositoryRoot, ".github", "workflows", "repository-runner.yml"), "utf8");
   assert.ok(workflow.includes("run_staging_smoke:\n        description: \"Legacy staging smoke disabled pending OIDC trust migration\"\n        required: false\n        type: boolean\n        default: false"));
   assert.ok(workflow.includes("run_repository_runner:\n        description: \"Legacy production runner disabled pending OIDC trust migration\"\n        required: false\n        type: boolean\n        default: false"));
-  assert.equal((workflow.match(/if: \\$\\{\\{ false \\}\\}/g) ?? []).length, 2);
-  assert.equal((workflow.match(/id-token: write/g) ?? []).length, 0);
+  assert.equal(workflow.split("if: ${{ false }}").length - 1, 2);
+  assert.equal(workflow.split("id-token: write").length - 1, 0);
 });
 
 
