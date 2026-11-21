@@ -346,8 +346,8 @@ export function validateUploadApproval(approval, { jobId, artifactSha256, metada
   if (!Array.isArray(receipt.checks) || requiredChecks.some(check => !receipt.checks.includes(check))) {
     throw new Error("technical-validation receipt is missing required export, metadata, caption or thumbnail checks");
   }
-  if (typeof receipt.checkedAt !== "string" || !/(Z|[+-]\d{2}:\d{2})$/.test(receipt.checkedAt) ||
-      !Number.isFinite(Date.parse(receipt.checkedAt)) || Date.parse(receipt.checkedAt) > Date.now()) {
+  const checkedAtTimestamp = strictIsoTimestamp(receipt.checkedAt);
+  if (!Number.isFinite(checkedAtTimestamp) || checkedAtTimestamp > Date.now()) {
     throw new Error("technical-validation receipt must have a valid non-future timezone-aware checkedAt timestamp");
   }
   if (approval.publishingEnabled !== false || approval.visibility !== "private") throw new Error("approval must explicitly preserve private-only publishing");
