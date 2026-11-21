@@ -359,3 +359,15 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Isolated local Node 22 checks: queue policy **8/8 PASS**; approval-template builder **2/2 PASS**; syntax check passed for both isolated modules. These are focused isolated validations, not a substitute for the full repository suite.
 - Owner input still required: choose the detailed item for each operational long-form slot, confirm the canonical Nile Crocodile Long-form 001 placement and the second topic, then complete and commit the approval record. No mapping or approval was fabricated.
 
+
+
+---
+
+## Direct YouTube uploader workflow credential-wiring fix — 21 November 2026
+
+- Found a release-blocking mismatch: `scripts/upload-private.mjs` requires `YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64` for live one-shot uploads, but neither `.github/workflows/upload-private.yml` nor `.github/workflows/upload-artifact-privately.yml` passed that secret to the uploader. A correctly authorized live upload would therefore fail before reaching YouTube.
+- Both private-upload workflows now pass the public Ed25519 verification key to the live uploader and check that the secret exists before upload execution. The read-only identity-verification job does not receive the key because it does not need it.
+- Updated `test/upload-private-workflow.test.mjs` to assert the key is passed and required in both upload entry points, and absent from the read-only job.
+- The key is a public verification key; the owner must configure the matching base64-encoded Ed25519 public key as the GitHub Actions secret `YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64`. The private signing key must remain outside the repository and must never be pasted into chat.
+- Workflow and regression changes are committed but **NOT_TESTED** on exact HEAD. No upload was attempted and no secret value was read or changed.
+
