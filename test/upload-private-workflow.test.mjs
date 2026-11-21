@@ -33,6 +33,18 @@ test("explicit private upload validates all artifact-bound inputs before ledger 
   assert.ok(privateUploadJob.includes("YOUTUBE_EMERGENCY_STOP: ${{ inputs.confirm_emergency_stop_release == 'YES'"));
 });
 
+test("both live private-upload workflows pass and require the Ed25519 one-shot authorization public key", () => {
+  const artifactWorkflow = fs.readFileSync(".github/workflows/upload-artifact-privately.yml", "utf8");
+  const keyBinding = "YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64: ${{ secrets.YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64 }}";
+  const requiredLoop = "for name in YOUTUBE_CLIENT_ID YOUTUBE_CLIENT_SECRET YOUTUBE_REFRESH_TOKEN YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64 SONICVHIBEZ_CHANNEL_ID; do";
+  assert.ok(privateUploadJob.includes(keyBinding), "primary uploader job must pass the public verification key");
+  assert.ok(privateUploadJob.includes(requiredLoop), "primary uploader must fail early when the key secret is absent");
+  assert.ok(!readOnlyJob.includes(keyBinding), "read-only channel verification does not need the signing verification key");
+  assert.ok(artifactWorkflow.includes(keyBinding), "artifact uploader job must pass the public verification key");
+  assert.ok(artifactWorkflow.includes(requiredLoop), "artifact uploader must fail early when the key secret is absent");
+  assert.match(uploaderSource, /YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64/);
+});
+
 test("workflow keeps the emergency stop default engaged and private upload explicitly opt-in", () => {
   assert.match(workflow, /confirm_emergency_stop_release:\s+description:[\s\S]*?required: true\s+default: 'NO'/);
   assert.ok(workflow.includes("group: sonicvhibez-private-upload"));
