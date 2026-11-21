@@ -50,6 +50,15 @@ test("separate creator-education long-form script has compliant disclosure order
   assert.ok(script.includes("AI-generated wildlife visuals are prohibited"));
   assert.ok(script.includes("not commercially cleared"));
   assert.ok(script.includes("No alternate voice or paid upgrade is authorized"));
+  assert.ok(script.includes("Queue ID: `long-story-wildlife-footage`"));
+  assert.ok(script.includes("NOT ASSIGNED"));
+  assert.ok(!script.includes("Long-Form Video 001"));
+  const queue = JSON.parse(readText("content/long-form-queue.json"));
+  const draft = queue.items.find(item => item.id === "long-story-wildlife-footage");
+  assert.ok(draft);
+  assert.equal(draft.scriptPath, "content/long-form-001-wildlife-story-script.md");
+  assert.equal(draft.status, "SCRIPT_DRAFT");
+  assert.equal(Object.hasOwn(draft, "publicationCyclePosition"), false);
 });
 
 test("Episode 001 and 002 metadata drafts disclose direct sales before the product CTA and exclude NOAA stock claims", () => {
