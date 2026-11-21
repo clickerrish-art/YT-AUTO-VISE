@@ -24,7 +24,8 @@
     "Pexels platform license permits commercial use and modification; source hashes and creator/source pages are documented in short-001-pexels-rights-evidence.json. Third-party rights, releases, location permissions and owner final approval remain unverified.",
     "Three Pexels clips were used only in a 56.71-second silent 720x1280 visual review preview, with repeated footage for timing; this is not the final edit or a release-ready export.",
     "The fourth primary clip is excluded from the preview because visible enclosure/barrier and partial foreground person appear.",
-    "No final video, approved narration, synchronized final captions, thumbnail, final metadata approval, exact-hash human video review, private-upload authorization or publishing action is recorded."
+    "No final video, approved narration, synchronized final captions, thumbnail, final metadata approval, exact-hash human video review, private-upload authorization or publishing action is recorded.",
+    "Owner decision 2026-11-22: Roderic is no longer mandatory; zero-cost commercially licensed alternative voice auditions are authorized. Existing Norman/Piper 53.023-second sample is available for listening but is not production-approved."
   ],
   "containsAIWildlifeVisuals": false,
   "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
@@ -36,9 +37,9 @@
   "captionHashType": "GIT_BLOB_SHA",
   "referenceOnlyRightsResearchEvidence": "short-001-pexels-rights-evidence.json",
   "footageEligibilityStatus": "EXCLUDED_PEXELS_STOCK_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA",
-  "narrationRightsStatus": "PROVIDER_DENIED",
+  "narrationRightsStatus": "ALTERNATIVE_VOICE_AUDITION_AVAILABLE_OWNER_REVIEW_REQUIRED",
   "narrationPublicBrandedDistributionAllowed": false,
   "narrationCommercialUseAllowed": false,
   "narrationProductionUseAllowed": false,
-  "narrationRestrictionSummary": "HeyGen Support confirmed the Free-plan Roderic output is limited to internal evaluation and is not permitted for public branded distribution or commercial/production use. Keep all Roderic Free-plan audio out of public videos. No paid plan or narrator substitution without explicit owner approval."
+  "narrationRestrictionSummary": "Roderic Free-plan audio remains prohibited for public branded or commercial use. Owner authorized zero-cost commercially licensed alternatives; Norman/Piper is an audition only. Production remains blocked pending owner listening, final voice selection, final audio hash approval and synchronized captions."
 }
