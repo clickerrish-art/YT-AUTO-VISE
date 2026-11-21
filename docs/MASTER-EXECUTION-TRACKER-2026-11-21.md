@@ -292,3 +292,16 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - `main`: `3795519ccbf58fd02d74458624b58dd2e44a88c0`, unchanged.
 - Branch comparison: 5,078 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
 - PR #1: open, draft, unmerged. No branch protection, workflow or production permission was changed.
+
+
+---
+
+## Queue guard timestamp validation and CI trigger coverage — 21 November 2026
+
+- Added strict timezone-qualified ISO timestamp validation for queue owner approvals. Invalid calendar dates (for example 31 February), malformed times, offsets beyond ±14:00 and malformed timestamps are rejected rather than normalized by permissive `Date.parse`.
+- Expanded the isolated queue-policy regression cases to include impossible calendar dates and invalid timezone offsets. The isolated Node 22 run completed **7 tests, 7 passed, 0 failed, 0 skipped**; `node --check` passed for the policy module.
+- Updated `.github/workflows/queue-readiness.yml` to run on owner-authenticated pushes to both `main` and `codex/marketing-machine-audit-fixes`, and to trigger for `test/**`, `tests/**`, dashboard, worker and queue-policy changes. The pull-request path filter now covers the same guard/test files.
+- Updated `.github/workflows/production-readiness.yml` path filters for queue identity, dashboard and worker code and the test tree, so readiness diagnostics are not silently skipped for those changes.
+- Added a workflow regression assertion for implementation-branch trigger and path coverage. The workflow regression test and all repository integration tests remain **NOT_TESTED** because the repository is not checked out in this execution environment and connector-created commits have produced no Actions runs.
+- No workflow was run with credentials, no upload was attempted, and no production or billing setting was changed.
+
