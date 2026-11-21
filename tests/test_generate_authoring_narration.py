@@ -27,6 +27,11 @@ def short_payload(word_count=130):
 
 
 class AuthoringNarrationTests(unittest.TestCase):
+
+    def test_authoring_tts_is_blocked_without_alternative_voice_authorization(self):
+        with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+            MODULE.require_owner_authorized_alternative_voice()
+
     def test_accepts_measured_short_with_matching_sections_and_claim_sources(self):
         narration, count = MODULE.validate_script_payload(short_payload(), "short")
         self.assertEqual(count, 130)
