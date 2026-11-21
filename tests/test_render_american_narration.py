@@ -3,6 +3,11 @@ from pathlib import Path
 from scripts import render_american_narration as module
 
 class AmericanNarrationTests(unittest.TestCase):
+
+    def test_alternative_voice_render_cli_is_blocked(self):
+        with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+            module.require_owner_authorized_alternative_voice()
+
     def test_voice_is_us_english_male_norman(self):
         self.assertEqual(module.VOICE_ID,"en_US-norman-medium")
         self.assertIn("American English",module.DIRECTION)
