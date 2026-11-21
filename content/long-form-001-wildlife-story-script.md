@@ -6,7 +6,7 @@
 **Channel:** SonicVhibez  
 **Format:** 16:9 long-form, target 7–8 minutes  
 **Status:** SCRIPT DRAFT — research/source review, media rights, commercially licensed narration, captions, thumbnail and human approval still required  
-**Narration rights:** Roderic is the preferred voice, but HeyGen Support confirmed that Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. The existing WAV is internal-evaluation-only. No production narration is authorized until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint; no alternate voice or paid upgrade is authorized.  
+**Narration rights:** Roderic is the preferred voice, but HeyGen Support confirmed that Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. The existing WAV is internal-evaluation-only. No production narration is authorized until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint; zero-cost commercially licensed alternative voices may be auditioned only; production use requires owner approval of the exact final audio. No paid upgrade is authorized.  
 **Audience:** Beginner wildlife filmmakers and faceless YouTube creators  
 **Core promise:** A repeatable editing method for turning a collection of animal clips into a clear, honest mini-story.
 
