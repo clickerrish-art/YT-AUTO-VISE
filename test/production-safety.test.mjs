@@ -53,7 +53,8 @@ test("narration generation remains disabled while Roderic commercial rights are 
     assert.doesNotMatch(workflow, /upload-artifact/i);
   }
   assert.equal(narrationPolicy.ownerDecision.approvedVoiceId, "b5c5b28db1ea408abc7d851202983bdb");
-  assert.equal(narrationPolicy.ownerDecision.alternativeVoicesAuthorized, false);
+  assert.equal(narrationPolicy.ownerDecision.alternativeVoicesAuthorized, true);
+  assert.equal(narrationPolicy.ownerDecision.selectionStatus, "PENDING_OWNER_LISTENING");
   assert.equal(narrationPolicy.ownerDecision.paidUpgradeAuthorized, false);
   assert.equal(narrationPolicy.ownerDecision.commercialRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21");
   assert.match(narrationPolicyHelper, /alternativeVoicesAuthorized/);
