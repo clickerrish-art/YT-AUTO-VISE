@@ -42,6 +42,9 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
   if (register.policy?.requireHumanApproval !== true) errors.push("human approval must be required");
   if (register.policy?.allowAutomaticPublication !== false) errors.push("automatic publication must remain disabled");
   if (register.policy?.sourceOfTruth !== "versioned-local-json") errors.push("source of truth must be versioned local JSON");
+  if (register.policy?.originalCreatorCapturedMediaRequired !== true) errors.push("original creator-captured media must be required");
+  if (register.policy?.stockMediaAllowed !== false) errors.push("stock media must remain excluded from production");
+  if (register.policy?.aiGeneratedWildlifeVisualsAllowed !== false) errors.push("AI-generated wildlife visuals must remain excluded from production");
   if (!Array.isArray(register.assets)) return [...errors, "assets must be an array"];
 
   const ids = new Set();
@@ -53,6 +56,21 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
     ids.add(asset.id);
     if (!["video", "image", "audio"].includes(asset.mediaType)) errors.push(at + " has an unsupported mediaType");
     if (!asset.source || typeof asset.source.provider !== "string" || !asset.source.provider.trim()) errors.push(at + " requires a provider-neutral source record");
+    const providerName = String(asset.source?.provider ?? "").toLowerCase();
+    const isStockProvider = ["pexels", "pixabay"].includes(providerName);
+    const eligibility = asset.productionEligibility ?? {};
+    if (typeof eligibility.eligible !== "boolean") errors.push(at + " requires an explicit productionEligibility.eligible boolean");
+    if (isStockProvider && (eligibility.eligible !== false || eligibility.status !== "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY")) {
+      errors.push(at + " Pexels/Pixabay stock listings must remain reference-only and production-ineligible");
+    }
+    if (eligibility.eligible === false && (typeof eligibility.reason !== "string" || !eligibility.reason.trim())) {
+      errors.push(at + " ineligible media requires a recorded exclusion reason");
+    }
+    if (eligibility.eligible === true) {
+      if (asset.source?.captureType !== "original_creator_captured") errors.push(at + " production-eligible media must be original creator-captured footage");
+      if (typeof asset.source?.contributor !== "string" || !asset.source.contributor.trim()) errors.push(at + " original creator identity is required for production-eligible media");
+      if (isStockProvider) errors.push(at + " stock-provider media cannot be production-eligible");
+    }
     if (!validHttpsUrl(asset.source?.url)) errors.push(at + " source URL must be HTTPS without embedded credentials");
     if (!["unverified", "verified", "unavailable", "rejected"].includes(asset.source?.listingStatus)) errors.push(at + " has an invalid listingStatus");
     if (!Array.isArray(asset.source?.listingEvidence)) errors.push(at + " listingEvidence must be an array");
@@ -123,6 +141,17 @@ export function validateMediaRegister(register, { now = Date.now() } = {}) {
     }
 
     const approval = asset.approval ?? {};
+    if (approval.status === "approved" && eligibility.eligible !== true) {
+      errors.push(at + " cannot be approved for production while productionEligibility.eligible is false");
+    }
+    if (eligibility.eligible === true) {
+      if (!asset.localFile || !SHA256.test(asset.localFile.sha256 ?? "")) errors.push(at + " production eligibility requires exact local source bytes and SHA-256");
+      if (rights.reviewStatus !== "cleared") errors.push(at + " production eligibility requires cleared commercial rights");
+      if (inspection.status !== "complete") errors.push(at + " production eligibility requires complete human visual inspection");
+      if (approval.status !== "approved" || approval.approvedFileSha256 !== asset.localFile?.sha256) {
+        errors.push(at + " production eligibility requires human approval bound to the exact source file hash");
+      }
+    }
     if (!["pending", "approved", "rejected", "revoked"].includes(approval.status)) errors.push(at + " has an invalid approval.status");
     if (approval.status === "approved") {
       if (claimRecords.some(claim => !["verified", "not_used"].includes(claim?.status))) errors.push(at + " cannot be approved while factual claims remain listing-only or unverified");
