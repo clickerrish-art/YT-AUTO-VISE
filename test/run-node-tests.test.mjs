@@ -10,7 +10,8 @@ test("isolated Node test runner bounds each child process and reports timeouts e
   assert.match(source, /result\.error\.code === "ETIMEDOUT"/);
   assert.match(source, /timed out after/);
   assert.match(source, /stdio: \["ignore", outputFd, outputFd\]/);
-  assert.match(source, /const detached = process\.platform !== "win32"/);\n  assert.match(source, /\\bdetached\\s*$/m);
+  assert.match(source, /const detached = process\.platform !== "win32"/);
+  assert.match(source, /^\s+detached$/m);
   assert.match(source, /process\.kill\(-result\.pid, "SIGKILL"\)/);
   assert.match(source, /fs\.readFileSync\(outputPath, "utf8"\)/);
 });
