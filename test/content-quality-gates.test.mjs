@@ -81,7 +81,9 @@ test("render edit plan is reproducible for same seed and does not accept unverif
 test("asset provenance requires traceable origin, hash, commercial permission and human rights verification", () => {
   const record = {
     assetId: "asset-1",
-    sourceMethod: "GENERATED",
+    sourceMethod: "ORIGINAL_RECORDING",
+    creatorCapturedOriginal: true,
+    captureProvenance: "Original camera recording supplied by the identified creator; source file retained unchanged",
     creatorOrRightsHolder: "SonicVhibez",
     originalSha256: hash,
     acquiredAt: "2026-10-25T10:00:00Z",
@@ -93,9 +95,13 @@ test("asset provenance requires traceable origin, hash, commercial permission an
     verifiedAt: "2026-10-25T11:00:00Z",
     generationMethod: "Text-to-video with reviewed prompt",
     generationTool: "Approved generator",
-    editorialPurpose: "Illustrate habitat"
+    editorialPurpose: "Document observed habitat behaviour"
   };
   assert.equal(validateAssetProvenance(record).valid, true);
+  assert.match(validateAssetProvenance({ ...record, sourceMethod: "GENERATED" }).errors.join(" "), /original creator recording/);
+  assert.match(validateAssetProvenance({ ...record, sourceMethod: "LICENSED" }).errors.join(" "), /original creator recording/);
+  assert.match(validateAssetProvenance({ ...record, creatorCapturedOriginal: false }).errors.join(" "), /creatorCapturedOriginal/);
+  assert.match(validateAssetProvenance({ ...record, captureProvenance: "" }).errors.join(" "), /captureProvenance/);
   assert.match(validateAssetProvenance({ ...record, originalSha256: "bad" }).errors.join(" "), /SHA-256/);
   assert.match(validateAssetProvenance({ ...record, commercialUseAllowed: false }).errors.join(" "), /commercial use/);
   assert.match(validateAssetProvenance({ ...record, licenseEvidenceLocation: "TODO" }).errors.join(" "), /licenseEvidenceLocation/);
