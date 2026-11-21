@@ -90,7 +90,7 @@ test("external-gated render and upload-reconciliation routes fail closed without
   assert.deepEqual(renderResponses.map(response => response.status), [409, 409]);
   const renderBodies = await Promise.all(renderResponses.map(response => response.json()));
   assert.ok(renderBodies.every(body => body.renderStarted === false && body.publishable === false && body.publishingEnabled === false));
-  assert.ok(renderBodies.every(body => /approved authoring pipeline/i.test(body.error)));
+  assert.ok(renderBodies.every(body => /queue identity reconciliation is not owner-approved/i.test(body.error)));
   assert.deepEqual(fs.readFileSync(statePath), beforeGatedOperations, "blocked rendering must not claim the job, lease, output or audit event");
 
   const reconcilePayload = {

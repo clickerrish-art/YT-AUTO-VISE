@@ -87,7 +87,7 @@ test("private-only Short upload accepts an explicit BLOCKED_EXTERNAL native Rela
   assert.throws(() => validateUploadApproval({ ...validApproval, shortParentRelationship: null }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /parent relationship/);
   assert.throws(() => validateUploadApproval({ ...validApproval, shortParentRelationshipSha256: sha("8") }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /does not bind the exact Short-to-parent relationship/);
   assert.throws(() => validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("9"), metadataVersion: sha("b"), channelId }), /childMediaSha256/);
-  assert.throws(() => validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId: "UC" + "Z".repeat(22) }), /configured SonicVhibez channel/);
+  assert.throws(() => validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId: "UC" + "Z".repeat(22), contentType: "short" }), /configured SonicVhibez channel/);
 });
 
 test("Short relationship cannot claim private parent native Related video eligibility", () => {

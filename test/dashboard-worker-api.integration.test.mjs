@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { createTestDashboardProject } from "./helpers/queue-identity-fixture.mjs";
 
 async function reservePort() {
   const server = createServer();
@@ -18,11 +19,13 @@ async function reservePort() {
 }
 
 test("scoped worker credential can only read dispatchable jobs and cannot access operator state", async t => {
+  const project = createTestDashboardProject("sonicvhibez-worker-api-project-");
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-worker-api-"));
   const port = await reservePort();
   const operatorToken = "operator-test-token-" + "o".repeat(32);
   const workerToken = "worker-test-token-" + "w".repeat(32);
-  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
+  const child = spawn(process.execPath, [path.join(project.root, "scripts", "dashboard-server.mjs")], {
+    cwd: project.root,
     env: {
       ...process.env,
       DASHBOARD_OPERATOR_TOKEN: operatorToken,
@@ -42,6 +45,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     child.kill("SIGTERM");
     await new Promise(resolve => child.exitCode !== null ? resolve() : child.once("exit", resolve));
     fs.rmSync(stateDir, { recursive: true, force: true });
+    project.cleanup();
   });
   const base = "http://127.0.0.1:" + port;
   let started = false;
@@ -231,9 +235,9 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     /not linked to the required approved authoring pipeline/);
   assert.equal(fs.readFileSync(statePath).toString(), before.toString(),
     "blocked production without approved authoring must not mutate job state, audit or worker lease");
-  assert.equal(fs.existsSync(path.join(process.cwd(), "content", "job-render-manifests", "queued-legacy-without-authoring.json")), false,
+  assert.equal(fs.existsSync(path.join(project.root, "content", "job-render-manifests", "queued-legacy-without-authoring.json")), false,
     "blocked production must not create a render manifest");
-  assert.equal(fs.existsSync(path.join(process.cwd(), "media", "jobs", "queued-legacy-without-authoring")), false,
+  assert.equal(fs.existsSync(path.join(project.root, "media", "jobs", "queued-legacy-without-authoring")), false,
     "blocked production must not create a per-job media directory");
 
   // A retained output or manifest is evidence of a previous/partial render.
@@ -259,8 +263,8 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   const recoveryState = JSON.parse(fs.readFileSync(statePath, "utf8"));
   recoveryState.jobs.push(...recoveryJobs);
   fs.writeFileSync(statePath, JSON.stringify(recoveryState, null, 2) + "\n");
-  const outputDirectory = path.join(process.cwd(), "media", "jobs", "recovery-output-job");
-  const manifestDirectory = path.join(process.cwd(), "content", "job-render-manifests");
+  const outputDirectory = path.join(project.root, "media", "jobs", "recovery-output-job");
+  const manifestDirectory = path.join(project.root, "content", "job-render-manifests");
   fs.mkdirSync(outputDirectory, { recursive: true });
   fs.mkdirSync(manifestDirectory, { recursive: true });
   const retainedOutput = path.join(outputDirectory, "final.mp4");

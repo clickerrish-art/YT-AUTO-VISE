@@ -6,8 +6,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
-
-const root = process.cwd();
+import { createTestDashboardProject } from "./helpers/queue-identity-fixture.mjs";
 const token = "dispatch-order-acceptance-" + "x".repeat(40);
 
 async function reservePort() {
@@ -21,9 +20,9 @@ async function reservePort() {
   return port;
 }
 
-function launchDashboard(port, stateDir) {
-  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    cwd: root,
+function launchDashboard(port, stateDir, projectRoot) {
+  const child = spawn(process.execPath, [path.join(projectRoot, "scripts", "dashboard-server.mjs")], {
+    cwd: projectRoot,
     env: {
       ...process.env,
       DASHBOARD_OPERATOR_TOKEN: token,
@@ -100,15 +99,17 @@ function job(id, {
 }
 
 test("dispatchable queue is read-only, approval-gated, ordered by scheduled instant and stable on ties", async t => {
+  const project = createTestDashboardProject("sonicvhibez-dispatch-order-project-");
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dispatch-order-"));
   const statePath = path.join(stateDir, "dashboard-state.json");
   let instance;
   t.after(async () => {
     await stopDashboard(instance);
     fs.rmSync(stateDir, { recursive: true, force: true });
+    project.cleanup();
   });
 
-  instance = launchDashboard(await reservePort(), stateDir);
+  instance = launchDashboard(await reservePort(), stateDir, project.root);
   await waitForReady(instance);
   const state = JSON.parse(fs.readFileSync(statePath, "utf8"));
   const saturday = futureScheduleDate("Saturday", 1);

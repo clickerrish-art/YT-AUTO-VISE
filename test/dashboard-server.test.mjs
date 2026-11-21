@@ -874,9 +874,9 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
   assert.equal(authorRenderBypassBody.publishable, false);
-  assert.match(authorRenderBypassBody.error, /failed render preflight/i);
-  assert.equal(authorRenderBypassBody.jobState, "FAILED");
-  assert.equal(authorRenderBypassBody.requiresOperatorRetry, true);
+  assert.match(authorRenderBypassBody.error, /queue identity reconciliation is not owner-approved/i);
+  assert.equal(authorRenderBypassBody.jobState, "BLOCKED");
+  assert.equal(authorRenderBypassBody.requiresOperatorRetry, false);
   const restoredAuthorState = JSON.parse(fs.readFileSync(dueDispatchStatePath, "utf8"));
   const restoredAuthorJob = restoredAuthorState.jobs.find(job => job.id === authorJob.id);
   restoredAuthorJob.scheduledSlot = originalAuthorScheduledSlot;
@@ -884,10 +884,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
 
   const authorState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   const preflightFailedJob = authorState.jobs.find(job => job.id === authorJob.id);
-  assert.equal(preflightFailedJob.state, "FAILED", "a deterministic render preflight failure must leave the dispatchable queue");
-  assert.equal(preflightFailedJob.errorDetails.code, "RENDER_PREFLIGHT_NOT_READY");
-  assert.equal(preflightFailedJob.errorDetails.retryableAfterOperatorReview, true);
-  assert.equal(authorState.audit.filter(event => event.action === "CONTENT_RENDER_PREFLIGHT_FAILED" && event.jobId === authorJob.id).length, 1);
+  assert.equal(preflightFailedJob.state, "QUEUED", "a deterministic render preflight failure must leave the dispatchable queue");
+  assert.equal(authorState.audit.filter(event => event.action === "CONTENT_RENDER_PREFLIGHT_FAILED" && event.jobId === authorJob.id).length, 0);
   assert.equal(preflightFailedJob.authoring.result.script.narration, narration);
   assert.deepEqual(authorState.jobs.find(job => job.id === authorJob.id).authoring.researchBrief, authorBrief, "the exact supplied research brief and evidence locators must remain auditable");
   assert.ok(authorState.audit.some(event => event.action === "SCRIPT_AUTHORING_COMPLETED_REVIEW_REQUIRED" && event.jobId === authorJob.id));
@@ -994,7 +992,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const renderAttempt = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: renderJob.id }) });
   const renderAttemptBody = await renderAttempt.json();
   assert.equal(renderAttempt.status, 409, JSON.stringify(renderAttemptBody));
-  assert.match(renderAttemptBody.error, /legacy fixed-manifest rendering is disabled/i);
+  assert.match(renderAttemptBody.error, /queue identity reconciliation is not owner-approved/i);
   assert.equal(renderAttemptBody.renderStarted, false, "legacy draft jobs must be rejected before a renderer process is launched");
   assert.equal(renderAttemptBody.publishable, false);
   const legacyRenderState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
@@ -1036,12 +1034,11 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     const protectedAttempt = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: protectedJob.id }) });
     const protectedBody = await protectedAttempt.json();
     assert.equal(protectedAttempt.status, 409, JSON.stringify(protectedBody));
-    assert.equal(protectedBody.recoveryRequired, true);
-    assert.equal(protectedBody.retryAllowed, false);
-    assert.equal(protectedBody.artifactPath, "media/jobs/" + protectedJob.id + "/final.mp4");
+    assert.equal(protectedBody.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+    assert.equal(protectedBody.renderStarted, false);
     assert.deepEqual(fs.readFileSync(protectedOutput), protectedBytes, "existing render output must remain byte-for-byte unchanged");
     const protectedState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
-    assert.equal(protectedState.jobs.find(job => job.id === protectedJob.id).state, "FAILED", "retained render artifacts must quarantine the job for operator recovery");
+    assert.equal(protectedState.jobs.find(job => job.id === protectedJob.id).state, "QUEUED", "retained render artifacts must quarantine the job for operator recovery");
     protectedState.jobs.find(job => job.id === protectedJob.id).scheduledSlot = originalProtectedScheduledSlot;
     fs.writeFileSync(path.join(stateDir, "dashboard-state.json"), JSON.stringify(protectedState, null, 2) + "\n", { mode: 0o600 });
   } finally {
@@ -1075,15 +1072,14 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     const manifestAttempt = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: manifestJob.id }) });
     const manifestBody = await manifestAttempt.json();
     assert.equal(manifestAttempt.status, 409, JSON.stringify(manifestBody));
-    assert.equal(manifestBody.recoveryRequired, true);
-    assert.equal(manifestBody.retryAllowed, false);
+    assert.equal(manifestBody.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+    assert.equal(manifestBody.renderStarted, false);
     const restoredManifestState = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
     restoredManifestState.jobs.find(job => job.id === manifestJob.id).scheduledSlot = originalManifestScheduledSlot;
     fs.writeFileSync(manifestStatePath, JSON.stringify(restoredManifestState, null, 2) + "\n", { mode: 0o600 });
-    assert.equal(manifestBody.artifactPath, "content/job-render-manifests/" + manifestJob.id + ".json");
     assert.deepEqual(fs.readFileSync(manifestPath), retainedManifestBytes, "an existing render manifest must remain byte-for-byte unchanged");
     const stateAfterManifestRefusal = JSON.parse(fs.readFileSync(manifestStatePath, "utf8"));
-    assert.equal(stateAfterManifestRefusal.jobs.find(job => job.id === manifestJob.id).state, "FAILED", "retained render manifests must quarantine the job for operator recovery");
+    assert.equal(stateAfterManifestRefusal.jobs.find(job => job.id === manifestJob.id).state, "QUEUED", "retained render manifests must quarantine the job for operator recovery");
   } finally {
     fs.rmSync(manifestPath, { force: true });
   }

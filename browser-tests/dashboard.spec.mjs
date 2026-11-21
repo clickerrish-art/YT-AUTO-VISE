@@ -817,7 +817,7 @@ test("production controls disable safely when real media prerequisites are missi
     const blockedRender = await request.post("/api/jobs/produce", { headers, data: { jobId: job.id } });
     expect(blockedRender.status()).toBe(409);
     const blockerBody = await blockedRender.json();
-    expect(blockerBody.error).toMatch(/approved authoring pipeline/i);
+    expect(blockerBody.error).toMatch(/queue identity reconciliation/i);
     expect(blockerBody.blockers).toEqual(expect.arrayContaining([
       expect.stringMatching(/research and source evidence/i),
       expect.stringMatching(/script and narration\/caption stages/i),

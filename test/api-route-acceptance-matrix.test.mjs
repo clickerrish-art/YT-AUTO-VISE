@@ -61,15 +61,16 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
   const currentSha = matrix.currentHeadReconciliation?.observedImplementationHeadSha;
   assert.match(currentSha || "", /^[a-f0-9]{40}$/,
     "API positive-route evidence must identify an exact tested source/test SHA");
-  assert.equal(matrix.currentHeadReconciliation?.status, "PASS");
-  assert.equal(matrix.currentHeadReconciliation?.positiveRoutesReconciled, 42);
+  assert.equal(matrix.currentHeadReconciliation?.status, "PARTIAL");
+  assert.equal(matrix.currentHeadReconciliation?.positiveRoutesReconciled, 41);
   assert.equal(matrix.currentHeadReconciliation?.blockedRoutesPreserved, 6);
+  assert.equal(matrix.currentHeadReconciliation?.ownerGatedRoutes, 2);
   assert.equal(matrix.latestCurrentHeadPositiveEvidence?.sourceTestSha, currentSha);
 
   const positive = matrix.routes.filter(route => route.overallAcceptance === "PASS");
   const blocked = matrix.routes.filter(route => route.overallAcceptance === "BLOCKED");
-  assert.equal(positive.length, 42);
-  assert.equal(blocked.length, 6);
+  assert.equal(positive.length, 41);
+  assert.equal(blocked.length, 7);
 
   for (const route of positive) {
     assert.equal(route.currentHeadStatus, "PASS", `${route.method} ${route.path} must be reconciled`);
@@ -84,8 +85,15 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
   }
 
   for (const route of blocked) {
-    assert.equal(route.currentHeadStatus, "BLOCKED");
-    assert.equal(route.currentHeadEvidenceSha, currentSha);
+    if ((route.method === "GET" && route.path === "/api/jobs/dispatchable") ||
+        (route.method === "POST" && route.path === "/api/jobs/produce")) {
+      assert.equal(route.currentHeadStatus, "NOT_TESTED");
+      assert.equal(route.currentHeadEvidenceSha, null);
+      assert.match(route.currentHeadEvidenceNote, /owner-approved content\/queue-identity-approval\.json is absent/i);
+    } else {
+      assert.equal(route.currentHeadStatus, "BLOCKED");
+      assert.equal(route.currentHeadEvidenceSha, currentSha);
+    }
   }
 
   const expectedBlocked = [
@@ -93,6 +101,7 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
     "POST /api/facebook/publish",
     "POST /api/facebook/verify-page",
     "POST /api/instagram/approve",
+    "GET /api/jobs/dispatchable",
     "POST /api/jobs/produce",
     "POST /api/uploads/reconcile"
   ];

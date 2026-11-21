@@ -4,6 +4,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { createTestDashboardProject } from "./helpers/queue-identity-fixture.mjs";
 import { createServer } from "node:http";
 
 async function reservePort() {
@@ -24,12 +25,13 @@ async function request(url, options = {}) {
 }
 
 test("uncovered dashboard routes expose safe reads and fail closed without durable provider state", async t => {
+  const project = createTestDashboardProject("sonicvhibez-route-acceptance-project-");
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-route-acceptance-"));
   const port = await reservePort();
   const operatorToken = "route-acceptance-operator-" + "x".repeat(32);
   const workerToken = "route-acceptance-worker-" + "y".repeat(32);
-  const child = spawn(process.execPath, [path.join(process.cwd(), "scripts", "dashboard-server.mjs")], {
-    cwd: process.cwd(),
+  const child = spawn(process.execPath, [path.join(project.root, "scripts", "dashboard-server.mjs")], {
+    cwd: project.root,
     env: {
       ...process.env,
       DASHBOARD_OPERATOR_TOKEN: operatorToken,
@@ -59,6 +61,7 @@ test("uncovered dashboard routes expose safe reads and fail closed without durab
   t.after(() => {
     child.kill("SIGTERM");
     fs.rmSync(stateDir, { recursive: true, force: true });
+    project.cleanup();
   });
 
   const base = `http://127.0.0.1:${port}`;

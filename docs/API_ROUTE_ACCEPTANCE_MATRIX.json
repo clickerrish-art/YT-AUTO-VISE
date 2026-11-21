@@ -316,7 +316,7 @@
       "restartRecovery": "N/A — read-only route with no durable mutation.",
       "externalOperation": "none",
       "overallAcceptance": "BLOCKED",
-      "notes": "The endpoint only selects candidates for dispatch. The render endpoint still revalidates the full script/narration/captions/production-plan/rights/compliance/metadata/media evidence and can reject a candidate without rendering. It does not upload or publish. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A. Latest guard: fail-closed queue identity reconciliation is now required before dispatch/production; integration regressions have been added but are NOT_TESTED on the current branch head.",
+      "notes": "The endpoint only selects candidates for dispatch. The render endpoint still revalidates the full script/narration/captions/production-plan/rights/compliance/metadata/media evidence and can reject a candidate without rendering. It does not upload or publish. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A. Latest guard: fail-closed queue identity reconciliation is now required before dispatch/production; integration regressions have been added but are NOT_TESTED on the current branch head. Current repository owner-approval gate overrides historical positive evidence; dispatch/render remains blocked until the owner supplies the exact mapping.",
       "testEvidence": {
         "test": "test/dashboard-worker-api.integration.test.mjs; test/worker-runner.test.mjs; test/dashboard-api-auth-matrix.test.mjs",
         "exactTestedSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
@@ -329,9 +329,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-      "currentHeadEvidenceRunId": 44884481167,
-      "currentHeadEvidenceNote": "Latest queue-identity guard source changes are committed on the implementation branch, but no exact-current-HEAD dashboard integration run or CI status is available. Until an owner-approved content/queue-identity-approval.json binds both queue hashes and all mappings, this route must return HTTP 409 QUEUE_IDENTITY_RECONCILIATION_REQUIRED with no dispatch/render side effect. Existing historical route passes apply only to their cited older SHAs.",
+      "currentHeadEvidenceSha": null,
+      "currentHeadEvidenceRunId": null,
+      "currentHeadEvidenceNote": "Owner-approved content/queue-identity-approval.json is absent. The production route must return HTTP 409 QUEUE_IDENTITY_RECONCILIATION_REQUIRED with no dispatch/render side effect. Synthetic approvals are used only in isolated test project roots; no real owner approval is created.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
         "test/dashboard-dispatchable-ordering.integration.test.mjs"
@@ -1330,7 +1330,7 @@
       "restartRecovery": "PASS — exact-SHA real-server test gracefully stops and restarts the dashboard, retries the same legacy job, receives 409 with renderStarted=false, and verifies byte-identical durable state and no render artifacts.",
       "externalOperation": "genuine rights-cleared media and final manifests required",
       "overallAcceptance": "BLOCKED",
-      "notes": "Exact candidate e99bc24511879106157c002c09242315e6219325 passed the real-server test test/dashboard-worker-api.integration.test.mjs. A scoped worker submits a queued legacy job without the approved authoring pipeline; POST /api/jobs/produce returns 409, preserves persisted state byte-for-byte, and creates neither render manifest nor per-job media directory. This accepts the negative fail-closed behavior only. Successful rendering remains BLOCKED until genuine rights-cleared media, approved script/narration/scene evidence and complete final manifests exist. Latest guard: fail-closed queue identity reconciliation is now required before dispatch/production; integration regressions have been added but are NOT_TESTED on the current branch head.",
+      "notes": "Exact candidate e99bc24511879106157c002c09242315e6219325 passed the real-server test test/dashboard-worker-api.integration.test.mjs. A scoped worker submits a queued legacy job without the approved authoring pipeline; POST /api/jobs/produce returns 409, preserves persisted state byte-for-byte, and creates neither render manifest nor per-job media directory. This accepts the negative fail-closed behavior only. Successful rendering remains BLOCKED until genuine rights-cleared media, approved script/narration/scene evidence and complete final manifests exist. Latest guard: fail-closed queue identity reconciliation is now required before dispatch/production; integration regressions have been added but are NOT_TESTED on the current branch head. Current repository owner-approval gate overrides historical positive evidence; dispatch/render remains blocked until the owner supplies the exact mapping.",
       "testEvidence": {
         "test": "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "exactTestedSha": "74c1f79e5dc9011eec81722e1d9eefafcbd6a4b1",
@@ -1342,9 +1342,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-      "currentHeadEvidenceRunId": 44884481167,
-      "currentHeadEvidenceNote": "Latest queue-identity guard source changes are committed on the implementation branch, but no exact-current-HEAD dashboard integration run or CI status is available. Until an owner-approved content/queue-identity-approval.json binds both queue hashes and all mappings, this route must return HTTP 409 QUEUE_IDENTITY_RECONCILIATION_REQUIRED with no dispatch/render side effect. Existing historical route passes apply only to their cited older SHAs.",
+      "currentHeadEvidenceSha": null,
+      "currentHeadEvidenceRunId": null,
+      "currentHeadEvidenceNote": "Owner-approved content/queue-identity-approval.json is absent. The production route must return HTTP 409 QUEUE_IDENTITY_RECONCILIATION_REQUIRED with no dispatch/render side effect. Synthetic approvals are used only in isolated test project roots; no real owner approval is created.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
@@ -2106,7 +2106,7 @@
     "note": "Current exact-SHA Node/Python suite passes; no browser E2E was run on this SHA. Do not promote DASH-001 from this Node-only result."
   },
   "currentHeadReconciliation": {
-    "status": "PASS",
+    "status": "PARTIAL",
     "observedImplementationHeadSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
     "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
     "regressionRunResults": {
@@ -2127,10 +2127,14 @@
       "npmAuditEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
       "nodeRunId": 44884481167
     },
-    "positiveRoutesReconciled": 42,
+    "positiveRoutesReconciled": 41,
     "authenticationNegativeRoutesPassed": 48,
     "blockedRoutesPreserved": 6,
-    "explanation": "Exact current source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb ran the complete Node suite: 181/181 files, 1,043 passed, zero failed/skipped (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). All 29 unique endpoint-specific success-evidence files referenced by the 42 positive routes were included in that suite; 48 protected-route missing/invalid-authentication cases also passed. Python 87 and npm audit zero were verified on the same exact SHA. No browser E2E ran on this SHA; the last 41/41 browser run remains historical at 668a8779f8a2894f99ed935d0c8bf13f2f215e64. This is local application/fixture evidence only, not live provider acceptance or production publication. Six routes remain externally blocked."
+    "explanation": "Exact current source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb ran the complete Node suite: 181/181 files, 1,043 passed, zero failed/skipped (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). All 29 unique endpoint-specific success-evidence files referenced by the 42 positive routes were included in that suite; 48 protected-route missing/invalid-authentication cases also passed. Python 87 and npm audit zero were verified on the same exact SHA. No browser E2E ran on this SHA; the last 41/41 browser run remains historical at 668a8779f8a2894f99ed935d0c8bf13f2f215e64. This is local application/fixture evidence only, not live provider acceptance or production publication. Six routes remain externally blocked. The owner-approved queue identity guard adds GET /api/jobs/dispatchable and gates POST /api/jobs/produce. Both remain blocked until content/queue-identity-approval.json binds both exact queue hashes and every operational long-form ID. Their positive behavior is NOT_TESTED on the current candidate; no owner approval is fabricated. The produce route was already blocked by production prerequisites, so the new queue gate overlaps that existing blocker.",
+    "ownerGatedRoutes": 2,
+    "latestCandidateHeadSha": "ef3907928af262b55e500cedda4648a2e4481c97",
+    "latestCandidateRegressionStatus": "FAILED — 15 Node tests failed in queue-readiness run 44924550837; browser E2E 40/41 passed in run 44924550715. No current candidate is accepted.",
+    "latestCandidateEvidenceNote": "The 61d116... exact-SHA route evidence is historical. Current candidate ef390792 has owner-gated dispatch/render routes and failed regression/browser runs; do not treat historical evidence as current-head acceptance."
   },
   "dashboardBrowserE2eRefreshRequest": {
     "requestedAt": "2026-11-20",
@@ -2174,5 +2178,11 @@
     "fullRepositoryRegression": "NOT_TESTED",
     "exactHeadCi": "NO_WORKFLOW_RUNS_OR_COMBINED_STATUSES",
     "matrixCountsReconciledAt": "2026-11-21"
+  },
+  "lastVerifiedRouteEvidence": {
+    "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "positiveRouteCount": 42,
+    "blockedRouteCount": 6,
+    "note": "Historical exact-SHA result only; superseded for GET /api/jobs/dispatchable and POST /api/jobs/produce by the newer owner-approval gate."
   }
 }

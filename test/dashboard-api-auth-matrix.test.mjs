@@ -190,9 +190,9 @@ test("API acceptance matrix exactly matches every live server API route", () => 
     "the Nature Frontiers media-register route's missing/invalid-credential checks must be recorded after exact-head execution");
   assert.equal(natureRegister?.overallAcceptance, "PASS",
     "the authenticated read-only Nature Frontiers media-register contract is accepted independently of media rights approval");
-  assert.equal(matrix.counts.overallPass, 42);
+  assert.equal(matrix.counts.overallPass, 41);
   assert.equal(matrix.counts.overallNotTested, 0);
-  assert.equal(matrix.counts.overallBlocked, 6);
+  assert.equal(matrix.counts.overallBlocked, 7);
   assert.equal(matrix.counts.authNegativePass, 48,
     "the matrix must record exact-head authentication-negative PASS for all 48 protected routes");
   assert.equal(matrix.counts.routes, actual.length,

@@ -9,6 +9,7 @@ import { createServer } from "node:net";
 import { createContentJob } from "../scripts/content-job-lifecycle.mjs";
 import { buildApprovedJobRenderManifest } from "../scripts/build-approved-job-render-manifest.mjs";
 import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
+import { writeTestQueueIdentityFixture } from "./helpers/queue-identity-fixture.mjs";
 import { productionPlanSha256 } from "../scripts/production-plan.mjs";
 
 function hash(file) {
@@ -328,6 +329,7 @@ test("approved long-form job runs through /api/jobs/produce to a verified, persi
     const source = path.join(process.cwd(), directory);
     if (fs.existsSync(source)) fs.cpSync(source, path.join(f.root, directory), { recursive: true });
   }
+  writeTestQueueIdentityFixture(f.root);
   const oldMetadataFile = path.join(f.root, f.metadata.path);
   const productionMetadataPath = "content/long-form-next.json";
   const productionMetadataFile = path.join(f.root, productionMetadataPath);

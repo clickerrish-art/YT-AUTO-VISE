@@ -5,6 +5,7 @@ import { createServer } from "node:http";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { createTestDashboardProject } from "./helpers/queue-identity-fixture.mjs";
 
 async function reservePort() {
   const probe = createServer();
@@ -41,6 +42,7 @@ function approvedQueuedJob(id, createdAt, date, time = "17:00") {
 }
 
 test("dispatchable jobs require valid explicit Johannesburg slots and hold invalid legacy slots", async t => {
+  const project = createTestDashboardProject("sonicvhibez-dispatchable-order-project-");
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-dispatchable-order-"));
   const stateFile = path.join(stateDir, "dashboard-state.json");
   const today = new Intl.DateTimeFormat("en-CA", {
@@ -69,8 +71,8 @@ test("dispatchable jobs require valid explicit Johannesburg slots and hold inval
   fs.writeFileSync(stateFile, JSON.stringify(state, null, 2) + "\n", { mode: 0o600 });
   const port = await reservePort();
   const token = "dispatchable-test-token-" + "x".repeat(32);
-  const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
-    cwd: process.cwd(),
+  const child = spawn(process.execPath, [path.join(project.root, "scripts", "dashboard-server.mjs")], {
+    cwd: project.root,
     env: {
       ...process.env,
       DASHBOARD_OPERATOR_TOKEN: token,
@@ -92,6 +94,7 @@ test("dispatchable jobs require valid explicit Johannesburg slots and hold inval
       await Promise.race([exited, new Promise(resolve => setTimeout(resolve, 1500))]);
     }
     fs.rmSync(stateDir, { recursive: true, force: true });
+    project.cleanup();
   });
 
   const base = `http://127.0.0.1:${port}`;
