@@ -108,21 +108,32 @@ def clean_script(text: str, include_paid_product: bool = False) -> str:
     text = re.sub(r"(?m)^\*\*[^\n]*\*\*\s*$", "", text)
     text = re.sub(r"(?m)^\*\*\[.*?\]\*\*.*$", "", text)
     text = re.sub(r"(?m)^### Suggested (description|tags).*$", "", text)
-    paid_paragraphs = re.findall(
-        r"(?:^|\n\n)(If you want a paid resource\b.*?)(?=\n\n|$)",
-        text,
-        flags=re.DOTALL,
-    )
+    paragraphs = text.split("\n\n")
+    paid_paragraphs = [
+        paragraph for paragraph in paragraphs
+        if re.search(r"\bIf you want a paid resource\b", paragraph)
+        or APPROVED_SELLAR_URL in paragraph
+        or "Complete YouTube Wildlife Creator" in paragraph
+    ]
     if include_paid_product:
-        if any(APPROVED_DISCLOSURE_TEXT not in paragraph for paragraph in paid_paragraphs):
-            raise ValueError("Paid-product narration must contain the exact owner-approved Selar disclosure")
+        for paragraph in paid_paragraphs:
+            if APPROVED_DISCLOSURE_TEXT not in paragraph:
+                raise ValueError("Paid-product narration must contain the exact owner-approved Selar disclosure")
+            product_index = paragraph.find("Complete YouTube Wildlife Creator")
+            url_index = paragraph.find(APPROVED_SELLAR_URL)
+            if product_index >= 0 or url_index >= 0:
+                advertisement_index = paragraph.find("Advertisement.")
+                disclosure_index = paragraph.find(APPROVED_DISCLOSURE_TEXT)
+                if not (
+                    advertisement_index >= 0
+                    and advertisement_index < disclosure_index < product_index < url_index
+                ):
+                    raise ValueError(
+                        "Paid-product narration must place Advertisement, the exact disclosure, "
+                        "the product name and the approved URL in that order"
+                    )
     else:
-        text = re.sub(
-            r"(?:^|\n\n)If you want a paid resource\b.*?(?=\n\n|$)",
-            "",
-            text,
-            flags=re.DOTALL,
-        )
+        text = "\n\n".join(paragraph for paragraph in paragraphs if paragraph not in paid_paragraphs)
     text = re.sub(r"(?m)^Promotional resource:.*$", "", text)
     text = re.sub(r"https://selar\.com/0u19v8u99l", "", text)
     text = re.sub(r"\[[^\]]*\]", " ", text)
