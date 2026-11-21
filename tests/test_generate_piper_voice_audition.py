@@ -5,10 +5,18 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts.generate_piper_voice_audition import (
-    MODEL_SHA256, CANDIDATES, validate_config, sha256_file, extract_short_narration
+    MODEL_SHA256, CANDIDATES, validate_config, sha256_file, extract_short_narration, generate
 )
 
 class PiperVoiceAuditionTests(unittest.TestCase):
+
+    def test_generation_is_blocked_before_output_or_model_download(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "audition"
+            with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                generate(output, downloader=lambda *args, **kwargs: self.fail("download must not start"))
+            self.assertFalse(output.exists())
+
     def test_only_male_speaker_ids_are_candidates(self):
         self.assertEqual([(x["voice"], x["speaker_id"]) for x in CANDIDATES],
                          [("banjo", 5), ("angus", 4), ("flynn", 6)])
