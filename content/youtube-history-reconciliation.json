@@ -62,12 +62,12 @@
   },
   "uploadAttemptReconciliation": {
     "status": "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS",
-    "inspectedAt": "2026-11-19T23:07:11.763Z",
+    "inspectedAt": "2026-11-21T09:37:06.547Z",
     "evidence": {
       "workflowDispatchRunsInspected": 1,
       "privateUploadWorkflowRunId": 42569826008,
       "privateUploadJobConclusion": "skipped",
-      "readOnlyVerificationJobConclusion": "failure",
+      "readOnlyVerificationJobConclusion": "success",
       "uploadArtifactPrivatelyWorkflowRunsFound": 0,
       "executedPrivateUploadJobs": 0,
       "nextPrivateUploadPreviousLedgerRunId": "NONE",
@@ -76,29 +76,34 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs?event=workflow_dispatch"
       ],
       "automatedLedgerValidation": {
-        "runId": 44634815964,
-        "jobId": 135950489953,
-        "sourceCommit": "dcd66956effb02ede85839d79e0bbc7a3ba0dff7",
-        "completedAt": "2026-11-19T23:07:11.763Z",
+        "runId": 44890418778,
+        "jobId": 136804802342,
+        "sourceCommit": "c31ea042bd5683b3c288c9e940e69a9a05f2db0c",
+        "completedAt": "2026-11-21T09:37:06.547Z",
         "conclusion": "success",
         "mode": "initialize",
         "inspectedWorkflowRuns": 1,
         "executedPrivateUploadRuns": 0,
         "previousLedgerRunId": "NONE",
-        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44634815964"
+        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44890418778"
       },
       "uploadWorkflowDispatchRunsFound": 1,
       "repositoryWorkflowDispatchRunsInspected": 5,
       "latestUploadWorkflowDispatchAt": "2026-11-09T05:53:10Z",
       "currentGitHubScan": {
-        "inspectedAt": "2026-11-19T23:07:11.763Z",
-        "repositoryWorkflowDispatchRuns": 5,
+        "inspectedAt": "2026-11-21T09:37:06.547Z",
+        "workflowRunId": 44890418778,
+        "jobId": 136804802342,
+        "sourceCommit": "c31ea042bd5683b3c288c9e940e69a9a05f2db0c",
+        "priorUploadWorkflowRunsInspected": 1,
         "uploadPrivateWorkflowDispatchRuns": 1,
         "uploadArtifactPrivatelyWorkflowDispatchRuns": 0,
         "latestUploadWorkflowDispatchRunId": 42569826008,
-        "conclusion": "failure",
+        "latestUploadWorkflowDispatchAt": "2026-11-09T05:53:10Z",
+        "conclusion": "success",
         "privateUploadJobConclusion": "skipped",
-        "executedPrivateUploadJobsSincePriorOwnerAttestation": 0
+        "executedPrivateUploadJobsSincePriorOwnerAttestation": 0,
+        "previousLedgerRunId": "NONE"
       },
       "localLedger": {
         "defaultPath": "run-logs/upload-attempts.json",
@@ -111,14 +116,14 @@
         "ownerAttestationRequiredForManualOrLocalAttemptsAfter": "2026-11-18"
       }
     },
-    "note": "GitHub Actions attempt history is verified: the sole prior private-upload workflow dispatch had its private-upload job skipped, the upload-artifact-privately entry point has no prior run, and the automated read-only ledger validator succeeded on 2026-11-19 with zero executed private-upload runs. The separate local attempt ledger is run-logs/upload-attempts.json and both /run-logs/ and /state/ are gitignored. The owner's last manual/local/third-party attempt attestation is dated 2026-11-18; therefore local or manual attempts after that date remain unverified and publication must stay blocked until the owner refreshes that attestation.",
+    "note": "GitHub Actions upload-history scan refreshed on 2026-11-21: the read-only validator inspected the prior upload entry-point history, found one previous upload workflow dispatch with its private-upload job skipped, found no upload-artifact-privately dispatch, and confirmed zero executed private-upload jobs. The separate local attempt ledger is run-logs/upload-attempts.json and is gitignored. The owner's manual/local/third-party attempt attestation remains valid only through 2026-11-18; no owner attestation covers later attempts, so publication remains blocked.",
     "ownerAttestation": {
       "status": "CONFIRMED",
       "confirmedAt": "2026-11-18",
       "statement": "The owner confirmed there were no manual, local, or external YouTube upload attempts other than the inventoried video LjePS02hA1o.",
       "scope": "Manual, local, and third-party/out-of-band upload attempts",
       "appliesToVideoId": "LjePS02hA1o",
-      "note": "The owner confirmed no manual, local or third-party/out-of-band attempts through 2026-11-18. The GitHub workflow scan was refreshed on 2026-11-19, but no owner attestation covers manual/local attempts after 2026-11-18. Keep publication blocked until that gap is explicitly closed.",
+      "note": "The owner confirmed no manual, local or third-party/out-of-band attempts through 2026-11-18. The GitHub upload-workflow scan was refreshed on 2026-11-21 and still finds zero executed private-upload jobs, but no owner attestation covers manual/local attempts after 2026-11-18. Keep publication blocked until the owner refreshes that attestation.",
       "validThrough": "2026-11-18",
       "freshnessStatus": "STALE_FOR_LOCAL_OR_MANUAL_ATTEMPTS_AFTER_2026-11-18"
     }
