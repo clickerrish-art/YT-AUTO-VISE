@@ -362,7 +362,7 @@ Read-back confirmed those four records changed on `main`; their corrected counte
 
 Latest comparison: main head `3795519ccbf58fd02d74458624b58dd2e44a88c0`; implementation branch is 4,872 commits ahead / 17 behind, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
 
-**Immediate default-branch risk:** `.github/workflows/acquire-noaa-broll-candidates.yml` still exists and is enabled on `main` (scheduled Tuesday and manual triggers). The branch copy has been disabled, but PR #1 remains unmerged, so the branch correction does not disable the default-branch workflow. The connected GitHub actions tools expose no workflow-disable operation, and no main-branch write will be attempted. A repository owner must disable that workflow in GitHub Actions or approve a safe branch/PR remediation. This is a release blocker.
+**Immediate default-branch risk:** `.github/workflows/acquire-noaa-broll-candidates.yml` still exists and is enabled on `main` (push trigger when this workflow file changes on main, plus manual workflow_dispatch; no scheduled cron trigger is present). The branch copy has been disabled, but PR #1 remains unmerged, so the branch correction does not disable the default-branch workflow. The connected GitHub actions tools expose no workflow-disable operation, and no main-branch write will be attempted. A repository owner must disable that workflow in GitHub Actions or approve a safe branch/PR remediation. This is a release blocker.
 
 
 ### Additional execution — disable incompatible wildlife media paths (2026-11-21)
