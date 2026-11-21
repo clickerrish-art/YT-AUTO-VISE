@@ -385,3 +385,15 @@ test("a Pexels/library candidate remains blocked even if marked cleared and its 
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test("short and long-form manifest templates require original creator-captured wildlife footage provenance", () => {
+  for (const file of [
+    "content/render-manifest.example.json",
+    "content/long-form-render-manifest.example.json"
+  ]) {
+    const manifest = JSON.parse(fs.readFileSync(file, "utf8"));
+    assert.equal(manifest.footageOrigin, "creator_captured_original");
+    assert.match(manifest.footageCreator, /REPLACE_WITH_ORIGINAL_CAMERA_OPERATOR/);
+    assert.match(manifest.captureEvidencePath, /REPLACE_WITH_CAPTURE_PROVENANCE/);
+  }
+});
