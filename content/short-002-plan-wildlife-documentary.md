@@ -13,15 +13,17 @@ How to Make a Wildlife Documentary Short: 3 Planning Steps
 
 ## Narration draft (128 words; provisional 55-second caption layout; record and retime against final audio before rendering)
 
-“Planning a wildlife documentary Short? Plan three things before editing.
+“Planning a wildlife documentary Short? Start with three checks.
 
 First, choose one subject and one question: how does this animal feed, move, communicate, or care for its young? Describe only what your footage shows.
 
-Second, build a simple story. Open with a moment that raises the question, add habitat context, then show the behavior and explain why it matters. Keep separate clips in their real sequence.
+Second, build a simple story: open with the question, add habitat context, show the behavior, and explain why it matters. Keep clips in their real sequence.
 
 Third, check every asset. Confirm footage and music rights, fact-check each claim, and keep captions readable on a phone.
 
-Before editing, note where each clip came from, what it actually shows, and which details still need checking. A focused story is easier to follow than a rushed list of facts. The Wildlife Creator’s Vault is linked below as a planning resource.”
+Record where each clip came from, what it shows, and what still needs checking. A focused story is stronger than a rushed list of facts.
+
+Advertisement: This product is sold through my own Selar business; purchases generate revenue for my business. The Wildlife Creator’s Vault is linked below.”
 
 ## Draft description — internal hold, not publish-ready
 
@@ -71,7 +73,7 @@ Use one genuine, rights-cleared animal image in its actual habitat, with natural
 - **15–29s:** Habitat context and behavior; label “2. BUILD THE STORY”
 - **29–42s:** Editing timeline and accurate sequence; label “3. CHECK THE EVIDENCE”
 - **42–50s:** Rights/caption reminder over calm observation footage
-- **50–55s:** Neutral end frame; product mention only after the promotion gate is cleared
+- **50–60s:** After all production gates pass, show a clear ADVERTISEMENT identifier, the product name/link and the exact owner-approved direct-sales disclosure in large, high-contrast text while the disclosure is spoken. Hold long enough to read; make no claims of guaranteed views, growth or monetization.
 
 ## Production checklist
 
