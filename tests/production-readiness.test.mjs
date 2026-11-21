@@ -113,6 +113,7 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and age-awar
   assert.ok(narrationRightsBlockers.some(blocker => blocker.message.includes("content/render-manifest.json")));
   assert.ok(narrationRightsBlockers.some(blocker => blocker.message.includes("content/long-form-render-manifest.json")));
   assert.ok(narrationRightsBlockers.every(blocker => blocker.controlOwner === "external_owner_or_human_reviewer"));
+  assert.ok(narrationRightsBlockers.every(blocker => blocker.message.includes("auditions are permitted") || blocker.message.includes("auditions only")));
   for (const blocker of report.blockers) {
     assert.match(blocker.id, /^RDY-[A-F0-9]{12}$/);
     assert.ok(["critical", "high"].includes(blocker.severity));
