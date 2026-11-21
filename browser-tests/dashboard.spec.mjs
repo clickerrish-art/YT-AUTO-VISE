@@ -787,7 +787,7 @@ test("rights asset builder requires explicit per-asset YouTube permission and on
   expect(after.publishingEnabled).toBe(false);
 });
 
-test("production controls disable safely when real media prerequisites are missing", async ({ page, request }) => {
+test("production controls disable safely when owner queue identity approval is missing", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
   await page.goto("/");
   await page.locator("#token").fill(operatorToken);
@@ -819,10 +819,13 @@ test("production controls disable safely when real media prerequisites are missi
     const blockerBody = await blockedRender.json();
     expect(blockerBody.error).toMatch(/queue identity reconciliation/i);
     expect(blockerBody.blockers).toEqual(expect.arrayContaining([
-      expect.stringMatching(/research and source evidence/i),
-      expect.stringMatching(/script and narration\/caption stages/i),
-      expect.stringMatching(/hash-bound production plan/i)
+      expect.stringMatching(/queue-identity-approval\.json is missing or invalid/i),
+      expect.stringMatching(/cover every operational long-form item exactly once/i),
+      expect.stringMatching(/long-form-plan-wildlife-video/i),
+      expect.stringMatching(/long-form-faceless-wildlife-workflow/i)
     ]));
+    expect(blockerBody.publishable).toBe(false);
+    expect(blockerBody.jobState).toBe("BLOCKED");
     expect(blockerBody.renderStarted).toBe(false);
     expect(blockerBody.publishingEnabled).toBe(false);
     const snapshot = await request.get("/api/state", { headers });
