@@ -108,6 +108,7 @@ test("Short 002 retains its approved direct-sales promotion with disclosure befo
 test("Nile crocodile documentary is non-commercial and prohibits unapproved wildlife visuals", () => {
   const manifest = JSON.parse(readText("content/long-form-render-manifest.json"));
   const metadata = readText("content/long-form-001-youtube-metadata-draft.md");
+  const script = readText("content/drafts/long-form-001-two-eyes-above-water.md");
   assert.equal(manifest.hasPaidPromotion, false);
   assert.ok(!metadata.includes(SELAR_URL));
   assert.ok(!metadata.includes("ADVERTISEMENT"));
@@ -116,6 +117,14 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.ok(metadata.includes("original creator-captured wildlife footage"));
   assert.ok(metadata.includes("AI-generated wildlife visuals"));
   assert.ok(metadata.includes("not permitted substitutes"));
+  assert.ok(script.includes("hasPaidPromotion=false"));
+  assert.ok(script.includes("No product CTA, Selar URL"));
+  assert.ok(script.includes("Original creator-captured wildlife footage only"));
+  assert.ok(script.includes("AI-generated wildlife visuals") && script.includes("prohibited"));
+  assert.ok(script.includes("stock/archive footage"));
+  assert.ok(script.includes("commercially prohibited by the provider's written determination"));
+  assert.ok(script.includes("No alternate voice or paid upgrade is authorized"));
+  assert.ok(!/AI reconstruction if synthetic|labelled reconstruction|real footage or labelled reconstruction/i.test(script));
 });
 
 test("approved Selar campaign is bound to exact owner-approved wording and remains draft-only", () => {
