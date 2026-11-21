@@ -7,7 +7,7 @@ const readText = path => fs.readFileSync(new URL(path, import.meta.url), "utf8")
 const readJson = path => JSON.parse(readText(path));
 const gitBlobSha = text => {
   const body = Buffer.from(text, "utf8");
-  const header = Buffer.from(\`blob \${body.length}\0\`, "utf8");
+  const header = Buffer.from("blob " + body.length + "\0", "utf8");
   return crypto.createHash("sha1").update(Buffer.concat([header, body])).digest("hex");
 };
 const jobDisabled = (yaml, job) => new RegExp("jobs:\\s*\\n\\s*" + job + ":\\s*\\n\\s*if:\\s*false\\b").test(yaml);
@@ -52,6 +52,6 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
     ["../.github/workflows/free-narration-artifact.yml", "generate-audio"],
     ["../.github/workflows/short-narration-artifact.yml", "generate"]
   ]) {
-    assert.ok(jobDisabled(readText(path), job), \`\${path} job \${job} must be disabled\`);
+    assert.ok(jobDisabled(readText(path), job), path + " job " + job + " must be disabled");
   }
 });
