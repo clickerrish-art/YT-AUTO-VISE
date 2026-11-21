@@ -437,3 +437,16 @@ This section supersedes older checkpoint statements in the historical audit entr
 - Current HEAD: zero workflow runs and zero combined status checks. Full Node/Python, browser E2E, npm audit, dashboard/worker integration and provider acceptance remain NOT_TESTED.
 - No queue content was changed, no owner approval was fabricated, no upload/publication was attempted, and no Metricool/Cloudflare settings, secrets, paid services or `main` were changed.
 
+
+
+---
+
+## User Library wildlife-media intake recheck — 21 November 2026
+
+- Searched the user's Library for original creator-captured wildlife MP4s, raw camera files, still photographs and rights/provenance records; also listed the available image/video inventory and inspected relevant contact sheets.
+- No eligible original-camera wildlife media package with matching creator/capture provenance and commercial usage rights was found.
+- Existing SonicVhibez visual assets are review drafts/rights-education templates and short-form wildlife imagery credited to Pexels stock in the retained release material; those visuals are not eligible substitutes under the original-camera-only rule. The prior visual triage classifies verified original-camera packages as 0 and publication-ready/approved videos as 0.
+- Nature Frontiers' recovered mongoose/cobra and crocodile assets are a separate brand, lack verified original-camera provenance/rights or are stylized/AI-assisted; they must not be reassigned to SonicVhibez.
+- A house-construction screenshot and dashboard/contact-sheet images in the Library are not wildlife source media.
+- Required owner input remains: upload the actual camera-original wildlife video/photo files and the associated creator identity, capture date/location (where safe), source-device/original-file evidence, written commercial publication rights/releases, and any restrictions. Do not upload credentials or sensitive identity documents. The assets remain on HOLD until inspected and hashed.
+
