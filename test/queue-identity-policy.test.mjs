@@ -9,7 +9,7 @@ const operationalQueue = { items: [
 ] };
 const detailedQueue = { items: [
   { id: "canonical-long-one", scriptPath: "content/one.md", publicationCyclePosition: 1 },
-  { id: "owner-selected-long-two", scriptPath: "content/two.md" }
+  { id: "owner-selected-long-two", scriptPath: "content/two.md", publicationCyclePosition: 2 }
 ] };
 const approval = {
   schemaVersion: 1, status: "OWNER_APPROVED", ownerApproved: true,
@@ -63,4 +63,42 @@ test("queue identity rejects invalid owner approval metadata and malformed queue
   const duplicateQueue = structuredClone(operationalQueue);
   duplicateQueue.items[1].id = duplicateQueue.items[0].id;
   assert.equal(validateQueueIdentity({ operationalQueue: duplicateQueue, detailedQueue, approval }).valid, false);
+});
+
+test("queue identity maps the third long-form item to cycle position four after the Short slot", () => {
+  const expandedOperational = structuredClone(operationalQueue);
+  expandedOperational.items.push({ id: "dispatch-short-two", contentType: "short" });
+  expandedOperational.items.push({ id: "dispatch-long-three", contentType: "long_form" });
+  const expandedDetailed = structuredClone(detailedQueue);
+  expandedDetailed.items.push({ id: "third-long-form", scriptPath: "content/three.md", publicationCyclePosition: 4 });
+  const expandedApproval = structuredClone(approval);
+  expandedApproval.mappings.push({
+    operationalItemId: "dispatch-long-three",
+    detailedItemId: "third-long-form",
+    cyclePosition: 4
+  });
+  const result = validateQueueIdentity({
+    operationalQueue: expandedOperational,
+    detailedQueue: expandedDetailed,
+    approval: expandedApproval
+  });
+  assert.equal(result.valid, true, result.errors.join("; "));
+});
+
+test("queue identity rejects duplicate cycle positions, mappings to Short items and mismatched detailed positions", () => {
+  const duplicatePosition = structuredClone(approval);
+  duplicatePosition.mappings[1].cyclePosition = 1;
+  assert.equal(validateQueueIdentity({ operationalQueue, detailedQueue, approval: duplicatePosition }).valid, false);
+
+  const shortMapping = structuredClone(approval);
+  shortMapping.mappings[1].operationalItemId = "dispatch-short-one";
+  assert.equal(validateQueueIdentity({ operationalQueue, detailedQueue, approval: shortMapping }).valid, false);
+
+  const mismatchedDetailedPosition = structuredClone(detailedQueue);
+  mismatchedDetailedPosition.items[1].publicationCyclePosition = 3;
+  assert.equal(validateQueueIdentity({
+    operationalQueue,
+    detailedQueue: mismatchedDetailedPosition,
+    approval
+  }).valid, false);
 });
