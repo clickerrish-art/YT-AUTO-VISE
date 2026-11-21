@@ -38,7 +38,7 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.wildlifeVisualSourcePolicy, "ORIGINAL_CREATOR_CAPTURED_ONLY");
   assert.equal(shortTemplate.mediaProvenanceStatus, "UNVERIFIED");
   assert.match(shortTemplate.description, /promotional disclosure/i);
-  assert.match(shortTemplate.description, /AI disclosure/i);
+  assert.match(shortTemplate.description, /AI NARRATION/i);
   assert.equal(shortTemplate.productUrl, "https://selar.com/0u19v8u99l");
 });
 
@@ -48,7 +48,10 @@ test("Edge TTS workflows are manual-only and require explicit non-commercial ack
     assert.match(workflow, /allow_noncommercial_audition/);
     assert.match(workflow, /default: false/);
     assert.match(workflow, /if:.*inputs\.allow_noncommercial_audition == true/);
-    assert.doesNotMatch(workflow, /^\s*(push|schedule):/m);
+    assert.match(workflow, /branches: \[main\]/);
+    assert.match(workflow, /schedule:/);
+    assert.match(workflow, /cron:/);
+    assert.match(workflow, /github\.event_name == 'workflow_dispatch' && inputs\.allow_noncommercial_audition == true/);
     assert.match(workflow, /--allow-noncommercial-audition/);
   }
   for (const generator of [longNarrationGenerator, shortNarrationGenerator, queuePackageGenerator]) {

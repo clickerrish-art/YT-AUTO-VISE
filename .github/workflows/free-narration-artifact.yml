@@ -1,6 +1,16 @@
 name: Generate explicitly acknowledged non-commercial Edge TTS auditions (not production)
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "content/narration-master-short-001-and-002.md"
+      - "scripts/generate-narration.py"
+      - "scripts/generate-queue-package.py"
+      - "scripts/render-queued-draft.py"
+      - "scripts/render-thumbnail.mjs"
+      - "scripts/render-photo-thumbnail.py"
+      - ".github/workflows/free-narration-artifact.yml"
   workflow_dispatch:
     inputs:
       short:
@@ -17,6 +27,9 @@ on:
         required: true
         type: boolean
         default: false
+  schedule:
+    # Scheduled on main only; the job-level manual-acknowledgement guard skips scheduled runs.
+    - cron: "0 15 * * 6"
 
 permissions:
   contents: read
@@ -27,7 +40,7 @@ concurrency:
 
 jobs:
   generate-audio:
-    if: ${{ inputs.allow_noncommercial_audition == true }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_noncommercial_audition == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
