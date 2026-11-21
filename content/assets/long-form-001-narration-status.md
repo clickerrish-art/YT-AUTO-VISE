@@ -3,7 +3,7 @@
 **Project:** SonicVhibez  
 **Title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Generated:** 2026-11-20  
-**Status:** GENERATED FOR INTERNAL EVALUATION ONLY — NOT ELIGIBLE FOR COMMERCIAL / MONETIZED PUBLICATION UNDER THE FREE-PLAN LICENCE
+**Status:** PROVIDER DENIED ZERO-COST COMMERCIAL EXCEPTION — INTERNAL EVALUATION ONLY; NOT ELIGIBLE FOR PUBLIC OR COMMERCIAL RELEASE
 
 ## Exact generation record
 
@@ -64,3 +64,12 @@ Narration generation is not narration approval or commercial clearance. The WAV 
 - Latest check: the Legal thread contains one message (the owner's sent request) and no response. Permission is **pending and unconfirmed**, not granted.
 - Release gate: do not use the Free-plan WAV commercially unless current applicable terms or explicit written authorization from the rights holder clearly permits it. Do not treat Support's referral, silence, or the owner's narrator approval as a licence.
 - Continue only work independent of this licence gate. Keep production and publishing disabled until all release gates are independently evidenced.
+
+
+## Final provider determination — 2026-11-21 (supersedes pending Legal wording)
+
+HeyGen Support has now explicitly denied the requested zero-cost commercial-use exception for both the existing 398.083-second Roderic Free-plan WAV and future Roderic Free-plan generations. The response covers public branded distribution and monetized/commercial use: neither is permitted under the Free plan. The full determination and source support threads are recorded in `content/heygen-roderic-commercial-rights-determination-2026-11-21.json`.
+
+**Current decision:** keep the existing Roderic audio internal-only; do not use it in public SonicVhibez releases, ads, Selar promotion or other commercial output. No paid upgrade is allowed. No other narrator may be auditioned or substituted without the owner's explicit change to the Roderic-only instruction. Consequently, no commercially eligible production narrator is currently available and both long-form and Short renders remain blocked at the narration gate.
+
+The earlier 2026-11-20 paragraphs describing the Legal response as pending are historical and superseded by this final provider determination. Publishing remains disabled.
