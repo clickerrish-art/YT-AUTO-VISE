@@ -31,7 +31,7 @@ Crocodilians have specialised sensory organs in their skin, commonly called inte
 
 That does not mean a crocodile can identify every animal from an impossible distance, or that every tiny ripple automatically triggers an attack. The research describes a sensory capability, not a supernatural radar system. The important point is more grounded: the water itself carries information, and the crocodile has specialised equipment for detecting some of it.
 
-A disturbance can tell an animal that something has moved nearby. But detection is not the same as identification, and neither one guarantees a strike. A crocodile still has to orient, assess, and decide whether to move. A recent study of Nile crocodiles examined how they integrate different signals arriving close together in time, including sound and water-surface vibration. It is a reminder that hunting is not just a reflex to one ripple. It involves processing information from a changing environment.
+A disturbance can tell an animal that something has moved nearby. But detection is not the same as identification, and neither one guarantees a strike. A 2025 controlled study of young Nile crocodiles examined how they respond when airborne sound and water-surface waves come from different sources and reach them at different times. The young crocodiles tended to approach the water-wave source even when the sound arrived first or later within the tested time window. This shows that young Nile crocodiles can combine information from different sensory channels; it does not prove that every adult crocodile uses the same cue sequence during a wild hunt. It is a reminder that a crocodile's response depends on information from a changing environment, not simply on an automatic reaction to every ripple.
 
 So how does the ambush fit together?
 
@@ -61,7 +61,7 @@ The river may look empty. That does not mean it is empty. And understanding the 
    Source: IUCN/SSC Crocodile Specialist Group, *Crocodylus niloticus* Action Plan (2010): https://iucncsg.org/wp-content/uploads/2026/10/Crocodylus-niloticus-Action-Plan-2010.pdf
 
 2. **Minimum-exposure posture and sensory organs** — crocodilians can hold the head at the air-water interface with eyes, nostrils and ears above the surface; integumentary sensory organs detect water-surface disturbance and underwater displacement.  
-   Source: *Temporal integration and decision-making in crocodiles*, Biology Open (2025): https://pmc.ncbi.nlm.nih.gov/articles/PMC12079573/
+   Source: Leitch & Catania, *Structure, innervation and response properties of integumentary sensory organs in crocodilians*, Journal of Experimental Biology (2012): https://pubmed.ncbi.nlm.nih.gov/23136155/
 
 3. **Nile crocodile surface-wave sensitivity** — experimental work tested responses to capillary surface waves; describe this as a demonstrated sensory capability, not unlimited detection range.  
    Source: Grap et al., *Crocodylus niloticus is highly sensitive to water surface waves*, Zoology (2015): https://pubmed.ncbi.nlm.nih.gov/26153334/
@@ -69,7 +69,10 @@ The river may look empty. That does not mean it is empty. And understanding the 
 4. **Shoreline ambush behaviour** — crocodiles may approach or wait near the shore, keep eyes above water to check position, and launch toward prey; avoid implying every hunt follows this exact sequence.  
    Source: San Diego Zoo Wildlife Explorers Center, Nile Crocodile — Diet & Feeding: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/diet
 
-5. **Human safety** — crocodilians can remain submerged, move between water bodies and hunt close to shore; absence of a visible animal is not proof of safety.  
+5. **Multisensory response to sound and water waves** — a 2025 controlled experiment tested young Nile crocodiles and found they tended to approach water-wave stimuli even when airborne sound arrived before or after them within the tested interval. This supports multisensory processing, not a universal claim about adult crocodile hunting behaviour in the wild.  
+   Source: Delbosc et al., *Temporal integration and decision-making in crocodiles*, Biology Open (2025): https://pmc.ncbi.nlm.nih.gov/articles/PMC12079573/
+
+6. **Human safety** — crocodilians can remain submerged, move between water bodies and hunt close to shore; absence of a visible animal is not proof of safety.  
    Source: IUCN/SSC Crocodile Specialist Group, Crocodilian Attacks: https://www.iucncsg.org/pages/Crocodilian-Attacks.html
 
 ## Visual plan — 16:9 landscape
