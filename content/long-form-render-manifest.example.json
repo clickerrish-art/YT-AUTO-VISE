@@ -1,5 +1,8 @@
 {
   "channel": "SonicVhibez",
+  "footageOrigin": "creator_captured_original",
+  "footageCreator": "REPLACE_WITH_ORIGINAL_CAMERA_OPERATOR",
+  "captureEvidencePath": "evidence/REPLACE_WITH_CAPTURE_PROVENANCE.json",
   "targetAspectRatio": "16:9",
   "footagePath": "../media/REPLACE_WITH_RIGHTS_CLEARED_FOOTAGE.mp4",
   "narrationPath": "../media/REPLACE_WITH_FINAL_NARRATION.wav",
