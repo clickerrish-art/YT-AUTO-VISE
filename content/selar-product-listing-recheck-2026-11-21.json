@@ -1,0 +1,84 @@
+{
+  "evidenceType": "live_public_product_listing_recheck",
+  "checkedAt": "2026-11-21T17:12:00+02:00",
+  "source": "Selar public product pages fetched live; listing text captured, no seller account mutation",
+  "seller": "Click 47",
+  "currency": "USD",
+  "products": [
+    {
+      "id": "prompt-pack-premium",
+      "url": "https://selar.com/539497q11t",
+      "title": "The Full Video Creation Prompt Pack Premium Edition",
+      "displayedPrice": "$35.13",
+      "displayedOriginalPrice": "$46.22",
+      "ratings": "0 Ratings",
+      "observedContents": [
+        "20 ready-to-use AI prompts",
+        "6 connected production stages",
+        "research and angle",
+        "scripting",
+        "thumbnail",
+        "title and metadata",
+        "production support",
+        "posting and optimization"
+      ],
+      "observedClaims": [
+        "repeatable workflow",
+        "create smarter, produce faster, learn from every upload"
+      ],
+      "observedLimitations": [
+        "Page explicitly says it is not a magic viral-video button and no prompt can guarantee views, subscribers or revenue."
+      ],
+      "promotionalDisposition": "HOLD_OWNER_DISCLOSURE_AND_COMPLIANCE_APPROVAL",
+      "notes": "Live page is now verified; previous R570 point-in-time record is superseded by current USD display. Do not imply guaranteed results."
+    },
+    {
+      "id": "youtube-success-blueprint",
+      "url": "https://selar.com/91j893378q",
+      "title": "THE YOUTUBE SUCCESS BLUEPRINT™ Build, Grow & Monetize a YouTube Channel With a Proven 90-Day Creator System",
+      "displayedPrice": "$36.92",
+      "displayedOriginalPrice": null,
+      "ratings": "0 Ratings",
+      "observedContents": [
+        "beginner-to-growth roadmap",
+        "niche and target audience",
+        "repeatable video ideas",
+        "hooks, scripts, pacing and retention",
+        "titles and thumbnails",
+        "YouTube analytics",
+        "monetization paths",
+        "AI workflows",
+        "pre-publish and policy-safety checklists",
+        "30/60/90-day growth plan",
+        "Creator Execution Vault"
+      ],
+      "observedClaims": [
+        "Proven 90-Day Creator System",
+        "Build, Grow & Monetize"
+      ],
+      "observedLimitations": [
+        "Page does not provide independent substantiation for the word 'Proven' or any specific monetization outcome; no earnings guarantee should be stated."
+      ],
+      "promotionalDisposition": "HOLD_OWNER_DISCLOSURE_AND_COMPLIANCE_APPROVAL",
+      "notes": "Live listing now verified, but marketing claims and viewer-facing disclosure still require owner/compliance approval."
+    },
+    {
+      "id": "wildlife-creators-vault",
+      "url": "https://selar.com/0u19v8u99l",
+      "title": "Complete YouTube Wildlife Creator's Vault - Premium Combo PDF",
+      "displayedPrice": "$61.57",
+      "displayedOriginalPrice": null,
+      "ratings": "0 Ratings",
+      "promotionalDisposition": "EXISTING_VAULT_ONLY_APPROVAL_SCOPE_UNCHANGED",
+      "notes": "Rechecked as comparison only. This does not authorize reuse of its disclosure wording for the other two products."
+    }
+  ],
+  "verification": {
+    "pageFetchesSuccessful": 3,
+    "sellerIdentityConsistent": true,
+    "purchaseOrSellerActionsPerformed": false,
+    "productDeliveryTested": false,
+    "legalComplianceApproved": false,
+    "ownerDisclosureApprovedForHeldProducts": false
+  }
+}
