@@ -450,18 +450,23 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T09:51:38+02:00",
-            "note": "Fresh global web-search results for the exact phrase “ethical wildlife photography” surface an informational problem around working distance, telephoto reach, animal stress signals, baiting and habitat disturbance. The National Park Service example contains a 75-foot rule specific to San Juan Island National Historical Park; it is not a universal wildlife distance. This is qualitative search-intent evidence only: no measured global search volume, competition score or growth metric is available, and no vidIQ credits were spent.",
+            "researchedAt": "2026-11-21T10:12:48+02:00",
+            "note": "Fresh search results on 21 November 2026 returned the exact phrase “ethical wildlife photography” alongside current practical guidance from a mammal-conservation society and biodiversity organization. The results consistently address the viewer problem in this Short: how to capture natural behaviour without approaching, baiting, feeding or disturbing animals, while following species- and location-specific rules. This supports informational search intent, not measured global search volume. No search-volume, competition or growth metric was available.",
             "sources": [
               {
-                "title": "Ethical Wildlife Photography — San Juan Island National Historical Park",
-                "url": "https://www.nps.gov/sajh/planyourvisit/ethical-wildlife-photography.htm",
-                "whyRelevant": "Official park guidance supports keeping distance, using a zoom lens and moving away if wildlife approaches; its 75-foot rule applies to that park only and must not be generalized."
+                "title": "Ethical wildlife photography for mammals — Mammal Society",
+                "url": "https://mammal.org.uk/position-statements/ethicalwildlifephotography",
+                "whyRelevant": "Conservation-society guidance prioritizes animal welfare, distance, long lenses and avoiding disturbance or intrusive equipment."
               },
               {
-                "title": "Ethical Wildlife Photography: A Responsible Field Guide",
-                "url": "https://www.shutterbugnews.com/2026/09/28/the-ethics-of-wildlife-photography-distance-baiting-and-honest-images/",
-                "whyRelevant": "A recent field guide addresses animal stress and avoidance signals, backing away, avoiding bait and habitat changes, and describing capture conditions honestly."
+                "title": "Wildlife Photography Ethics: Getting the Shot Without Harm",
+                "url": "https://www.biodiversity.com.au/get-involved/wildlife-photography-ethics/",
+                "whyRelevant": "Recent practical guidance covers distance, nests and young, baiting, call playback and photographing animals behaving naturally."
+              },
+              {
+                "title": "Guide To Ethical Wildlife Photography — Mile High Wildlife Photo Club",
+                "url": "https://www.mhwpc.org/info/guide_to_ethical_wildlife_photography.php",
+                "whyRelevant": "Explains observable stress signals, backing away, telephoto use, baiting/playback concerns and respect for access rules."
               }
             ]
           },
@@ -543,18 +548,23 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T09:51:38+02:00",
-            "note": "Fresh global web-search results for the exact phrase “how to outline a YouTube video” show direct how-to and template intent: creators want a viewer promise, a hook, ordered sections, supporting examples or proof, visual notes and one clear ending action before writing the full script. This is qualitative search-intent evidence only: no measured global search volume, competition score or growth metric is available, and no vidIQ credits were spent.",
+            "researchedAt": "2026-11-21T10:12:48+02:00",
+            "note": "Fresh search results on 21 November 2026 returned the exact query “how to outline a YouTube video” and recent step-by-step creator guidance. The repeated informational need is to define the viewer and promise, order a small set of main points, attach examples or proof and plan supporting visuals before scripting. This matches the Short's four-step lesson. Evidence is qualitative only: no measured global search volume, competition score or rising-demand metric was available.",
             "sources": [
               {
-                "title": "How to Outline a YouTube Video (Step-by-Step Template)",
-                "url": "https://boost-view.vercel.app/blog/how-to-outline-youtube-video",
-                "whyRelevant": "A November 2026 guide matches the exact query and describes a viewer promise, separate hook, 3–6 ordered sections, visual changes and a specific next-video step."
+                "title": "How to Outline a YouTube Video (Step-by-Step Template) — Tublify",
+                "url": "https://tublify.vercel.app/blog/how-to-outline-youtube-video",
+                "whyRelevant": "A guide dated 4 November 2026 uses the exact query and outlines a promise, hook, ordered sections, visuals and a clear ending."
               },
               {
                 "title": "Free Script Outline Generator — YouTube Video Beats",
                 "url": "https://hypenest.ai/tools/script-outline-generator",
-                "whyRelevant": "The guide explains a hook → body → CTA structure with examples or proof, visual notes and a useful closing action."
+                "whyRelevant": "Recent creator-tool guidance describes a hook, main beats, proof/examples, visual notes and one next step as the practical outline structure."
+              },
+              {
+                "title": "How to Outline a YouTube Video (Step-by-Step Template) — BoostView",
+                "url": "https://boost-view.vercel.app/blog/how-to-outline-youtube-video",
+                "whyRelevant": "A second recent exact-topic result reinforces the same step-by-step informational intent around a promise, 3–6 sections, visual changes and a next-video ending."
               }
             ]
           },
