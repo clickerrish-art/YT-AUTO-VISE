@@ -13,6 +13,7 @@ on:
       - "scripts/dashboard-server.mjs"
       - "scripts/worker-runner.mjs"
       - "scripts/queue-identity-policy.mjs"
+      - "scripts/prepare-queue-identity-approval.mjs"
       - "tests/**"
       - "scripts/render-short.mjs"
       - "package.json"
@@ -31,6 +32,7 @@ on:
       - "scripts/dashboard-server.mjs"
       - "scripts/worker-runner.mjs"
       - "scripts/queue-identity-policy.mjs"
+      - "scripts/prepare-queue-identity-approval.mjs"
       - "tests/**"
       - "scripts/render-short.mjs"
       - "package.json"
@@ -68,6 +70,7 @@ jobs:
           node --check scripts/preflight-media.mjs
           node --check scripts/render-short.mjs
           node --check scripts/production-readiness.mjs
+          node --check scripts/prepare-queue-identity-approval.mjs
           node --check scripts/upload-private.mjs
       - name: Install FFmpeg for media integration tests
         run: |
@@ -117,7 +120,22 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/queue-proposal"
           cp content/queue.json "$RUNNER_TEMP/queue-proposal/queue.json"
+          cp content/long-form-queue.json "$RUNNER_TEMP/queue-proposal/long-form-queue.json"
           cp "$RUNNER_TEMP/production-readiness.json" "$RUNNER_TEMP/queue-proposal/production-readiness.json"
+      - name: Generate non-approving queue identity approval template
+        run: |
+          node scripts/prepare-queue-identity-approval.mjs > "$RUNNER_TEMP/queue-proposal/queue-identity-approval.template.json"
+          node --input-type=module -e '
+          import fs from "node:fs";
+          const file = process.env.RUNNER_TEMP + "/queue-proposal/queue-identity-approval.template.json";
+          const template = JSON.parse(fs.readFileSync(file, "utf8"));
+          if (template.status !== "PENDING_OWNER_APPROVAL" || template.ownerApproved !== false ||
+              template.approvedBy !== "" || template.approvedAt !== "" || template.approvalReference !== "" ||
+              !Array.isArray(template.mappings) || template.mappings.length < 2) {
+            throw new Error("Queue identity template must remain explicitly unapproved with blank owner fields.");
+          }
+          console.log("PASS: non-approving queue identity template generated; owner approval fields remain blank.");
+          '
       - name: Replenish draft topics in the isolated proposal only
         env:
           QUEUE_TRUST_ROOT: ${{ runner.temp }}/queue-proposal
@@ -136,6 +154,8 @@ jobs:
             echo "## Queue readiness and proposal"
             echo "- Existing repository queue was validated read-only."
             echo "- Replenishment ran against an isolated temporary copy."
+            echo "- The artifact includes the operational queue, detailed long-form queue, and a non-approving identity template with blank owner approval fields."
+            echo "- No owner approval file was created or approved."
             echo "- A queue proposal artifact was retained for operator review."
             echo "- This workflow has contents: read and cannot push or modify main."
             echo "- No rendering, upload, scheduling or publication was performed."
