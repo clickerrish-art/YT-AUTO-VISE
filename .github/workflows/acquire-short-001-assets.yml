@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   acquire:
-    if: ${{ inputs.reference_only == true }}
+    if: false # Disabled: Pexels stock is reference-only and cannot be used as original creator-captured production media.
     name: Download and verify reference-only Pexels clips
     runs-on: ubuntu-latest
     timeout-minutes: 20
