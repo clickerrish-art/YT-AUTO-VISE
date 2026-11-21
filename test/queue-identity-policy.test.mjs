@@ -60,6 +60,12 @@ test("queue identity rejects invalid owner approval metadata and malformed queue
   const changed = structuredClone(approval);
   changed.approvedAt = "2026-11-21T12:00:00";
   assert.equal(validateQueueIdentity({ operationalQueue, detailedQueue, approval: changed }).valid, false);
+  const impossibleDate = structuredClone(approval);
+  impossibleDate.approvedAt = "2026-02-31T12:00:00+02:00";
+  assert.equal(validateQueueIdentity({ operationalQueue, detailedQueue, approval: impossibleDate }).valid, false);
+  const impossibleOffset = structuredClone(approval);
+  impossibleOffset.approvedAt = "2026-11-21T12:00:00+15:00";
+  assert.equal(validateQueueIdentity({ operationalQueue, detailedQueue, approval: impossibleOffset }).valid, false);
   const duplicateQueue = structuredClone(operationalQueue);
   duplicateQueue.items[1].id = duplicateQueue.items[0].id;
   assert.equal(validateQueueIdentity({ operationalQueue: duplicateQueue, detailedQueue, approval }).valid, false);
