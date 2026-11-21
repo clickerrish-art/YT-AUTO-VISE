@@ -976,3 +976,15 @@ All these production queues remain HOLD/planning-only. No media render, narratio
 - The Piper generator blocks before output-directory creation or model download; the other CLI entry points block before TTS/render execution.
 - Updated the corresponding Python tests to verify an explicit audition acknowledgement cannot override the owner decision.
 - These changes are repository-read-back verified; full Python runtime tests remain NOT_TESTED on this head.
+
+
+### Additional verified correction — runbooks, narration and history (2026-11-21)
+
+- WanGP and Internet Archive runbooks now explicitly state disabled/reference-only; no GPU generation or archive footage production is authorized.
+- The 17-entry Pexels register's purpose and historical approval scope now explicitly state reference-only and not production-approved.
+- Roderic voice-rights and Short 001 narration-generation records now carry the written HeyGen denial; generation-source hashes are labelled Git blob hashes and kept distinct from current script/caption pins.
+- Manual Edge TTS/Piper/Norman/Banjo narration entry points are protected by the owner-exclusive voice policy helper and regression tests.
+- YouTube history reconciliation records the 20 November read-only refresh without treating it as new owner attestation. Owner reaffirmation and fresh upload-attempt attestation remain required.
+- Current Go-Live checkpoint now distinguishes the default-branch NOAA workflow's push/manual triggers from the disabled implementation-branch copy; the default-branch workflow has no cron schedule.
+
+No media render, narration generation, upload, schedule or publication was performed.
