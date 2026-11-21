@@ -60,7 +60,7 @@ const baseApproval = {
 };
 
 test("private-only Short upload accepts an explicit BLOCKED_EXTERNAL native Related-video status without claiming association succeeded", () => {
-  assert.equal(validateUploadApproval(baseApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), true);
+  assert.equal(validateUploadApproval(baseApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId, contentType: "short" }), true);
   assert.equal(baseApproval.shortParentRelationship.nativeRelatedVideo.status, "BLOCKED_EXTERNAL");
   assert.equal(baseApproval.visibility, "private");
   assert.equal(baseApproval.publishingEnabled, false);
@@ -83,10 +83,10 @@ test("private-only Short upload accepts an explicit BLOCKED_EXTERNAL native Rela
     shortParentRelationship: eligibleRelationship,
     shortParentRelationshipSha256: shortParentRelationshipSha256(eligibleRelationship)
   };
-  assert.equal(validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), true);
-  assert.throws(() => validateUploadApproval({ ...validApproval, shortParentRelationship: null }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /parent relationship/);
-  assert.throws(() => validateUploadApproval({ ...validApproval, shortParentRelationshipSha256: sha("8") }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /does not bind the exact Short-to-parent relationship/);
-  assert.throws(() => validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("9"), metadataVersion: sha("b"), channelId }), /childMediaSha256/);
+  assert.equal(validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId, contentType: "short" }), true);
+  assert.throws(() => validateUploadApproval({ ...validApproval, shortParentRelationship: null }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId, contentType: "short" }), /parent relationship/);
+  assert.throws(() => validateUploadApproval({ ...validApproval, shortParentRelationshipSha256: sha("8") }, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId, contentType: "short" }), /does not bind the exact Short-to-parent relationship/);
+  assert.throws(() => validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("9"), metadataVersion: sha("b"), channelId, contentType: "short" }), /childMediaSha256/);
   assert.throws(() => validateUploadApproval(validApproval, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId: "UC" + "Z".repeat(22), contentType: "short" }), /configured SonicVhibez channel/);
 });
 
@@ -95,7 +95,7 @@ test("Short relationship cannot claim private parent native Related video eligib
   changedRelationship.relationshipEvidenceSha256 = shortParentEvidenceSha256(changedRelationship);
   const bad = { ...baseApproval, shortParentRelationship: changedRelationship };
   bad.shortParentRelationshipSha256 = shortParentRelationshipSha256(bad.shortParentRelationship);
-  assert.throws(() => validateUploadApproval(bad, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }), /private parent/);
+  assert.throws(() => validateUploadApproval(bad, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId, contentType: "short" }), /private parent/);
 });
 
 test("BLOCKED_EXTERNAL native Related-video status requires a specific non-empty blocker", () => {
@@ -107,7 +107,7 @@ test("BLOCKED_EXTERNAL native Related-video status requires a specific non-empty
   const bad = { ...baseApproval, shortParentRelationship: changedRelationship };
   bad.shortParentRelationshipSha256 = shortParentRelationshipSha256(changedRelationship);
   assert.throws(
-    () => validateUploadApproval(bad, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId }),
+    () => validateUploadApproval(bad, { jobId: "child-job-001", artifactSha256: sha("a"), metadataVersion: sha("b"), channelId, contentType: "short" }),
     /external blocker must contain a specific explanation/
   );
 });
