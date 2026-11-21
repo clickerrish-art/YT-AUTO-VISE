@@ -118,19 +118,46 @@ if (!exists(mediaInventoryPath)) {
         asset?.excludedFromProduction !== true && asset?.status !== "EXCLUDED_NOT_USED"
       );
       const unresolvedAssets = selectedAssets.filter(asset => {
-        const sourceVerified = typeof asset?.originalSourceUrl === "string" && /^https:\/\/www\.pexels\.com\/video\//.test(asset.originalSourceUrl);
-        const localPath = typeof asset?.localMediaPath === "string" && asset.localMediaPath.trim() && !path.isAbsolute(asset.localMediaPath) && exists(asset.localMediaPath);
-        const hashVerified = typeof asset?.sha256 === "string" && /^[a-f0-9]{64}$/i.test(asset.sha256);
-        return asset?.status !== "CLEARED" || !sourceVerified || asset?.creatorConfirmed !== true || asset?.rightsConfirmed !== true || !localPath || !hashVerified || asset?.humanVisualReview !== "PASS";
+        const captureEvidence = typeof asset?.captureEvidencePath === "string" &&
+          asset.captureEvidencePath.trim() && !path.isAbsolute(asset.captureEvidencePath) &&
+          exists(asset.captureEvidencePath);
+        const sourceVerified = asset?.creatorCapturedOriginal === true &&
+          typeof asset?.creatorName === "string" && asset.creatorName.trim().length > 0 &&
+          captureEvidence;
+        const localPath = typeof asset?.localMediaPath === "string" && asset.localMediaPath.trim() &&
+          !path.isAbsolute(asset.localMediaPath) && exists(asset.localMediaPath);
+        const hashVerified = localPath && typeof asset?.sha256 === "string" &&
+          /^[a-f0-9]{64}$/i.test(asset.sha256) &&
+          createHash("sha256").update(fs.readFileSync(path.resolve(root, asset.localMediaPath))).digest("hex") === asset.sha256.toLowerCase();
+        const rightsEvidence = typeof asset?.rightsEvidencePath === "string" &&
+          asset.rightsEvidencePath.trim() && !path.isAbsolute(asset.rightsEvidencePath) &&
+          exists(asset.rightsEvidencePath);
+        return asset?.status !== "CLEARED" || !sourceVerified ||
+          asset?.creatorConfirmed !== true || asset?.rightsConfirmed !== true ||
+          !rightsEvidence || !localPath || !hashVerified || asset?.humanVisualReview !== "PASS";
       });
       if (selectedAssets.length > 0 && (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0)) {
         const ids = unresolvedAssets.map(asset => asset?.canvaAssetId).filter(Boolean);
-        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported Canva wildlife asset(s) remain unverified (${ids.join(", ") || "selected inventory not cleared"}); exact source page and creator, original MP4, SHA-256 and human visual review are required before use.`);
+        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported wildlife asset(s) are not verified as original creator-captured footage (${ids.join(", ") || "selected inventory not cleared"}); creator identity, capture evidence, original MP4, matching SHA-256, written rights evidence and human visual review are required before use.`);
       }
       notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${excludedAssets.length} excluded from production (not rights-cleared); ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
     }
   } catch {
     blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is not valid JSON.");
+  }
+}
+
+function validateCreatorCapturedFootage(manifest, label) {
+  if (manifest.footageOrigin !== "creator_captured_original") {
+    blockers.push(`${label}: footageOrigin must be creator_captured_original; stock, library, AI-generated or otherwise unverified wildlife footage is not eligible.`);
+  }
+  if (typeof manifest.footageCreator !== "string" || !manifest.footageCreator.trim()) {
+    blockers.push(`${label}: footageCreator must identify the original camera operator/creator.`);
+  }
+  const captureEvidencePath = manifest.captureEvidencePath;
+  if (typeof captureEvidencePath !== "string" || !captureEvidencePath.trim() ||
+      path.isAbsolute(captureEvidencePath) || !exists(captureEvidencePath)) {
+    blockers.push(`${label}: captureEvidencePath must reference an existing, relative original-capture provenance record.`);
   }
 }
 
@@ -147,6 +174,7 @@ if (!exists(manifestPath)) {
   } catch { blockers.push("content/render-manifest.json is not valid JSON."); }
   if (manifest) {
     if (manifest.channel !== "SonicVhibez") blockers.push("Render manifest target must be exactly SonicVhibez.");
+    validateCreatorCapturedFootage(manifest, "content/render-manifest.json");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
       const assetPath = manifest[key];
       if (typeof assetPath !== "string" || !assetPath.trim()) {
@@ -178,6 +206,7 @@ if (!exists(longFormManifestPath)) {
   } catch { blockers.push("content/long-form-render-manifest.json is not valid JSON."); }
   if (longManifest) {
     if (longManifest.channel !== "SonicVhibez") blockers.push("Long-form render manifest target must be exactly SonicVhibez.");
+    validateCreatorCapturedFootage(longManifest, "content/long-form-render-manifest.json");
     if (longManifest.targetAspectRatio !== "16:9") blockers.push("Long-form render manifest must specify targetAspectRatio 16:9.");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
       if (typeof longManifest[key] !== "string" || !longManifest[key].trim() || !exists(path.join("content", longManifest[key]))) {
@@ -348,7 +377,7 @@ if (!exists(youtubeVerificationPath)) {
   }
 }
 function resolutionFor(blocker) {
-  if (/imported Canva wildlife asset/i.test(blocker)) return "For every listed Canva asset, confirm the exact original Pexels source page and creator, visually match the imported frames, export the original MP4, retain download/source evidence and a SHA-256 hash, and complete human visual review. Only then mark the individual asset CLEARED and authorize the inventory. Candidate URLs are not proof.";
+  if (/imported wildlife asset/i.test(blocker)) return "Use only footage captured by the identified original camera operator. Retain the original camera file, creator identity, capture/provenance record, written commercial-use permission, matching SHA-256, and human visual review. Stock/library clips, AI-generated wildlife visuals and candidate URLs are not eligible substitutes.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_grant/i.test(blocker)) return "Google rejected the YouTube OAuth refresh token (invalid_grant). Reauthorize the existing OAuth client for the same Google account with the YouTube read-only and upload scopes (https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload), request offline access with explicit consent, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, update only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun the read-only verification workflow. Never paste token values into chat or create a second OAuth client.";
   if (/latest read-only YouTube OAuth attempt.*invalid_grant/i.test(blocker)) return "Google rejected the latest YouTube refresh-token grant (invalid_grant). Reauthorize the existing OAuth client for the same Google account with https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload and offline access, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, replace only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun read-only verification. Never paste token values into chat or create a second OAuth client.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_client/i.test(blocker)) return "Google rejected the existing OAuth client ID/secret pair. Verify the matching values for the existing single client in GitHub Actions secrets; do not create another client or share secret values. Rerun the read-only verification workflow after correcting the pair.";
