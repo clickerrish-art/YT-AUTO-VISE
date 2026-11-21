@@ -30,7 +30,7 @@ Learn how to make a wildlife documentary Short with one subject, habitat context
 Promotional resource: Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF  
 https://selar.com/0u19v8u99l
 
-**DISCLOSURE HOLD:** Owner-confirmed relationship: Selar is the owner's own business and purchases generate direct sales revenue; this is not an affiliate commission. SonicVhibez promotion authorization is recorded separately. The exact viewer-facing commercial disclosure remains unapproved. Do not publish until the owner approves the exact wording and all media, rights and human-review gates pass.
+**Owner-approved commercial disclosure for this exact product:** This product is sold through my own Selar business; purchases generate revenue for my business. This is direct sales revenue, not an affiliate commission. This wording must appear verbatim in the final description and metadata promotionDisclosure object.
 
 Use only footage and music you own or are licensed to use. Keep the edit faithful to the observed sequence.
 
@@ -85,7 +85,7 @@ Use one genuine, rights-cleared animal image in its actual habitat, with natural
 - [ ] Check captions at phone size, audio levels and vertical safe areas.
 - [x] Seller identity is Click 47 on the Selar listing; the listing includes Nature Frontiers branding, while SonicVhibez promotion authorization is separately recorded by the owner.
 - [x] Owner-confirmed Selar relationship: the owner's own business; purchases generate direct sales revenue, not affiliate commission. SonicVhibez promotion authorization is separately recorded.
-- [ ] Obtain owner approval of the exact viewer-facing disclosure wording, with a timezone-qualified timestamp and approval reference.
+- [x] Product-specific viewer-facing disclosure is owner-approved in config/products.json (2026-11-10T07:00:36+02:00; exact wording above). Final metadata must still include it verbatim and pass scripts/product-promotion-gate.mjs.
 - [ ] Verify the exact SonicVhibez destination and full YouTube timestamp history before any calendar decision.
 - [ ] Keep as a private draft; do not upload or schedule until all gates pass.
 - [ ] Human playback and compliance review must be completed before any review flag is changed.
@@ -94,12 +94,12 @@ Use one genuine, rights-cleared animal image in its actual habitat, with natural
 
 **SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed.
 
-**Release state:** HOLD — Selar direct-sales relationship and SonicVhibez promotion authorization are owner-confirmed; exact viewer-facing disclosure remains unapproved; genuine media rights, final assets, destination identity and human review remain outstanding. No video has been rendered or published.
+**Release state:** HOLD — Selar direct-sales relationship, SonicVhibez promotion authorization and the exact product-specific viewer-facing disclosure are owner-approved. Final metadata must still pass the product-promotion gate. Genuine original media, commercially eligible Roderic narration, final assets, destination/history verification and human review remain outstanding. No video has been rendered or published.
 
 
 ## Current production gate — 2026-11-21
 
 - Use only genuine original creator-captured wildlife media with creator/source provenance, exact original file hash, commercial-use rights, full technical and visual review, and exact-hash approval. Generic stock footage and AI-generated wildlife visuals are prohibited as substitutes.
 - The owner-selected Roderic HeyGen Free-plan voice is internal-only; HeyGen Support denied the zero-cost commercial-use exception. No alternate narrator is approved. Do not generate or render production narration until written rights change or the owner explicitly changes the voice requirement.
-- The direct-sales disclosure remains a separate owner approval gate for this specific Short; the approval recorded for another Short does not automatically approve this draft.
+- The owner-approved disclosure is product-specific to the Complete YouTube Wildlife Creator’s Vault and applies to this Short because it promotes that exact product. Do not reuse it for another product. Insert it verbatim in the final description and metadata promotionDisclosure object; verify the product-promotion gate before release.
 - This item remains a planning draft, not a render or release candidate. Keep publishing disabled.
