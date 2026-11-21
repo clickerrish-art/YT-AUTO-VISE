@@ -16,7 +16,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 concurrency:
   group: sonicvhibez-repository-runner
@@ -24,7 +23,7 @@ concurrency:
 
 jobs:
   repository-runner:
-    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' && inputs.run_repository_runner == true }}
+    if: false # Disabled: legacy OIDC trust is being retired.
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
@@ -154,12 +153,11 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   staging-smoke:
-    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/codex/cloudflare-adapter-integration-20261108' && inputs.run_staging_smoke == true }}
+    if: false # Disabled: legacy OIDC trust is being retired.
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
       contents: read
-      id-token: write
     env:
       DASHBOARD_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
       DASHBOARD_WORKER_ID: sonicvhibez-render-worker
