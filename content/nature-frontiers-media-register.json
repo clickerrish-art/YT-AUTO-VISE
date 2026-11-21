@@ -12,8 +12,14 @@
       "This register is provider-neutral and must remain usable without a stock-provider API.",
       "A source listing or platform licence claim is not proof of species, filming location, additional permissions, or final publication clearance.",
       "Stock footage must not be described as footage captured or owned by Nature Frontiers.",
-      "Do not publish until the exact media file, rights evidence, complete visual inspection, and human approval are recorded."
-    ]
+      "Do not publish until the exact media file, rights evidence, complete visual inspection, and human approval are recorded.",
+      "Current owner production policy requires genuine original creator-captured wildlife media. All Pexels/Pixabay stock listings in this register are reference-only and excluded from production; a platform licence or source listing does not satisfy the original-capture requirement.",
+      "Do not use AI-generated wildlife visuals or generic stock footage as substitutes for genuine original wildlife media. Only original creator-captured media with verified creator/source provenance, exact file hash, commercial rights and full human inspection can be considered for production."
+    ],
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "productionEligibilityRequiresExactOriginalSource": true
   },
   "assets": [
     {
@@ -91,6 +97,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -166,6 +177,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -241,6 +257,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -318,6 +339,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -390,6 +416,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -445,6 +476,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -500,6 +536,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -555,6 +596,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -610,6 +656,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -665,6 +716,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -720,6 +776,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -775,6 +836,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -830,6 +896,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -885,6 +956,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -940,6 +1016,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -995,6 +1076,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1071,6 +1157,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1143,6 +1234,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1218,6 +1314,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1273,6 +1374,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1348,6 +1454,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1420,6 +1531,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1495,6 +1611,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1550,6 +1671,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1628,6 +1754,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1707,6 +1838,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1778,6 +1914,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1833,6 +1974,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1907,6 +2053,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -1962,6 +2113,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2017,6 +2173,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2072,6 +2233,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2127,6 +2293,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2182,6 +2353,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2237,6 +2413,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2292,6 +2473,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2347,6 +2533,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2402,6 +2593,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2457,6 +2653,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2512,6 +2713,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2567,6 +2773,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2622,6 +2833,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2677,6 +2893,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2732,6 +2953,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2787,6 +3013,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2842,6 +3073,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2897,6 +3133,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -2952,6 +3193,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3007,6 +3253,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3062,6 +3313,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3117,6 +3373,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3172,6 +3433,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3227,6 +3493,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3282,6 +3553,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3337,6 +3613,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3392,6 +3673,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3447,6 +3733,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3502,6 +3793,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3557,6 +3853,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3612,6 +3913,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3667,6 +3973,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3722,6 +4033,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3777,6 +4093,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3832,6 +4153,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3887,6 +4213,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3942,6 +4273,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -3997,6 +4333,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4052,6 +4393,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4107,6 +4453,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4162,6 +4513,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4217,6 +4573,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4272,6 +4633,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4327,6 +4693,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4382,6 +4753,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4437,6 +4813,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4492,6 +4873,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4547,6 +4933,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4602,6 +4993,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4657,6 +5053,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4712,6 +5113,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4767,6 +5173,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4822,6 +5233,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4877,6 +5293,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4932,6 +5353,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -4987,6 +5413,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -5042,6 +5473,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -5097,6 +5533,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -5152,6 +5593,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -5207,6 +5653,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -5285,6 +5736,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -5363,6 +5819,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     },
     {
@@ -5441,6 +5902,11 @@
         "scheduled": false,
         "published": false,
         "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     }
   ]
