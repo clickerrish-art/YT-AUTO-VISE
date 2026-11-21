@@ -304,7 +304,7 @@ test("readiness reports malformed render-manifest asset paths without crashing J
   }
 });
 
-test("readiness blocks selected imported Canva wildlife assets until exact source, local MP4 and human review are verified", () => {
+test("readiness blocks selected imported wildlife assets until creator-capture provenance, local MP4 and human review are verified", () => {
   const directory = fs.mkdtempSync(path.join(process.cwd(), "content", ".sonicvhibez-media-inventory-"));
   try {
     const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
@@ -326,9 +326,9 @@ test("readiness blocks selected imported Canva wildlife assets until exact sourc
     assert.equal(blocker.controlOwner, "external_owner_or_human_reviewer");
     assert.ok(blocker.evidence.path.endsWith("sonicvhibez-imported-media-inventory.json"));
     assert.match(blocker.message, /VAHZ9kg2rvg/);
-    assert.match(blocker.resolution, /original MP4/);
+    assert.match(blocker.resolution, /original camera file/);
     assert.match(blocker.resolution, /SHA-256/);
-    assert.match(blocker.resolution, /Candidate URLs are not proof/);
+    assert.match(blocker.resolution, /not eligible substitutes/);
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
