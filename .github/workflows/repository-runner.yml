@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   repository-runner:
-    if: false # Disabled: legacy OIDC trust is being retired.
+    if: ${{ false }} # Disabled: legacy OIDC trust is being retired.
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
@@ -153,7 +153,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   staging-smoke:
-    if: false # Disabled: legacy OIDC trust is being retired.
+    if: ${{ false }} # Disabled: legacy OIDC trust is being retired.
     runs-on: ubuntu-latest
     timeout-minutes: 8
     permissions:
