@@ -1,4 +1,6 @@
-# SonicVhibez Long-Form Video 001 — Production Script
+# SonicVhibez Creator-Education Long-Form Draft — Queue ID: `long-story-wildlife-footage`
+
+**Cycle assignment:** NOT ASSIGNED. This is a separate creator-education draft, not the Nile crocodile documentary and not the owner-selected second long-form item in the rolling publication cycle. The Nile crocodile documentary retains the canonical long-form 001 topic identity. This legacy file path is retained to avoid breaking existing references; do not infer its cycle position from the filename.
 
 **Working title:** How to Turn Wildlife Footage Into a Documentary Story  
 **Channel:** SonicVhibez  
