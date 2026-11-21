@@ -4,6 +4,10 @@ import fs from "node:fs";
 
 const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
 const narrationWorkflow = fs.readFileSync(".github/workflows/generate-long-form-narration.yml", "utf8");
+const shortNarrationWorkflow = fs.readFileSync(".github/workflows/free-narration-artifact.yml", "utf8");
+const queuePackageGenerator = fs.readFileSync("scripts/generate-queue-package.py", "utf8");
+const legacyLongNarrationGenerator = fs.readFileSync("scripts/generate-long-form-narration.py", "utf8");
+const queuedDraftRenderer = fs.readFileSync("scripts/render-queued-draft.py", "utf8");
 const qualityWorkflow = fs.readFileSync(".github/workflows/content-quality.yml", "utf8");
 const readiness = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
 const longRenderer = fs.readFileSync("scripts/render-long-form.mjs", "utf8");
@@ -31,10 +35,64 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.productUrl, "https://selar.com/0u19v8u99l");
 });
 
-test("script changes automatically trigger narration generation", () => {
-  assert.match(narrationWorkflow, /push:[\s\S]*paths:[\s\S]*content\/long-form-scripts\.md/);
-  assert.match(narrationWorkflow, /workflow_dispatch/);
-  assert.match(narrationWorkflow, /actions\/upload-artifact@v4/);
+test("long-form Edge TTS generation is manual-only and explicitly non-commercial", () => {
+  assert.ok(narrationWorkflow.includes("workflow_dispatch:"));
+  assert.ok(narrationWorkflow.includes("allow_noncommercial_audition:"));
+  assert.ok(narrationWorkflow.includes("default: false"));
+  assert.ok(narrationWorkflow.includes("--allow-noncommercial-audition"));
+  assert.ok(narrationWorkflow.includes("NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"));
+  assert.ok(narrationWorkflow.includes("actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02"));
+  const workflowLines = narrationWorkflow.split(String.fromCharCode(10)).map(line => line.trim());
+  assert.equal(workflowLines.includes("schedule:"), false);
+  assert.equal(workflowLines.includes("push:"), false);
+});
+
+test("Short Edge TTS audition workflow is manual-only, acknowledged, and never production", () => {
+  assert.ok(shortNarrationWorkflow.includes("workflow_dispatch:"));
+  assert.ok(shortNarrationWorkflow.includes("allow_noncommercial_audition:"));
+  assert.ok(shortNarrationWorkflow.includes("default: false"));
+  assert.ok(shortNarrationWorkflow.includes("if: \${{ inputs.allow_noncommercial_audition == true }}"));
+  assert.ok(shortNarrationWorkflow.includes("--allow-noncommercial-audition"));
+  assert.ok(shortNarrationWorkflow.includes("NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"));
+  assert.ok(shortNarrationWorkflow.includes('assert data["productionUseAllowed"] is False'));
+  const workflowLines = shortNarrationWorkflow.split(String.fromCharCode(10)).map(line => line.trim());
+  assert.equal(workflowLines.includes("schedule:"), false);
+  assert.equal(workflowLines.includes("push:"), false);
+  assert.doesNotMatch(shortNarrationWorkflow, /generate-queue-package|render-queued-draft|youtube\.upload/i);
+});
+
+test("direct queue-package Edge TTS generation requires explicit non-commercial acknowledgement", () => {
+  assert.ok(queuePackageGenerator.includes("--allow-noncommercial-audition"));
+  assert.ok(queuePackageGenerator.includes("if not args.allow_noncommercial_audition"));
+  assert.ok(queuePackageGenerator.includes("if not args.voice"));
+  assert.ok(queuePackageGenerator.includes('"status": "INTERNAL_AUDITION_ONLY"'));
+  assert.ok(queuePackageGenerator.includes('"voiceApprovalStatus": "NOT_OWNER_APPROVED"'));
+  assert.ok(queuePackageGenerator.includes('"licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"'));
+  assert.ok(queuePackageGenerator.includes('"commercialUseAllowed": False'));
+  assert.ok(queuePackageGenerator.includes('"productionUseAllowed": False'));
+  assert.ok(queuePackageGenerator.includes('"publishingEnabled": False'));
+});
+
+
+test("legacy long-form Edge TTS generator is explicitly non-commercial and fail-closed", () => {
+  assert.ok(legacyLongNarrationGenerator.includes("--allow-noncommercial-audition"));
+  assert.ok(legacyLongNarrationGenerator.includes("--voice"));
+  assert.ok(legacyLongNarrationGenerator.includes("require_noncommercial_audition(allow_noncommercial_audition)"));
+  assert.ok(legacyLongNarrationGenerator.includes('"status": "INTERNAL_AUDITION_ONLY"'));
+  assert.ok(legacyLongNarrationGenerator.includes('"voiceApprovalStatus": "NOT_OWNER_APPROVED"'));
+  assert.ok(legacyLongNarrationGenerator.includes('"licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"'));
+  assert.ok(legacyLongNarrationGenerator.includes('"commercialUseAllowed": False'));
+  assert.ok(legacyLongNarrationGenerator.includes('"productionUseAllowed": False'));
+  assert.ok(legacyLongNarrationGenerator.includes('"publishingEnabled": False'));
+  assert.ok(legacyLongNarrationGenerator.includes("audioSha256"));
+});
+
+test("video renderer rejects non-commercial internal-audition audio", () => {
+  assert.ok(queuedDraftRenderer.includes('meta.get("status") == "INTERNAL_AUDITION_ONLY"'));
+  assert.ok(queuedDraftRenderer.includes('meta.get("licenseStatus") == "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY"'));
+  assert.ok(queuedDraftRenderer.includes('meta.get("commercialUseAllowed") is False'));
+  assert.ok(queuedDraftRenderer.includes('meta.get("productionUseAllowed") is False'));
+  assert.ok(queuedDraftRenderer.includes("non-commercial internal-audition audio cannot be rendered"));
 });
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
