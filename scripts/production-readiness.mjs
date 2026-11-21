@@ -10,6 +10,7 @@ import { validateCadenceDecision } from "./schedule-policy.mjs";
 import { validateProductPromotionGate } from "./product-promotion-gate.mjs";
 import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
 import { validateProductionQualityApprovalFile } from "./production-quality-approval.mjs";
+import { validateQueueIdentity } from "./queue-identity-policy.mjs";
 
 const root = process.cwd();
 const blockers = [];
@@ -99,6 +100,30 @@ if (!queueExists) {
         blockers.push("Queue contains duplicate item IDs; remove duplicates before relying on cadence tracking.");
       }
       notes.push(`Queue: ${items.length} items; public publishing ${queue.publishingEnabled === false ? "disabled" : "not safely disabled"}.`);
+  }
+}
+
+const detailedQueuePath = "content/long-form-queue.json";
+const queueIdentityApprovalPath = "content/queue-identity-approval.json";
+let detailedQueue;
+let queueIdentityApproval;
+try {
+  if (exists(detailedQueuePath)) detailedQueue = JSON.parse(fs.readFileSync(path.resolve(root, detailedQueuePath), "utf8"));
+  else blockers.push("Detailed content/long-form-queue.json is missing; queue identity cannot be reconciled.");
+} catch {
+  blockers.push("Detailed content/long-form-queue.json is invalid JSON; queue identity cannot be reconciled.");
+}
+try {
+  if (exists(queueIdentityApprovalPath)) queueIdentityApproval = JSON.parse(fs.readFileSync(path.resolve(root, queueIdentityApprovalPath), "utf8"));
+} catch {
+  blockers.push("content/queue-identity-approval.json is invalid JSON; owner queue identity approval cannot be trusted.");
+}
+if (queue) {
+  const identity = validateQueueIdentity({ operationalQueue: queue, detailedQueue, approval: queueIdentityApproval });
+  if (!identity.valid) {
+    blockers.push("QUEUE IDENTITY RECONCILIATION REQUIRED: " + identity.errors.join(" "));
+  } else {
+    notes.push("Queue identity reconciliation: " + identity.mappingCount + " owner-approved long-form mappings verified.");
   }
 }
 
