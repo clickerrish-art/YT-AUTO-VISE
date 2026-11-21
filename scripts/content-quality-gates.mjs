@@ -228,7 +228,9 @@ export function validateAssetProvenance(asset) {
     if (!nonempty(asset[key]) || PLACEHOLDER.test(asset[key] ?? "")) errors.push(key + " is required and must not be a placeholder");
   }
   if (!hashValid(asset.originalSha256)) errors.push("originalSha256 must be a SHA-256 checksum");
-  if (!["GENERATED", "ORIGINAL_RECORDING", "LICENSED"].includes(asset.sourceMethod)) errors.push("sourceMethod must be GENERATED, ORIGINAL_RECORDING or LICENSED");
+  if (asset.sourceMethod !== "ORIGINAL_RECORDING") errors.push("wildlife visuals must originate from an original creator recording; generated and stock/licensed assets are prohibited");
+  if (asset.creatorCapturedOriginal !== true) errors.push("creatorCapturedOriginal must be true after original-file provenance verification");
+  if (!nonempty(asset.captureProvenance) || PLACEHOLDER.test(asset.captureProvenance ?? "")) errors.push("captureProvenance must identify the original creator-captured source and must not be a placeholder");
   if (!nonempty(asset.permittedUse) || PLACEHOLDER.test(asset.permittedUse ?? "")) errors.push("permittedUse must be explicit and non-placeholder");
   if (asset.rightsStatus !== "VERIFIED") errors.push("rightsStatus must be VERIFIED after human evidence review");
   if (asset.commercialUseAllowed !== true) errors.push("commercial use must be explicitly allowed for this production");
