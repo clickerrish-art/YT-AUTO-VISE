@@ -1469,9 +1469,9 @@ test("authoring form generates and persists a source-bound script through the re
 });
 
 
-test("narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call", async ({ page }) => {
-  test.setTimeout(300_000);
-  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-live-narration-"));
+test("narration generation remains blocked while no commercially eligible owner-approved voice is authorized", async ({ page }) => {
+  test.setTimeout(180_000);
+  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-narration-policy-"));
   const token = operatorToken;
   const port = 24_000 + Math.floor(Math.random() * 12_000);
   const base = `http://127.0.0.1:${port}`;
@@ -1516,14 +1516,13 @@ test("narration form persists measured audio and word-boundary captions with a d
   const serverEnv = {
     ...process.env,
     DASHBOARD_OPERATOR_TOKEN: token,
-    DASHBOARD_OPERATOR_ID: "live-narration-e2e-operator",
+    DASHBOARD_OPERATOR_ID: "narration-policy-e2e-operator",
     DASHBOARD_STATE_DIR: stateDir,
     UPLOAD_LOG_DIR: stateDir,
     PORT: String(port),
     DASHBOARD_HOST: "127.0.0.1",
     SCRIPT_GENERATION_ENDPOINT: `http://127.0.0.1:${provider.address().port}/v1/chat/completions`,
     SCRIPT_GENERATION_TIMEOUT_MS: "10000",
-    AUTHORING_TTS_RATE: "+5%",
     PYTHONPATH: [path.join(process.cwd(), "tests", "fixtures", "narration-tts-stub"), process.env.PYTHONPATH].filter(Boolean).join(path.delimiter)
   };
   let child;
@@ -1536,8 +1535,6 @@ test("narration form persists measured audio and word-boundary captions with a d
     child.stdout.on("data", chunk => { logs += chunk.toString(); });
     child.stderr.on("data", chunk => { logs += chunk.toString(); });
   }
-  startServer();
-  const jobOutputDir = { value: null };
   async function stopServer() {
     if (child && child.exitCode === null && child.signalCode === null) {
       const exited = new Promise(resolve => child.once("exit", resolve));
@@ -1545,9 +1542,7 @@ test("narration form persists measured audio and word-boundary captions with a d
       await exited;
     }
   }
-  async function restartServer() {
-    await stopServer();
-    startServer();
+  async function waitForServer() {
     for (let attempt = 0; attempt < 100; attempt++) {
       if (child.exitCode !== null || child.signalCode !== null) break;
       try {
@@ -1556,22 +1551,14 @@ test("narration form persists measured audio and word-boundary captions with a d
       } catch {}
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    throw new Error("Dashboard did not recover after narration restart: " + logs);
+    throw new Error("Dashboard did not become healthy: " + logs);
   }
+  startServer();
   try {
-    let ready = false;
-    for (let attempt = 0; attempt < 100; attempt++) {
-      if (child.exitCode !== null) break;
-      try {
-        const response = await fetch(base + "/healthz");
-        if (response.ok) { ready = true; break; }
-      } catch {}
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    expect(ready, "isolated dashboard failed to start: " + logs).toBe(true);
+    await waitForServer();
     const headers = { "content-type": "application/json", "x-operator-token": token };
     const draft = {
-      id: "live-tts-" + Date.now().toString(36),
+      id: "voice-policy-" + Date.now().toString(36),
       title: "Evidence-led wildlife Short",
       topic: "Interpreting wildlife observations",
       contentType: "short",
@@ -1588,23 +1575,20 @@ test("narration form persists measured audio and word-boundary captions with a d
       audience: "Adults interested in evidence-led wildlife education",
       editorialPurpose: "Explain the limits of interpreting one wildlife observation",
       sources: [source],
-      parentRecord: { contentId: "long-parent", weeklyContentCycleId: "live-tts-cycle", format: "long_form", channel: "SonicVhibez" }
+      parentRecord: { contentId: "long-parent", weeklyContentCycleId: "voice-policy-cycle", format: "long_form", channel: "SonicVhibez" }
     };
     const authorResponse = await fetch(base + "/api/jobs/author", { method: "POST", headers, body: JSON.stringify({ jobId, brief }) });
     const authorBody = await authorResponse.json();
     expect(authorResponse.status, JSON.stringify(authorBody)).toBe(201);
-    // Use the server's canonical digest, which sorts nested keys as well.
-    const stateAfterAuthor = await (await fetch(base + "/api/state", { headers })).json();
-    const authoredJob = stateAfterAuthor.jobs.find(job => job.id === jobId);
+    const authoredState = await (await fetch(base + "/api/state", { headers })).json();
+    const authoredJob = authoredState.jobs.find(job => job.id === jobId);
     const approvedScript = authoredJob.authoring.result.script;
     const canonical = value => Array.isArray(value) ? "[" + value.map(canonical).join(",") + "]" :
       value && typeof value === "object" ? "{" + Object.keys(value).sort().map(key => JSON.stringify(key) + ":" + canonical(value[key])).join(",") + "}" : JSON.stringify(value);
     const approvedSha = crypto.createHash("sha256").update(canonical(approvedScript), "utf8").digest("hex");
-    expect(approvedSha).toMatch(/^[a-f0-9]{64}$/);
-    jobOutputDir.value = path.join(process.cwd(), "media", "generated-authoring", jobId + "-" + approvedSha.slice(0, 12));
     const approvalResponse = await fetch(base + "/api/jobs/authoring/review", {
       method: "POST", headers,
-      body: JSON.stringify({ jobId, decision: "APPROVE", scriptSha256: approvedSha, reason: "Reviewed the source mapping and approved the exact script revision for narration." })
+      body: JSON.stringify({ jobId, decision: "APPROVE", scriptSha256: approvedSha, reason: "Reviewed the exact source mapping; narration remains gated by the owner-approved voice policy." })
     });
     const approvalBody = await approvalResponse.json();
     expect(approvalResponse.status, JSON.stringify(approvalBody)).toBe(200);
@@ -1615,129 +1599,34 @@ test("narration form persists measured audio and word-boundary captions with a d
     await expect(page.locator("#app")).toBeVisible();
     await page.locator("#narrationjob").selectOption(jobId);
     await expect(page.locator("#narrationsha")).toHaveValue(approvedSha);
-    // Exercise the API itself with two simultaneous identical generation requests.
-    // Exactly one request may generate TTS; the other must reuse its durable receipt.
-    const narrationPayload = JSON.stringify({ jobId, scriptSha256: approvedSha });
-    const concurrentNarrationResponses = await Promise.all([
-      fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload }),
-      fetch(base + "/api/jobs/narration", { method: "POST", headers, body: narrationPayload })
-    ]);
-    const concurrentNarrationBodies = await Promise.all(concurrentNarrationResponses.map(response => response.json()));
-    expect(
-      concurrentNarrationResponses.map(response => response.status).sort(),
-      JSON.stringify({ concurrentNarrationBodies, serverLogs: logs })
-    ).toEqual([200, 201]);
-    const createdIndex = concurrentNarrationResponses.findIndex(response => response.status === 201);
-    const reusedIndex = concurrentNarrationResponses.findIndex(response => response.status === 200);
-    expect(concurrentNarrationBodies[createdIndex].narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(concurrentNarrationBodies[reusedIndex].reused).toBe(true);
-    expect(concurrentNarrationBodies[reusedIndex].idempotent).toBe(true);
-    expect(concurrentNarrationBodies[reusedIndex].narrationStage.artifacts)
-      .toEqual(concurrentNarrationBodies[createdIndex].narrationStage.artifacts);
-    const concurrentNarrationState = await (await fetch(base + "/api/state", { headers })).json();
-    expect(concurrentNarrationState.audit.filter(event =>
-      event.action === "AUTHORING_NARRATION_STARTED" && event.jobId === jobId
-    )).toHaveLength(1);
-    expect(concurrentNarrationState.audit.filter(event =>
-      event.action === "AUTHORING_NARRATION_DRAFT_READY" && event.jobId === jobId
-    )).toHaveLength(1);
-    expect(concurrentNarrationState.publishingEnabled).toBe(false);
+    await page.locator("#narrationform button[type=submit]").click();
+    await expect(page.locator("#narrationresult")).toContainText("Narration stage did not complete", { timeout: 20_000 });
+    await expect(page.locator("#narrationresult")).toContainText("owner has not authorized an alternative narrator");
 
-    // Keep the UI double-click guard covered independently after the API-level race.
-    let narrationRequests = 0;
-    await page.route("**/api/jobs/narration", async route => {
-      narrationRequests += 1;
-      await new Promise(resolve => setTimeout(resolve, 250));
-      const response = await route.fetch();
-      await route.fulfill({ response });
-    });
-    await page.locator("#narrationform button[type=submit]").dblclick();
-    await expect(page.locator("#narrationresult")).toContainText("Narration stage: DRAFT_REVIEW_REQUIRED", { timeout: 30_000 });
-    expect(narrationRequests).toBe(1);
+    const state = await (await fetch(base + "/api/state", { headers })).json();
+    const job = state.jobs.find(item => item.id === jobId);
+    expect(job.authoring.narrationStage.status).toBe("BLOCKED");
+    expect(job.authoring.narrationStage.error).toMatch(/owner has not authorized an alternative narrator/i);
+    expect(job.authoring.narrationStage.artifacts ?? {}).toEqual({});
+    expect(state.audit.filter(event => event.action === "AUTHORING_NARRATION_STARTED" && event.jobId === jobId)).toHaveLength(1);
+    expect(state.audit.filter(event => event.action === "AUTHORING_NARRATION_BLOCKED" && event.jobId === jobId)).toHaveLength(1);
+    expect(state.publishingEnabled).toBe(false);
+    expect(state.uploads).toHaveLength(0);
 
-    const firstState = await (await page.request.get(base + "/api/state", { headers })).json();
-    const firstJob = firstState.jobs.find(job => job.id === jobId);
-    expect(firstJob.authoring.narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(firstJob.authoring.narrationStage.narrationReport.captionTiming).toBe("TTS_WORD_BOUNDARIES");
-    expect(firstJob.authoring.narrationStage.narrationReport.wordCount).toBe(137);
-    expect(firstJob.authoring.narrationStage.narrationReport.durationSeconds).toBeGreaterThanOrEqual(50);
-    expect(firstJob.authoring.narrationStage.narrationReport.durationSeconds).toBeLessThanOrEqual(60);
-    expect(firstJob.authoring.narrationStage.publishable).toBe(false);
-    expect(firstState.publishingEnabled).toBe(false);
-    const expectedArtifacts = ["narration.mp3", "narration.txt", "captions.srt", "narration-report.json"];
-    for (const name of expectedArtifacts) {
-      const artifact = firstJob.authoring.narrationStage.artifacts[name];
-      expect(artifact.sha256).toMatch(/^[a-f0-9]{64}$/);
-      const absolutePath = path.resolve(process.cwd(), artifact.path);
-      expect(fs.lstatSync(absolutePath).isFile()).toBe(true);
-      expect(crypto.createHash("sha256").update(fs.readFileSync(absolutePath)).digest("hex")).toBe(artifact.sha256);
-      if (name === "narration.mp3") jobOutputDir.value = path.dirname(absolutePath);
-    }
-    // Prove the generated narration stage and all four exact-hash artifacts survive
-    // a real process restart before an idempotent retry is accepted.
-    await restartServer();
+    await stopServer();
+    startServer();
+    await waitForServer();
     const restartedState = await (await fetch(base + "/api/state", { headers })).json();
-    const restartedJob = restartedState.jobs.find(job => job.id === jobId);
-    expect(restartedJob.authoring.narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(restartedJob.authoring.narrationStage.artifacts).toEqual(firstJob.authoring.narrationStage.artifacts);
-    expect(restartedJob.authoring.narrationStage.publishable).toBe(false);
-    expect(restartedState.audit.filter(event => event.action === "AUTHORING_NARRATION_DRAFT_READY" && event.jobId === jobId)).toHaveLength(1);
-
-    const beforeExactRetries = fs.readFileSync(path.join(stateDir, "dashboard-state.json"));
-    const exactRetryResponses = await Promise.all([
-      fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: approvedSha }) }),
-      fetch(base + "/api/jobs/narration", { method: "POST", headers, body: JSON.stringify({ jobId, scriptSha256: approvedSha }) })
-    ]);
-    const exactRetryBodies = await Promise.all(exactRetryResponses.map(response => response.json()));
-    expect(exactRetryResponses.every(response => response.status === 200)).toBe(true);
-    expect(exactRetryBodies.every(body => body.reused === true && body.idempotent === true)).toBe(true);
-    expect(exactRetryBodies.every(body => body.narrationStage.artifacts["narration.mp3"].sha256 === firstJob.authoring.narrationStage.artifacts["narration.mp3"].sha256)).toBe(true);
-    expect(fs.readFileSync(path.join(stateDir, "dashboard-state.json"))).toEqual(beforeExactRetries);
-    const retryState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
-    expect(retryState.audit.filter(event => event.action === "AUTHORING_NARRATION_DRAFT_READY" && event.jobId === jobId)).toHaveLength(1);
-    const reviewBundle = await (await page.request.get(base + "/api/jobs/narration/review?jobId=" + encodeURIComponent(jobId), { headers })).json();
-    expect(reviewBundle.scriptSha256).toBe(approvedSha);
-    expect(reviewBundle.transcript.trim().split(/\s+/u)).toHaveLength(137);
-    expect(reviewBundle.captions).toContain("-->");
-    const audioResponse = await page.request.get(base + "/api/jobs/narration/audio?jobId=" + encodeURIComponent(jobId), { headers });
-    expect(audioResponse.status()).toBe(200);
-    expect(audioResponse.headers()["content-type"]).toContain("audio/mpeg");
-    const audioBytes = await audioResponse.body();
-    expect(crypto.createHash("sha256").update(audioBytes).digest("hex")).toBe(firstJob.authoring.narrationStage.artifacts["narration.mp3"].sha256);
-    expect(audioBytes.length).toBeGreaterThan(10_000);
-    await page.locator("#narrationreviewjob").selectOption(jobId);
-    await expect(page.locator("#narrationtranscript")).toContainText("A wildlife encounter");
-    await expect(page.locator("#narrationcaptions")).toContainText("-->");
-    await expect(page.locator("#narrationaudio")).toHaveAttribute("src", /^blob:/);
-
-    await page.reload();
-    await page.locator("#token").fill(token);
-    await page.locator("#connect").click();
-    await expect(page.locator("#app")).toBeVisible();
-    await page.locator("#narrationjob").selectOption(jobId);
-    await expect(page.locator("#narrationsha")).toHaveValue(approvedSha);
-
-    // Simulate a process interruption after complete files exist. Reconciliation
-    // must verify those exact files and must not call the TTS service again.
-    const stateFile = path.join(stateDir, "dashboard-state.json");
-    const interruptedState = JSON.parse(fs.readFileSync(stateFile, "utf8"));
-    const interruptedJob = interruptedState.jobs.find(job => job.id === jobId);
-    interruptedJob.authoring.narrationStage.status = "RECOVERY_REQUIRED";
-    interruptedJob.authoring.narrationStage.recoveryRequired = true;
-    fs.writeFileSync(stateFile, JSON.stringify(interruptedState, null, 2), { mode: 0o600 });
-    await page.locator("#reconcilenarration").click();
-    await expect(page.locator("#narrationresult")).toContainText("Narration reconciled without regeneration: DRAFT_REVIEW_REQUIRED", { timeout: 30_000 });
-    const reconciledState = await (await page.request.get(base + "/api/state", { headers })).json();
-    const reconciledJob = reconciledState.jobs.find(job => job.id === jobId);
-    expect(reconciledJob.authoring.narrationStage.status).toBe("DRAFT_REVIEW_REQUIRED");
-    expect(reconciledJob.authoring.narrationStage.artifacts["narration.mp3"].sha256).toBe(firstJob.authoring.narrationStage.artifacts["narration.mp3"].sha256);
-    expect(reconciledJob.authoring.narrationStage.publishable).toBe(false);
-    expect(reconciledState.publishingEnabled).toBe(false);
+    const restartedJob = restartedState.jobs.find(item => item.id === jobId);
+    expect(restartedJob.authoring.narrationStage.status).toBe("BLOCKED");
+    expect(restartedJob.authoring.narrationStage.error).toMatch(/owner has not authorized an alternative narrator/i);
+    expect(restartedJob.authoring.narrationStage.artifacts ?? {}).toEqual({});
+    expect(restartedState.publishingEnabled).toBe(false);
+    expect(restartedState.uploads).toHaveLength(0);
   } finally {
     await stopServer();
-    provider.close();
+    await new Promise(resolve => provider.close(resolve));
     fs.rmSync(stateDir, { recursive: true, force: true });
-    if (jobOutputDir.value) fs.rmSync(jobOutputDir.value, { recursive: true, force: true });
   }
 });
 
