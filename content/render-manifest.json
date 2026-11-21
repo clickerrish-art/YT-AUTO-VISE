@@ -37,9 +37,10 @@
   "captionHashType": "GIT_BLOB_SHA",
   "referenceOnlyRightsResearchEvidence": "short-001-pexels-rights-evidence.json",
   "footageEligibilityStatus": "EXCLUDED_PEXELS_STOCK_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA",
-  "narrationRightsStatus": "ALTERNATIVE_VOICE_AUDITION_AVAILABLE_OWNER_REVIEW_REQUIRED",
+  "narrationRightsStatus": "PROVIDER_DENIED",
   "narrationPublicBrandedDistributionAllowed": false,
   "narrationCommercialUseAllowed": false,
   "narrationProductionUseAllowed": false,
-  "narrationRestrictionSummary": "Roderic Free-plan audio remains prohibited for public branded or commercial use. Owner authorized zero-cost commercially licensed alternatives; Norman/Piper is an audition only. Production remains blocked pending owner listening, final voice selection, final audio hash approval and synchronized captions."
+  "narrationRestrictionSummary": "Roderic Free-plan audio remains prohibited for public branded or commercial use. Owner authorized zero-cost commercially licensed alternatives; Norman/Piper is an audition only. Production remains blocked pending owner listening, final voice selection, final audio hash approval and synchronized captions.",
+  "alternativeVoiceAuditionStatus": "OWNER_AUTHORIZED_ZERO_COST_ALTERNATIVE_AUDITION_PENDING_LISTENING"
 }
