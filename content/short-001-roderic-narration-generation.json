@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "project": "SonicVhibez",
   "contentId": "short-001-wildlife-video-storytelling",
-  "status": "DRAFT_NARRATION_GENERATED_AUDIO_FILE_NOT_YET_SAVED_OR_HUMAN_REVIEWED",
+  "status": "INTERNAL_AUDITION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE",
   "generatedDate": "2026-11-19",
   "provider": "HeyGen Voice",
   "voice": {
@@ -44,7 +44,10 @@
     "scriptPath": "content/short-001-wildlife-video-storytelling.md",
     "scriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
     "captionsPath": "content/short-001-wildlife-video-storytelling.srt",
-    "captionsBlobSha256": "6a09a58188301ed134912010c6276c6a167544be"
+    "captionsBlobSha256": "6a09a58188301ed134912010c6276c6a167544be",
+    "currentScriptBlobSha": "81bdea7b2a7b29b89a8f1bb7a9a6f5e8b9d7a5e1",
+    "currentCaptionBlobSha": "6a09a58188301ed134912010c6276c6a167544be",
+    "hashType": "GIT_BLOB_SHA"
   },
   "spokenText": "Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep separate moments in their original recorded order; label any reconstruction clearly. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.",
   "captions": {
@@ -72,7 +75,7 @@
     "releaseEligible": false,
     "commercialUseAllowed": false,
     "productionUseBlocked": true,
-    "note": "Audio is retained as an internal voice-quality audition only. Do not render into or publish with a commercial SonicVhibez video."
+    "note": "This narration is an internal audition only. HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs. Do not render into or publish with a public, branded, monetized or commercial SonicVhibez video."
   },
   "license": {
     "provider": "HeyGen",
@@ -86,7 +89,9 @@
     "revenueGeneratingProductPromotionAllowed": false,
     "productionUseBlocked": true,
     "permittedUse": "Internal audition and evaluation only",
-    "reviewStatus": "VERIFIED_AGAINST_CURRENT_PUBLISHED_TERMS_2026-11-19",
-    "note": "The Roderic recording must not be used in SonicVhibez production under the current Free-plan terms. A commercial HeyGen license or an explicitly approved zero-cost commercially licensed alternative is required."
-  }
+    "reviewStatus": "PROVIDER_DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_2026-11-21",
+    "note": "HeyGen Support explicitly denied a zero-cost commercial-use exception for existing and future Roderic Free-plan outputs. This voice may only be used for personal, non-commercial internal evaluation under the Free plan. No paid upgrade is authorized and no alternative narrator may be substituted without explicit owner approval.",
+    "providerDenialEvidence": "heygen-roderic-commercial-rights-determination-2026-11-21.json"
+  },
+  "providerDenialEvidence": "heygen-roderic-commercial-rights-determination-2026-11-21.json"
 }
