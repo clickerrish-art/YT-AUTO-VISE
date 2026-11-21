@@ -15,6 +15,7 @@ const queuePackageGenerator = fs.readFileSync("scripts/generate-queue-package.py
 const queuedRenderer = fs.readFileSync("scripts/render-queued-draft.py", "utf8");
 const photoThumbnailGenerator = fs.readFileSync("scripts/render-photo-thumbnail.py", "utf8");
 const pexelsRegistry = JSON.parse(fs.readFileSync("content/approved-pexels-footage.json", "utf8"));
+const pexelsAcquisitionWorkflow = fs.readFileSync(".github/workflows/acquire-short-001-assets.yml", "utf8");
 
 test("production remains gated and target is SonicVhibez only", () => {
   assert.equal(queue.publishingEnabled, false);
@@ -68,6 +69,11 @@ test("Pexels stock thumbnail generation is disabled and historical selections ar
   assert.doesNotMatch(photoThumbnailGenerator, /images\.pexels\.com|pexels\.com\/photo/i);
   assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, false);
   assert.equal(pexelsRegistry.currentProductionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.match(pexelsAcquisitionWorkflow, /workflow_dispatch/);
+  assert.match(pexelsAcquisitionWorkflow, /reference_only/);
+  assert.match(pexelsAcquisitionWorkflow, /default: false/);
+  assert.match(pexelsAcquisitionWorkflow, /if:.*inputs\\.reference_only == true/);
+  assert.doesNotMatch(pexelsAcquisitionWorkflow, /^\\s*(push|pull_request|schedule):/m);
 });
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {

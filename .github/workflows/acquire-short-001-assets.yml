@@ -1,63 +1,69 @@
-name: Acquire approved SonicVhibez Short 001 Pexels footage
+name: Acquire Pexels references only (never production assets)
 
 on:
-  push:
-    branches:
-      - codex/marketing-machine-audit-fixes
-    paths:
-      - content/approved-pexels-footage.json
-      - scripts/acquire-short-001-assets.mjs
-      - .github/workflows/acquire-short-001-assets.yml
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - main
-    paths:
-      - content/approved-pexels-footage.json
-      - scripts/acquire-short-001-assets.mjs
-      - .github/workflows/acquire-short-001-assets.yml
   workflow_dispatch:
+    inputs:
+      reference_only:
+        description: Explicitly acknowledge that any downloaded Pexels media is reference-only and must never substitute for original creator-captured wildlife media.
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 concurrency:
-  group: acquire-short-001-pexels-${{ github.ref }}
+  group: acquire-short-001-pexels-reference-only
   cancel-in-progress: true
 
 jobs:
   acquire:
-    name: Download and verify four explicitly approved Pexels clips
+    if: ${{ inputs.reference_only == true }}
+    name: Download and verify reference-only Pexels clips
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
+      - name: Require explicit reference-only acknowledgement
+        env:
+          REFERENCE_ONLY: ${{ inputs.reference_only }}
+        run: |
+          if [ "$REFERENCE_ONLY" != "true" ]; then
+            echo "::error::Blocked. Pexels media is not approved for production under the current original-media policy."
+            exit 1
+          fi
       - name: Check out exact source commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
+          ref: ${{ github.sha }}
       - name: Set up Node.js 24
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "24"
           package-manager-cache: false
-
+      - name: Verify stock media remains excluded from production
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from "node:fs";
+          const registry = JSON.parse(fs.readFileSync("content/approved-pexels-footage.json", "utf8"));
+          const policy = registry.currentProductionPolicy || {};
+          if (policy.originalCreatorCapturedMediaRequired !== true || policy.stockMediaAllowed !== false || policy.stockPhotographsAllowed !== false || policy.aiGeneratedWildlifeVisualsAllowed !== false) {
+            throw new Error("Current original-media production policy is missing or unsafe.");
+          }
+          console.log("PASS: Pexels downloads are reference-only; original creator-captured wildlife media is required for production.");
+          NODE
       - name: Install pinned FFmpeg and ffprobe
         uses: AnimMouse/setup-ffmpeg@178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3
         with:
           version: "9.0"
           token: ${{ github.token }}
-
       - name: Check acquisition script syntax
         run: node --check scripts/acquire-short-001-assets.mjs
-
-      - name: Download, probe and hash approved source footage
+      - name: Download, probe and hash reference-only source footage
         run: node scripts/acquire-short-001-assets.mjs
-
-      - name: Upload source footage, SHA-256 manifest and contact sheet
+      - name: Upload reference-only source artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: sonicvhibez-short-001-approved-pexels-source
+          name: sonicvhibez-short-001-pexels-reference-only
           path: artifacts/short-001/
           if-no-files-found: error
           retention-days: 7

@@ -30,14 +30,15 @@
     "rightsEvidenceComplete": false,
     "finalVideoReviewComplete": false,
     "releaseEligible": false,
-    "note": "Four explicitly approved primary Pexels MP4s were downloaded, ffprobed, SHA-256 hashed and fully decoded in workflow run 44576264343 on exact source SHA fe903d3e7eda9e00fc0ed2ca841b1c75f938438a. Their bytes are retained in artifact 14556226994 until 26 Nov 2026, not committed to the repository or production workspace. The artifact manifest and exact file hashes were independently checked. The visible-enclosure clip is excluded from the visual review preview; a dark collar/strap is visible on one lion in the resting-lions clip and requires context review. This is acquisition and technical-integrity evidence only; rights, full human playback, owner review, final edit approval and release remain false.",
+    "note": "Four explicitly approved primary Pexels MP4s were downloaded, ffprobed, SHA-256 hashed and fully decoded in workflow run 44576264343 on exact source SHA fe903d3e7eda9e00fc0ed2ca841b1c75f938438a. Their bytes are retained in artifact 14556226994 until 26 Nov 2026, not committed to the repository or production workspace. The artifact manifest and exact file hashes were independently checked. The visible-enclosure clip is excluded from the visual review preview; a dark collar/strap is visible on one lion in the resting-lions clip and requires context review. This is acquisition and technical-integrity evidence only; rights, full human playback, owner review, final edit approval and release remain false. A second reference-only acquisition run 44887585580 completed on 2026-11-21 and produced artifact 14700765594 (83,910,657 bytes; expires 2026-11-28T09:01:42Z). These Pexels bytes remain reference-only and are excluded from production by the current original-media policy; no rendering or publication is authorized.",
     "workflowArtifactAvailable": true,
-    "latestWorkflowRunId": 44576264343,
-    "latestArtifactId": 14556226994,
+    "latestWorkflowRunId": 44887585580,
+    "latestArtifactId": 14700765594,
     "latestArtifactName": "sonicvhibez-short-001-approved-pexels-source",
-    "latestArtifactSha256": "5cf86f3f9bbc2fcc4353b0b05141de2e23fe681d10152a02b80712e20287ad52",
-    "latestArtifactExpiresAt": "2026-11-26T17:21:30Z",
-    "exactHeadSha": "fe903d3e7eda9e00fc0ed2ca841b1c75f938438a"
+    "latestArtifactSha256": null,
+    "latestArtifactExpiresAt": "2026-11-28T09:01:42Z",
+    "exactHeadSha": "c0ba24274180287b54bc3a5c90561b53aaf6ecc9",
+    "latestArtifactSizeBytes": 83910657
   },
   "durationSummary": {
     "primaryClipDurationSeconds": 53,
