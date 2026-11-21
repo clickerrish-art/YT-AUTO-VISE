@@ -21,6 +21,10 @@ on:
       - "docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
       - "docs/DASHBOARD_CONTROL_ACCEPTANCE_MATRIX.md"
       - "docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json"
+      - "test/**"
+      - "tests/**"
+      - "content/**"
+      - "config/**"
   workflow_dispatch:
     inputs:
       source_ref:
