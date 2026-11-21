@@ -1,74 +1,146 @@
 # Continuous Wildlife Production System
 
-## Operating contract
+**Current operating policy — 2026-11-21**
 
-This system is footage-led and zero-cost by default. It must never describe an unrendered plan, still-image montage, downloaded source package, or review cut as a finished wildlife video.
+This system is source-led and zero-cost by default. It requires genuine original creator-captured wildlife media. It must not use AI-generated wildlife visuals, generic stock footage, public-domain B-roll packages, or stock-library clips as substitutes for original wildlife media. A stock platform licence does not override this production policy.
 
-### Automated intake
+## Non-negotiable operating rules
 
-- GitHub Actions workflow: `.github/workflows/acquire-noaa-broll-candidates.yml`
-- Runs weekly on Tuesday at 04:23 UTC and can also be run manually.
-- Downloads selected official NOAA Fisheries B-roll packages into a temporary review artifact.
-- Stores source URLs, response headers, file identification and SHA-256 evidence.
-- Retains the review artifact for 14 days.
-- This workflow is candidate intake only. A successful download is not rights clearance or production approval.
+- Original creator-captured wildlife video and photographs only. Verify the creator, original source, chain of custody, capture context, exact original file bytes, and commercial-use permission.
+- Do not describe stock, archival, generated, staged, composite or illustrative material as original documentary footage.
+- Do not generate wildlife scenes with WanGP, Comfy Cloud, or another text-to-video/image model for production.
+- No paid subscriptions, paid APIs, hosted GPU usage, storage charges, paid TTS or infrastructure spend without explicit owner authorization. No GPU generation is currently authorized.
+- The owner-approved narrator is Roderic — Authoritative & Refined (HeyGen voice ID `b5c5b28db1ea408abc7d851202983bdb`) only. HeyGen has denied zero-cost commercial rights for existing and future Free-plan Roderic output. Keep it internal-only. No alternative narrator or paid upgrade is authorized. Narration is therefore a hard production blocker until written rights change or the owner explicitly changes the narrator constraint.
+- SonicVhibez is the only YouTube brand. Nature Frontiers is Facebook/Instagram only; never route Nature Frontiers content to YouTube.
+- Publishing remains disabled by default. No public, unattended, scheduled, or private upload without the exact required owner authorization and all prior release gates.
+- A test pass, a filename, a stock listing, a source URL, a plan, or a partial contact sheet is not production evidence.
 
-## Primary AI video-generation engine: WanGP on Kaggle
+## Media eligibility
 
-**Primary engine:** project-owned [Kaggle notebook](../notebooks/sonicvhibez_wangp_kaggle.ipynb) running the official [WanGP repository](https://github.com/deepbeepmeep/WanGP) at immutable commit `f4cfc1259215577be9a2ee280c41efbedfb4459a` (v20.00). The commit is unsigned; the notebook pins the exact SHA and never pulls mutable `main`.
+### Eligible source package
 
-- **Notebook-owned setup:** clones the pinned source, keeps model weights/cache in Kaggle `/kaggle/temp`, writes MP4 outputs under `/kaggle/working/WanGP-outputs`, and records the Python environment.
-- **Test model:** Wan 2.2 TI2V 5B quantized single-file checkpoint `DeepBeepMeep/Wan2.2/wan2.2_text2video_5B_quanto_mbf16_int8.safetensors`, pinned to revision `16bb1ad02fe4ca8319b67261397ea4eeaa4896c4`, SHA-256 `463076f7625d8c7fc8912011cf5d02db7f0a8ae666e1758cd835e5a8517ef0e0`. VAE is pinned to revision `4cb9607e5532be42f37a05778acfc47aee7701e1`, SHA-256 `bb6e5e515ca6af2cb2b7bbf8bfc790b8c306832c34e0a76193507c3739ebf54a`. No FastWan or other LoRA is applied.
-- **Model licence determination:** official `Wan-AI/Wan2.2-TI2V-5B` model card declares Apache-2.0. The WanGP-compatible single-file checkpoint and converted VAE are mirrored under `DeepBeepMeep/Wan2.2`; the inspected mirror metadata does not independently declare a licence or a complete provenance statement for those converted files. Therefore the exact mirror checkpoint's commercial-use rights are **HOLD pending written provenance/rights confirmation**. The upstream base-model licence alone is not treated as proof that the mirror artifacts are licensed. Notebook and importer fail closed with `HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE`.
-- **WanGP software licence:** Community License 2.0. It permits internal business use and use of outputs subject to its terms; direct output sales require reasonable credit, while selling/hosting WanGP itself or paid API/SaaS access requires separate written commercial permission. Third-party model, LoRA, dataset and package terms remain separate.
-- **Evidence intake:** `scripts/import_wangp_kaggle_output.py` validates pinned revisions, checkpoint/VAE hashes, video SHA-256, ffprobe metadata and full-file FFmpeg decode. It stores generated clips in `media/jobs/<job-id>/generated-shot.mp4` and writes `content/generation-evidence/<job-id>.json`. Import status is generated/unreviewed; it never approves rights or publishing and does not mark a long-form render complete.
-- **Session operation:** the owner must start Kaggle when free GPU quota is available. The notebook's temporary Gradio share URL is public while active; do not enter credentials or private information. Kaggle free sessions are repeatable batch compute, not permanently running or guaranteed unattended GPU service.
-- **Visual standard:** photorealistic wildlife only. Reject cartoon, plastic-looking, anatomically implausible, morphing or physically impossible animal behaviour. Generated scenes must not be represented as genuine documentary footage of a real event. Review YouTube altered/synthetic-content disclosure requirements.
-- **Voice:** narration remains a separate stage. Target remains a natural, realistic male Australian-English voice; no voice is commercially cleared merely because it is free.
-- **Brand and release:** SonicVhibez only for YouTube. Human full-playback review, factual review, rights review, captions, thumbnail and hash-bound approval remain mandatory. Publishing stays disabled until the separate authorization gate passes.
+A media package can enter production review only when it contains:
 
-### Required production stages
+1. Original creator-captured MP4/photo files supplied by the creator or rights holder, not a stock-library download.
+2. Creator identity and contact/source record, original capture/source provenance, and a chain-of-custody note.
+3. Explicit written commercial-use permission covering the intended platforms, editing/derivatives, territory, duration and attribution requirements.
+4. Untouched source file(s) with SHA-256, byte size, filename, capture metadata where available, and a protected immutable original.
+5. Technical probe and full decode for video; resolution, frame rate, duration, codecs, focus, exposure, image quality and audio checked.
+6. Full human visual review of every complete clip/photo and a written record of what is actually shown. Do not infer species, behaviour, location or event from filenames or listing text.
+7. Rights, factual and editorial review, followed by owner approval bound to exact file hashes and permitted usage.
 
-1. Research the animal, behaviour, location and claims; retain primary-source URLs.
-2. Prepare a shot-by-shot generation brief grounded in the research. Clearly label fictional/composite scenes and never imply an AI-generated encounter is genuine wildlife footage.
-3. Start the approved WanGP Kaggle notebook, confirm GPU and internet access, record the source commit and model/checkpoint licence, and generate short shots in a controlled batch.
-4. Inspect every generated shot for anatomy, species traits, natural movement, scene continuity, watermarks, visual artefacts and misleading behaviour. Reject poor outputs rather than hiding defects with editing.
-5. Record prompt, negative prompt, seed, model/checkpoint, LoRA, settings, runtime, Kaggle session reference, output filename and SHA-256 for every accepted generated clip.
-6. Write a fact-checked script and shot-to-claim map. Narration must not claim that generated footage depicts a real recorded event, location or animal.
-7. Generate narration only from a voice with documented commercial-use permission. Australian-English male voice is the required profile; do not silently substitute another accent. If no suitable no-cost voice is cleared, hold the job for owner input.
-8. Edit the approved generated shots with FFmpeg/Remotion. No still-image slideshow, fake animal animation presented as documentary footage, or stock footage misrepresented as original AI-generated wildlife.
-9. Run technical checks (ffprobe, full decode, audio presence/levels, caption sync, aspect ratio, duration), then visual and factual quality review against the complete rendered file.
-10. Produce a review package containing MP4, script, SRT, thumbnail, generation manifest, model/LoRA licences, source map, hashes, QA report and disclosures.
-11. Require explicit human approval bound to the exact final file hashes before any scheduling.
-12. Schedule only after approval. Publishing remains separately gated by brand, channel, credential and one-shot authorization controls.
+Missing any item means HOLD. Do not silently substitute Pexels, Pixabay, Wikimedia Commons, NOAA B-roll, Internet Archive, or generated content.
 
-## Cost and infrastructure policy
+### Current quarantine
 
-- Paid APIs, hosted GPU generation, paid runners, paid TTS and paid storage are disabled unless the owner explicitly approves a specific cost.
-- GitHub Actions standard-runner free quota is finite. Actions may prepare prompts and validate metadata, but must not be treated as a video GPU.
-- Kaggle free GPU is the primary generation runtime, but it is quota/session-bound. No always-on or guaranteed unattended generation is claimed.
-- Do not store large source packages, model weights or rendered videos in Git history. Keep model caches in Kaggle temporary storage and persist only approved outputs and evidence to a durable, owner-approved destination.
-- No local model installation is assumed; the owner has stated the PC has insufficient storage.
-- Free stock/archive footage can support documentary editing, but does not satisfy a request for newly AI-generated photorealistic footage. Do not conflate the two.
+- Five imported SonicVhibez Canva/Pexels items: excluded and audit-only.
+- Four Short 001 Pexels clips: reference-only and excluded.
+- Ninety-two Nature Frontiers Pexels/Pixabay listings: reference-only and excluded; zero local files, zero approved items, zero scheduled items and zero published items.
+- Pexels and Wikimedia Commons crocodile leads: reference-only and excluded.
+- NOAA B-roll packages and Internet Archive discovery results: reference-only and excluded.
+- Comfy Cloud Arctic/polar-bear text-to-video demo: disqualified; no original-footage input.
+- WanGP Kaggle notebook and importer: disabled under the original-capture policy; no generation has been run.
 
-## Fail-closed rules
+## Production workflow — execute sequentially
 
-- Missing model/checkpoint licence, voice permission, asset/generation provenance, claim source, output hash, human review or exact-file approval means HOLD.
-- A technical render pass is not a visual-quality pass.
-- No automatic scheduling or publishing is enabled by this workflow.
+### 1. Original media intake
+
+- Receive the creator's original files and rights/provenance evidence.
+- Preserve untouched originals; compute SHA-256 before any editing.
+- Verify media integrity, technical quality, scene coverage, species, visible behaviour and context.
+- Register each asset as a candidate with its source, creator, hash, rights and review state.
+- Reject stock, AI-generated, ambiguous, altered, corrupted, low-quality or rights-unclear assets.
+- Do not proceed to edit until every selected clip is eligible and hash-bound.
+
+### 2. Research and editorial preparation
+
+- Research species, behaviour, ecology, conservation and safety claims from primary or authoritative sources.
+- Maintain a claim map with citations and clear limits on what each source establishes.
+- Build a shot-by-shot plan that maps each approved original clip to the narration beat and claim it supports.
+- Avoid invented events, sensationalized behaviour, misleading locations, unsupported detection distances or claims that imply a specific recorded encounter when the footage does not show one.
+- Obtain independent qualified zoological review for the complete script and scene map.
+
+### 3. Narration clearance
+
+- Use only Roderic while the owner’s Roderic-only instruction remains in force.
+- Existing/future HeyGen Free-plan Roderic output is not commercially eligible under HeyGen’s written denial.
+- Do not generate or use Free-plan Roderic in public, branded, monetized or commercial content.
+- Do not use Piper, Banjo, Norman, Edge TTS, or any other voice without explicit owner approval.
+- Keep the job blocked until the owner obtains a lawful zero-cost commercial-use path for Roderic or explicitly changes the voice requirement.
+
+### 4. Editing and rendering
+
+Only after media, script, independent review and narration rights pass:
+
+- Long-form target: 6–10 minutes, 16:9.
+- Short target: 50–60 seconds, 9:16.
+- Use genuine original wildlife footage only. Do not fill runtime by looping clips or substituting generic stock.
+- Preserve original source files; record every derivative and source in/out point.
+- Use brand-correct logo/watermark, typography, colour, disclosure and sound treatment.
+- No unwanted AI-generation watermark or review-only text may remain on final exports.
+
+### 5. Captions, audio and visual quality
+
+- Generate captions from the cleared final narration and synchronize against the final audio waveform.
+- Review pronunciation, intelligibility, loudness, clipping, channel layout, silence, transitions and ending.
+- Watch and listen to the entire rendered file, not only a contact sheet or midpoint frame.
+- Verify scene-to-narration alignment, pacing, readability, accessibility, continuity and scientific accuracy.
+- Run ffprobe, full-file decode, aspect ratio, duration, codec and caption-sync checks.
+- Any change to final media invalidates hash-bound review and approval.
+
+### 6. Packaging and approval
+
+- Prepare title, description, thumbnail, tags, captions, disclosure and platform metadata.
+- Review thumbnail for accuracy and mobile readability; never imply a real animal encounter not shown in original footage.
+- Record exact SHA-256 for final video, thumbnail, captions and metadata.
+- Require rights clearance, scientific/editorial review, complete human playback and owner approval against those exact hashes.
+- Keep release manifests fail-closed until every gate is evidenced.
+
+### 7. Publishing and verification
+
+- Verify the authenticated YouTube destination is SonicVhibez only.
+- Reconcile complete paginated remote upload/publication history, including private, unlisted and public videos and uncertain upload attempts.
 - Never retry an uncertain upload blindly.
-- Keep SonicVhibez YouTube and Nature Frontiers Meta destinations separate.
+- Private-only upload requires one-shot authorization bound to the exact job, media, metadata, thumbnail, captions, rights, human review and channel.
+- Verify remote video ID, destination channel and final privacy after upload.
+- Public release requires separate explicit authorization.
+- Nature Frontiers remains Facebook/Instagram only and requires its own account mapping, signed human approval, rights, campaign and disclosure gates.
 
-## Current implementation status
+### 8. Scheduling and operations
 
-- Weekly NOAA source-candidate intake: implemented in GitHub Actions.
-- **Project-owned WanGP Kaggle notebook:** committed; pinned source and model files are defined and hash-checked by the notebook. Not yet executed in the owner's Kaggle account.
-- **MP4 evidence importer:** committed with Python unit tests; it has not yet received a real Kaggle output package.
-- **Real wildlife test generation:** NOT_TESTED — no Kaggle GPU session has been started from this conversation, and no MP4 exists to inspect.
-- **Exact mirror checkpoint commercial rights:** HOLD — upstream Wan-AI model card declares Apache-2.0, but the exact WanGP-compatible mirror checkpoint/converted VAE provenance and licence are not independently confirmed. Obtain written confirmation before commercial use.
-- Automated final long-form video rendering from accepted generated shots: not yet verified.
-- Commercially cleared Australian-English male narration: not established.
-- Rights review and human approval: remain required.
-- Continuous end-to-end production and automatic scheduling: not established.
+- Preserve the sequence `long_form → long_form → short`.
+- Use Africa/Johannesburg for calendar-day rules and require at least 72 actual hours between actual publication timestamps.
+- Do not schedule more than the mathematically feasible cadence. Three 72-hour gaps require 216 hours; the previous three-per-week expectation conflicts with the 72-hour minimum and needs an owner-approved feasible cadence.
+- Verify lease, heartbeat, cancellation, idempotency, retry backoff, dead-letter, restart recovery and durable publication history before enabling autonomous workers.
+- Keep emergency stop active and publishing disabled until full production acceptance.
 
-The system must report each stage separately. It must not report 100% completion until a complete real video has been rendered, independently inspected, rights-cleared and approved.
+## Current blockers — 2026-11-21
+
+| Gate | Status | Evidence / missing input |
+|---|---|---|
+| Original wildlife media | BLOCKED | No admissible original creator-captured wildlife package with provenance, hashes and commercial rights is present. |
+| Commercial narration | BLOCKED | HeyGen denied zero-cost commercial rights for Roderic Free-plan outputs; no alternative narrator is approved. |
+| Long-form 001 | BLOCKED | Original footage and commercially eligible narration missing; no final render, captions, thumbnail or exact-hash approval. |
+| Short 001 | BLOCKED | Pexels clips are reference-only; Roderic audio is internal-only; no final original-media edit or approval. |
+| Scientific sign-off | PARTIAL | Script research and primary-paper limitations are documented; independent qualified review of complete script and final scene map remains outstanding. |
+| Metricool brand separation | PARTIAL / BLOCKED | Repository configuration is corrected; live provider mapping confirmation and legacy brand 7545638 access remain unresolved. |
+| YouTube history | NOT_TESTED | Fresh complete authenticated inventory and owner attestation of manual/local/third-party uploads are required before any upload. |
+| Scheduling | BLOCKED | Cadence conflict, complete history and full worker/recovery proof remain open. |
+| Durable archive | BLOCKED | No verified permanent archive and restore route; previous Cloudflare R2 enablement returned error 10042. |
+| Production publisher | BLOCKED | No verified operational production publisher Worker/runner state. |
+| Software acceptance | PARTIAL / STALE | Earlier exact-SHA test results are historical; no full current-head regression or live production acceptance has been run after current policy changes. |
+
+## Required owner/provider inputs
+
+- Original creator-captured wildlife files, creator identity, provenance and explicit commercial-use rights.
+- A written HeyGen reversal granting zero-cost commercial rights for Roderic, or the owner's explicit change to the Roderic-only rule.
+- Metricool access/export for legacy Nature Frontiers brand 7545638 and written confirmation of current brand 8094526 mapping.
+- Fresh owner attestation of manual/local/third-party YouTube upload attempts since 2026-11-18 and fresh authenticated paginated YouTube history.
+- Owner/admin authorization and access for a genuinely zero-cost durable archive and production publisher infrastructure.
+- Independent qualified zoological review and final exact-hash human approval.
+
+## Historical AI-generation material
+
+The WanGP Kaggle notebook, WanGP importer, Comfy Cloud text-to-video workflow and associated model/checkpoint research are retained as historical technical records only. Their code paths are disabled. Do not run GPU sessions, download model weights, generate wildlife scenes or import generated shots under the current owner media policy. The model mirror checkpoint/VAE also had unresolved commercial provenance.
+
+**Completion rule:** this project is not 100% complete until original media, narration rights, final outputs, all reviews, publishing verification, durable recovery, software acceptance and release gates have each been independently completed and evidenced. Until then the correct state is HOLD, not READY.
