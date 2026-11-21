@@ -63,10 +63,10 @@ class NarrationTests(unittest.TestCase):
         source = path.read_text(encoding="utf-8")
         self.assertEqual(source.count("def has_owner_approved_selar_disclosure("), 1)
 
-    def test_edge_tts_requires_explicit_noncommercial_audition_acknowledgement(self):
-        with self.assertRaisesRegex(SystemExit, "not the approved Roderic voice"):
-            module.require_noncommercial_audition(False)
-        self.assertTrue(module.require_noncommercial_audition(True))
+    def test_alternative_voice_audition_is_blocked_by_current_owner_policy(self):
+        for acknowledged in (False, True):
+            with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                module.require_noncommercial_audition(acknowledged)
 
     def test_edge_tts_audition_notice_explicitly_prohibits_commercial_use(self):
         self.assertIn("not owner-approved", module.NONCOMMERCIAL_AUDITION_NOTICE)
