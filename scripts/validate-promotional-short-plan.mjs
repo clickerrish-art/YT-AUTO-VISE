@@ -52,6 +52,30 @@ function isRealMonday(value) {
     && date.getUTCDay() === 1;
 }
 
+function currentMondayInTimezone(referenceNow, timeZone) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(referenceNow);
+  const values = Object.fromEntries(parts
+    .filter(part => ["year", "month", "day"].includes(part.type))
+    .map(part => [part.type, part.value]));
+  const localCalendarDate = new Date(Date.UTC(
+    Number(values.year),
+    Number(values.month) - 1,
+    Number(values.day)
+  ));
+  const daysSinceMonday = (localCalendarDate.getUTCDay() + 6) % 7;
+  localCalendarDate.setUTCDate(localCalendarDate.getUTCDate() - daysSinceMonday);
+  return [
+    localCalendarDate.getUTCFullYear(),
+    String(localCalendarDate.getUTCMonth() + 1).padStart(2, "0"),
+    String(localCalendarDate.getUTCDate()).padStart(2, "0")
+  ].join("-");
+}
+
 const PUBLICATION_TIMESTAMP_KEYS = new Set([
   "scheduledAt", "publishedAt", "publicationAt", "publishAt",
   "actualPublishedAt", "actualPublicationAt", "actualPublishAt",
@@ -111,6 +135,10 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
   if (!plan || typeof plan !== "object" || Array.isArray(plan)) return ["plan must be a JSON object"];
   if (plan.channel !== "SonicVhibez") errors.push("channel must be exactly SonicVhibez");
   if (plan.timezone !== "Africa/Johannesburg") errors.push("timezone must be Africa/Johannesburg");
+  const currentWeekOf = currentMondayInTimezone(
+    referenceNow,
+    plan.timezone === "Africa/Johannesburg" ? plan.timezone : "Africa/Johannesburg"
+  );
   if (plan.maxShortsPerWeek !== 2) errors.push("maxShortsPerWeek must remain exactly 2");
   if (plan.publicationEnabled !== false) errors.push("publicationEnabled must remain false");
   if (plan.schedulingEnabled !== false) errors.push("schedulingEnabled must remain false");
@@ -132,6 +160,7 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
   }
 
   for (const week of plan.weeks) {
+    const requireFreshKeywordEvidence = typeof week?.weekOf === "string" && week.weekOf >= currentWeekOf;
     if (!isRealMonday(week?.weekOf)) errors.push("each weekOf must be a real Monday in YYYY-MM-DD format");
     if (weekKeys.has(week?.weekOf)) errors.push("weekOf values must be unique");
     weekKeys.add(week?.weekOf);
@@ -328,8 +357,10 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
         errors.push(`${label}: keyword evidence needs a valid research timestamp`);
       } else {
         const evidenceAgeMs = referenceNow.getTime() - Date.parse(evidence.researchedAt);
-        if (evidenceAgeMs > KEYWORD_EVIDENCE_MAX_AGE_MS || evidenceAgeMs < -KEYWORD_EVIDENCE_FUTURE_SKEW_MS) {
-          errors.push(`${label}: keyword evidence must be no more than 14 days old and cannot be more than 5 minutes in the future`);
+        if (evidenceAgeMs < -KEYWORD_EVIDENCE_FUTURE_SKEW_MS) {
+          errors.push(`${label}: keyword evidence cannot be more than 5 minutes in the future`);
+        } else if (requireFreshKeywordEvidence && evidenceAgeMs > KEYWORD_EVIDENCE_MAX_AGE_MS) {
+          errors.push(`${label}: keyword evidence must be no more than 14 days old for current or future draft weeks`);
         }
       }
       const evidenceNote = typeof evidence?.note === "string" ? evidence.note.trim() : "";
