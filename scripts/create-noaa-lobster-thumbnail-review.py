@@ -47,6 +47,7 @@ def assert_no_symlink_ancestors(path: Path) -> None:
         current = current.parent
 
 def main() -> None:
+    raise SystemExit("BLOCKED: NOAA B-roll is stock/archive footage and is excluded by the current original creator-captured-media production policy. This script is retained as a historical review artifact only.")
     assert_no_symlink_ancestors(SOURCE)
     assert_no_symlink_ancestors(OUT_DIR)
     if not SOURCE.is_file():
