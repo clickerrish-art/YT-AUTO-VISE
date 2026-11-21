@@ -138,19 +138,20 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64: ${{ secrets.YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64 }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
           CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}
           YOUTUBE_EMERGENCY_STOP: ${{ inputs.confirm_emergency_stop_release == 'YES' && 'false' || 'true' }}
         run: |
           missing=0
-          for name in YOUTUBE_CLIENT_ID YOUTUBE_CLIENT_SECRET YOUTUBE_REFRESH_TOKEN SONICVHIBEZ_CHANNEL_ID; do
+          for name in YOUTUBE_CLIENT_ID YOUTUBE_CLIENT_SECRET YOUTUBE_REFRESH_TOKEN YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64 SONICVHIBEZ_CHANNEL_ID; do
             if [ -z "${!name}" ]; then
               echo "::error::Missing GitHub Actions secret: $name"
               missing=1
             fi
           done
           if [ "$missing" -ne 0 ]; then
-            echo "BLOCKED: configure the four repository secrets before retrying."
+            echo "BLOCKED: configure the five repository secrets before retrying."
             exit 2
           fi
       - name: Run strict metadata, media, and authenticated channel checks; upload privately only
@@ -158,6 +159,7 @@ jobs:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64: ${{ secrets.YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64 }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
           CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}
           YOUTUBE_EMERGENCY_STOP: ${{ inputs.confirm_emergency_stop_release == 'YES' && 'false' || 'true' }}
