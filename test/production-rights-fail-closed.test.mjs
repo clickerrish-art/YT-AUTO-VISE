@@ -116,3 +116,22 @@ test("NOAA and stock-library source records remain excluded from current product
   const thumbnailScript = readText("../scripts/create-noaa-lobster-thumbnail-review.py");
   assert.ok(thumbnailScript.includes("BLOCKED: NOAA B-roll is stock/archive footage"));
 });
+
+test("Production queues and Short candidates reflect current media and narration blockers", () => {
+  const nextShort = readJson("../content/next-short.json");
+  const longQueue = readJson("../content/long-form-queue.json");
+  const queue = readJson("../content/queue.json");
+  const weekly = readJson("../config/weekly-content-plan.json");
+  const short004 = readJson("../content/short-004-california-spiny-lobster-metadata.json");
+  assert.equal(nextShort.productionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(nextShort.productionPolicy.stockMediaAllowed, false);
+  assert.equal(nextShort.productionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(nextShort.productionPolicy.narrationCommercialRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION");
+  assert.equal(longQueue.productionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(queue.productionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(weekly.productionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(short004.currentProductionDisposition.productionEligible, false);
+  assert.equal(short004.scheduleAllowed, false);
+  assert.equal(short004.uploadAllowed, false);
+  assert.equal(short004.status, "HOLD_EXCLUDED_NOAA_STOCK_SOURCE");
+});
