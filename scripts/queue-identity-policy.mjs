@@ -3,6 +3,26 @@
  * detailed long-form content queue. This proves identity only; it does not
  * approve rights, production, scheduling or publication.
  */
+function strictApprovalTimestamp(value) {
+  if (typeof value !== "string") return NaN;
+  const match = value.match(/^(\\d{4})-(\\d{2})-(\\d{2})T([01]\\d|2[0-3]):([0-5]\\d):([0-5]\\d)(?:\\.(\\d{1,3}))?(Z|([+-])(\\d{2}):(\\d{2}))$/);
+  if (!match) return NaN;
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText, fraction = "", zone, sign, offsetHourText, offsetMinuteText] = match;
+  const year = Number(yearText), month = Number(monthText), day = Number(dayText);
+  const hour = Number(hourText), minute = Number(minuteText), second = Number(secondText);
+  const calendar = new Date(0);
+  calendar.setUTCFullYear(year, month - 1, day);
+  calendar.setUTCHours(hour, minute, second, Number(fraction.padEnd(3, "0")));
+  if (calendar.getUTCFullYear() !== year || calendar.getUTCMonth() !== month - 1 ||
+      calendar.getUTCDate() !== day || calendar.getUTCHours() !== hour ||
+      calendar.getUTCMinutes() !== minute || calendar.getUTCSeconds() !== second) return NaN;
+  if (zone !== "Z") {
+    const offsetHour = Number(offsetHourText), offsetMinute = Number(offsetMinuteText);
+    if (offsetHour > 14 || offsetMinute > 59 || (offsetHour === 14 && offsetMinute !== 0)) return NaN;
+  }
+  return Date.parse(value);
+}
+
 export function validateQueueIdentity({ operationalQueue, detailedQueue, approval } = {}) {
   const errors = [];
   const operationalItems = operationalQueue?.items;
@@ -50,7 +70,7 @@ export function validateQueueIdentity({ operationalQueue, detailedQueue, approva
     if (typeof approval.approvalReference !== "string" || !approval.approvalReference.trim()) {
       errors.push("Queue identity approval must include a non-empty decision reference.");
     }
-    const approvedAt = typeof approval.approvedAt === "string" ? Date.parse(approval.approvedAt) : NaN;
+    const approvedAt = strictApprovalTimestamp(approval.approvedAt);
     if (!Number.isFinite(approvedAt) || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$/.test(approval.approvedAt)) {
       errors.push("Queue identity approval must include a valid timezone-qualified approvedAt timestamp.");
     }
