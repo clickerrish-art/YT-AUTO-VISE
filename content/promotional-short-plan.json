@@ -78,7 +78,7 @@
             "status": "HOLD",
             "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+            "holdText": "Mapped in prior product records to The Full Video Creation Prompt Pack Premium Edition (539497q11t). The 2026-10-20 product-page record was HOLD - VERIFY PRODUCT at R570 with Compliance Check blank; no exact viewer-facing direct-sales disclosure was approved for this product. Recheck the live listing, price, contents, claims and compliance, then obtain owner-approved exact wording. Keep HOLD; do not publish."
           },
           "productionChecklist": [
             "Keep the lesson practical and show one original example prompt.",
@@ -185,7 +185,7 @@
             "status": "HOLD",
             "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+            "holdText": "Mapped in prior product records to THE YOUTUBE SUCCESS BLUEPRINT™ Build, Grow & Monetize a YouTube Channel With a Proven 90-Day Creator System (91j893378q). Prior records do not contain verified current product-page details, approved claims or exact viewer-facing direct-sales disclosure for this product. Recheck the live listing and claims, then obtain owner-approved exact wording. Keep HOLD; do not publish."
           },
           "productionChecklist": [
             "Keep the plan realistic and avoid implying that one cadence fits every channel.",
@@ -373,7 +373,7 @@
             "status": "HOLD",
             "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+            "holdText": "Mapped in prior product records to THE YOUTUBE SUCCESS BLUEPRINT™ Build, Grow & Monetize a YouTube Channel With a Proven 90-Day Creator System (91j893378q). Prior records do not contain verified current product-page details, approved claims or exact viewer-facing direct-sales disclosure for this product. Recheck the live listing and claims, then obtain owner-approved exact wording. Keep HOLD; do not publish."
           },
           "productionChecklist": [
             "Keep the four checks practical and explain each in one short sentence.",
@@ -585,7 +585,7 @@
             "status": "HOLD",
             "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "The owner confirms this is a direct sale through their own Selar business, not an affiliate commission. The viewer-facing commercial disclosure is still unapproved; keep this promotion on HOLD until the owner approves the exact wording."
+            "holdText": "Mapped in prior product records to The Full Video Creation Prompt Pack Premium Edition (539497q11t). The 2026-10-20 product-page record was HOLD - VERIFY PRODUCT at R570 with Compliance Check blank; no exact viewer-facing direct-sales disclosure was approved for this product. Recheck the live listing, price, contents, claims and compliance, then obtain owner-approved exact wording. Keep HOLD; do not publish."
           },
           "productionChecklist": [
             "Keep the lesson to four repeatable outline steps and one clear example.",
@@ -1215,7 +1215,7 @@
             "status": "HOLD",
             "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
             "requiredBeforeRelease": true,
-            "holdText": "The owner-confirmed relationship is direct sales through the owner's own Selar business. The exact viewer-facing disclosure is not approved for this specific product; keep the promotion on HOLD until the owner approves the wording."
+            "holdText": "Mapped in prior product records to THE YOUTUBE SUCCESS BLUEPRINT™ Build, Grow & Monetize a YouTube Channel With a Proven 90-Day Creator System (91j893378q). Prior records do not contain verified current product-page details, approved claims or exact viewer-facing direct-sales disclosure for this product. Recheck the live listing and claims, then obtain owner-approved exact wording. Keep HOLD; do not publish."
           },
           "productionChecklist": [
             "Verify the current YouTube Studio definitions of stayed to watch, engaged views, average view duration and subscribers gained before final editing.",
@@ -1478,7 +1478,8 @@
           "disclosure": {
             "status": "HOLD",
             "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
-            "requiredBeforeRelease": true
+            "requiredBeforeRelease": true,
+            "holdText": "Mapped in prior product records to The Full Video Creation Prompt Pack Premium Edition (539497q11t). The 2026-10-20 product-page record was HOLD - VERIFY PRODUCT at R570 with Compliance Check blank; no exact viewer-facing direct-sales disclosure was approved for this product. Recheck the live listing, price, contents, claims and compliance, then obtain owner-approved exact wording. Keep HOLD; do not publish."
           },
           "visibility": "private",
           "keywordPhrases": [
