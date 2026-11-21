@@ -480,3 +480,19 @@ This section supersedes older checkpoint statements in the historical audit entr
 - **CI:** current HEAD still has zero workflow runs and zero combined statuses. A browser-based workflow-dispatch attempt did not start because the browser automation wallet balance was negative; no top-up or paid action was made. The zero-cost constraint remains. A local shallow clone also failed because the execution environment cannot resolve github.com. Owner-authenticated push is the available zero-cost path to run the branch push workflows.
 - **No production publication, OAuth/secret mutation, Metricool/Cloudflare mutation, queue mutation or paid service use occurred.** Exact-current-HEAD full Node/Python/browser tests and npm audit remain NOT_TESTED.
 
+
+
+---
+
+## Exact final checkpoint for this execution segment — 21 November 2026
+
+- Immediately before this tracker update, implementation HEAD was `e99d2c0c31863fe015f63141897c4f569c46bda9`, 5,134 commits ahead / 17 behind `main`. This tracker commit advances the branch by one additional commit; use the resulting commit SHA returned by this update as the new HEAD.
+- `main` remains `3795519ccbf58fd02d74458624b58dd2e44a88c0`; merge base remains `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- PR #1 remains open, draft and unmerged. GitHub reports `mergeable=false`; no merge or main write was attempted.
+- Exact-current-HEAD CI is still absent: zero workflow runs and zero combined statuses. A shallow clone failed because this execution environment cannot resolve `github.com`. A browser-based workflow-dispatch attempt did not start because TinyFish's wallet balance was `-1.176 USD`; no top-up was made under the zero-cost rule. Do not pay to trigger tests; an owner-authenticated branch push is the zero-cost route.
+- GitHub branch-protection reads remain unavailable to the connected app (HTTP 403); protection is UNVERIFIED and requires owner/admin confirmation.
+- Legacy manual YouTube upload workflows on `main` are unsafe to dispatch because their uploader lacks the current signed one-shot authorization and dual confirmations. The secure replacements are only on the draft implementation branch. This remains a release-blocking owner/admin decision.
+- The main-branch NOAA candidate acquisition workflow also remains manually dispatchable; no main workflow or settings were changed. The implementation-branch NOAA/Pexels/thumbnail acquisition jobs are disabled.
+- All external production blockers remain: original wildlife camera media and rights, commercially cleared narration, qualified zoological review, owner queue mapping/approval, fresh YouTube OAuth and upload-attempt reconciliation, GitHub Actions public-key secret configuration, Metricool connection-state confirmation and legacy records, Cloudflare production/recovery/security, product disclosure approval and exact-current-HEAD verification.
+- No upload, publication, remote schedule, Metricool/Cloudflare mutation, secret change, paid spend, queue edit or merge occurred.
+
