@@ -19,7 +19,7 @@ test("read-only channel verification can be dispatched without media or approval
 
 test("explicit private upload validates all artifact-bound inputs before ledger restore or uploader execution", () => {
   assert.match(workflow, /confirm_private_upload:\s+description:[\s\S]*?required: true\s+default: 'NO'/);
-  assert.ok(privateUploadJob.includes("if: ${{ inputs.confirm_private_upload == 'YES' }}"));
+  assert.ok(privateUploadJob.includes("if: ${{ inputs.confirm_private_upload == 'YES' && inputs.confirm_emergency_stop_release == 'YES' }}"));
   const guard = privateUploadJob.indexOf("Require exact upload inputs before any private-upload work");
   const ledger = privateUploadJob.indexOf("Validate previous upload ledger against executed private-upload jobs");
   const uploader = privateUploadJob.indexOf("node scripts/upload-private.mjs");
@@ -30,6 +30,7 @@ test("explicit private upload validates all artifact-bound inputs before ledger 
   }
   assert.ok(privateUploadJob.includes("A-Za-z0-9][A-Za-z0-9:_-]{2,119}"));
   assert.ok(privateUploadJob.includes("CONFIRM_PRIVATE_UPLOAD: ${{ inputs.confirm_private_upload }}"));
+  assert.ok(privateUploadJob.includes("inputs.confirm_emergency_stop_release == 'YES'"), "emergency-stop release must be a second job-level opt-in");
   assert.ok(privateUploadJob.includes("YOUTUBE_EMERGENCY_STOP: ${{ inputs.confirm_emergency_stop_release == 'YES'"));
 });
 
