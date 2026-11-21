@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "channel": "SonicVhibez",
   "provider": "wangp_kaggle",
-  "primary": true,
-  "status": "NOTEBOOK_AND_IMPORTER_COMMITTED_KAGGLE_EXECUTION_PENDING",
+  "primary": false,
+  "status": "DISABLED_BY_ORIGINAL_CREATOR_CAPTURED_MEDIA_POLICY",
   "source": {
     "application": "WanGP",
     "repository": "https://github.com/deepbeepmeep/WanGP",
@@ -48,7 +48,11 @@
       "illustration",
       "plastic-looking CGI"
     ],
-    "seedMustBeRecorded": true
+    "seedMustBeRecorded": true,
+    "enabled": false,
+    "productionEligible": false,
+    "visualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+    "note": "Disabled: do not run this model or import its generated wildlife scenes into production under the current owner media policy."
   },
   "licensing": {
     "wanGpLicense": "WanGP Community License 2.0",
@@ -99,8 +103,11 @@
   },
   "narration": {
     "separateFromVideoGeneration": true,
-    "voiceProfile": "realistic male Australian English",
-    "commercialVoiceRightsRequired": true
+    "voiceProfile": "Roderic — Authoritative & Refined",
+    "commercialVoiceRightsRequired": true,
+    "voiceId": "b5c5b28db1ea408abc7d851202983bdb",
+    "productionNarrationStatus": "BLOCKED_BY_HEYGEN_FREE_PLAN_COMMERCIAL_RIGHTS_DENIAL",
+    "commercialUseAllowed": false
   },
   "safety": {
     "humanFullPlaybackReviewRequired": true,
@@ -108,7 +115,9 @@
     "syntheticMediaDisclosureReviewRequired": true,
     "publishingEnabled": false,
     "youtubeChannel": "SonicVhibez",
-    "neverTargetNatureFrontiers": true
+    "neverTargetNatureFrontiers": true,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "originalCreatorCapturedMediaRequired": true
   },
   "requiredGenerationEvidence": [
     "wanGpCommit",
@@ -126,5 +135,12 @@
     "ffprobeReport",
     "fullDecodePassed",
     "humanVisualReview"
-  ]
+  ],
+  "productionDisposition": {
+    "enabled": false,
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+    "reason": "AI-generated wildlife visuals are prohibited as substitutes for genuine original creator-captured wildlife media. This WanGP configuration is retained as a historical technical record only.",
+    "noGenerationAuthorized": true
+  }
 }
