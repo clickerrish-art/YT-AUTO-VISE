@@ -100,6 +100,23 @@ test("accepts only a complete technical receipt bound to the exact long-form rel
   assert.equal(validate(f.approval, f.video, f.metadata), true);
 });
 
+test("requires explicit upload metadata format and exact matching human approval", () => {
+  const f = fixture();
+  assert.throws(() => validateUploadApproval(f.approval, {
+    jobId: f.approval.jobId,
+    artifactSha256: f.video.sha256,
+    metadataVersion: f.metadata.sha256
+  }), /metadata must explicitly declare contentType/);
+  const mismatched = structuredClone(f.approval);
+  mismatched.contentType = "short";
+  assert.throws(() => validateUploadApproval(mismatched, {
+    jobId: mismatched.jobId,
+    artifactSha256: f.video.sha256,
+    metadataVersion: f.metadata.sha256,
+    contentType: "long_form"
+  }), /must exactly match/);
+});
+
 test("rejects a checksummed receipt for a different video or metadata revision", () => {
   const f = fixture();
   f.approval.technicalValidationReceipt.artifacts[0].sha256 = hash("other-video");
