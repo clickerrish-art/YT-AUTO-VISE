@@ -309,5 +309,19 @@
       "contentType": "short"
     }
   ],
-  "version": 2
+  "version": 2,
+  "productionPolicy": {
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "narrator": "Roderic — Authoritative & Refined",
+    "narrationCommercialRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION",
+    "alternativeNarratorAuthorized": false,
+    "paidUpgradeAuthorized": false,
+    "publishingEnabled": false,
+    "releaseRequiresExactHashRightsAndHumanApproval": true
+  },
+  "notes": [
+    "Current owner production policy (2026-11-21): use genuine original creator-captured wildlife media only. Generic stock/archive footage and AI-generated wildlife visuals are not permitted substitutes. HeyGen denied zero-cost commercial-use rights for Roderic Free-plan output; no alternate narrator or paid upgrade is authorized. All queue items remain planning/draft-only until the source-media, narration, rights, review and release gates pass."
+  ]
 }
