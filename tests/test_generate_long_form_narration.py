@@ -16,6 +16,11 @@ SPEC.loader.exec_module(MODULE)
 
 class LongFormNarrationCleaningTests(unittest.TestCase):
 
+    def test_alternative_voice_generation_is_blocked_by_current_owner_policy(self):
+        with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+            MODULE.require_noncommercial_audition(True)
+
+
     def test_source_and_output_paths_are_anchored_to_repository_not_caller_working_directory(self):
         expected_root = MODULE_PATH.resolve().parents[1]
         self.assertEqual(MODULE.SOURCE, expected_root / "content" / "long-form-scripts.md")
