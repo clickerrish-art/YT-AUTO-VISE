@@ -99,15 +99,16 @@ test("missing metadata fails closed", async () => {
   assert.match(result.stderr, /metadata file not found/);
 });
 
-test("SonicVhibez metadata templates never target the Nature Frontiers channel", () => {
-  const forbiddenChannelId = "UCSlkuPfHH78oGC1o418HV4w";
-  for (const templatePath of [
-    "content/short-001-metadata.example.json",
-    "content/short-002-metadata.example.json"
-  ]) {
+test("SonicVhibez metadata templates use only the verified SonicVhibez channel identity", () => {
+  const verifiedSonicVhibezChannelId = "UCSlkuPfHH78oGC1o418HV4w";
+  const expectedChannelIds = new Map([
+    ["content/short-001-metadata.example.json", "REPLACE_WITH_VERIFIED_SONICVHIBEZ_CHANNEL_ID"],
+    ["content/short-002-metadata.example.json", verifiedSonicVhibezChannelId]
+  ]);
+  for (const templatePath of expectedChannelIds.keys()) {
     const template = JSON.parse(fs.readFileSync(templatePath, "utf8"));
-    assert.notEqual(template.channelId, forbiddenChannelId);
-    assert.equal(template.channelId, "REPLACE_WITH_VERIFIED_SONICVHIBEZ_CHANNEL_ID");
+    assert.equal(template.channel, "SonicVhibez");
+    assert.equal(template.channelId, expectedChannelIds.get(templatePath));
     assert.equal(template.visibility, "private");
     assert.equal(template.rightsConfirmed, false);
     assert.equal(template.complianceReviewed, false);
