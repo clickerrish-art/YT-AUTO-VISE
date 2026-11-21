@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import { parseNodeTestSummary } from "./node-test-summary.mjs";
 
 const roots = ["test", "tests"];
+const TEST_FILE_TIMEOUT_MS = 60_000;
 const files = roots.flatMap(root => {
   if (!fs.existsSync(root)) return [];
   return fs.readdirSync(root, { withFileTypes: true })
@@ -19,7 +20,7 @@ if (files.length === 0) {
 
 const failures = [];
 let totalPass = 0, totalFail = 0, totalSkipped = 0;
-console.log(`Running ${files.length} Node.js test files in isolated processes.`);
+console.log(`Running ${files.length} Node.js test files in isolated processes (per-file timeout: ${TEST_FILE_TIMEOUT_MS}ms).`);
 
 for (const [index, file] of files.entries()) {
   console.log(`\n[${index + 1}/${files.length}] ${file}`);
@@ -27,6 +28,8 @@ for (const [index, file] of files.entries()) {
     cwd: process.cwd(),
     env: process.env,
     encoding: "utf8",
+    timeout: TEST_FILE_TIMEOUT_MS,
+    killSignal: "SIGTERM",
     maxBuffer: 32 * 1024 * 1024
   });
   const output = String(result.stdout ?? "") + String(result.stderr ?? "");
@@ -41,8 +44,11 @@ for (const [index, file] of files.entries()) {
   }
 
   if (result.error) {
-    failures.push({ file, reason: result.error.message });
-    console.error(`FAILED to start ${file}: ${result.error.message}`);
+    const reason = result.error.code === "ETIMEDOUT"
+      ? `timed out after ${TEST_FILE_TIMEOUT_MS}ms`
+      : result.error.message;
+    failures.push({ file, reason });
+    console.error(`FAILED to execute ${file}: ${reason}`);
     continue;
   }
   if (result.signal || result.status !== 0) {
