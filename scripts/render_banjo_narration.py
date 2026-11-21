@@ -14,12 +14,14 @@ import urllib.request
 from pathlib import Path
 
 try:
+    from .narration_policy import require_owner_authorized_alternative_voice
     from .generate_piper_voice_audition import (
         CONFIG_NAME, MODEL_NAME, MODEL_SHA256, REPO, REVISION,
         download_pinned, extract_short_narration, sha256_file,
         sha256_text, validate_config,
     )
 except ImportError:
+    from narration_policy import require_owner_authorized_alternative_voice
     from generate_piper_voice_audition import (
         CONFIG_NAME, MODEL_NAME, MODEL_SHA256, REPO, REVISION,
         download_pinned, extract_short_narration, sha256_file,
@@ -303,6 +305,7 @@ def render(
 
 
 def main() -> int:
+    require_owner_authorized_alternative_voice()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", default="artifacts/banjo-narration-review")
     parser.add_argument("--source-script", default="content/short-001-wildlife-video-storytelling.md")
