@@ -34,7 +34,10 @@
         "defaultPublicationState",
         "requireHumanApproval",
         "allowAutomaticPublication",
-        "sourceOfTruth"
+        "sourceOfTruth",
+        "originalCreatorCapturedMediaRequired",
+        "stockMediaAllowed",
+        "aiGeneratedWildlifeVisualsAllowed"
       ],
       "properties": {
         "defaultPublicationState": {
@@ -54,6 +57,15 @@
           "items": {
             "type": "string"
           }
+        },
+        "originalCreatorCapturedMediaRequired": {
+          "const": true
+        },
+        "stockMediaAllowed": {
+          "const": false
+        },
+        "aiGeneratedWildlifeVisualsAllowed": {
+          "const": false
         }
       },
       "additionalProperties": true
@@ -71,7 +83,8 @@
           "inspection",
           "editorial",
           "approval",
-          "usage"
+          "usage",
+          "productionEligibility"
         ],
         "properties": {
           "id": {
@@ -137,6 +150,13 @@
                   "type": "string",
                   "format": "uri"
                 }
+              },
+              "captureType": {
+                "enum": [
+                  "original_creator_captured",
+                  "stock_listing",
+                  "other"
+                ]
               }
             },
             "additionalProperties": true
@@ -350,6 +370,31 @@
                 "items": {
                   "type": "string"
                 }
+              }
+            },
+            "additionalProperties": true
+          },
+          "productionEligibility": {
+            "type": "object",
+            "required": [
+              "eligible",
+              "status",
+              "reason"
+            ],
+            "properties": {
+              "eligible": {
+                "type": "boolean"
+              },
+              "status": {
+                "enum": [
+                  "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+                  "ELIGIBLE_FOR_OWNER_APPROVED_USE",
+                  "NOT_ELIGIBLE_MISSING_GATES"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 10
               }
             },
             "additionalProperties": true
