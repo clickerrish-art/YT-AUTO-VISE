@@ -171,3 +171,11 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - The scheduled `.github/workflows/twice-weekly-check.yml` runs Tuesday/Thursday/Saturday at 15:00 UTC and performs `npm test` plus an example rights/compliance negative check. It does **not** generate narration.
 - The implementation branch already contains fail-closed mitigations: both narration workflows are replaced with `if: false` disabled stubs; the NOAA acquisition job is `if: false`. These changes are present in PR #1 only and are not effective on `main` while PR #1 remains open/draft/unmerged.
 - Do not merge PR #1 or write to `main` from this execution. Owner/admin must choose the controlled default-branch remediation path; until then, avoid pushes to the affected main-branch workflow paths and do not manually dispatch those workflows.
+
+
+### Nile crocodile documentary research package — 21 November 2026
+- Desk fact-check completed against the IUCN Crocodile Specialist Group species account, SANBI 2023 regional assessment, San Diego Zoo Wildlife Alliance fact sheets, a Lake St Lucia maternal-care study and the Leslie/Kemp/Spotila Lake St Lucia temperature-dependent sex determination study.
+- Added `content/nile-crocodile-documentary-001-source-to-claim-ledger-2026-11-21.md` with claim-by-claim evidence, source limitations, required editorial caveats and outstanding review gates.
+- Corrected the script's size description to “one of Africa's largest crocodilians”; dated the global 2017 and South African regional 2023 conservation assessments; expanded the claim register and added nine source references.
+- Narration text remains approximately 875 words, within the 6–10 minute long-form requirement at a normal narration pace.
+- The script remains DRAFT. No qualified zoological sign-off, original footage, commercial rights, narration clearance, final captions/render or exact-hash approval exists. This research task is complete; the documentary production task is not.
