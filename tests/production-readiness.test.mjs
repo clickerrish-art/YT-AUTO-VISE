@@ -6,6 +6,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createTestDashboardProject } from "../test/helpers/queue-identity-fixture.mjs";
 
 function currentYouTubeReconciliationExpectation() {
   const verification = JSON.parse(fs.readFileSync("content/youtube-channel-verification-status.json", "utf8"));
@@ -80,6 +81,7 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /public publishing disabled/);
   assert.match(result.stdout, /content\/render-manifest\.json/);
   assert.match(result.stdout, /long-form-render-manifest/);
+  assert.match(result.stdout, /narration rights are not cleared for public branded\/production use/i);
   assert.match(result.stdout, /footageOrigin must be creator_captured_original/);
   assert.match(result.stdout, /footageCreator must identify the original camera operator/);
   assert.match(result.stdout, /captureEvidencePath must reference an existing/);
@@ -104,6 +106,13 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and age-awar
   assert.equal(report.status, "blocked");
   assert.ok(report.blockerCount > 0);
   assert.equal(report.blockers.length, report.blockerCount);
+  const narrationRightsBlockers = report.blockers.filter(blocker =>
+    /narration rights are not cleared for public branded\/production use/i.test(blocker.message)
+  );
+  assert.equal(narrationRightsBlockers.length, 2);
+  assert.ok(narrationRightsBlockers.some(blocker => blocker.message.includes("content/render-manifest.json")));
+  assert.ok(narrationRightsBlockers.some(blocker => blocker.message.includes("content/long-form-render-manifest.json")));
+  assert.ok(narrationRightsBlockers.every(blocker => blocker.controlOwner === "external_owner_or_human_reviewer"));
   for (const blocker of report.blockers) {
     assert.match(blocker.id, /^RDY-[A-F0-9]{12}$/);
     assert.ok(["critical", "high"].includes(blocker.severity));
@@ -168,6 +177,37 @@ test("readiness JSON distinguishes fresh and stale external reconciliation from 
   const metadata = JSON.parse(fs.readFileSync("content/next-short.json", "utf8"));
   assert.equal(metadata.channelId, "UCSlkuPfHH78oGC1o418HV4w");
   assert.ok(report.blockers.some(blocker => /SONICVHIBEZ_CHANNEL_ID/.test(blocker.message)), "the secure OAuth environment binding remains an owner-controlled gate");
+});
+
+
+
+test("readiness rejects provider-denied Roderic narration even if manifest rights flags are manually changed to approved", () => {
+  const project = createTestDashboardProject("sonicvhibez-voice-rights-fixture-");
+  try {
+    const manifestPath = path.join(project.root, "content", "render-manifest.json");
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    manifest.narrationRightsStatus = "PROVIDER_APPROVED";
+    manifest.narrationPublicBrandedDistributionAllowed = true;
+    manifest.narrationCommercialUseAllowed = true;
+    manifest.narrationProductionUseAllowed = true;
+    manifest.rightsConfirmed = true;
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+    const result = spawnSync(process.execPath, [path.join(project.root, "scripts", "production-readiness.mjs"), "--json"], {
+      cwd: project.root,
+      encoding: "utf8",
+      env: { ...process.env, YOUTUBE_CLIENT_ID: "", YOUTUBE_CLIENT_SECRET: "", YOUTUBE_REFRESH_TOKEN: "", SONICVHIBEZ_CHANNEL_ID: "" }
+    });
+    assert.equal(result.status, 2);
+    const report = JSON.parse(result.stdout);
+    const blocker = report.blockers.find(item =>
+      item.message.includes("content/render-manifest.json") &&
+      /narration rights are not cleared for public branded\/production use/i.test(item.message)
+    );
+    assert.ok(blocker, "provider denial must override manually changed manifest flags");
+    assert.match(blocker.message, /PROVIDER_DENIED/);
+  } finally {
+    project.cleanup();
+  }
 });
 
 test("readiness workflow compares retained exit-code evidence and avoids false mismatches from missing step outputs", () => {

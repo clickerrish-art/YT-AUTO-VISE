@@ -16,6 +16,45 @@ const root = process.cwd();
 const blockers = [];
 const notes = [];
 const exists = (p) => isSafeRegularFileWithinRoot(root, p);
+
+function validateNarrationRights(manifest, manifestPath) {
+  const evidenceName = manifest.narrationRightsDeterminationEvidence;
+  if (typeof evidenceName !== "string" || !evidenceName.trim()) {
+    blockers.push(manifestPath + ": narration rights evidence path is missing or invalid.");
+    return;
+  }
+  const evidencePath = path.join("content", evidenceName);
+  if (!exists(evidencePath)) {
+    blockers.push(manifestPath + ": narration rights evidence file " + evidencePath + " is missing.");
+    return;
+  }
+  let evidence;
+  try {
+    evidence = JSON.parse(fs.readFileSync(path.resolve(root, evidencePath), "utf8"));
+  } catch {
+    blockers.push(manifestPath + ": narration rights evidence file " + evidencePath + " is not valid JSON.");
+    return;
+  }
+  const provider = evidence.providerDetermination ?? {};
+  const manifestApproved = ["OWNER_LICENSED", "PROVIDER_APPROVED"].includes(manifest.narrationRightsStatus) &&
+    manifest.narrationPublicBrandedDistributionAllowed === true &&
+    manifest.narrationCommercialUseAllowed === true &&
+    manifest.narrationProductionUseAllowed === true;
+  const ownerApproved = evidence.rightsOwnerConfirmed === true &&
+    evidence.publicBrandedDistributionAllowed === true &&
+    evidence.commercialUseAllowed === true &&
+    evidence.productionUseAllowed === true;
+  const providerApproved = provider.status === "APPROVED" &&
+    provider.publicBrandedDistributionAllowed === true &&
+    provider.commercialUseAllowed === true &&
+    provider.productionUseAllowed === true;
+  const providerDenied = provider.status === "DENIED" ||
+    provider.publicBrandedDistributionAllowed === false ||
+    provider.commercialUseAllowed === false;
+  if (!manifestApproved || !(ownerApproved || providerApproved) || providerDenied) {
+    blockers.push(manifestPath + ": narration rights are not cleared for public branded/production use. The current HeyGen Free-plan Roderic determination is PROVIDER_DENIED; public distribution and commercial/production use are not allowed. Supply an owner-owned voice recording or explicitly licensed commercial voice with affirmative rights evidence; no paid plan or narrator substitution without owner approval.");
+  }
+}
 const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
 const queueAbsolutePath = path.resolve(root, queuePath);
 const queueExists = process.env.QUEUE_PATH
@@ -202,6 +241,7 @@ if (!exists(manifestPath)) {
   if (manifest) {
     if (manifest.channel !== "SonicVhibez") blockers.push("Render manifest target must be exactly SonicVhibez.");
     validateCreatorCapturedFootage(manifest, "content/render-manifest.json");
+  validateNarrationRights(manifest, "content/render-manifest.json");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
       const assetPath = manifest[key];
       if (typeof assetPath !== "string" || !assetPath.trim()) {
@@ -234,6 +274,7 @@ if (!exists(longFormManifestPath)) {
   if (longManifest) {
     if (longManifest.channel !== "SonicVhibez") blockers.push("Long-form render manifest target must be exactly SonicVhibez.");
     validateCreatorCapturedFootage(longManifest, "content/long-form-render-manifest.json");
+    validateNarrationRights(longManifest, "content/long-form-render-manifest.json");
     if (longManifest.targetAspectRatio !== "16:9") blockers.push("Long-form render manifest must specify targetAspectRatio 16:9.");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
       if (typeof longManifest[key] !== "string" || !longManifest[key].trim() || !exists(path.join("content", longManifest[key]))) {
@@ -404,6 +445,7 @@ if (!exists(youtubeVerificationPath)) {
   }
 }
 function resolutionFor(blocker) {
+  if (/narration rights are not cleared/i.test(blocker)) return "Do not use HeyGen Free-plan Roderic output in public branded or commercial production. Provide an owner-owned voice recording with rights evidence or an explicitly licensed commercial voice; no paid plan or narrator substitution without owner approval.";
   if (/imported wildlife asset/i.test(blocker)) return "Use only footage captured by the identified original camera operator. Retain the original camera file, creator identity, capture/provenance record, written commercial-use permission, matching SHA-256, and human visual review. Stock/library clips, AI-generated wildlife visuals and candidate URLs are not eligible substitutes.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_grant/i.test(blocker)) return "Google rejected the YouTube OAuth refresh token (invalid_grant). Reauthorize the existing OAuth client for the same Google account with the YouTube read-only and upload scopes (https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload), request offline access with explicit consent, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, update only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun the read-only verification workflow. Never paste token values into chat or create a second OAuth client.";
   if (/latest read-only YouTube OAuth attempt.*invalid_grant/i.test(blocker)) return "Google rejected the latest YouTube refresh-token grant (invalid_grant). Reauthorize the existing OAuth client for the same Google account with https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload and offline access, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, replace only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun read-only verification. Never paste token values into chat or create a second OAuth client.";
@@ -424,7 +466,7 @@ function resolutionFor(blocker) {
 
 function controlOwnerFor(message) {
   if (/product promotion gate/i.test(message)) return "external_owner_or_human_reviewer";
-  if (/LIVE BLOCKER|CADENCE DECISION REQUIRED|YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID|verified SonicVhibez YouTube channel ID|rightsConfirmed|complianceReviewed|human-reviewed|human review|owner-approved/i.test(message)) {
+  if (/LIVE BLOCKER|CADENCE DECISION REQUIRED|YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID|verified SonicVhibez YouTube channel ID|narration rights|narrationRights|rightsConfirmed|complianceReviewed|human-reviewed|human review|owner-approved/i.test(message)) {
     return "external_owner_or_human_reviewer";
   }
   if (/render-manifest|long-form-render-manifest|final rendered|media\/next-short\.mp4|footageLicenseEvidence|narrationLicenseEvidence/i.test(message)) {

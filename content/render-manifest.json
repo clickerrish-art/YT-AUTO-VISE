@@ -35,5 +35,10 @@
   "sourceHashType": "GIT_BLOB_SHA",
   "captionHashType": "GIT_BLOB_SHA",
   "referenceOnlyRightsResearchEvidence": "short-001-pexels-rights-evidence.json",
-  "footageEligibilityStatus": "EXCLUDED_PEXELS_STOCK_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
+  "footageEligibilityStatus": "EXCLUDED_PEXELS_STOCK_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA",
+  "narrationRightsStatus": "PROVIDER_DENIED",
+  "narrationPublicBrandedDistributionAllowed": false,
+  "narrationCommercialUseAllowed": false,
+  "narrationProductionUseAllowed": false,
+  "narrationRestrictionSummary": "HeyGen Support confirmed the Free-plan Roderic output is limited to internal evaluation and is not permitted for public branded distribution or commercial/production use. Keep all Roderic Free-plan audio out of public videos. No paid plan or narrator substitution without explicit owner approval."
 }

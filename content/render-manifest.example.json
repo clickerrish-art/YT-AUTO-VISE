@@ -14,5 +14,11 @@
   "complianceReviewed": false,
   "containsSyntheticMedia": true,
   "hasPaidPromotion": true,
-  "notes": "Example only. The current planned Short uses synthetic TTS narration and includes an owner-approved direct-sales promotion, so keep both disclosure flags true unless the final reviewed assets and promotion differ. Complete this manifest only with genuine source files and verified rights; no placeholders or fabricated evidence."
+  "notes": "Example only. The current planned Short uses synthetic TTS narration and includes an owner-approved direct-sales promotion, so keep both disclosure flags true unless the final reviewed assets and promotion differ. Complete this manifest only with genuine source files and verified rights; no placeholders or fabricated evidence.",
+  "narrationRightsStatus": "PENDING_OWNER_RIGHTS_REVIEW",
+  "narrationPublicBrandedDistributionAllowed": false,
+  "narrationCommercialUseAllowed": false,
+  "narrationProductionUseAllowed": false,
+  "narrationRightsDeterminationEvidence": "",
+  "narrationRestrictionSummary": "Do not use narration in public branded or commercial production until a user-owned recording or explicitly licensed commercial voice has affirmative rights evidence and owner approval."
 }
