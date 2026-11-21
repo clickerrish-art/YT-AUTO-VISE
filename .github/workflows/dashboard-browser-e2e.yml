@@ -1,5 +1,6 @@
 name: Dashboard browser end-to-end acceptance
 
+# The branch-side push trigger provides exact-HEAD browser acceptance before this workflow exists on main.
 on:
   push:
     branches: [codex/marketing-machine-audit-fixes]
