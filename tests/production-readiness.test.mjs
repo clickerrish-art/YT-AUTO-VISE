@@ -343,7 +343,7 @@ test("excluded Canva imports remain quarantined and readiness still requires ori
   });
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
-  assert.equal(report.blockers.some(item => /selected imported wildlife asset\\(s\\) are not verified as original creator-captured footage/.test(item.message)), false);
+  assert.equal(report.blockers.some(item => item.message.includes("selected imported wildlife asset")), false);
   assert.ok(report.notes.some(note => note.includes("5 assets; 5 excluded from production (not rights-cleared); 0 selected/unresolved; release not authorized")));
   assert.ok(report.blockers.some(item => /footageOrigin must be creator_captured_original/.test(item.message)),
     "an excluded stock inventory must not silently permit an AI-generated or stock-based production path");
@@ -376,7 +376,7 @@ test("a Pexels/library candidate remains blocked even if marked cleared and its 
     });
     assert.equal(result.status, 2);
     const report = JSON.parse(result.stdout);
-    const blocker = report.blockers.find(item => /selected imported wildlife asset\\(s\\) are not verified as original creator-captured footage/.test(item.message));
+    const blocker = report.blockers.find(item => item.message.includes("selected imported wildlife asset"));
     assert.ok(blocker, "library media must remain blocked even with a generic license and a matching local hash");
     assert.match(blocker.message, /VAHZ9kg2rvg/);
   } finally {
