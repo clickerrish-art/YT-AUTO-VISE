@@ -275,8 +275,9 @@ export function acquireExclusiveUploadLock(lockPath, { jobId, now = () => new Da
 }
 export function validateUploadApproval(approval, { jobId, artifactSha256, metadataVersion, channelId, contentType }) {
   if (approval?.decision !== "APPROVE" || approval.jobId !== jobId) throw new Error("approval decision and job ID must match this upload");
-  if (contentType && approval.contentType && contentType !== approval.contentType) throw new Error("approval content format does not match upload metadata");
-  const approvedFormat = contentType ?? approval.contentType ?? "long_form";
+  if (!["short", "long_form"].includes(contentType)) throw new Error("upload metadata must explicitly declare contentType as short or long_form");
+  if (approval.contentType !== contentType) throw new Error("approval content format must exactly match the explicit upload metadata contentType");
+  const approvedFormat = contentType;
   if (approvedFormat === "short") {
     if (approval.contentType !== "short") throw new Error("Short upload approval must explicitly identify contentType=short");
     // Upload is restricted to private visibility below. A valid parent relationship may
