@@ -334,21 +334,31 @@ test("qualitative web-search intent is accepted only with dated HTTPS sources an
 });
 
 
-test("keyword evidence must be current and cannot be materially future-dated", () => {
+test("keyword evidence is fresh for active and future weeks while historical drafts keep their original research record", () => {
   const evidenceTimes = checkedInPlan.weeks.flatMap(week =>
     week.items.map(item => Date.parse(item.keywordEvidence.researchedAt))
   );
   const now = new Date(Math.max(...evidenceTimes));
   assert.deepEqual(validatePromotionalShortPlan(checkedInPlan, products, { now }), []);
 
+  const historical = clone(checkedInPlan);
+  const archivedItem = historical.weeks.find(week => week.weekOf === "2026-11-09").items[0];
+  archivedItem.keywordEvidence.researchedAt =
+    new Date(now.getTime() - 45 * 24 * 60 * 60 * 1000).toISOString();
+  assert.equal(validatePromotionalShortPlan(historical, products, { now })
+    .some(error => /keyword evidence must be no more than 14 days old/.test(error)), false,
+    "past draft-preparation weeks retain their historical evidence without pretending it is current");
+
   const stale = clone(checkedInPlan);
-  stale.weeks[0].items[0].keywordEvidence.researchedAt =
+  const activeItem = stale.weeks.find(week => week.weekOf === "2026-11-23").items[0];
+  activeItem.keywordEvidence.researchedAt =
     new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000).toISOString();
   assert.ok(validatePromotionalShortPlan(stale, products, { now })
     .some(error => /keyword evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(checkedInPlan);
-  future.weeks[0].items[0].keywordEvidence.researchedAt =
+  const futureItem = future.weeks.find(week => week.weekOf === "2026-11-23").items[0];
+  futureItem.keywordEvidence.researchedAt =
     new Date(now.getTime() + 5 * 60 * 1000 + 1).toISOString();
   assert.ok(validatePromotionalShortPlan(future, products, { now })
     .some(error => /cannot be more than 5 minutes in the future/.test(error)));
