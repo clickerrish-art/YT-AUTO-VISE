@@ -49,7 +49,7 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
       "excludedAt": "2026-11-18"
     },
     {
@@ -89,7 +89,7 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
       "excludedAt": "2026-11-18"
     },
     {
@@ -129,7 +129,7 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
       "excludedAt": "2026-11-18"
     },
     {
@@ -169,7 +169,7 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
       "excludedAt": "2026-11-18"
     },
     {
@@ -212,7 +212,7 @@
         ]
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because the active production direction is realistic AI-generated wildlife scenes. This is a quarantine decision, not a rights clearance; do not use these imports unless they are reactivated after exact provenance, original media, SHA-256 and human review are verified.",
+      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
       "excludedAt": "2026-11-18"
     }
   ],
@@ -221,12 +221,20 @@
     "No original MP4, exact source match, SHA-256 or human visual review is claimed for these excluded assets.",
     "Reactivation requires full source provenance, local original media, hash verification, rights review and human visual approval."
   ],
-  "notes": "All five imported Canva wildlife assets are quarantined as EXCLUDED_NOT_USED. They are retained for audit only and are not cleared for any use. The active production path must use separately verified realistic AI-generated scenes.",
+  "notes": "All five imported Canva/Pexels wildlife assets are quarantined as EXCLUDED_NOT_USED and retained for audit only. They are not original creator-captured media and are not cleared for any production use. The current production path requires genuine original creator-captured wildlife footage; neither generic stock footage nor AI-generated wildlife visuals may substitute for it.",
   "historicalBlockingEvidence": [
     "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
     "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
     "The fifth Canva lion clip has no verified exact Pexels source page/creator; similar Pexels pages with mismatching durations or dimensions were rejected.",
     "Candidate Pexels pages and general Pexels commercial-use terms are not sufficient to clear an imported clip without exact visual matching, original MP4, download/source evidence, hash and human review.",
     "No footage rights or human visual review is marked complete."
-  ]
+  ],
+  "currentProductionPolicy": {
+    "status": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "importedCanvaAssetsProductionEligible": false,
+    "note": "Only genuine original creator-captured wildlife media with verified provenance, exact source files, hashes, commercial rights and human review may enter production."
+  }
 }
