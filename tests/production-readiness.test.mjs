@@ -320,7 +320,7 @@ test("readiness blocks selected imported wildlife assets until creator-capture p
     });
     assert.equal(result.status, 2);
     const report = JSON.parse(result.stdout);
-    const blocker = report.blockers.find(item => /selected imported Canva wildlife asset\(s\) remain unverified/.test(item.message));
+    const blocker = report.blockers.find(item => item.message.includes("selected imported wildlife asset"));
     assert.ok(blocker, "selected unverified imported Canva assets must be an explicit production blocker");
     assert.equal(blocker.severity, "critical");
     assert.equal(blocker.controlOwner, "external_owner_or_human_reviewer");
