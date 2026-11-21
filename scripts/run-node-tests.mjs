@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { spawnSync } from "node:child_process";
 import { parseNodeTestSummary } from "./node-test-summary.mjs";
 
@@ -24,15 +25,29 @@ console.log(`Running ${files.length} Node.js test files in isolated processes (p
 
 for (const [index, file] of files.entries()) {
   console.log(`\n[${index + 1}/${files.length}] ${file}`);
-  const result = spawnSync(process.execPath, ["--test", file], {
-    cwd: process.cwd(),
-    env: process.env,
-    encoding: "utf8",
-    timeout: TEST_FILE_TIMEOUT_MS,
-    killSignal: "SIGTERM",
-    maxBuffer: 32 * 1024 * 1024
-  });
-  const output = String(result.stdout ?? "") + String(result.stderr ?? "");
+  const outputDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-node-test-"));
+  const outputPath = path.join(outputDirectory, "test-output.log");
+  const outputFd = fs.openSync(outputPath, "w", 0o600);
+  const detached = process.platform !== "win32";
+  let result;
+  try {
+    result = spawnSync(process.execPath, ["--test", file], {
+      cwd: process.cwd(),
+      env: process.env,
+      stdio: ["ignore", outputFd, outputFd],
+      timeout: TEST_FILE_TIMEOUT_MS,
+      killSignal: "SIGKILL",
+      detached
+    });
+  } finally {
+    fs.closeSync(outputFd);
+  }
+  // Kill any test-owned child processes left behind before starting the next isolated file.
+  if (detached && Number.isInteger(result?.pid)) {
+    try { process.kill(-result.pid, "SIGKILL"); } catch {}
+  }
+  const output = fs.readFileSync(outputPath, "utf8");
+  fs.rmSync(outputDirectory, { recursive: true, force: true });
   process.stdout.write(output);
   const summary = parseNodeTestSummary(output);
   if (!summary) {
