@@ -956,3 +956,15 @@ The default-branch `.github/workflows/acquire-noaa-broll-candidates.yml` remains
 - Added regression assertions for these disabled paths and source exclusions.
 
 **Default-branch caveat:** the branch changes are not merged. The NOAA B-roll scheduled workflow remains enabled on `main`; the Git safety incident and required owner action are recorded above. This prevents a claim that the default branch is fully safe.
+
+
+### Additional verified correction — queue and candidate alignment (2026-11-21)
+
+- Long-form 001 queue now records the explicit commercial-narration denial and original footage blocker; the corrected script awaits owner and qualified zoological review.
+- Next Short metadata no longer treats AI-generated wildlife visuals as an option; original creator-captured media is required and current Roderic Free-plan audio is not commercially usable.
+- Short 002's voice and source-media gates now reflect the Roderic-only/rights-denied and original-capture-only policies.
+- Short 004 NOAA metadata, script and review-render record now identify the source as historical reference-only and excluded; eSpeak narration remains an unapproved review artifact.
+- Long-form queue, general content queue and weekly content plan carry consistent source, narrator and publishing safeguards.
+- Worker runner code and tests were reviewed: 409/429 backoff, ambiguous dispatch quarantine, failed persistence stop/lock retention and restart blocking are present. This remains code-reviewed only, not runtime-verified on the current head.
+
+All these production queues remain HOLD/planning-only. No media render, narration generation, upload, schedule or publication occurred.
