@@ -914,3 +914,14 @@ The 19 November snapshot and historical notes above are retained for audit histo
 At the latest comparison before this register update, implementation branch `codex/marketing-machine-audit-fixes` was **4,828 commits ahead / 13 behind** `main`, with merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. `main` was not modified. PR #1 was not merged, closed or marked ready. No reset, rebase, force-push or history rewrite was performed.
 
 No full regression suite or live production acceptance was run after the 2026-11-21 repository changes. Prior test passes remain historical evidence only and do not certify this new head.
+
+
+### Additional verified correction — Nature Frontiers brand boundary (2026-11-21)
+
+- Removed the NatureFrontiers-life YouTube subscription URL from the Nature Frontiers Facebook and Instagram approved-destination arrays.
+- Removed the YouTube destination from the Nature Frontiers post-link catalogue and added an explicit `youtubePublishingAllowed=false` invariant.
+- Added regression coverage for no YouTube URLs, no SonicVhibez channel ID in Nature Frontiers configuration, and preserved publishing-disabled/dry-run/emergency-stop defaults.
+- Added rights/manifest regression coverage for exact Git blob pins, Pexels exclusion, HeyGen's denial and disabled alternate-voice workflows.
+- Connector-side read-back assertions passed; both new test files passed Node syntax checks. Full repository tests have not been executed on this head, so runtime test acceptance remains NOT_TESTED.
+
+**Important boundary:** this fixes the repository-side configuration only. Metricool provider-side brand mappings and legacy data remain unresolved; no live account mutation was made.
