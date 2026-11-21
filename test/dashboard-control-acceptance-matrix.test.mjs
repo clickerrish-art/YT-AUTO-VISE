@@ -49,6 +49,13 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(matrix.overallAcceptance, "NOT_TESTED");
   assert.match(matrix.coverageNote, /DASH-001 remains NOT_TESTED overall/);
 
+  const currentHeadRefresh = matrix.currentHeadRefresh;
+  assert.equal(currentHeadRefresh.sourceTestSha, "61d116ede6c4abc9977078e88864d8571cdadccb");
+  assert.equal(currentHeadRefresh.nodeTests, 1043);
+  assert.equal(currentHeadRefresh.nodeTestFiles, 181);
+  assert.equal(currentHeadRefresh.browserE2EStatus, "NOT_RUN_ON_THIS_SHA");
+  assert.equal(currentHeadRefresh.overallAcceptance, "NOT_TESTED");
+
   const dashboardEvidence = matrix.dashboardEvidence;
   assert.equal(dashboardEvidence.status, "PASS");
   assert.equal(dashboardEvidence.testSha, evidenceSha);

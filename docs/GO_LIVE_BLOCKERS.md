@@ -2962,3 +2962,46 @@ A separate educational Short candidate has been drafted from the owner-authorize
 A 55.235-second 1080×1920 H.264/AAC review render was produced from the exact source hash. Selected source ranges are 160–175, 245–257, 320–335 and 360–373 seconds. The source audio was removed before assembly; the only audio is a draft eSpeak text-to-speech narration. The review render displays **REVIEW DRAFT — NOT FOR PUBLICATION**, **AI-GENERATED NARRATION**, and the exact NOAA attribution. SHA-256: `c0735b95efa5a70fba2eba3a87cbacd2355c400288b320d97dd3190dce1cf280`. Full-file FFmpeg decode, H.264/AAC stream inspection, 1080×1920 resolution, 30 fps and 55.235-second duration were verified.
 
 This is an editorial/technical review render, **not** a production master. The eSpeak voice is a low-fidelity placeholder and must be replaced with approved narration before publication. Captions and timing need human full-playback review; selected footage has been sampled at two-second intervals, not inspected frame-by-frame. Rights and compliance approvals remain false. The item is unscheduled, upload is prohibited, and the existing long_form → long_form → short cycle and all existing schedules remain unchanged.
+
+
+## 21 November 2026 — current exact-SHA and promotional Shorts recheck
+
+Implementation branch snapshot:
+- Branch `codex/marketing-machine-audit-fixes` HEAD: `61d116ede6c4abc9977078e88864d8571cdadccb`; `main`: `861173281b6253c839e6923182b1d3fdf3280b0a`; merge base: `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- Divergence: 4,798 ahead / 13 behind; PR #1 is open, draft, unmerged, not mergeable (`dirty`), 487 changed files. PR #7 is also open, draft, unmerged, not mergeable, 19 changed files. The implementation branch is unprotected. No main-branch edit, merge, reset, rebase, force-push or history rewrite occurred.
+- PR #7 remains a separate Nature Frontiers Facebook draft workflow. Its publisher workflow is guarded by `github.ref == refs/heads/main` and hardcodes `FACEBOOK_PUBLISH_ENABLED=NO`; config remains `publishingEnabled=false`, `dryRun=true`, `emergencyStop=true`. A PR-branch schedule is not active production automation.
+
+Exact current-SHA CI:
+- [Validate SonicVhibez automation](${runUrl}) passed 1,043 Node tests across 181/181 files, 87 Python tests, zero skips, npm audit 0 vulnerabilities, syntax/compilation, promotional Shorts validation, schedule/queue and campaign validation, and read-only Cloudflare staging checks.
+- [Generate and verify npm lockfile](${lockUrl}) passed clean locked installation, 1,043 Node tests, schedule/campaign validation and JavaScript syntax; no lockfile change was needed.
+- [Deployment recovery smoke](${deployUrl}) passed 2/2 restart/rollback tests.
+- [Cloudflare runner-bridge safety](${bridgeUrl}) passed 4/4 tests.
+- No browser E2E ran on `61d116ede6c4abc9977078e88864d8571cdadccb`. The latest 41/41 Chromium run is historical on `668a8779f8a2894f99ed935d0c8bf13f2f215e64` ([run](${browserUrl})); DASH-001 remains NOT_TESTED.
+- The latest production-readiness run was on parent SHA `764e2c74e0d7331e2d914498fc581ec034366c86` and returned HOLD with 19 blockers ([run](${readinessUrl})); readiness was not rerun on this content-only descendant.
+
+Current acceptance snapshot:
+- Requirement register: 89 total — 71 PASS, 8 NOT_TESTED, 10 BLOCKED, 0 FAIL. These are recorded row counts, not a claim of 100% current acceptance.
+- API matrix: 48 routes; 42 local authorized positive routes PASS; 48/48 protected-route missing/invalid-authentication checks PASS; six provider/production routes remain BLOCKED. API-001 remains BLOCKED overall.
+- Dashboard matrix: 121 controls, 17 forms and 15 cross-cutting dimensions mapped; prior 41/41 browser journeys are historical at SHA 668a. Current head has Node/Python tests but no browser E2E; DASH-001 remains NOT_TESTED overall.
+
+YouTube history and spacing:
+- The last read-only inventory (19 November) identified channel `SonicVibes`, handle `@sonicvhibez`, ID `UCSlkuPfHH78oGC1o418HV4w`, and one public 20-second legacy Short; zero private/unlisted videos were present in that inventory. Its actual publication was `2026-10-22T15:05:56Z` = `2026-10-22 17:05:56 Africa/Johannesburg`.
+- That timestamp was 713.1 hours before the 21 November 10:12:48 SAST check. This is not a spacing clearance: the owner's manual/local/third-party attempt attestation is valid only through 18 November, the OAuth scope evidence is older than the 24-hour freshness window, and the current destination schedule cannot be inspected. The 72-hour gate is therefore UNVERIFIED; no publication time was proposed and nothing was scheduled.
+
+Metricool:
+- Live brand list exposes only `Nature Frontiers SA`, brandId `8094526`. Its YouTube network ID points to the verified SonicVibes/@sonicvhibez channel while its Facebook/Instagram identities are Nature Frontiers. This cross-brand mapping is unsafe; no separate SonicVhibez/Sonic Fire YouTube-only brand is exposed.
+- The read-only scheduled-post query for 21 October 2026 through 19 February 2027 returned zero items. The connector did not expose unscheduled draft flags, autoPublish flags or published-video history in this query. No existing post was changed and no provider write occurred.
+
+Promotional Shorts:
+- The week beginning 23 November has exactly two `DRAFT_ONLY` creator-education Shorts; plan cap is two per week and both `publicationEnabled=false` and `schedulingEnabled=false`.
+- Short 007 (ethical wildlife photography) has the owner-approved direct-sales disclosure for the Complete YouTube Wildlife Creator's Vault. Short 008 (YouTube video outline) remains on DISCLOSURE HOLD for the Prompt Pack. The Success Blueprint remains a later candidate with unverified viewer-facing disclosure.
+- Keyword evidence was refreshed with qualitative exact-query search results; no measured global search volume, competition score or trend metric was available. No third-party SEO score is claimed.
+- All three Selar seller records identify Click 47, last live-verified on 9 November 2026 at 09:49 SAST. The 14-day evidence window reaches its limit on 23 November at 09:49 SAST; recheck the exact listings before production/release. No final promotional MP4 or thumbnail assets were rendered or verified. No paid tool, upgrade or GPU was used.
+
+Remaining owner/provider gates:
+- Fresh owner attestation for any manual/local/third-party upload attempts after 18 November; fresh authenticated OAuth upload-scope verification; complete public/private/unlisted and scheduled-history reconciliation; upload-attempt ledger reconciliation.
+- Genuine rights-cleared footage, narration and music; real manifests and final rendered media; exact-hash-bound human quality/compliance review; metadata approval and per-operation one-shot private-upload authorization.
+- A distinct SonicVhibez/Sonic Fire YouTube-only Metricool destination, plus current destination schedule/history access; product-specific disclosure approval for Prompt Pack and Success Blueprint; refreshed Selar seller evidence.
+- Six API routes remain provider/production blocked. Full dashboard per-control behavior acceptance, current browser E2E, production Worker deployment/rollback and full semantic Git review remain incomplete.
+
+No upload, schedule, publication, account reconnection, spend, existing-post mutation or auto-publishing change occurred.

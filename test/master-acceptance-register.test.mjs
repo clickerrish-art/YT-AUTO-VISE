@@ -34,10 +34,15 @@ test("the owner-approved rolling publication cadence is no longer marked blocked
 test("API and dashboard acceptance statuses retain their exact evidence boundaries", () => {
   const api = byId("API-001");
   assert.equal(api.status, "BLOCKED");
-  assert.equal(api.currentHeadEvidenceSha, "668a8779f8a2894f99ed935d0c8bf13f2f215e64");
+  assert.equal(api.currentHeadEvidenceSha, "61d116ede6c4abc9977078e88864d8571cdadccb");
   assert.match(api.currentHeadEvidenceNote, /42\/42 authorized application-level positive routes PASS/);
   assert.match(api.currentHeadEvidenceNote, /48\/48 protected API routes/);
   assert.match(api.currentHeadEvidenceNote, /six provider\/production routes remain BLOCKED/);
+  assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, "61d116ede6c4abc9977078e88864d8571cdadccb");
+  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1043);
+  assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
+  assert.equal(register.latestExactCiCheckpoint.nodeTests.skipped, 0);
+  assert.equal(register.latestExactCiCheckpoint.browserE2EStatus, "NOT_RUN_ON_THIS_SHA");
 
   const dashboard = byId("DASH-001");
   assert.equal(dashboard.status, "NOT_TESTED");

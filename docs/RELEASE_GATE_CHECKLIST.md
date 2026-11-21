@@ -2417,3 +2417,20 @@ At the candidate snapshot, `main=fa00d28e7f58911482686e4ad69fac9f4701a2e6`, merg
 ## Current external exception
 
 Metricool brand `7545638` is still labelled Nature Frontiers and mixes its Facebook/Instagram/TikTok/Pinterest identities with the SonicVibes `@sonicvhibez` YouTube channel ID. Seven future Nature Frontiers posts were returned; all seven have `draft=false` and `autoPublish=true`, including four creator-product promotions. They were not changed because this workflow is not authorized to mutate existing scheduled posts. Treat this as an owner review item, not a passed draft-safety gate.
+
+
+## 21 November 2026 — current exact-SHA release checkpoint
+
+- [x] Updated the week of 23 November promotional Shorts keyword evidence using fresh qualitative search-intent research; no search volume or third-party SEO score was invented.
+- [x] Kept exactly two `DRAFT_ONLY` Shorts for that week; `publicationEnabled=false`, `schedulingEnabled=false`, and no publication timestamps exist in the plan.
+- [x] Exact SHA `61d116ede6c4abc9977078e88864d8571cdadccb`: automation/security passed 1,043 Node tests / 181 files, 87 Python tests, zero skips, npm audit 0 vulnerabilities, syntax/compilation, promotional Shorts validator, schedule/queue and campaign validation ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167)).
+- [x] Lockfile/clean-install workflow passed with 1,043 Node tests, schedule/campaign validation and syntax ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481144)); no lockfile commit was required.
+- [x] Deployment recovery smoke passed 2/2 tests ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161)); Cloudflare runner-bridge safety passed 4/4 tests ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195)).
+- [ ] No browser E2E on current SHA; latest 41/41 browser result is historical on `668a8779f8a2894f99ed935d0c8bf13f2f215e64`. DASH-001 remains NOT_TESTED.
+- [ ] API-001 remains BLOCKED: 42/48 local routes PASS and 48/48 auth-negative checks PASS, but six provider/production routes remain BLOCKED.
+- [ ] Production readiness remains HOLD with 19 blockers on parent SHA `764e2c74e0d7331e2d914498fc581ec034366c86` ([run](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44883587818)); no current-head readiness pass is claimed.
+- [ ] Metricool exposes only the Nature Frontiers SA brand, cross-mapped to the verified SonicVibes/@sonicvhibez YouTube ID; no separate SonicVhibez destination is available. Scheduled-post query returned zero items, but unscheduled draft flags and published history remain uninspectable.
+- [ ] Last verified public Short was published 22 October 2026 at 17:05:56 SAST; 713.1 hours had elapsed by the 21 November check, but post-18-Nov owner attempt attestation and current destination schedule are missing. The 72-hour spacing gate remains UNVERIFIED; do not schedule.
+- [ ] Refresh Click 47 seller evidence before its 14-day limit on 23 November 2026 at 09:49 SAST. Prompt Pack and Success Blueprint viewer-facing disclosures remain unapproved/unverified.
+- [ ] Genuine media/rights, manifests, final MP4/thumbnail, human playback/compliance approval, current OAuth scope, upload-attempt reconciliation, private one-shot authorization, separate destination verification, full DASH-001 browser acceptance, production deployment/rollback and GIT-002 semantic review remain open.
+- [x] No upload, publication, live schedule, account reconnection, existing-post mutation, paid spend or auto-publishing change occurred.

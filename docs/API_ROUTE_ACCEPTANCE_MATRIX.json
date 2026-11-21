@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-19T18:54:00Z",
+  "generatedAt": "2026-11-21T08:24:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3",
-  "liveMainSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
+  "testedSourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+  "liveMainSha": "861173281b6253c839e6923182b1d3fdf3280b0a",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
     "totalHandlers": 52,
@@ -173,7 +173,7 @@
       "path": "/api/facebook/autonomous-status",
       "classification": "read-only autonomous publisher status",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -195,9 +195,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -207,7 +207,7 @@
       "path": "/api/facebook/idea",
       "classification": "read-only content idea generation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -229,9 +229,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -241,7 +241,7 @@
       "path": "/api/facebook/state",
       "classification": "read-only Meta state inspection",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -263,9 +263,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -275,7 +275,7 @@
       "path": "/api/instagram/status",
       "classification": "Nature Frontiers Instagram operations status (authenticated, read-only)",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS — exact source/test SHA 31ceeaf61275af745e4e93c777698ad2362b2a17: the full 894-test Node regression suite passed with zero failures and zero skips in Queue readiness run 43774065231. The source-derived negative-auth matrix verified missing and invalid operator credentials for all 48 protected API routes before route processing or mutation.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64; test/dashboard-server.test.mjs passed in the 62/62 Instagram safety suite on run 43774533777. Authenticated GET returns HTTP 200, identifies the Nature Frontiers destination, confirms read-only/no-provider-mutation behavior, reports fail-closed switches and does not expose the operator token.",
       "inputValidation": "NOT_APPLICABLE — read-only GET accepts no caller-supplied body or query parameters.",
       "durablePersistence": "NOT_APPLICABLE — read-only status endpoint does not mutate persistent state.",
@@ -294,9 +294,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/instagram-approval-service.test.mjs"
@@ -307,7 +307,7 @@
       "path": "/api/jobs/dispatchable",
       "classification": "read-only scoped worker dispatch inventory",
       "authRequired": "operator token or scoped worker token; worker token is restricted to this GET and POST /api/jobs/produce",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — the worker credential receives only queued jobs whose production plan is explicitly APPROVED_PLAN_ONLY with an APPROVE decision and a 64-character approval receipt field; a draft plan is withheld. The fixture is synthetic and is not proof of genuine human approval.",
       "inputValidation": "PASS — limit must be an integer from 1 to 100; worker identity must match the bounded identifier policy; invalid limit/identity return HTTP 400.",
       "durablePersistence": "N/A — read-only; four concurrent requests preserve the exact persisted state bytes.",
@@ -329,9 +329,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
         "test/dashboard-dispatchable-ordering.integration.test.mjs"
@@ -342,7 +342,7 @@
       "path": "/api/jobs/narration/audio",
       "classification": "read-only verified audio stream",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS — read-only; durable state remains byte-identical under concurrent requests.",
@@ -364,9 +364,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -377,7 +377,7 @@
       "path": "/api/jobs/narration/review",
       "classification": "read-only narration review bundle",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS — read-only; durable state remains byte-identical under concurrent requests.",
@@ -399,9 +399,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -411,7 +411,7 @@
       "path": "/api/jobs/queue-diagnostics",
       "classification": "read-only production queue diagnostics",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — authenticated operator receives read-only queued/dispatchable/held counts, blocker summaries and per-job diagnostics in Africa/Johannesburg.",
       "inputValidation": "PASS — limit is constrained to an integer from 1 to 100; limit 101 returns HTTP 400 without mutation.",
       "durablePersistence": "N/A — read-only GET; persisted state remains byte-identical.",
@@ -433,9 +433,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-queue-diagnostics.integration.test.mjs"
       ]
@@ -445,7 +445,7 @@
       "path": "/api/jobs/review/bundle",
       "classification": "local production-review evidence bundle",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — authenticated operator receives only the hash-verified review bundle or the requested exact media preview.",
       "inputValidation": "PASS — incomplete/mutated artifact evidence is rejected with HTTP 409; preview kinds are constrained to video, thumbnail and captions.",
       "durablePersistence": "N/A — read-only GET; no state mutation.",
@@ -467,9 +467,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
@@ -480,7 +480,7 @@
       "path": "/api/jobs/review/preview",
       "classification": "local production-review media preview",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — authenticated operator receives only the hash-verified review bundle or the requested exact media preview.",
       "inputValidation": "PASS — incomplete/mutated artifact evidence is rejected with HTTP 409; preview kinds are constrained to video, thumbnail and captions.",
       "durablePersistence": "N/A — read-only GET; no state mutation.",
@@ -502,9 +502,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
@@ -515,7 +515,7 @@
       "path": "/api/nature-frontiers/media-register",
       "classification": "Nature Frontiers provider-independent media register (read-only)",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS — exact source/test SHA 31ceeaf61275af745e4e93c777698ad2362b2a17: the full 894-test Node regression suite passed with zero failures and zero skips in Queue readiness run 43774065231. The source-derived negative-auth matrix verified missing and invalid operator credentials for all 48 protected API routes before route processing or mutation.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64; the full 894-test Node suite passed with zero failures and zero skips in run 43774533849. test/nature-frontiers-media-register-api.test.mjs verifies authenticated HTTP 200, live read-only register payload, real registered asset, validation result, no state-file path disclosure and publishing disabled.",
       "inputValidation": "PASS — register is parsed and validated with validateMediaRegister; malformed/unavailable register returns a safe server error.",
       "durablePersistence": "NOT_APPLICABLE — read-only register is sourced from the checked-in provider-independent JSON register.",
@@ -534,9 +534,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/nature-frontiers-media-register-api.test.mjs"
       ]
@@ -546,7 +546,7 @@
       "path": "/api/state",
       "classification": "read-only state inspection",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -568,9 +568,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs",
         "test/state-recovery-dashboard.integration.test.mjs"
@@ -581,7 +581,7 @@
       "path": "/api/state/backups",
       "classification": "Cloudflare durable-state backup listing",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS — exact-candidate authenticated staging smoke 43700604171 verifies unauthenticated Node GET /api/state returns HTTP 401 before state access.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — exact-candidate staging smoke 43700604171 starts the real Node dashboard with Cloudflare Access credentials and verifies authenticated GET /api/state/backups returns HTTP 200, revision 2 and three retained backup records.",
       "inputValidation": "NOT_APPLICABLE — read-only route has no request body or query parameters.",
       "durablePersistence": "PASS — Node dashboard reads the D1-backed backup inventory through CloudflareDashboardStateClient; every returned backup has a non-empty ID, positive source revision, 64-character SHA-256 and valid timestamp, and no state_json is exposed.",
@@ -601,9 +601,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -613,7 +613,7 @@
       "path": "/api/tasks",
       "classification": "read-only task inventory",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -635,9 +635,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs"
       ]
@@ -647,7 +647,7 @@
       "path": "/api/campaigns/manage",
       "classification": "campaign preview, activation/deactivation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — preview and deactivate actions are exercised through the real HTTP server; preview keeps public publishing disabled.",
       "inputValidation": "PASS — malformed/invalid action and unknown campaign ID are rejected without durable state or audit mutation.",
       "durablePersistence": "PASS",
@@ -673,9 +673,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/campaign-management-api.integration.test.mjs"
       ]
@@ -685,7 +685,7 @@
       "path": "/api/drafts",
       "classification": "local draft/job creation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -707,9 +707,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
         "test/dashboard-api-request-boundaries.test.mjs"
@@ -720,7 +720,7 @@
       "path": "/api/drafts/update",
       "classification": "local draft editing",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS — empty payload and malformed JSON return 400; unknown draft returns 404; invalid calendar date and attempted rights/approval promotion are rejected without durable mutation.",
       "durablePersistence": "PASS",
@@ -742,9 +742,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs"
       ]
@@ -754,7 +754,7 @@
       "path": "/api/facebook/drafts",
       "classification": "local draft creation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -776,9 +776,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ]
@@ -788,7 +788,7 @@
       "path": "/api/facebook/drafts/approve",
       "classification": "local draft approval / provider workflow boundary",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — safe REJECT only; APPROVE remains blocked by genuine Page identity, rights and compliance dependencies",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -807,9 +807,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "The route remains BLOCKED by its external provider/owner/production prerequisite. Current exact-SHA Node/browser regression passed; fail-closed local behavior was retained. No provider write, public publishing or production job was attempted.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "BLOCKED on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Authentication-negative protection is tested; the authorized provider/production operation remains blocked pending owner/provider identity, rights, approval or remote reconciliation evidence. No live write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ]
@@ -819,7 +819,7 @@
       "path": "/api/facebook/drafts/evaluate",
       "classification": "local Facebook policy evaluation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -841,9 +841,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ]
@@ -853,7 +853,7 @@
       "path": "/api/facebook/publish",
       "classification": "external Meta publication",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "BLOCKED — explicit publishing remains disabled by the active emergency stop and dry-run defaults; the mocked provider integration test verifies HTTP 409 without provider mutation.",
       "inputValidation": "PASS",
       "durablePersistence": "PASS — two concurrent blocked publish requests preserve dashboard-state.json byte-for-byte; no publish attempt is persisted.",
@@ -866,9 +866,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "The route remains BLOCKED by its external provider/owner/production prerequisite. Current exact-SHA Node/browser regression passed; fail-closed local behavior was retained. No provider write, public publishing or production job was attempted.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "BLOCKED on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Authentication-negative protection is tested; the authorized provider/production operation remains blocked pending owner/provider identity, rights, approval or remote reconciliation evidence. No live write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
       ]
@@ -878,7 +878,7 @@
       "path": "/api/facebook/verify-page",
       "classification": "external identity and permission verification",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — deterministic mocked Meta Graph integration verifies identity and permissions through read-only GET calls; real Meta provider acceptance remains external and unverified.",
       "inputValidation": "PASS",
       "durablePersistence": "PASS — mocked successful verification persists Page identity, permission state and credential fingerprints; missing Page ID and provider permission failures preserve state byte-for-byte.",
@@ -891,9 +891,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "The route remains BLOCKED by its external provider/owner/production prerequisite. Current exact-SHA Node/browser regression passed; fail-closed local behavior was retained. No provider write, public publishing or production job was attempted.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "BLOCKED on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Authentication-negative protection is tested; the authorized provider/production operation remains blocked pending owner/provider identity, rights, approval or remote reconciliation evidence. No live write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
       ]
@@ -903,7 +903,7 @@
       "path": "/api/instagram/approve",
       "classification": "Instagram-specific signed human approval and candidate intake",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact candidate SHA 8b397d32d39a3874174d6e824451bb31f7c1c264: the authenticated-route negative matrix includes every source-derived API route and rejects missing/invalid operator credentials before route validation or mutation; Instagram safety workflow 43766594262 passed the route-negative suite.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "BLOCKED — approval requires a recently verified Nature Frontiers Facebook Page, a matching owner-verified Instagram professional account ID, and an exact approved source payload. The repository configuration intentionally leaves the Instagram account ID unset.",
       "inputValidation": "PASS — route requires confirmInstagramApproval=true, an exact payload, and a specific review reason; source policy and target mismatch fail closed.",
       "durablePersistence": "NOT_TESTED — production approval is blocked until the owner-verified Instagram account and Page connection are configured.",
@@ -922,9 +922,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "The route remains BLOCKED by its external provider/owner/production prerequisite. Current exact-SHA Node/browser regression passed; fail-closed local behavior was retained. No provider write, public publishing or production job was attempted.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "BLOCKED on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Authentication-negative protection is tested; the authorized provider/production operation remains blocked pending owner/provider identity, rights, approval or remote reconciliation evidence. No live write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/instagram-approval-route-fail-closed.integration.test.mjs"
       ]
@@ -934,7 +934,7 @@
       "path": "/api/jobs",
       "classification": "content job creation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -956,9 +956,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
         "test/dashboard-api-job-cancellation.integration.test.mjs"
@@ -969,7 +969,7 @@
       "path": "/api/jobs/author",
       "classification": "script authoring",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -992,9 +992,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ]
@@ -1004,7 +1004,7 @@
       "path": "/api/jobs/authoring/review",
       "classification": "script approval",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1026,9 +1026,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ]
@@ -1038,7 +1038,7 @@
       "path": "/api/jobs/lease/claim",
       "classification": "worker lease claim",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1060,9 +1060,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -1072,7 +1072,7 @@
       "path": "/api/jobs/lease/complete",
       "classification": "worker completion",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — the real HTTP server accepted a generated test-only vertical H.264/AAC MP4 with exact file SHA-256 and metadata SHA-256, and persisted GENERATED state with probed duration and dimensions.",
       "inputValidation": "PASS — missing completion fields return 400; unknown job returns 404; missing/invalid operator authentication is rejected by the 35-route auth matrix; changed media SHA and conflicting completion payload return 409 without durable state/audit mutation.",
       "durablePersistence": "PASS — successful completion persists GENERATED state, inspected artifact SHA/duration/dimensions, metadata path/version, worker lease history and a SHA-256-bound lastWorkerCompletion receipt. On restart, an unfinished active lease is moved to RECOVERY_REQUIRED and the completion receipt remains intact.",
@@ -1096,9 +1096,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-completion.integration.test.mjs"
       ]
@@ -1108,7 +1108,7 @@
       "path": "/api/jobs/lease/heartbeat",
       "classification": "worker lease heartbeat",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1130,9 +1130,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -1142,7 +1142,7 @@
       "path": "/api/jobs/lease/reap",
       "classification": "expired lease recovery",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1164,9 +1164,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -1176,7 +1176,7 @@
       "path": "/api/jobs/narration",
       "classification": "narration generation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1198,9 +1198,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "browser-tests/dashboard.spec.mjs"
@@ -1212,7 +1212,7 @@
       "path": "/api/jobs/narration/reconcile",
       "classification": "narration artifact reconciliation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1242,9 +1242,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -1254,7 +1254,7 @@
       "path": "/api/jobs/narration/review",
       "classification": "human narration review receipt",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — synthetic fixture attestation only",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1276,9 +1276,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -1288,7 +1288,7 @@
       "path": "/api/jobs/parent-relationship",
       "classification": "Short-parent relationship binding",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1309,9 +1309,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-parent-relationship.integration.test.mjs"
       ]
@@ -1321,7 +1321,7 @@
       "path": "/api/jobs/produce",
       "classification": "media rendering/production",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "BLOCKED — a legacy queued job without the approved authoring pipeline is now covered by a real-server fail-closed test; successful rendering still requires genuine rights-cleared media, approved script/narration/scene evidence and final manifests.",
       "inputValidation": "PASS",
       "durablePersistence": "PASS for the tested fail-closed negative path: HTTP 409 preserves dashboard-state.json byte-for-byte and creates no render manifest or media directory. Successful production persistence remains untested because genuine approved production inputs are absent.",
@@ -1342,9 +1342,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "The route remains BLOCKED by its external provider/owner/production prerequisite. Current exact-SHA Node/browser regression passed; fail-closed local behavior was retained. No provider write, public publishing or production job was attempted.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "BLOCKED on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Authentication-negative protection is tested; the authorized provider/production operation remains blocked pending owner/provider identity, rights, approval or remote reconciliation evidence. No live write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
@@ -1355,7 +1355,7 @@
       "path": "/api/jobs/production-plan",
       "classification": "production plan submission",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1377,9 +1377,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ]
@@ -1389,7 +1389,7 @@
       "path": "/api/jobs/production-plan/review",
       "classification": "hash-bound production plan review",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1411,9 +1411,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ]
@@ -1423,7 +1423,7 @@
       "path": "/api/jobs/render-recovery/reconcile",
       "classification": "render artifact recovery reconciliation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — an operator can reconcile a failed/dead-letter render only after the exact video, thumbnail and manifest paths are verified absent.",
       "inputValidation": "PASS — a short review reason returns HTTP 400; retained render artifacts return HTTP 409 without state mutation.",
       "durablePersistence": "PASS — the verified-absent recovery receipt persists and survives a fresh dashboard process.",
@@ -1445,9 +1445,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-render-recovery-reconcile.integration.test.mjs"
       ]
@@ -1457,7 +1457,7 @@
       "path": "/api/jobs/retry",
       "classification": "operator-authorized failed-job retry",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — operator review authorizes a retryable failed job and a dead-letter override grants exactly one additional attempt.",
       "inputValidation": "PASS — missing/short reasons and malformed override flags are rejected as HTTP 400; exhausted retry without explicit override is HTTP 409.",
       "durablePersistence": "PASS — authorized job state and retry authorization persist and survive a fresh dashboard process.",
@@ -1479,9 +1479,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-retry.integration.test.mjs"
       ]
@@ -1491,7 +1491,7 @@
       "path": "/api/jobs/review",
       "classification": "human production review",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1512,9 +1512,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs"
       ]
@@ -1524,7 +1524,7 @@
       "path": "/api/jobs/rights/verify",
       "classification": "rights/provenance verification",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — real HTTP request accepted one valid operator-attested evidence set and advanced the job to AWAITING_HUMAN_REVIEW",
       "inputValidation": "PASS",
       "durablePersistence": "PASS — rights evidence and its SHA-256 digest persisted in durable job state",
@@ -1547,9 +1547,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-rights-verification.integration.test.mjs"
       ]
@@ -1559,7 +1559,7 @@
       "path": "/api/jobs/transition",
       "classification": "operator content-job transition",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
@@ -1595,9 +1595,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-cancellation.integration.test.mjs"
       ]
@@ -1607,7 +1607,7 @@
       "path": "/api/jobs/validate",
       "classification": "media/job validation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — the real HTTP server accepted a generated test-only vertical H.264/AAC export with checksum-bound metadata, captions and 1280×720 thumbnail and returned passed technical validation.",
       "inputValidation": "PASS — missing job/caption parameters return 400; unknown job returns 404; a media file changed after its recorded SHA-256 returns 409; rejected requests preserve state bytes and audit history.",
       "durablePersistence": "PASS — successful validation persists VALIDATING state and per-artifact duration, dimensions and SHA-256 validation results.",
@@ -1631,9 +1631,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-validation-idempotency.integration.test.mjs"
       ]
@@ -1643,7 +1643,7 @@
       "path": "/api/state/backup",
       "classification": "Cloudflare durable-state backup creation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS — full authenticated-route negative matrix 45/45 on exact source candidate cabd871847f14b6667adb43af1dbacaaa81f35b2; missing and invalid operator credentials are rejected before route processing or mutation.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — one-time staging drill 43701290286 created a backup through the real Node dashboard POST /api/state/backup and received HTTP 201 with backupId, sourceRevision 2, SHA-256 and timestamp.",
       "inputValidation": "NOT_APPLICABLE — backup creation accepts no caller-supplied body; authentication and remote configuration guards are covered by exact-candidate integration tests.",
       "durablePersistence": "PASS — the explicit backup remained in the Cloudflare D1 backup inventory after restore and Node dashboard restart; the automatic pre-restore backup was also retained.",
@@ -1662,9 +1662,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -1674,7 +1674,7 @@
       "path": "/api/state/restore",
       "classification": "Cloudflare durable-state backup restore",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS — full authenticated-route negative matrix 45/45 on exact source candidate cabd871847f14b6667adb43af1dbacaaa81f35b2; missing and invalid operator credentials are rejected before route processing or mutation.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — one-time staging drill 43701290286 restored the exact pre-test snapshot through the real Node dashboard POST /api/state/restore with explicit confirmRestore=true; D1 revision advanced monotonically from 2 to 3.",
       "inputValidation": "PASS — test/dashboard-cloudflare-state.integration.test.mjs rejects missing confirmation, blank backup ID, non-positive/fractional/string expectedRevision and stale revision before any remote restore request; the live drill exercised the valid confirmed path.",
       "durablePersistence": "PASS — Cloudflare D1 persisted revision 3 and the restored state; explicit and automatic pre-restore backups remained retained.",
@@ -1694,9 +1694,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -1706,7 +1706,7 @@
       "path": "/api/tasks/run",
       "classification": "operator task execution",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — the real HTTP server executed allowlisted validate-schedule and validate-campaigns commands, returning SUCCEEDED with exitCode 0 and publishingEnabled=false.",
       "inputValidation": "PASS — arbitrary/non-allowlisted task IDs return 400; empty/missing payloads are rejected by the 35-route request-boundary matrix; missing/invalid operator tokens are rejected by the 35-route auth matrix.",
       "durablePersistence": "PASS — task RUNNING record, final SUCCEEDED result, exit code and output persist in the shared state file; a seeded interrupted RUNNING task is recovered to RECOVERY_REQUIRED on startup.",
@@ -1729,9 +1729,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-task-runner.test.mjs"
       ]
@@ -1741,7 +1741,7 @@
       "path": "/api/uploads/reconcile",
       "classification": "uncertain remote upload reconciliation",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "BLOCKED — successful reconciliation still requires an authoritative prior upload attempt and remote video ID; no live YouTube reconciliation is claimed. Missing-ledger and unreadable-ledger fail-closed behavior is covered by exact-SHA real-server tests.",
       "inputValidation": "PASS",
       "durablePersistence": "PASS for fail-closed negative paths: absent ledger returns 409 and unreadable/unsafe ledger returns 503 without changing dashboard-state.json; successful remote reconciliation persistence remains untested.",
@@ -1760,9 +1760,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "The route remains BLOCKED by its external provider/owner/production prerequisite. Current exact-SHA Node/browser regression passed; fail-closed local behavior was retained. No provider write, public publishing or production job was attempted.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "BLOCKED on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Authentication-negative protection is tested; the authorized provider/production operation remains blocked pending owner/provider identity, rights, approval or remote reconciliation evidence. No live write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/upload-reconcile-fail-closed.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
@@ -1773,7 +1773,7 @@
       "path": "/api/worker/quarantine-release",
       "classification": "operator-reviewed worker quarantine release",
       "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 12c28787923384d5ba767614c89c09b4b328cd9a: missing and invalid operator credentials are rejected with HTTP 401 before route validation or mutation; persisted state remains byte-identical. See automation/security run 43692156887.",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS — separate quarantine-release credential plus operator authentication issue one Ed25519-signed receipt bound to the exact terminal private SonicVhibez upload.",
       "inputValidation": "PASS — missing separate release credential is rejected; legacy receipts without complete channel-history proof return HTTP 409.",
       "durablePersistence": "PASS — the signed receipt is stored with the exact job and survives a fresh dashboard process.",
@@ -1795,9 +1795,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-      "currentHeadEvidenceRunId": 44778359839,
-      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were executed in the current exact-SHA Node/browser regression: Node 181/181 files, 1,042 tests, zero failures/skips (run 44778359839); browser E2E 41/41 journeys (run 44778360071). This is local application/fixture evidence, not live provider acceptance or production publication.",
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceRunId": 44884481167,
+      "currentHeadEvidenceNote": "Endpoint-specific success test(s) for this route were included in the exact current-SHA Node regression: 181/181 files, 1,043 tests, zero failures/skips (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). This is local application/fixture evidence only, not live provider acceptance or production publication. No browser E2E ran on this SHA.",
       "currentHeadEvidenceTestFiles": [
         "test/worker-quarantine-release.test.mjs"
       ]
@@ -1868,41 +1868,57 @@
     "note": "The readiness artifact confirms one public upload and prior upload-attempt reconciliation, but current OAuth invalid_grant prevents a fresh complete live history/schedule read. SCHED-001 remains NOT_TESTED."
   },
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-    "automationRun": 44778359839,
+    "exactSourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "automationRun": 44884481167,
     "nodeTestFiles": {
       "passed": 181,
       "failed": 0,
       "skipped": 0
     },
     "nodeTests": {
-      "passed": 1042,
+      "passed": 1043,
       "failed": 0,
       "skipped": 0
     },
-    "browserE2ERun": 44778360071,
-    "browserJourneys": {
-      "passed": 41,
-      "total": 41,
-      "failed": 0,
-      "skipped": 0
+    "browserE2ERun": null,
+    "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
+    "lastBrowserE2E": {
+      "sourceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
+      "run": 44778971471,
+      "journeys": {
+        "passed": 41,
+        "total": 41,
+        "failed": 0,
+        "skipped": 0
+      }
     },
     "pythonTests": {
       "passed": 87,
       "failed": 0,
       "skipped": 0,
-      "sourceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a"
+      "sourceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167"
     },
     "npmAuditVulnerabilities": 0,
-    "npmAuditSourceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
+    "npmAuditSourceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "runnerBridgeSafetyRun": 44884481195,
+    "deploymentRecoveryRun": 44884481161,
+    "lockfileRun": 44884481144,
+    "productionReadiness": {
+      "status": "HOLD",
+      "run": 44883587818,
+      "sourceSha": "764e2c74e0d7331e2d914498fc581ec034366c86",
+      "blockers": 19
+    },
     "routeMatrix": {
       "routes": 48,
       "overallPass": 42,
       "overallNotTested": 0,
       "overallBlocked": 6,
-      "authenticationNegativePass": 48
+      "authenticationNegativePass": 48,
+      "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb"
     },
-    "note": "Current exact source/test SHA 41b6e701d0937f1e7708362c93e036924fe522ff was exercised by the complete Node suite and browser E2E. Node: 181/181 test files, 1,042 passed, zero failed/skipped (run 44778359839); browser: 41/41 journeys passed (run 44778360071). All 29 unique endpoint-specific success-evidence files referenced by the 42 positive routes were observed in these two exact-SHA logs. The 48 protected-route authentication-negative tests also ran in the Node suite. Python: 87 passed and npm audit: zero vulnerabilities on adjacent code SHA 8415e3b1d3802a512c994ee509ab31a24da67a9a (run 44777012301); the only changes between that validation and 41b6e701d0937f1e7708362c93e036924fe522ff were evidence/rights JSON. This is local application and deterministic-fixture evidence, not live provider acceptance, production deployment or remote publication. Six routes remain blocked for explicit owner/provider or genuine production-evidence prerequisites."
+    "note": "Exact current source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb: automation/security https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167 passed 1,043 Node tests across 181/181 files, zero failures/skips; 87 Python tests, zero failures/skips; npm audit 0 vulnerabilities; JavaScript syntax and Python compilation passed; promotional Shorts plan, schedule/queue, campaign isolation and read-only Cloudflare staging checks passed. Lockfile workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481144 also passed the clean locked install, 1,043 Node tests, schedule/campaign validation and syntax checks. Deployment recovery https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161 passed 2/2 tests; Cloudflare runner-bridge safety https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195 passed 4/4 tests. No browser E2E ran on this SHA; the last 41/41 browser result is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471). Production-readiness was not rerun on this content-only descendant; the latest read-only readiness run on parent SHA 764e2c74e0d7331e2d914498fc581ec034366c86 returned HOLD with 19 blockers (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44883587818)."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-15",
@@ -1988,30 +2004,33 @@
     }
   },
   "currentBranchCheckpoint": {
-    "sourceTestSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-    "aheadBy": 4780,
-    "behindBy": 11,
+    "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "aheadBy": 4798,
+    "behindBy": 13,
     "changedPaths": 487,
     "criticalModules": 17,
     "finalTreeDeletions": 0,
     "patchEquivalentCommits": 0
   },
   "currentHeadEvidence": {
-    "sourceTestSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-    "automationRunId": 44778359839,
+    "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "automationRunId": 44884481167,
     "nodeTestFiles": 181,
-    "nodeTests": 1042,
+    "nodeTests": 1043,
     "pythonTests": 87,
-    "pythonEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
+    "pythonEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "npmAuditEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
+    "npmAuditEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
     "authNegativePass": 48,
     "overallPass": 42,
     "overallNotTested": 0,
     "overallBlocked": 6,
-    "routeAcceptanceMatrixExecutionStatus": "PASS — all 42 positive route evidence sets across 29 unique files executed in current-head Node/browser runs",
-    "note": "Current exact source/test SHA 41b6e701d0937f1e7708362c93e036924fe522ff was exercised by the complete Node suite and browser E2E. Node: 181/181 test files, 1,042 passed, zero failed/skipped (run 44778359839); browser: 41/41 journeys passed (run 44778360071). All 29 unique endpoint-specific success-evidence files referenced by the 42 positive routes were observed in these two exact-SHA logs. The 48 protected-route authentication-negative tests also ran in the Node suite. Python: 87 passed and npm audit: zero vulnerabilities on adjacent code SHA 8415e3b1d3802a512c994ee509ab31a24da67a9a (run 44777012301); the only changes between that validation and 41b6e701d0937f1e7708362c93e036924fe522ff were evidence/rights JSON. This is local application and deterministic-fixture evidence, not live provider acceptance, production deployment or remote publication. Six routes remain blocked for explicit owner/provider or genuine production-evidence prerequisites."
+    "routeAcceptanceMatrixExecutionStatus": "PASS — all 42 positive route evidence sets across 29 unique files and all 48 protected-route authentication-negative cases executed in the exact current-SHA Node suite",
+    "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
+    "lastBrowserEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
+    "lastBrowserRunId": 44778971471,
+    "note": "Exact current source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb: automation/security https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167 passed 1,043 Node tests across 181/181 files, zero failures/skips; 87 Python tests, zero failures/skips; npm audit 0 vulnerabilities; JavaScript syntax and Python compilation passed; promotional Shorts plan, schedule/queue, campaign isolation and read-only Cloudflare staging checks passed. Lockfile workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481144 also passed the clean locked install, 1,043 Node tests, schedule/campaign validation and syntax checks. Deployment recovery https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161 passed 2/2 tests; Cloudflare runner-bridge safety https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195 passed 4/4 tests. No browser E2E ran on this SHA; the last 41/41 browser result is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471). This is local application and deterministic-fixture evidence, not live provider acceptance, production deployment or remote publication. Six routes remain BLOCKED for owner/provider or genuine production-evidence prerequisites."
   },
   "latestRegressionEvidence": {
     "recordedAt": "2026-11-20T16:57:46Z",
@@ -2043,69 +2062,75 @@
     "overallBlocked": 6
   },
   "latestCurrentHeadAuthenticationEvidence": {
-    "sourceSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-    "runId": 44778359839,
+    "sourceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "runId": 44884481167,
     "status": "PASS",
     "protectedRoutes": 48,
-    "nodeTests": 1042,
+    "nodeTests": 1043,
     "nodeFiles": 181,
     "pythonTests": 87,
-    "pythonEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
+    "pythonEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "npmAuditEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
-    "note": "All 48 protected-route missing/invalid-authentication cases passed in the current exact-SHA Node suite. This remains separate from the 42 authorized positive routes and six externally blocked routes."
+    "npmAuditEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "note": "All 48 protected-route missing/invalid-authentication cases passed in the exact current-SHA Node suite. This remains separate from the 42 authorized positive routes and six externally blocked routes."
   },
-  "latestBranchTipAtEvidenceRefresh": "41b6e701d0937f1e7708362c93e036924fe522ff",
+  "latestBranchTipAtEvidenceRefresh": "61d116ede6c4abc9977078e88864d8571cdadccb",
   "latestApplicationSourceChangeSha": "a3a3a7a69cd84043da160667fcb6f0d3f4a22246",
-  "latestFullyTestedSourceTestTreeSha": "a31859736a552c2960be05d3b0bafd8b89954b07",
-  "sourceTestEvidenceStatus": "PASS on exact source/test SHA 41b6e701d0937f1e7708362c93e036924fe522ff: 1,042 Node tests across 181 files, zero skips, plus 41/41 browser journeys; 48 protected-route authentication-negative cases and all 42 positive route evidence sets ran. Python 87 and npm audit 0 were verified on adjacent code SHA 8415e3b1d3802a512c994ee509ab31a24da67a9a. Six provider/production routes remain BLOCKED.",
-  "latestApplicationSourceTestTreeSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
+  "latestFullyTestedSourceTestTreeSha": "98b499f198f9fd8c1807b8e5d7241c3f258950b7",
+  "sourceTestEvidenceStatus": "PASS on exact source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb: 1,043 Node tests across 181 files, 87 Python tests, zero skips and npm audit zero vulnerabilities. No browser E2E on this SHA; six provider/production routes remain BLOCKED.",
+  "latestApplicationSourceTestTreeSha": "98b499f198f9fd8c1807b8e5d7241c3f258950b7",
   "latestCurrentHeadPositiveEvidence": {
-    "sourceTestSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-    "runId": 44778359839,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778359839",
+    "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "runId": 44884481167,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
     "positiveRouteCount": 42,
     "blockedRouteCount": 6,
     "nodeTestFilesPassed": 181,
-    "nodePassed": 1042,
+    "nodePassed": 1043,
     "nodeFailed": 0,
     "nodeSkipped": 0,
-    "browserRunId": 44778360071,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778360071",
-    "browserTestsPassed": 41,
-    "browserTestsFailed": 0,
-    "browserTestsSkipped": 0,
+    "browserRunId": null,
+    "browserRun": null,
+    "browserTestsPassed": null,
+    "browserTestsFailed": null,
+    "browserTestsSkipped": null,
+    "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
+    "lastBrowserEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
+    "lastBrowserRunId": 44778971471,
     "pythonPassed": 87,
-    "pythonEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
+    "pythonEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "pythonRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
     "npmAuditVulnerabilities": 0,
-    "npmAuditEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a"
+    "npmAuditEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "note": "Current exact-SHA Node/Python suite passes; no browser E2E was run on this SHA. Do not promote DASH-001 from this Node-only result."
   },
   "currentHeadReconciliation": {
     "status": "PASS",
-    "observedImplementationHeadSha": "41b6e701d0937f1e7708362c93e036924fe522ff",
-    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778359839",
+    "observedImplementationHeadSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
     "regressionRunResults": {
-      "nodePassed": 1042,
+      "nodePassed": 1043,
       "nodeFailed": 0,
       "nodeSkipped": 0,
       "nodeTestFilesPassed": 181,
-      "browserPassed": 41,
-      "browserFailed": 0,
-      "browserSkipped": 0,
-      "browserRunId": 44778360071,
-      "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778360071",
+      "browserPassed": null,
+      "browserFailed": null,
+      "browserSkipped": null,
+      "browserRunId": null,
+      "browserRun": null,
+      "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
       "pythonPassed": 87,
-      "pythonEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
-      "pythonRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44777012301",
+      "pythonEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "pythonRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
       "npmAuditVulnerabilities": 0,
-      "npmAuditEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
-      "nodeRunId": 44778359839
+      "npmAuditEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "nodeRunId": 44884481167
     },
     "positiveRoutesReconciled": 42,
     "authenticationNegativeRoutesPassed": 48,
     "blockedRoutesPreserved": 6,
-    "explanation": "Current exact source/test SHA 41b6e701d0937f1e7708362c93e036924fe522ff was exercised by the complete Node suite and browser E2E. Node: 181/181 test files, 1,042 passed, zero failed/skipped (run 44778359839); browser: 41/41 journeys passed (run 44778360071). All 29 unique endpoint-specific success-evidence files referenced by the 42 positive routes were observed in these two exact-SHA logs. The 48 protected-route authentication-negative tests also ran in the Node suite. Python: 87 passed and npm audit: zero vulnerabilities on adjacent code SHA 8415e3b1d3802a512c994ee509ab31a24da67a9a (run 44777012301); the only changes between that validation and 41b6e701d0937f1e7708362c93e036924fe522ff were evidence/rights JSON. This is local application and deterministic-fixture evidence, not live provider acceptance, production deployment or remote publication. Six routes remain blocked for explicit owner/provider or genuine production-evidence prerequisites."
+    "explanation": "Exact current source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb ran the complete Node suite: 181/181 files, 1,043 passed, zero failed/skipped (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167). All 29 unique endpoint-specific success-evidence files referenced by the 42 positive routes were included in that suite; 48 protected-route missing/invalid-authentication cases also passed. Python 87 and npm audit zero were verified on the same exact SHA. No browser E2E ran on this SHA; the last 41/41 browser run remains historical at 668a8779f8a2894f99ed935d0c8bf13f2f215e64. This is local application/fixture evidence only, not live provider acceptance or production publication. Six routes remain externally blocked."
   },
   "dashboardBrowserE2eRefreshRequest": {
     "requestedAt": "2026-11-20",

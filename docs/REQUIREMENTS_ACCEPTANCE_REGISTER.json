@@ -364,7 +364,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595474749",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595475031",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167"
       ],
       "nextAction": "Complete per-control positive success, authorization, persistence/restart, concurrency, error feedback and accessibility acceptance for every applicable control; keep DASH-001 NOT_TESTED until the complete behavioral matrix is independently accepted.",
       "assessmentCommitSha": "dcd68fab0a6df4d2142b35bf0a3edfbf49b7afe8",
@@ -372,8 +373,8 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "NOT_TESTED overall on exact source/test SHA 668a8779f8a2894f99ed935d0c8bf13f2f215e64. Current browser E2E 44778971471 passed 41/41 Chromium journeys; current Node regression 44778971476 passed 1,042 tests across 181 files, zero failures/skips. The evidence matrix records 121/121 controls passed field-interaction/mapped-action checks, 17/17 forms and 15/15 cross-cutting dimensions passed. These passes do not establish every applicable control's positive success path, authorization, persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior individually. The matrix's evidenceStatus is PASS; its overallAcceptance is NOT_TESTED. DASH-001 remains NOT_TESTED overall.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T19:12:50Z"
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Historical exact-SHA browser evidence 668a8779f8a2894f99ed935d0c8bf13f2f215e64 passed 41/41 Chromium journeys; its matrix records 121/121 controls, 17/17 forms and 15/15 cross-cutting dimensions for mapped field-interaction/expected-outcome checks. Current exact head 61d116ede6c4abc9977078e88864d8571cdadccb passes 1,043 Node tests across 181 files but has no browser E2E run; the historical 41/41 result is not current-SHA evidence. Per-control positive success, authorization, persistence, refresh/restart, concurrency, error-feedback and full accessibility acceptance remains incomplete; overallAcceptance is NOT_TESTED.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
     },
     {
       "id": "SCHED-001",
@@ -408,14 +409,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44725743866",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476"
       ],
-      "nextAction": "Obtain the owner fresh attestation that no manual/local/third-party YouTube upload attempts occurred after 2026-11-18, reaffirm the legacy Short classification, then prove the live sequence and 72-hour/Johannesburg-day gate using authoritative actual publication timestamps. Do not dispatch or upload while any uncertainty remains.",
+      "nextAction": "Obtain a fresh owner attestation covering manual/local/third-party YouTube attempts after 2026-11-18 and refresh the authenticated read-only channel/scope/history inventory before any spacing decision.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "NOT_TESTED overall on exact source/test SHA 668a8779f8a2894f99ed935d0c8bf13f2f215e64. Local scheduling/configuration tests pass. Read-only YouTube inventory run 44725743866 on 2026-11-20 verified @sonicvhibez, channel ID UCSlkuPfHH78oGC1o418HV4w, both youtube.upload and youtube.readonly scopes, and a complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos. The owner-approved rolling long_form → long_form → short cycle without a weekly target is recorded from 2026-11-18; the new cycle has zero publications, so actual 72-hour intervals and sequence progression are not yet demonstrated. Owner attestation for manual/local/third-party upload attempts is valid only through 2026-11-18 and must be refreshed before upload.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T19:12:50Z"
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Latest read-only YouTube identity/inventory evidence from 2026-11-19 verified SonicVibes/@sonicvhibez, channel ID UCSlkuPfHH78oGC1o418HV4w, and a complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos. Its actualPublishedAt is 2026-10-22T15:05:56Z (2026-10-22 17:05:56 Africa/Johannesburg). That is 713.1 elapsed hours before the 2026-11-21 10:12:48 SAST check, but the owner attestation covers manual/local/third-party attempts only through 2026-11-18 and is now stale; upload-scope evidence checked 2026-11-19 is also stale under the 24-hour freshness rule. Metricool exposes no distinct SonicVhibez destination or schedule. Therefore complete current publication history, queued schedule and the 72-hour gate remain unverified; do not schedule or upload.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
     },
     {
       "id": "SCHED-WORKER-MULTIPROCESS-001",
@@ -653,9 +654,9 @@
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "NOT_TESTED overall on exact branch head 668a8779f8a2894f99ed935d0c8bf13f2f215e64. Non-destructive inventory against main 69b933c6e00f902035d6f5bcef97dd9dd9f7787f: 4,781 branch-only commits, 11 base-only commits, 487 changed final-tree paths, 17 critical modules, one patch-equivalent commit and zero final-tree deletions. Code/config diff whitespace scan is clean after removing three whitespace-only issues; tracked secret-pattern scan found no matches; high-risk destructive-command scan found no additions. Markdown hard-break whitespace remains intentional. Both main and implementation branches are unprotected; PR #1 remains draft/open/unmerged and PR #8 remains open/unmerged. Full semantic review of all 487 changed paths and owner-side branch-protection verification remain incomplete.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T19:12:50Z"
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceNote": "NOT_TESTED — live comparison at exact branch HEAD 61d116ede6c4abc9977078e88864d8571cdadccb: main 861173281b6253c839e6923182b1d3fdf3280b0a; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch 4798 commits ahead and 13 behind; PR #1 has 487 changed files. Branch is unprotected; PR remains open/draft/unmerged and mergeability is dirty. Full semantic review and safe reconciliation of divergence remain incomplete; no history rewrite or destructive reconciliation was performed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
     },
     {
       "id": "DEPLOY-001",
@@ -679,9 +680,9 @@
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "NOT_TESTED for production deployment on exact SHA 668a8779f8a2894f99ed935d0c8bf13f2f215e64. Deployment recovery smoke 44778971474 and runner-bridge safety 44778971535 passed; staging tests are fail-closed and non-mutating. Production deployment remains blocked: R2 is disabled at account level (previous API response 403/code 10042), live OIDC trust is pinned to a different historical branch/workflow, the unified wrapper is not deployed, and no SonicVhibez production publisher Worker exists.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:30:00Z"
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceNote": "NOT_TESTED — exact current-head deployment recovery smoke passed 2/2 tests (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161) and Cloudflare runner-bridge safety passed 4/4 tests (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195); this is test-runner/staging evidence only. No production Worker, production deployment or production rollback was verified.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
     },
     {
       "id": "MEDIA-SEC-001",
@@ -1994,16 +1995,17 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595474749",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595475031",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167"
       ],
       "nextAction": "Resolve the six external gates only with genuine owner/provider evidence: Meta Page/Instagram identity and permissions, human draft approval, genuine media/rights/review for production jobs, and exact remote upload-attempt reconciliation. Keep all routes fail-closed until then.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "BLOCKED overall on exact source/test SHA 668a8779f8a2894f99ed935d0c8bf13f2f215e64. Current Node/browser runs 44778971476/44778971471 passed 1,042 Node tests across 181 files and 41/41 Chromium journeys. 42/42 authorized application-level positive routes PASS and 48/48 protected API routes reject missing/invalid authentication across the current exact-SHA evidence files. six provider/production routes remain BLOCKED: POST /api/facebook/drafts/approve, POST /api/facebook/publish, POST /api/facebook/verify-page, POST /api/instagram/approve, POST /api/jobs/produce and POST /api/uploads/reconcile. No live provider write or production publication was attempted.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T18:54:00Z"
+      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "currentHeadEvidenceNote": "BLOCKED overall on exact source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Current automation run 44884481167 passed 1,043 Node tests across 181 files, including 42/42 authorized application-level positive route evidence sets and 48/48 protected API routes rejecting missing/invalid authentication. Six provider/production routes remain BLOCKED: POST /api/facebook/drafts/approve, POST /api/facebook/publish, POST /api/facebook/verify-page, POST /api/instagram/approve, POST /api/jobs/produce and POST /api/uploads/reconcile. No live provider write or production publication was attempted.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
     },
     {
       "id": "API-NEG-001",
@@ -2110,14 +2112,16 @@
         "Read-only Metricool getScheduledPosts, 2026-11-01 through 2027-01-31: zero future scheduled posts.",
         "Read-only Metricool published analytics, 2026-08-01 through 2026-11-19: five Facebook content rows and zero Instagram feed/Reel rows.",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-reconciliation-2026-11-19.json",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971478"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971478",
+        "Read-only Metricool getBrandSettings 2026-11-21: one Nature Frontiers SA brandId 8094526; its YouTube network ID matches the separately verified SonicVibes/@sonicvhibez channel; no distinct SonicVhibez brand.",
+        "Read-only Metricool getScheduledPosts 2026-10-21 through 2027-02-19: zero items; unscheduled draft flags and published history not exposed."
       ],
-      "nextAction": "Keep publishing disabled. Disconnect the SonicVhibez YouTube connection from Nature Frontiers in Metricool, restore read access to legacy brand 7545638 or export its 20 drafts/eight uncertain records, and preserve the emergency stop until all records are reconciled.",
+      "nextAction": "Keep publishing disabled and do not use the Nature Frontiers brand for SonicVhibez promotions. Require a distinct, verifiably SonicVhibez/Sonic Fire YouTube-only destination and a separately owner-controlled reconciliation of any legacy records; do not reconnect or mutate accounts in this workflow.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "BLOCKED. Current Metricool Nature Frontiers SA brand settings still include the SonicVhibez YouTube channel, violating the required brand separation. The current brand's scheduled-post query for 2026-11-01 through 2026-12-31 returned zero future scheduled posts; published analytics previously showed five Facebook items and zero Instagram rows in the inspected window. Legacy brand 7545638 returns 403; its 20 scheduled draft posts and eight draft=false/autoPublish=true records remain inaccessible. The current Instagram safety workflow 44778971478 passed with publishing disabled, dryRun=true, emergencyStop=true and SAFE_NOOP; no provider writes occurred.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:24:00Z"
+      "currentHeadEvidenceNote": "BLOCKED. The live Metricool brand list on 2026-11-21 exposes only Nature Frontiers SA (brandId 8094526); its YouTube network ID is UCSlkuPfHH78oGC1o418HV4w, which the repository's read-only YouTube identity record identifies as SonicVibes/@sonicvhibez, while its Facebook/Instagram identities are Nature Frontiers. This is a cross-brand mapping conflict; no separate SonicVhibez/Sonic Fire brand is exposed. The current scheduled-post query for 2026-10-21 through 2027-02-19 returned zero future scheduled posts. Prior published analytics on 2026-11-19 showed five Facebook content rows and zero Instagram feed/Reel rows; current published analytics and unscheduled draft/autoPublish flags are not exposed by this read-only query. No provider writes or changes were made.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
     },
     {
       "id": "E2E-001",
@@ -2612,13 +2616,13 @@
   ],
   "latestDocumentedPrHeadBeforeRegisterRefresh": "4f38aa392f97e944c97c3d3c312be08e57686069",
   "observedBranchHeadBeforeRegisterRefresh": "57769fa219fe98b52f8b182f3849206ac3c8110c",
-  "latestLiveBranchHeadBeforeRegisterRefresh": "4f38aa392f97e944c97c3d3c312be08e57686069",
-  "latestLiveAheadBy": 4781,
-  "latestLiveBehindBy": 11,
+  "latestLiveBranchHeadBeforeRegisterRefresh": "61d116ede6c4abc9977078e88864d8571cdadccb",
+  "latestLiveAheadBy": 4798,
+  "latestLiveBehindBy": 13,
   "latestLiveChangedFiles": 487,
-  "currentLiveHeadBeforeRegisterRefresh": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-  "currentLiveAheadBy": 4781,
-  "currentLiveBehindBy": 11,
+  "currentLiveHeadBeforeRegisterRefresh": "61d116ede6c4abc9977078e88864d8571cdadccb",
+  "currentLiveAheadBy": 4798,
+  "currentLiveBehindBy": 13,
   "currentLiveChangedFiles": 487,
   "latestInventoryHead": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
   "latestInventoryAheadBy": 4781,
@@ -2634,7 +2638,7 @@
     "overallPass": 42,
     "overallNotTested": 0,
     "overallBlocked": 6,
-    "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64"
+    "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb"
   },
   "dashboardBrowserJourneys": {
     "total": 41,
@@ -2819,7 +2823,7 @@
     "overallNotTested": 0,
     "overallBlocked": 6
   },
-  "latestLiveBranchHead": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
+  "latestLiveBranchHead": "61d116ede6c4abc9977078e88864d8571cdadccb",
   "sourceTestLineage": {
     "previousTestedSha": "012eea3f7d2d24ff3cc70947071e74e48efed9bd",
     "currentTestedSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
@@ -2843,46 +2847,57 @@
   },
   "latestLiveCompareAt": "2026-11-18T09:49:03+02:00",
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-    "automationRun": 44778971476,
+    "exactSourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "automationRun": 44884481167,
     "nodeTestFiles": {
       "passed": 181,
       "failed": 0,
       "skipped": 0
     },
     "nodeTests": {
-      "passed": 1042,
+      "passed": 1043,
       "failed": 0,
       "skipped": 0
     },
-    "browserE2ERun": 44778971471,
-    "browserJourneys": {
-      "passed": 41,
-      "total": 41,
-      "failed": 0,
-      "skipped": 0
+    "browserE2ERun": null,
+    "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
+    "lastBrowserE2E": {
+      "sourceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
+      "run": 44778971471,
+      "browserJourneys": {
+        "passed": 41,
+        "total": 41,
+        "failed": 0,
+        "skipped": 0
+      }
     },
     "pythonTests": {
       "passed": 87,
       "failed": 0,
       "skipped": 0,
-      "sourceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44777012301"
+      "sourceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167"
     },
     "npmAuditVulnerabilities": 0,
-    "npmAuditSourceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
-    "runnerBridgeSafetyRun": 44778971535,
-    "deploymentRecoveryRun": 44778971474,
-    "natureFrontiersInstagramSafetyRun": 44778971478,
+    "npmAuditSourceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "lockfileRun": 44884481144,
+    "runnerBridgeSafetyRun": 44884481195,
+    "deploymentRecoveryRun": 44884481161,
     "routeMatrix": {
       "routes": 48,
       "overallPass": 42,
       "overallNotTested": 0,
       "overallBlocked": 6,
       "authenticationNegativePass": 48,
-      "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64"
+      "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb"
     },
-    "note": "Current Node/browser tests are exact on the source/test SHA. Python 87 and npm audit zero were run on adjacent code SHA 8415e3b1d3802a512c994ee509ab31a24da67a9a; only evidence/rights JSON changed after that run."
+    "productionReadiness": {
+      "status": "HOLD",
+      "run": 44883587818,
+      "sourceSha": "764e2c74e0d7331e2d914498fc581ec034366c86",
+      "blockers": 19
+    },
+    "note": "Exact current source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb: automation/security https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167 passed 1,043 Node tests across 181/181 files, zero failures/skips; 87 Python tests, zero failures/skips; npm audit 0 vulnerabilities; JavaScript syntax and Python compilation passed; promotional Shorts plan, schedule/queue, campaign isolation and read-only Cloudflare staging checks passed. Lockfile workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481144 also passed the clean locked install, 1,043 Node tests, schedule/campaign validation and syntax checks. Deployment recovery https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161 passed 2/2 tests; Cloudflare runner-bridge safety https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195 passed 4/4 tests. No browser E2E ran on this SHA; the last 41/41 browser result is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471). The latest readiness run was on parent SHA 764e2c74e0d7331e2d914498fc581ec034366c86 and returned HOLD with 19 blockers (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44883587818); no readiness run was triggered on the content-only descendant."
   },
   "latestFullNodeRegression": {
     "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
@@ -2921,27 +2936,31 @@
     "note": "Earlier targeted 97/97 local coverage is superseded by exact-candidate full Node regression 917/917 on 57769."
   },
   "currentRunEvidence": {
-    "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-    "nodeRunId": 44778971476,
-    "browserRunId": 44778971471,
-    "pythonRunId": 44777012301,
-    "pythonEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
+    "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "nodeRunId": 44884481167,
+    "lockfileRunId": 44884481144,
+    "deploymentRecoveryRunId": 44884481161,
+    "runnerBridgeSafetyRunId": 44884481195,
+    "nodeTests": 1043,
+    "nodeTestFiles": 181,
+    "pythonTests": 87,
+    "pythonEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
     "npmAuditVulnerabilities": 0,
-    "npmAuditEvidenceSha": "8415e3b1d3802a512c994ee509ab31a24da67a9a",
-    "oauthInventoryRunId": 44725743866,
-    "productionReadinessRunId": 44712917611,
-    "deploymentRecoveryRunId": 44778971474,
-    "runnerBridgeSafetyRunId": 44778971535,
-    "instagramSafetyRunId": 44778971478
+    "npmAuditEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
+    "lastBrowserEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
+    "productionReadinessRunId": 44883587818,
+    "productionReadinessEvidenceSha": "764e2c74e0d7331e2d914498fc581ec034366c86",
+    "productionReadinessBlockers": 19
   },
   "latestExactHeadSnapshot": {
-    "sourceTestSha": "4f38aa392f97e944c97c3d3c312be08e57686069",
+    "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
     "branch": "codex/marketing-machine-audit-fixes",
-    "mainSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
+    "mainSha": "861173281b6253c839e6923182b1d3fdf3280b0a",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
-    "aheadBy": 4680,
-    "behindBy": 9,
-    "changedPaths": 467,
+    "aheadBy": 4798,
+    "behindBy": 13,
+    "changedPaths": 487,
     "criticalModules": 17,
     "finalTreeDeletions": 0,
     "patchEquivalentCommits": 0,
@@ -2949,128 +2968,66 @@
       "state": "open",
       "draft": true,
       "merged": false,
-      "mergeable": true
+      "mergeable": false,
+      "changedFiles": 487
     },
-    "branchProtection": "NOT_INDEPENDENTLY_VERIFIED_HTTP_403",
+    "pullRequest7": {
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": false,
+      "headSha": "7449c1b61dcd26811ee6e6d416a02180a7f1c1ec",
+      "changedFiles": 19
+    },
+    "branchProtection": "UNPROTECTED",
     "ci": {
       "automationSecurity": {
         "status": "PASS",
-        "runId": 44595474749,
-        "nodeTests": 1038,
+        "runId": 44884481167,
+        "nodeTests": 1043,
         "nodeFiles": 181,
         "pythonTests": 87,
         "skipped": 0,
         "npmAuditVulnerabilities": 0
       },
       "dashboardE2E": {
-        "status": "PASS",
-        "runId": 44595474683,
+        "status": "NOT_RUN_ON_CURRENT_SHA",
+        "lastRunId": 44778971471,
+        "lastTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
         "journeys": 41,
         "passed": 41
       },
-      "metadata": {
+      "lockfile": {
         "status": "PASS",
-        "runId": 44595474684
-      },
-      "contentQuality": {
-        "status": "PASS",
-        "runId": 44595475031,
-        "tests": 1040,
-        "pass": 1040,
-        "fail": 0,
-        "skipped": 0
+        "runId": 44884481144,
+        "nodeTests": 1043
       },
       "queueReadiness": {
         "status": "PASS",
-        "runId": 44595474754,
-        "items": 16,
+        "runId": 44884481167,
         "publishingEnabled": false
-      },
-      "cloudflareDurableStateUnit": {
-        "status": "PASS",
-        "runId": 44595474871
       },
       "cloudflareRunnerBridgeSafety": {
         "status": "PASS",
-        "runId": 44595475574
+        "runId": 44884481195
       },
       "deploymentRecovery": {
         "status": "PASS",
-        "runId": 44595474812
-      },
-      "baselineComparison": {
-        "status": "PASS",
-        "runId": 44595475089,
-        "mainNpmAuditVulnerabilities": 4,
-        "candidateNpmAuditVulnerabilities": 0
-      },
-      "branchInventory": {
-        "status": "PASS",
-        "runId": 44595474867,
-        "aheadBy": 4680,
-        "behindBy": 9,
-        "changedFiles": 467
-      },
-      "productionQualityEnforcement": {
-        "status": "PASS",
-        "runId": 44595475021
+        "runId": 44884481161,
+        "tests": 2
       },
       "productionReadiness": {
         "status": "HOLD",
-        "runId": 44595474996,
-        "blockers": 20
-      },
-      "cloudflareAuthenticatedStagingSmoke": {
-        "status": "SKIPPED",
-        "reason": "The automation workflow ran on a pull_request event; the live staging smoke is push-only. Prior independent read-only smoke 44555237191 passed."
-      },
-      "natureFrontiersMetaPageConnection": {
-        "status": "REGRESSION_PASS_LIVE_GET_SKIPPED",
-        "runId": 44595474792,
-        "liveIdentityGet": "SKIPPED_ON_PULL_REQUEST"
-      },
-      "natureFrontiersEditorialApprovalSafety": {
-        "status": "PASS",
-        "runId": 44595475052
-      },
-      "natureFrontiersDraftPackage": {
-        "status": "PASS",
-        "runId": 44595474776
-      },
-      "natureFrontiersInstagramPublishingSafety": {
-        "status": "PASS",
-        "runId": 44595474764
-      },
-      "metricoolReadOnlyReconciliation": {
-        "status": "PARTIAL",
-        "brandId": 8094526,
-        "publishedFacebookItems": 7,
-        "publishedInstagramItems": 0,
-        "futureScheduledPosts": 0,
-        "legacyBrandId": 7545638,
-        "legacyBrandAccess": "403_FORBIDDEN",
-        "legacyRecordsExpected": 8,
-        "legacyScheduledDraftsReported": 20,
-        "readOnlyEvidenceFile": "content/metricool-nature-frontiers-reconciliation-2026-11-19.json",
-        "publishingEnabled": false
-      },
-      "cloudflareDeploymentInventory": {
-        "status": "BLOCKED",
-        "evidenceFile": "content/cloudflare-deployment-reconciliation-2026-11-19.json",
-        "stagingWorker": "sonicvhibez-durable-state-staging",
-        "productionWorker": null,
-        "stagingD1Revision": 2,
-        "stagingBackups": 5,
-        "runnerRows": 0,
-        "r2ApiStatus": 403,
-        "durableObjectNamespaces": 0,
-        "oidcTrustedRef": "refs/heads/codex/cloudflare-adapter-integration-20261108"
+        "runId": 44883587818,
+        "sourceSha": "764e2c74e0d7331e2d914498fc581ec034366c86",
+        "blockers": 19
       }
     },
     "api": {
       "routes": 48,
       "authNegativePass": 48,
       "overallPass": 42,
+      "overallNotTested": 0,
       "overallBlocked": 6
     },
     "dashboard": {
@@ -3080,58 +3037,34 @@
       "standalone": 17,
       "journeys": 41,
       "journeysPass": 41,
-      "DASH_001": "PASS"
+      "DASH_001": "NOT_TESTED"
     },
-    "productionReadinessBlockers": 20,
-    "cloudflare": {
-      "sonicVhibezStagingD1": {
-        "applicationTables": 6,
-        "backups": 5,
-        "dashboardStateRows": 1,
-        "runnerArtifacts": 0,
-        "runnerArtifactParts": 0,
-        "runnerControlRows": 0,
-        "runnerStateRows": 0,
-        "stateRevision": 2,
-        "queueItems": 16,
-        "campaigns": 3,
-        "auditEvents": 4,
-        "publishingEnabled": false
-      },
-      "r2": {
-        "enabled": false,
-        "error": 10042
-      },
-      "sonicVhibezProductionPublisherWorker": false,
-      "natureFrontiersProductionD1": {
-        "applicationTables": 7,
-        "totalRows": 0
-      },
-      "natureFrontiersPublisherWorker": {
-        "deployed": true,
-        "secrets": 0,
-        "schedules": 0,
-        "onlyD1Binding": true
-      }
-    },
+    "productionReadinessBlockers": 19,
     "metricool": {
       "currentBrandId": "8094526",
       "currentBrand": "Nature Frontiers SA",
       "currentBrandScheduledPosts": 0,
-      "historicalBrandId": "7545638",
-      "historicalBrandHttpStatus": 403,
-      "previouslyObservedUnknownAutoPublishRecords": 8
+      "sonicVhibezSeparateBrand": false,
+      "legacyBrandId": "7545638",
+      "publishedAnalyticsCurrent": "NOT_INSPECTED",
+      "unscheduledDraftFlags": "NOT_EXPOSED",
+      "publishingEnabled": false
     },
     "youtube": {
-      "latestOAuthError": "invalid_grant",
-      "historicalInventory": {
+      "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+      "channelTitle": "SonicVibes",
+      "handle": "@sonicvhibez",
+      "identityLastVerified": "2026-11-19T22:48:58Z",
+      "lastKnownPublicShortId": "LjePS02hA1o",
+      "lastKnownActualPublishedAt": "2026-10-22T17:05:56+02:00",
+      "visibilityCounts": {
         "public": 1,
         "private": 0,
         "unlisted": 0
       },
-      "uploadAttemptReconciliation": "STALE_OR_INCOMPLETE",
-      "uploadScopeVerified": false,
-      "completeHistoryAndQueueInspection": false
+      "ownerAttemptAttestationValidThrough": "2026-11-18",
+      "uploadScopeStatus": "STALE",
+      "historyAndQueueInspection": "INCOMPLETE"
     }
   },
   "dashboardControlMatrixCounts": {
@@ -3143,20 +3076,27 @@
     "journeysPass": 41,
     "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
     "inventoryCountsVerified": true,
-    "inventoryCountEvidence": "Exact source/test SHA 668a8779f8a2894f99ed935d0c8bf13f2f215e64; Node 44778971476 1,042 tests/181 files pass; browser 44778971471 41/41 journeys pass. Overall DASH-001 remains NOT_TESTED."
+    "inventoryCountEvidence": "Exact source/test SHA 668a8779f8a2894f99ed935d0c8bf13f2f215e64; Node 44778971476 1,042 tests/181 files pass; browser 44778971471 41/41 journeys pass. Overall DASH-001 remains NOT_TESTED.",
+    "currentHeadRefresh": {
+      "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "nodeTests": 1043,
+      "nodeTestFiles": 181,
+      "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
+      "lastBrowserEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64"
+    }
   },
   "currentHeadStatusSnapshot": {
-    "DASH_001": "NOT_TESTED — 41/41 browser journeys and 1,042 Node tests pass on 668a8779f8a2894f99ed935d0c8bf13f2f215e64; per-control full success/authorization/persistence/concurrency/accessibility acceptance remains incomplete.",
-    "API_001": "BLOCKED — 42/42 positive route evidence sets and 48/48 auth-negative checks pass; six external provider/production routes remain BLOCKED.",
-    "SCHED_001": "NOT_TESTED — OAuth identity/scopes and complete one-public-video inventory pass; no new cycle publications or 72-hour intervals yet; owner attestation stale after 2026-11-18.",
+    "DASH_001": "NOT_TESTED — current exact head 61d116ede6c4abc9977078e88864d8571cdadccb passes 1,043 Node tests/181 files, but no browser E2E ran on this SHA; the 41/41 Chromium result is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64. Per-control success/authorization/persistence/concurrency/accessibility acceptance remains incomplete.",
+    "API_001": "BLOCKED — 42/42 positive route evidence sets and 48/48 auth-negative checks pass on exact SHA 61d116ede6c4abc9977078e88864d8571cdadccb; six provider/production routes remain BLOCKED.",
+    "SCHED_001": "NOT_TESTED — latest read-only identity/inventory evidence from 2026-11-19 found one public 20-second legacy Short and zero private/unlisted videos; upload-scope evidence is now stale, owner attestation is stale after 2026-11-18, and current destination schedule/history cannot be fully inspected.",
     "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — local backoff/persistence/restart tests pass; live OIDC/runner/production publisher prerequisites remain.",
     "STATE_001": "PASS_STAGING — D1 backup/restore and staging recovery evidence pass; production artifact storage is separate.",
-    "DEPLOY_001": "NOT_TESTED — recovery smoke and runner bridge safety pass; R2 disabled, OIDC trust stale, no production Worker.",
-    "GIT_002": "NOT_TESTED — 4,781 ahead, 11 behind, 487 changed paths, 17 critical modules; 11 base-only and one patch-equivalent commit; full semantic review and branch protection incomplete.",
+    "DEPLOY_001": "NOT_TESTED — exact current-head deployment recovery smoke passed 2/2 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161) and Cloudflare runner-bridge safety passed 4/4 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195); no production Worker or production deployment/rollback was verified.",
+    "GIT_002": "NOT_TESTED — 4798 ahead, 13 behind, 487 changed paths; branch is unprotected and full semantic review remains incomplete.",
     "SCHED_003": "PASS — owner-approved rolling cycle without weekly target; 72-hour and Johannesburg no-same-day rules preserved.",
-    "API_NEG_001": "PASS — 48/48 protected routes reject missing/invalid credentials.",
+    "API_NEG_001": "PASS — 48/48 protected routes reject missing/invalid credentials in exact current-SHA Node run 44884481167.",
     "DASH_CTRL_WIRING_001": "PASS_EVIDENCE — 121 controls mapped; overall DASH-001 remains NOT_TESTED.",
-    "DASH_CTRL_A11Y_001": "PASS_EVIDENCE — 41/41 browser journeys; per-control full accessibility acceptance remains open.",
+    "DASH_CTRL_A11Y_001": "PASS_EVIDENCE — last 41/41 browser journeys are historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64; current head has no browser E2E, so per-control full accessibility acceptance remains open.",
     "DASH_CTRL_FORM_PATHS_001": "PASS_EVIDENCE — 17 form journeys; production-dependent outcomes remain fail-closed.",
     "DASH_CTRL_STANDALONE_001": "PASS_EVIDENCE — 17 standalone controls exercised; overall DASH-001 remains NOT_TESTED.",
     "DASH_CTRL_BLOCKED_API_001": "PASS_EVIDENCE — six production-blocked forms map to guarded routes.",
@@ -3179,7 +3119,14 @@
     "controls": 121,
     "forms": 17,
     "crossCuttingDimensions": 15,
-    "coverageNote": "The evidence run passed; DASH-001 remains NOT_TESTED until all applicable control success, authorization, persistence, refresh/restart, concurrency, error-feedback and accessibility dimensions are individually accepted."
+    "coverageNote": "The evidence run passed; DASH-001 remains NOT_TESTED until all applicable control success, authorization, persistence, refresh/restart, concurrency, error-feedback and accessibility dimensions are individually accepted.",
+    "currentHeadRefresh": {
+      "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "nodeTests": 1043,
+      "nodeTestFiles": 181,
+      "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
+      "overallAcceptance": "NOT_TESTED"
+    }
   },
   "latestVerifiedExecution": {
     "sourceTestSha": "4f38aa392f97e944c97c3d3c312be08e57686069",
@@ -3197,11 +3144,11 @@
   },
   "acceptanceReconciliation": {
     "status": "REQUIRED",
-    "note": "Requirement-row totals now reconcile to 72 PASS / 7 NOT_TESTED / 10 BLOCKED after DASH-001 was correctly promoted to PASS from its exact behavioral matrix. API-001 remains BLOCKED; SCHED-001/live worker, DEPLOY-001 and GIT-002 remain open. Other requirement rows still require item-by-item current-head review; no aggregate promotion is implied.",
+    "note": "The current requirement register contains 89 rows: 71 PASS, 8 NOT_TESTED, 10 BLOCKED and 0 FAIL. DASH-001 remains NOT_TESTED overall; API-001 remains BLOCKED with six provider/production routes. The exact current-SHA Node/Python suite does not automatically promote every requirement row. The current dashboard browser evidence is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64; no browser E2E ran on the current head.",
     "storedRequirementCounts": {
       "total": 89,
-      "PASS": 72,
-      "NOT_TESTED": 7,
+      "PASS": 71,
+      "NOT_TESTED": 8,
       "BLOCKED": 10,
       "FAIL": 0
     },
@@ -3214,7 +3161,7 @@
       "asOf": "2026-11-18T11:15:00+02:00",
       "sourceSha": "8d3f24b46af34af3238ca7714e96606af0c3940f",
       "freshlyReconciled": false,
-      "countBasis": "Last checked-in CurrentHeadStatus row values; not item-by-item re-evaluated on 3912a7. The new exact-SHA CI run does not automatically promote requirement acceptance."
+      "countBasis": "Historical per-row currentHeadStatus values; not all 89 requirements were re-evaluated on the current head. The exact-SHA CI run does not automatically promote requirement acceptance."
     },
     "apiRouteAggregate": {
       "routes": 48,
@@ -3229,9 +3176,9 @@
       "NOT_TESTED": 0,
       "BLOCKED": 6,
       "authenticationNegativePass": 48,
-      "asOf": "2026-11-19T19:12:50Z",
-      "testedSourceTestSha": "e9cc56ba3a1a3ca37a73d78a1fcc679b9d2c13f3",
-      "run": 44595474749,
+      "asOf": "2026-11-21T08:24:00Z",
+      "testedSourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
       "note": "42 authorized local routes and 48/48 auth-negative checks passed in the exact current-branch full regression; six provider/production operations remain BLOCKED."
     }
   },
@@ -3341,7 +3288,7 @@
       "requiredResolution": "Owner enables/verifies R2 in Cloudflare Dashboard or removes the unused binding; then rerun a read-only artifact accounting check."
     }
   ],
-  "updatedAt": "2026-11-20",
+  "updatedAt": "2026-11-21",
   "currentEvidenceRefresh": {
     "recordedAt": "2026-11-20",
     "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
