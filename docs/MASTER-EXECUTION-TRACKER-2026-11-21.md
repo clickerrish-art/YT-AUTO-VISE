@@ -217,3 +217,21 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Fresh upload-attempt scan 44890418778 succeeded on 21 November: one prior upload workflow dispatch with its job skipped, zero executed private-upload jobs and zero private-upload artifact workflow runs. The owner attestation remains valid only through 18 November.
 - The updated read-only workflow is designed to upload full inventory metadata only when every video is public; private/unlisted metadata is never uploaded and the raw runner file is deleted. The live updated workflow has not run because connector-created commits did not trigger Actions; the workflow is not yet on default branch for manual dispatch. A normal owner-authenticated push to this implementation branch is required for live verification.
 - Canonical long-form 001, unqueued alternates, six product-specific disclosure holds, Cloudflare staging/backup/R2/2FA/OIDC findings, and the mixed-queue identity conflict are recorded in the sections above. No publication, upload, provider mutation, paid resource, main-branch write, merge, rebase or force-push occurred.
+
+
+---
+
+## Execution addendum — 21 November 2026, 17:12 SAST
+
+### Fresh public listing verification — completed, read-only
+- Re-fetched all three Selar product pages live: Wildlife Creator's Vault (0u19v8u99l), The Full Video Creation Prompt Pack Premium Edition (539497q11t), and THE YOUTUBE SUCCESS BLUEPRINT (91j893378q). All three pages resolved successfully and identify the seller as Click 47.
+- Current displayed prices at check time: Vault $61.57 USD; Prompt Pack $35.13 USD (struck-through original $46.22 USD); YouTube Success Blueprint $36.92 USD. These are point-in-time page displays, not guaranteed checkout totals or fixed prices.
+- Prompt Pack page describes 20 prompts across six stages and explicitly says no prompt can guarantee views, subscribers or revenue.
+- Blueprint page advertises a “Proven 90-Day Creator System” and multiple monetization paths, but the listing itself supplies no independent substantiation for “Proven” or any earnings outcome. Do not claim guaranteed growth, monetization or income.
+- Evidence saved at content/selar-product-listing-recheck-2026-11-21.json; GitHub commit e564d7a3fed175e7f7b8b3862d59699c35bde9ff; file re-fetched and JSON content verified.
+- This closes the live listing identity/content/price recheck task only. It does not close the six promotional disclosure holds, seller delivery testing, legal/compliance approval, or owner approval. Existing Vault approval scope remains Vault-only. No purchase, seller-account mutation, campaign edit, scheduling or publication occurred.
+
+### Current execution safety
+- main remains 3795519ccbf58fd02d74458624b58dd2e44a88c0; PR #1 remains OPEN / DRAFT / UNMERGED. No merge, main-branch write, rebase, reset, force-push, paid action or publication was performed.
+- The latest known full-suite PASS remains on 600775c3bd3a4ce80515ccbf4caa93f6cef06bf6; the YouTube inventory privacy-gate additions and subsequent changes mean exact-current-HEAD full suite and browser E2E are still NOT_TESTED. Combined status lookup for 69777a330d4092301150eb6481ea7cf3f4d9ce99 returned no status checks. Do not promote that baseline to current-head PASS.
+- All remaining blockers in the preceding sections remain open unless explicitly closed by exact evidence. In particular, owner YouTube history attestations/classification, original creator-captured footage and rights, commercially cleared narration, zoological and final human review, queue authority/topic, production renders, deployment/restore/security remediation, API/dashboard acceptance, and Meta legacy reconciliation are not solved by this listing check.
