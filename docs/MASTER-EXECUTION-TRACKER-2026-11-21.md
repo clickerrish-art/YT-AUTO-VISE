@@ -162,3 +162,12 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Six promotional Short disclosure records remain HOLD; eight Vault-specific records remain approved only for that product.
 - Owner inputs still required: original footage and creator provenance; written commercial rights; narration licensing decision; owner classification of the existing public YouTube video; fresh manual/local/third-party upload-attempt attestation after 18 November; Metricool legacy export/access; Cloudflare R2/2FA owner actions; qualified zoological and final human review.
 - No task is master-complete while a critical production, security, deployment or external-provider gate is BLOCKED or NOT_TESTED.
+
+
+### Default-branch automation risk — verified against main and implementation branch
+- On `main`, `.github/workflows/free-narration-artifact.yml` still has `workflow_dispatch` and push triggers and invokes Edge TTS voice `en-US-GuyNeural` for Short narration without the required explicit non-commercial audition gate.
+- On `main`, `.github/workflows/generate-long-form-narration.yml` still has push and manual triggers; its script defaults to `en-US-GuyNeural` and does not require the new audition acknowledgement.
+- On `main`, `.github/workflows/acquire-noaa-broll-candidates.yml` has a push trigger for workflow-file changes and manual dispatch; lobster and turtle inputs default true. It only uploads a 14-day rights-review artifact and explicitly labels downloads NOT REVIEWED; it is not a production render/publish step, but conflicts with the original-camera-only production policy and should remain disabled.
+- The scheduled `.github/workflows/twice-weekly-check.yml` runs Tuesday/Thursday/Saturday at 15:00 UTC and performs `npm test` plus an example rights/compliance negative check. It does **not** generate narration.
+- The implementation branch already contains fail-closed mitigations: both narration workflows are replaced with `if: false` disabled stubs; the NOAA acquisition job is `if: false`. These changes are present in PR #1 only and are not effective on `main` while PR #1 remains open/draft/unmerged.
+- Do not merge PR #1 or write to `main` from this execution. Owner/admin must choose the controlled default-branch remediation path; until then, avoid pushes to the affected main-branch workflow paths and do not manually dispatch those workflows.
