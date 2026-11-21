@@ -945,3 +945,14 @@ Four stock-source rights-review JSON updates were accidentally written to `main`
 The latest comparison shows main head `3795519ccbf58fd02d74458624b58dd2e44a88c0`; the implementation branch is 4,872 ahead / 17 behind, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
 
 The default-branch `.github/workflows/acquire-noaa-broll-candidates.yml` remains enabled because the implementation-branch disablement is not merged. It has a Tuesday schedule and manual trigger. The connected GitHub actions interface provides no workflow-disable operation; the repository owner must disable it through GitHub Actions or approve an owner-directed remediation. This remains a release blocker.
+
+
+### Additional verified correction — source-led wildlife production (2026-11-21)
+
+- Disabled WanGP wildlife generation in `config/video-generation.json`; all seven Kaggle notebook code cells now fail closed before GPU/model setup; the generated-output importer blocks AI wildlife files before media copy.
+- Disabled NOAA B-roll, Pexels reference acquisition and NOAA thumbnail-review jobs on the implementation branch. The Pexels acquisition and NOAA thumbnail scripts also fail closed before file/network operations.
+- Superseded the historical NOAA conditional-use authorization and marked NOAA, Pexels and Wikimedia stock-library records reference-only and production-ineligible.
+- Rewrote the continuous production system and source-sourcing documents around original creator-captured footage, verified rights, exact hashes, complete review and release approvals.
+- Added regression assertions for these disabled paths and source exclusions.
+
+**Default-branch caveat:** the branch changes are not merged. The NOAA B-roll scheduled workflow remains enabled on `main`; the Git safety incident and required owner action are recorded above. This prevents a claim that the default branch is fully safe.
