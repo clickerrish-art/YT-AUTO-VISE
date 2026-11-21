@@ -371,3 +371,33 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - The key is a public verification key; the owner must configure the matching base64-encoded Ed25519 public key as the GitHub Actions secret `YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64`. The private signing key must remain outside the repository and must never be pasted into chat.
 - Workflow and regression changes are committed but **NOT_TESTED** on exact HEAD. No upload was attempted and no secret value was read or changed.
 
+
+
+---
+
+## Final execution updates in this session — 21 November 2026
+
+### Queue identity approval and API acceptance
+- Queue owner approval is now bound to the SHA-256 digests of both current queue documents. The approval cannot survive semantic queue edits under unchanged IDs.
+- `npm run prepare:queue-approval` prints a safe pending template with the current hashes and cycle positions while leaving detailed item choices and all owner approval fields blank. It does not write or approve the file.
+- API acceptance matrix now reflects the queue guard: `GET /api/jobs/dispatchable` and `POST /api/jobs/produce` are BLOCKED overall and NOT_TESTED on the current head until integration CI runs and owner queue approval is supplied. Route counts reconciled to 48 routes: 41 PASS, 7 BLOCKED, 0 overall NOT_TESTED; authentication-negative evidence remains 48/48 historical/current matrix entries.
+- The 8 queue-policy tests and 2 approval-template tests passed in isolated local Node 22 runs. Dashboard, worker, production-readiness and full repository integration tests remain NOT_TESTED.
+
+### Direct YouTube uploader workflow corrections
+- Both live private-upload entry points now pass and preflight-check `YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64`, which the uploader requires to verify the offline Ed25519 one-shot authorization. Previously neither workflow passed this required environment variable, so live upload would have failed before contacting YouTube.
+- Both upload jobs now require **both** `confirm_private_upload == YES` and `confirm_emergency_stop_release == YES` at job level. If either confirmation is absent, the private-upload job does not start.
+- Workflow regression tests now assert the public-key binding, early secret check, and dual confirmation. They have NOT_TESTED status until CI runs.
+- The owner must configure the base64-encoded Ed25519 public verification key as GitHub Actions secret `YOUTUBE_UPLOAD_AUTHORIZATION_PUBLIC_KEY_B64`. The matching private signing key must remain offline. No secret was read or changed.
+
+### Dependency audit enforcement
+- Automation CI now requires a complete npm audit severity summary (`info`, `low`, `moderate`, `high`, `critical`), zero findings at every severity, and a successful audit exit code. Missing or malformed audit summary is a hard failure.
+- The lockfile-only installation and strict audit checks are covered by a workflow regression test, but npm audit has not been executed on this head.
+
+### Current repository checkpoint
+- Implementation HEAD: `52b25e3ccbf2c74af5913e56adc15890a85fb69f`.
+- `main`: `3795519ccbf58fd02d74458624b58dd2e44a88c0`, unchanged.
+- Branch divergence: 5,119 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- PR #1 remains open, draft and unmerged.
+- Current HEAD has zero GitHub Actions workflow runs and zero combined status checks. Exact-current-HEAD full Node/Python, browser E2E, npm audit, dashboard/worker integration and provider acceptance remain NOT_TESTED.
+- No publication, paid spend, secret mutation, Metricool mutation, Cloudflare mutation, queue mutation, merge, or main-branch write occurred.
+
