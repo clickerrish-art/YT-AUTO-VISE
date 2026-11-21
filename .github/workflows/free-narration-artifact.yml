@@ -40,7 +40,7 @@ concurrency:
 
 jobs:
   generate-audio:
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_noncommercial_audition == true }}
+    if: false # Disabled: Roderic is the exclusive owner-approved narrator; Edge TTS is not authorized for audition or production.
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
