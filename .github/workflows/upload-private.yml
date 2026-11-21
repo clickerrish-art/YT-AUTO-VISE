@@ -86,7 +86,7 @@ jobs:
         run: node scripts/verify-youtube-channel.mjs
 
   private-upload:
-    if: ${{ inputs.confirm_private_upload == 'YES' }}
+    if: ${{ inputs.confirm_private_upload == 'YES' && inputs.confirm_emergency_stop_release == 'YES' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
