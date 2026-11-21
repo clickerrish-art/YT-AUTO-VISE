@@ -30,6 +30,7 @@ import { createWorkerQuarantineReleaseReceipt, verifyWorkerQuarantineReleaseRece
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, validateCadenceDecision, localDateTimeToIso } from "./schedule-policy.mjs";
 import { validateQueueIdentity } from "./queue-identity-policy.mjs";
+import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
 import { META_GRAPH_API_VERSION } from "./meta-graph-api-version.mjs";
 import {
   FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
@@ -43,10 +44,23 @@ import { validateProductionQualityScorecard, qualityScorecardSha256 } from "./pr
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 function readQueueIdentityGate() {
   try {
-    const operationalQueue = JSON.parse(fs.readFileSync(path.join(root, "content/queue.json"), "utf8"));
-    const detailedQueue = JSON.parse(fs.readFileSync(path.join(root, "content/long-form-queue.json"), "utf8"));
-    const approvalPath = path.join(root, "content/queue-identity-approval.json");
-    const approval = fs.existsSync(approvalPath) ? JSON.parse(fs.readFileSync(approvalPath, "utf8")) : null;
+    const readProjectJson = relativePath => {
+      if (!isSafeRegularFileWithinRoot(root, relativePath)) {
+        throw new Error(relativePath + " is missing, symlinked or outside the project root");
+      }
+      return JSON.parse(fs.readFileSync(path.join(root, relativePath), "utf8"));
+    };
+    const operationalQueue = readProjectJson("content/queue.json");
+    const detailedQueue = readProjectJson("content/long-form-queue.json");
+    const approvalRelativePath = "content/queue-identity-approval.json";
+    const approvalAbsolutePath = path.join(root, approvalRelativePath);
+    let approval = null;
+    try {
+      fs.lstatSync(approvalAbsolutePath);
+      approval = readProjectJson(approvalRelativePath);
+    } catch (error) {
+      if (error?.code !== "ENOENT") throw error;
+    }
     return validateQueueIdentity({ operationalQueue, detailedQueue, approval });
   } catch (error) {
     return { valid: false, errors: ["Queue identity files could not be read safely: " + String(error?.message ?? error).slice(0, 300)] };
