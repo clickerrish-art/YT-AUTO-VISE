@@ -183,13 +183,16 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
 
     def test_both_long_form_descriptions_identify_the_commercial_segment(self):
         source = MODULE.SOURCE.read_text(encoding="utf-8")
-        self.assertEqual(source.count("ADVERTISEMENT — Promotional resource:"), 2)
+        self.assertEqual(source.count("ADVERTISEMENT\\n\\nThis product is sold through my own Selar business"), 2)
+        self.assertNotIn("ADVERTISEMENT — Promotional resource:", source)
         self.assertNotIn("ADVERTISEMENT — ADVERTISEMENT", source)
         episodes = MODULE.extract_episodes(source)
         self.assertEqual(len(episodes), 2)
         for _, _, narration in episodes:
             self.assertIn("Advertisement.", narration)
             self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, narration)
+            self.assertLess(narration.index(MODULE.APPROVED_DISCLOSURE_TEXT),
+                            narration.index("Complete YouTube Wildlife Creator"))
 
     def test_owner_gate_is_defined_once_and_requires_all_evidence_references(self):
         source = MODULE_PATH.read_text(encoding="utf-8")
