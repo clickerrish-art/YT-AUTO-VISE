@@ -54,9 +54,12 @@ test("narration generation remains disabled while Roderic commercial rights are 
   }
   assert.equal(narrationPolicy.ownerDecision.approvedVoiceId, "b5c5b28db1ea408abc7d851202983bdb");
   assert.equal(narrationPolicy.ownerDecision.alternativeVoicesAuthorized, true);
-  assert.equal(narrationPolicy.ownerDecision.selectionStatus, "PENDING_OWNER_LISTENING");
+  assert.equal(narrationPolicy.ownerDecision.selectionStatus, "OWNER_SELECTED_WADE_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED");
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.voiceId, "a3a4aa242aaf431ea8ec2c4b3bb332fa");
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.productionApproved, false);
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.commercialUseAllowed, false);
   assert.equal(narrationPolicy.ownerDecision.paidUpgradeAuthorized, false);
-  assert.equal(narrationPolicy.ownerDecision.commercialRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21");
+  assert.equal(narrationPolicy.ownerDecision.commercialRightsStatus, "HEYGEN_FREE_PLAN_OUTPUT_RESTRICTED_TO_PERSONAL_NON_COMMERCIAL_INTERNAL_EVALUATION");
   assert.match(narrationPolicyHelper, /alternativeVoicesAuthorized/);
   assert.match(narrationPolicyHelper, /BLOCKED: the owner has not authorized an alternative narrator/);
   for (const generator of [longNarrationGenerator, shortNarrationGenerator]) {
