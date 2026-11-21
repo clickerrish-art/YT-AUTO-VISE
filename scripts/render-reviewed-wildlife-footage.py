@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""Render a wildlife-footage review draft from a human-reviewed local manifest.
+"""Render a review draft using only verified original creator-captured wildlife footage.
 
-This is deliberately separate from the default text-led renderer. Each clip must be
-placed in media/approved-footage/ and documented in manifest.json. The script fails
-closed unless every asset has a source URL, license basis, attribution, and an explicit
-human rights-review flag. It never marks a video ready to publish or uploads anything.
+Stock, licensed-library and generated visuals are categorically rejected. Each original
+camera file must be hash-bound to creator identity, capture provenance and human rights
+review. The script never marks a video ready to publish or uploads anything.
 """
 from __future__ import annotations
-import json, subprocess
+import hashlib, json, re, subprocess
 from pathlib import Path
 from mutagen.mp3 import MP3
 
@@ -37,14 +36,24 @@ def main() -> None:
     for i, clip in enumerate(clips, 1):
         if not isinstance(clip, dict):
             raise SystemExit(f"Clip {i}: expected an object.")
-        for field in ("file", "sourceUrl", "licenseBasis", "attribution"):
+        if clip.get("sourceMethod") != "ORIGINAL_RECORDING":
+            raise SystemExit(f"Clip {i}: only ORIGINAL_RECORDING creator-captured wildlife footage is permitted; stock, licensed-library and generated visuals are prohibited.")
+        if clip.get("creatorCapturedOriginal") is not True:
+            raise SystemExit(f"Clip {i}: creatorCapturedOriginal must be true.")
+        for field in ("creatorIdentity", "captureProvenance", "file", "sourceUrl", "licenseBasis", "attribution"):
             if not str(clip.get(field, "")).strip():
                 raise SystemExit(f"Clip {i}: missing required field {field}.")
         if clip.get("rightsReviewed") is not True:
             raise SystemExit(f"Clip {i}: rightsReviewed must be true only after human verification.")
+        digest = str(clip.get("originalSha256", ""))
+        if not re.fullmatch(r"[a-f0-9]{64}", digest):
+            raise SystemExit(f"Clip {i}: originalSha256 must be the exact original-file SHA-256.")
         path = (FOOTAGE / str(clip["file"])).resolve()
         if FOOTAGE.resolve() not in path.parents or not path.is_file():
             raise SystemExit(f"Clip {i}: file must exist inside {FOOTAGE} (no external paths).")
+        actual = hashlib.sha256(path.read_bytes()).hexdigest()
+        if actual != digest:
+            raise SystemExit(f"Clip {i}: originalSha256 does not match the supplied original file bytes.")
         resolved.append((path, clip))
     metas = sorted(PACKAGE.glob("*.json"))
     if len(metas) != 1:
