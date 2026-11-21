@@ -100,9 +100,14 @@ async function downloadPexels(asset, destination) {
 }
 
 async function main() {
+  const register = JSON.parse(await fsp.readFile(REGISTER_PATH, "utf8"));
+  const policy = register.currentProductionPolicy ?? {};
+  if (policy.stockMediaAllowed !== true || policy.originalCreatorCapturedMediaRequired !== false) {
+    console.error("BLOCKED: Pexels stock acquisition is disabled. Current production requires original creator-captured wildlife media; Pexels may remain reference-only and must not be downloaded for production.");
+    return 2;
+  }
   await fsp.mkdir(MEDIA_ROOT, { recursive: true });
   await fsp.mkdir(PREVIEW_ROOT, { recursive: true });
-  const register = JSON.parse(await fsp.readFile(REGISTER_PATH, "utf8"));
   const byId = new Map(register.assets.map(asset => [asset.id, asset]));
   const assets = APPROVED_IDS.map(id => {
     const asset = byId.get(id);
