@@ -10,4 +10,6 @@ jobs:
   generate-audio:
     if: false # Disabled: Roderic remains exclusive, but HeyGen denied zero-cost commercial use; no alternative narrator or paid upgrade is authorized.
     runs-on: ubuntu-latest
-    steps: []
+    steps:
+      - name: Confirm the workflow is intentionally disabled
+        run: echo "Narration generation is blocked by the current commercial-rights decision."
