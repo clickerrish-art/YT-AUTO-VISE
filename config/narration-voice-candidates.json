@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "OWNER_APPROVED_RODERIC_EXCLUSIVE_BUT_COMMERCIAL_RIGHTS_DENIED",
+  "status": "OWNER_AUTHORIZED_ZERO_COST_ALTERNATIVE_VOICE_AUDITION_PENDING_HUMAN_REVIEW",
   "provider": "piper_local",
   "model": {
     "repository": "rhasspy/piper-voices",
@@ -44,14 +44,14 @@
       "accent": "American English (en_US)",
       "vocalDirection": "Mature approximately-45-year-old character; clean, clear, warm, confident, passionate wildlife storyteller; natural conversational pacing; controlled emphasis; never robotic or overacted.",
       "priority": 1,
-      "rightsStatus": "PUBLIC_DOMAIN_SOURCE_RECORDINGS; PINNED_MODEL_CARD_AND_ATTRIBUTION_REVIEW_REQUIRED",
+      "rightsStatus": "OFFICIAL_PIPER_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN_SOURCE_RECORDINGS; PINNED_MODEL_CARD_REVIEWED",
       "sampleUrl": "https://huggingface.co/rhasspy/piper-voices/resolve/8e602cc224300e0961258a0c885bccbfcc515a7f/en/en_US/norman/medium/samples/speaker_0.mp3",
-      "status": "HISTORICAL_AUDITION_ONLY_NOT_AUTHORIZED",
+      "status": "CURRENT_AUDITION_CANDIDATE_OWNER_LISTENING_REQUIRED",
       "productionApproved": false
     }
   ],
   "audition": {
-    "status": "SUPERSEDED_BY_EXCLUSIVE_RODERIC_OWNER_DECISION_AND_NOT_AUTHORIZED_FOR_FUTURE_AUDITIONS",
+    "status": "CURRENT_OWNER_AUTHORIZED_ALTERNATIVE_AUDITION_REVIEW_REQUIRED",
     "generatedByWorkflow": true,
     "chosenVoice": "norman",
     "chosenVoiceId": "en_US-norman-medium",
@@ -73,7 +73,7 @@
     "durationSeconds": 53.023,
     "sourceScriptSha256": "20f807f0a1c6afd62ced948cfc8d8ed21478d479a76cc287eae62411bc185c53",
     "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
-    "commercialAttributionReview": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED",
+    "commercialAttributionReview": "OFFICIAL_PIPER_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; PINNED_MODEL_CARD_AND_ENGINE_LICENCE_RECORDED",
     "artifactSha256": "f1cb09dc70baf54156435e55ddc0656010848e492ec5969c014f352f6ac45d93",
     "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md"
   },
@@ -95,20 +95,14 @@
     "finalNarration": false
   },
   "ownerDecision": {
-    "approvedVoice": "Roderic — Authoritative & Refined",
-    "approvedVoiceId": "b5c5b28db1ea408abc7d851202983bdb",
-    "exclusivity": "EXCLUSIVE_APPROVED_VOICE_NO_SUBSTITUTIONS",
-    "rejectedVoices": [
-      "Banjo"
-    ],
-    "historicalAuditionOnly": [
-      "Norman (en_US-norman-medium)"
-    ],
-    "productionRule": "Roderic — Authoritative & Refined remains the exclusive owner-selected narrator. HeyGen denied zero-cost commercial-use permission for existing and future Free-plan outputs. Do not use Roderic Free-plan audio publicly or commercially. Do not generate, audition or substitute any other voice and do not upgrade to a paid plan unless the owner explicitly changes these constraints. Production narration remains blocked.",
-    "decidedAt": "2026-11-20",
-    "commercialRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21",
-    "providerDenialEvidence": "content/heygen-roderic-commercial-rights-determination-2026-11-21.json",
-    "alternativeVoicesAuthorized": false,
-    "paidUpgradeAuthorized": false
+    "previousApprovedVoice": "Roderic — Authoritative & Refined",
+    "previousApprovedVoiceId": "b5c5b28db1ea408abc7d851202983bdb",
+    "currentDecision": "OWNER_DECLINED_RODERIC_EXCLUSIVITY_AND_AUTHORIZED_A_ZERO_COST_ALTERNATIVE_VOICE",
+    "decisionDate": "2026-11-22",
+    "decisionEvidence": "Owner answered no to retaining Roderic as mandatory narrator; owner separately declined R2 activation. This authorizes evaluation of zero-cost commercially licensed alternatives, not automatic approval of any specific voice.",
+    "alternativeVoicesAuthorized": true,
+    "selectedAlternative": "PENDING_OWNER_LISTENING_AND_SELECTION",
+    "paidUpgradeAuthorized": false,
+    "commercialUseRule": "Use only a voice whose exact model/data licence and required notices support the intended commercial distribution. No paid service, no Roderic Free-plan audio, and no production release before owner listening approval tied to final audio SHA-256."
   }
 }
