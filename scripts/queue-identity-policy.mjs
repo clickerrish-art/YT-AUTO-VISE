@@ -51,7 +51,7 @@ export function validateQueueIdentity({ operationalQueue, detailedQueue, approva
       errors.push("Queue identity approval must include a non-empty decision reference.");
     }
     const approvedAt = typeof approval.approvedAt === "string" ? Date.parse(approval.approvedAt) : NaN;
-    if (!Number.isFinite(approvedAt) || !/[zZ]|[+-]\\d{2}:\\d{2}$/.test(approval.approvedAt)) {
+    if (!Number.isFinite(approvedAt) || !/[zZ]|[+-]\d{2}:\d{2}$/.test(approval.approvedAt)) {
       errors.push("Queue identity approval must include a valid timezone-qualified approvedAt timestamp.");
     }
   }
