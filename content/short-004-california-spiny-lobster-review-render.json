@@ -70,12 +70,11 @@
     "audioChannels": 1
   },
   "remainingReview": [
-    "Add the NOAA Fisheries site-wide credit alongside the package-specific NOAA Office of National Marine Sanctuaries credit in the final production master",
-    "Complete final-output rights review against the exact final video, narration, captions and attribution",
-    "Human full-playback review of the complete video, narration, captions, attribution, framing and factual claims",
-    "Human editorial decision on synthetic eSpeak voice quality; replace with owner-approved natural narration before publication",
-    "Caption timing remains provisional until human review against the final approved voice",
-    "Complete factual/editorial and compliance approval, then record owner approval against the exact final hashes"
+    "Do not use this review render or NOAA source package in production; it is reference-only and excluded.",
+    "Acquire genuine original creator-captured California spiny lobster footage with provenance, exact original bytes, SHA-256 and commercial-use permission.",
+    "Use only the owner-approved Roderic narrator if HeyGen later grants zero-cost commercial rights in writing; current Free-plan outputs are internal-only and no alternative narrator is approved.",
+    "Rebuild all scenes, narration and captions against the eligible source package and exact final narration.",
+    "Complete full playback, factual/editorial review, rights review, and exact-hash owner approval on a new final master."
   ],
   "uploadAllowed": false,
   "scheduleAllowed": false,
@@ -151,7 +150,7 @@
   "complianceReviewed": false,
   "attributionStatus": "ADD_NOAA_FISHERIES_CREDIT_TO_FINAL_MASTER",
   "requiredAttributionForFinalMaster": "NOAA Fisheries / NOAA's Office of National Marine Sanctuaries",
-  "reasonHeld": "The exact NOAA B-roll source licence and opening-slate credit are verified, but final-output rights confirmation remains false until the final master includes both NOAA Fisheries and NOAA's Office of National Marine Sanctuaries attribution. Still held: human full-playback and narration review; replace or explicitly approve synthetic eSpeak narration; verify caption timing; complete factual/editorial and compliance review; obtain hash-bound owner approval.",
+  "reasonHeld": "Historical review render only. NOAA stock/archive source is excluded by the current original creator-captured-media policy. Synthetic eSpeak narration is unapproved. Do not restore, render, upload, schedule or publish this source package; replace only with a separately supplied and rights-cleared original creator-captured source and an owner-approved commercially eligible narration.",
   "sourceRightsEvidence": {
     "status": "SOURCE_LICENSE_VERIFIED",
     "licenseType": "PUBLIC_DOMAIN_NOAA_BROLL",
@@ -205,5 +204,13 @@
       "Human full-playback, factual/editorial review and hash-bound owner approval remain separate release gates."
     ]
   },
-  "sourceRightsVerified": true
+  "sourceRightsVerified": true,
+  "currentProductionDisposition": {
+    "status": "EXCLUDED_REFERENCE_ONLY",
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "reason": "The source is NOAA archive B-roll. Its historical public-domain licence verification does not make it admissible under the current requirement for genuine original creator-captured wildlife media."
+  },
+  "sourceProductionEligible": false,
+  "sourcePolicy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED"
 }
