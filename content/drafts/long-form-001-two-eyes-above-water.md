@@ -57,22 +57,25 @@ The river may look empty. That does not mean it is empty. And understanding the 
 
 ## Research and claim map
 
-1. **Species, habitats and broad ecology** — Nile crocodiles use rivers, lakes and freshwater swamps; diet shifts with age and includes a broad range of prey.  
-   Source: IUCN/SSC Crocodile Specialist Group, *Crocodylus niloticus* Action Plan (2010): https://iucncsg.org/wp-content/uploads/2026/10/Crocodylus-niloticus-Action-Plan-2010.pdf
+1. **Species, habitats and broad ecology** — Nile crocodiles occupy rivers, lakes, wetlands and reservoirs across sub-Saharan Africa; diet includes fish, birds, mammals, reptiles and carrion, while juveniles feed on insects and small fish.  
+   Source: IUCN/SSC Crocodile Specialist Group, *Crocodylus niloticus* species profile: https://iucncsg.org/crocodylians/crocodylus-niloticus/
 
-2. **Minimum-exposure posture and sensory organs** — crocodilians can hold the head at the air-water interface with eyes, nostrils and ears above the surface; integumentary sensory organs detect water-surface disturbance and underwater displacement.  
+2. **Minimum-exposure posture and body form** — crocodilians can hold the head at the air-water interface with eyes, ears and nostrils exposed while most of the snout and body remain submerged; the long tail and body form support aquatic movement.  
+   Source: IUCN/SSC Crocodile Specialist Group, *The Crocodilian Body*: https://www.iucncsg.org/pages/The-Crocodilian-Body.html
+
+3. **Integumentary sensory organs** — crocodilian sensory organs are innervated by mechanoreceptors and respond to mechanical stimulation; do not imply that they provide unlimited detection range or identify every moving animal.  
    Source: Leitch & Catania, *Structure, innervation and response properties of integumentary sensory organs in crocodilians*, Journal of Experimental Biology (2012): https://pubmed.ncbi.nlm.nih.gov/23136155/
 
-3. **Nile crocodile surface-wave sensitivity** — experimental work tested responses to capillary surface waves; describe this as a demonstrated sensory capability, not unlimited detection range.  
-   Source: Grap et al., *Crocodylus niloticus is highly sensitive to water surface waves*, Zoology (2015): https://pubmed.ncbi.nlm.nih.gov/26153334/
-
-4. **Shoreline ambush behaviour** — crocodiles may approach or wait near the shore, keep eyes above water to check position, and launch toward prey; avoid implying every hunt follows this exact sequence.  
-   Source: San Diego Zoo Wildlife Explorers Center, Nile Crocodile — Diet & Feeding: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/diet
+4. **Nile crocodile surface-wave sensitivity** — experimental work tested Nile crocodile responses to capillary surface waves and measured behavioural thresholds; describe this as a demonstrated laboratory sensory capability, not a guaranteed field detection distance.  
+   Source: Grap et al., *Crocodylus niloticus (Crocodilia) is highly sensitive to water surface waves*, Zoology (2015): https://pubmed.ncbi.nlm.nih.gov/26153334/
 
 5. **Multisensory response to sound and water waves** — a 2025 controlled experiment tested young Nile crocodiles and found they tended to approach water-wave stimuli even when airborne sound arrived before or after them within the tested interval. This supports multisensory processing, not a universal claim about adult crocodile hunting behaviour in the wild.  
    Source: Delbosc et al., *Temporal integration and decision-making in crocodiles*, Biology Open (2025): https://pmc.ncbi.nlm.nih.gov/articles/PMC12079573/
 
-6. **Human safety** — crocodilians can remain submerged, move between water bodies and hunt close to shore; absence of a visible animal is not proof of safety.  
+6. **Shoreline ambush behaviour and feeding** — Nile crocodiles may approach or wait near the shore, surface with eyes above water to check position, and launch toward prey; prey type changes with age. Avoid implying every hunt follows this exact sequence.  
+   Source: San Diego Zoo Wildlife Explorers Center, Nile Crocodile — Diet & Feeding: https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/diet
+
+7. **Human safety** — crocodilians can remain submerged, move between water bodies and hunt close to shore; absence of a visible animal is not proof of safety. Follow local warning signs and wildlife-authority advice.  
    Source: IUCN/SSC Crocodile Specialist Group, Crocodilian Attacks: https://www.iucncsg.org/pages/Crocodilian-Attacks.html
 
 ## Visual plan — 16:9 landscape
