@@ -29,6 +29,7 @@ import { buildVerifiedUploadReconciliationJob } from "./upload-reconciliation-tr
 import { createWorkerQuarantineReleaseReceipt, verifyWorkerQuarantineReleaseReceipt } from "./worker-quarantine-release.mjs";
 import { manageCampaign } from "./campaign-management.mjs";
 import { validatePublicationSlot, validateCadenceDecision, localDateTimeToIso } from "./schedule-policy.mjs";
+import { validateQueueIdentity } from "./queue-identity-policy.mjs";
 import { META_GRAPH_API_VERSION } from "./meta-graph-api-version.mjs";
 import {
   FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
@@ -40,6 +41,18 @@ import { instagramApprovalFingerprint } from "./instagram-autonomous-publisher.m
 import { validateProductionQualityScorecard, qualityScorecardSha256 } from "./production-quality-scorecard.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+function readQueueIdentityGate() {
+  try {
+    const operationalQueue = JSON.parse(fs.readFileSync(path.join(root, "content/queue.json"), "utf8"));
+    const detailedQueue = JSON.parse(fs.readFileSync(path.join(root, "content/long-form-queue.json"), "utf8"));
+    const approvalPath = path.join(root, "content/queue-identity-approval.json");
+    const approval = fs.existsSync(approvalPath) ? JSON.parse(fs.readFileSync(approvalPath, "utf8")) : null;
+    return validateQueueIdentity({ operationalQueue, detailedQueue, approval });
+  } catch (error) {
+    return { valid: false, errors: ["Queue identity files could not be read safely: " + String(error?.message ?? error).slice(0, 300)] };
+  }
+}
+
 const host = process.env.DASHBOARD_HOST ?? "127.0.0.1";
 const port = Number(process.env.PORT ?? 8787);
 const token = process.env.DASHBOARD_OPERATOR_TOKEN;
@@ -908,6 +921,8 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { publishingEnabled: false, schedule, campaigns: campaignConfig.campaigns, campaignValidation: { ok: campaignErrors.length === 0, errors: campaignErrors }, queueItems: state.queueItems, jobs: state.jobs.slice(-30).reverse(), uploads: state.uploads.slice(-30).reverse(), uploadLedger: readUploadLedger(), audit: state.audit.slice(-50).reverse(), blockers });
     }
     if (req.method === "GET" && url.pathname === "/api/jobs/dispatchable") {
+      const queueIdentity = readQueueIdentityGate();
+      if (!queueIdentity.valid) return json(res, 409, { error: "Queue identity reconciliation is not owner-approved; dispatch is blocked.", code: "QUEUE_IDENTITY_RECONCILIATION_REQUIRED", blockers: queueIdentity.errors, jobs: [], publishingEnabled: false, readOnly: true });
       const state = loadState();
       const requestedLimit = Number(url.searchParams.get("limit") ?? 20);
       if (!Number.isInteger(requestedLimit) || requestedLimit < 1 || requestedLimit > 100) {
@@ -3231,6 +3246,8 @@ const server = http.createServer(async (req, res) => {
       } finally { release(); }
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/produce") {
+      const queueIdentity = readQueueIdentityGate();
+      if (!queueIdentity.valid) return json(res, 409, { error: "Queue identity reconciliation is not owner-approved; production dispatch is blocked.", code: "QUEUE_IDENTITY_RECONCILIATION_REQUIRED", blockers: queueIdentity.errors, publishingEnabled: false });
       const body = await readBody(req);
       if (typeof body.jobId !== "string") return json(res, 400, { error: "jobId is required" });
       const release = await acquireStateLock();
