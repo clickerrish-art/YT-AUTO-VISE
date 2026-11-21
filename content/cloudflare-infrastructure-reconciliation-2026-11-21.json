@@ -107,5 +107,25 @@
     "Resolve and test the staging Worker's legacy OIDC trust before any runner dispatch.",
     "Implement or deploy a separate SonicVhibez production Worker only after production storage, secrets, least-privilege OIDC, monitoring and rollback are verified.",
     "Populate runner state/control/artifact records through an approved non-publishing staging lifecycle test, then verify restart and independent restore."
-  ]
+  ],
+  "oidcTrust": {
+    "deployedWorker": "sonicvhibez-durable-state-staging",
+    "deployedWorkerContentReadOnlyInspection": true,
+    "trustedRepository": "clickerrish-art/YT-AUTO-VISE",
+    "trustedRef": "refs/heads/codex/cloudflare-adapter-integration-20261108",
+    "trustedWorkflow": "clickerrish-art/YT-AUTO-VISE/.github/workflows/repository-runner.yml@refs/heads/codex/cloudflare-adapter-integration-20261108",
+    "requiredEvent": "workflow_dispatch",
+    "currentTrustedBranchHead": "d07abb7079d2a7870b1649d7c74e1abd841e7751",
+    "sourceWorkflowInspection": {
+      "workflowPath": ".github/workflows/repository-runner.yml",
+      "workflowJobsCondition": "if: ${{ false }}",
+      "idTokenWritePermissionPresent": false,
+      "repositoryRunnerInputDefault": false,
+      "stagingSmokeInputDefault": false,
+      "state": "SOURCE_FAIL_CLOSED"
+    },
+    "risk": "The deployed staging Worker still accepts OIDC claims pinned to the legacy branch. The corresponding repository-runner workflow is currently source-disabled and has no id-token: write permission, which prevents the normal workflow path from minting the expected token. The stale trust remains in the deployed Worker and must be retired or migrated only after replacement trust is verified.",
+    "dispatchPermitted": false,
+    "deploymentMutationPerformed": false
+  }
 }
