@@ -10,7 +10,7 @@
   "captionsPath": "short-001-wildlife-video-storytelling.srt",
   "qualityEvidencePath": "short-quality-evidence.json",
   "footageLicenseEvidence": "short-001-pexels-rights-evidence.json",
-  "narrationLicenseEvidence": "american-narration-review-evidence.json",
+  "narrationLicenseEvidence": "short-001-roderic-narration-generation.json",
   "rightsConfirmed": false,
   "complianceReviewed": false,
   "containsSyntheticMedia": true,
