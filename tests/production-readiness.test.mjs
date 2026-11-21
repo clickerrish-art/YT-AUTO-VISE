@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
@@ -79,6 +80,9 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /public publishing disabled/);
   assert.match(result.stdout, /content\/render-manifest\.json/);
   assert.match(result.stdout, /long-form-render-manifest/);
+  assert.match(result.stdout, /footageOrigin must be creator_captured_original/);
+  assert.match(result.stdout, /footageCreator must identify the original camera operator/);
+  assert.match(result.stdout, /captureEvidencePath must reference an existing/);
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
   assert.doesNotMatch(result.stdout, /Metadata needs the verified SonicVhibez YouTube channel ID/);
   assert.match(result.stdout, /SONICVHIBEZ_CHANNEL_ID/);
@@ -332,7 +336,7 @@ test("readiness blocks selected imported Canva wildlife assets until exact sourc
   }
 });
 
-test("explicitly excluded Canva imports remain quarantined and do not block the AI-generated production path", () => {
+test("excluded Canva imports remain quarantined and readiness still requires original creator-captured footage", () => {
   const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
   assert.equal(inventory.releaseAuthorized, false);
   assert.ok(inventory.assets.every(asset => asset.status === "EXCLUDED_NOT_USED" && asset.excludedFromProduction === true));
@@ -341,6 +345,43 @@ test("explicitly excluded Canva imports remain quarantined and do not block the 
   });
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
-  assert.equal(report.blockers.some(item => /imported Canva wildlife asset\(s\) remain unverified/.test(item.message)), false);
-  assert.ok(report.notes.some(note => /5 assets; 5 excluded from production \(not rights-cleared\); 0 selected\/unresolved; release not authorized/.test(note)));
+  assert.equal(report.blockers.some(item => /selected imported wildlife asset\\(s\\) are not verified as original creator-captured footage/.test(item.message)), false);
+  assert.ok(report.notes.some(note => /5 assets; 5 excluded from production \\(not rights-cleared\\); 0 selected\\/unresolved; release not authorized/.test(note)));
+  assert.ok(report.blockers.some(item => /footageOrigin must be creator_captured_original/.test(item.message)),
+    "an excluded stock inventory must not silently permit an AI-generated or stock-based production path");
+});
+
+test("a Pexels/library candidate remains blocked even if marked cleared and its local hash and rights evidence are supplied", () => {
+  const directory = fs.mkdtempSync(path.join(process.cwd(), "content", ".sonicvhibez-stock-rejection-"));
+  try {
+    const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
+    const asset = inventory.assets[0];
+    asset.status = "CLEARED";
+    asset.excludedFromProduction = false;
+    asset.creatorCapturedOriginal = false;
+    asset.creatorName = "Library uploader";
+    asset.creatorConfirmed = true;
+    asset.captureEvidencePath = "package.json";
+    asset.rightsEvidencePath = "package.json";
+    asset.localMediaPath = "package.json";
+    asset.sha256 = createHash("sha256").update(fs.readFileSync("package.json")).digest("hex");
+    asset.rightsConfirmed = true;
+    asset.humanVisualReview = "PASS";
+    inventory.status = "CLEARED";
+    inventory.releaseAuthorized = true;
+    const inventoryPath = path.join(directory, "sonicvhibez-imported-media-inventory.json");
+    fs.writeFileSync(inventoryPath, JSON.stringify(inventory, null, 2));
+    const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
+      cwd: process.cwd(),
+      env: { ...process.env, SONICVHIBEZ_IMPORTED_MEDIA_INVENTORY_PATH: path.relative(process.cwd(), inventoryPath) },
+      encoding: "utf8"
+    });
+    assert.equal(result.status, 2);
+    const report = JSON.parse(result.stdout);
+    const blocker = report.blockers.find(item => /selected imported wildlife asset\\(s\\) are not verified as original creator-captured footage/.test(item.message));
+    assert.ok(blocker, "library media must remain blocked even with a generic license and a matching local hash");
+    assert.match(blocker.message, /VAHZ9kg2rvg/);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
 });
