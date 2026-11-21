@@ -462,3 +462,21 @@ This section supersedes older checkpoint statements in the historical audit entr
 - The implementation branch contains secure replacements: explicit `short|long_form` match, exact-hash one-shot signed authorization, public-key preflight, emergency-stop release plus private-upload dual confirmation, and non-cancelling shared concurrency. PR #1 remains draft/unmerged, so these replacements are not active on `main`.
 - The standing no-main-write/no-merge rule was preserved. This cannot be fully remediated without an owner/admin decision to approve and activate the secure workflow version or disable the legacy default-branch workflows. No workflow was dispatched.
 
+
+
+---
+
+## Latest execution checkpoint after scope, uploader and media audit — 21 November 2026
+
+- **Implementation HEAD:** `e99d2c0c31863fe015f63141897c4f569c46bda9`.
+- **Main:** `3795519ccbf58fd02d74458624b58dd2e44a88c0`, unchanged. Divergence is 5,133 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- **PR #1:** open, draft, unmerged. No merge, main write, reset, rebase or force-push.
+- **Permanent scope:** README, OPERATIONS and master tracker all state that SonicVhibez YouTube remains in this Marketing Machine regardless of name, via direct API integration and not Metricool.
+- **Critical default-branch release risk:** main still contains legacy manual YouTube upload workflows and uploader source without signed one-shot authorization or the current dual confirmations. Both must NOT be dispatched. Secure replacements exist only on the draft implementation branch; owner/admin release decision is required before the default-branch path is safe.
+- **Metricool discrepancy:** latest read-only Nature Frontiers brand response contains the SonicVhibez YouTube channel ID under `youtubeData`; no scheduled posts were returned for 21 November–1 January. The active connection state is ambiguous; no network mutation was performed.
+- **Original wildlife media:** Library recheck found no eligible creator-captured source package with provenance and commercial rights. Existing SonicVhibez wildlife visuals are stock/reference-only or draft templates; 0 verified original-camera packages and 0 approved production masters.
+- **Queue safety:** hash-bound owner approval policy and pending template are implemented; 8/8 policy and 2/2 template tests passed in isolated local Node 22 runs. The approval file is absent by design; dispatch remains blocked.
+- **Uploader safety:** explicit content format, strict receipt timestamp, public-key secret wiring and dual confirmations are implemented on the branch. Regression tests are added but NOT_TESTED.
+- **CI:** current HEAD still has zero workflow runs and zero combined statuses. A browser-based workflow-dispatch attempt did not start because the browser automation wallet balance was negative; no top-up or paid action was made. The zero-cost constraint remains. A local shallow clone also failed because the execution environment cannot resolve github.com. Owner-authenticated push is the available zero-cost path to run the branch push workflows.
+- **No production publication, OAuth/secret mutation, Metricool/Cloudflare mutation, queue mutation or paid service use occurred.** Exact-current-HEAD full Node/Python/browser tests and npm audit remain NOT_TESTED.
+
