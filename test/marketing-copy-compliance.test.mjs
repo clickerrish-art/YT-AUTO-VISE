@@ -40,6 +40,7 @@ test("creator-education long-form script places the exact direct-sales disclosur
   assert.ok(script.includes("Do not use stock/archive footage"));
   assert.ok(script.includes("internal-evaluation-only"));
   assert.ok(script.includes("No alternate narrator or paid upgrade is authorized"));
+  assert.ok(script.includes("cannot be publicly redistributed for branded projects"));
 });
 
 test("separate creator-education long-form script has compliant disclosure order and fail-closed production rights", () => {
@@ -50,6 +51,7 @@ test("separate creator-education long-form script has compliant disclosure order
   assert.ok(script.includes("AI-generated wildlife visuals are prohibited"));
   assert.ok(script.includes("not commercially cleared"));
   assert.ok(script.includes("No alternate narrator or paid upgrade is authorized"));
+  assert.ok(script.includes("cannot be publicly redistributed for branded projects"));
   assert.ok(script.includes("Queue ID: `long-story-wildlife-footage`"));
   assert.ok(script.includes("NOT ASSIGNED"));
   assert.ok(!script.includes("Long-Form Video 001"));
@@ -71,6 +73,7 @@ test("Episode 001 and 002 metadata drafts disclose direct sales before the produ
     assert.ok(draft.includes("ADVERTISEMENT"));
     assert.ok(draft.includes(SELAR_URL));
     assert.ok(draft.includes("original creator-captured production footage"));
+    assert.ok(draft.includes("cannot be publicly redistributed for branded projects"));
     assert.ok(!draft.includes("uses illustrative marine B-roll"));
     assert.ok(!draft.includes("NOAA Fisheries"));
   }
@@ -110,6 +113,11 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   const metadata = readText("content/long-form-001-youtube-metadata-draft.md");
   const script = readText("content/drafts/long-form-001-two-eyes-above-water.md");
   assert.equal(manifest.hasPaidPromotion, false);
+  assert.equal(manifest.narrationRightsStatus, "PROVIDER_DENIED");
+  assert.equal(manifest.narrationPublicBrandedDistributionAllowed, false);
+  assert.equal(manifest.narrationCommercialUseAllowed, false);
+  assert.equal(manifest.narrationProductionUseAllowed, false);
+  assert.ok(manifest.narrationRestrictionSummary.includes("cannot be publicly redistributed for branded projects"));
   assert.ok(!metadata.includes(SELAR_URL));
   assert.ok(!metadata.includes("ADVERTISEMENT"));
   assert.ok(metadata.includes("hasPaidPromotion=false"));
@@ -123,6 +131,7 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.ok(script.includes("AI-generated wildlife visuals") && script.includes("prohibited"));
   assert.ok(script.includes("stock/archive footage"));
   assert.ok(script.includes("commercially prohibited by the provider's written determination"));
+  assert.ok(script.includes("cannot be publicly redistributed for branded projects"));
   assert.ok(script.includes("No alternate voice or paid upgrade is authorized"));
   assert.ok(!/AI reconstruction if synthetic|labelled reconstruction|real footage or labelled reconstruction/i.test(script));
 });
