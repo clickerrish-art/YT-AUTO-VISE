@@ -1,3 +1,9 @@
+> **Permanent channel scope:** SonicVhibez YouTube remains part of this Marketing Machine regardless of its name and is operated through the direct YouTube API integration, not Metricool. Nature Frontiers is a separate Facebook/Instagram brand. Never reconnect YouTube to Metricool without explicit owner instruction. Keep public/unattended YouTube and live Meta publishing disabled; private upload requires exact one-shot authorization and verification. Use only original creator-captured wildlife media with provenance, commercial rights and exact-hash human approval.
+
+> Current project blockers and owner inputs: [MASTER EXECUTION TRACKER](docs/MASTER-EXECUTION-TRACKER-2026-11-21.md).
+
+---
+
 # Content-job cancellation
 
 Content jobs can be cancelled through the existing authenticated state-transition endpoint. Cancellation is terminal and records the operator, timestamp, reason, transition history and a `CONTENT_JOB_CANCELLED` audit event.
