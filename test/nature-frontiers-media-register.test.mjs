@@ -11,7 +11,10 @@ const base = {
     defaultPublicationState: "held",
     requireHumanApproval: true,
     allowAutomaticPublication: false,
-    sourceOfTruth: "versioned-local-json"
+    sourceOfTruth: "versioned-local-json",
+    originalCreatorCapturedMediaRequired: true,
+    stockMediaAllowed: false,
+    aiGeneratedWildlifeVisualsAllowed: false
   },
   assets: [{
     id: "nf-test-asset-001",
@@ -22,6 +25,11 @@ const base = {
       url: "https://www.pexels.com/video/example-123/",
       listingStatus: "verified",
       listingEvidence: ["https://www.pexels.com/video/example-123/"]
+    },
+    productionEligibility: {
+      eligible: false,
+      status: "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+      reason: "Stock media is reference-only and not original creator-captured footage."
     },
     localFile: null,
     media: { sha256: null },
@@ -81,6 +89,14 @@ test("prevents approval when rights or complete visual inspection are missing", 
 test("requires a matching file hash, reviewer, evidence and usage scope for approval", () => {
   const value = structuredClone(base);
   const hash = "b".repeat(64);
+  value.assets[0].source.provider = "Creator upload";
+  value.assets[0].source.captureType = "original_creator_captured";
+  value.assets[0].source.contributor = "Original wildlife creator";
+  value.assets[0].productionEligibility = {
+    eligible: true,
+    status: "ELIGIBLE_FOR_OWNER_APPROVED_USE",
+    reason: "Original creator-captured source with verified rights, full inspection and exact-hash approval."
+  };
   value.assets[0].localFile = { path: "media/nf-test.mp4", sha256: hash };
   value.assets[0].media.sha256 = hash;
   value.assets[0].rights = {
@@ -251,4 +267,29 @@ test("obtained additional permissions require HTTPS evidence in the canonical re
   assert.ok(validateMediaRegister(value).some(error => error.includes("obtained additional permissions require evidence URLs")));
   value.assets[0].rights.additionalPermissionsEvidence = ["http://example.com/permission"];
   assert.ok(validateMediaRegister(value).some(error => error.includes("additional permissions evidence URLs must be HTTPS")));
+});
+
+test("rejects Pexels and Pixabay listings as production-eligible wildlife media", () => {
+  for (const provider of ["Pexels", "Pixabay"]) {
+    const value = structuredClone(base);
+    value.assets[0].source.provider = provider;
+    value.assets[0].productionEligibility.eligible = true;
+    value.assets[0].productionEligibility.status = "ELIGIBLE_FOR_OWNER_APPROVED_USE";
+    value.assets[0].source.captureType = "original_creator_captured";
+    value.assets[0].source.contributor = "Listing contributor";
+    assert.ok(validateMediaRegister(value).some(error => error.includes("Pexels/Pixabay stock listings must remain reference-only")));
+  }
+});
+
+test("requires original capture, commercial rights, full inspection and exact-hash approval for production eligibility", () => {
+  const value = structuredClone(base);
+  value.assets[0].source.provider = "Creator upload";
+  value.assets[0].source.captureType = "original_creator_captured";
+  value.assets[0].source.contributor = "Original wildlife creator";
+  value.assets[0].productionEligibility.eligible = true;
+  value.assets[0].productionEligibility.status = "ELIGIBLE_FOR_OWNER_APPROVED_USE";
+  assert.ok(validateMediaRegister(value).some(error => error.includes("exact local source bytes and SHA-256")));
+  assert.ok(validateMediaRegister(value).some(error => error.includes("cleared commercial rights")));
+  assert.ok(validateMediaRegister(value).some(error => error.includes("complete human visual inspection")));
+  assert.ok(validateMediaRegister(value).some(error => error.includes("human approval bound to the exact source file hash")));
 });
