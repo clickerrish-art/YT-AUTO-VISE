@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   audition:
+    if: false # Disabled: owner approved Roderic exclusively; no Piper voice audition or substitution is authorized.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
