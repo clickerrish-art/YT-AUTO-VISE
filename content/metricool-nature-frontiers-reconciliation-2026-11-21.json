@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "project": "Nature Frontiers",
+  "checkedAt": "2026-11-21",
+  "status": "PARTIAL_LEGACY_HISTORY_UNRESOLVED",
+  "mode": "READ_ONLY_PROVIDER_RECONCILIATION_NO_MUTATIONS",
+  "source": "Live Metricool connector read-only inspection",
+  "currentMetricoolBrand": {
+    "id": 8094526,
+    "label": "Nature Frontiers SA",
+    "timezone": "Africa/Johannesburg",
+    "networksData": {
+      "facebookPageId": "1431329126735709",
+      "instagramProfessionalHandle": "naturefrontieers2026"
+    },
+    "youtubeConnectionReturned": false,
+    "youtubeObservation": "The latest getBrandSettings response exposed Facebook and Instagram only; it did not return a YouTube network field. This is a current settings observation and does not reconstruct historical mappings."
+  },
+  "scheduledPostsQuery": {
+    "from": "2026-11-21T00:00:00+02:00",
+    "to": "2027-01-01T23:59:59+02:00",
+    "timezone": "Africa/Johannesburg",
+    "returnedCount": 0,
+    "interpretation": "The Metricool scheduled-post endpoint returned an empty list for the current brand and requested interval. This endpoint only returns scheduled posts; it does not expose unscheduled drafts, published-post history, historical autoPublish flags or analytics."
+  },
+  "legacyBrand": {
+    "id": 7545638,
+    "accessStatus": "HTTP_403_FORBIDDEN",
+    "error": "Access denied to blog 7545638",
+    "historicalRecordsExpected": {
+      "scheduledDraftPosts": 20,
+      "autoPublishRecords": 8
+    },
+    "reconciliationStatus": "BLOCKED"
+  },
+  "supportFollowUps": {
+    "legacyBrandExportRequestSent": "2026-11-19",
+    "removeCrossBrandYoutubeRequestSent": "2026-11-19",
+    "replyObservedInGmailSearch": "NONE"
+  },
+  "safety": {
+    "providerMutationsPerformed": false,
+    "postsCreated": false,
+    "postsEdited": false,
+    "postsRescheduled": false,
+    "postsPublished": false,
+    "autoPublishingEnabled": false
+  },
+  "nextRequiredAction": "Metricool support or the owner must restore read access to brand 7545638 or provide a complete export of its 20 reported drafts, eight historical autoPublish records, remote IDs, timestamps, platform statuses and analytics. Preserve both brands and all content."
+}
