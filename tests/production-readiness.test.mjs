@@ -407,5 +407,5 @@ test("production readiness blocks the real repository queue until owner identity
   const blocker = report.blockers.find(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/.test(item.message));
   assert.ok(blocker, "the operational and detailed queue identities must be reconciled");
   assert.match(blocker.message, /content\/queue-identity-approval\.json is missing/i);
-  assert.equal(report.publicationEnabled, false);
+  assert.equal(report.status, "blocked");
 });
