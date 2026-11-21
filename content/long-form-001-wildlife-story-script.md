@@ -6,7 +6,7 @@
 **Channel:** SonicVhibez  
 **Format:** 16:9 long-form, target 7–8 minutes  
 **Status:** SCRIPT DRAFT — research/source review, media rights, commercially licensed narration, captions, thumbnail and human approval still required  
-**Narration rights:** Roderic is the preferred voice, but the current HeyGen Free-plan sample is non-commercial internal-evaluation only. No production narrator is licensed; no alternative voice may be substituted without explicit owner approval  
+**Narration rights:** Roderic is the preferred voice, but HeyGen Support confirmed that Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. The existing WAV is internal-evaluation-only. No production narration is authorized until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint; no alternate voice or paid upgrade is authorized.  
 **Audience:** Beginner wildlife filmmakers and faceless YouTube creators  
 **Core promise:** A repeatable editing method for turning a collection of animal clips into a clear, honest mini-story.
 
@@ -29,7 +29,7 @@ This product is sold through my own Selar business; purchases generate revenue f
 For a structured resource to support wildlife-video planning, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
 https://selar.com/0u19v8u99l
 
-Narration is not commercially cleared. The existing Roderic Free-plan sample is internal-evaluation-only; do not use it in production. Do not generate or use production narration until Roderic's commercial rights are resolved in writing. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited. If any other realistic altered or synthetic content appears in the final edit, assess and apply YouTube's disclosure setting where required. Review the current sales page and terms before purchasing.
+HeyGen Support confirmed that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. The existing sample is internal-evaluation-only; do not use it in any public branded release. Do not generate or use production narration until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint. No alternate narrator or paid upgrade is authorized. AI-generated wildlife visuals are prohibited. If any other realistic altered or synthetic content appears in the final edit, assess and apply YouTube's disclosure setting where required. Review the current sales page and terms before purchasing.
 
 #WildlifeFilmmaking #DocumentaryStorytelling #VideoEditing
 
