@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "assetId": "pexels-video-30026544",
+  "project": "SonicVhibez",
+  "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+  "source": {
+    "platform": "Pexels",
+    "pageUrl": "https://www.pexels.com/video/crocodile-resting-on-riverbank-in-south-africa-30026544/",
+    "directMp4Url": "https://videos.pexels.com/video-files/30026544/12882200_1920_1080_25fps.mp4",
+    "creator": "Johnny Tilly",
+    "pageTitle": "Crocodile Resting on Riverbank in South Africa",
+    "description": "Nile crocodile basking on a riverbank in South Africa's wild safari.",
+    "pageDate": "2025-01-01",
+    "metadataCheckedAt": "2026-11-20",
+    "pageMetadata": {
+      "durationSeconds": 36,
+      "width": 1920,
+      "height": 1080,
+      "aspectRatio": "16:9",
+      "frameRate": 25,
+      "sourceLicenseLabel": "Free"
+    }
+  },
+  "licenseReview": {
+    "source": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/legal-pages/license/",
+    "termsUrl": "https://www.pexels.com/terms-of-service/",
+    "checkedAt": "2026-11-20",
+    "platformCommercialUse": "PERMITTED_SUBJECT_TO_LICENSE_AND_TERMS",
+    "attributionRequired": false,
+    "modificationPermitted": true,
+    "restrictions": [
+      "Do not redistribute or sell the clip on a stock or wallpaper platform.",
+      "Do not imply endorsement by any depicted person or brand.",
+      "Do not use the content as a trademark, design mark, trade name, business name or service mark.",
+      "Do not sell or distribute the clip as a standalone unmodified asset.",
+      "Check separately for third-party intellectual-property, privacy, property, publicity and other rights."
+    ],
+    "platformLicenseIsNotProofOfThirdPartyReleases": true
+  },
+  "acquisition": {
+    "attempted": true,
+    "completed": false,
+    "filePath": null,
+    "fileSizeBytes": null,
+    "sha256": null,
+    "retrievalNotes": "The source page and its free-download route were inspected. The media-host MP4 could not be retrieved through the available zero-cost file retrieval path. A paid browser automation attempt was not made because the connected browser wallet had insufficient balance; no top-up or charge was authorized."
+  },
+  "inspection": {
+    "playable": null,
+    "ffprobe": null,
+    "representativeFramesReviewed": false,
+    "fullClipReviewed": false,
+    "embeddedAudioReviewed": false,
+    "visiblePeopleLogosTrademarksReviewed": false,
+    "speciesIndependentlyConfirmed": false,
+    "behaviourConfirmed": false
+  },
+  "approvals": {
+    "commercialRightsConfirmed": false,
+    "humanRightsReview": "NOT_RECEIVED",
+    "scientificEditorialApproval": "NOT_RECEIVED",
+    "finalProductionApproved": false
+  },
+  "releaseDecision": "DO_NOT_USE_IN_CURRENT_PRODUCTION — REFERENCE ONLY; ORIGINAL CREATOR-CAPTURED MEDIA REQUIRED",
+  "evidenceNote": "Source-page metadata and platform licence have been reviewed; this record does not assert that the specific media file has been acquired, inspected, or fully rights-cleared. Historical page-level licence research is retained for audit only and does not make this stock-library asset production-eligible.",
+  "historicalStatus": "OPEN_SOURCE_FILE_NOT_ACQUIRED",
+  "currentProductionDisposition": {
+    "status": "EXCLUDED_REFERENCE_ONLY",
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "reason": "This Pexels/Wikimedia Commons stock-library source is not eligible under the current owner policy. Genuine original creator-captured wildlife media is required; stock footage cannot substitute, regardless of the platform licence."
+  }
+}
