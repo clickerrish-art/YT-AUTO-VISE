@@ -374,3 +374,15 @@ Latest comparison: main head `3795519ccbf58fd02d74458624b58dd2e44a88c0`; impleme
 19. **Regression coverage expanded.** The production fail-closed tests now check AI generation config/notebook/importer, stock acquisition workflow guards, NOAA source-record exclusions, Pexels/Wikimedia source exclusions, and the disabled NOAA thumbnail script. Current file read-backs confirmed all these controls are present.
 
 The current branch corrections do not alter default-branch workflow state. The NOAA acquisition workflow remains enabled on `main` until the owner disables it or authorizes a normal branch/PR remediation. See the Git safety incident section above.
+
+
+### Additional execution — production queue and candidate alignment (2026-11-21)
+
+20. **Long-form 001 queue corrected.** Its status now states that both original creator-captured footage and commercially eligible Roderic narration are missing. The script revision is awaiting owner and qualified zoological review after the scientific claim corrections. Stale “Legal response pending” and “Pexels candidates remain leads” language was removed.
+21. **Next Short metadata corrected.** The draft no longer suggests that AI-generated wildlife scenes are an acceptable option if disclosed. It explicitly prohibits AI wildlife visuals and stock substitutes, records the Roderic commercial-rights denial, and remains HOLD with rights/compliance false.
+22. **Short 002 voice and media gates corrected.** Its draft now states Roderic is the exclusive owner-selected narrator, commercial narration is blocked by the HeyGen denial, and no alternative voice is authorized. Its specific Selar disclosure remains a separate approval gate.
+23. **Short 004 NOAA candidate excluded.** Its metadata, review-render evidence and script now state that NOAA B-roll is historical reference-only and not eligible under the current original creator-captured-media policy. The prior conditional source authorization is superseded; eSpeak review narration is not an approved production voice. No upload or schedule is allowed.
+24. **Queue-wide policy aligned.** `content/long-form-queue.json`, `content/queue.json` and `config/weekly-content-plan.json` now share the original-capture-only, no-stock, no-AI-wildlife, Roderic-only/rights-denied and publishing-disabled policy.
+25. **Worker backoff code review.** The current branch's `scripts/worker-runner.mjs` already persists 409/429 retry cooldowns, quarantines ambiguous dispatch outcomes, stops and retains the exclusive process lock when backoff persistence fails, and blocks restart before API contact. `test/worker-runner.test.mjs` contains dedicated 409 persistence-failure, lock-retention and restart-block tests. This is code-reviewed but **NOT runtime-verified on the current head**; no claim of SCHED-001 completion is made.
+
+All changed queue and candidate files were read back and JSON-parsed where applicable. Rendering, narration generation, upload, scheduling and publishing remain disabled.
