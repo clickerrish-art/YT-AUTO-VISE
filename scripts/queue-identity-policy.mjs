@@ -78,8 +78,8 @@ export function validateQueueIdentity({ operationalQueue, detailedQueue, approva
       errors.push("Queue identity approval must include a non-empty decision reference.");
     }
     const approvedAt = strictApprovalTimestamp(approval.approvedAt);
-    if (!Number.isFinite(approvedAt) || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$/.test(approval.approvedAt)) {
-      errors.push("Queue identity approval must include a valid timezone-qualified approvedAt timestamp.");
+    if (!Number.isFinite(approvedAt) || approvedAt > Date.now() + 5 * 60_000 || !/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,3})?(?:Z|[+-][0-9]{2}:[0-9]{2})$/.test(approval.approvedAt)) {
+      errors.push("Queue identity approval must include a valid, non-future timezone-qualified approvedAt timestamp.");
     }
   }
 
