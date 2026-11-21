@@ -1,11 +1,11 @@
-# SonicVhibez — California Spiny Lobster Short (new candidate)
+# SonicVhibez — California Spiny Lobster Short (historical candidate; source excluded)
 
-**Status:** EDITORIAL DRAFT — HOLD FOR PRODUCTION-SOURCE RESTORATION, SHOT-LEVEL REVIEW, FINAL RENDER AND HUMAN APPROVAL  
+**Status:** HISTORICAL EDITORIAL DRAFT — NOAA SOURCE EXCLUDED; NOT ELIGIBLE FOR CURRENT PRODUCTION  
 **Channel:** SonicVhibez only  
 **Cycle position:** Candidate for the next Short slot only; do not schedule ahead of the two long-form items  
 **Target:** 55 seconds, 9:16 vertical, 1080×1920  
 **Promotion:** None; no product CTA or commercial claim  
-**Footage:** NOAA B-Roll: Spiny Lobsters in California's Channel Islands; conditional owner authorization is limited to the exact SHA in `content/asset-candidates/noaa-spiny-lobsters-california.json`. Required credit: **NOAA’s Office of National Marine Sanctuaries**. Remove source audio completely.
+**Footage:** The NOAA B-roll package is historical reference-only and excluded by the current owner policy requiring genuine original creator-captured wildlife media. Do not use it. A new original creator-captured lobster source package with creator provenance, exact file hash and commercial-use rights is required.
 
 ## Narration draft (approximately 110 words; retime to the final recording)
 
@@ -21,12 +21,12 @@ A hidden reef resident by day. A night-time forager after dark. That is the Cali
 
 ## Edit and disclosure instructions
 
-- Use only the owner-authorized source package, verified against its SHA-256 before editing.
+- Do not use the NOAA source package or any generic stock/archive footage. The 2026-11-10 conditional NOAA authorization was superseded by the 2026-11-21 original-capture policy.
 - The 55.235-second vertical technical review render is **not** a source master; its warning labels are baked in. A separate 64-second silent source-review assembly is also review-only. Restore the original source artifact from the recorded workflow artifact and render the production candidate from that original source file.
-- Inspect every selected shot and transition, confirm no extra third-party credits, and retain exact NOAA attribution legibly on screen. Do not use NOAA marks as channel branding or imply endorsement.
+- If a future eligible original creator-captured source is acquired, inspect every selected shot and transition, verify the creator's exact commercial-use permission, and credit that creator exactly as required. Do not use NOAA marks or attribution for a different source.
 - Remove the entire source audio stream. Use newly recorded/licensed narration only; do not retain or sample source audio.
 - The natural-history facts are narration context, not a claim that every behaviour occurs in the displayed shots. Do not imply the daytime footage depicts nocturnal feeding.
-- If AI-generated narration is used, identify it accurately in production notes and apply platform disclosure settings as required. Do not fabricate wildlife visuals.
+- The owner-approved narrator remains Roderic — Authoritative & Refined only. HeyGen denied zero-cost commercial-use permission for existing and future Free-plan output; no alternative narrator is approved. Do not use the eSpeak review narration or any substitute voice.
 - No Selar promotion is included, so do not mark this editorial Short as a paid promotion.
 - Keep publication private/disabled. This draft does not authorize upload, schedule or publication.
 
@@ -40,10 +40,15 @@ A hidden reef resident by day. A night-time forager after dark. That is the Cali
 
 **Title:** California Spiny Lobster: The Reef's Night-Time Forager
 
-**Description:** Meet the California spiny lobster (*Panulirus interruptus*), filmed in the rocky reef habitat of California's Channel Islands. NOAA footage is credited to NOAA’s Office of National Marine Sanctuaries. California spiny lobsters shelter in reef crevices by day and emerge after dark to forage. Source audio has been removed from the edit. Educational natural-history narration; behaviour described in narration is not necessarily shown in every shot.
+**Description:** Not publishable. The previous description referred to NOAA archive footage, which is excluded by current production policy. Rewrite against the actual original creator-captured footage and creator-specific credit only after a new source package is approved.
 
 **Tags:** California spiny lobster, Panulirus interruptus, NOAA, Channel Islands, marine wildlife, rocky reef, ocean animals, marine biology, wildlife documentary, nature Shorts
 
 **Hashtags:** #CaliforniaSpinyLobster #MarineWildlife #OceanDocumentary #WildlifeShorts
 
 **Thumbnail:** A genuine lobster in its reef habitat, no fabricated danger or composite. If text is used: “NO CLAWS?” only if the frame and context make clear this is a spiny lobster species.
+
+
+## Current production disposition — 2026-11-21
+
+This script may be reused only after an original creator-captured California spiny lobster footage package is obtained and rights-cleared. The current NOAA source, its review renders, and its eSpeak narration are not eligible for production. No narration generation, rendering, upload, scheduling or publication is authorized until the original-media and Roderic commercial-rights gates pass.
