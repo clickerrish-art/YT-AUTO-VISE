@@ -274,3 +274,21 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Latest implementation commit created in this execution: `c0f1818262dc59f42ed8ba30c95361edd0ec1c98`.
 - `main` remains `3795519ccbf58fd02d74458624b58dd2e44a88c0`; comparison is 5,073 ahead / 17 behind, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
 - PR #1 remains subject to the standing safety rule: open, draft and unmerged. No main-branch write, merge, reset, rebase, force-push, publication or paid action was performed.
+
+
+---
+
+## Queue guard hardening and additional regression coverage — 21 November 2026
+
+- Corrected the queue identity policy to model the actual repeating `long_form → long_form → short` sequence. Long-form cycle positions now resolve as 1, 2, 4, 5, 7, 8, … rather than incorrectly treating the third long-form as position 3.
+- Every mapping must now reference an existing operational `long_form` item, a unique detailed-queue ID and a unique publication-cycle position. The detailed queue's `publicationCyclePosition` must match the owner-approved mapping. Mappings to Shorts, duplicate positions and future-cycle misalignment are rejected.
+- Expanded isolated Node 22 policy tests to seven cases, including the third long-form mapping to cycle position 4, duplicate cycle positions, mapping a Short as long-form, and disagreement between detailed and operational positions. Exact fetched policy/test source passed **7/7** isolated tests and `node --check` for the policy module.
+- Added a production-readiness integration regression asserting that the real repository remains blocked when `content/queue-identity-approval.json` is absent. Existing dashboard and worker regression tests cover the dispatch and polling hold paths.
+- These repository integration tests have been added but **have not been executed** because this session has no checked-out repository and the GitHub connector has not triggered Actions for connector-created commits. Full Node/Python, readiness, dashboard, worker and browser suites remain NOT_TESTED at the current HEAD.
+- No owner queue approval, topic selection, cycle assignment, production input, upload or publication was fabricated or performed.
+
+### Exact checkpoint after queue guard hardening
+- Implementation HEAD: `4f0bea6d91144c3f8b1faf34681eb60820289655`.
+- `main`: `3795519ccbf58fd02d74458624b58dd2e44a88c0`, unchanged.
+- Branch comparison: 5,078 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- PR #1: open, draft, unmerged. No branch protection, workflow or production permission was changed.
