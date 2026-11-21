@@ -360,7 +360,7 @@ Four sequential updates to historical stock-source rights-review JSON files were
 
 Read-back confirmed those four records changed on `main`; their corrected counterparts were then separately committed and verified on `codex/marketing-machine-audit-fixes`. No other files were intentionally written to `main` in this incident. I did not attempt a rollback, reset, rebase or history rewrite. **No further writes to `main` will be made.** Any remediation of these four default-branch commits requires an owner-approved normal GitHub process.
 
-Latest comparison: main head `3795519ccbf58fd02d74458624b58dd2e44a88c0`; implementation branch is 4,872 commits ahead / 17 behind, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+At the initial incident record, the implementation branch was 4,872 ahead / 17 behind. A later read-only comparison at 2026-11-21 09:36 UTC returned 4,924 ahead / 17 behind; main head remained `3795519ccbf58fd02d74458624b58dd2e44a88c0`, merge base `45352b73bb6cc4787b2a49988b575afb754ab627`, and PR #1 head was `08af58dd597b9e3ba72bd74124d54da142551817`.
 
 **Immediate default-branch risk:** `.github/workflows/acquire-noaa-broll-candidates.yml` still exists and is enabled on `main` (push trigger when this workflow file changes on main, plus manual workflow_dispatch; no scheduled cron trigger is present). The branch copy has been disabled, but PR #1 remains unmerged, so the branch correction does not disable the default-branch workflow. The connected GitHub actions tools expose no workflow-disable operation, and no main-branch write will be attempted. A repository owner must disable that workflow in GitHub Actions or approve a safe branch/PR remediation. This is a release blocker.
 
