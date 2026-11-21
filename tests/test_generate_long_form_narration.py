@@ -157,11 +157,13 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
             "https://selar.com/0u19v8u99l"
         )
         cleaned = MODULE.clean_script(valid, include_paid_product=True)
-        self.assertLess(cleaned.index("Advertisement."), cleaned.index(MODULE.APPROVED_DISCLOSURE_TEXT))
-        self.assertLess(cleaned.index(MODULE.APPROVED_DISCLOSURE_TEXT),
-                        cleaned.index("Complete YouTube Wildlife Creator"))
-        self.assertLess(cleaned.index("Complete YouTube Wildlife Creator"),
-                        cleaned.index("https://selar.com/0u19v8u99l"))
+        self.assertLess(valid.index("Advertisement."), valid.index(MODULE.APPROVED_DISCLOSURE_TEXT))
+        self.assertLess(valid.index(MODULE.APPROVED_DISCLOSURE_TEXT),
+                        valid.index("Complete YouTube Wildlife Creator"))
+        self.assertLess(valid.index("Complete YouTube Wildlife Creator"),
+                        valid.index("https://selar.com/0u19v8u99l"))
+        self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, cleaned)
+        self.assertNotIn("https://selar.com/0u19v8u99l", cleaned)
 
         invalid = (
             "Advertisement. If you want a paid resource, review the Complete YouTube Wildlife Creator's Vault. "
