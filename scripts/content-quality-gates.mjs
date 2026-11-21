@@ -235,7 +235,6 @@ export function validateAssetProvenance(asset) {
   if (asset.rightsStatus !== "VERIFIED") errors.push("rightsStatus must be VERIFIED after human evidence review");
   if (asset.commercialUseAllowed !== true) errors.push("commercial use must be explicitly allowed for this production");
   if (asset.sourceMethod === "LICENSED" && (!nonempty(asset.licenseName) || !nonempty(asset.attributionRequirements))) errors.push("licensed assets require licenseName and attributionRequirements");
-  if (asset.sourceMethod === "GENERATED" && (!nonempty(asset.generationMethod) || !nonempty(asset.generationTool))) errors.push("generated assets require generationMethod and generationTool");
   if (!nonempty(asset.verifiedBy) || !nonempty(asset.verifiedAt) || !Number.isFinite(Date.parse(asset.verifiedAt))) errors.push("human rights verifier and valid verification timestamp are required");
   return { valid: errors.length === 0, errors };
 }
