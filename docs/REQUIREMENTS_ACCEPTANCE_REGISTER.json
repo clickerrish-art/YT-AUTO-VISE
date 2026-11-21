@@ -409,7 +409,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44725743866",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476"
       ],
-      "nextAction": "Obtain a fresh owner attestation covering manual/local/third-party YouTube attempts after 2026-11-18 and refresh the authenticated read-only channel/scope/history inventory before any spacing decision.",
+      "nextAction": "Obtain a fresh attestation covering manual/local/third-party YouTube attempts after 2026-11-18, then refresh the authenticated read-only channel/scope/history inventory before any spacing decision.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
@@ -2004,7 +2004,7 @@
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-      "currentHeadEvidenceNote": "BLOCKED overall on exact source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Current automation run 44884481167 passed 1,043 Node tests across 181 files, including 42/42 authorized application-level positive route evidence sets and 48/48 protected API routes rejecting missing/invalid authentication. Six provider/production routes remain BLOCKED: POST /api/facebook/drafts/approve, POST /api/facebook/publish, POST /api/facebook/verify-page, POST /api/instagram/approve, POST /api/jobs/produce and POST /api/uploads/reconcile. No live provider write or production publication was attempted.",
+      "currentHeadEvidenceNote": "BLOCKED overall on exact source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Current automation run 44884481167 passed 1,043 Node tests across 181 files, including 42/42 authorized application-level positive routes PASS and 48/48 protected API routes rejecting missing/invalid authentication. Six provider/production routes remain BLOCKED: POST /api/facebook/drafts/approve, POST /api/facebook/publish, POST /api/facebook/verify-page, POST /api/instagram/approve, POST /api/jobs/produce and POST /api/uploads/reconcile. No live provider write or production publication was attempted.",
       "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
     },
     {
