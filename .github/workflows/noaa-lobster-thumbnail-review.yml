@@ -19,6 +19,7 @@ concurrency:
 
 jobs:
   thumbnail-review:
+    if: false # Disabled: NOAA stock/archive B-roll is excluded by the original creator-captured-media policy.
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
