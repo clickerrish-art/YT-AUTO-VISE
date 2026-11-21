@@ -1,6 +1,29 @@
-> Older checkpoint sections below are retained as historical evidence. This top checkpoint and the latest exact-run references supersede earlier blocker counts, test totals, route statuses and source SHAs.
+> Checkpoint sections below the 21 November update are retained as historical evidence. The current update supersedes earlier media, voice, branch, workflow and blocker statements. Historical CI passes do not certify the current head.
 
-# Current verified checkpoint — 19 November 2026
+# Current verified checkpoint — 21 November 2026
+
+**Overall status: HOLD — NOT MASTER COMPLETE.** No production media is cleared, no final render exists, and no upload, schedule or publication is authorized.
+
+- **Original wildlife media:** BLOCKED. Current policy requires genuine original creator-captured wildlife media. All Pexels, Pixabay, Wikimedia Commons, NOAA B-roll, Internet Archive and Canva stock/archive candidates are reference-only and excluded. The repository contains no eligible creator-captured footage package with provenance, exact source bytes/hashes and commercial rights.
+- **Narration:** BLOCKED. HeyGen Support explicitly denied a zero-cost commercial-use exception for existing and future Roderic Free-plan outputs. Keep the current Roderic audio internal-only. Roderic remains the exclusive owner-selected narrator; no other voice or paid upgrade is authorized.
+- **AI generation:** DISABLED on the implementation branch. WanGP config is disabled; all seven Kaggle notebook code cells fail closed before GPU/model setup; the importer rejects generated wildlife output. Comfy Cloud's five-second Arctic/polar-bear text-to-video demo is disqualified and has not been run.
+- **Stock/archive acquisition:** DISABLED on the implementation branch. NOAA B-roll, Pexels acquisition and NOAA thumbnail workflows are guarded off; associated scripts fail closed. The NOAA conditional-use record and old Pexels/Wikimedia rights leads are explicitly superseded/excluded.
+- **Nature Frontiers brand separation:** repository config now restricts Nature Frontiers to Facebook/Instagram and removes its YouTube subscription destination. Metricool provider-side confirmation remains unresolved: current settings returned Facebook/Instagram only, but this does not independently prove the old mapping was disconnected. Legacy brand 7545638 remains inaccessible (403); eight historical auto-publish records and the reported 20 drafts remain unreconciled.
+- **Long-form 001 and Short 001/002/004:** planning/draft only. Long-form 001 script and primary-paper limitations are corrected and pinned but await owner/qualified zoological review. Short 001 Pexels footage is excluded. Short 004 NOAA footage and eSpeak review narration are excluded. No final captions, thumbnails, full playback or exact-hash approval.
+- **YouTube:** current refresh-token grant previously returned `invalid_grant`; no fresh authenticated complete inventory or current upload scope is available. Reconcile all local/manual/third-party attempts and obtain owner attestation before any upload. Never retry an uncertain upload.
+- **Scheduling:** publishing disabled. Preserve rolling `long_form → long_form → short`, 72 actual hours, Africa/Johannesburg and no same-day release. Do not claim SCHED-001 complete without complete remote history and live recovery tests.
+- **Deployment:** no verified SonicVhibez production publisher Worker. Cloudflare R2 enablement previously returned error 10042; durable archive/restore remains blocked.
+- **Software tests:** added brand-separation, original-media and rights fail-closed regression tests. Existing worker backoff code and tests cover 409 cooldown persistence, uncertain dispatch quarantine, failed persistence lock retention and restart blocking. These changes have not had a full current-head runtime regression; latest commit-run lookup returned no PR-triggered runs. Historical CI totals are not current-head proof.
+
+**Git state and safety:** implementation branch `codex/marketing-machine-audit-fixes` is 4,896 commits ahead / 17 behind `main`; main head `3795519ccbf58fd02d74458624b58dd2e44a88c0`; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. Four rights-review JSON commits were accidentally written to main because branch was omitted from GitHub update calls; see the explicit incident record in `docs/MASTER_COMPLETION_PLAN_2026-11-20.md`. No further writes to main will be made. The main-branch NOAA B-roll acquisition workflow remains enabled; repository owner action is required to disable it or approve safe remediation.
+
+**Required owner/provider inputs:** original creator-captured footage and rights; HeyGen written reversal or explicit change to the Roderic-only rule; Metricool legacy export and mapping confirmation; fresh YouTube OAuth/history and owner upload-attempt attestation; zero-cost archive/publisher infrastructure access; qualified zoological and final exact-hash human approval.
+
+**Safety:** PR #1 remains open/draft/unmerged. Public/unattended publishing remains disabled. No provider mutation, media render, GPU generation, upload, schedule or publication occurred in this 21 November work.
+
+---
+
+# Historical checkpoint — 19 November 2026
 
 **Exact tested source/test tree:** `4dec5f719e0b717893547fbbbe687c7f9f9658db` (the latest source/test tree; subsequent commits only update evidence/data files). Full automation/security run 44527617194 passed on this exact tree. Current branch inventory run 44527617041 records 4,550 branch-only commits, nine main-only commits, 454 changed files, zero deletions and a clean working tree. The nine main-only commits are add/revert pairs with no net main-tree change relative to merge base.
 
