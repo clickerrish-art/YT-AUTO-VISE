@@ -7,6 +7,8 @@ on:
       - "scripts/validate-schedule.mjs"
       - "scripts/schedule-policy.mjs"
       - "config/weekly-content-plan.json"
+      - "config/narration-voice-candidates.json"
+      - "content/drafts/*.md"
       - ".github/workflows/twice-weekly-check.yml"
       - "scripts/production-readiness.mjs"
       - "test/**"

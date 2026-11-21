@@ -4,7 +4,7 @@ on:
     branches:
       - codex/marketing-machine-audit-fixes
     paths:
-      - ".github/workflows/export-source-bundle.yml"
+      - ".github/workflows/**"
       - ".github/workflows/free-narration-artifact.yml"
       - "scripts/replenish-queue.mjs"
       - "test/queue-cadence.test.mjs"
