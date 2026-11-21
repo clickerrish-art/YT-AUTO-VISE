@@ -8,6 +8,9 @@ on:
     branches: [codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/verify-youtube-channel.mjs"
+      - "scripts/prepare-youtube-inventory-artifact.mjs"
+      - "scripts/youtube-inventory-artifact-policy.mjs"
+      - "test/youtube-inventory-artifact-policy.test.mjs"
       - "scripts/youtube-oauth-scope.mjs"
       - "test/verify-youtube-channel.test.mjs"
       - "test/youtube-oauth-scope.test.mjs"
