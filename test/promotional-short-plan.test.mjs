@@ -627,7 +627,7 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
 
 
 test("current search-intent evidence is mandatory, dated, sourced and fresh for current/future drafts", () => {
-  const now = new Date("2026-11-21T09:00:00+02:00");
+  const now = new Date("2026-11-21T11:30:00+02:00");
   const valid = clone(checkedInPlan);
   assert.deepEqual(validatePromotionalShortPlan(valid, products, { now }), []);
 
@@ -640,7 +640,7 @@ test("current search-intent evidence is mandatory, dated, sourced and fresh for 
   assert.ok(validatePromotionalShortPlan(stale, products, { now }).some(error => /current search-intent evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(valid);
-  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-21T09:10:00+02:00";
+  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-21T11:40:00+02:00";
   assert.ok(validatePromotionalShortPlan(future, products, { now }).some(error => /current search-intent evidence cannot be more than 5 minutes in the future/.test(error)));
 
   const insecure = clone(valid);
