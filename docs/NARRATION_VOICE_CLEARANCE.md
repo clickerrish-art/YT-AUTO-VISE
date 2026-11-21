@@ -1,14 +1,14 @@
-> **SUPERSEDED — 2026-11-20.** This document describes an earlier Norman (en_US-norman-medium) audition candidate and is retained only as historical evidence. It is not a current voice selection or production instruction. The owner has since selected **Roderic — Authoritative & Refined** (HeyGen voice ID `b5c5b28db1ea408abc7d851202983bdb`) as the exclusive approved narrator and explicitly rejected Banjo for all future production and auditions. Do not generate, audition, or substitute Norman, Banjo, or any other voice for SonicVhibez. Roderic's existing HeyGen Free-plan WAV remains internal-evaluation-only unless HeyGen Legal grants verified written commercial-use permission. See `content/assets/long-form-001-narration-status.md` and `docs/MASTER_COMPLETION_PLAN_2026-11-20.md` for current controls.
+> **SUPERSEDED — 2026-11-21. HISTORICAL RECORD ONLY.** Nothing below is a current candidate selection or production instruction. The owner selected **Roderic — Authoritative & Refined** (HeyGen voice ID `b5c5b28db1ea408abc7d851202983bdb`) as the exclusive narrator and rejected Banjo; the owner has not approved Norman or any other alternative. HeyGen Support has now explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs. Therefore no commercially eligible narrator is currently available under the combined Roderic-only and zero-cost constraints. Do not generate, audition or substitute another voice unless the owner explicitly changes that instruction. The existing Roderic Free-plan WAV remains internal-only and must not be used in public branded or commercial production. See `content/assets/long-form-001-narration-status.md` and `content/heygen-roderic-commercial-rights-determination-2026-11-21.json` for current controls.
 
 ---
 
 # SonicVhibez narration voice — American male candidate review
 
-## Current candidate
+## Historical candidate — superseded; not approved for production
 
-**Norman — `en_US-norman-medium`**, a free local Piper synthetic US-English male voice, is the current audition candidate. It is not yet approved as the permanent production voice.
+**Norman — `en_US-norman-medium`** was an earlier free local Piper audition candidate. The owner later selected Roderic exclusively; Norman was never approved for production and must not be used.
 
-The current project direction is a mature, approximately 45-year-old American male wildlife storyteller: clean, clear, warm, confident, energetic and passionate, with natural conversational pacing. Perceived age is a creative direction, not a claim about the synthetic speaker.
+The historical creative direction at the time of this audition was a mature, approximately 45-year-old American male wildlife storyteller: clean, clear, warm, confident, energetic and passionate, with natural conversational pacing. Perceived age is a creative direction, not a claim about the synthetic speaker.
 
 ## Exact review artifact
 
