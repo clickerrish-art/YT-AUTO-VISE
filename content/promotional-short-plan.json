@@ -6,7 +6,7 @@
   "publicationEnabled": false,
   "schedulingEnabled": false,
   "calendarStatus": "DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES",
-  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp. Added sonicvhibez-short-013-youtube-shorts-analytics for the week beginning 2026-12-14; 55-second private DRAFT_ONLY, qualitative search-intent evidence only, 90-Day Blueprint direct-sales disclosure HOLD, and no publication timestamp. SEO evidence for the two existing drafts in the week beginning 2026-11-23 was refreshed on 2026-11-19 using current qualitative web-search results; no search volume or competition metrics were available. The weekly cap remains two, and all items remain private DRAFT_ONLY with no publication or scheduling timestamps.,Two 55-second Shorts prepared for week beginning 2026-12-21: low-light wildlife photography (Vault, owner-approved direct-sales disclosure) and YouTube script hooks (Prompt Pack, product-specific disclosure HOLD). Both remain private DRAFT_ONLY with no publication or scheduling timestamps. Fresh 19 November qualitative web-search evidence only; no measured volume or competition. Selar pages could not be re-opened in this run; seller registry evidence was last checked 9 November. Fresh 20 November 2026 qualitative SEO refresh completed for the two drafts in the week beginning 2026-11-23; no search-volume or competition metrics were available and no vidIQ credits were spent. The weekly maximum remains exactly two; both items remain DRAFT_ONLY/private with no publication timestamps or scheduling.",
+  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp. Added sonicvhibez-short-013-youtube-shorts-analytics for the week beginning 2026-12-14; 55-second private DRAFT_ONLY, qualitative search-intent evidence only, 90-Day Blueprint direct-sales disclosure HOLD, and no publication timestamp. SEO evidence for the two existing drafts in the week beginning 2026-11-23 was refreshed on 2026-11-19 using current qualitative web-search results; no search volume or competition metrics were available. The weekly cap remains two, and all items remain private DRAFT_ONLY with no publication or scheduling timestamps.,Two 55-second Shorts prepared for week beginning 2026-12-21: low-light wildlife photography (Vault, owner-approved direct-sales disclosure) and YouTube script hooks (Prompt Pack, product-specific disclosure HOLD). Both remain private DRAFT_ONLY with no publication or scheduling timestamps. Fresh 19 November qualitative web-search evidence only; no measured volume or competition. Selar pages could not be re-opened in this run; seller registry evidence was last checked 9 November. Fresh 20 November 2026 qualitative SEO refresh completed for the two drafts in the week beginning 2026-11-23; no search-volume or competition metrics were available and no vidIQ credits were spent. The weekly maximum remains exactly two; both items remain DRAFT_ONLY/private with no publication timestamps or scheduling. Fresh qualitative SEO evidence for the two 2026-11-30 drafts was refreshed on 2026-11-21 from wildlife-video fact-check reporting and pre-production/wildlife-filming guidance; no measured volume or competition was available, and no vidIQ credits were used.",
   "weeks": [
     {
       "weekOf": "2026-11-09",
@@ -650,28 +650,23 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-12T09:54:29+02:00",
-            "note": "Qualitative search-intent evidence only: current indexed results surface dedicated guidance on wildlife-video misinformation, verifying animal clips and fact-checking YouTube scripts. No measured global search volume or competition was available; vidIQ had 3 credits remaining, below its 5-credit keyword-research call cost. These results are not volume estimates.",
+            "researchedAt": "2026-11-21T10:48:26.540+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 21 November 2026 search results surfaced current reporting and fact-check guidance about fabricated or AI-altered animal videos, including the risk of false species, behaviour and location claims. This supports the exact viewer problem in the Short—checking what a wildlife clip actually proves before writing a caption or narration—but does not establish keyword volume or ranking opportunity.",
             "sources": [
               {
-                "title": "How to Fact-Check and Correct Wildlife Misinformation",
-                "url": "https://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/",
-                "whyRelevant": "Recent wildlife-specific guidance recommends writing down the exact claim and tracing it to an underlying study, dataset, agency notice or first-hand source."
+                "title": "Fabricated AI animal videos are distorting how we see wildlife, researchers warn",
+                "url": "https://www.euronews.com/2026/07/21/fabricated-ai-animal-videos-are-distorting-how-we-see-wildlife-researchers-warn",
+                "whyRelevant": "Current 2026 reporting summarizes conservation researchers' warnings that fabricated animal footage can misrepresent behaviour, species and locations, directly matching the fact-check lesson."
               },
               {
-                "title": "Fact-check: Animal videos on the internet—cute, but often fake",
+                "title": "Faktencheck - Tiervideos im Internet: herzig, aber oft fake – drei Beispiele",
                 "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
-                "whyRelevant": "The Swiss public broadcaster's January 2026 animal-video fact-check explains checking plausibility, visual continuity and the account or earliest accessible source."
+                "whyRelevant": "A fact-checking newsroom gives practical checks for implausible animal behaviour, visual continuity and tracing the original publisher of an animal video."
               },
               {
-                "title": "How to Research and Fact-Check a YouTube Script",
-                "url": "https://meowplaybook.com/blog/research-fact-check-youtube-script",
-                "whyRelevant": "A creator-facing guide published last week recommends matching every checkable script claim to a source fact sheet and linking sources for viewers."
-              },
-              {
-                "title": "How to Identify Marine Species in Blue Planet III Footage",
-                "url": "https://www.documentarytube.com/blog/how-to-identify-marine-species-featured-in-blue-planet-iii/",
-                "whyRelevant": "A recent documentary-specific guide distinguishes confirmed, supported, probable and unresolved species identification, supporting honest uncertainty in narration."
+                "title": "People could get hurt: Conservationists decry AI wildlife visuals",
+                "url": "https://factcheck.afp.com/doc.afp.com.C4TR6KG",
+                "whyRelevant": "AFP fact-check coverage links misleading AI wildlife visuals to conservation and safety risks, reinforcing why creators should verify footage claims and disclose uncertainty."
               }
             ]
           },
@@ -787,23 +782,23 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-12T10:11:06+02:00",
-            "note": "Qualitative search-intent evidence only: current indexed results surface practical wildlife-documentary shot-list guides, shot-size sequencing and wildlife-filming tutorials. No measured global search volume or competition is available; vidIQ has 3 credits remaining and its keyword-research call costs 5 credits. These sources support the topic and phrasing, not volume estimates.",
+            "researchedAt": "2026-11-21T10:48:26.540+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 21 November 2026 research found creator guidance emphasizing storyboarding and pre-production before filming, alongside wildlife-documentary production guidance on using longer focal lengths to capture natural behaviour without disturbing animals. These sources support the practical shot-planning problem; the exact long-tail phrase is retained as an intent-led keyword, not a measured-volume claim.",
             "sources": [
               {
-                "title": "Types of shots in wildlife video",
-                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
-                "whyRelevant": "Explains why wildlife sequences benefit from varied shot sizes and consistent camera angles, supporting a practical shot-sequence lesson."
+                "title": "How-To Guide: Get Your Nonprofits on Youtube",
+                "url": "https://help.youtube.com/nonprofits/resources/how-to-guide/get-your-nonprofit-on-youtube/",
+                "whyRelevant": "YouTube's own production guidance recommends storyboarding and deciding what to film before recording, supporting the shot-list planning lesson."
               },
               {
-                "title": "How to get the best shots for your wildlife documentary",
-                "url": "https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/",
-                "whyRelevant": "Covers wide, medium and close shots, B-roll, patience, stable framing and observing wildlife without forcing action."
+                "title": "Filmed on Canon: National Geographic's Latest Documentary",
+                "url": "https://www.canon.com.au/get-inspired/behind-the-scenes-save-this-rhino-documentary",
+                "whyRelevant": "A wildlife-documentary production account explains how long telephoto reach helps crews capture natural animal behaviour without disturbing subjects, matching the responsible-distance guidance."
               },
               {
-                "title": "How to film a wildlife documentary on your safari",
-                "url": "https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania",
-                "whyRelevant": "Provides an explicit shot-list sequence of establishing, medium and close-up shots and stresses safe distance and natural behaviour."
+                "title": "To the Ends of the Earth | The Natural World - Pushing Boundaries",
+                "url": "https://www.pbs.org/video/the-natural-world-pushing-boundaries-SAZzpZ/",
+                "whyRelevant": "A wildlife-filmmaking programme describes framing and long-lens choices across habitats, providing relevant production context for planning wide, context and detail shots."
               }
             ]
           },
