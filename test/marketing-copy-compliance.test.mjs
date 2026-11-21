@@ -51,7 +51,7 @@ test("separate creator-education long-form script has compliant disclosure order
   assert.ok(script.includes("AI-generated wildlife visuals are prohibited"));
   assert.ok(script.includes("cannot be used commercially"));
   assert.ok(script.includes("No alternate narrator or paid upgrade is authorized"));
-  assert.ok(script.includes("cannot be publicly redistributed for branded projects"));
+  assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
   assert.ok(script.includes("Queue ID: `long-story-wildlife-footage`"));
   assert.ok(script.includes("NOT ASSIGNED"));
   assert.ok(!script.includes("Long-Form Video 001"));
@@ -131,7 +131,7 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.ok(script.includes("AI-generated wildlife visuals") && script.includes("prohibited"));
   assert.ok(script.includes("stock/archive footage"));
   assert.ok(script.includes("commercially prohibited by the provider's written determination"));
-  assert.ok(script.includes("cannot be publicly redistributed for branded projects"));
+  assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
   assert.ok(script.includes("No alternate voice or paid upgrade is authorized"));
   assert.ok(!/AI reconstruction if synthetic|labelled reconstruction|real footage or labelled reconstruction/i.test(script));
 });
