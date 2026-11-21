@@ -28,5 +28,8 @@
   "mediaProvenanceStatus": "UNVERIFIED",
   "narrationRightsDeterminationEvidence": "heygen-roderic-commercial-rights-determination-2026-11-21.json",
   "sourceScriptBlobSha": "f4949a62c1235867ab7565ba43c3cfe97efae297",
-  "sourceScriptHashType": "GIT_BLOB_SHA"
+  "sourceScriptHashType": "GIT_BLOB_SHA",
+  "scientificReviewPath": "assets/long-form-001-scientific-claim-review.md",
+  "scientificReviewBlobSha": "5c794a85fdec74bafb14b832d366edda12007ffb",
+  "scientificReviewHashType": "GIT_BLOB_SHA"
 }
