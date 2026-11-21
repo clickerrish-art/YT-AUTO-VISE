@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "assetId": "wikimedia-nairobi-national-park-nile-crocodile-2025",
   "project": "SonicVhibez",
-  "status": "OPEN_SOURCE_FILE_NOT_ACQUIRED",
+  "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
   "source": {
     "platform": "Wikimedia Commons",
     "pageUrl": "https://commons.wikimedia.org/wiki/File:Nairobi_National_Park_(August_2025)_Nile_crocodile.webm",
@@ -62,6 +62,13 @@
     "scientificEditorialApproval": "NOT_RECEIVED",
     "finalProductionApproved": false
   },
-  "releaseDecision": "DO_NOT_USE_UNTIL_ORIGINAL_FILE_IS_ACQUIRED_AND_INSPECTED_AND_CC_BY_SA_ATTRIBUTION_AND_SHAREALIKE_OBLIGATIONS_ARE_APPROVED",
-  "evidenceNote": "This is a promising openly licensed candidate with a source-page record, not an acquired or production-approved media asset."
+  "releaseDecision": "DO NOT USE IN CURRENT PRODUCTION — REFERENCE ONLY; ORIGINAL CREATOR-CAPTURED MEDIA REQUIRED",
+  "evidenceNote": "This is a promising openly licensed candidate with a source-page record, not an acquired or production-approved media asset. Historical page-level licence research is retained for audit only and does not make this stock-library asset production-eligible.",
+  "historicalStatus": "OPEN_SOURCE_FILE_NOT_ACQUIRED",
+  "currentProductionDisposition": {
+    "status": "EXCLUDED_REFERENCE_ONLY",
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "reason": "This Pexels/Wikimedia Commons stock-library source is not eligible under the current owner policy. Genuine original creator-captured wildlife media is required; stock footage cannot substitute, regardless of the platform licence."
+  }
 }
