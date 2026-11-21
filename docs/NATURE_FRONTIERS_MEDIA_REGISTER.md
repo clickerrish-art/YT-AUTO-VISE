@@ -2,6 +2,10 @@
 
 The canonical register is `content/nature-frontiers-media-register.json`. It is ordinary version-controlled JSON and does not require a Pexels, Pixabay, Metricool, Meta, or other provider API. Provider integrations may be added later as optional import/export adapters; they must never become the source of truth.
 
+## Current production-media eligibility policy
+
+Nature Frontiers production requires genuine original creator-captured wildlife media. Generic stock footage and AI-generated wildlife visuals are not acceptable substitutes. Pexels/Pixabay listings may be retained as research/reference records only; they are not production-eligible even when a platform licence permits commercial use. The current 92 stock listings are all marked reference-only and ineligible. A future asset can become production-eligible only after original-capture provenance, creator identity, exact local source bytes and SHA-256, commercial rights, full human visual inspection, and exact-hash human approval are all verified.
+
 ## Validate
 
 Run `npm run validate:nature-frontiers-media`. The validator uses only Node.js built-ins, performs no network requests and needs no credentials.
@@ -80,7 +84,9 @@ Rights clearance is bound to the exact local file SHA-256 and permitted usage sc
 - New media defaults to held and pending.
 - Automatic publication is disabled.
 - Listing metadata never proves species, behaviour or exact location.
-- No stock asset is represented as Nature Frontiers-original footage.
+- No stock asset is represented as Nature Frontiers-original footage, and no stock listing is production-eligible under the current owner policy.
+- AI-generated wildlife visuals are not permitted as substitutes for genuine original creator-captured wildlife media.
+- Production eligibility requires an original creator-capture declaration plus exact file, rights, full inspection and exact-hash approval gates.
 - A listing-level licence claim is not a substitute for a rights review.
 - Approval is bound to the exact local file hash and intended platform use.
 - No provider API is required to create, edit, validate, back up or restore the register.
