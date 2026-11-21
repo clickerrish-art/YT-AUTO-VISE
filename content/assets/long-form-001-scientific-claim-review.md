@@ -64,3 +64,21 @@ This review does not clear footage, audio, models, narration rights, music, capt
 8. IUCN/SSC Crocodile Specialist Group. “Locomotion.” https://www.iucncsg.org/pages/Locomotion.html
 
 **Remaining scientific-review gate:** independent qualified zoological review of the entire narration and final footage/scene mapping. The current source check is a desk review, not expert sign-off.
+
+
+## Independent primary-paper cross-check — 2026-11-21
+
+The sensory-integration wording in the documentary script was checked against the full open-access primary paper:
+
+- Delbosc, N.C. et al. (2025), “Temporal integration and decision-making in crocodiles,” *Biology Open* 14(5), bio061844, published 6 May 2025. DOI: https://doi.org/10.1242/bio.061844. Full text: https://pmc.ncbi.nlm.nih.gov/articles/PMC12079573/
+
+**What the experiment supports:** The study tested naïve juvenile Nile crocodiles in controlled basins. Experiment 1 involved nine individuals; Experiment 2 involved ten. The researchers presented airborne sound and water-surface vibration from separate or co-located sources and controlled their relative arrival timing. In the controlled timing conditions, the young crocodiles preferentially approached the water-vibration source whether it arrived before, at the same time as, or after the sound, within the several-second delays tested.
+
+**Limits that must remain in the script/edit:**
+- These were young, captive, naïve crocodiles in a controlled experimental basin, not free-ranging adult crocodiles stalking prey.
+- The study tested approach decisions toward experimental stimuli, not prey detection range, strike accuracy, hunting success or a universal ambush sequence.
+- The result supports temporal integration of airborne sound and water-surface vibration in this experimental context. It does not establish that every crocodile prioritizes water vibration in every natural context.
+- Do not use this experiment as proof that a crocodile can detect a specific animal at a particular distance, identify prey from any ripple, or automatically launch an attack.
+
+**Disposition:** The revised script's restricted description of young Nile crocodiles combining sound and water-wave information under controlled conditions is supported. The claim remains contextual and must not be illustrated as documentary footage of a wild hunt. Independent qualified zoological review of the complete narration and final scene mapping remains outstanding.
+
