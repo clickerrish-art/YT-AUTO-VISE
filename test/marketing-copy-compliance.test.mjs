@@ -117,7 +117,12 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.equal(manifest.narrationPublicBrandedDistributionAllowed, false);
   assert.equal(manifest.narrationCommercialUseAllowed, false);
   assert.equal(manifest.narrationProductionUseAllowed, false);
-  assert.ok(manifest.narrationRestrictionSummary.includes("cannot be publicly redistributed for branded projects"));
+  assert.ok(manifest.narrationRestrictionSummary.includes("prohibited for public branded or commercial use"));
+  assert.equal(manifest.selectedNarratorForReview.name, "Wade - Resonant & Narrative");
+  assert.equal(manifest.selectedNarratorForReview.ownerSelectionStatus, "SELECTED_FOR_FURTHER_REVIEW_ONLY");
+  assert.equal(manifest.selectedNarratorForReview.commercialUseAllowed, false);
+  assert.equal(manifest.selectedNarratorForReview.productionApproved, false);
+  assert.equal(manifest.selectedNarratorForReview.publicationAuthorized, false);
   assert.ok(!metadata.includes(SELAR_URL));
   assert.ok(!metadata.includes("ADVERTISEMENT"));
   assert.ok(metadata.includes("hasPaidPromotion=false"));
@@ -132,7 +137,16 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.ok(script.includes("stock/archive footage"));
   assert.ok(script.includes("commercially prohibited by the provider's written determination"));
   assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
-  assert.ok(script.includes("No alternate voice or paid upgrade is authorized"));
+  assert.ok(script.includes("selected Wade — Resonant & Narrative"));
+  assert.ok(script.includes("further review only; this is not production approval or permission to publish"));
+  assert.ok(script.includes("No paid upgrade is authorized."));
+  assert.ok(metadata.includes("selected Wade — Resonant & Narrative"));
+  assert.ok(metadata.includes("not production approval or permission to publish"));
+  const voiceConfig = JSON.parse(readText("config/narration-voice-candidates.json"));
+  assert.equal(voiceConfig.ownerDecision.selectedAlternative.voiceId, "a3a4aa242aaf431ea8ec2c4b3bb332fa");
+  assert.equal(voiceConfig.ownerDecision.selectedAlternative.productionApproved, false);
+  assert.equal(voiceConfig.ownerDecision.selectedAlternative.commercialUseAllowed, false);
+  assert.equal(voiceConfig.ownerDecision.selectionStatus, "OWNER_SELECTED_WADE_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED");
   assert.ok(!/AI reconstruction if synthetic|labelled reconstruction|real footage or labelled reconstruction/i.test(script));
 });
 

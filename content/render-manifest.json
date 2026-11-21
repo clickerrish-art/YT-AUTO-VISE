@@ -25,7 +25,8 @@
     "Three Pexels clips were used only in a 56.71-second silent 720x1280 visual review preview, with repeated footage for timing; this is not the final edit or a release-ready export.",
     "The fourth primary clip is excluded from the preview because visible enclosure/barrier and partial foreground person appear.",
     "No final video, approved narration, synchronized final captions, thumbnail, final metadata approval, exact-hash human video review, private-upload authorization or publishing action is recorded.",
-    "Owner decision 2026-11-22: Roderic is no longer mandatory; zero-cost commercially licensed alternative voice auditions are authorized. Existing Norman/Piper 53.023-second sample is available for listening but is not production-approved."
+    "Owner decision 2026-11-22: Roderic is no longer mandatory; zero-cost commercially licensed alternative voice auditions are authorized. Existing Norman/Piper 53.023-second sample is available for listening but is not production-approved.",
+    "Owner selected Wade — Resonant & Narrative (public HeyGen Voice, ID a3a4aa242aaf431ea8ec2c4b3bb332fa) on 2026-11-22 for further review only; not permission to publish. HeyGen Free-plan generated output remains internal-evaluation-only. The Wade speech sample was not generated because the workspace had insufficient remaining free speech allowance; no paid credits or upgrade were used."
   ],
   "containsAIWildlifeVisuals": false,
   "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
@@ -41,6 +42,25 @@
   "narrationPublicBrandedDistributionAllowed": false,
   "narrationCommercialUseAllowed": false,
   "narrationProductionUseAllowed": false,
-  "narrationRestrictionSummary": "Roderic Free-plan audio remains prohibited for public branded or commercial use. Owner authorized zero-cost commercially licensed alternatives; Norman/Piper is an audition only. Production remains blocked pending owner listening, final voice selection, final audio hash approval and synchronized captions.",
-  "alternativeVoiceAuditionStatus": "OWNER_AUTHORIZED_ZERO_COST_ALTERNATIVE_AUDITION_PENDING_LISTENING"
+  "narrationRestrictionSummary": "Roderic Free-plan output remains prohibited for public branded or commercial use. Wade — Resonant & Narrative is the owner's current selection for further review only, not production approval. HeyGen Free-plan generated output, including Wade, is restricted to personal, non-commercial internal evaluation. The Wade speech audition could not be generated because the workspace had insufficient remaining free speech allowance. No narrator is approved for production until commercial rights are independently verified and the owner approves the exact final audio hash; captions must then be synchronized to the approved final narration.",
+  "alternativeVoiceAuditionStatus": "WADE_OWNER_SELECTED_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED",
+  "selectedNarratorForReview": {
+    "provider": "HeyGen Voice",
+    "voiceId": "a3a4aa242aaf431ea8ec2c4b3bb332fa",
+    "name": "Wade - Resonant & Narrative",
+    "voiceType": "public",
+    "mode": "instant",
+    "status": "ACTIVE",
+    "language": "en",
+    "locale": "en-US",
+    "ownerSelectionStatus": "SELECTED_FOR_FURTHER_REVIEW_ONLY",
+    "selectedAt": "2026-11-22",
+    "previewAudioUrl": "https://resource2.heygen.ai/voice_preview/RPFp9jEl9ORvq3vByBde.mp3",
+    "commercialUseStatus": "HEYGEN_FREE_PLAN_OUTPUT_PERSONAL_NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+    "commercialUseAllowed": false,
+    "productionApproved": false,
+    "publicationAuthorized": false,
+    "auditionGenerationStatus": "BLOCKED_INSUFFICIENT_FREE_SPEECH_ALLOWANCE",
+    "note": "Owner selected this voice for further review only, not production approval or permission to publish. The connected Free-plan output licence restricts generated audio to personal, non-commercial internal evaluation. No paid credits or upgrade were used."
+  }
 }

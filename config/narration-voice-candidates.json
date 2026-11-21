@@ -101,12 +101,30 @@
     "previousApprovedVoice": "Roderic — Authoritative & Refined",
     "previousApprovedVoiceId": "b5c5b28db1ea408abc7d851202983bdb",
     "alternativeVoicesAuthorized": true,
-    "selectedAlternative": null,
-    "selectionStatus": "PENDING_OWNER_LISTENING",
+    "selectedAlternative": {
+      "provider": "HeyGen Voice",
+      "voiceId": "a3a4aa242aaf431ea8ec2c4b3bb332fa",
+      "name": "Wade - Resonant & Narrative",
+      "voiceType": "public",
+      "mode": "instant",
+      "status": "ACTIVE",
+      "language": "en",
+      "locale": "en-US",
+      "ownerSelectionStatus": "SELECTED_FOR_FURTHER_REVIEW_ONLY",
+      "selectedAt": "2026-11-22",
+      "previewAudioUrl": "https://resource2.heygen.ai/voice_preview/RPFp9jEl9ORvq3vByBde.mp3",
+      "commercialUseStatus": "HEYGEN_FREE_PLAN_OUTPUT_PERSONAL_NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+      "commercialUseAllowed": false,
+      "productionApproved": false,
+      "publicationAuthorized": false,
+      "auditionGenerationStatus": "BLOCKED_INSUFFICIENT_FREE_SPEECH_ALLOWANCE",
+      "note": "Owner selected this voice for further review only, not production approval or permission to publish. The connected Free-plan output licence restricts generated audio to personal, non-commercial internal evaluation. No paid credits or upgrade were used."
+    },
+    "selectionStatus": "OWNER_SELECTED_WADE_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED",
     "paidUpgradeAuthorized": false,
-    "commercialRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21",
+    "commercialRightsStatus": "HEYGEN_FREE_PLAN_OUTPUT_RESTRICTED_TO_PERSONAL_NON_COMMERCIAL_INTERNAL_EVALUATION",
     "decisionDate": "2026-11-22",
-    "decisionEvidence": "Owner declined to require Roderic and authorized evaluation of zero-cost commercially licensed alternatives. This permits audition only; it does not approve Norman or any other narrator for production.",
-    "commercialUseRule": "Use only a voice whose exact model/data licence and required notices support the intended commercial distribution. No paid service, no Roderic Free-plan audio, and no production release before owner listening approval tied to the exact final audio SHA-256."
+    "decisionEvidence": "On 2026-11-22 the owner declined Roderic exclusivity and selected Wade — Resonant & Narrative (public HeyGen Voice) for further review only. This is not production approval or permission to publish. The connected Free-plan output licence restricts generated speech to personal, non-commercial internal evaluation; the requested Wade speech sample could not be generated because the workspace had insufficient remaining free speech allowance. No paid credits or upgrade were used.",
+    "commercialUseRule": "Use only a voice whose exact model/data/runtime licence and applicable service-plan terms support the intended public/commercial distribution. HeyGen Free-plan generated output is internal-evaluation-only, including Wade. No Roderic Free-plan audio, no paid service, and no production release before owner listening approval tied to the exact final audio SHA-256."
   }
 }
