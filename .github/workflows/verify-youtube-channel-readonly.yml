@@ -40,14 +40,47 @@ jobs:
           package-manager-cache: false
       - name: Install locked dependencies
         run: npm ci --ignore-scripts
-      - name: Run deterministic OAuth-scope, identity and pagination tests
-        run: node --test test/youtube-oauth-scope.test.mjs test/verify-youtube-channel.test.mjs
-      # Do not upload raw private/unlisted video metadata to a public repository artifact.
-      # Until an owner-controlled private/encrypted destination exists, retain only aggregate counts in the run output.
-      - name: Verify authenticated channel, upload scope and complete uploads inventory (read-only, aggregate-only)
+      - name: Run deterministic OAuth-scope, identity, pagination and privacy-gate tests
+        run: node --test test/youtube-oauth-scope.test.mjs test/verify-youtube-channel.test.mjs test/youtube-inventory-artifact-policy.test.mjs
+      # The complete inventory is written only to the runner's temporary workspace.
+      # It is uploaded only when every listed video is public; any private/unlisted entry fails closed and is deleted.
+      - name: Verify authenticated channel, upload scope and complete uploads inventory (read-only)
+        id: inventory
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          YOUTUBE_HISTORY_INVENTORY_PATH: readiness-report/youtube-history-inventory.json
         run: node scripts/verify-youtube-channel.mjs
+      - name: Evaluate whether inventory can be shared as public-only evidence
+        id: prepare
+        env:
+          YOUTUBE_HISTORY_INVENTORY_PATH: readiness-report/youtube-history-inventory.json
+        run: node scripts/prepare-youtube-inventory-artifact.mjs
+      - name: Upload complete public-only YouTube inventory
+        id: upload
+        if: steps.prepare.outputs.artifact_ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonicvhibez-youtube-public-only-inventory-${{ github.run_id }}
+          path: readiness-report/youtube-history-inventory.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Record public-only artifact reference
+        if: steps.prepare.outputs.artifact_ready == 'true' && steps.upload.outputs.artifact-id != ''
+        env:
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+          ARTIFACT_DIGEST: ${{ steps.upload.outputs.artifact-digest }}
+        run: |
+          {
+            echo "- GitHub artifact ID: $ARTIFACT_ID"
+            echo "- GitHub artifact URL: $ARTIFACT_URL"
+            echo "- Uploaded archive digest: $ARTIFACT_DIGEST"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Remove raw inventory from runner workspace
+        if: always()
+        run: |
+          rm -f readiness-report/youtube-history-inventory.json
+          rmdir readiness-report 2>/dev/null || true
