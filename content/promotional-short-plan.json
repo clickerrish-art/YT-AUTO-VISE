@@ -501,18 +501,23 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T09:51:38+02:00",
-            "note": "Fresh global web-search results for the exact phrase “ethical wildlife photography” surface an informational problem around working distance, telephoto reach, animal stress signals, baiting and habitat disturbance. The National Park Service example contains a 75-foot rule specific to San Juan Island National Historical Park; it is not a universal wildlife distance. This is qualitative search-intent evidence only: no measured global search volume, competition score or growth metric is available, and no vidIQ credits were spent.",
+            "researchedAt": "2026-11-21T11:15:25+02:00",
+            "note": "Fresh global search results for the exact phrase “ethical wildlife photography” show informational intent around working distance, long lenses, stress signals, avoiding bait and protecting habitat. This is qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available.",
             "sources": [
               {
-                "title": "Ethical Wildlife Photography — San Juan Island National Historical Park",
-                "url": "https://www.nps.gov/sajh/planyourvisit/ethical-wildlife-photography.htm",
-                "whyRelevant": "Official park guidance supports keeping distance, using a zoom lens and moving away if wildlife approaches; its 75-foot rule applies to that park only and must not be generalized."
+                "title": "Ethical wildlife photography for mammals — Mammal Society",
+                "url": "https://mammal.org.uk/position-statements/ethicalwildlifephotography",
+                "whyRelevant": "Conservation-society guidance prioritizes wildlife welfare, long lenses and avoiding disturbance, baiting, intrusive equipment and misleading captions."
               },
               {
-                "title": "Ethical Wildlife Photography: A Responsible Field Guide",
-                "url": "https://www.shutterbugnews.com/2026/09/28/the-ethics-of-wildlife-photography-distance-baiting-and-honest-images/",
-                "whyRelevant": "A recent field guide addresses animal stress and avoidance signals, backing away, avoiding bait and habitat changes, and describing capture conditions honestly."
+                "title": "Audubon’s Guide to Ethical Bird Photography and Videography",
+                "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
+                "whyRelevant": "The guide applies directly to wildlife video, recommending telephoto distance, no chasing or baiting, habitat protection and care around sensitive locations."
+              },
+              {
+                "title": "Guide To Ethical Wildlife Photography — Mile High Wildlife Photo Club",
+                "url": "https://www.mhwpc.org/info/guide_to_ethical_wildlife_photography.php",
+                "whyRelevant": "Recent guidance describes animal stress signs, backing away, avoiding bait and respecting nesting areas and access rules."
               }
             ]
           }
@@ -599,18 +604,23 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T09:51:38+02:00",
-            "note": "Fresh global web-search results for the exact phrase “how to outline a YouTube video” show direct how-to and template intent: creators want a viewer promise, a hook, ordered sections, supporting examples or proof, visual notes and one clear ending action before writing the full script. This is qualitative search-intent evidence only: no measured global search volume, competition score or growth metric is available, and no vidIQ credits were spent.",
+            "researchedAt": "2026-11-21T11:15:25+02:00",
+            "note": "Fresh global search results for the exact phrase “how to outline a YouTube video” show direct how-to and template intent around a clear viewer promise, ordered main points, supporting examples or proof, visual notes and one useful ending action. This is qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available.",
             "sources": [
               {
-                "title": "How to Outline a YouTube Video (Step-by-Step Template)",
-                "url": "https://boost-view.vercel.app/blog/how-to-outline-youtube-video",
-                "whyRelevant": "A November 2026 guide matches the exact query and describes a viewer promise, separate hook, 3–6 ordered sections, visual changes and a specific next-video step."
+                "title": "How to Outline a YouTube Video (Step-by-Step Template) — Tublify",
+                "url": "https://tublify.vercel.app/blog/how-to-outline-youtube-video",
+                "whyRelevant": "A 4 November 2026 guide matches the exact query and covers a promise, hook, ordered sections, visuals and a clear ending."
               },
               {
-                "title": "Free Script Outline Generator — YouTube Video Beats",
-                "url": "https://hypenest.ai/tools/script-outline-generator",
-                "whyRelevant": "The guide explains a hook → body → CTA structure with examples or proof, visual notes and a useful closing action."
+                "title": "YouTube Video Script Outliner — YTSEOHub",
+                "url": "https://ytseohub.com/script/script-outliner",
+                "whyRelevant": "The page explains a practical outline with a hook, main points, proof, CTA and visual notes, matching the four-step lesson."
+              },
+              {
+                "title": "YouTube Script Outliner — ToolsVenue",
+                "url": "https://toolsvenue.com/youtube-script-outliner/",
+                "whyRelevant": "The guide describes structured outlines with a hook, sections, timestamps and an outro, supporting demand for a step-by-step planning workflow."
               }
             ]
           },
@@ -673,28 +683,23 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-12T09:54:29+02:00",
-            "note": "Qualitative search-intent evidence only: current indexed results surface dedicated guidance on wildlife-video misinformation, verifying animal clips and fact-checking YouTube scripts. No measured global search volume or competition was available; vidIQ had 3 credits remaining, below its 5-credit keyword-research call cost. These results are not volume estimates.",
+            "researchedAt": "2026-11-21T10:48:26.540+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 21 November 2026 search results surfaced current reporting and fact-check guidance about fabricated or AI-altered animal videos, including the risk of false species, behaviour and location claims. This supports the exact viewer problem in the Short—checking what a wildlife clip actually proves before writing a caption or narration—but does not establish keyword volume or ranking opportunity.",
             "sources": [
               {
-                "title": "How to Fact-Check and Correct Wildlife Misinformation",
-                "url": "https://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/",
-                "whyRelevant": "Recent wildlife-specific guidance recommends writing down the exact claim and tracing it to an underlying study, dataset, agency notice or first-hand source."
+                "title": "Fabricated AI animal videos are distorting how we see wildlife, researchers warn",
+                "url": "https://www.euronews.com/2026/07/21/fabricated-ai-animal-videos-are-distorting-how-we-see-wildlife-researchers-warn",
+                "whyRelevant": "Current 2026 reporting summarizes conservation researchers' warnings that fabricated animal footage can misrepresent behaviour, species and locations, directly matching the fact-check lesson."
               },
               {
-                "title": "Fact-check: Animal videos on the internet—cute, but often fake",
+                "title": "Faktencheck - Tiervideos im Internet: herzig, aber oft fake – drei Beispiele",
                 "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
-                "whyRelevant": "The Swiss public broadcaster's January 2026 animal-video fact-check explains checking plausibility, visual continuity and the account or earliest accessible source."
+                "whyRelevant": "A fact-checking newsroom gives practical checks for implausible animal behaviour, visual continuity and tracing the original publisher of an animal video."
               },
               {
-                "title": "How to Research and Fact-Check a YouTube Script",
-                "url": "https://meowplaybook.com/blog/research-fact-check-youtube-script",
-                "whyRelevant": "A creator-facing guide published last week recommends matching every checkable script claim to a source fact sheet and linking sources for viewers."
-              },
-              {
-                "title": "How to Identify Marine Species in Blue Planet III Footage",
-                "url": "https://www.documentarytube.com/blog/how-to-identify-marine-species-featured-in-blue-planet-iii/",
-                "whyRelevant": "A recent documentary-specific guide distinguishes confirmed, supported, probable and unresolved species identification, supporting honest uncertainty in narration."
+                "title": "People could get hurt: Conservationists decry AI wildlife visuals",
+                "url": "https://factcheck.afp.com/doc.afp.com.C4TR6KG",
+                "whyRelevant": "AFP fact-check coverage links misleading AI wildlife visuals to conservation and safety risks, reinforcing why creators should verify footage claims and disclose uncertainty."
               }
             ]
           },
@@ -805,23 +810,23 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-12T10:11:06+02:00",
-            "note": "Qualitative search-intent evidence only: current indexed results surface practical wildlife-documentary shot-list guides, shot-size sequencing and wildlife-filming tutorials. No measured global search volume or competition is available; vidIQ has 3 credits remaining and its keyword-research call costs 5 credits. These sources support the topic and phrasing, not volume estimates.",
+            "researchedAt": "2026-11-21T10:48:26.540+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 21 November 2026 research found creator guidance emphasizing storyboarding and pre-production before filming, alongside wildlife-documentary production guidance on using longer focal lengths to capture natural behaviour without disturbing animals. These sources support the practical shot-planning problem; the exact long-tail phrase is retained as an intent-led keyword, not a measured-volume claim.",
             "sources": [
               {
-                "title": "Types of shots in wildlife video",
-                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
-                "whyRelevant": "Explains why wildlife sequences benefit from varied shot sizes and consistent camera angles, supporting a practical shot-sequence lesson."
+                "title": "How-To Guide: Get Your Nonprofits on Youtube",
+                "url": "https://help.youtube.com/nonprofits/resources/how-to-guide/get-your-nonprofit-on-youtube/",
+                "whyRelevant": "YouTube's own production guidance recommends storyboarding and deciding what to film before recording, supporting the shot-list planning lesson."
               },
               {
-                "title": "How to get the best shots for your wildlife documentary",
-                "url": "https://africa-media.org/careers/how-to-get-the-best-shots-for-your-wildlife-documentary/",
-                "whyRelevant": "Covers wide, medium and close shots, B-roll, patience, stable framing and observing wildlife without forcing action."
+                "title": "Filmed on Canon: National Geographic's Latest Documentary",
+                "url": "https://www.canon.com.au/get-inspired/behind-the-scenes-save-this-rhino-documentary",
+                "whyRelevant": "A wildlife-documentary production account explains how long telephoto reach helps crews capture natural animal behaviour without disturbing subjects, matching the responsible-distance guidance."
               },
               {
-                "title": "How to film a wildlife documentary on your safari",
-                "url": "https://kilisherpas.com/blogs/how-to-film-a-wildlife-documentary-on-your-safari-in-tanzania",
-                "whyRelevant": "Provides an explicit shot-list sequence of establishing, medium and close-up shots and stresses safe distance and natural behaviour."
+                "title": "To the Ends of the Earth | The Natural World - Pushing Boundaries",
+                "url": "https://www.pbs.org/video/the-natural-world-pushing-boundaries-SAZzpZ/",
+                "whyRelevant": "A wildlife-filmmaking programme describes framing and long-lens choices across habitats, providing relevant production context for planning wide, context and detail shots."
               }
             ]
           },
@@ -1434,7 +1439,30 @@
             "Recheck the Selar listing and seller Click 47 before release; the registry evidence was last checked 9 November 2026 and the live page could not be re-opened on 19 November.",
             "Complete human factual, rights, compliance, playback and thumbnail review against final asset hashes.",
             "Keep the item private and DRAFT_ONLY; do not upload, schedule or publish."
-          ]
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-19T09:51:01+02:00",
+            "note": "Qualitative search-intent evidence only; no measured volume, competition score or rising-demand metric was available. Fresh web search on 19 November 2026 surfaced the exact phrase 'Low-Light Wildlife Photography' in a 2026 guide, a specialist explainer on ISO/Auto ISO for wildlife, and a YouTube how-to on wildlife photography in low light. These results support informational intent around exposure trade-offs at dawn, dusk and shade. The YouTube view count is video performance, not search volume.",
+            "sources": [
+              {
+                "title": "Low-Light Wildlife Photography Guide: Settings, Focus & Field Techniques (2026)",
+                "url": "https://wildlifesafaris.in/low-light-wildlife-photography-guide-settings-focus-field-techniques-2026/",
+                "whyRelevant": "Exact phrase match; discusses exposure, shutter speed, aperture, ISO and focus for wildlife in low light."
+              },
+              {
+                "title": "ISO & Auto ISO For Wildlife Photography Explained",
+                "url": "https://natureslens.co.uk/wildlife-photography-camera-settings/iso-for-wildlife-photography/",
+                "whyRelevant": "Explains that usable ISO and shutter choices depend on sensor, subject movement and light; supports avoiding universal fixed settings."
+              },
+              {
+                "title": "How To Photograph Wildlife In Low Light In 4 Minutes",
+                "url": "https://www.youtube.com/watch?v=jYZs75Gxr-g",
+                "whyRelevant": "A YouTube how-to result (published 20 November 2024; 5,561 views at search time) directly addresses low-light wildlife photography and camera settings; views are not search volume."
+              }
+            ]
+          }
         },
         {
           "id": "sonicvhibez-short-016-youtube-script-hooks",
@@ -1513,7 +1541,30 @@
             "Keep the product-specific direct-sales disclosure on HOLD until its exact viewer-facing wording is approved.",
             "Complete human factual, playback, thumbnail and final-asset-hash review before any upload consideration.",
             "Keep the item private and DRAFT_ONLY; do not upload, schedule or publish."
-          ]
+          ],
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-19T09:51:01+02:00",
+            "note": "Fresh web search on 19 November 2026 surfaced the exact topic phrase 'YouTube script hooks' and a beginner guide to writing YouTube scripts. The results repeatedly frame the opening line as a practical creator problem: match the title and first visual, name a specific viewer need, and deliver the promised value without filler or misleading curiosity gaps. This is qualitative search-intent evidence only; no measured global search volume, competition score or rising-demand metric was available.",
+            "sources": [
+              {
+                "title": "YouTube script hooks: 8 opening lines that stop the skip",
+                "url": "https://artiphik.com/blog/youtube-script-hooks-that-keep-viewers",
+                "whyRelevant": "Direct phrase match; explains opening-line patterns, viewer problem callouts, demonstrations and avoiding misleading hooks."
+              },
+              {
+                "title": "How to Write a YouTube Script: Beginner Templates and Tips",
+                "url": "https://www.toptal.com/creator/post/how-to-write-a-youtube-script",
+                "whyRelevant": "Recent beginner guide structures scripts around a hook, clear value, body and a relevant next step."
+              },
+              {
+                "title": "Beginner-Friendly YouTube Script Template and Hook Formulas",
+                "url": "https://vitscript.com/blog/beginner-friendly-youtube-script-template-and-hook-formulas",
+                "whyRelevant": "Covers cold opens and practical hook formulas for creator scripts; supports the informational need for opening examples."
+              }
+            ]
+          }
         }
       ]
     }
