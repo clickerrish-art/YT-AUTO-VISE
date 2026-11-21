@@ -50,7 +50,9 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
     ["../.github/workflows/banjo-narration-review.yml", "render-review"],
     ["../.github/workflows/generate-long-form-narration.yml", "generate"],
     ["../.github/workflows/free-narration-artifact.yml", "generate-audio"],
-    ["../.github/workflows/short-narration-artifact.yml", "generate"]
+    ["../.github/workflows/short-narration-artifact.yml", "generate"],
+    ["../.github/workflows/acquire-noaa-broll-candidates.yml", "acquire-candidates"],
+    ["../.github/workflows/acquire-short-001-assets.yml", "acquire"]
   ]) {
     assert.ok(jobDisabled(readText(path), job), path + " job " + job + " must be disabled");
   }
@@ -67,4 +69,20 @@ test("Pexels and Pixabay media registers are reference-only, never production fo
   assert.ok(nature.assets.every(asset => asset.productionEligibility?.status === "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY"));
   assert.equal(short.productionDisposition.productionEligible, false);
   assert.ok(short.assets.every(asset => asset.productionEligibility === "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"));
+});
+
+test("AI wildlife generation and stock acquisition paths are disabled", () => {
+  const generation = readJson("../config/video-generation.json");
+  const notebook = readJson("../notebooks/sonicvhibez_wangp_kaggle.ipynb");
+  const acquisitionScript = readText("../scripts/acquire-short-001-assets.mjs");
+  assert.equal(generation.status, "DISABLED_BY_ORIGINAL_CREATOR_CAPTURED_MEDIA_POLICY");
+  assert.equal(generation.primary, false);
+  assert.equal(generation.generation.enabled, false);
+  assert.equal(generation.safety.aiGeneratedWildlifeVisualsAllowed, false);
+  const codeCells = notebook.cells.filter(cell => cell.cell_type === "code");
+  assert.ok(codeCells.length > 0);
+  assert.ok(codeCells.every(cell => (Array.isArray(cell.source) ? cell.source.join("") : cell.source)
+    .startsWith('raise RuntimeError("DISABLED_BY_OWNER_ORIGINAL_CAPTURE_POLICY')));
+  assert.ok(acquisitionScript.includes("Pexels stock acquisition is disabled"));
+  assert.ok(acquisitionScript.indexOf("Pexels stock acquisition is disabled") < acquisitionScript.indexOf("await fsp.mkdir(MEDIA_ROOT"));
 });
