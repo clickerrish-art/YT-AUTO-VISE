@@ -44,6 +44,13 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
   assert.equal(rights.providerDetermination.zeroCostCommercialExceptionAvailable, false);
   assert.equal(rights.providerDetermination.existingFreePlanOutputsCommerciallyUsable, false);
   assert.equal(rights.providerDetermination.futureFreePlanGenerationsCommerciallyUsable, false);
+  const voiceReview = readJson("../content/media/roderic-heygen-voice-rights-review.json");
+  const shortNarration = readJson("../content/short-001-roderic-narration-generation.json");
+  assert.equal(voiceReview.providerDenial.status, "DENIED");
+  assert.equal(voiceReview.decision, "KEEP_ALL_RODERIC_FREE_PLAN_NARRATION_OUT_OF_PUBLIC_OR_COMMERCIAL_PRODUCTION");
+  assert.equal(shortNarration.status, "INTERNAL_AUDITION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
+  assert.equal(shortNarration.license.commercialUseAllowed, false);
+  assert.equal(shortNarration.release.productionUseBlocked, true);
   for (const [path, job] of [
     ["../.github/workflows/piper-voice-audition.yml", "audition"],
     ["../.github/workflows/american-narration-review.yml", "render-review"],
