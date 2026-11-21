@@ -92,7 +92,8 @@ test("every promotional product requires fresh seller evidence tied to its exact
       .filter(evidence => evidence?.researchedAt)
       .map(evidence => Date.parse(evidence.researchedAt)))
   ));
-  const now = new Date(latestEvidence + 60 * 1000);
+  const latestSellerEvidence = Math.max(...products.map(product => Date.parse(product.promotionGate.seller.verifiedAt)));
+  const now = new Date(Math.max(latestEvidence, latestSellerEvidence) + 60 * 1000);
   assert.deepEqual(validatePlan(checkedInPlan, products, { now }), []);
 
   const staleProducts = clone(products);
@@ -346,7 +347,8 @@ test("keyword evidence is fresh for active and future weeks while historical dra
       .filter(evidence => evidence?.researchedAt)
       .map(evidence => Date.parse(evidence.researchedAt)))
   );
-  const now = new Date(Math.max(...evidenceTimes));
+  const latestSellerEvidence = Math.max(...products.map(product => Date.parse(product.promotionGate.seller.verifiedAt)));
+  const now = new Date(Math.max(...evidenceTimes, latestSellerEvidence));
   assert.deepEqual(validatePlan(checkedInPlan, products, { now }), []);
 
   const historical = clone(checkedInPlan);
@@ -635,7 +637,7 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
 
 
 test("current search-intent evidence is mandatory, dated, sourced and fresh for current/future drafts", () => {
-  const now = new Date("2026-11-21T11:30:00+02:00");
+  const now = new Date("2026-11-21T14:40:00+02:00");
   const valid = clone(checkedInPlan);
   assert.deepEqual(validatePlan(valid, products, { now }), []);
 
@@ -648,7 +650,7 @@ test("current search-intent evidence is mandatory, dated, sourced and fresh for 
   assert.ok(validatePlan(stale, products, { now }).some(error => /current search-intent evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(valid);
-  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-21T11:40:00+02:00";
+  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-21T14:50:00+02:00";
   assert.ok(validatePlan(future, products, { now }).some(error => /current search-intent evidence cannot be more than 5 minutes in the future/.test(error)));
 
   const insecure = clone(valid);
