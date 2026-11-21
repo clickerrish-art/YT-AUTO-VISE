@@ -1,7 +1,7 @@
 # Long-form 001 — Two Eyes Above the Water
 
 **Brand:** SonicVhibez  
-**Status:** OWNER-APPROVED TOPIC AND SCRIPT; PRODUCTION HOLD. RODERIC IS THE OWNER-APPROVED NARRATOR PREFERENCE, BUT HEYGEN DENIED COMMERCIAL USE OF THE FREE-PLAN OUTPUT. DO NOT USE THAT OUTPUT IN PRODUCTION WITHOUT WRITTEN RIGHTS CLEARANCE.  
+**Status:** OWNER-APPROVED TOPIC AND SCRIPT; PRODUCTION HOLD. HEYGEN SUPPORT CONFIRMED THAT RODERIC FREE-PLAN OUTPUT CANNOT BE PUBLICLY REDISTRIBUTED FOR BRANDED PROJECTS, EVEN IF UNMONETIZED, AND CANNOT BE USED COMMERCIALLY. DO NOT USE THE EXISTING WAV IN ANY PUBLIC BRANDED RELEASE. NO PAID PLAN OR ALTERNATE NARRATOR IS AUTHORIZED.  
 **Target format:** YouTube long-form, 16:9, 6–10 minutes  
 **Working title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Thumbnail direction:** Use a genuine original creator-captured Nile crocodile eye/waterline photograph from the approved footage only; eye on the right, dark open negative space on the left, exact words “TOO BIG?”; no AI-generated wildlife image, stock/archive image, blood, victim, gore or fabricated attack.  
