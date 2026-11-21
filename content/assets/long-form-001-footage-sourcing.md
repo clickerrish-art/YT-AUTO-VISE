@@ -4,6 +4,8 @@
 **Updated:** 2026-11-20  
 **Status:** SOURCING LEADS ONLY — no source file downloaded, decoded, visually reviewed, or approved for the final edit.
 
+**SUPERSEDED BY CURRENT OWNER MEDIA POLICY — 2026-11-21:** All Pexels and Wikimedia Commons entries below are historical research leads only. They are stock/archive library material, not original creator-captured production media, and are excluded from the current edit. Do not download, render, or use them as substitutes. The current production requirement is genuine original creator-captured wildlife footage with creator/source provenance, exact original file bytes and SHA-256, commercial rights, full technical/visual inspection, and exact-hash human approval.
+
 ## Zero-cost candidates
 
 | Asset | Source and contributor | Published metadata | Intended use | Current disposition |
@@ -35,7 +37,7 @@ Pexels states that its videos are free to download and use, including commercial
 
 **Important:** These short candidate clips do not supply enough footage for a 6–10 minute documentary. Additional varied, verified, rights-cleared footage and original explanatory graphics are still required. The AI wildlife model/checkpoint previously considered remains blocked until its commercial-use terms are independently verified. No paid footage, stock subscription, or GPU spend is permitted.
 
-**Narration dependency:** One Roderic — Authoritative & Refined narration was generated on the HeyGen Free plan for internal evaluation only. The owner explicitly approves Roderic exclusively and rejects Banjo for all future production/auditions; no voice substitution is authorized. Free-plan terms do not permit commercial/monetized publication. A $0 exception request was sent to HeyGen Legal (thread `1a1f841532f681a1`) and, when checked on 2026-11-20, had no response. Do not use the existing WAV commercially unless written permission or applicable terms clearly permit it.
+**Narration dependency:** One Roderic — Authoritative & Refined narration was generated on the HeyGen Free plan for internal evaluation only. The owner explicitly approves Roderic exclusively and rejects Banjo for all future production/auditions; no voice substitution is authorized. Free-plan terms do not permit commercial/monetized publication. HeyGen Support explicitly denied the requested zero-cost commercial-use exception for existing and future Roderic Free-plan outputs on 2026-11-21. See `content/heygen-roderic-commercial-rights-determination-2026-11-21.json`. Keep the existing WAV internal-only; do not use it commercially or substitute another narrator.
 
 **Scheduling:** NOT QUEUED. Do not reserve or set a YouTube publication time before media, rights, narration, captions, final review, upload authorization, and live channel-history reconciliation pass.
 
@@ -81,3 +83,12 @@ These are new source leads, not acquired or approved assets. Their Commons file 
 - WMC-003 is CC BY 3.0 on its file page; attribution and indication of modifications are required. Its content still requires full human welfare/editorial review.
 - No Wikimedia Commons candidate has been accepted as a production asset. No asset hashes, decode checks, complete visual inspection or final rights approvals exist.
 - The inability to ingest the source bytes into the current Comfy Cloud workspace remains unresolved. These leads do not remove the cloud-only acquisition/storage blocker.
+
+
+## Current original-media disposition — 2026-11-21
+
+- PEX-001 through PEX-005: REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY.
+- WMC-001 through WMC-003: REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY.
+- No source bytes from these library leads are accepted for the current production.
+- No AI-generated wildlife insert or reconstruction is authorized as a substitute.
+- Next eligible intake is an original creator-captured file delivered by the creator/rights holder, with provenance and commercial-use permission. Record the untouched file SHA-256 before editing.
