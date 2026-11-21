@@ -3,6 +3,10 @@
 from __future__ import annotations
 import argparse, hashlib, json, re, sys, urllib.request, wave
 from pathlib import Path
+try:
+    from scripts.narration_policy import require_owner_authorized_alternative_voice
+except ImportError:
+    from narration_policy import require_owner_authorized_alternative_voice
 
 REPO = "DataCraftsmanAustralia/piper-en_AU-librivox-medium"
 REVISION = "3faad046064c56f7316ffd745d5a8b14035f35df"
@@ -66,6 +70,7 @@ def sha256_text(value: str) -> str:
 
 def generate(output_dir: Path, downloader=download_pinned,
              source_script_path: Path = Path("content/short-001-wildlife-video-storytelling.md")) -> dict:
+    require_owner_authorized_alternative_voice()
     output_dir.mkdir(parents=True, exist_ok=True)
     model_path, config_path = output_dir / MODEL_NAME, output_dir / CONFIG_NAME
     downloader(MODEL_NAME, model_path)
