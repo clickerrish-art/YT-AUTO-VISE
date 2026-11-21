@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "status": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
   "mode": "READ_ONLY_IDENTITY_AND_INVENTORY_VERIFIED_OWNER_REVIEW_REQUIRED",
-  "workflowRunId": 44632065508,
+  "workflowRunId": 44725743866,
   "workflowRunAttempt": 1,
-  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44632065508",
-  "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
-  "checkedAt": "2026-11-19T22:48:58.854Z",
+  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44725743866",
+  "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
+  "checkedAt": "2026-11-20T11:13:10.643Z",
   "deterministicIdentityAndPaginationTests": {
     "status": "PASS",
     "passed": 13,
@@ -43,21 +43,23 @@
     "unlisted": 0
   },
   "inventoryArtifact": {
-    "id": 14582711324,
+    "id": 14623951721,
     "name": "sonicvhibez-youtube-history-inventory",
-    "sha256": "a235d90228e1af3ae969751ba097af890a887f7231d6c580a0836564766b2f91",
-    "createdAt": "2026-11-19T22:48:59Z",
-    "expiresAt": "2026-11-26T22:48:59Z"
+    "sha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
+    "createdAt": "2026-11-20T11:13:11Z",
+    "expiresAt": "2026-11-27T11:13:10Z",
+    "inventoryJsonSha256": "0dd1fad51ee1ecc2f5ae192fc2d42fc94d93657198c310e9f5ad7f0ad904e316"
   },
   "videos": [
     {
       "id": "LjePS02hA1o",
+      "channelId": "UCSlkuPfHH78oGC1o418HV4w",
       "visibility": "public",
       "youtubePublishedAt": "2026-10-22T15:05:56Z",
       "scheduledPublishAt": null,
       "duration": "PT20S",
-      "format": "short",
-      "ownerConfirmed": true,
+      "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
+      "ownerConfirmed": false,
       "publicationCycleReconciled": false,
       "ownerReview": {
         "verifiedBy": "clickerrish-art",
@@ -65,20 +67,21 @@
         "format": "short",
         "studioPublicationDateConfirmed": true,
         "studioVideoUrl": "https://studio.youtube.com/video/LjePS02hA1o/edit",
-        "reaffirmedAt": "2026-11-18"
+        "reaffirmedAt": "2026-11-18",
+        "reaffirmationRequired": true
       }
     }
   ],
   "publicationHistoryReconciliation": {
-    "status": "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY",
+    "status": "PENDING_OWNER_REAFFIRMATION",
     "reconciliationPath": "content/youtube-history-reconciliation.json",
-    "reconciliationBlobSha": "595006448b68b0007730be11d39bd380f7d3eb6a",
-    "verifiedAt": "2026-11-19T22:48:58.854Z",
+    "verifiedAt": "2026-11-20T11:13:10.643Z",
     "verifiedBy": "clickerrish-art",
-    "freshInventoryRunId": 44632065508,
-    "freshInventoryArtifactId": 14582711324,
-    "freshInventoryArtifactSha256": "a235d90228e1af3ae969751ba097af890a887f7231d6c580a0836564766b2f91",
-    "reason": "The complete fresh inventory matches the exact video ID, authenticated channel, public visibility and YouTube publishedAt timestamp in the owner-reviewed history record. The owner confirmed the sole upload is a Short and that its YouTube Studio publication date matches the API inventory. The 20-second duration remains a documented legacy exception to the current 50–60 second Short target."
+    "freshInventoryRunId": 44725743866,
+    "freshInventoryArtifactId": 14623951721,
+    "freshInventoryArtifactSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8",
+    "priorOwnerReviewDate": "2026-11-18",
+    "reason": "The complete 2026-11-20 inventory matches the prior owner-reviewed video ID, channel ID, public visibility, YouTube publishedAt timestamp and 20-second duration. The fresh artifact still labels format UNCLASSIFIED_REQUIRES_OWNER_REVIEW. The owner must reaffirm that the sole public video remains a Short and confirm the Studio publication date against this exact fresh artifact before it can be treated as current owner-reviewed history."
   },
   "secretValuesLogged": false,
   "publishingEnabled": false,
@@ -252,7 +255,7 @@
     "expiresAt": "2026-11-16T15:57:20Z",
     "status": "EXPIRED_HISTORICAL_ARTIFACT"
   },
-  "verifiedAt": "2026-11-19T22:48:58.854Z",
+  "verifiedAt": "2026-11-20T11:13:10.643Z",
   "uploadAttemptReconciliation": {
     "status": "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS",
     "inspectedAt": "2026-11-21T09:37:06.547Z",
@@ -322,32 +325,32 @@
     }
   },
   "latestSuccessfulReadOnlyVerification": {
-    "workflowRunId": 44632065508,
-    "jobId": 135941004862,
+    "workflowRunId": 44725743866,
+    "jobId": 136252575433,
     "attempt": 1,
-    "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
-    "verifiedAt": "2026-11-19T22:48:58.854Z",
+    "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
+    "verifiedAt": "2026-11-20T11:13:10.643Z",
     "result": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
-    "artifactId": 14582711324,
-    "artifactSha256": "a235d90228e1af3ae969751ba097af890a887f7231d6c580a0836564766b2f91"
+    "artifactId": 14623951721,
+    "artifactSha256": "f311a9e989ae7b121dec09bf1ee8cdeaee77c9b8dbdcc2914045f8b87a1672e8"
   },
   "latestAttempt": {
-    "workflowRunId": 44632065508,
-    "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44632065508",
-    "sourceCommit": "e7ae8d46232b9df01d6335cddba174a641a823e7",
-    "attemptedAt": "2026-11-19T22:48:58.854Z",
+    "workflowRunId": 44725743866,
+    "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44725743866",
+    "sourceCommit": "95d1b3d70f6559b845557c533b163da8657c025b",
+    "attemptedAt": "2026-11-20T11:13:10.643Z",
     "status": "PASS",
-    "jobId": 135941004862,
-    "artifactId": 14582711324,
+    "jobId": 136252575433,
+    "artifactId": 14623951721,
     "errorCode": null,
     "message": "Live read-only YouTube identity and complete uploads inventory succeeded; both exact OAuth scopes verified. No upload or metadata write was attempted.",
     "publishingEnabled": false,
     "uploadAttempted": false,
     "metadataWriteAttempted": false
   },
-  "identityVerificationFreshness": "FRESH_AS_OF_2026-11-19T22:48:58.854Z",
-  "uploadsInventoryFreshness": "FRESH_AS_OF_2026-11-19T22:48:58.854Z",
-  "lastSuccessfulInventoryAt": "2026-11-19T22:48:58.854Z",
+  "identityVerificationFreshness": "FRESH_AS_OF_2026-11-20T11:13:10.643Z",
+  "uploadsInventoryFreshness": "FRESH_AS_OF_2026-11-20T11:13:10.643Z",
+  "lastSuccessfulInventoryAt": "2026-11-20T11:13:10.643Z",
   "uploadScopeVerified": true,
   "uploadScopeCheckedAt": "2026-11-21T12:54:58.640Z",
   "acceptedUploadScope": "https://www.googleapis.com/auth/youtube.upload",
@@ -362,5 +365,6 @@
       "https://www.googleapis.com/auth/youtube.upload"
     ],
     "note": "Read-only authenticated inventory confirmed the @sonicvhibez channel, one public video, zero private/unlisted videos, complete inventory retrieval and both required OAuth scopes. Format classification, owner-approved publication-cycle reconciliation and upload-attempt attestation remain separate release gates. No upload or publication was attempted."
-  }
+  },
+  "jobId": 136252575433
 }
