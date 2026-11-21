@@ -12,6 +12,11 @@ import re
 import sys
 
 try:
+    from scripts.narration_policy import require_owner_authorized_alternative_voice
+except ImportError:
+    from narration_policy import require_owner_authorized_alternative_voice
+
+try:
     from mutagen.mp3 import MP3
 except ImportError:
     MP3 = None
@@ -37,6 +42,7 @@ NONCOMMERCIAL_AUDITION_NOTICE = (
 
 
 def require_noncommercial_audition(acknowledged: bool) -> bool:
+    require_owner_authorized_alternative_voice()
     if acknowledged is not True:
         raise SystemExit(
             "BLOCKED: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
