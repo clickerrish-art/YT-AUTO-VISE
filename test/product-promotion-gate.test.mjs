@@ -37,7 +37,7 @@ test("checked-in Wildlife Vault registry records verified seller, SonicVhibez au
   const seller = product.promotionGate.seller;
   assert.equal(seller.status, "VERIFIED");
   assert.equal(seller.name, "Click 47");
-  assert.ok(seller.evidenceReference.includes("2026-11-09"));
+  assert.ok(seller.evidenceReference.includes("2026-11-21"));
   assert.equal(product.promotionGate.brandAuthorization.brand, "SonicVhibez");
   assert.equal(product.promotionGate.compensation.type, "DIRECT_SALES_REVENUE");
   assert.equal(product.promotionGate.disclosure.status, "OWNER_APPROVED");
@@ -91,10 +91,10 @@ test("Selar is direct business revenue and non-Selar product links are affiliate
   selar.product.url = "https://selar.com/0u19v8u99l";
   selar.product.promotionGate.seller.sourceUrl = selar.product.url;
   selar.product.promotionGate.compensation.status = "OWNER_CONFIRMED";
-  selar.product.promotionGate.compensation.verifiedAt = "2026-11-09";
+  selar.product.promotionGate.compensation.verifiedAt = "2026-11-21";
   selar.product.promotionGate.compensation.evidenceReference = "owner-confirmed-own-Selar-business";
   selar.product.promotionGate.disclosure.text = "This product is sold through my own Selar business; purchases generate revenue for my business.";
-  selar.product.promotionGate.disclosure.approvedAt = "2026-11-09T08:00:00Z";
+  selar.product.promotionGate.disclosure.approvedAt = "2026-11-21T08:00:00Z";
   selar.metadata.hasPaidPromotion = true;
   selar.metadata.description = "Creator lesson. " + selar.product.promotionGate.disclosure.text;
   selar.metadata.promotionDisclosure = { status: "APPROVED", type: "direct_sales_revenue", text: selar.product.promotionGate.disclosure.text };
@@ -128,10 +128,10 @@ test("Selar host matching rejects deceptive suffixes and accepts genuine Selar s
   genuineSubdomain.product.url = "https://shop.selar.com/product";
   genuineSubdomain.product.promotionGate.seller.sourceUrl = genuineSubdomain.product.url;
   genuineSubdomain.product.promotionGate.compensation.status = "OWNER_CONFIRMED";
-  genuineSubdomain.product.promotionGate.compensation.verifiedAt = "2026-11-09";
+  genuineSubdomain.product.promotionGate.compensation.verifiedAt = "2026-11-21";
   genuineSubdomain.product.promotionGate.compensation.evidenceReference = "owner-confirmed-direct-Selar-sales";
   genuineSubdomain.product.promotionGate.disclosure.text = "This is sold through my own Selar business.";
-  genuineSubdomain.product.promotionGate.disclosure.approvedAt = "2026-11-09T08:00:00Z";
+  genuineSubdomain.product.promotionGate.disclosure.approvedAt = "2026-11-21T08:00:00Z";
   genuineSubdomain.metadata.hasPaidPromotion = true;
   genuineSubdomain.metadata.description = "Creator lesson. " + genuineSubdomain.product.promotionGate.disclosure.text;
   genuineSubdomain.metadata.promotionDisclosure = {
