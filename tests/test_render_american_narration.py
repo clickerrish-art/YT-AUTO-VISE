@@ -8,6 +8,22 @@ class AmericanNarrationTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
             module.require_owner_authorized_alternative_voice()
 
+    def test_render_api_is_blocked_before_output_directory_or_download(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "out"
+            source = Path(tmp) / "script.md"
+            source.write_text("A test narration script.", encoding="utf-8")
+            called = []
+            original_download = module.download
+            module.download = lambda *args, **kwargs: called.append(args)
+            try:
+                with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                    module.render(output, source)
+            finally:
+                module.download = original_download
+            self.assertFalse(output.exists())
+            self.assertEqual(called, [])
+
     def test_voice_is_us_english_male_norman(self):
         self.assertEqual(module.VOICE_ID,"en_US-norman-medium")
         self.assertIn("American English",module.DIRECTION)

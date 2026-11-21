@@ -1,5 +1,3 @@
-import hashlib
-import json
 import subprocess
 import sys
 import tempfile
@@ -7,7 +5,6 @@ import unittest
 import wave
 import struct
 from pathlib import Path
-from unittest.mock import patch
 
 from scripts import render_banjo_narration as module
 
@@ -57,11 +54,10 @@ class BanjoNarrationTests(unittest.TestCase):
     def test_direct_cli_import_works_from_repository_root(self):
         root = Path(__file__).resolve().parents[1]
         result = subprocess.run(
-            [sys.executable, str(root / "scripts" / "render_banjo_narration.py"), "--help"],
+            [sys.executable, "-c", "import sys; sys.path.insert(0, 'scripts'); import render_banjo_narration"],
             cwd=root, capture_output=True, text=True, check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Render the selected Banjo voice", result.stdout)
 
     def test_selection_is_fixed_to_banjo_speaker_five(self):
         self.assertEqual(module.VOICE_ID, "banjo")
@@ -126,51 +122,22 @@ class BanjoNarrationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "silent"):
                 module.inspect_wav(path)
 
-    def test_render_generates_only_banjo_and_never_approves_it(self):
+    def test_render_api_is_blocked_before_output_directory_or_model_download(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             source = root / "script.md"
-            source.write_text("# Short\n\n## Narration draft\n\n" + NARRATION + "\n\n## Description\n\nignored\n")
+            source.write_text("# Short\n\n## Narration draft\n\nWildlife narration draft.\n", encoding="utf-8")
             output = root / "out"
+            calls = []
 
             def downloader(filename, destination):
-                if filename == module.MODEL_NAME:
-                    destination.write_bytes(b"pinned-test-model")
-                else:
-                    destination.write_text(json.dumps({
-                        "num_speakers": 10,
-                        "speaker_id_map": {"timothy_ferguson": 5, "algy_pug": 4, "howard_skyman": 6},
-                        "audio": {"sample_rate": 22050},
-                    }))
+                calls.append(filename)
 
-            def attribution_downloader(destination):
-                destination.write_text("Jenny (Dioco); Timothy Ferguson; commercial use permitted.")
+            with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                module.render(output, source, downloader=downloader)
 
-            model_hash = hashlib.sha256(b"pinned-test-model").hexdigest()
-            with patch.object(module, "MODEL_SHA256", model_hash):
-                report = module.render(
-                    output,
-                    source,
-                    downloader=downloader,
-                    voice_loader=lambda path: FakeVoice(),
-                    synthesis_config_factory=lambda **kwargs: kwargs,
-                    attribution_downloader=attribution_downloader,
-                )
-
-            self.assertEqual(report["voice"], "banjo")
-            self.assertEqual(report["speakerId"], 5)
-            self.assertFalse(report["productionApproved"])
-            self.assertFalse(report["finalNarration"])
-            self.assertFalse(report["publishingEnabled"])
-            self.assertEqual(report["humanVoiceQualityReview"], "PENDING")
-            self.assertEqual(report["commercialAttributionReview"], "PENDING")
-            self.assertTrue((output / module.OUTPUT_NAME).is_file())
-            self.assertTrue((output / "ATTRIBUTION.txt").is_file())
-            self.assertTrue((output / module.ATTRIBUTION_FILE).is_file())
-            self.assertTrue(report["attributionFileValidated"])
-            self.assertEqual(report["audioMetrics"]["clippedSampleCount"], 0)
-            self.assertEqual(report["audioRepair"]["clippedSamplesInterpolated"], 3)
-            self.assertLessEqual(report["audioMetrics"]["peakDbfs"], -0.7)
+            self.assertFalse(output.exists())
+            self.assertEqual(calls, [])
 
     def test_full_model_attribution_file_is_validated(self):
         with tempfile.TemporaryDirectory() as tmp:

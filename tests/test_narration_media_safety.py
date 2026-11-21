@@ -1,6 +1,7 @@
 import asyncio
 import importlib.util
 import sys
+import tempfile
 import types
 import unittest
 from pathlib import Path
@@ -34,27 +35,42 @@ long_form = load_module("sonic_long_form_audition", ROOT / "scripts" / "generate
 queue_package = load_module("sonic_queue_audition", ROOT / "scripts" / "generate-queue-package.py")
 queued_renderer = load_module("sonic_queued_renderer", ROOT / "scripts" / "render-queued-draft.py")
 photo_thumbnail = load_module("sonic_photo_thumbnail", ROOT / "scripts" / "render-photo-thumbnail.py")
+legacy_long_form = load_module("sonic_legacy_long_form", ROOT / "scripts" / "generate-long-form-narration.py")
 
 
 class NarrationMediaSafetyTests(unittest.TestCase):
-    def test_long_form_edge_tts_requires_explicit_noncommercial_acknowledgement(self):
-        with self.assertRaisesRegex(SystemExit, "not the approved Roderic voice"):
-            long_form.require_noncommercial_audition(False)
-        self.assertTrue(long_form.require_noncommercial_audition(True))
+    def test_long_form_edge_tts_is_blocked_without_owner_authorized_alternative_voice(self):
+        for acknowledged in (False, True):
+            with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                long_form.require_noncommercial_audition(acknowledged)
 
-    def test_long_form_requires_explicit_voice_after_acknowledgement(self):
-        with self.assertRaisesRegex(SystemExit, "supply --voice explicitly"):
+    def test_long_form_requires_owner_authorization_before_voice_or_output(self):
+        with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
             asyncio.run(long_form.main(True, None))
 
-    def test_queue_package_edge_tts_requires_explicit_noncommercial_acknowledgement(self):
-        with self.assertRaisesRegex(SystemExit, "not the approved Roderic voice"):
-            queue_package.require_noncommercial_audition(False)
-        self.assertTrue(queue_package.require_noncommercial_audition(True))
+    def test_legacy_long_form_cli_is_blocked_before_creating_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "narration"
+            with patch.object(legacy_long_form, "OUT", output):
+                with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                    asyncio.run(legacy_long_form.main())
+            self.assertFalse(output.exists())
 
-    def test_queue_package_cli_blocks_before_reading_queue_without_acknowledgement(self):
-        with patch.object(sys, "argv", ["generate-queue-package.py", "--run-number", "1"]):
-            with self.assertRaisesRegex(SystemExit, "not the approved Roderic voice"):
-                asyncio.run(queue_package.main())
+    def test_queue_package_edge_tts_is_blocked_without_owner_authorized_alternative_voice(self):
+        for acknowledged in (False, True):
+            with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                queue_package.require_noncommercial_audition(acknowledged)
+
+    def test_queue_package_cli_cannot_bypass_narrator_policy_with_noncommercial_acknowledgement(self):
+        for acknowledgement in ([], ["--allow-noncommercial-audition"]):
+            with tempfile.TemporaryDirectory() as tmp:
+                output = Path(tmp) / "queue-package"
+                with patch.object(queue_package, "OUT", output), patch.object(
+                    sys, "argv", ["generate-queue-package.py", "--run-number", "1", *acknowledgement]
+                ):
+                    with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                        asyncio.run(queue_package.main())
+                self.assertFalse(output.exists())
 
     def test_production_renderer_requires_owner_approved_commercial_voice_and_original_media(self):
         metadata = {

@@ -1,4 +1,6 @@
+import asyncio
 import importlib.util
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -31,6 +33,13 @@ class AuthoringNarrationTests(unittest.TestCase):
     def test_authoring_tts_is_blocked_without_alternative_voice_authorization(self):
         with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
             MODULE.require_owner_authorized_alternative_voice()
+
+    def test_direct_generate_api_is_blocked_before_output_directory_creation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "generated"
+            with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+                asyncio.run(MODULE.generate(short_payload(), "short", output))
+            self.assertFalse(output.exists())
 
     def test_accepts_measured_short_with_matching_sections_and_claim_sources(self):
         narration, count = MODULE.validate_script_payload(short_payload(), "short")
