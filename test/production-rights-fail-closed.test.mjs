@@ -135,3 +135,15 @@ test("Production queues and Short candidates reflect current media and narration
   assert.equal(short004.uploadAllowed, false);
   assert.equal(short004.status, "HOLD_EXCLUDED_NOAA_STOCK_SOURCE");
 });
+
+test("Nature Frontiers validator and schema enforce original creator-captured eligibility", () => {
+  const validator = readText("../scripts/validate-nature-frontiers-media-register.mjs");
+  const schema = readJson("../schemas/nature-frontiers-media-register.schema.json");
+  assert.ok(validator.includes("original creator-captured media must be required"));
+  assert.ok(validator.includes("Pexels/Pixabay stock listings must remain reference-only"));
+  assert.ok(validator.includes("production eligibility requires cleared commercial rights"));
+  assert.ok(schema.properties.policy.required.includes("originalCreatorCapturedMediaRequired"));
+  assert.ok(schema.properties.assets.items.required.includes("productionEligibility"));
+  assert.equal(schema.properties.policy.properties.stockMediaAllowed.const, false);
+  assert.equal(schema.properties.policy.properties.aiGeneratedWildlifeVisualsAllowed.const, false);
+});
