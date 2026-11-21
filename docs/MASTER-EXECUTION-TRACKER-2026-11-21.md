@@ -305,3 +305,21 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Added a workflow regression assertion for implementation-branch trigger and path coverage. The workflow regression test and all repository integration tests remain **NOT_TESTED** because the repository is not checked out in this execution environment and connector-created commits have produced no Actions runs.
 - No workflow was run with credentials, no upload was attempted, and no production or billing setting was changed.
 
+
+
+---
+
+## CI determinism and security-gate hardening — 21 November 2026
+
+- `queue-readiness.yml` now uses `npm ci --ignore-scripts` against the committed lockfile instead of a potentially mutating `npm install`.
+- `validate-automation.yml` now fails if `package-lock.json` is absent, uses `npm ci --ignore-scripts` unconditionally, and fails closed if npm audit cannot complete or reports any known vulnerability at any severity (including low/moderate). A warning-only moderate-vulnerability result is no longer treated as acceptable release evidence.
+- `dashboard-browser-e2e.yml` now includes `test/**` in its branch push path filters so dashboard and API regression changes trigger browser acceptance.
+- Added `test/automation-workflow.test.mjs` to assert the strict lockfile, audit and implementation-branch CI requirements.
+- These workflow/test changes are committed but have **not** been executed by GitHub Actions. The connector has returned zero workflow runs and zero combined statuses for the current PR head. An owner-authenticated push to the implementation branch is required to obtain real CI execution; do not merge PR #1 to trigger it.
+
+### Exact checkpoint after CI/security changes
+- Implementation branch head: `7310c6a82968a780083534a3b434e3e9022565ae`.
+- `main`: `3795519ccbf58fd02d74458624b58dd2e44a88c0`, unchanged.
+- Branch comparison: 5,093 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- PR #1 remains open, draft and unmerged.
+- No npm audit was run in this environment; zero vulnerabilities on this new HEAD is NOT_TESTED. The stricter CI gate will establish that only when it runs.
