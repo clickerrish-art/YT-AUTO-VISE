@@ -42,12 +42,14 @@
   },
   "source": {
     "scriptPath": "content/short-001-wildlife-video-storytelling.md",
-    "scriptBlobSha256": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
     "captionsPath": "content/short-001-wildlife-video-storytelling.srt",
-    "captionsBlobSha256": "6a09a58188301ed134912010c6276c6a167544be",
     "currentScriptBlobSha": "81bdea7b2a7b29b89a8f1bb7a9a6f5e8b9d7a5e1",
     "currentCaptionBlobSha": "6a09a58188301ed134912010c6276c6a167544be",
-    "hashType": "GIT_BLOB_SHA"
+    "hashType": "GIT_BLOB_SHA",
+    "recordedGenerationScriptBlobSha": "81f9c038fc40bbdca860fc97f2998f526ff5aa13",
+    "recordedGenerationCaptionsBlobSha": "6a09a58188301ed134912010c6276c6a167544be",
+    "recordedGenerationHashType": "GIT_BLOB_SHA",
+    "note": "The original generation record's source hash is preserved as historical evidence. The current script hash is recorded separately; the narration is an internal-only audition and is not approved against the current script for production."
   },
   "spokenText": "Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep separate moments in their original recorded order; label any reconstruction clearly. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.",
   "captions": {
