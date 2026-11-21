@@ -72,7 +72,46 @@
       "runner_artifact_parts": 0
     },
     "verification": "Read-only sqlite_master schema query and individual COUNT(*) queries; zero rows written",
-    "listEndpointDiscrepancy": "The D1 list endpoint returned num_tables=0 while the direct database detail endpoint and sqlite_master query confirm six tables. Direct detail/schema evidence is used."
+    "listEndpointDiscrepancy": "The D1 list endpoint returned num_tables=0 while the direct database detail endpoint and sqlite_master query confirm six tables. Direct detail/schema evidence is used.",
+    "dashboardState": {
+      "present": true,
+      "revision": 3,
+      "updatedAt": "2026-11-15T09:52:22.168Z",
+      "schemaVersion": 1,
+      "publishingEnabled": false,
+      "publicPublishingEnabled": false,
+      "unattendedPublishingEnabled": false,
+      "arrayCounts": {
+        "queueItems": 16,
+        "audit": 4,
+        "jobs": 0,
+        "uploads": 0,
+        "campaigns": 3,
+        "facebookDrafts": 0,
+        "facebookPosts": 0,
+        "facebookAttempts": 0
+      },
+      "utf8Bytes": 11011
+    },
+    "backupIntegrity": {
+      "checkedAt": "2026-11-21",
+      "count": 5,
+      "checksumAndSchemaVerified": 5,
+      "total": 5,
+      "latestCreatedAt": "2026-11-15T09:52:22.168Z",
+      "latestSourceRevision": 2,
+      "note": "Each retained dashboard_backups.state_json SHA-256 was recomputed read-only using Web Crypto and matched the stored checksum; each JSON payload parsed as schema version 1. This verifies stored backup bytes, not independent restore."
+    },
+    "restoreStatus": "NOT_TESTED_INDEPENDENT_RESTORE_REQUIRED",
+    "runnerOperationalState": {
+      "jobs": 0,
+      "uploads": 0,
+      "runnerStateRows": 0,
+      "runnerControlRows": 0,
+      "runnerArtifactsRows": 0,
+      "runnerArtifactPartsRows": 0,
+      "interpretation": "Staging dashboard snapshot exists, but no production job execution or durable runner/artifact lifecycle has been recorded in D1."
+    }
   },
   "r2": {
     "bucketBindingConfigured": true,
