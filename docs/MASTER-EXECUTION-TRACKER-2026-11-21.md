@@ -335,3 +335,15 @@ This section supersedes any older exact-head, YouTube, Metricool, Cloudflare or 
 - Existing one-shot authorization already uses strict ISO timestamp validation, Ed25519 signature verification and exact job/video/metadata/approval/channel binding; it was inspected and left intact.
 - These new uploader regression tests have **NOT_TESTED** status until the repository test suite runs on exact HEAD. No upload, OAuth mutation, secret access, publication or paid service was used.
 
+
+
+---
+
+## Metricool YouTube scope discrepancy — read-only check, 21 November 2026
+
+- The owner instruction remains permanent: SonicVhibez YouTube belongs to this Marketing Machine through its direct API integration; do not reconnect or use Metricool for YouTube.
+- A fresh read-only `getBrandSettings` response for Nature Frontiers SA (brand `8094526`) unexpectedly included `networksData.youtubeData = UCSlkuPfHH78oGC1o418HV4w`, the SonicVhibez channel ID. The connector does not expose a definitive active/authorized flag, so this may be retained/stale association data; active disconnection cannot be independently proven from this response.
+- A read-only scheduled-post query for 21 November 2026 through 1 January 2027 (Africa/Johannesburg) returned zero scheduled posts.
+- Machine-readable evidence: `content/metricool-youtube-scope-recheck-2026-11-21.json`, status `CONNECTION_STATE_AMBIGUOUS`. No Metricool settings were changed and no posts were created or published.
+- Release/scope control: continue to route SonicVhibez YouTube through the project's direct API only. Do not reconnect or mutate Metricool network settings without explicit owner instruction. Owner/UI verification of the lingering `youtubeData` association is required before declaring the Metricool disconnection independently verified.
+
