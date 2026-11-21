@@ -33,6 +33,30 @@ class ReviewedFootageRendererSafetyTests(unittest.TestCase):
             self.assertIn("No reviewed footage manifest", result.stderr)
             self.assertFalse((root / "media" / "rendered-drafts").exists())
 
+
+    def test_rejects_stock_and_generated_visuals_even_when_licence_review_is_claimed(self):
+        import shutil, json
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "scripts").mkdir()
+            shutil.copy2(SCRIPT, root / "scripts" / SCRIPT.name)
+            footage = root / "media" / "approved-footage"
+            footage.mkdir(parents=True)
+            (footage / "manifest.json").write_text(json.dumps({"clips": [{
+                "file": "stock.mp4",
+                "sourceUrl": "https://example.com/stock.mp4",
+                "licenseBasis": "commercial stock licence",
+                "attribution": "stock creator",
+                "rightsReviewed": True,
+                "sourceMethod": "LICENSED",
+                "creatorCapturedOriginal": False
+            }]}), encoding="utf-8")
+            result = subprocess.run([sys.executable, str(root / "scripts" / SCRIPT.name)],
+                                    cwd=root, text=True, capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("only ORIGINAL_RECORDING", result.stderr)
+            self.assertFalse((root / "media" / "rendered-drafts").exists())
+
     def test_empty_manifest_fails_closed(self):
         with tempfile.TemporaryDirectory() as td:
             import shutil, json
