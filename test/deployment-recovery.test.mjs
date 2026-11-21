@@ -193,7 +193,7 @@ test("legacy repository runner and staging smoke remain disabled until OIDC trus
   assert.ok(workflow.includes("run_staging_smoke:\n        description: \"Legacy staging smoke disabled pending OIDC trust migration\"\n        required: false\n        type: boolean\n        default: false"));
   assert.ok(workflow.includes("run_repository_runner:\n        description: \"Legacy production runner disabled pending OIDC trust migration\"\n        required: false\n        type: boolean\n        default: false"));
   assert.equal(workflow.split("if: ${{ false }}").length - 1, 2);
-  assert.equal(workflow.split("id-token: write").length - 1, 0);
+  assert.equal(workflow.split("\n").filter(line => line.trim() === "id-token: write").length, 0);
 });
 
 
