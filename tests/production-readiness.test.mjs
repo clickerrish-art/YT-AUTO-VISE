@@ -346,7 +346,7 @@ test("excluded Canva imports remain quarantined and readiness still requires ori
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
   assert.equal(report.blockers.some(item => /selected imported wildlife asset\\(s\\) are not verified as original creator-captured footage/.test(item.message)), false);
-  assert.ok(report.notes.some(note => /5 assets; 5 excluded from production \\(not rights-cleared\\); 0 selected\\/unresolved; release not authorized/.test(note)));
+  assert.ok(report.notes.some(note => note.includes("5 assets; 5 excluded from production (not rights-cleared); 0 selected/unresolved; release not authorized")));
   assert.ok(report.blockers.some(item => /footageOrigin must be creator_captured_original/.test(item.message)),
     "an excluded stock inventory must not silently permit an AI-generated or stock-based production path");
 });
