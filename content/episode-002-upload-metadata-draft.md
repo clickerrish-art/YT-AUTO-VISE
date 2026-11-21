@@ -11,6 +11,8 @@ You do not need to appear on camera to make a useful wildlife video—but facele
 
 This is creator-education content for SonicVhibez. No original creator-captured production footage has yet been acquired and approved for this package. Do not use NOAA B-roll, stock/archive footage or AI-generated wildlife visuals as substitutes. Add source credits only after original footage provenance and commercial usage rights have been verified.
 
+Narration hold: HeyGen Support confirmed that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. No production narration is authorized until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint. No alternate narrator or paid upgrade is authorized.
+
 ADVERTISEMENT
 
 This product is sold through my own Selar business; purchases generate revenue for my business.
