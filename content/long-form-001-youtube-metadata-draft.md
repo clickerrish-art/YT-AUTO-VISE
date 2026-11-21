@@ -57,4 +57,6 @@ Nile crocodile, Crocodylus niloticus, crocodile hunting, crocodile ambush, croco
 
 **Promotion decision:** NON-COMMERCIAL EDUCATIONAL CONTENT — `hasPaidPromotion=false`; no product CTA, Selar URL or product sales disclosure.
 
+**Narration rights hold:** HeyGen Support confirmed that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. The existing WAV is internal-evaluation-only; do not use it in a public SonicVhibez release. No production narration is authorized until written rights clearance is obtained or the owner explicitly changes the Roderic-only constraint. No alternate narrator or paid upgrade is authorized.
+
 **Release state:** HOLD. This metadata draft is not upload authorization and does not reserve a publication time.
