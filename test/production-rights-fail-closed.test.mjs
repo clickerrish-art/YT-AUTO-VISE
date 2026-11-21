@@ -126,7 +126,7 @@ test("Production queues and Short candidates reflect current media and narration
   assert.equal(nextShort.productionPolicy.originalCreatorCapturedMediaRequired, true);
   assert.equal(nextShort.productionPolicy.stockMediaAllowed, false);
   assert.equal(nextShort.productionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
-  assert.equal(nextShort.productionPolicy.narrationCommercialRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION");
+  assert.equal(nextShort.productionPolicy.narrationRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION");
   assert.equal(longQueue.productionPolicy.originalCreatorCapturedMediaRequired, true);
   assert.equal(queue.productionPolicy.originalCreatorCapturedMediaRequired, true);
   assert.equal(weekly.productionPolicy.originalCreatorCapturedMediaRequired, true);

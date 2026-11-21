@@ -16,17 +16,18 @@ function fixture() {
   const sha = crypto.createHash("sha256").update(bytes).digest("hex");
   const register = {
     schemaVersion: "1.0.0", registerId: "nature-frontiers-media", brand: "Nature Frontiers", timezone: "Africa/Johannesburg",
-    policy: { defaultPublicationState: "held", requireHumanApproval: true, allowAutomaticPublication: false, sourceOfTruth: "versioned-local-json" },
+    policy: { defaultPublicationState: "held", requireHumanApproval: true, allowAutomaticPublication: false, sourceOfTruth: "versioned-local-json", originalCreatorCapturedMediaRequired: true, stockMediaAllowed: false, aiGeneratedWildlifeVisualsAllowed: false },
     assets: [{
       id: "nf-test-asset", mediaType: "video",
-      source: { provider: "test", url: "https://example.com/asset", listingStatus: "unverified", listingEvidence: [] },
+      source: { provider: "test fixture", url: "https://example.com/asset", listingStatus: "unverified", listingEvidence: [], captureType: "other" },
       localFile: { path: "media/nature-frontiers/clip.mp4", sha256: sha, byteSize: bytes.length },
       media: { sha256: sha, byteSize: bytes.length },
       claims: [{ type: "species", value: "giraffe", status: "listing_only" }, { type: "location", value: "South Africa", status: "unverified" }],
       rights: { reviewStatus: "not_assessed", additionalPermissionsStatus: "not_assessed", licenseEvidence: [], reviewedBy: null, reviewedAt: null },
       inspection: { status: "not_inspected", inspectedBy: null, inspectedAt: null, visualNotes: "" },
       approval: { status: "pending", approvedBy: null, approvedAt: null, approvedFileSha256: null, approvedUsage: [] },
-      usage: { scheduled: false, published: false, platformPostIds: [] }
+      usage: { scheduled: false, published: false, platformPostIds: [] },
+      productionEligibility: { eligible: false, status: "NOT_ELIGIBLE_MISSING_GATES", reason: "Test fixture has no verified commercial rights, complete inspection or owner approval." }
     }]
   };
   const review = {

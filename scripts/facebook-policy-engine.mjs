@@ -11,8 +11,7 @@ export const NATURE_FRONTIERS_KNOWN_DESTINATIONS = Object.freeze([
   "https://www.safari.com/singita-boulders?a=GM26",
   "https://www.safari.com/safaris/4-day-londolozi-varty-camp-fly-in-safari?a=GM26",
   "https://selar.com/m/kehinde-ajiboye3108854",
-  "https://selar.com/0u19v8u99l",
-  "https://www.youtube.com/@NatureFrontiers-life?sub_confirmation=1"
+  "https://selar.com/0u19v8u99l"
 ]);
 export const APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l";
 const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");

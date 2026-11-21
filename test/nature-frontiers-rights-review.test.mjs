@@ -25,11 +25,11 @@ function fixture() {
     registerId: "nature-frontiers-media",
     brand: "Nature Frontiers",
     timezone: "Africa/Johannesburg",
-    policy: { defaultPublicationState: "held", requireHumanApproval: true, allowAutomaticPublication: false, sourceOfTruth: "versioned-local-json" },
+    policy: { defaultPublicationState: "held", requireHumanApproval: true, allowAutomaticPublication: false, sourceOfTruth: "versioned-local-json", originalCreatorCapturedMediaRequired: true, stockMediaAllowed: false, aiGeneratedWildlifeVisualsAllowed: false },
     assets: [{
     id: "nf-test-asset-001",
     mediaType: "video",
-    source: { provider: "Local archive", url: "https://archive.example.org/clip", listingStatus: "verified", listingEvidence: [] },
+    source: { provider: "Local archive test fixture", url: "https://archive.example.org/clip", listingStatus: "verified", listingEvidence: [], captureType: "other" },
     media: { sha256: hash },
     claims: [],
     inspection: { status: "not_inspected", inspectedBy: null, inspectedAt: null, visualNotes: "" },
@@ -37,7 +37,8 @@ function fixture() {
     localFile: { path: "media/nature-frontiers/clip.mp4", sha256: hash },
     approval: { status: "pending" },
     usage: { scheduled: false, published: false, platformPostIds: [] },
-    rights: { reviewStatus: "not_assessed", additionalPermissionsStatus: "not_assessed", licenseEvidence: [] }
+    rights: { reviewStatus: "not_assessed", additionalPermissionsStatus: "not_assessed", licenseEvidence: [] },
+    productionEligibility: { eligible: false, status: "NOT_ELIGIBLE_MISSING_GATES", reason: "Test fixture has no verified commercial rights, complete inspection or owner approval." }
   }] };
   return { root, register, hash };
 }

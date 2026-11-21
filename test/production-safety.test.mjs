@@ -12,6 +12,8 @@ const shortTemplate = JSON.parse(fs.readFileSync("content/next-short.example.jso
 const longNarrationGenerator = fs.readFileSync("scripts/generate_long_form_narration.py", "utf8");
 const shortNarrationGenerator = fs.readFileSync("scripts/generate-narration.py", "utf8");
 const queuePackageGenerator = fs.readFileSync("scripts/generate-queue-package.py", "utf8");
+const narrationPolicy = JSON.parse(fs.readFileSync("config/narration-voice-candidates.json", "utf8"));
+const narrationPolicyHelper = fs.readFileSync("scripts/narration_policy.py", "utf8");
 const queuedRenderer = fs.readFileSync("scripts/render-queued-draft.py", "utf8");
 const photoThumbnailGenerator = fs.readFileSync("scripts/render-photo-thumbnail.py", "utf8");
 const pexelsRegistry = JSON.parse(fs.readFileSync("content/approved-pexels-footage.json", "utf8"));
@@ -42,20 +44,22 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.productUrl, "https://selar.com/0u19v8u99l");
 });
 
-test("Edge TTS workflows only generate after manual non-commercial acknowledgement", () => {
-  for (const workflow of [narrationWorkflow, shortNarrationWorkflow]) {
+test("narration generation remains disabled while Roderic commercial rights are denied", () => {
+  for (const [workflow, disabledJob] of [[narrationWorkflow, "generate:"], [shortNarrationWorkflow, "generate-audio:"]]) {
     assert.match(workflow, /workflow_dispatch/);
-    assert.match(workflow, /allow_noncommercial_audition/);
-    assert.match(workflow, /default: false/);
-    assert.match(workflow, /if:.*inputs\.allow_noncommercial_audition == true/);
-    assert.match(workflow, /branches: \[main\]/);
-    assert.match(workflow, /schedule:/);
-    assert.match(workflow, /cron:/);
-    assert.match(workflow, /github\.event_name == 'workflow_dispatch' && inputs\.allow_noncommercial_audition == true/);
-    assert.match(workflow, /--allow-noncommercial-audition/);
+    assert.ok(workflow.includes(disabledJob));
+    assert.match(workflow, /if: false # Disabled:/);
+    assert.doesNotMatch(workflow, /schedule:|cron:/);
+    assert.doesNotMatch(workflow, /upload-artifact/i);
   }
-  for (const generator of [longNarrationGenerator, shortNarrationGenerator, queuePackageGenerator]) {
-    assert.match(generator, /require_noncommercial_audition/);
+  assert.equal(narrationPolicy.ownerDecision.approvedVoiceId, "b5c5b28db1ea408abc7d851202983bdb");
+  assert.equal(narrationPolicy.ownerDecision.alternativeVoicesAuthorized, false);
+  assert.equal(narrationPolicy.ownerDecision.paidUpgradeAuthorized, false);
+  assert.equal(narrationPolicy.ownerDecision.commercialRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION_BY_HEYGEN_SUPPORT_2026-11-21");
+  assert.match(narrationPolicyHelper, /alternativeVoicesAuthorized/);
+  assert.match(narrationPolicyHelper, /BLOCKED: the owner has not authorized an alternative narrator/);
+  for (const generator of [longNarrationGenerator, shortNarrationGenerator]) {
+    assert.match(generator, /require_owner_authorized_alternative_voice/);
     assert.match(generator, /not commercially cleared/i);
   }
 });
@@ -75,7 +79,7 @@ test("Pexels stock thumbnail generation is disabled and historical selections ar
   assert.match(pexelsAcquisitionWorkflow, /workflow_dispatch/);
   assert.match(pexelsAcquisitionWorkflow, /reference_only/);
   assert.match(pexelsAcquisitionWorkflow, /default: false/);
-  assert.match(pexelsAcquisitionWorkflow, /if:.*inputs\.reference_only == true/);
+  assert.match(pexelsAcquisitionWorkflow, /if: false # Disabled:/);
   assert.doesNotMatch(pexelsAcquisitionWorkflow, /^\s*(push|pull_request|schedule):/m);
 });
 

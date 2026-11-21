@@ -31,7 +31,8 @@ test("Nature Frontiers remains a Facebook destination, not a YouTube target", ()
 test("known Nature Frontiers destinations remain allowlisted but are never required on every organic post", () => {
   assert.deepEqual(config.allowedCampaignIds, [], "no Nature Frontiers commercial campaign is authorized for autonomous publishing yet");
   for (const url of NATURE_FRONTIERS_KNOWN_DESTINATIONS) assert.ok(config.approvedDestinations.includes(url), url);
-  assert.equal(NATURE_FRONTIERS_KNOWN_DESTINATIONS.length, 8);
+  assert.equal(NATURE_FRONTIERS_KNOWN_DESTINATIONS.length, 7);
+  assert.ok(NATURE_FRONTIERS_KNOWN_DESTINATIONS.every(url => new URL(url).hostname !== "www.youtube.com"));
   const links = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/nature-frontiers-post-links.json"), "utf8"));
   assert.equal(links.campaignId, null);
   assert.equal(links.disclosure, null);
