@@ -53,6 +53,7 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
     ["../.github/workflows/short-narration-artifact.yml", "generate"],
     ["../.github/workflows/acquire-noaa-broll-candidates.yml", "acquire-candidates"],
     ["../.github/workflows/acquire-short-001-assets.yml", "acquire"],
+    ["../.github/workflows/noaa-lobster-thumbnail-review.yml", "thumbnail-review"],
     ["../.github/workflows/noaa-lobster-thumbnail-review.yml", "thumbnail-review"]
   ]) {
     assert.ok(jobDisabled(readText(path), job), path + " job " + job + " must be disabled");
@@ -76,6 +77,7 @@ test("AI wildlife generation and stock acquisition paths are disabled", () => {
   const generation = readJson("../config/video-generation.json");
   const notebook = readJson("../notebooks/sonicvhibez_wangp_kaggle.ipynb");
   const acquisitionScript = readText("../scripts/acquire-short-001-assets.mjs");
+  const importer = readText("../scripts/import_wangp_kaggle_output.py");
   assert.equal(generation.status, "DISABLED_BY_ORIGINAL_CREATOR_CAPTURED_MEDIA_POLICY");
   assert.equal(generation.primary, false);
   assert.equal(generation.generation.enabled, false);
@@ -86,6 +88,7 @@ test("AI wildlife generation and stock acquisition paths are disabled", () => {
     .startsWith('raise RuntimeError("DISABLED_BY_OWNER_ORIGINAL_CAPTURE_POLICY')));
   assert.ok(acquisitionScript.includes("Pexels stock acquisition is disabled"));
   assert.ok(acquisitionScript.indexOf("Pexels stock acquisition is disabled") < acquisitionScript.indexOf("await fsp.mkdir(MEDIA_ROOT"));
+  assert.ok(importer.includes("AI-generated wildlife media is disabled by the current original creator-captured-media policy"));
 });
 
 test("NOAA and stock-library source records remain excluded from current production", () => {
