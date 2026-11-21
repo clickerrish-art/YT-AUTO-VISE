@@ -149,6 +149,28 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         self.assertIn("This product is sold through my own Selar business; purchases generate revenue for my business.", cleaned)
         self.assertNotIn("selar.com", cleaned)
 
+    def test_paid_product_cta_requires_ad_disclosure_product_and_url_in_order(self):
+        valid = (
+            "Advertisement. "
+            "This product is sold through my own Selar business; purchases generate revenue for my business. "
+            "If you want a paid resource, review the Complete YouTube Wildlife Creator's Vault. "
+            "https://selar.com/0u19v8u99l"
+        )
+        cleaned = MODULE.clean_script(valid, include_paid_product=True)
+        self.assertLess(cleaned.index("Advertisement."), cleaned.index(MODULE.APPROVED_DISCLOSURE_TEXT))
+        self.assertLess(cleaned.index(MODULE.APPROVED_DISCLOSURE_TEXT),
+                        cleaned.index("Complete YouTube Wildlife Creator"))
+        self.assertLess(cleaned.index("Complete YouTube Wildlife Creator"),
+                        cleaned.index("https://selar.com/0u19v8u99l"))
+
+        invalid = (
+            "Advertisement. If you want a paid resource, review the Complete YouTube Wildlife Creator's Vault. "
+            "https://selar.com/0u19v8u99l "
+            "This product is sold through my own Selar business; purchases generate revenue for my business."
+        )
+        with self.assertRaisesRegex(ValueError, "in that order"):
+            MODULE.clean_script(invalid, include_paid_product=True)
+
     def test_rejects_paid_product_paragraph_without_exact_approved_disclosure(self):
         source = "If you want a paid resource, review the product.\n\nClosing narration remains."
         with self.assertRaisesRegex(ValueError, "exact owner-approved Selar disclosure"):
