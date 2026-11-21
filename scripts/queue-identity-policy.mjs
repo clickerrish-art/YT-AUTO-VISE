@@ -1,3 +1,5 @@
+import crypto from "node:crypto";
+
 /**
  * Fail-closed reconciliation between the operational dispatch queue and the
  * detailed long-form content queue. This proves identity only; it does not
@@ -57,10 +59,15 @@ export function validateQueueIdentity({ operationalQueue, detailedQueue, approva
     } else detailedById.set(item.id, item);
   }
 
+  const operationalQueueSha256 = crypto.createHash("sha256").update(JSON.stringify(operationalQueue)).digest("hex");
+  const detailedQueueSha256 = crypto.createHash("sha256").update(JSON.stringify(detailedQueue)).digest("hex");
+
   if (!approval || typeof approval !== "object" || Array.isArray(approval)) {
     errors.push("Owner-approved content/queue-identity-approval.json is missing or invalid.");
   } else {
     if (approval.schemaVersion !== 1) errors.push("Queue identity approval schemaVersion must be 1.");
+    if (approval.operationalQueueSha256 !== operationalQueueSha256) errors.push("Queue identity approval is stale: operationalQueueSha256 does not match the current content/queue.json.");
+    if (approval.detailedQueueSha256 !== detailedQueueSha256) errors.push("Queue identity approval is stale: detailedQueueSha256 does not match the current content/long-form-queue.json.");
     if (approval.status !== "OWNER_APPROVED" || approval.ownerApproved !== true) {
       errors.push("Queue identity approval must be explicitly OWNER_APPROVED by the owner.");
     }
