@@ -968,3 +968,11 @@ The default-branch `.github/workflows/acquire-noaa-broll-candidates.yml` remains
 - Worker runner code and tests were reviewed: 409/429 backoff, ambiguous dispatch quarantine, failed persistence stop/lock retention and restart blocking are present. This remains code-reviewed only, not runtime-verified on the current head.
 
 All these production queues remain HOLD/planning-only. No media render, narration generation, upload, schedule or publication occurred.
+
+
+### Additional verified correction — narrator execution controls (2026-11-21)
+
+- Added a shared fail-closed narrator policy helper and enforced it in all known manual Edge TTS, Piper, Norman/American and Banjo CLI generation paths.
+- The Piper generator blocks before output-directory creation or model download; the other CLI entry points block before TTS/render execution.
+- Updated the corresponding Python tests to verify an explicit audition acknowledgement cannot override the owner decision.
+- These changes are repository-read-back verified; full Python runtime tests remain NOT_TESTED on this head.
