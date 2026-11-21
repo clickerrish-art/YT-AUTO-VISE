@@ -1,11 +1,11 @@
 # SonicVhibez Short 002 — production brief
 
-**Status:** SCRIPT DRAFT — revised SEO packaging; not rendered, uploaded, scheduled, or published  
+**Status:** SCRIPT DRAFT — revised SEO packaging; original creator-captured media and commercially eligible Roderic narration missing; not rendered, uploaded, scheduled, or published  
 **Weekly allowance:** Existing item 2 of 2; this is a revision, not a third Short  
 **Channel:** SonicVhibez only  
 **Target runtime:** about 55 seconds  
 **Format:** 9:16 vertical  
-**Voice:** friendly, clear, conversational documentary narration  
+**Voice:** Roderic — Authoritative & Refined only (owner-selected exclusive narrator). HeyGen denied zero-cost commercial rights for Free-plan output; production narration is blocked. No alternate narrator or paid upgrade is authorized.  
 **Product URL:** https://selar.com/0u19v8u99l
 
 ## YouTube title
@@ -95,3 +95,11 @@ Use one genuine, rights-cleared animal image in its actual habitat, with natural
 **SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed.
 
 **Release state:** HOLD — Selar direct-sales relationship and SonicVhibez promotion authorization are owner-confirmed; exact viewer-facing disclosure remains unapproved; genuine media rights, final assets, destination identity and human review remain outstanding. No video has been rendered or published.
+
+
+## Current production gate — 2026-11-21
+
+- Use only genuine original creator-captured wildlife media with creator/source provenance, exact original file hash, commercial-use rights, full technical and visual review, and exact-hash approval. Generic stock footage and AI-generated wildlife visuals are prohibited as substitutes.
+- The owner-selected Roderic HeyGen Free-plan voice is internal-only; HeyGen Support denied the zero-cost commercial-use exception. No alternate narrator is approved. Do not generate or render production narration until written rights change or the owner explicitly changes the voice requirement.
+- The direct-sales disclosure remains a separate owner approval gate for this specific Short; the approval recorded for another Short does not automatically approve this draft.
+- This item remains a planning draft, not a render or release candidate. Keep publishing disabled.
