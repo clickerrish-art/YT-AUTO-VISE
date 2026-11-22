@@ -11,6 +11,7 @@ import { buildApprovedJobRenderManifest } from "../scripts/build-approved-job-re
 import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
 import { writeTestQueueIdentityFixture } from "./helpers/queue-identity-fixture.mjs";
 import { productionPlanSha256 } from "../scripts/production-plan.mjs";
+import { FIXED_NOW, fixedClockEnv } from "./helpers/fixed-clock.mjs";
 
 function hash(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
@@ -291,7 +292,7 @@ async function reservePort() {
 }
 
 function dueJohannesburgSlot() {
-  const now = Date.now() - 2 * 60_000;
+  const now = FIXED_NOW - 2 * 60_000;
   return {
     date: new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(now)),
     time: new Intl.DateTimeFormat("en-GB", { timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(now)),
@@ -343,7 +344,7 @@ test("approved long-form job runs through /api/jobs/produce to a verified, persi
   rehashPlanReview(f.job);
 
   const scheduledDate = (() => {
-    const date = new Date();
+    const date = new Date(FIXED_NOW);
     for (let i = 0; i < 14; i++) {
       const candidate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + i, 12));
       if (candidate.toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" }) === "Tuesday") return candidate.toISOString().slice(0, 10);
@@ -395,15 +396,14 @@ process.stdout.write("TEST_FIXTURE_RENDER_SUCCEEDED; fixture output is not publi
 
   child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     cwd: f.root,
-    env: {
-      ...process.env,
+    env: fixedClockEnv({
       DASHBOARD_OPERATOR_TOKEN: token,
       DASHBOARD_OPERATOR_ID: "approved-render-test@example.test",
       DASHBOARD_STATE_DIR: stateDir,
       UPLOAD_LOG_DIR: stateDir,
       PORT: String(port),
       DASHBOARD_HOST: "127.0.0.1"
-    },
+    }),
     stdio: ["ignore", "pipe", "pipe"]
   });
   child.stdout.on("data", chunk => { logs += chunk.toString(); });
