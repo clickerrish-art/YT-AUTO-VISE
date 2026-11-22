@@ -1366,7 +1366,7 @@ test("every protected dashboard API route rejects missing and invalid operator a
     const mutatingRoutes = inventory.routes.filter(route =>
       route.path.startsWith("/api/") && route.method !== "GET"
     );
-    assert.equal(mutatingRoutes.length, 34, "all declared mutating API routes must be included in the auth matrix");
+    assert.equal(mutatingRoutes.length, 36, "all declared mutating API routes must be included in the auth matrix");
     assert.ok(mutatingRoutes.some(route => route.method === "POST" && route.path === "/api/instagram/approve"), "Instagram approval must be covered by the operator-authentication matrix");
 
     for (const route of mutatingRoutes) {
@@ -1447,6 +1447,7 @@ test("all dashboard POST routes reject empty operation payloads without mutating
       PORT: String(port),
       DASHBOARD_HOST: "127.0.0.1",
       FACEBOOK_PUBLISH_ENABLED: "NO",
+      FACEBOOK_PROVIDER_DRAFTS_ENABLED: "NO",
       FACEBOOK_RUNTIME_KILL_SWITCH: "YES",
       META_PAGE_ACCESS_TOKEN: "",
       META_USER_ACCESS_TOKEN: ""
@@ -1478,6 +1479,8 @@ test("all dashboard POST routes reject empty operation payloads without mutating
     "/api/facebook/drafts",
     "/api/facebook/drafts/evaluate",
     "/api/facebook/drafts/approve",
+    "/api/facebook/drafts/provider",
+    "/api/facebook/drafts/provider/reconcile",
     "/api/facebook/publish",
     "/api/tasks/run",
     "/api/campaigns/manage",
@@ -1525,6 +1528,15 @@ test("all dashboard POST routes reject empty operation payloads without mutating
       "empty payload for POST " + route + " must not mutate persisted dashboard state"
     );
   }
+  const providerDraftDisabled = await fetchDashboard(base + "/api/facebook/drafts/provider", {
+    method: "POST", headers,
+    body: JSON.stringify({ draftId: "approved-provider-draft-001", confirmProviderDraft: true })
+  });
+  assert.equal(providerDraftDisabled.status, 409, "provider draft creation must remain disabled by the safe default configuration");
+  const providerDraftDisabledBody = await providerDraftDisabled.json();
+  assert.equal(providerDraftDisabledBody.remoteMutationAttempted, false);
+  assert.equal(fs.readFileSync(stateFile, "utf8"), originalState, "disabled provider-draft operation must not persist an attempt or mutate state");
+
   const unsignedRelease = await fetchDashboard(base + "/api/worker/quarantine-release", {
     method: "POST", headers, body: JSON.stringify({ jobId: "job-release-123", workerId: "worker-test" })
   });
