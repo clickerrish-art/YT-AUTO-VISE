@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 import { resolveRegularFileNoSymlinks } from "./safe-media-path.mjs";
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 import { META_GRAPH_API_VERSION } from "./meta-graph-api-version.mjs";
+import { facebookApprovalFingerprint } from "./facebook-pipeline.mjs";
 
 const PAGE_ID_PATTERN = /^\d{5,30}$/;
 const API_VERSION_PATTERN = /^v\d+\.\d+$/;
@@ -344,5 +345,268 @@ export async function reconcileMetaPagePost({
     outcome: matches.length > 1 ? "AMBIGUOUS" : "UNRESOLVED",
     reason: matches.length > 1 ? "MULTIPLE_REMOTE_CANDIDATES" : "NO_MATCH_IS_NOT_PROOF_OF_NON_PUBLICATION",
     matches, checkedAt: new Date().toISOString()
+  };
+}
+
+
+/**
+ * Create an unpublished Page draft. This is deliberately separate from the scheduled
+ * publisher: it never supplies scheduled_publish_time and always sends published=false.
+ * The caller must durably consume the one-shot authorization and write an attempt
+ * record before invoking this function. This adapter never retries a mutation.
+ */
+export function metaProviderDraftPayloadSha256(draft) {
+  const stable = value => {
+    if (Array.isArray(value)) return value.map(stable);
+    if (value && typeof value === "object") {
+      return Object.fromEntries(Object.keys(value).sort().map(key => [key, stable(value[key])]));
+    }
+    return value;
+  };
+  return crypto.createHash("sha256").update(JSON.stringify(stable({
+    id: draft?.id ?? "",
+    caption: draft?.caption ?? "",
+    destinationPageId: draft?.destinationPageId ?? "",
+    expectedPageId: draft?.expectedPageId ?? null,
+    media: draft?.media ?? null,
+    disclosure: draft?.disclosure ?? "",
+    disclosureRequired: draft?.disclosureRequired === true,
+    commercial: draft?.commercial === true,
+    campaignId: draft?.campaignId ?? null,
+    claims: draft?.claims ?? [],
+    complianceVersion: draft?.complianceVersion ?? ""
+  }))).digest("hex");
+}
+
+function validateProviderDraftAuthorization({
+  draft, pageId, expectedPageId, permissionsVerified, authorization, now
+}) {
+  if (!draft || draft.kind !== "FACEBOOK_PAGE_DRAFT" || draft.status !== "APPROVED_DRAFT" ||
+      draft.approval?.decision !== "APPROVE") {
+    throw new MetaPageApiError("An explicitly approved local Facebook draft is required");
+  }
+  const approvedFingerprint = facebookApprovalFingerprint(draft);
+  if (!/^[a-f0-9]{64}$/.test(draft.approval?.fingerprint ?? "") ||
+      draft.approval.fingerprint !== approvedFingerprint) {
+    throw new MetaPageApiError("Local draft changed after approval; provider-draft creation is blocked");
+  }
+  if (draft.destination !== "nature_frontiers_facebook" ||
+      draft.destinationPageId !== pageId || draft.expectedPageId !== expectedPageId) {
+    throw new MetaPageApiError("Approved draft destination does not match the exact verified Nature Frontiers Page");
+  }
+  if (permissionsVerified !== true) {
+    throw new MetaPageApiError("Live Meta Page permissions were not verified before provider-draft creation");
+  }
+  if (!authorization || authorization.operation !== "CREATE_UNPUBLISHED_PROVIDER_DRAFT" ||
+      authorization.confirmed !== true || authorization.oneShot !== true ||
+      authorization.draftId !== draft.id || authorization.pageId !== pageId ||
+      authorization.approvalFingerprint !== approvedFingerprint ||
+      authorization.payloadSha256 !== metaProviderDraftPayloadSha256(draft) ||
+      typeof authorization.nonce !== "string" || authorization.nonce.length < 16) {
+    throw new MetaPageApiError("A one-shot authorization bound to the exact draft, Page and approved payload is required");
+  }
+  const issued = Date.parse(authorization.issuedAt ?? "");
+  const expires = Date.parse(authorization.expiresAt ?? "");
+  if (!Number.isFinite(issued) || !Number.isFinite(expires) || issued > now ||
+      expires <= now || expires <= issued || expires - issued > 5 * 60_000) {
+    throw new MetaPageApiError("Provider-draft authorization is expired, invalid or exceeds the five-minute authorization window");
+  }
+}
+
+export async function createMetaUnpublishedPageDraft({
+  draft, pageId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION,
+  permissionsVerified = false, authorization, fetchImpl = fetch,
+  rootDir = process.cwd(), now = Date.now(), timeoutMs = 30000,
+  probeImage = probeImageFile
+}) {
+  validateConfig({ pageId, expectedPageId, accessToken, apiVersion });
+  validateProviderDraftAuthorization({
+    draft, pageId, expectedPageId, permissionsVerified, authorization, now
+  });
+  if (typeof draft.caption !== "string" || !draft.caption.trim() || draft.caption.length > 5000) {
+    throw new MetaPageApiError("Approved provider-draft caption is missing or exceeds 5000 characters");
+  }
+
+  const form = new FormData();
+  form.set("message", draft.caption);
+  form.set("published", "false");
+  let pathPart = encodeURIComponent(pageId) + "/feed";
+  let photoId = null;
+
+  if (draft.media) {
+    if (typeof draft.media.path !== "string" || !/^[a-f0-9]{64}$/.test(draft.media.sha256 ?? "")) {
+      throw new MetaPageApiError("Approved image path and SHA-256 are required for provider-draft media");
+    }
+    const root = path.resolve(rootDir);
+    let absolute;
+    try { absolute = resolveRegularFileNoSymlinks(draft.media.path, rootDir, "Facebook provider-draft image"); }
+    catch { throw new MetaPageApiError("Approved provider-draft image is missing, unsafe or not a regular file"); }
+    if (!(absolute === root || absolute.startsWith(root + path.sep))) {
+      throw new MetaPageApiError("Provider-draft image path escapes the configured project root");
+    }
+    let bytes;
+    try { bytes = fs.readFileSync(absolute); }
+    catch { throw new MetaPageApiError("Approved provider-draft image is missing or unreadable"); }
+    if (!bytes.length || crypto.createHash("sha256").update(bytes).digest("hex") !== draft.media.sha256) {
+      throw new MetaPageApiError("Provider-draft image checksum does not match the approved payload");
+    }
+    const mimeType = IMAGE_TYPES.get(path.extname(absolute).toLowerCase());
+    if (!mimeType) throw new MetaPageApiError("Provider-draft image must be JPEG, PNG, GIF, BMP or TIFF");
+    probeImage(absolute);
+    form.set("source", new Blob([bytes], { type: mimeType }), path.basename(absolute));
+    pathPart = encodeURIComponent(pageId) + "/photos";
+  }
+
+  let response;
+  try {
+    response = await fetchImpl(endpoint(apiVersion, pathPart), {
+      method: "POST", headers: headers(accessToken), body: form,
+      redirect: "error", signal: AbortSignal.timeout(timeoutMs)
+    });
+  } catch {
+    throw new MetaPageApiError(
+      "Meta provider-draft create ended without a definitive response; outcome is uncertain and must be reconciled before any retry",
+      { retryable: false, uncertain: true }
+    );
+  }
+  const data = await parseResponse(response, accessToken, { mutation: true });
+  const remotePostId = typeof data.post_id === "string" ? data.post_id :
+    (!draft.media && typeof data.id === "string" ? data.id : "");
+  if (!remotePostId || !remotePostId.startsWith(pageId + "_") ||
+      remotePostId.length <= pageId.length + 1) {
+    throw new MetaPageApiError(
+      "Meta may have created an unpublished draft but returned no Page-bound post ID; reconcile before retrying",
+      { uncertain: true }
+    );
+  }
+  if (draft.media && typeof data.id === "string") photoId = data.id;
+  return {
+    status: "REMOTE_UNPUBLISHED_UNVERIFIED",
+    remotePostId, photoId, pageId, apiVersion,
+    payloadSha256: metaProviderDraftPayloadSha256(draft),
+    approvalFingerprint: draft.approval.fingerprint,
+    createdAt: new Date(now).toISOString(),
+    verifiedRemotely: false,
+    publishingEnabled: false
+  };
+}
+
+/** Read back one exact Page post and refuse anything not demonstrably unpublished. */
+export async function fetchMetaUnpublishedPageDraft({
+  remotePostId, expectedPageId, accessToken,
+  apiVersion = META_GRAPH_API_VERSION, fetchImpl = fetch, timeoutMs = 10000,
+  expectedMessage = ""
+}) {
+  validateConfig({ pageId: expectedPageId, expectedPageId, accessToken, apiVersion });
+  if (typeof remotePostId !== "string" ||
+      !remotePostId.startsWith(expectedPageId + "_") ||
+      remotePostId.length <= expectedPageId.length + 1) {
+    throw new MetaPageApiError("Remote provider-draft ID does not match the verified Page");
+  }
+  let response;
+  try {
+    response = await fetchImpl(endpoint(apiVersion,
+      encodeURIComponent(remotePostId) + "?fields=id,message,is_published,from,created_time,permalink_url"), {
+      method: "GET", headers: headers(accessToken), redirect: "error",
+      signal: AbortSignal.timeout(timeoutMs)
+    });
+  } catch {
+    throw new MetaPageApiError("Provider-draft remote read-back failed; preserve the attempt and reconcile later", { retryable: true });
+  }
+  const data = await parseResponse(response, accessToken);
+  if (data.id !== remotePostId ||
+      (data.from?.id && data.from.id !== expectedPageId) ||
+      (expectedMessage && data.message !== expectedMessage)) {
+    throw new MetaPageApiError("Provider-draft read-back does not match the exact Page, remote ID and approved caption");
+  }
+  if (data.is_published !== false) {
+    throw new MetaPageApiError("Remote object is not demonstrably unpublished; publication or unknown state detected", { uncertain: true });
+  }
+  return {
+    status: "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED",
+    remotePostId: data.id, pageId: expectedPageId,
+    message: data.message, isPublished: false,
+    createdTime: data.created_time ?? null,
+    remoteUrl: typeof data.permalink_url === "string" && data.permalink_url.startsWith("https://") ? data.permalink_url : null,
+    verifiedAt: new Date().toISOString(), publishingEnabled: false
+  };
+}
+
+/**
+ * Reconcile only by read operations. A known remote ID is read directly. Without an ID,
+ * a bounded Page feed scan may discover a matching unpublished post; zero matches never
+ * authorizes a retry because Meta documents that unpublished objects may not appear in feed.
+ */
+export async function reconcileMetaUnpublishedPageDraft({
+  pageId, expectedPageId, accessToken, apiVersion = META_GRAPH_API_VERSION,
+  caption, attemptStartedAt, remotePostId = null, fetchImpl = fetch,
+  timeoutMs = 10000, maxPages = 5
+}) {
+  validateConfig({ pageId, expectedPageId, accessToken, apiVersion });
+  if (typeof caption !== "string" || !caption.trim() || !Number.isFinite(Date.parse(attemptStartedAt))) {
+    throw new MetaPageApiError("Provider-draft reconciliation requires the exact caption and attempt timestamp");
+  }
+  if (remotePostId) {
+    const receipt = await fetchMetaUnpublishedPageDraft({
+      remotePostId, expectedPageId, accessToken, apiVersion, fetchImpl, timeoutMs,
+      expectedMessage: caption
+    });
+    return { outcome: "CONFIRMED_UNPUBLISHED", receipt, matches: [receipt], checkedAt: new Date().toISOString() };
+  }
+  const since = Math.floor((Date.parse(attemptStartedAt) - 10 * 60_000) / 1000);
+  const until = Math.floor((Date.parse(attemptStartedAt) + 10 * 60_000) / 1000);
+  const matches = new Map();
+  let after = "";
+  for (let pageNumber = 0; pageNumber < maxPages; pageNumber++) {
+    const query = new URLSearchParams({
+      fields: "id,message,is_published,created_time,from",
+      limit: "100", since: String(since), until: String(until)
+    });
+    if (after) query.set("after", after);
+    let response;
+    try {
+      response = await fetchImpl(endpoint(apiVersion, encodeURIComponent(pageId) + "/feed?" + query.toString()), {
+        method: "GET", headers: headers(accessToken), redirect: "error",
+        signal: AbortSignal.timeout(timeoutMs)
+      });
+    } catch {
+      return { outcome: "UNRESOLVED", reason: "RECONCILIATION_REQUEST_FAILED", matches: [...matches.values()], checkedAt: new Date().toISOString() };
+    }
+    let data;
+    try { data = await parseResponse(response, accessToken); }
+    catch {
+      return { outcome: "UNRESOLVED", reason: "RECONCILIATION_API_ERROR", matches: [...matches.values()], checkedAt: new Date().toISOString() };
+    }
+    if (!Array.isArray(data.data)) {
+      return { outcome: "UNRESOLVED", reason: "RECONCILIATION_RESPONSE_MALFORMED", matches: [...matches.values()], checkedAt: new Date().toISOString() };
+    }
+    for (const item of data.data) {
+      if (item?.id?.startsWith(expectedPageId + "_") && item.message === caption &&
+          item.is_published === false && (!item.from?.id || item.from.id === expectedPageId)) {
+        matches.set(item.id, item);
+      }
+    }
+    if (!data.paging?.next) break;
+    const nextAfter = data.paging?.cursors?.after;
+    if (typeof nextAfter !== "string" || !nextAfter || nextAfter === after) {
+      return { outcome: "UNRESOLVED", reason: "RECONCILIATION_CURSOR_INVALID", matches: [...matches.values()], checkedAt: new Date().toISOString() };
+    }
+    after = nextAfter;
+    if (pageNumber === maxPages - 1) {
+      return { outcome: "UNRESOLVED", reason: "RECONCILIATION_PAGE_LIMIT_REACHED", matches: [...matches.values()], checkedAt: new Date().toISOString() };
+    }
+  }
+  if (matches.size === 1) {
+    const candidate = [...matches.values()][0];
+    const receipt = await fetchMetaUnpublishedPageDraft({
+      remotePostId: candidate.id, expectedPageId, accessToken, apiVersion, fetchImpl, timeoutMs,
+      expectedMessage: caption
+    });
+    return { outcome: "CONFIRMED_UNPUBLISHED", receipt, matches: [receipt], checkedAt: new Date().toISOString() };
+  }
+  return {
+    outcome: matches.size > 1 ? "AMBIGUOUS" : "UNRESOLVED",
+    reason: matches.size > 1 ? "MULTIPLE_REMOTE_CANDIDATES" : "NO_MATCH_IS_NOT_PROOF_OF_NON_CREATION",
+    matches: [...matches.values()], retryAllowed: false, checkedAt: new Date().toISOString()
   };
 }
