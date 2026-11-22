@@ -157,3 +157,28 @@ test("the recorded rolling cadence approval is explicit and does not waive 72-ho
   assert.equal(validation.valid, true);
   assert.equal(validateCadenceDecision(plan.cadenceDecision, 71.99).valid, false);
 });
+
+
+test("queue manifests distinguish the Speechma audition candidate from the prohibited existing Roderic production audio", () => {
+  const expectedNarrator = "No production narrator approved; Speechma Andrew is selected for a manual zero-cost audition only.";
+  for (const source of [queue, longFormQueue]) {
+    const policy = source.productionPolicy;
+    const candidate = policy.selectedNarrationAuditionCandidate;
+    assert.equal(policy.narrator, expectedNarrator);
+    assert.equal(policy.alternativeNarratorAuthorized, false);
+    assert.equal(policy.paidUpgradeAuthorized, false);
+    assert.equal(policy.publishingEnabled, false);
+    assert.equal(candidate.provider, "Speechma");
+    assert.equal(candidate.name, "Andrew");
+    assert.equal(candidate.manualBrowserOnly, true);
+    assert.equal(candidate.automationAllowed, false);
+    assert.equal(candidate.securityCodeRequiredPerGeneration, true);
+    assert.equal(candidate.maximumCharactersPerStandardConversion, 2000);
+    assert.equal(candidate.browserHistoryLocalOnly, true);
+    assert.equal(candidate.productionApproved, false);
+    assert.equal(candidate.publicationAuthorized, false);
+  }
+  assert.match(longFormQueue.items[0].narrationVoice, /Roderic/);
+  assert.equal(longFormQueue.items[0].narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
+  assert.match(longFormQueue.items[0].productionNotes, /Speechma Andrew.*manual zero-cost browser audition only/);
+});
