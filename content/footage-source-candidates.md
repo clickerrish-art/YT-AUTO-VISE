@@ -1,6 +1,6 @@
 # SonicVhibez footage acquisition queue — candidates and conditional owner authorizations
 
-**Historical status (10 November 2026; superseded 21 November 2026):** The earlier conditional NOAA source-use note below is no longer a current production authorization. Current owner policy requires genuine original creator-captured wildlife media and prohibits generic stock/archive footage and AI-generated wildlife visuals as substitutes. All NOAA, Pexels, Pixabay and Internet Archive source packages listed in this document are reference-only and excluded from current production. No source from this queue may be rendered or published under the current policy.
+**Policy update (22 November 2026):** The owner explicitly permits previously shared Pexels/Pixabay footage unless an individual asset is not legally usable. This supersedes the 21 November original-creator-captured-only restriction for SonicVhibez. Pexels/Pixabay assets may enter review and production subject to exact source-page provenance, platform licence evidence, original MP4 bytes and SHA-256, technical decode, third-party-rights review and human approval. This is not blanket release clearance. AI-generated wildlife visuals remain prohibited. NOAA, Wikimedia and Internet Archive candidates are not covered by this Pexels/Pixabay authorization and remain separate review-only candidates unless separately approved.
 
 ## Preferred acquisition source
 
@@ -137,7 +137,7 @@ This assembly is only a source/credit/audio-removal proof. It has no narration, 
 
 ## Pexels wildlife clips — conditional owner-approved candidates, HOLD — 16 November 2026
 
-The owner previously authorized stock footage only **if each clip is individually verified safe**. This is conditional source-review permission, not blanket production approval.
+The owner explicitly authorized qualifying Pexels/Pixabay footage on 22 November 2026, provided each asset is individually verified safe. This permits review and production use subject to asset-level licence, provenance, technical, third-party-rights and human checks; it is not blanket publication approval.
 
 ### Candidate 1 — King cobra feeding on another snake
 
@@ -208,7 +208,7 @@ A second, explicitly synthetic **review-only** render was generated to inspect t
 
 ## Direct creator outreach leads — 22 November 2026
 
-**Disposition: LEADS ONLY — no footage acquired, downloaded, or approved.** This section is a contact/research queue, not a production asset register. The current owner policy still requires original creator-captured files delivered directly by the creator, provenance, original-file integrity, written zero-cost commercial permission, technical inspection, complete viewing, and human approval. Do not download/use the linked archive or portfolio copies as substitutes.
+**Disposition: LEADS ONLY — no footage acquired, downloaded, or approved.** This section is a contact/research queue, not a production asset register. The 22 November owner authorization covers Pexels/Pixabay stock only; the archive and portfolio leads in this section are not covered. Do not download/use those linked archive or portfolio copies unless separately approved and rights-cleared.
 
 1. **Grant Brokensha / The Bigger Picture Films — highest-priority crocodile cinematography lead**
    - Evidence: the filmmaker profile describes Grant's work with Nile crocodiles, including underwater crocodile cinematography and the *Hippo vs. Croc* production.
