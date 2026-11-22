@@ -1,5 +1,6 @@
 name: Verify SonicVhibez upload ledger (read-only)
 # This workflow only inspects prior workflow attempts and ledger metadata; it never uploads.
+# Branch-side refresh trigger is read-only and does not mutate the ledger or provider.
 
 on:
   push:
