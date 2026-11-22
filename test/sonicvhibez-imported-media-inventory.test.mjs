@@ -84,5 +84,5 @@ test("general Pexels licence evidence is not treated as asset-specific rights cl
   assert.equal(inventory.policyReference.reviewStatus, "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY");
   assert.ok(inventory.notes.includes("permits qualifying Pexels/Pixabay stock"));
   assert.match(inventory.notes, /No candidate is selected for production or release-authorized/);
-  assert.ok(inventory.blockingEvidence.some(item => /not rights-cleared/i.test(item)));
+  assert.ok(inventory.blockingEvidence.some(item => /No imported Canva candidate is rights-cleared/i.test(item)));
 });
