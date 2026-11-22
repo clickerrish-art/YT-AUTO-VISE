@@ -36,6 +36,31 @@ These source pages display the Pexels Free licence. Their direct MP4 URLs were i
 | 31702245 | MC G'Zay | Nile crocodile in natural habitat | 13s | 1080×1920 | VAHbmXxvw3E | https://www.pexels.com/video/wild-nile-crocodile-in-natural-habitat-31702245/ |
 | 31998380 | Floating Rabbit | Crocodiles basking along the Lower Zambezi in Zambia | 60s | 3840×2160 | VAHbmVmwByo | https://www.pexels.com/video/aerial-view-of-crocodiles-in-lower-zambezi-river-31998380/ |
 
+## Additional SonicVhibez Pexels B-roll imported into Canva
+
+These four exact Pexels source pages were identified from the existing SonicVhibez Canva inventory on 22 November 2026. Platform-page metadata and creator identity are recorded; the original MP4 bytes have not yet been acquired and hashed. Three are eligible to enter review; the aerial zebra import has a 13-second Canva versus 14-second Pexels source-duration mismatch and remains excluded pending visual/trim verification.
+
+| Pexels ID | Creator | Subject | Pexels duration | Dimensions | Canva duration | Canva asset ID | Source page |
+|---|---|---|---:|---|---:|---|---|
+| 37394148 | Magda Ehlers | African elephant in natural habitat | 14s | 3840×2160 | 14s | VAHZ9kg2rvg | https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/ |
+| 5146558 | Taryn Elliott | Aerial zebras and wildebeests | 14s | 1920×1080 | 13s | VAHZ9hEjS0U | https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/ |
+| 5146578 | Taryn Elliott | Zebras and wildebeests grazing | 25s | 1920×1080 | 25s | VAHZ9niQJoo | https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/ |
+| 5214258 | Taryn Elliott | Giraffe in open fields | 21s | 1920×1080 | 21s | VAHZ9i3Hx6U | https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/ |
+
+The fifth Canva import, a 9-second lion close-up (asset VAHZ9oFCiak), has no exact source page or creator verified and remains excluded. The three exact-metadata candidates are review-only, not production- or release-cleared.
+
+## Pixabay platform licence review
+
+Official licence summary: https://pixabay.com/service/license-summary/
+
+Pixabay grants a free, worldwide, non-exclusive licence to use and modify eligible content, including commercial uses, subject to its Content License and restrictions. Attribution is generally not required. Standalone redistribution/resale, certain trademark/endorsement uses and other restricted uses are not permitted. The platform licence does not grant every depicted person's, property's, trademark owner's or other third party's rights; asset-level rights review remains required.
+
+**Inventory finding:** No exact Pixabay source page or local Pixabay MP4 was identified in the current SonicVhibez-specific recovered media inventory. No Pixabay clip is being claimed as acquired or used. Nature Frontiers media records remain separate and are not silently transferred into SonicVhibez.
+
+## Owner permission scope
+
+The 22 November owner instruction authorizes qualifying **video footage** from Pexels/Pixabay subject to asset-level review. It does not authorize stock photographs under this change. stockVideoFootageAllowed=true, stockPhotographsAllowed=false, and aiGeneratedWildlifeVisualsAllowed=false are the enforced policy values. Pexels/Pixabay content is licensed content, not public-domain material.
+
 ## Current limitations
 
 - The three Short 001 clips are platform-licensed, technically verified and used in a silent visual review; complete human playback, collar context, third-party-rights and owner release approval remain outstanding.
