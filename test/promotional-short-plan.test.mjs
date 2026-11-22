@@ -678,7 +678,7 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
 
 
 test("current search-intent evidence is mandatory, dated, sourced and fresh for current/future drafts", () => {
-  const now = new Date("2026-11-22T10:30:00+02:00");
+  const now = new Date("2026-11-22T11:05:00+02:00");
   const valid = clone(checkedInPlan);
   assert.deepEqual(validatePlan(valid, products, { now }), []);
 
