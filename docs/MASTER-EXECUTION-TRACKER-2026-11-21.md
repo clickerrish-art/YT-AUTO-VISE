@@ -568,7 +568,7 @@ GitHub Actions run 44965097575 — PASS on c290bac5431c7b46b42b19e74a2c65a04f0a4
 
 ## Nature Frontiers and external providers
 
-- No Metricool or Meta provider mutation was made. Legacy Metricool brand access remains blocked; the reported 20 drafts and eight autoPublish=true records remain unreconciled. Nature Frontiers remains separate from SonicVhibez.
+- No Metricool or Meta provider mutation was made. The 2026-11-22 live Metricool getBrandSettings response for Nature Frontiers brand 8094526 includes youtubeData=UCSlkuPfHH78oGC1o418HV4w, the SonicVhibez YouTube channel ID. Treat this as an unresolved cross-brand mapping risk; do not publish to YouTube through Metricool. The current-brand scheduled-post query returned zero for the checked interval, but does not cover drafts or published history. Legacy brand 7545638 remains HTTP 403; its reported 20 drafts and eight draft=false/autoPublish=true records remain unreconciled. The connected Metricool tools expose no supported brand-settings mutation; owner UI/support must remove the YouTube association and a fresh read must verify it is absent while Facebook and Instagram remain.
 - No analytics baseline can be established without genuine publications and platform analytics.
 - No GitHub branch protection change was made. The connected GitHub interface provided read-only protection evidence; no branch settings write action was available in the connected workflow.
 
