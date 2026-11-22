@@ -19621,7 +19621,7 @@
     "pythonTests": 108,
     "pythonFailed": 0,
     "pythonSkipped": 0,
-    "npmAuditVulnerabilities": 0,
+    "npmAuditVulnerabilities": null,
     "browserE2EStatus": "PASS",
     "lastBrowserEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
     "lastBrowserRunId": 45078103699,
@@ -19630,7 +19630,8 @@
     "forms": 17,
     "crossCuttingDimensions": 15,
     "overallAcceptance": "NOT_TESTED",
-    "note": "Exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8: automation/security 191/191 Node test files, 1,130 Node tests, 108 Python tests, zero failures/skips; browser E2E 41/41. DASH-001 remains NOT_TESTED because not every applicable control has individually accepted success, authorization, persistence, restart, concurrency, error-feedback and accessibility evidence."
+    "note": "Exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8: automation/security 191/191 Node test files, 1,130 Node tests, 108 Python tests, zero failures/skips; browser E2E 41/41. DASH-001 remains NOT_TESTED because not every applicable control has individually accepted success, authorization, persistence, restart, concurrency, error-feedback and accessibility evidence.",
+    "npmAuditLastVerifiedSha": "d2a7be4733939cffca0423ba28675977af6ab346"
   },
   "refreshedAt": "2026-11-22T20:42:00Z",
   "latestHeadVerification": {
@@ -19652,7 +19653,7 @@
     "pythonTests": 108,
     "pythonFailed": 0,
     "pythonSkipped": 0,
-    "npmAuditVulnerabilities": 0,
+    "npmAuditVulnerabilities": null,
     "productionReadiness": {
       "status": "HOLD",
       "runId": 45078103669,
@@ -19661,7 +19662,8 @@
       "artifactSha256": "dc4de8a531866c825f1c0a2e436e10fe70f1ab48c75941c76a6793d3e46af528"
     },
     "overallAcceptance": "NOT_TESTED",
-    "note": "Exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8 passed automation/security (1,130 Node tests across 191 files, 108 Python tests, zero failures/skips) and dashboard browser E2E 41/41. The 121-control/17-form inventory remains. DASH-001 remains NOT_TESTED overall until every applicable control has individually accepted positive-success, authorization, durable persistence, refresh/restart, concurrency, actionable-error and full accessibility behavior. Production readiness HOLD: 22 blockers."
+    "note": "Exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8 passed automation/security (1,130 Node tests across 191 files, 108 Python tests, zero failures/skips) and dashboard browser E2E 41/41. The 121-control/17-form inventory remains. DASH-001 remains NOT_TESTED overall until every applicable control has individually accepted positive-success, authorization, durable persistence, refresh/restart, concurrency, actionable-error and full accessibility behavior. Production readiness HOLD: 22 blockers.",
+    "npmAuditLastVerifiedSha": "d2a7be4733939cffca0423ba28675977af6ab346"
   },
   "latestBranchTipAtEvidenceRefresh": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
   "latestBranchInventory": {
