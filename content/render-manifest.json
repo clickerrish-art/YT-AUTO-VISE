@@ -15,7 +15,7 @@
   "complianceReviewed": false,
   "containsSyntheticMedia": true,
   "hasPaidPromotion": true,
-  "sourceScriptPath": "short-001-wildlife-video-storytelling.md",
+  "sourceScriptPath": "content/short-001-wildlife-video-storytelling.md",
   "notes": [
     "Owner instruction dated 2026-11-22 permits qualifying Pexels/Pixabay licensed footage for SonicVhibez. Three recovered Pexels clips are used in a silent 55.033-second review preview; full third-party rights and final human review remain pending. The fourth primary clip is excluded for visible enclosure/barrier and partial person.",
     "HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs on 2026-11-21; public branded or commercial use is prohibited. Keep this narration internal-only.",
@@ -32,7 +32,7 @@
   "wildlifeVisualSourcePolicy": "ORIGINAL_OR_LICENSED_PEXELS_PIXABAY_WITH_ASSET_LEVEL_REVIEW",
   "mediaProvenanceStatus": "REVIEW_ONLY_PREVIEW_HASH_VERIFIED_FINAL_SOURCE_RIGHTS_AND_NARRATION_PENDING",
   "narrationRightsDeterminationEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
-  "sourceScriptBlobSha": "81bdea0fa807bee606d029741f34718e9f0aa415",
+  "sourceScriptBlobSha": "385aae1f313877e70bbba129fc3f3548c3e40cdb",
   "captionSourceBlobSha": "6a09a58188301ed134912010c6276c6a167544be",
   "sourceHashType": "GIT_BLOB_SHA",
   "captionHashType": "GIT_BLOB_SHA",
