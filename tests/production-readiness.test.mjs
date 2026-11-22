@@ -186,7 +186,7 @@ test("readiness JSON distinguishes fresh and stale external reconciliation from 
 
 
 
-test("readiness rejects provider-denied Roderic narration even if manifest rights flags are manually changed to approved", () => {
+test("readiness rejects ungenerated Speechma Andrew narration even if manifest rights flags are manually changed to approved", () => {
   const project = createTestDashboardProject("sonicvhibez-voice-rights-fixture-");
   try {
     const manifestPath = path.join(project.root, "content", "render-manifest.json");
@@ -209,7 +209,8 @@ test("readiness rejects provider-denied Roderic narration even if manifest right
       /narration rights are not cleared for public branded\/production use/i.test(item.message)
     );
     assert.ok(blocker, "provider denial must override manually changed manifest flags");
-    assert.match(blocker.message, /PROVIDER_DENIED/);
+    assert.match(blocker.message, /Speechma Andrew/);
+    assert.match(blocker.message, /No audition audio has been generated/);
   } finally {
     project.cleanup();
   }
