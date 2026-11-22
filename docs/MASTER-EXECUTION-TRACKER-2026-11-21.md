@@ -605,7 +605,7 @@ GitHub Actions run 44965097575 — PASS on c290bac5431c7b46b42b19e74a2c65a04f0a4
 
 ### Exact-head engineering evidence
 
-The most recent full source snapshot is the verified GitHub recovery bundle for `c788667cf1e432814e38dfa6c8c138b9c0d4665e` (source recovery run [44970243907](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970243907), PASS). The current tree differs from that snapshot only in two corrected test assertions plus an empty commit; those corrections were independently reproduced and tested locally.
+The most recent full source snapshot is the verified GitHub recovery bundle for `c788667cf1e432814e38dfa6c8c138b9c0d4665e` (source recovery run [44970243907](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970243907), PASS). The application/test source tree differs from that snapshot only in two corrected test assertions plus an empty verification commit; those corrections were independently reproduced and tested locally. The later commits after that source snapshot are documentation-only master-register updates.
 
 - Exact-head automation run [44970243782](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970243782): CANCELLED before completion; do not count as a pass.
 - Queue readiness run [44970243812](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970243812): FAILED during repository regression tests. The full Node runner reported 1,083 passed / 2 failed / 0 skipped. The two failures were stale test expectations: one still expected Wade in the crocodile metadata; the other had an unescaped slash in the readiness-test regular expression. Both were corrected in commits `af10c5bbeaac9f186ec65478d2a2aa41b3afff21` and `17461e0b4b361822799760b7f802f2730c98b6df`.
