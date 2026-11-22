@@ -4,7 +4,8 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
-import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, reconcileMetaPagePost, MetaPageApiError } from "../scripts/meta-page-adapter.mjs";
+import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, reconcileMetaPagePost, createMetaUnpublishedPageDraft, fetchMetaUnpublishedPageDraft, reconcileMetaUnpublishedPageDraft, metaProviderDraftPayloadSha256, MetaPageApiError } from "../scripts/meta-page-adapter.mjs";
+import { facebookApprovalFingerprint } from "../scripts/facebook-pipeline.mjs";
 
 const PAGE_ID = "123456789012345";
 const TOKEN = "test-token-never-log-" + "x".repeat(30);
@@ -356,4 +357,231 @@ test("expired or revoked user and Page tokens fail closed without any automatic 
   }), error => error instanceof MetaPageApiError && error.code === 190 && !error.message.includes(pageToken));
   assert.deepEqual(paths, ["/v27.0/" + PAGE_ID]);
   assert.ok(paths.every(item => !item.includes("/oauth/access_token")));
+});
+
+
+function approvedProviderDraft() {
+  const draft = {
+    id: "provider-draft-001", kind: "FACEBOOK_PAGE_DRAFT",
+    destination: "nature_frontiers_facebook",
+    destinationPageId: PAGE_ID, expectedPageId: PAGE_ID,
+    caption: "A reviewed wildlife education draft.",
+    status: "APPROVED_DRAFT", media: null, claims: [],
+    complianceVersion: "nf-facebook-baseline-2026-10-v2",
+    approval: { decision: "APPROVE", reviewer: "operator", fingerprint: "" }
+  };
+  draft.approval.fingerprint = facebookApprovalFingerprint(draft);
+  return draft;
+}
+function providerDraftAuthorization(draft, now = NOW) {
+  return {
+    operation: "CREATE_UNPUBLISHED_PROVIDER_DRAFT", confirmed: true, oneShot: true,
+    draftId: draft.id, pageId: PAGE_ID,
+    approvalFingerprint: draft.approval.fingerprint,
+    payloadSha256: metaProviderDraftPayloadSha256(draft),
+    nonce: "provider-draft-nonce-000001",
+    issuedAt: new Date(now - 1000).toISOString(),
+    expiresAt: new Date(now + 60_000).toISOString()
+  };
+}
+
+test("unpublished provider draft binds exact approval, Page and payload and never schedules or publishes", async () => {
+  const draft = approvedProviderDraft();
+  let calls = 0, request;
+  const result = await createMetaUnpublishedPageDraft({
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN,
+    apiVersion: API, permissionsVerified: true,
+    authorization: providerDraftAuthorization(draft), now: NOW,
+    fetchImpl: async (url, options) => {
+      calls++; request = { url, options };
+      return response({ id: PAGE_ID + "_provider_001" });
+    }
+  });
+  assert.equal(calls, 1);
+  assert.equal(new URL(request.url).pathname, "/" + API + "/" + PAGE_ID + "/feed");
+  assert.equal(request.options.method, "POST");
+  assert.equal(request.options.body.get("published"), "false");
+  assert.equal(request.options.body.get("message"), draft.caption);
+  assert.equal(request.options.body.has("scheduled_publish_time"), false);
+  assert.equal(result.status, "REMOTE_UNPUBLISHED_UNVERIFIED");
+  assert.equal(result.remotePostId, PAGE_ID + "_provider_001");
+  assert.equal(result.payloadSha256, metaProviderDraftPayloadSha256(draft));
+  assert.equal(result.publishingEnabled, false);
+});
+
+test("provider draft rejects missing one-shot authorization before network mutation", async () => {
+  const draft = approvedProviderDraft();
+  let calls = 0;
+  await assert.rejects(() => createMetaUnpublishedPageDraft({
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN,
+    permissionsVerified: true, now: NOW, fetchImpl: async () => { calls++; return response({ id: PAGE_ID + "_1" }); }
+  }), /one-shot authorization/i);
+  assert.equal(calls, 0);
+});
+
+test("expired Meta token fails closed and does not retry provider mutation", async () => {
+  const draft = approvedProviderDraft();
+  let calls = 0;
+  await assert.rejects(() => createMetaUnpublishedPageDraft({
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN,
+    permissionsVerified: true, authorization: providerDraftAuthorization(draft), now: NOW,
+    fetchImpl: async () => { calls++; return response({ error: { code: 190, message: "Invalid OAuth access token" } }, 400); }
+  }), error => error instanceof MetaPageApiError && error.code === 190);
+  assert.equal(calls, 1);
+});
+
+test("provider draft rejects a Page identity different from the owner-verified Page", async () => {
+  const draft = approvedProviderDraft();
+  let calls = 0;
+  const authorization = { ...providerDraftAuthorization(draft), pageId: "999999999999999" };
+  await assert.rejects(() => createMetaUnpublishedPageDraft({
+    draft, pageId: PAGE_ID, expectedPageId: "999999999999999", accessToken: TOKEN,
+    permissionsVerified: true, authorization, now: NOW,
+    fetchImpl: async () => { calls++; return response({ id: PAGE_ID + "_1" }); }
+  }), /does not match the exact verified Nature Frontiers Page/i);
+  assert.equal(calls, 0);
+});
+
+test("provider draft rejects any payload modified after human approval", async () => {
+  const draft = approvedProviderDraft();
+  const authorization = providerDraftAuthorization(draft);
+  draft.caption += " changed after approval";
+  let calls = 0;
+  await assert.rejects(() => createMetaUnpublishedPageDraft({
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN,
+    permissionsVerified: true, authorization, now: NOW,
+    fetchImpl: async () => { calls++; return response({ id: PAGE_ID + "_1" }); }
+  }), /changed after approval/i);
+  assert.equal(calls, 0);
+});
+
+test("provider-draft payload fingerprint changes on material content changes", () => {
+  const draft = approvedProviderDraft();
+  const original = metaProviderDraftPayloadSha256(draft);
+  assert.notEqual(metaProviderDraftPayloadSha256({ ...draft, caption: "A different caption" }), original);
+  assert.notEqual(metaProviderDraftPayloadSha256({ ...draft, id: "another-draft" }), original);
+});
+
+test("provider-draft create timeout is uncertain and never automatically retried", async () => {
+  const draft = approvedProviderDraft();
+  let calls = 0;
+  await assert.rejects(() => createMetaUnpublishedPageDraft({
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN,
+    permissionsVerified: true, authorization: providerDraftAuthorization(draft), now: NOW,
+    fetchImpl: async () => { calls++; throw new Error("socket timed out after request dispatch"); }
+  }), error => error instanceof MetaPageApiError && error.uncertain === true && error.retryable === false);
+  assert.equal(calls, 1);
+});
+
+test("provider-draft timeout after remote creation remains uncertain rather than retryable", async () => {
+  const draft = approvedProviderDraft();
+  let calls = 0;
+  await assert.rejects(() => createMetaUnpublishedPageDraft({
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN,
+    permissionsVerified: true, authorization: providerDraftAuthorization(draft), now: NOW,
+    fetchImpl: async () => { calls++; throw new Error("response lost after remote creation"); }
+  }), error => error instanceof MetaPageApiError && error.uncertain === true);
+  assert.equal(calls, 1);
+});
+
+test("provider-draft remote read-back verifies exact ID, caption, Page and unpublished state", async () => {
+  const remotePostId = PAGE_ID + "_provider_002";
+  const result = await fetchMetaUnpublishedPageDraft({
+    remotePostId, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    expectedMessage: "A reviewed wildlife education draft.",
+    fetchImpl: async url => {
+      assert.ok(String(url).includes(encodeURIComponent(remotePostId)));
+      return response({ id: remotePostId, message: "A reviewed wildlife education draft.",
+        is_published: false, from: { id: PAGE_ID }, created_time: "2026-11-22T10:00:00+0000" });
+    }
+  });
+  assert.equal(result.status, "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED");
+  assert.equal(result.isPublished, false);
+});
+
+test("provider-draft read-back failure is retryable as a read only, never as a create", async () => {
+  let calls = 0;
+  await assert.rejects(() => fetchMetaUnpublishedPageDraft({
+    remotePostId: PAGE_ID + "_provider_003", expectedPageId: PAGE_ID,
+    accessToken: TOKEN, apiVersion: API,
+    fetchImpl: async () => { calls++; throw new Error("read timed out"); }
+  }), error => error instanceof MetaPageApiError && error.retryable === true);
+  assert.equal(calls, 1);
+});
+
+test("provider-draft read-back rejects an object that is unexpectedly published", async () => {
+  await assert.rejects(() => fetchMetaUnpublishedPageDraft({
+    remotePostId: PAGE_ID + "_provider_004", expectedPageId: PAGE_ID,
+    accessToken: TOKEN, apiVersion: API,
+    fetchImpl: async () => response({ id: PAGE_ID + "_provider_004", message: "A reviewed wildlife education draft.", is_published: true, from: { id: PAGE_ID } })
+  }), error => error instanceof MetaPageApiError && error.uncertain === true && /not demonstrably unpublished/i.test(error.message));
+});
+
+test("provider-draft read-back rejects wrong Page and changed caption", async () => {
+  await assert.rejects(() => fetchMetaUnpublishedPageDraft({
+    remotePostId: PAGE_ID + "_provider_005", expectedPageId: PAGE_ID,
+    accessToken: TOKEN, apiVersion: API, expectedMessage: "approved",
+    fetchImpl: async () => response({ id: PAGE_ID + "_provider_005", message: "modified", is_published: false, from: { id: "999999999999999" } })
+  }), /does not match the exact Page/i);
+});
+
+test("provider-draft reconciliation after restart reads known remote ID without creating again", async () => {
+  let calls = 0;
+  const args = {
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    caption: "A reviewed wildlife education draft.",
+    attemptStartedAt: "2026-11-22T10:00:00.000Z",
+    remotePostId: PAGE_ID + "_provider_006",
+    fetchImpl: async () => {
+      calls++;
+      return response({ id: PAGE_ID + "_provider_006", message: "A reviewed wildlife education draft.", is_published: false, from: { id: PAGE_ID } });
+    }
+  };
+  const first = await reconcileMetaUnpublishedPageDraft(args);
+  const recovered = await reconcileMetaUnpublishedPageDraft(args);
+  assert.equal(first.outcome, "CONFIRMED_UNPUBLISHED");
+  assert.equal(recovered.outcome, "CONFIRMED_UNPUBLISHED");
+  assert.equal(calls, 2, "recovery performs read-only verification only");
+});
+
+test("provider-draft reconciliation with no matching feed result remains unresolved and forbids retry", async () => {
+  const result = await reconcileMetaUnpublishedPageDraft({
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    caption: "A reviewed wildlife education draft.",
+    attemptStartedAt: "2026-11-22T10:00:00.000Z",
+    fetchImpl: async () => response({ data: [] })
+  });
+  assert.equal(result.outcome, "UNRESOLVED");
+  assert.equal(result.retryAllowed, false);
+});
+
+test("provider-draft reconciliation rejects multiple remote candidates as ambiguous", async () => {
+  const result = await reconcileMetaUnpublishedPageDraft({
+    pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN, apiVersion: API,
+    caption: "A reviewed wildlife education draft.",
+    attemptStartedAt: "2026-11-22T10:00:00.000Z",
+    fetchImpl: async () => response({ data: [
+      { id: PAGE_ID + "_a", message: "A reviewed wildlife education draft.", is_published: false },
+      { id: PAGE_ID + "_b", message: "A reviewed wildlife education draft.", is_published: false }
+    ] })
+  });
+  assert.equal(result.outcome, "AMBIGUOUS");
+  assert.equal(result.retryAllowed, false);
+});
+
+test("provider-draft adapter never issues a publishing or scheduling follow-up", async () => {
+  const draft = approvedProviderDraft();
+  const methods = [];
+  await createMetaUnpublishedPageDraft({
+    draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN,
+    permissionsVerified: true, authorization: providerDraftAuthorization(draft), now: NOW,
+    fetchImpl: async (url, options) => {
+      methods.push({ method: options.method, url: String(url), body: options.body });
+      return response({ id: PAGE_ID + "_provider_007" });
+    }
+  });
+  assert.equal(methods.length, 1);
+  assert.equal(methods[0].method, "POST");
+  assert.equal(methods[0].body.get("published"), "false");
+  assert.equal(methods[0].body.has("scheduled_publish_time"), false);
 });
