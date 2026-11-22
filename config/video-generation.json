@@ -3,7 +3,7 @@
   "channel": "SonicVhibez",
   "provider": "wangp_kaggle",
   "primary": false,
-  "status": "DISABLED_BY_ORIGINAL_CREATOR_CAPTURED_MEDIA_POLICY",
+  "status": "DISABLED_BY_OWNER_AI_WILDLIFE_VISUAL_POLICY",
   "source": {
     "application": "WanGP",
     "repository": "https://github.com/deepbeepmeep/WanGP",
@@ -139,8 +139,8 @@
   "productionDisposition": {
     "enabled": false,
     "productionEligible": false,
-    "policy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
-    "reason": "AI-generated wildlife visuals are prohibited as substitutes for genuine original creator-captured wildlife media. This WanGP configuration is retained as a historical technical record only.",
+    "policy": "AI_GENERATED_WILDLIFE_VISUALS_PROHIBITED",
+    "reason": "The owner permits qualifying licensed Pexels/Pixabay stock footage but has not authorized AI-generated wildlife visuals. This WanGP configuration remains a historical technical record only.",
     "noGenerationAuthorized": true
   }
 }
