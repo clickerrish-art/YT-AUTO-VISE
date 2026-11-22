@@ -96,6 +96,57 @@ test("interactive signer creates a valid receipt bound to the exact candidate", 
   assert.notEqual(facebookPayloadFingerprint(alteredAttestation), facebookPayloadFingerprint(saved));
 });
 
+test("approval console displays claim source excerpts and every material rights term with exact hashes", async t => {
+  const f = fixture(t);
+  f.payload.media[0].rightsRecord.attributionRequired = true;
+  f.payload.media[0].rightsRecord.attributionText = "Credit: Example Creator";
+  f.payload.media[0].rightsRecord.expiresAt = "2026-12-17T10:00:00.000Z";
+  fs.writeFileSync(f.file, JSON.stringify([f.payload]));
+  const output = [];
+  await approveFacebookCandidate({
+    candidateFile: f.relativeFile,
+    slotId: f.payload.slotId,
+    env: { FACEBOOK_APPROVAL_HMAC_SECRET: secret, FACEBOOK_APPROVER_ID: reviewer },
+    confirm: confirmer(f.payload.slotId),
+    write: value => output.push(String(value)),
+    now
+  });
+  const rendered = output.join("");
+  for (const expected of [
+    f.payload.claims[0].text,
+    f.payload.claims[0].sourceUrls[0],
+    f.payload.claims[0].sourceExcerpt,
+    "Path: " + f.payload.media[0].path,
+    "SHA-256: " + f.payload.media[0].sha256,
+    "Rights evidence: " + f.payload.media[0].rightsRecord.evidencePath,
+    "Rights SHA-256: " + f.payload.media[0].rightsRecord.evidenceSha256,
+    "License: Owner-created",
+    "Permitted use: commercial=true; social media=true",
+    "Attribution required: true",
+    "Attribution text: Credit: Example Creator",
+    "Rights expiry: 2026-12-17T10:00:00.000Z"
+  ]) assert.ok(rendered.includes(expected), "approval display must include " + expected);
+});
+
+test("approval refuses expired rights and missing required attribution", async t => {
+  const f = fixture(t);
+  const base = {
+    candidateFile: f.relativeFile,
+    slotId: f.payload.slotId,
+    env: { FACEBOOK_APPROVAL_HMAC_SECRET: secret, FACEBOOK_APPROVER_ID: reviewer },
+    confirm: confirmer(f.payload.slotId),
+    now
+  };
+  f.payload.media[0].rightsRecord.expiresAt = "2026-11-16T10:00:00.000Z";
+  fs.writeFileSync(f.file, JSON.stringify([f.payload]));
+  await assert.rejects(() => approveFacebookCandidate(base), /incomplete or expired/);
+  f.payload.media[0].rightsRecord.expiresAt = null;
+  f.payload.media[0].rightsRecord.attributionRequired = true;
+  f.payload.media[0].rightsRecord.attributionText = "";
+  fs.writeFileSync(f.file, JSON.stringify([f.payload]));
+  await assert.rejects(() => approveFacebookCandidate(base), /incomplete or expired/);
+});
+
 test("signer refuses missing secrets, invalid media hashes, duplicate slots and existing receipts", async t => {
   const f = fixture(t);
   const base = {
