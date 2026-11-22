@@ -88,7 +88,29 @@
         "fps": 25
       },
       "humanVisualReview": "REPRESENTATIVE_FRAME_REVIEW_COMPLETE; FULL_PLAYBACK_AND_OWNER_CONTEXT_REVIEW_PENDING",
-      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
+      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
+      "downloadedToReviewArtifact": true,
+      "acquisitionRunId": 44975292889,
+      "acquisitionRunNumber": 151,
+      "acquisitionArtifactId": 14735735813,
+      "acquisitionArtifactName": "sonicvhibez-short-001-pexels-review-assets",
+      "acquisitionArtifactExpiresAt": "2026-12-06T02:16:28Z",
+      "mediaFile": "media/pexels-29765785.mp4",
+      "actual": {
+        "durationSeconds": 12.16,
+        "width": 1080,
+        "height": 1920,
+        "fps": 25,
+        "codec": "h264",
+        "sizeBytes": 24028876
+      },
+      "fileSizeBytes": 24028876,
+      "fullDecode": "PASS",
+      "rightsVerified": false,
+      "thirdPartyRightsReviewed": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "releaseEligible": false
     },
     {
       "id": "pexels-11760785",
@@ -116,7 +138,29 @@
         "fps": 29.97002997002997
       },
       "humanVisualReview": "REPRESENTATIVE_FRAME_REVIEW_COMPLETE; FULL_PLAYBACK_AND_OWNER_CONTEXT_REVIEW_PENDING",
-      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
+      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
+      "downloadedToReviewArtifact": true,
+      "acquisitionRunId": 44975292889,
+      "acquisitionRunNumber": 151,
+      "acquisitionArtifactId": 14735735813,
+      "acquisitionArtifactName": "sonicvhibez-short-001-pexels-review-assets",
+      "acquisitionArtifactExpiresAt": "2026-12-06T02:16:28Z",
+      "mediaFile": "media/pexels-11760785.mp4",
+      "actual": {
+        "durationSeconds": 18.623333,
+        "width": 2160,
+        "height": 4096,
+        "fps": 29.97002997002997,
+        "codec": "h264",
+        "sizeBytes": 21909387
+      },
+      "fileSizeBytes": 21909387,
+      "fullDecode": "PASS",
+      "rightsVerified": false,
+      "thirdPartyRightsReviewed": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "releaseEligible": false
     },
     {
       "id": "pexels-11528208",
@@ -144,7 +188,29 @@
         "fps": 30
       },
       "humanVisualReview": "REPRESENTATIVE_FRAME_REVIEW_COMPLETE; FULL_PLAYBACK_AND_OWNER_CONTEXT_REVIEW_PENDING",
-      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
+      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
+      "downloadedToReviewArtifact": true,
+      "acquisitionRunId": 44975292889,
+      "acquisitionRunNumber": 151,
+      "acquisitionArtifactId": 14735735813,
+      "acquisitionArtifactName": "sonicvhibez-short-001-pexels-review-assets",
+      "acquisitionArtifactExpiresAt": "2026-12-06T02:16:28Z",
+      "mediaFile": "media/pexels-11528208.mp4",
+      "actual": {
+        "durationSeconds": 6.868333,
+        "width": 2158,
+        "height": 3840,
+        "fps": 30,
+        "codec": "h264",
+        "sizeBytes": 23170674
+      },
+      "fileSizeBytes": 23170674,
+      "fullDecode": "PASS",
+      "rightsVerified": false,
+      "thirdPartyRightsReviewed": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "releaseEligible": false
     },
     {
       "id": "pexels-31702128",
@@ -172,7 +238,9 @@
         "fps": 29.97002997002997
       },
       "humanVisualReview": "SAMPLED_REVIEW_COMPLETE; EXCLUDED_FROM_SHORT_001",
-      "currentProductionEligibility": "EXCLUDED_EDITORIAL_VISIBLE_ENCLOSURE_AND_PARTIAL_PERSON"
+      "currentProductionEligibility": "EXCLUDED_EDITORIAL_VISIBLE_ENCLOSURE_AND_PARTIAL_PERSON",
+      "excludedFromProduction": true,
+      "exclusionReason": "Editorial exclusion: visible enclosure/barrier and partial person make this unsuitable as a natural wild-animal encounter; this is not a copyright/licence exclusion."
     },
     {
       "id": "pexels-37425422",
@@ -307,7 +375,9 @@
       "humanReviewed": false,
       "productionEligible": false,
       "releaseEligible": false,
-      "selectedForProduction": false
+      "selectedForProduction": false,
+      "editorialContextReviewRequired": true,
+      "editorialContextNote": "Title/source description indicates a safari park or enclosure setting; do not present as an unmodified wild encounter without clear contextual labelling."
     },
     {
       "id": "pexels-5214258",
@@ -361,7 +431,9 @@
       "humanReviewed": false,
       "productionEligible": false,
       "releaseEligible": false,
-      "selectedForProduction": false
+      "selectedForProduction": false,
+      "editorialContextReviewRequired": true,
+      "editorialContextNote": "Title/source description indicates a safari park or enclosure setting; do not present as an unmodified wild encounter without clear contextual labelling."
     },
     {
       "id": "pexels-33430867",
