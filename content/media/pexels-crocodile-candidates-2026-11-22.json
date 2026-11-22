@@ -48,7 +48,9 @@
       "acquisitionArtifactId": 14735172901,
       "localOriginalBytesAvailableInArtifact": true,
       "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
-      "technicalProbe": "PASS"
+      "technicalProbe": "PASS",
+      "latestAcquisitionArtifactId": 14736582634,
+      "latestAcquisitionWorkflowRunId": 44978618279
     },
     {
       "assetId": "pexels-video-31702202",
@@ -84,7 +86,9 @@
       "acquisitionArtifactId": 14735172901,
       "localOriginalBytesAvailableInArtifact": true,
       "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
-      "technicalProbe": "PASS"
+      "technicalProbe": "PASS",
+      "latestAcquisitionArtifactId": 14736582634,
+      "latestAcquisitionWorkflowRunId": 44978618279
     },
     {
       "assetId": "pexels-video-31702221",
@@ -120,7 +124,9 @@
       "acquisitionArtifactId": 14735172901,
       "localOriginalBytesAvailableInArtifact": true,
       "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
-      "technicalProbe": "PASS"
+      "technicalProbe": "PASS",
+      "latestAcquisitionArtifactId": 14736582634,
+      "latestAcquisitionWorkflowRunId": 44978618279
     },
     {
       "assetId": "pexels-video-31702245",
@@ -156,7 +162,9 @@
       "acquisitionArtifactId": 14735172901,
       "localOriginalBytesAvailableInArtifact": true,
       "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
-      "technicalProbe": "PASS"
+      "technicalProbe": "PASS",
+      "latestAcquisitionArtifactId": 14736582634,
+      "latestAcquisitionWorkflowRunId": 44978618279
     },
     {
       "assetId": "pexels-video-31998380",
@@ -192,7 +200,9 @@
       "acquisitionArtifactId": 14735172901,
       "localOriginalBytesAvailableInArtifact": true,
       "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
-      "technicalProbe": "PASS"
+      "technicalProbe": "PASS",
+      "latestAcquisitionArtifactId": 14736582634,
+      "latestAcquisitionWorkflowRunId": 44978618279
     },
     {
       "assetId": "pexels-video-20443910",
@@ -235,7 +245,8 @@
     "This is review-only source acquisition. Third-party rights, complete human playback, scientific scene-to-claim review, final owner approval and release eligibility remain pending.",
     "Do not merge South Africa, Kenya and Zambia scenes into one encounter or imply a single location. Keep source geography distinct.",
     "Correction 2026-11-22: supplemental candidate 20443910 was discovered after the five-file acquisition and is not present in artifact 14735172901. It is not acquired, hashed, probed, decoded or production-eligible; acquire it separately before changing this status.",
-    "Correction 2026-11-22: supplemental candidate 20443910 was subsequently acquired for review in workflow run 44978618279, artifact 14736582634. The six-file acquisition summary reports 151.819967 source seconds and six full-decode passes. Its per-file SHA-256 is recorded in the artifact acquisition manifest but has not yet been extracted into this register. It remains supplemental, not selected for production or release."
+    "Correction 2026-11-22: supplemental candidate 20443910 was subsequently acquired for review in workflow run 44978618279, artifact 14736582634. The six-file acquisition summary reports 151.819967 source seconds and six full-decode passes. Its per-file SHA-256 is recorded in the artifact acquisition manifest but has not yet been extracted into this register. It remains supplemental, not selected for production or release.",
+    "The later six-file acquisition artifact 14736582634 (workflow run 44978618279) contains all five primary clips plus supplemental 20443910. The first five retain their original per-file SHA-256 values from artifact 14735172901; the supplemental per-file SHA-256 remains recorded only inside the latest artifact manifest pending extraction."
   ],
   "acquisition": {
     "status": "SUCCESS",
