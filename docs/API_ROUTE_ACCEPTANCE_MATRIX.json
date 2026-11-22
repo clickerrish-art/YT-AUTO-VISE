@@ -3,7 +3,7 @@
   "generatedAt": "2026-11-22T22:38:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
+  "testedSourceTestSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
   "liveMainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "inventory": {
@@ -2104,8 +2104,8 @@
     "note": "The readiness artifact confirms one public upload and prior upload-attempt reconciliation, but current OAuth invalid_grant prevents a fresh complete live history/schedule read. SCHED-001 remains NOT_TESTED."
   },
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-    "automationRun": 45075651363,
+    "exactSourceTestSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+    "automationRun": 45078103820,
     "nodeTestFiles": {
       "passed": 191,
       "failed": 0,
@@ -2116,11 +2116,11 @@
       "failed": 0,
       "skipped": 0
     },
-    "browserE2ERun": 45075651491,
+    "browserE2ERun": 45078103699,
     "browserE2EStatus": "PASS",
     "lastBrowserE2E": {
-      "sourceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651491",
+      "sourceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103699",
       "journeys": {
         "passed": 41,
         "total": 41,
@@ -2132,10 +2132,10 @@
       "passed": 108,
       "failed": 0,
       "skipped": 0,
-      "sourceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363"
+      "sourceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103820"
     },
-    "npmAuditVulnerabilities": 0,
+    "npmAuditVulnerabilities": null,
     "npmAuditSourceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
     "runnerBridgeSafetyRun": 45075651397,
     "deploymentRecoveryRun": 45075651539,
@@ -2143,9 +2143,11 @@
     "cloudflareDurableStateRun": 45075651458,
     "productionReadiness": {
       "status": "HOLD",
-      "run": 45075651463,
-      "sourceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "blockers": 22
+      "run": 45078103669,
+      "sourceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "blockers": 22,
+      "artifactId": 14776146309,
+      "artifactSha256": "dc4de8a531866c825f1c0a2e436e10fe70f1ab48c75941c76a6793d3e46af528"
     },
     "routeMatrix": {
       "routes": 50,
@@ -2155,7 +2157,7 @@
       "authenticationNegativePass": 50,
       "sourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346"
     },
-    "note": "Exact source/test SHA d2a7be4733939cffca0423ba28675977af6ab346: automation https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363 passed 1,130 Node tests across 191 files, 108 Python tests, zero failures/skips, npm audit 0; dashboard E2E https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651491 passed 41/41. Production readiness https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651463 correctly remains HOLD with 22 genuine owner/production blockers."
+    "note": "Exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8: automation 45078103820 passed 1,130 Node tests/191 files and 108 Python tests; dashboard E2E 45078103699 passed 41/41. npm audit last verified zero vulnerabilities on d2a7be4733939cffca0423ba28675977af6ab346. Production readiness 45078103669 remains HOLD with 22 blockers."
   },
   "cloudflareStagingInfrastructure": {
     "observedAt": "2026-11-15",
@@ -2314,13 +2316,13 @@
   },
   "latestBranchTipAtEvidenceRefresh": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
   "latestApplicationSourceChangeSha": "2aadb00ebf3181f1d1da769681f80fa4f98f5cc8",
-  "latestFullyTestedSourceTestTreeSha": "d2a7be4733939cffca0423ba28675977af6ab346",
+  "latestFullyTestedSourceTestTreeSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
   "sourceTestEvidenceStatus": "PASS — exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8 passed 1,130 Node tests across 191 files, 108 Python tests and 41/41 Chromium journeys, with zero failures/skips. npm audit zero vulnerabilities was last independently verified on exact source/test SHA d2a7be4733939cffca0423ba28675977af6ab346; it was not rerun in workflow 45078103820.",
-  "latestApplicationSourceTestTreeSha": "d2a7be4733939cffca0423ba28675977af6ab346",
+  "latestApplicationSourceTestTreeSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
   "latestCurrentHeadPositiveEvidence": {
-    "sourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-    "runId": 45075651363,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363",
+    "sourceTestSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+    "runId": 45078103820,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103820",
     "positiveRouteCount": 41,
     "blockedRouteCount": 7,
     "notTestedRouteCount": 2,
@@ -2328,14 +2330,17 @@
     "nodePassed": 1130,
     "nodeFailed": 0,
     "nodeSkipped": 0,
-    "browserRunId": 45075651491,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651491",
+    "browserRunId": 45078103699,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103699",
     "browserTestsPassed": 41,
     "browserTestsFailed": 0,
     "browserTestsSkipped": 0,
     "pythonPassed": 108,
-    "npmAuditVulnerabilities": 0,
-    "note": "Exact-head full regression and dashboard E2E passed; live provider writes and production operations remain gated."
+    "npmAuditVulnerabilities": null,
+    "note": "Exact branch-head full suite on d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8: 1,130 Node tests/191 files, 108 Python tests, 41/41 browser journeys, zero failures/skips. npm audit remains last verified at d2a7be4733939cffca0423ba28675977af6ab346. Live provider writes and production operations remain gated.",
+    "pythonFailed": 0,
+    "pythonSkipped": 0,
+    "npmAuditSourceSha": "d2a7be4733939cffca0423ba28675977af6ab346"
   },
   "currentHeadReconciliation": {
     "status": "PARTIAL",
