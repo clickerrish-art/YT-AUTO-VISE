@@ -594,8 +594,8 @@
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
-      "currentHeadEvidenceNote": "Exact candidate 57769 local Nature Frontiers draft and Instagram safety workflows passed without provider writes. Read-only Meta identity run 43942301878 returned HTTP 401 / OAuth error 190 / subcode 463 due to expired session; provider-side draft/publish capability remains blocked and publishing stays disabled. Repository-owned unpublished provider-draft adapter, authenticated API create/reconcile routes, durable attempt/audit records and dashboard controls were added through commits 33caef9, 4d86f57, dc098ad and 2a81935. Exact-SHA tests have not run, and live Meta token remains expired/unverified; no provider draft was created.",
-      "latestImplementationSha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e"
+      "currentHeadEvidenceNote": "Exact candidate 57769 local Nature Frontiers draft and Instagram safety workflows passed without provider writes. Read-only Meta identity run 43942301878 returned HTTP 401 / OAuth error 190 / subcode 463 due to expired session; provider-side draft/publish capability remains blocked and publishing stays disabled. Repository-owned unpublished provider-draft adapter, authenticated API create/reconcile routes, durable attempt/audit records and dashboard controls were added through commits 33caef9, 4d86f57, dc098ad and 2a81935. Exact-SHA tests have not run, and live Meta token remains expired/unverified; no provider draft was created. Repository-owned unpublished provider-draft adapter, authenticated API create/reconcile routes, durable attempt/audit records and dashboard controls were added through commits 33caef9, 4d86f57, dc098ad and 2a81935. Syntax-only parsing passed on implementation SHA fc4ca389d06bc3a6fbde5b82e539d4098675f445; exact-SHA tests have not run, and live Meta token remains expired/unverified. No provider draft was created.",
+      "latestImplementationSha": "fc4ca389d06bc3a6fbde5b82e539d4098675f445"
     },
     {
       "id": "SAFE-001",
@@ -2026,9 +2026,9 @@
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceNote": "Prior exact-SHA evidence accepts 41 routes and has 48/48 auth-negative checks on its then-current 48-route inventory. The inventory has since grown to 50 routes with two newly implemented unpublished Meta provider-draft routes; those routes have regression tests but no exact-SHA test execution yet. Seven existing routes remain externally/owner gated. Overall API-001 remains BLOCKED.",
+      "currentHeadEvidenceNote": "Prior exact-SHA evidence accepts 41 routes and has 48/48 auth-negative checks on its then-current 48-route inventory. The inventory now contains 50 routes with two newly implemented unpublished Meta provider-draft routes; those routes have regression tests but no exact-SHA test execution yet. Seven existing routes remain externally/owner gated. Overall API-001 remains BLOCKED.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T13:13:51Z",
-      "latestImplementationSha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e"
+      "latestImplementationSha": "fc4ca389d06bc3a6fbde5b82e539d4098675f445"
     },
     {
       "id": "API-NEG-001",
@@ -2644,11 +2644,11 @@
   "latestDocumentedPrHeadBeforeRegisterRefresh": "4f38aa392f97e944c97c3d3c312be08e57686069",
   "observedBranchHeadBeforeRegisterRefresh": "57769fa219fe98b52f8b182f3849206ac3c8110c",
   "latestLiveBranchHeadBeforeRegisterRefresh": "61d116ede6c4abc9977078e88864d8571cdadccb",
-  "latestLiveAheadBy": 5490,
+  "latestLiveAheadBy": 5493,
   "latestLiveBehindBy": 17,
   "latestLiveChangedFiles": 546,
-  "currentLiveHeadBeforeRegisterRefresh": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e",
-  "currentLiveAheadBy": 5490,
+  "currentLiveHeadBeforeRegisterRefresh": "5a83f1a2e7bd7619c686cfea1850265dcb865130",
+  "currentLiveAheadBy": 5493,
   "currentLiveBehindBy": 17,
   "currentLiveChangedFiles": 546,
   "latestInventoryHead": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
@@ -2667,7 +2667,7 @@
     "overallNotTested": 2,
     "overallBlocked": 7,
     "sourceTestSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-    "implementationHeadSha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e"
+    "implementationHeadSha": "fc4ca389d06bc3a6fbde5b82e539d4098675f445"
   },
   "dashboardBrowserJourneys": {
     "total": 41,
@@ -2853,7 +2853,7 @@
     "overallNotTested": 2,
     "overallBlocked": 7
   },
-  "latestLiveBranchHead": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e",
+  "latestLiveBranchHead": "5a83f1a2e7bd7619c686cfea1850265dcb865130",
   "sourceTestLineage": {
     "previousTestedSha": "012eea3f7d2d24ff3cc70947071e74e48efed9bd",
     "currentTestedSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
@@ -3117,15 +3117,15 @@
     }
   },
   "currentHeadStatusSnapshot": {
-    "DASH_001": "NOT_TESTED — dashboard gained an explicit unpublished provider-draft action and read-only reconciliation display on exact implementation SHA ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e. No browser E2E or per-control acceptance has run on this SHA; prior 41/41 journey evidence is historical.",
-    "API_001": "BLOCKED — route inventory now contains 50 protected API routes: 41 have prior accepted endpoint-specific evidence, two newly added Meta provider-draft routes are NOT_TESTED on exact implementation SHA ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e, and seven pre-existing routes remain blocked by owner/provider prerequisites. Only 48/50 routes have prior authentication-negative evidence; the two new routes are not yet run. The new provider-draft API and read-only reconciliation route are fail-closed by default; no live Meta write occurred.",
+    "DASH_001": "NOT_TESTED — dashboard gained an explicit unpublished provider-draft action and read-only reconciliation display on source SHA fc4ca389d06bc3a6fbde5b82e539d4098675f445. No browser E2E or per-control acceptance has run on this source SHA; prior 41/41 journey evidence is historical.",
+    "API_001": "BLOCKED — route inventory contains 50 protected API routes: 41 have prior accepted endpoint-specific evidence, two newly added Meta provider-draft routes are NOT_TESTED on implementation SHA fc4ca389d06bc3a6fbde5b82e539d4098675f445, and seven pre-existing routes remain blocked by owner/provider prerequisites. Only 48/50 routes have prior authentication-negative evidence; the two new routes have not been executed on this source SHA. Provider-draft routes are fail-closed by default; no live Meta write occurred.",
     "SCHED_001": "NOT_TESTED — latest read-only identity/inventory evidence from 2026-11-19 found one public 20-second legacy Short and zero private/unlisted videos; upload-scope evidence is now stale, owner attestation is stale after 2026-11-18, and current destination schedule/history cannot be fully inspected.",
     "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — local backoff/persistence/restart tests pass; live OIDC/runner/production publisher prerequisites remain.",
     "STATE_001": "PASS_STAGING — D1 backup/restore and staging recovery evidence pass; production artifact storage is separate.",
     "DEPLOY_001": "NOT_TESTED — exact current-head deployment recovery smoke passed 2/2 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161) and Cloudflare runner-bridge safety passed 4/4 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195); no production Worker or production deployment/rollback was verified.",
-    "GIT_002": "NOT_TESTED — current implementation branch comparison against main reports 5,490 ahead / 17 behind with merge base 45352b73bb6cc4787b2a49988b575afb754ab627. PR #1 reports 546 changed files. Full semantic review is incomplete; branch protection detail remains inaccessible (HTTP 403) and must not be treated as verified.",
+    "GIT_002": "NOT_TESTED — current implementation branch comparison against main reports 5,493 ahead / 17 behind with merge base 45352b73bb6cc4787b2a49988b575afb754ab627. PR #1 reports 546 changed files. Full semantic review is incomplete; branch protection detail remains inaccessible (HTTP 403) and must not be treated as verified.",
     "SCHED_003": "PASS — owner-approved rolling cycle without weekly target; 72-hour and Johannesburg no-same-day rules preserved.",
-    "API_NEG_001": "NOT_TESTED — 48/50 routes have prior missing/invalid-auth rejection evidence; the two new provider-draft routes are included in the auth-matrix source but have not been executed on the current implementation SHA.",
+    "API_NEG_001": "NOT_TESTED — 48/50 routes have prior missing/invalid-auth rejection evidence; the two new provider-draft routes are included in the source auth matrix but have not been executed on the current source SHA.",
     "DASH_CTRL_WIRING_001": "PASS_EVIDENCE — 121 controls mapped; overall DASH-001 remains NOT_TESTED.",
     "DASH_CTRL_A11Y_001": "PASS_EVIDENCE — last 41/41 browser journeys are historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64; current head has no browser E2E, so per-control full accessibility acceptance remains open.",
     "DASH_CTRL_FORM_PATHS_001": "PASS_EVIDENCE — 17 form journeys; production-dependent outcomes remain fail-closed.",
@@ -3487,7 +3487,7 @@
     "verdict": "API-001 BLOCKED — local route acceptance is 41/48; seven owner/provider prerequisites remain unresolved."
   },
   "latestImplementationUpdate": {
-    "implementationHeadSha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e",
+    "implementationHeadSha": "fc4ca389d06bc3a6fbde5b82e539d4098675f445",
     "branch": "codex/marketing-machine-audit-fixes",
     "commits": [
       {
@@ -3536,6 +3536,13 @@
       "nodeTests": "NOT_TESTED — no writable checkout or available exact-SHA test runner.",
       "githubActions": "BLOCKED_TOOLING — workflow_dispatch not exposed by connected GitHub tools; TinyFish browser dispatch could not start because its wallet balance is negative. No funds added.",
       "liveMetaProvider": "NOT_TESTED — no live provider write; safe defaults remain disabled."
+    },
+    "sourceVerification": {
+      "syntaxParsing": "PASS_PARSE — meta-page-adapter.mjs, dashboard-server.mjs, meta-page-adapter.test.mjs, dashboard-server.test.mjs and the dashboard inline script parse on the exact source SHA. This is syntax-only and is not a test run.",
+      "nodeTests": "NOT_TESTED — no writable checkout or local Node runtime attached to the repository.",
+      "githubActions": "BLOCKED_TOOLING — GitHub integration exposes no workflow_dispatch action. Browser dispatch could not start because the connected TinyFish wallet balance is negative; no top-up was made.",
+      "liveMetaProvider": "NOT_TESTED — no provider write; safe defaults remain disabled."
     }
-  }
+  },
+  "latestRegisterRefreshSourceHead": "5a83f1a2e7bd7619c686cfea1850265dcb865130"
 }
