@@ -489,3 +489,23 @@ test("queue production policy carries the manual-only Speechma audition without 
   assert.match(longFormQueue.items[0].narrationVoice, /Roderic/);
   assert.equal(longFormQueue.items[0].narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
 });
+
+
+test("queue identity approval template is non-approving and pinned to canonical queue hashes", () => {
+  const template = JSON.parse(fs.readFileSync("content/queue-identity-approval.template.json", "utf8"));
+  const operationalQueue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
+  const detailedQueue = JSON.parse(fs.readFileSync("content/long-form-queue.json", "utf8"));
+  const canonicalHash = value => createHash("sha256").update(JSON.stringify(value)).digest("hex");
+  assert.equal(template.schemaVersion, 1);
+  assert.equal(template.status, "PENDING_OWNER_APPROVAL");
+  assert.equal(template.ownerApproved, false);
+  assert.equal(template.approvedBy, "");
+  assert.equal(template.approvedAt, "");
+  assert.equal(template.approvalReference, "");
+  assert.equal(template.operationalQueueSha256, canonicalHash(operationalQueue));
+  assert.equal(template.detailedQueueSha256, canonicalHash(detailedQueue));
+  assert.deepEqual(template.mappings, [
+    { operationalItemId: "long-form-plan-wildlife-video", detailedItemId: "", cyclePosition: 1 },
+    { operationalItemId: "long-form-faceless-wildlife-workflow", detailedItemId: "", cyclePosition: 2 }
+  ]);
+});

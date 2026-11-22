@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "status": "PENDING_OWNER_APPROVAL",
+  "ownerApproved": false,
+  "approvedBy": "",
+  "approvedAt": "",
+  "approvalReference": "",
+  "operationalQueueSha256": "a577005e27bd041f500996f94ce303ce204ae5eb7ab9be80730ee178c6bd6cb3",
+  "detailedQueueSha256": "ff2ea20fd3c5034e29d25d985a63e0faa5acdf5f47b31ee655f75e16ead0689c",
+  "mappings": [
+    {
+      "operationalItemId": "long-form-plan-wildlife-video",
+      "detailedItemId": "",
+      "cyclePosition": 1
+    },
+    {
+      "operationalItemId": "long-form-faceless-wildlife-workflow",
+      "detailedItemId": "",
+      "cyclePosition": 2
+    }
+  ]
+}
