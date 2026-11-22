@@ -357,7 +357,7 @@ test("readiness reports malformed render-manifest asset paths without crashing J
   }
 });
 
-test("readiness blocks selected imported wildlife assets until creator-capture provenance, local MP4 and human review are verified", () => {
+test("readiness blocks selected licensed wildlife assets until source, local MP4, rights and human review are verified", () => {
   const directory = fs.mkdtempSync(path.join(process.cwd(), "content", ".sonicvhibez-media-inventory-"));
   try {
     const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
@@ -379,45 +379,59 @@ test("readiness blocks selected imported wildlife assets until creator-capture p
     assert.equal(blocker.controlOwner, "external_owner_or_human_reviewer");
     assert.ok(blocker.evidence.path.endsWith("sonicvhibez-imported-media-inventory.json"));
     assert.match(blocker.message, /VAHZ9kg2rvg/);
-    assert.match(blocker.resolution, /original camera file/);
+    assert.match(blocker.resolution, /Pexels\/Pixabay source page/);
+    assert.match(blocker.resolution, /original MP4/);
     assert.match(blocker.resolution, /SHA-256/);
-    assert.match(blocker.resolution, /not eligible substitutes/);
+    assert.match(blocker.resolution, /third-party rights/);
+    assert.match(blocker.resolution, /human visual review/);
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
 
-test("excluded Canva imports remain quarantined and readiness still requires original creator-captured footage", () => {
+test("readiness tracks licensed Pexels review candidates and keeps final release blocked", () => {
   const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
   assert.equal(inventory.releaseAuthorized, false);
-  assert.ok(inventory.assets.every(asset => asset.status === "EXCLUDED_NOT_USED" && asset.excludedFromProduction === true));
+  assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction === false).length, 3);
+  assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true).length, 2);
+  assert.equal(inventory.status, "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW");
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
     cwd: process.cwd(), encoding: "utf8"
   });
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
-  assert.equal(report.blockers.some(item => item.message.includes("selected imported wildlife asset")), false);
-  assert.ok(report.notes.some(note => note.includes("5 assets; 5 excluded from production (not rights-cleared); 0 selected/unresolved; release not authorized")));
-  assert.ok(report.blockers.some(item => /footageOrigin must be creator_captured_original/.test(item.message)),
-    "an excluded stock inventory must not silently permit an AI-generated or stock-based production path");
+  assert.ok(report.blockers.some(item => item.message.includes("selected imported wildlife asset")));
+  assert.ok(report.notes.some(note => note.includes("5 assets; 2 excluded from production; 3 selected/unresolved; release not authorized")));
+  assert.ok(report.blockers.some(item => /licensed Pexels\/Pixabay footage/.test(item.message)));
 });
 
-test("a Pexels/library candidate remains blocked even if marked cleared and its local hash and rights evidence are supplied", () => {
-  const directory = fs.mkdtempSync(path.join(process.cwd(), "content", ".sonicvhibez-stock-rejection-"));
+test("licensed Pexels candidates can pass the source gate when all asset-level rights checks are complete", () => {
+  const directory = fs.mkdtempSync(path.join(process.cwd(), "content", ".sonicvhibez-stock-acceptance-"));
   try {
     const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
-    const asset = inventory.assets[0];
-    asset.status = "CLEARED";
-    asset.excludedFromProduction = false;
-    asset.creatorCapturedOriginal = false;
-    asset.creatorName = "Library uploader";
-    asset.creatorConfirmed = true;
-    asset.captureEvidencePath = "package.json";
-    asset.rightsEvidencePath = "package.json";
-    asset.localMediaPath = "package.json";
-    asset.sha256 = createHash("sha256").update(fs.readFileSync("package.json")).digest("hex");
-    asset.rightsConfirmed = true;
-    asset.humanVisualReview = "PASS";
+    const candidates = inventory.assets.filter(asset => asset.reviewRenderEligible === true);
+    assert.equal(candidates.length, 3);
+    const localHash = createHash("sha256").update(fs.readFileSync("package.json")).digest("hex");
+    for (const asset of candidates) {
+      asset.status = "CLEARED";
+      asset.excludedFromProduction = false;
+      asset.creatorCapturedOriginal = false;
+      asset.sourceMethod = "PEXELS_LICENSED_STOCK";
+      asset.sourcePlatform = "Pexels";
+      asset.sourcePageUrl = asset.originalSourceUrl;
+      asset.creatorName = asset.creatorName || "Verified Pexels contributor";
+      asset.creatorConfirmed = true;
+      asset.platformLicenseReviewed = true;
+      asset.licenseEvidencePath = "package.json";
+      asset.thirdPartyRightsReviewed = true;
+      asset.rightsEvidencePath = "package.json";
+      asset.localMediaPath = "package.json";
+      asset.sha256 = localHash;
+      asset.rightsConfirmed = true;
+      asset.humanVisualReview = "PASS";
+      asset.productionEligible = true;
+      asset.releaseEligible = true;
+    }
     inventory.status = "CLEARED";
     inventory.releaseAuthorized = true;
     const inventoryPath = path.join(directory, "sonicvhibez-imported-media-inventory.json");
@@ -427,25 +441,32 @@ test("a Pexels/library candidate remains blocked even if marked cleared and its 
       env: { ...process.env, SONICVHIBEZ_IMPORTED_MEDIA_INVENTORY_PATH: path.relative(process.cwd(), inventoryPath) },
       encoding: "utf8"
     });
-    assert.equal(result.status, 2);
+    assert.equal(result.status, 2, "other production prerequisites must still keep the overall project on HOLD");
     const report = JSON.parse(result.stdout);
-    const blocker = report.blockers.find(item => item.message.includes("selected imported wildlife asset"));
-    assert.ok(blocker, "library media must remain blocked even with a generic license and a matching local hash");
-    assert.match(blocker.message, /VAHZ9kg2rvg/);
+    assert.equal(report.blockers.some(item => item.message.includes("selected imported wildlife asset")), false,
+      "fully verified licensed Pexels sources should pass the media-source gate");
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
 
-test("short and long-form manifest templates require original creator-captured wildlife footage provenance", () => {
+test("short and long-form manifest templates support licensed Pexels/Pixabay footage with fail-closed rights gates", () => {
   for (const file of [
     "content/render-manifest.example.json",
     "content/long-form-render-manifest.example.json"
   ]) {
     const manifest = JSON.parse(fs.readFileSync(file, "utf8"));
-    assert.equal(manifest.footageOrigin, "creator_captured_original");
-    assert.match(manifest.footageCreator, /REPLACE_WITH_ORIGINAL_CAMERA_OPERATOR/);
-    assert.match(manifest.captureEvidencePath, /REPLACE_WITH_CAPTURE_PROVENANCE/);
+    assert.equal(manifest.footageOrigin, "licensed_pexels_stock");
+    assert.equal(manifest.creatorCapturedOriginal, false);
+    assert.ok(Array.isArray(manifest.footageSourceUrls) && manifest.footageSourceUrls.length > 0);
+    assert.match(manifest.footageSourceManifest, /ASSET_LEVEL_SOURCE_MANIFEST/);
+    assert.equal(manifest.platformLicenseReviewed, false);
+    assert.equal(manifest.thirdPartyRightsReviewed, false);
+    assert.equal(manifest.stockVideoFootageAllowed, true);
+    assert.equal(manifest.stockPhotographsAllowed, false);
+    assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, false);
+    assert.equal(manifest.rightsConfirmed, false);
+    assert.equal(manifest.complianceReviewed, false);
   }
 });
 
