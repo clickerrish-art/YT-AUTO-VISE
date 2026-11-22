@@ -48,7 +48,7 @@ export async function approveFacebookCandidate({
     const rl = createInterface({ input: stdin, output: stdout });
     try { return await rl.question(prompt); } finally { rl.close(); }
   },
-  write = value => write(value),
+  write = value => stdout.write(value),
   now = new Date().toISOString()
 } = {}) {
   if (typeof slotId !== "string" || !slotId.trim()) fail("An exact candidate slot ID is required");
