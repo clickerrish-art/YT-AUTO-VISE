@@ -565,6 +565,7 @@ test("queue production policy carries the manual-only Speechma audition without 
     assert.equal(candidate.publicationAuthorized, false);
   }
   assert.match(longFormQueue.items[0].narrationVoice, /Roderic/);
+  assert.match(longFormQueue.items[0].narrationVoice, /internal-only.*not commercially cleared/i);
   assert.equal(longFormQueue.items[0].narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
 });
 
