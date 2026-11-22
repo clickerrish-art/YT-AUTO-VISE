@@ -39,7 +39,7 @@ test("creator-education long-form script places the exact direct-sales disclosur
   assert.ok(script.includes("AI-generated wildlife visuals are not permitted substitutes"));
   assert.ok(script.includes("Other stock/archive sources and AI-generated wildlife visuals are not permitted substitutes"));
   assert.ok(script.includes("internal-evaluation-only"));
-  assert.ok(script.includes("Speechma Andrew (English US male) is selected for a manual, zero-cost browser audition only"));
+  assert.ok(script.includes("The owner selected Speechma Andrew (English US male) for a manual, zero-cost browser audition only"));
   assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
 });
 
