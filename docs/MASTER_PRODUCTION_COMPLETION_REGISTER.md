@@ -1,5 +1,38 @@
 # Execution addendum — 22 November 2026
 
+## Latest Zero-Stop execution checkpoint
+
+This checkpoint supersedes the earlier same-day status where the evidence below differs. It does not change the draft PR, default branch, publishing safeguards or Nature Frontiers separation.
+
+### Verified completed in this execution
+
+- Recovered the owner-selected Short 001 Pexels source package (artifact 14700765594); recovered ZIP SHA-256: `7b69c231dd393c3351469f4ef8e5de4147fc75465e23f40a0f966feef7a50185`.
+- Independently rechecked the four original MP4 SHA-256 values against the acquisition manifest and completed full FFmpeg decoding for all four.
+- Used three separate owner-selected Pexels clips in the silent 55.033-second visual review: lion walking (lifeofhicham), elephant mother/calf (ROMAN ODINTSOV), and resting lions (Lorenzo Boldorini). The fourth (MC G'Zay, Pexels 31702128) remains excluded from this edit because an enclosure/barrier and partial foreground person are visible.
+- Independently rechecked the 55.033-second 720×1280 silent review MP4: SHA-256 `c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844`; full FFmpeg decode PASS. It remains review-only, not a final narrated master.
+- Fixed the readiness-engine selection defect: review-eligible imported Canva candidates no longer become selected production assets by implication. Only `selectedForProduction=true` assets enter the selected-asset release gate. Regression tests now exercise both unselected-candidate behavior and explicit-selection fail-closed behavior.
+- Reconciled the prior owner-reviewed historical Short record against the latest complete read-only YouTube inventory. Run [44974991731](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44974991731) passed; the authenticated @sonicvhibez channel has one public upload, zero private and zero unlisted uploads, and both required OAuth scopes. The sole remote video exactly matches the prior owner-reviewed Short by video ID, channel ID, visibility, publishedAt and PT20S duration. Its 20-second duration remains a legacy exception.
+- Updated `content/youtube-channel-verification-status.json` and `content/youtube-history-reconciliation.json` to bind that result to the fresh artifact and preserve the original 18 November owner-review provenance.
+
+### Current unresolved gates — do not mark master complete
+
+1. **Upload-attempt reconciliation — OWNER INPUT REQUIRED.** The latest recorded automated ledger scan (run 44964938424) found zero executed private-upload jobs and zero upload-artifact-privately dispatches among the inspected workflow history. The local ledger is gitignored and inaccessible to GitHub. The user's manual/local/third-party no-attempt attestation is only valid through 18 November 2026. A current owner statement is still required before any new upload; do not infer it from an empty public inventory.
+2. **Short 001 narration — NOT GENERATED.** Speechma Andrew (English US male standard voice) is selected for a manual zero-cost browser audition only. No approved MP3, exact audio hash, full listening review or production approval exists. Do not automate Speechma's free site, use a paid API, or substitute unapproved HeyGen Roderic/Wade Free-plan audio.
+3. **Short 001 rights/editorial — HOLD.** Complete human full playback and third-party-rights review for the three selected clips; resolve the resting-lion collar/strap context; approve the exact asset list. The Pexels platform licence is not a blanket model/property/trademark release.
+4. **Short 001 final production — NOT COMPLETE.** Generate and approve the narration, regenerate captions against that exact audio, create the final 1080×1920 export, verify 50–60 seconds and audio compliance, perform full playback/QC, and approve the exact video/caption/metadata/thumbnail hashes.
+5. **Long-form 001 crocodile footage — NOT ACQUIRED LOCALLY.** Five Pexels candidate pages are recorded, but the original MP4 bytes still require acquisition, SHA-256, ffprobe, full decode and human visual review. Keep South Africa, Kenya and Zambia locations distinct and do not imply a single encounter.
+6. **Long-form 001 scientific/editorial — HOLD.** Complete the source-to-scene-to-claim map and qualified zoological review; verify species, geography, behaviour and all claims against reliable sources.
+7. **Long-form 001 narration/captions — NOT GENERATED.** Use the same manually auditioned Speechma Andrew candidate only if the actual downloaded output is reviewed and approved; retain its exact hash. Generate captions from that exact approved audio.
+8. **Packaging — NOT COMPLETE.** Finalize truthful thumbnails, titles, descriptions, tags, credits, disclosures and exact metadata; inspect every final export in full and bind human approval to final hashes.
+9. **Private YouTube upload — NOT AUTHORIZED.** Reverify channel and OAuth credentials at execution time; reconcile local/remote attempts; require an exact-job/media/metadata/thumbnail/captions/rights approval and one-shot authorization; upload private only; independently read back remote video ID, privacy and metadata. No public or unattended publishing.
+10. **Scheduling — NOT RELEASE-VERIFIED.** Preserve `long_form → long_form → short`, Africa/Johannesburg, at least 72 elapsed hours between actual publications and no same Johannesburg calendar day. Three intervals require at least 216 hours. Do not claim the cadence passed until actual remote publication timestamps prove it.
+11. **Dashboard/API/state/recovery — EXACT-SHA ACCEPTANCE STILL REQUIRED.** Verify DASH-001, API-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 at one exact final SHA, including browser journeys, auth-negative routes, persistence, leases, retry/backoff, cancellation, dead-letter, restart, backup/restore and provider reconciliation. CI green alone is not production certification.
+12. **Nature Frontiers / Meta — SEPARATE HOLD.** Keep its publishing disabled, dry-run enabled and emergency stop active. Do not transfer SonicVhibez permissions, assets or approvals to Nature Frontiers.
+13. **Release/Git safety — PRESERVE.** Keep the implementation branch and PR #1 open, draft and unmerged; do not modify `main`, merge, close, mark ready, reset, rebase, force-push or rewrite history.
+
+**Current decision: HOLD — NOT 100% MASTER COMPLETE.** Technical media recovery and history reconciliation have progressed, but final narration, human rights/editorial approval, long-form acquisition, final exports, upload-attempt attestation, exact-hash approvals and release verification remain open.
+
+
 > Current media-policy and production update. The historical 19 November snapshot is retained below for audit.
 
 > This addendum is the current operational status and supersedes older statements below that prohibit all Pexels/Pixabay stock for SonicVhibez. Historical snapshots remain preserved for audit. Nature Frontiers remains a separate brand and its independent media policy is not changed by this SonicVhibez owner instruction.
