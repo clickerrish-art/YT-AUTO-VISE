@@ -2,7 +2,7 @@
   "channel": "SonicVhibez",
   "channelId": "SET_SONICVHIBEZ_CHANNEL_ID_IN_GITHUB_ACTIONS_VARIABLES",
   "title": "How to Make Better Wildlife Videos for YouTube",
-  "description": "Practical tips for planning wildlife videos and telling a clear nature story. PROMOTIONAL DISCLOSURE DRAFT — OWNER APPROVAL REQUIRED: This product is sold through my own Selar business; purchases generate revenue for my business. AI NARRATION: Use the owner-approved Roderic voice only if commercial rights are explicitly confirmed; otherwise do not use synthetic narration. WILDLIFE VISUALS: genuine original creator-captured footage and photographs only. No AI-generated wildlife visuals or generic stock wildlife footage or photographs may be used as substitutes.",
+  "description": "Practical tips for planning wildlife videos and telling a clear nature story. PROMOTIONAL DISCLOSURE DRAFT — OWNER APPROVAL REQUIRED: This product is sold through my own Selar business; purchases generate revenue for my business. AI NARRATION: Use the owner-approved Roderic voice only if commercial rights are explicitly confirmed; otherwise do not use synthetic narration. WILDLIFE VISUALS: original creator-captured footage or qualifying Pexels/Pixabay licensed stock with exact source provenance, licence evidence, local original files, hashes, technical verification and asset-level human/third-party-rights review. No AI-generated wildlife visuals or unverified stock may be used.",
   "tags": [
     "wildlife videos",
     "wildlife filmmaking",
@@ -25,6 +25,6 @@
     "text": "This product is sold through my own Selar business; purchases generate revenue for my business."
   },
   "containsAIWildlifeVisuals": false,
-  "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+  "wildlifeVisualSourcePolicy": "ORIGINAL_OR_LICENSED_PEXELS_PIXABAY_WITH_ASSET_LEVEL_REVIEW",
   "mediaProvenanceStatus": "UNVERIFIED"
 }
