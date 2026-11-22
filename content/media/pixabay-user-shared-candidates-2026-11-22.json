@@ -58,7 +58,12 @@
       "releaseEligible": false,
       "rightsVerified": false,
       "humanReviewed": false,
-      "selectedForProduction": false
+      "selectedForProduction": false,
+      "acceptedFps": [
+        25
+      ],
+      "sourcePageVerifiedAt": "2026-11-22",
+      "directDownloadUrlExtraction": "PENDING_PUBLIC_PAGE_PARSE"
     },
     {
       "assetId": "pixabay-video-173139",
@@ -86,7 +91,12 @@
       "releaseEligible": false,
       "rightsVerified": false,
       "humanReviewed": false,
-      "selectedForProduction": false
+      "selectedForProduction": false,
+      "acceptedFps": [
+        30
+      ],
+      "sourcePageVerifiedAt": "2026-11-22",
+      "directDownloadUrlExtraction": "PENDING_PUBLIC_PAGE_PARSE"
     },
     {
       "assetId": "pixabay-video-263732",
@@ -114,7 +124,12 @@
       "releaseEligible": false,
       "rightsVerified": false,
       "humanReviewed": false,
-      "selectedForProduction": false
+      "selectedForProduction": false,
+      "acceptedFps": [
+        30
+      ],
+      "sourcePageVerifiedAt": "2026-11-22",
+      "directDownloadUrlExtraction": "PENDING_PUBLIC_PAGE_PARSE"
     },
     {
       "assetId": "pixabay-video-323312",
@@ -149,7 +164,12 @@
       "releaseEligible": false,
       "rightsVerified": false,
       "humanReviewed": false,
-      "selectedForProduction": false
+      "selectedForProduction": false,
+      "acceptedFps": [
+        24
+      ],
+      "sourcePageVerifiedAt": "2026-11-22",
+      "directDownloadUrlExtraction": "PENDING_PUBLIC_PAGE_PARSE"
     },
     {
       "assetId": "pixabay-video-127476",
@@ -176,7 +196,14 @@
       "releaseEligible": false,
       "rightsVerified": false,
       "humanReviewed": false,
-      "selectedForProduction": false
+      "selectedForProduction": false,
+      "acceptedFps": [
+        29,
+        29.97,
+        30
+      ],
+      "sourcePageVerifiedAt": "2026-11-22",
+      "directDownloadUrlExtraction": "PENDING_PUBLIC_PAGE_PARSE"
     },
     {
       "assetId": "pixabay-video-216696",
@@ -205,7 +232,14 @@
       "releaseEligible": false,
       "rightsVerified": false,
       "humanReviewed": false,
-      "selectedForProduction": false
+      "selectedForProduction": false,
+      "acceptedFps": [
+        29,
+        29.97,
+        30
+      ],
+      "sourcePageVerifiedAt": "2026-11-22",
+      "directDownloadUrlExtraction": "PENDING_PUBLIC_PAGE_PARSE"
     }
   ],
   "notes": [
