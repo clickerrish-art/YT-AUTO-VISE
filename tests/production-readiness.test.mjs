@@ -37,7 +37,9 @@ function currentYouTubeReconciliationExpectation() {
     priorOwnerVideo?.duration === reconciledVideo?.latestInventoryMatch?.duration &&
     priorOwnerVideo?.ownerReview?.format === reconciledVideo?.format &&
     priorOwnerVideo?.ownerReview?.studioPublicationDateConfirmed === true &&
-    priorOwnerVideo?.ownerReview?.reaffirmedAt === "2026-11-18" &&
+    reconciledVideo?.priorOwnerReview?.reaffirmedAt === "2026-11-18" &&
+        reconciledVideo?.priorOwnerReview?.ownerConfirmed === true &&
+        reconciledVideo?.priorOwnerReview?.verifiedBy === "clickerrish-art" &&
     verification.videos?.length === 1 &&
     verification.videos[0]?.id === reconciledVideo?.id &&
     verification.videos[0]?.visibility === reconciledVideo?.visibility &&
