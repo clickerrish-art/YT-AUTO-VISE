@@ -1,12 +1,38 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-22T21:29:00Z",
+  "generatedAt": "2026-11-22T21:40:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
   "liveMainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-  "inventory": "{\"totalHandlers\":54,\"protectedApiRoutes\":50,\"nonApiHandlers\":[\"GET /\",\"GET /healthz\",\"GET /readyz\",\"GET /operational-readyz\"],\"branchAheadBy\":5571,\"branchBehindBy\":0,\"changedFiles\":545,\"branchProtectionEnabled\":null,\"branchProtectionStatus\":\"UNVERIFIED — GitHub branch-protection endpoint returns HTTP 403; owner-side settings are not independently visible.\",\"comparisonSourceSha\":\"234b61306997f702bd62af2d87d27bbabce60a4c\",\"mergeBaseSha\":\"3795519ccbf58fd02d74458624b58dd2e44a88c0\",\"latestInventoryRun\":null,\"latestCompareEvidence\":{\"sourceSha\":\"da7e45cd49128f3580c455bfeebf63dfb7b17383\",\"aheadBy\":5561,\"behindBy\":0,\"changedFilesInPullRequest\":545,\"compareApiFilesReturned\":300,\"compareApiFileListLimitReached\":true},\"latestAutomationRun\":\"https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45072112844\"}",
+  "inventory": {
+    "totalHandlers": 54,
+    "protectedApiRoutes": 50,
+    "nonApiHandlers": [
+      "GET /",
+      "GET /healthz",
+      "GET /readyz",
+      "GET /operational-readyz"
+    ],
+    "branchAheadBy": 5585,
+    "branchBehindBy": 0,
+    "changedFiles": 546,
+    "branchProtectionEnabled": null,
+    "branchProtectionStatus": "UNVERIFIED — GitHub branch-protection endpoint returns HTTP 403; owner-side settings are not independently visible.",
+    "comparisonSourceSha": "cdb3a869201842b4f53772cbd2af095bfcc4405d",
+    "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+    "latestInventoryRun": null,
+    "latestCompareEvidence": {
+      "sourceSha": "cdb3a869201842b4f53772cbd2af095bfcc4405d",
+      "aheadBy": 5585,
+      "behindBy": 0,
+      "changedFilesInPullRequest": 546,
+      "compareApiFilesReturned": 300,
+      "compareApiFileListLimitReached": true
+    },
+    "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45072112844"
+  },
   "counts": {
     "routes": 50,
     "authNegativePass": 50,
@@ -390,7 +416,7 @@
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
-      "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
+      "currentHeadEvidenceNote": "Mocked provider integration PASS: concurrent reconciliation and interrupted SUBMITTING after remote create; restart, read-only feed match and exact remote read-back are verified. Live Meta provider acceptance remains NOT_TESTED.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs"
       ],
@@ -424,7 +450,7 @@
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
-      "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
+      "currentHeadEvidenceNote": "Mocked provider integration PASS: concurrent reconciliation and interrupted SUBMITTING after remote create; restart, read-only feed match and exact remote read-back are verified. Live Meta provider acceptance remains NOT_TESTED.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs"
       ],
@@ -766,11 +792,11 @@
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "BLOCKED",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
+      "currentHeadEvidenceSha": null,
       "currentHeadEvidenceRunId": 45072112844,
-      "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
+      "currentHeadEvidenceNote": "Positive dispatch/production remains untested because owner-approved content/queue-identity-approval.json is absent; the endpoint remains fail-closed and no job was dispatched or produced.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
         "test/dashboard-dispatchable-ordering.integration.test.mjs"
@@ -1174,11 +1200,11 @@
         "scenario": "Two simultaneous worker-authenticated POST /api/jobs/produce requests for a legacy QUEUED CONTENT_PRODUCTION job without authoring both return 409 with renderStarted=false and publishingEnabled=false; persisted state remains byte-identical; no manifest or per-job media directory is created. After graceful server restart, the same request remains 409 and state remains byte-identical."
       },
       "lastVerifiedOverallAcceptance": "BLOCKED",
-      "currentHeadStatus": "BLOCKED",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
+      "currentHeadEvidenceSha": null,
       "currentHeadEvidenceRunId": 45072112844,
-      "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
+      "currentHeadEvidenceNote": "Positive dispatch/production remains untested because owner-approved content/queue-identity-approval.json is absent; the endpoint remains fail-closed and no job was dispatched or produced.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
@@ -2270,7 +2296,8 @@
     "authenticationNegativeRoutesPassed": 50,
     "notTestedRoutesPreserved": 2,
     "blockedRoutesPreserved": 7,
-    "explanation": "Exact-head tests pass; 41 local positive route classifications remain accepted, 50/50 auth-negative checks pass, two routes remain NOT_TESTED and seven remain BLOCKED. No live provider writes."
+    "explanation": "Exact-head tests pass; 41 local positive route classifications remain accepted, 50/50 auth-negative checks pass, two routes remain NOT_TESTED and seven remain BLOCKED. No live provider writes.",
+    "ownerGatedRoutes": 2
   },
   "dashboardBrowserE2eRefreshRequest": {
     "requestedAt": "2026-11-22T21:29:00Z",
