@@ -18,7 +18,7 @@ test("Long-form manifest pins current script and scientific review and remains b
   const review = readText("../content/assets/long-form-001-scientific-claim-review.md");
   assert.equal(manifest.sourceScriptBlobSha, gitBlobSha(script));
   assert.equal(manifest.scientificReviewBlobSha, gitBlobSha(review));
-  assert.equal(manifest.status, "BLOCKED_NOT_RENDERABLE_COMMERCIAL_NARRATION_AND_FOOTAGE_MISSING");
+  assert.equal(manifest.status, "BLOCKED_FOOTAGE_HUMAN_RIGHTS_REVIEW_AND_COMMERCIAL_NARRATION_PENDING");\n  assert.equal(manifest.footageAcquisitionStatus, "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED");\n  assert.equal(manifest.footageAcquisitionArtifact.assetCount, 5);\n  assert.equal(manifest.footageAcquisitionArtifact.fullDecodePasses, 5);\n  assert.equal(manifest.footageCandidates.length, 5);\n  assert.ok(manifest.footageCandidates.every(asset => asset.status === "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED" && asset.fullDecode === "PASS" && /^[a-f0-9]{64}$/.test(asset.sha256) && asset.releaseEligible === false));\n  assert.equal(manifest.supplementalFootageCandidates.length, 1);\n  assert.equal(manifest.supplementalFootageCandidates[0].status, "DISCOVERED_NOT_ACQUIRED");
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
   assert.equal(manifest.footageLicenseEvidence, "content/media/pexels-license-evidence-2026-11-22.md");
