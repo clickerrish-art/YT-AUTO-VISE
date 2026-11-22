@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          node --test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
+          npm test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
           if ! grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/node-test.log"; then
             echo "FAIL: Node test summary did not explicitly report zero skips."
             exit 1
