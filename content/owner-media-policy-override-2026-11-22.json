@@ -18,7 +18,9 @@
     "requireAssetLevelThirdPartyRightsReview": true,
     "requireHumanVisualEditorialReview": true,
     "requireExactCreatorCreditInInternalLedger": true,
-    "requireNoImpliedEndorsement": true
+    "requireNoImpliedEndorsement": true,
+    "stockVideoFootageAllowed": true,
+    "stockPhotographsAllowed": false
   },
   "releaseGates": {
     "platformLicenseReviewIsNotFinalRightsClearance": true,
