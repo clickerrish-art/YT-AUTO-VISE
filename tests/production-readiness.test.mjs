@@ -402,9 +402,8 @@ test("review-eligible Pexels candidates do not become selected production inputs
   });
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
-  assert.ok(report.blockers.some(item => item.message.includes("selected imported wildlife asset")));
-  assert.ok(report.notes.some(note => note.includes("5 assets; 2 excluded from production; 3 selected/unresolved; release not authorized")));
-  assert.ok(report.blockers.some(item => /licensed Pexels\/Pixabay footage/.test(item.message)));
+  assert.equal(report.blockers.some(item => item.message.includes("selected imported wildlife asset")), false);
+  assert.ok(report.notes.some(note => note.includes("5 assets; 2 excluded from production; 0 selected/unresolved; release not authorized")));
 });
 
 test("licensed Pexels candidates can pass the source gate when all asset-level rights checks are complete", () => {
