@@ -22,8 +22,8 @@ const evidenceSha = "03d90ef8b1453d066cf2e9d831f193e0d02cced9";
 const automationEvidenceSha = "6087b4088699a10359aeab99bee3d17cdd9722ad";
 const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45026669831";
 const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45026140527";
-assert.ok(browserRun.startsWith("https://github.com/"));
-assert.ok(automationRun.startsWith("https://github.com/"));
+assert.ok(browserRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
+assert.ok(automationRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
 
 function assertEvidence(evidence, dimension, run = browserRun) {
   assert.ok(evidence.some(item =>
