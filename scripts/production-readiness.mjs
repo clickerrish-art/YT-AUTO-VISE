@@ -248,6 +248,9 @@ function validateWildlifeFootage(manifest, label) {
     return;
   }
   if (origin === "licensed_pexels_stock" || origin === "licensed_pixabay_stock") {
+    if (manifest.creatorCapturedOriginal !== false) {
+      blockers.push(`${label}: creatorCapturedOriginal must be false for licensed stock footage; never label stock as owner-shot.`);
+    }
     const platform = origin === "licensed_pexels_stock" ? "Pexels" : "Pixabay";
     const sources = Array.isArray(manifest.footageSourceUrls) ? manifest.footageSourceUrls :
       (typeof manifest.footageSourceUrl === "string" ? [manifest.footageSourceUrl] : []);
