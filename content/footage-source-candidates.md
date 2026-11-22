@@ -204,3 +204,45 @@ A second, explicitly synthetic **review-only** render was generated to inspect t
 - Full-file decode: PASS. Sampled frames confirm the review warning, AI narration disclosure, captions and NOAA credit remain visible and do not overlap.
 
 **Disposition remains HOLD.** The synthetic voice is not approved for publication and must be replaced with owner-approved natural narration. Human full-playback review, final voice/caption timing, factual/editorial review, rights confirmation and compliance approval remain outstanding. Neither the silent nor narrated review render is a production master or a substitute for `media/next-short.mp4`.
+
+
+## Direct creator outreach leads — 22 November 2026
+
+**Disposition: LEADS ONLY — no footage acquired, downloaded, or approved.** This section is a contact/research queue, not a production asset register. The current owner policy still requires original creator-captured files delivered directly by the creator, provenance, original-file integrity, written zero-cost commercial permission, technical inspection, complete viewing, and human approval. Do not download/use the linked archive or portfolio copies as substitutes.
+
+1. **Grant Brokensha / The Bigger Picture Films — highest-priority crocodile cinematography lead**
+   - Evidence: the filmmaker profile describes Grant's work with Nile crocodiles, including underwater crocodile cinematography and the *Hippo vs. Croc* production.
+   - Public contact listed on the filmmaker profile: grant@thebiggerpictures.com.
+   - Profile: https://www.rockhopper.co.za/grant-brokensha-natural-history-filmmaker
+   - Ask for unused original-camera Nile crocodile footage and stills captured by Grant, directly supplied by the rights holder, and whether a no-fee, non-exclusive worldwide commercial YouTube/social licence is possible. Confirm whether any broadcaster, producer, archive, or distributor holds exclusive rights.
+
+2. **Roger Horrocks — underwater Nile crocodile cinematography lead**
+   - Evidence: Roger's official site identifies him as an underwater cinematographer and describes his work filming Nile crocodiles in the Okavango Delta; it also advertises footage licensing.
+   - Public contact: roger@rogerhorrocks.com.
+   - Official site: https://www.rogerhorrocks.com/
+   - Background/filmography: https://www.rogerhorrocks.com/about-roger-horrocks
+   - Important restriction: do not use an archive download or an archive screener as a substitute. Ask whether Roger can provide original camera masters directly and grant a no-fee commercial licence, with written confirmation of sole/controlling rights.
+
+3. **Judy Lehmberg / Epic Nature — crocodile behaviour lead**
+   - Evidence: her channel has a video titled “Huge crocodiles fishing in the Crocodile River” and its description gives a direct licensing contact.
+   - Public contact in the video description: judy@judylehmberg.com.
+   - Video reference: https://www.youtube.com/watch?v=cW4Shimbu34
+   - Provenance is not yet established. Ask who personally recorded the sequence, who owns the original camera files, whether any third party appears in the footage, and whether original files can be supplied directly under a no-fee commercial licence. Do not rip or download the YouTube copy.
+
+4. **Bernard DUPONT — recent Kruger Nile crocodile stills lead**
+   - Evidence: his Flickr photostream contains Nile crocodile photographs attributed to him, including images recorded at Kruger National Park in December 2025 and uploaded in February/March 2026.
+   - Creator page: https://www.flickr.com/people/berniedup/
+   - Recent example: https://www.flickr.com/photos/berniedup/54981322870/
+   - Rights are not cleared by the public listing. Contact the photographer through his profile and request the original full-resolution files, capture metadata, confirmation that he is the photographer/rightsholder, and explicit no-fee worldwide commercial permission.
+
+5. **Addshore — recent 4K Nairobi National Park video lead**
+   - Evidence: a 21-second 3840×2160 video titled “Nairobi National Park (August 2025) Nile crocodile” is attributed as the uploader's own work under CC BY-SA 4.0.
+   - Public record: https://commons.wikimedia.org/wiki/File:Nairobi_National_Park_(August_2025)_Nile_crocodile.webm
+   - Creator profile: https://commons.wikimedia.org/wiki/User:Addshore
+   - Important restriction: do not download/use the Commons-hosted archive copy. Ask the creator to supply the untouched original camera file and confirm capture provenance, metadata, and a direct no-fee commercial grant. Review whether CC BY-SA attribution/share-alike conditions are compatible with the intended final edit before considering any use.
+
+### Required outreach response and intake gate
+
+For every positive reply, request: (a) original camera file(s), not a platform rip or archive copy; (b) creator's full name and capture role; (c) capture date/location and original metadata; (d) confirmation of sole rights or all necessary permissions; (e) explicit written permission for worldwide, perpetual, monetized YouTube and social/commercial use at zero cost, including editing/cropping/captions/thumbnails; (f) required credit wording; and (g) disclosure of music, people, logos, permits, or other third-party material. A refusal, fee, incomplete rights chain, or archive-only offer leaves the lead on HOLD.
+
+**Execution status:** public research completed; no creator has been contacted; no response or permission is claimed; no asset is production-eligible. This lead list does not change any render manifest, rights flag, queue status, or publishing control.
