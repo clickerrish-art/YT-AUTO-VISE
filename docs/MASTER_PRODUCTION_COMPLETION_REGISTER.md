@@ -988,3 +988,92 @@ All these production queues remain HOLD/planning-only. No media render, narratio
 - Current Go-Live checkpoint now distinguishes the default-branch NOAA workflow's push/manual triggers from the disabled implementation-branch copy; the default-branch workflow has no cron schedule.
 
 No media render, narration generation, upload, schedule or publication was performed.
+
+
+---
+
+# 22 November 2026 — live execution and verification addendum
+
+**Current release decision: HOLD.** This addendum supersedes stale checkpoint statements only where it provides newer, exact evidence. It does not approve publishing or waive any rights, human-review, account-owner, or external-provider gate.
+
+## Repository checkpoint
+
+- Implementation branch: codex/marketing-machine-audit-fixes
+- Exact current HEAD at this addendum: c290bac5431c7b46b42b19e74a2c65a04f0a4512
+- main: 3795519ccbf58fd02d74458624b58dd2e44a88c0
+- Divergence: 5,192 ahead / 17 behind
+- PR #1: open, draft, unmerged; head matches the implementation branch
+- Branch protection: disabled on both main and implementation branch
+- No main commit, merge, PR state change, rebase, reset, force-push, or history rewrite was performed.
+
+## Exact-current-head regression
+
+GitHub Actions run 44965097575 — PASS on c290bac5431c7b46b42b19e74a2c65a04f0a4512.
+
+- Node.js: 1,095 tests passed across 189 test files; 0 failed; 0 skipped.
+- Python: 104 tests passed.
+- npm audit: 0 known vulnerabilities.
+- JavaScript syntax checks: PASS.
+- Python compilation checks: PASS.
+- Cloudflare staging authenticated/read-only smoke: PASS; durable revision 3, five retained backups, required state collections present, publishing disabled, runner session inactive, and remote state unchanged.
+- Queue validation: 16 topics, approved Selar destination, recognized held states, public publishing disabled.
+- Wade review-only narration boundary: PASS; no commercial clearance or production approval.
+- No upload, metadata write, remote publication, or queue approval occurred during these tests.
+
+## Dashboard, queue, deployment and bridge
+
+- Dashboard browser E2E run 44964506947: 41/41 passed on source SHA 3c87ef2d699a886fc6942956385b02f23702a314. Dashboard HTML, inventory script, and browser test sources are unchanged through c290bac. The historical control matrix still needs a current-source reconciliation; DASH-001 is not declared fully accepted solely from the 41 browser tests.
+- Queue readiness run 44965097050: PASS. The generated proposal contains 16 queue items and a non-approving queue identity template. It deliberately leaves detailed-item mapping and owner approval blank.
+- Deployment recovery smoke run 44965096834: PASS, 2/2 simulated recovery checks. This is not a production deployment or independent Cloudflare restore.
+- Cloudflare runner bridge safety run 44965096861: PASS, 4/4.
+- Source recovery bundle run 44965096792: PASS.
+- Production readiness run 44965096777: HOLD, 27 blockers. The report is not to be converted to PASS by weakening gates.
+
+## Narration and wildlife media
+
+- Wade — Resonant & Narrative remains selected for review only. The requested HeyGen audition is blocked by insufficient Free-plan speech allowance. Free-plan output is not commercially cleared. Piper, Edge TTS, and other narrator substitutions remain unauthorized; no paid credits or upgrade were used.
+- Readiness reporting and regression tests now explicitly state this restricted authorization.
+- Repository tree contains no original production wildlife video/audio masters.
+- Five direct creator outreach leads were added to content/footage-source-candidates.md. They are research leads only; no creator has been contacted and no rights or assets have been acquired.
+- Four zoological reviewer leads were added to content/assets/long-form-001-zoological-reviewer-leads.md. They are research leads only; no reviewer has been contacted or engaged.
+- No stock/archive download, YouTube rip, AI-generated wildlife image/video, or unverified asset was admitted as production media.
+
+## YouTube identity and history
+
+- Fresh read-only inventory run 44964986410 authenticated the @sonicvhibez channel and verified youtube.upload plus youtube.readonly scopes.
+- Complete uploads-playlist inventory: 1 public video, 0 private, 0 unlisted. The single public item is 20 seconds long. Its video ID, channel ID, public visibility, API publishedAt, and duration match the prior owner-reviewed record; the fresh API artifact leaves format unclassified, so the owner must reaffirm the historical Short classification and Studio publication date.
+- Automated upload-ledger scan run 44964986465: one prior upload workflow run inspected; its private-upload job was skipped; zero executed private-upload jobs were found. This does not inspect manual, local, or third-party uploads.
+- The owner attestation for manual/local/third-party upload attempts remains valid only through 18 November 2026. A fresh owner attestation is still required.
+- No upload or publication was attempted.
+
+## Cloudflare, persistence and account security
+
+- The account has one member; that member's two-factor authentication is disabled and account-wide enforcement is false. Enforcement was not enabled because doing so before the member enrols could lock the account.
+- sonicvhibez-durable-state-staging exists; no SonicVhibez production publisher Worker is deployed.
+- Staging D1 database sonicvhibez-state-staging has six application tables, a single dashboard_state row at revision 3, 16 queue items, zero jobs, and publishing disabled. The current state was last updated 15 November 2026.
+- dashboard_backups contains five valid JSON snapshots; all five record publishing disabled. The latest backup is 15 November 2026 at 09:52:22Z and the highest backup source revision is 2, while the live staging state is revision 3. A revision-3 backup is therefore missing.
+- runner_artifacts and runner_state contain zero rows. The staging Worker has an R2 binding named ARTIFACTS pointing to sonicvhibez-artifacts-staging, but R2 bucket listing returned Cloudflare error 10042 / HTTP 403. The binding is not evidence that the bucket is accessible.
+- The staging-only independent backup/restore drill has not been run. Its workflow requires an explicit workflow_dispatch YES input; it will add two backup records and advance the staging revision by one. No such confirmation was supplied in this session.
+- A D1 SQL export job completed, but the signed export download was blocked by the available execution/download path. No independent SQL restore is claimed.
+- R2 activation requires the Cloudflare Dashboard checkout/subscription step. No subscription, paid spend, Worker deployment, D1 mutation, or account-security mutation was performed.
+
+## Nature Frontiers and external providers
+
+- No Metricool or Meta provider mutation was made. Legacy Metricool brand access remains blocked; the reported 20 drafts and eight autoPublish=true records remain unreconciled. Nature Frontiers remains separate from SonicVhibez.
+- No analytics baseline can be established without genuine publications and platform analytics.
+- No GitHub branch protection change was made. The connected GitHub interface provided read-only protection evidence; no branch settings write action was available in the connected workflow.
+
+## Current remaining owner/admin gates
+
+1. Supply original creator-captured wildlife camera files and explicit commercial rights, or obtain direct no-fee permission from a creator.
+2. Reaffirm the sole public YouTube video's Short classification and Studio publication date against the fresh inventory.
+3. Attest whether any manual, local, or third-party YouTube upload attempts occurred after 18 November 2026.
+4. Approve the exact operational-to-detailed queue identity mapping. The two operational long-form IDs do not unambiguously identify the Nile crocodile documentary.
+5. Enrol the Cloudflare account member in 2FA before account-wide enforcement.
+6. Decide whether to enable R2 through the Cloudflare Dashboard, accepting that usage above its free allowance may be chargeable; no activation without owner approval.
+7. Explicitly authorize or decline the one-time staging backup/restore drill.
+8. Provide/approve the repository public upload-verification key secret and confirm the private signing key remains offline.
+9. Obtain a commercially permitted narration solution; Wade remains review-only and currently cannot be auditioned within the available free allowance.
+10. Obtain qualified zoological review, six held disclosure approvals, final asset/video/thumbnail approvals, and legacy Metricool access/reconciliation.
+
+**No production content is approved, no publishing is enabled, and the release remains HOLD.**
