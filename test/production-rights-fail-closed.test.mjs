@@ -21,18 +21,18 @@ test("Long-form manifest pins current script and scientific review and remains b
   assert.equal(manifest.status, "BLOCKED_NOT_RENDERABLE_COMMERCIAL_NARRATION_AND_FOOTAGE_MISSING");
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
-  assert.equal(manifest.footageLicenseEvidence, "");
+  assert.equal(manifest.footageLicenseEvidence, "content/media/pexels-license-evidence-2026-11-22.md");
   assert.equal(manifest.narrationRightsDeterminationEvidence, "speechma-andrew-voice-selection-2026-11-22.json");
 });
 
-test("Short manifest pins exact source files and excludes Pexels stock from production", () => {
+test("Short manifest pins exact source files and allows only review-only Pexels stock", () => {
   const manifest = readJson("../content/render-manifest.json");
   assert.equal(manifest.sourceScriptBlobSha, gitBlobSha(readText("../content/short-001-wildlife-video-storytelling.md")));
   assert.equal(manifest.captionSourceBlobSha, gitBlobSha(readText("../content/short-001-wildlife-video-storytelling.srt")));
   assert.equal(manifest.sourceHashType, "GIT_BLOB_SHA");
   assert.equal(manifest.captionHashType, "GIT_BLOB_SHA");
-  assert.equal(manifest.footageLicenseEvidence, "");
-  assert.equal(manifest.footageEligibilityStatus, "EXCLUDED_PEXELS_STOCK_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA");
+  assert.equal(manifest.footageLicenseEvidence, "content/media/pexels-license-evidence-2026-11-22.md");
+  assert.equal(manifest.footageEligibilityStatus, "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22");
   assert.equal(manifest.status, "BLOCKED_NOT_RENDERABLE");
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
@@ -59,7 +59,6 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
     ["../.github/workflows/free-narration-artifact.yml", "generate-audio"],
     ["../.github/workflows/short-narration-artifact.yml", "generate"],
     ["../.github/workflows/acquire-noaa-broll-candidates.yml", "acquire-candidates"],
-    ["../.github/workflows/acquire-short-001-assets.yml", "acquire"],
     ["../.github/workflows/noaa-lobster-thumbnail-review.yml", "thumbnail-review"],
 
   ]) {
@@ -67,44 +66,54 @@ test("HeyGen denial is recorded and all unapproved narration workflows are disab
   }
 });
 
-test("Pexels and Pixabay media registers are reference-only, never production footage", () => {
+test("Nature Frontiers remains stock-excluded while SonicVhibez Pexels footage is review-only", () => {
   const nature = readJson("../content/nature-frontiers-media-register.json");
   const short = readJson("../content/short-001-acquisition-manifest.json");
+  const owner = readJson("../content/owner-media-policy-override-2026-11-22.json");
   assert.equal(nature.policy.originalCreatorCapturedMediaRequired, true);
   assert.equal(nature.policy.stockMediaAllowed, false);
   assert.equal(nature.policy.aiGeneratedWildlifeVisualsAllowed, false);
   assert.ok(nature.assets.length > 0);
   assert.ok(nature.assets.every(asset => asset.productionEligibility?.eligible === false));
   assert.ok(nature.assets.every(asset => asset.productionEligibility?.status === "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY"));
+  assert.equal(owner.status, "ACTIVE_WITH_ASSET_LEVEL_REVIEW_GATES");
+  assert.equal(owner.mediaRules.pexelsLicensedStockAllowed, true);
+  assert.equal(owner.mediaRules.pixabayLicensedStockAllowed, true);
+  assert.equal(owner.mediaRules.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(owner.releaseGates.publicOrUnattendedPublishingRemainsDisabled, true);
   assert.equal(short.productionDisposition.productionEligible, false);
-  assert.ok(short.assets.every(asset => asset.productionEligibility === "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"));
+  assert.equal(short.productionDisposition.reviewRenderEligible, true);
+  assert.equal(short.assets.filter(asset => asset.productionEligibility === "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22").length, 3);
+  assert.equal(short.assets.filter(asset => asset.productionEligibility === "EXCLUDED_EDITORIAL_VISIBLE_ENCLOSURE_AND_PARTIAL_PERSON").length, 1);
+  assert.ok(short.assets.every(asset => asset.releaseEligible === false && asset.rightsVerified === false));
 });
 
-test("AI wildlife generation and stock acquisition paths are disabled", () => {
+test("AI wildlife generation remains disabled while licensed stock acquisition is enabled for review", () => {
   const generation = readJson("../config/video-generation.json");
   const notebook = readJson("../notebooks/sonicvhibez_wangp_kaggle.ipynb");
   const acquisitionScript = readText("../scripts/acquire-short-001-assets.mjs");
   const importer = readText("../scripts/import_wangp_kaggle_output.py");
-  assert.equal(generation.status, "DISABLED_BY_ORIGINAL_CREATOR_CAPTURED_MEDIA_POLICY");
+  assert.equal(generation.status, "DISABLED_BY_OWNER_AI_WILDLIFE_VISUAL_POLICY");
   assert.equal(generation.primary, false);
   assert.equal(generation.generation.enabled, false);
   assert.equal(generation.safety.aiGeneratedWildlifeVisualsAllowed, false);
   const codeCells = notebook.cells.filter(cell => cell.cell_type === "code");
   assert.ok(codeCells.length > 0);
   assert.ok(codeCells.every(cell => (Array.isArray(cell.source) ? cell.source.join("") : cell.source)
-    .startsWith('raise RuntimeError("DISABLED_BY_OWNER_ORIGINAL_CAPTURE_POLICY')));
-  assert.ok(acquisitionScript.includes("Pexels stock acquisition is disabled"));
-  assert.ok(acquisitionScript.indexOf("Pexels stock acquisition is disabled") < acquisitionScript.indexOf("await fsp.mkdir(MEDIA_ROOT"));
-  assert.ok(importer.includes("AI-generated wildlife media is disabled by the current original creator-captured-media policy"));
+    .startsWith('raise RuntimeError("DISABLED_BY_OWNER_AI_WILDLIFE_VISUAL_POLICY')));
+  assert.ok(acquisitionScript.includes("policy.stockMediaAllowed !== true"));
+  assert.ok(acquisitionScript.includes('"pexels-11528208"'));
+  assert.ok(!acquisitionScript.includes('"pexels-31702128"'));
+  assert.ok(acquisitionScript.includes("full decode "));
+  assert.ok(importer.includes("AI-generated wildlife media is disabled by the current owner media policy"));
 });
 
-test("NOAA and stock-library source records remain excluded from current production", () => {
+test("NOAA and Wikimedia leads remain excluded while Pexels candidates can enter review", () => {
   const noaa = readJson("../content/asset-candidates/noaa-spiny-lobsters-california.json");
   assert.equal(noaa.currentProductionDisposition.productionEligible, false);
   assert.equal(noaa.ownerAuthorization.currentStatus, "SUPERSEDED_BY_2026-11-21_ORIGINAL_MEDIA_POLICY");
   assert.equal(noaa.publication.allowed, false);
   for (const path of [
-    "../content/media/pexels-crocodile-30026544-rights-review.json",
     "../content/media/wikimedia-kruger-tilapia-2015-rights-review.json",
     "../content/media/wikimedia-nairobi-crocodile-2025-rights-review.json",
     "../content/media/wikimedia-wildebeest-ambush-2016-rights-review.json"
@@ -112,6 +121,15 @@ test("NOAA and stock-library source records remain excluded from current product
     const record = readJson(path);
     assert.equal(record.currentProductionDisposition.productionEligible, false, path);
     assert.equal(record.status, "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY", path);
+  }
+  for (const path of [
+    "../content/media/pexels-crocodile-30026544-rights-review.json",
+    "../content/media/pexels-lion-19773061-rights-review.json"
+  ]) {
+    const record = readJson(path);
+    assert.equal(record.currentProductionDisposition.productionEligible, false, path);
+    assert.equal(record.currentProductionDisposition.reviewEligible, true, path);
+    assert.equal(record.currentProductionDisposition.releaseEligible, false, path);
   }
   const thumbnailScript = readText("../scripts/create-noaa-lobster-thumbnail-review.py");
   assert.ok(thumbnailScript.includes("BLOCKED: NOAA B-roll is stock/archive footage"));
@@ -123,13 +141,16 @@ test("Production queues and Short candidates reflect current media and narration
   const queue = readJson("../content/queue.json");
   const weekly = readJson("../config/weekly-content-plan.json");
   const short004 = readJson("../content/short-004-california-spiny-lobster-metadata.json");
-  assert.equal(nextShort.productionPolicy.originalCreatorCapturedMediaRequired, true);
-  assert.equal(nextShort.productionPolicy.stockMediaAllowed, false);
+  assert.equal(nextShort.productionPolicy.originalCreatorCapturedMediaRequired, false);
+  assert.equal(nextShort.productionPolicy.stockMediaAllowed, true);
   assert.equal(nextShort.productionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
   assert.equal(nextShort.productionPolicy.narrationRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION");
-  assert.equal(longQueue.productionPolicy.originalCreatorCapturedMediaRequired, true);
-  assert.equal(queue.productionPolicy.originalCreatorCapturedMediaRequired, true);
-  assert.equal(weekly.productionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(longQueue.productionPolicy.originalCreatorCapturedMediaRequired, false);
+  assert.equal(longQueue.productionPolicy.stockMediaAllowed, true);
+  assert.equal(queue.productionPolicy.originalCreatorCapturedMediaRequired, false);
+  assert.equal(queue.productionPolicy.stockMediaAllowed, true);
+  assert.equal(weekly.productionPolicy.originalCreatorCapturedMediaRequired, false);
+  assert.equal(weekly.productionPolicy.stockMediaAllowed, true);
   assert.equal(short004.currentProductionDisposition.productionEligible, false);
   assert.equal(short004.scheduleAllowed, false);
   assert.equal(short004.uploadAllowed, false);
