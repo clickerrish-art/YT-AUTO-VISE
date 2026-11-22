@@ -1,3 +1,91 @@
+## Current exact-head checkpoint — 23 November 2026
+
+This checkpoint supersedes the older exact-head summaries below. Historical entries remain for audit, but must not override the statuses in this section.
+
+- **Exact tested source/test SHA:** `940fcdd776669c44bdd73619374e567c66655fbd`.
+- **Current branch tip at this register refresh:** `8b44196dfb36bfce1fafe2ebfd0be6c52c81849c` (three later documentation/evidence-only commits; application/test source tree remains the tested SHA above).
+- **Main:** `3795519ccbf58fd02d74458624b58dd2e44a88c0`; unchanged. Merge base remains main.
+- **PR #1:** open, draft, unmerged; no merge, close, ready-for-review, reset, rebase or force-push performed.
+- **Branch inventory:** 5,642 commits ahead / 0 behind main; 548 changed paths; zero deletions; clean inventory. The exact inventory artifact was produced on source/test SHA `940fcdd...` (5,639 ahead) before three documentation-only commits. The 17 critical modules are identified; full semantic review of all 548 paths is not complete.
+- **Branch protection:** not independently verified; the GitHub integration returned HTTP 403. Owner/admin verification remains required.
+
+### Exact-source verification
+
+The exact source/test SHA `940fcdd...` passed:
+
+| Verification | Result | Run |
+|---|---:|---:|
+| Node.js | 1,130 passed / 0 failed / 0 skipped across 191 files | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471) |
+| Python | 108 passed / 0 failed | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471) |
+| npm audit | 0 known vulnerabilities on candidate | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471) |
+| Chromium dashboard E2E | 41/41 passed | [Browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543403) |
+| Content quality | PASS | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543500) |
+| Queue readiness | PASS; production dispatch remains gated | [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543439) |
+| Metadata validation | PASS with production HOLD | [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543539) |
+| Isolated main/candidate baseline | PASS; main has 4 moderate npm findings, candidate has 0 | [Baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543427) |
+| Deployment recovery / runner bridge / durable-state checks | PASS in isolated or staging validation | [Recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543553) · [Runner bridge](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543492) · [Durable state](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543460) |
+
+These are engineering and local/staging results, not evidence of live publication, production deployment or owner approval.
+
+### Acceptance gates — current status
+
+| Gate | Current status | Remaining boundary |
+|---|---|---|
+| API-001 | **BLOCKED** | 50 routes: 41 PASS, 2 NOT_TESTED, 7 BLOCKED; 50/50 auth-negative checks pass. Live provider acceptance is not tested. |
+| DASH-001 | **NOT_TESTED** | 121 controls and 17 forms inventoried; 41/41 browser journeys pass. Complete per-control authorization, persistence/restart, concurrency, actionable-error and accessibility acceptance is incomplete. |
+| SCHED-001 | **NOT_TESTED** | Local policy tests pass; complete remote publication history, actual publication timestamps and fresh manual/local/third-party upload-attempt attestation are missing. |
+| SCHED-003 | **PASS** | Owner-approved rolling `long_form → long_form → short` cycle, no weekly target, minimum 72 elapsed hours, Africa/Johannesburg, no same-local-day publication. |
+| SCHED-WORKER-DISPATCH-001 | **NOT_TESTED live** | Local 409 cooldown persistence, restart and fail-stop tests pass; no live production worker dispatch is authorized or verified. |
+| STATE-001 | **PASS — staging only** | Durable-state and recovery checks pass; production state storage is not established. |
+| DEPLOY-001 | **NOT_TESTED** | No SonicVhibez production Worker/D1; R2 API 403/code 10042; no Durable Object namespace; OIDC trust is pinned to an old branch. |
+| GIT-002 | **NOT_TESTED** | Full 548-path semantic review incomplete; branch protection unverified. |
+| Production readiness | **HOLD** | 22 fail-closed blockers remain. Publishing is disabled. |
+
+### The 22 live production-readiness blockers
+
+The latest exact-head readiness run is [45083543382](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543382). Its report has 22 blockers and an intentional HOLD exit code. The report is not a test-suite failure; it correctly prevents an unsafe release.
+
+1. **RDY-80A6BF70F7FE — Queue identity:** the owner-approved queue identity file is missing; both operational long-form items need exact mappings and cycle-position confirmation.
+2. **RDY-10D9D60C22A5 — Short footage policy:** the Short manifest cannot use Pexels/Pixabay stock as a substitute for original creator-captured footage.
+3. **RDY-55A2491343AE — Short narration rights:** Speechma Andrew has not been manually auditioned; no production audio or approval exists.
+4. **RDY-93F84DBDCB44 — Short footage file:** `media/next-short-footage.mp4` is missing.
+5. **RDY-7EC64DE8E92E — Short narration file:** `media/next-short-narration.mp3` is missing.
+6. **RDY-33CDEB9448E4 — Short rights:** asset-level rights confirmation is incomplete.
+7. **RDY-953B00FE1CFC — Short third-party rights:** people, property, trademarks, music and other third-party rights are not reviewed.
+8. **RDY-E76C6F6896E0 — Short compliance:** human content/compliance review is incomplete.
+9. **RDY-CF39E0DCDDCE — Long-form footage policy:** original creator-captured wildlife footage is required; stock candidates remain review-only.
+10. **RDY-BA4688DC4110 — Long-form narration rights:** no commercially cleared production narration exists.
+11. **RDY-D5E74BFC896B — Long-form footage file:** the rights-cleared footage path is missing.
+12. **RDY-6706D03BD203 — Long-form narration file:** the production narration WAV is missing.
+13. **RDY-15BDEB8B90E0 — Long-form captions:** the final SRT captions are missing.
+14. **RDY-EF19160F89FB — Long-form rights:** asset-level rights confirmation is incomplete.
+15. **RDY-B7FD1B926EE7 — Long-form third-party rights:** people, property, trademarks, music and other third-party rights are not reviewed.
+16. **RDY-9F64A4A468D6 — Long-form compliance:** human content/compliance review is incomplete.
+17. **RDY-59F6FCE1F9B0 — Metadata review:** metadata has not been human-reviewed and marked READY_FOR_PRIVATE_UPLOAD.
+18. **RDY-4E9BD4C5E14F — Metadata rights:** rights confirmation is incomplete.
+19. **RDY-36AA230A31D7 — Metadata compliance:** human compliance review is incomplete.
+20. **RDY-0E98CB4E03DE — Exact-hash approval:** final video, thumbnail, captions and metadata lack an exact-hash-bound human approval; UPLOAD_APPROVAL_PATH is not configured.
+21. **RDY-3DA0707998B8 — Final render:** `media/next-short.mp4` is missing.
+22. **RDY-D849996022ED — Upload history:** local, workflow and owner-attested upload-attempt reconciliation is stale/incomplete; do not retry an uncertain upload.
+
+### Required owner inputs and production work
+
+1. **Original footage:** re-upload the original creator-captured wildlife video(s), including the raw source file, creator/source provenance and permission evidence. I searched the accessible Library and did not find the original production MP4. Do not substitute stock or AI wildlife imagery.
+2. **Queue authority:** approve the exact mapping for `long-form-plan-wildlife-video` and `long-form-faceless-wildlife-workflow` to the detailed long-form queue items; explicitly confirm which item is publication-cycle position 1. The current template is hash-bound and pending, not approved.
+3. **Narration:** manually audition Speechma Andrew on its free browser site, download the actual MP3, preserve it, verify it, listen in full and approve/reject that exact hash. Do not automate the free site or use a paid API. Existing HeyGen Roderic Free audio is internal-only and not commercially cleared.
+4. **Editorial and rights review:** complete factual/zoological review, asset-level creator and third-party rights checks, captions, thumbnail and metadata review. Any CSG/external review request remains unsent until owner authorization.
+5. **YouTube history:** provide a fresh owner attestation covering manual, local and third-party upload attempts after 18 November 2026; confirm the intended SonicVhibez channel identity because the remote title and handle differ.
+6. **Metricool/Meta:** the accessible Nature Frontiers SA brand 8094526 is still mapped to SonicVhibez YouTube; read-only search found zero future scheduled posts from 23 November 2026 through 19 February 2027. Legacy brand 7545638 returns 403. Its reported 20 drafts/eight autoPublish records remain unverified. Owner/admin must restore access and correct the mapping; no mutation or publishing was performed.
+7. **Cloudflare:** owner/admin must provision or authorize the production Worker/D1/R2/Durable Object resources, correct R2 access and OIDC branch trust, and enable account-wide MFA. Staging recovery tests do not authorize production writes.
+8. **GitHub:** owner/admin must independently verify branch protection and required checks; complete the full semantic review before any merge decision.
+
+After genuine footage and narration exist, the production sequence is: technical probe/full decode and hashes → factual/editorial and rights review → Short 50–60 seconds vertical and long-form 6–10 minutes 16:9 → synchronized captions and thumbnail → exact-hash human approval → fresh YouTube history reconciliation → one-shot private upload authorization bound to the exact job/assets/metadata/channel → remote read-back. No public or unattended publishing is enabled.
+
+**Release decision: HOLD.** No live Meta draft/publish, YouTube upload, public publication or production deployment was performed. The revoked 22 November stock-media override is not owner approval; the current rule is original creator-captured wildlife media only.
+
+
+---
+
 # Execution addendum — 22 November 2026
 
 ## Superseding exact-head engineering checkpoint — 22 November 2026
