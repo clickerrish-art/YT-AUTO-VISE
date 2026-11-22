@@ -60,6 +60,17 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   let createCalls = 0;
   let createBody = "";
   let readBackCalls = 0;
+  let feedCalls = 0;
+  let mockCaption = caption;
+  let holdNextCreateResponse = false;
+  let holdFeedResponse = false;
+  let heldCreateResolve;
+  const heldCreate = new Promise(resolve => { heldCreateResolve = resolve; });
+  let feedEnteredResolve;
+  const feedEntered = new Promise(resolve => { feedEnteredResolve = resolve; });
+  let feedGateResolve;
+  const feedGate = new Promise(resolve => { feedGateResolve = resolve; });
+  const remoteDrafts = new Map();
   const graph = createServer((req, res) => {
     const url = new URL(req.url, "http://127.0.0.1");
     const apiPath = url.pathname.split("/").slice(2).join("/");
@@ -81,12 +92,30 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
       if (req.method === "POST" && apiPath === pageId + "/photos") {
         createCalls += 1;
         createBody = Buffer.concat(chunks).toString("utf8");
+        const createdRemoteId = createCalls === 1 ? remotePostId : pageId + "_987654322";
+        remoteDrafts.set(createdRemoteId, {
+          id: createdRemoteId, from: { id: pageId }, message: mockCaption, is_published: false,
+          permalink_url: "https://www.facebook.com/" + createdRemoteId, created_time: new Date().toISOString()
+        });
+        if (holdNextCreateResponse) {
+          holdNextCreateResponse = false;
+          heldCreateResolve(createdRemoteId);
+          return;
+        }
         await new Promise(resolve => setTimeout(resolve, 120));
-        return send(200, { id: "test-photo-001", post_id: remotePostId });
+        return send(200, { id: "test-photo-" + createCalls, post_id: createdRemoteId });
       }
-      if (req.method === "GET" && apiPath === remotePostId) {
+      if (req.method === "GET" && apiPath === pageId + "/feed") {
+        feedCalls += 1;
+        if (holdFeedResponse) {
+          feedEnteredResolve();
+          await feedGate;
+        }
+        return send(200, { data: [...remoteDrafts.values()] });
+      }
+      if (req.method === "GET" && remoteDrafts.has(apiPath)) {
         readBackCalls += 1;
-        return send(200, { id: remotePostId, from: { id: pageId }, message: caption, is_published: false, permalink_url: "https://www.facebook.com/" + remotePostId, created_time: "2026-11-22T12:00:00+0000" });
+        return send(200, remoteDrafts.get(apiPath));
       }
       return send(404, { error: { message: "Unexpected mocked Graph API route", path: apiPath, method: req.method } });
     });
@@ -270,4 +299,101 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   assert.equal(reconciled.status, 200, JSON.stringify(reconciled.body));
   assert.equal(createCalls, 1, "reconciliation must remain read-only and never create a second object");
   assert.equal(readBackCalls, 1, "reusing a verified attempt after restart must not repeat provider read-back");
+
+  // Simulate a process crash after Meta accepted the create request but before
+  // the HTTP response/remote ID could be persisted. The durable attempt remains
+  // SUBMITTING and must be reconciled by exact caption + time-window read-back.
+  const secondDraftId = "meta-provider-interrupted-" + path.basename(stateDir).replace(/[^a-z0-9-]/gi, "");
+  const secondCaption = caption + " Interrupted SUBMITTING recovery fixture.";
+  mockCaption = secondCaption;
+  const secondDraftResponse = await request(base, "/api/facebook/drafts", "POST", {
+    id: secondDraftId,
+    topic: "Interrupted provider-draft recovery test",
+    caption: secondCaption,
+    pillar: "wildlife_behaviour",
+    scheduledDate: new Date(Date.now() + 6 * 86_400_000).toISOString().slice(0, 10),
+    scheduledTime: "08:00",
+    destinationPageId: pageId,
+    claims: [],
+    media
+  }, operatorToken);
+  const secondDraft = await readJson(secondDraftResponse);
+  assert.ok([200, 201].includes(secondDraft.status), JSON.stringify(secondDraft.body));
+  assert.equal(secondDraft.body.evaluation?.ok, true, JSON.stringify(secondDraft.body.evaluation));
+  const secondApproval = await request(base, "/api/facebook/drafts/approve", "POST", {
+    draftId: secondDraftId,
+    decision: "APPROVE",
+    reason: "TEST ONLY: interrupted provider-draft recovery fixture"
+  }, operatorToken);
+  assert.equal(secondApproval.status, 200, await secondApproval.text());
+
+  holdNextCreateResponse = true;
+  const interruptedCreate = request(base, "/api/facebook/drafts/provider", "POST", {
+    draftId: secondDraftId, confirmProviderDraft: true
+  }, operatorToken).then(readJson).catch(error => ({ status: 0, error: String(error) }));
+  const interruptedRemotePostId = await Promise.race([
+    heldCreate,
+    new Promise((_, reject) => setTimeout(() => reject(new Error("mock Meta create was not reached")), 5000))
+  ]);
+  assert.equal(interruptedRemotePostId, pageId + "_987654322");
+  const interruptedChild = child;
+  await new Promise(resolve => {
+    interruptedChild.once("exit", resolve);
+    interruptedChild.kill("SIGKILL");
+  });
+  await interruptedCreate;
+
+  child = startChild();
+  await waitReady();
+  const interruptedStateResponse = await request(base, "/api/facebook/state", "GET", undefined, operatorToken);
+  assert.equal(interruptedStateResponse.status, 200);
+  const interruptedState = await interruptedStateResponse.json();
+  const interruptedAttempt = interruptedState.providerDraftAttempts?.find(item => item.draftId === secondDraftId);
+  assert.ok(interruptedAttempt, "the interrupted provider attempt must remain durable after process restart");
+  assert.equal(interruptedAttempt.status, "SUBMITTING", "startup must preserve uncertain provider state instead of retrying or inventing a result");
+  assert.equal(interruptedAttempt.remotePostId, null);
+  assert.equal(interruptedState.publishingEnabled, false);
+
+  // Hold the first read-only feed scan open, then race a second reconciliation.
+  // The second request must be fenced before it performs another provider read.
+  holdFeedResponse = true;
+  const firstRecovery = request(base, "/api/facebook/drafts/provider/reconcile", "POST", {
+    attemptId: interruptedAttempt.id
+  }, operatorToken).then(readJson);
+  await Promise.race([
+    feedEntered,
+    new Promise((_, reject) => setTimeout(() => reject(new Error("reconciliation did not start its read-only feed scan")), 5000))
+  ]);
+  const concurrentRecovery = await readJson(await request(base, "/api/facebook/drafts/provider/reconcile", "POST", {
+    attemptId: interruptedAttempt.id
+  }, operatorToken));
+  assert.equal(concurrentRecovery.status, 409);
+  assert.match(concurrentRecovery.body.error, /already in progress/i);
+  assert.equal(concurrentRecovery.body.retryAllowed, false);
+  assert.equal(feedCalls, 1, "concurrent reconciliation must not issue a second provider feed scan");
+
+  feedGateResolve();
+  holdFeedResponse = false;
+  const recovered = await firstRecovery;
+  assert.equal(recovered.status, 200, JSON.stringify(recovered.body));
+  assert.equal(recovered.body.attempt.status, "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED");
+  assert.equal(recovered.body.attempt.remotePostId, interruptedRemotePostId);
+  assert.equal(recovered.body.publishingEnabled, false);
+  assert.equal(createCalls, 2, "interrupted reconciliation must never repeat the provider create mutation");
+  assert.equal(readBackCalls, 2, "the interrupted attempt must be read back exactly once after feed matching");
+  assert.equal(feedCalls, 1, "only one feed scan is allowed for the interrupted attempt");
+
+  const finalStateResponse = await request(base, "/api/facebook/state", "GET", undefined, operatorToken);
+  assert.equal(finalStateResponse.status, 200);
+  const finalState = await finalStateResponse.json();
+  const finalAttempt = finalState.providerDraftAttempts?.find(item => item.id === interruptedAttempt.id);
+  assert.equal(finalAttempt?.status, "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED");
+  assert.equal(finalAttempt?.remotePostId, interruptedRemotePostId);
+  assert.equal(finalState.publishingEnabled, false);
+  const finalAuditResponse = await request(base, "/api/state", "GET", undefined, operatorToken);
+  assert.equal(finalAuditResponse.status, 200);
+  const finalAudit = await finalAuditResponse.json();
+  assert.equal(finalAudit.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_ATTEMPT_PREPARED").length, 2);
+  assert.equal(finalAudit.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_VERIFIED_UNPUBLISHED").length, 1);
+  assert.equal(finalAudit.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_RECONCILED_UNPUBLISHED").length, 1);
 });
