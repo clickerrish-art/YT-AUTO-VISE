@@ -20,7 +20,7 @@
 
 A strong wildlife video is more than a sequence of beautiful animal clips. In this practical guide, learn how to build a beginning, middle and ending from footage you actually have, use natural sound, write narration that adds context, and avoid misleading edits.
 
-This is a creator-education video. Always verify animal-behaviour claims with reliable sources and respect wildlife, local rules and the rights attached to every clip. Production media must be original creator-captured wildlife footage with verified provenance and commercial rights; do not use stock/archive footage or AI-generated wildlife visuals. Until eligible original footage is supplied, use clearly labelled diagrams or blank edit placeholders only.
+This is a creator-education video. Always verify animal-behaviour claims with reliable sources and respect wildlife, local rules and the rights attached to every clip. Production media may be original creator-captured wildlife footage or qualifying Pexels/Pixabay licensed stock, with exact source-page provenance, applicable licence evidence, original file hash, technical verification, third-party-rights review and human approval. Do not use other stock sources or AI-generated wildlife visuals. Until qualifying footage is acquired and reviewed, use clearly labelled diagrams or blank edit placeholders only.
 
 ADVERTISEMENT.
 
@@ -51,7 +51,7 @@ Open on three distinct, rights-cleared shots: a wide habitat view, an animal beh
 Before you edit, watch every clip and write down what is genuinely visible. Is the animal searching, resting, moving through its habitat, feeding, grooming, or responding to something in the environment? Do not begin with a sensational headline and force the footage to fit it. Start with a question the material can answer. For example: “How does this animal use its surroundings?” or “What changes over the course of this sequence?” If the clips do not show the answer, choose a narrower question.
 
 **Visuals:**  
-Show a simple clip log with columns for filename, visible action, location if known, usable duration, audio, and source/licence. Use only original creator-captured footage after provenance and commercial rights are verified. Until then, use clearly labelled blank or diagram placeholders; do not substitute stock/archive or AI-generated wildlife visuals.
+Show a simple clip log with columns for filename, visible action, location if known, usable duration, audio, and source/licence. Use original creator-captured footage or qualifying licensed Pexels/Pixabay footage after source provenance and rights are verified. If rights are incomplete, use clearly labelled blank or diagram placeholders; do not substitute other stock or AI-generated wildlife visuals.
 
 **On-screen text:** “Let the footage set the limits.”
 
