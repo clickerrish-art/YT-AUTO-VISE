@@ -201,9 +201,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/campaign-management-api.integration.test.mjs"
       ]
@@ -235,9 +235,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs"
       ]
@@ -269,9 +269,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
         "test/dashboard-api-request-boundaries.test.mjs"
@@ -304,9 +304,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -335,9 +335,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Exact-SHA fail-closed negative-path tests reran in automation run 45024548346. External provider/owner prerequisite remains unresolved; no provider success or publication is claimed.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ]
@@ -369,9 +369,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ]
@@ -455,9 +455,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ]
@@ -489,9 +489,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -514,9 +514,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Exact-SHA fail-closed negative-path tests reran in automation run 45024548346. External provider/owner prerequisite remains unresolved; no provider success or publication is claimed.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
       ]
@@ -548,9 +548,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
@@ -573,9 +573,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Exact-SHA fail-closed negative-path tests reran in automation run 45024548346. External provider/owner prerequisite remains unresolved; no provider success or publication is claimed.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
       ]
@@ -604,9 +604,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Exact-SHA fail-closed negative-path tests reran in automation run 45024548346. External provider/owner prerequisite remains unresolved; no provider success or publication is claimed.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
       "currentHeadEvidenceTestFiles": [
         "test/instagram-approval-route-fail-closed.integration.test.mjs"
       ]
@@ -635,9 +635,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/instagram-approval-service.test.mjs"
@@ -670,9 +670,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ]
@@ -705,9 +705,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ]
@@ -774,9 +774,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -810,9 +810,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-completion.integration.test.mjs"
       ]
@@ -844,9 +844,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -878,9 +878,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ]
@@ -912,9 +912,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -955,9 +955,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -989,9 +989,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -1023,9 +1023,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
@@ -1057,9 +1057,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "browser-tests/dashboard.spec.mjs"
@@ -1092,9 +1092,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-parent-relationship.integration.test.mjs"
       ]
@@ -1160,9 +1160,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ]
@@ -1194,9 +1194,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ]
@@ -1228,9 +1228,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-queue-diagnostics.integration.test.mjs"
       ]
@@ -1262,9 +1262,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-render-recovery-reconcile.integration.test.mjs"
       ]
@@ -1296,9 +1296,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-retry.integration.test.mjs"
       ]
@@ -1330,9 +1330,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
@@ -1365,9 +1365,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
@@ -1399,9 +1399,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs"
       ]
@@ -1434,9 +1434,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-rights-verification.integration.test.mjs"
       ]
@@ -1482,9 +1482,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-cancellation.integration.test.mjs"
       ]
@@ -1518,9 +1518,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-validation-idempotency.integration.test.mjs"
       ]
@@ -1552,9 +1552,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
         "test/dashboard-api-job-cancellation.integration.test.mjs"
@@ -1584,9 +1584,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/nature-frontiers-media-register-api.test.mjs"
       ]
@@ -1615,9 +1615,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -1647,9 +1647,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -1679,9 +1679,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ]
@@ -1713,9 +1713,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs",
         "test/state-recovery-dashboard.integration.test.mjs"
@@ -1749,9 +1749,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-task-runner.test.mjs"
       ]
@@ -1783,9 +1783,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs"
       ]
@@ -1814,9 +1814,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Exact-SHA fail-closed negative-path tests reran in automation run 45024548346. External provider/owner prerequisite remains unresolved; no provider success or publication is claimed.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
       "currentHeadEvidenceTestFiles": [
         "test/upload-reconcile-fail-closed.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
@@ -1849,9 +1849,9 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 in automation run 45058706978; endpoint-specific integration test file(s) listed for this route were included in the complete 191-file, 1,129-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/worker-quarantine-release.test.mjs"
       ]
