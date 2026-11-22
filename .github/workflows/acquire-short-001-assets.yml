@@ -7,6 +7,8 @@ on:
       - ".github/workflows/acquire-short-001-assets.yml"
       - "scripts/acquire-short-001-assets.mjs"
       - "scripts/acquire-crocodile-footage-review.mjs"
+      - "scripts/acquire-previously-shared-pexels-candidates.mjs"
+      - "content/media/pexels-user-shared-candidates-2026-11-22.json"
       - "content/approved-pexels-footage.json"
       - "content/owner-media-policy-override-2026-11-22.json"
       - "content/media/pexels-license-evidence-2026-11-22.md"
@@ -78,8 +80,10 @@ jobs:
       - name: Check acquisition script syntax
         run: node --check scripts/acquire-short-001-assets.mjs
       - name: Download, probe, hash and fully decode selected footage
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-short-001]')
         run: node scripts/acquire-short-001-assets.mjs
       - name: Upload source media and evidence for human review
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-short-001]')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: sonicvhibez-short-001-pexels-review-assets
@@ -89,11 +93,27 @@ jobs:
       - name: Check crocodile acquisition script syntax
         run: node --check scripts/acquire-crocodile-footage-review.mjs
       - name: Acquire, hash, probe and fully decode Pexels crocodile candidates
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-crocodile]')
         run: node scripts/acquire-crocodile-footage-review.mjs
       - name: Upload crocodile source media and evidence for human review
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-crocodile]')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: sonicvhibez-long-form-001-pexels-crocodile-review
           path: artifacts/long-form-001/pexels-candidates/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Check previously shared Pexels acquisition script syntax
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')
+        run: node --check scripts/acquire-previously-shared-pexels-candidates.mjs
+      - name: Acquire four previously shared Pexels sources for review
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')
+        run: node scripts/acquire-previously-shared-pexels-candidates.mjs
+      - name: Upload previously shared Pexels originals and evidence
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-previously-shared-pexels-review-assets
+          path: artifacts/previously-shared-pexels-candidates/
           if-no-files-found: error
           retention-days: 14
