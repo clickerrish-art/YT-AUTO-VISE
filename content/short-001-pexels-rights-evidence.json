@@ -3,7 +3,7 @@
   "project": "SonicVhibez",
   "contentId": "short-001-wildlife-video-storytelling",
   "createdAt": "2026-11-19",
-  "status": "PLATFORM_LICENSE_DOCUMENTED_REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
+  "status": "PLATFORM_LICENSE_DOCUMENTED_RESEARCH_ONLY_EXCLUDED_FROM_PRODUCTION",
   "sourceLicense": {
     "name": "Pexels License",
     "url": "https://www.pexels.com/license/",
@@ -89,19 +89,15 @@
     "The new 55.033-second visual review remains silent and review-only; final narration, synchronized captions, full rights review and owner approval are still pending."
   ],
   "currentProductionPolicy": {
-    "status": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_REVIEW_GATES",
-    "originalCreatorCapturedMediaRequired": false,
-    "stockMediaAllowed": true,
-    "pexelsAllowed": true,
-    "pixabayAllowed": true,
+    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY_STOCK_EXCLUDED",
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "pexelsAllowed": false,
+    "pixabayAllowed": false,
     "aiGeneratedWildlifeVisualsAllowed": false,
-    "reviewRenderEligible": true,
-    "releaseEligible": false,
-    "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
-    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
-    "note": "Owner permits qualifying Pexels/Pixabay stock for review and production subject to asset-level rights, provenance, original-file, hash, technical and human-review gates. This record does not grant final rights clearance or publication approval.",
-    "stockVideoFootageAllowed": true,
-    "stockPhotographsAllowed": false
+    "stockVideoFootageAllowed": false,
+    "stockPhotographsAllowed": false,
+    "note": "Pexels/Pixabay platform-license evidence is retained for historical provenance research only. It does not authorize stock footage as a production substitute."
   },
   "acquisitionVerification": {
     "workflowRunId": 44975292889,
@@ -116,5 +112,6 @@
     "thirdPartyRightsReviewed": false,
     "humanReviewed": false,
     "releaseEligible": false
-  }
+  },
+  "notes": "Current owner production policy: original creator-captured wildlife media only. These Pexels files remain research/review history and are not production-approved."
 }
