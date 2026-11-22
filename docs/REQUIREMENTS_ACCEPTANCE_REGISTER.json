@@ -3251,15 +3251,22 @@
     },
     {
       "id": "YOUTUBE-OAUTH-001",
-      "status": "BLOCKED",
-      "detail": "The latest read-only YouTube OAuth refresh returned invalid_grant. The existing refresh token must be reauthorized securely for the SonicVhibez account; upload scope must be verified.",
-      "requiredResolution": "Owner reauthorizes offline access and youtube.upload scope, then updates only the GitHub Actions YOUTUBE_REFRESH_TOKEN secret. Never paste credentials into chat or source."
+      "status": "PASS",
+      "detail": "Reverified on 2026-11-22 by read-only workflow 45054962924: authenticated account matches the owner-supplied SonicVhibez channel; handle @sonicvhibez; one uploads-playlist page and one video fully verified; both youtube.readonly and youtube.upload scopes granted. OAuth refresh and channel identity now pass.",
+      "requiredResolution": "Owner reauthorizes offline access and youtube.upload scope, then updates only the GitHub Actions YOUTUBE_REFRESH_TOKEN secret. Never paste credentials into chat or source.",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45054962924"
+      ]
     },
     {
       "id": "YOUTUBE-HISTORY-001",
-      "status": "BLOCKED",
-      "detail": "Complete public/private/unlisted channel history and actual upload timestamps cannot be refreshed until OAuth is repaired. The last historical snapshot is insufficient to prove the rolling cadence.",
-      "requiredResolution": "After OAuth reauthorization, retrieve paginated channel/video history, reconcile remote IDs, privacy and publishedAt timestamps with local ledger, then verify no uncertain upload is retried."
+      "status": "PARTIAL",
+      "detail": "Fresh read-only OAuth inventory 45054962924 verified a complete uploads playlist containing one public video, zero private videos and zero unlisted videos; both required scopes passed. A public-only artifact was retained as GitHub artifact 14767106314. Format classification, exact publishedAt/owner timestamp attestation, mapping to the local production ledger and cadence acceptance remain outstanding. The read-only upload-ledger check 45054962928 found no prior private-upload workflow run (PREVIOUS_LEDGER_RUN_ID=NONE), so no previous private-upload attempt needs reconciliation; this does not attest manual/local/third-party uploads.",
+      "requiredResolution": "After OAuth reauthorization, retrieve paginated channel/video history, reconcile remote IDs, privacy and publishedAt timestamps with local ledger, then verify no uncertain upload is retried.",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45054962924",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45054962928"
+      ]
     },
     {
       "id": "PRODUCTION-QUALITY-001",
@@ -3276,8 +3283,11 @@
     {
       "id": "NATURE-FRONTIERS-HISTORY-001",
       "status": "BLOCKED",
-      "detail": "Read-only Metricool reconciliation on 19 Nov found current Nature Frontiers brand 8094526 (created 14 Nov) with 3 Facebook feed posts, 2 Facebook Reels, 2 Facebook Stories, zero Instagram posts/reels/stories, and zero future scheduled posts through 31 Dec. The current brand incorrectly links the SonicVhibez YouTube channel UCSlkuPfHH78oGC1o418HV4w. Legacy brand 7545638, which the owner reported had 20 scheduled draft posts and eight draft=false/autoPublish=true records, returns 403 access denied; no Metricool support reply was found to the owner's 13 Nov request. Historical records remain unreconciled.",
-      "requiredResolution": "Owner/Metricool support must restore or export legacy brand 7545638 and its 20 scheduled drafts/eight autoPublish records without deletion; verify whether brand 8094526 replaced it without history loss; remove the SonicVhibez YouTube mapping from Nature Frontiers; reconcile by post ID and timestamp. Keep publishing disabled, dryRun=true and emergencyStop=true."
+      "detail": "Read-only Metricool inspection on 22 Nov confirms the only accessible brand is Nature Frontiers SA, brand 8094526, timezone Africa/Johannesburg. It still links the SonicVhibez YouTube channel UCSlkuPfHH78oGC1o418HV4w, which is an incorrect cross-brand association and must be removed by the owner/provider without changing publishing settings. The current brand has zero scheduled posts from 22 Nov 2026 through 1 Jan 2027. Legacy brand 7545638 remains inaccessible (403 access denied), so the previously owner-reported 20 drafts and eight draft=false/autoPublish=true records remain unreconciled.",
+      "requiredResolution": "Owner/Metricool support must restore or export legacy brand 7545638 and its 20 scheduled drafts/eight autoPublish records without deletion; verify whether brand 8094526 replaced it without history loss; remove the SonicVhibez YouTube mapping from Nature Frontiers; reconcile by post ID and timestamp. Keep publishing disabled, dryRun=true and emergencyStop=true.",
+      "evidence": [
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45054962924"
+      ]
     },
     {
       "id": "SONICVHIBEZ-PRODUCTION-DEPLOY-001",
