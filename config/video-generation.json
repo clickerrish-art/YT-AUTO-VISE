@@ -51,8 +51,8 @@
     "seedMustBeRecorded": true,
     "enabled": false,
     "productionEligible": false,
-    "visualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
-    "note": "Disabled: do not run this model or import its generated wildlife scenes into production under the current owner media policy."
+    "visualSourcePolicy": "AI_GENERATED_WILDLIFE_VISUALS_PROHIBITED",
+    "note": "Disabled: the owner permits qualifying Pexels/Pixabay licensed footage but has not authorized AI-generated wildlife scenes. Do not run this model or import generated wildlife visuals into SonicVhibez production."
   },
   "licensing": {
     "wanGpLicense": "WanGP Community License 2.0",
@@ -117,7 +117,11 @@
     "youtubeChannel": "SonicVhibez",
     "neverTargetNatureFrontiers": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
-    "originalCreatorCapturedMediaRequired": true
+    "originalCreatorCapturedMediaRequired": false,
+    "stockMediaAllowed": true,
+    "pexelsAllowed": true,
+    "pixabayAllowed": true,
+    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json"
   },
   "requiredGenerationEvidence": [
     "wanGpCommit",
