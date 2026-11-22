@@ -36,10 +36,10 @@ test("creator-education long-form script places the exact direct-sales disclosur
     assert.ok(disclosureIndex >= 0 && disclosureIndex < productIndex && productIndex < urlIndex);
   }
   assert.equal((script.match(/ADVERTISEMENT\n\nThis product is sold through my own Selar business/g) ?? []).length, 2);
-  assert.ok(script.includes("AI-generated wildlife visuals are prohibited"));
+  assert.ok(script.includes("AI-generated wildlife visuals are not permitted substitutes"));
   assert.ok(script.includes("Other stock/archive sources and AI-generated wildlife visuals are not permitted substitutes"));
   assert.ok(script.includes("internal-evaluation-only"));
-  assert.ok(script.includes("Speechma Andrew (English US male) is selected for a manual zero-cost browser audition only"));
+  assert.ok(script.includes("Speechma Andrew (English US male) is selected for a manual, zero-cost browser audition only"));
   assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
 });
 
