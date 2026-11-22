@@ -184,12 +184,33 @@ if (!exists(mediaInventoryPath)) {
         asset?.excludedFromProduction !== true && asset?.status !== "EXCLUDED_NOT_USED"
       );
       const unresolvedAssets = selectedAssets.filter(asset => {
+        const sourceMethod = asset?.sourceMethod;
         const captureEvidence = typeof asset?.captureEvidencePath === "string" &&
           asset.captureEvidencePath.trim() && !path.isAbsolute(asset.captureEvidencePath) &&
           exists(asset.captureEvidencePath);
-        const sourceVerified = asset?.creatorCapturedOriginal === true &&
-          typeof asset?.creatorName === "string" && asset.creatorName.trim().length > 0 &&
-          captureEvidence;
+        const licenseEvidence = typeof asset?.licenseEvidencePath === "string" &&
+          asset.licenseEvidencePath.trim() && !path.isAbsolute(asset.licenseEvidencePath) &&
+          exists(asset.licenseEvidencePath);
+        const sourcePage = typeof asset?.sourcePageUrl === "string" ? asset.sourcePageUrl : "";
+        let stockSourcePageVerified = false;
+        if (sourceMethod === "PEXELS_LICENSED_STOCK" || sourceMethod === "PIXABAY_LICENSED_STOCK") {
+          try {
+            const parsed = new URL(sourcePage);
+            const host = parsed.hostname.toLowerCase();
+            const allowedHost = sourceMethod === "PEXELS_LICENSED_STOCK"
+              ? (host === "pexels.com" || host.endsWith(".pexels.com"))
+              : (host === "pixabay.com" || host.endsWith(".pixabay.com"));
+            stockSourcePageVerified = parsed.protocol === "https:" && allowedHost;
+          } catch { stockSourcePageVerified = false; }
+        }
+        const originalSourceVerified = sourceMethod === "ORIGINAL_RECORDING" &&
+          asset?.creatorCapturedOriginal === true && captureEvidence;
+        const licensedStockSourceVerified = (sourceMethod === "PEXELS_LICENSED_STOCK" || sourceMethod === "PIXABAY_LICENSED_STOCK") &&
+          asset?.creatorCapturedOriginal === false && stockSourcePageVerified &&
+          asset?.platformLicenseReviewed === true && licenseEvidence &&
+          asset?.thirdPartyRightsReviewed === true;
+        const sourceVerified = (originalSourceVerified || licensedStockSourceVerified) &&
+          typeof asset?.creatorName === "string" && asset.creatorName.trim().length > 0;
         const localPath = typeof asset?.localMediaPath === "string" && asset.localMediaPath.trim() &&
           !path.isAbsolute(asset.localMediaPath) && exists(asset.localMediaPath);
         const hashVerified = localPath && typeof asset?.sha256 === "string" &&
@@ -204,27 +225,57 @@ if (!exists(mediaInventoryPath)) {
       });
       if (selectedAssets.length > 0 && (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0)) {
         const ids = unresolvedAssets.map(asset => asset?.canvaAssetId).filter(Boolean);
-        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported wildlife asset(s) are not verified as original creator-captured footage (${ids.join(", ") || "selected inventory not cleared"}); creator identity, capture evidence, original MP4, matching SHA-256, written rights evidence and human visual review are required before use.`);
+        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported wildlife asset(s) are not fully verified as original or licensed Pexels/Pixabay footage (${ids.join(", ") || "selected inventory not cleared"}); exact creator/source page, original MP4, matching SHA-256, applicable platform licence, third-party rights and human visual review are required before release.`);
       }
-      notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${excludedAssets.length} excluded from production (not rights-cleared); ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
+      notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${excludedAssets.length} excluded from production; ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
     }
   } catch {
     blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is not valid JSON.");
   }
 }
 
-function validateCreatorCapturedFootage(manifest, label) {
-  if (manifest.footageOrigin !== "creator_captured_original") {
-    blockers.push(`${label}: footageOrigin must be creator_captured_original; stock, library, AI-generated or otherwise unverified wildlife footage is not eligible.`);
-  }
+function validateWildlifeFootage(manifest, label) {
+  const origin = manifest.footageOrigin;
   if (typeof manifest.footageCreator !== "string" || !manifest.footageCreator.trim()) {
-    blockers.push(`${label}: footageCreator must identify the original camera operator/creator.`);
+    blockers.push(`${label}: footageCreator must identify the original camera operator or licensed stock contributor(s).`);
   }
-  const captureEvidencePath = manifest.captureEvidencePath;
-  if (typeof captureEvidencePath !== "string" || !captureEvidencePath.trim() ||
-      path.isAbsolute(captureEvidencePath) || !exists(captureEvidencePath)) {
-    blockers.push(`${label}: captureEvidencePath must reference an existing, relative original-capture provenance record.`);
+  if (origin === "creator_captured_original") {
+    const captureEvidencePath = manifest.captureEvidencePath;
+    if (typeof captureEvidencePath !== "string" || !captureEvidencePath.trim() ||
+        path.isAbsolute(captureEvidencePath) || !exists(captureEvidencePath)) {
+      blockers.push(`${label}: captureEvidencePath must reference an existing, relative original-capture provenance record.`);
+    }
+    return;
   }
+  if (origin === "licensed_pexels_stock" || origin === "licensed_pixabay_stock") {
+    const platform = origin === "licensed_pexels_stock" ? "Pexels" : "Pixabay";
+    const sources = Array.isArray(manifest.footageSourceUrls) ? manifest.footageSourceUrls :
+      (typeof manifest.footageSourceUrl === "string" ? [manifest.footageSourceUrl] : []);
+    const sourceUrlsValid = sources.length > 0 && sources.every(value => {
+      try {
+        const parsed = new URL(value);
+        const host = parsed.hostname.toLowerCase();
+        const allowedHost = platform === "Pexels"
+          ? (host === "pexels.com" || host.endsWith(".pexels.com"))
+          : (host === "pixabay.com" || host.endsWith(".pixabay.com"));
+        return parsed.protocol === "https:" && allowedHost;
+      } catch { return false; }
+    });
+    if (!sourceUrlsValid) blockers.push(`${label}: licensed ${platform} footage requires exact HTTPS source-page URLs from ${platform}.`);
+    const sourceManifest = manifest.footageSourceManifest;
+    if (typeof sourceManifest !== "string" || !sourceManifest.trim() ||
+        path.isAbsolute(sourceManifest) || !exists(sourceManifest)) {
+      blockers.push(`${label}: footageSourceManifest must reference an existing, relative asset-level source manifest.`);
+    }
+    if (manifest.platformLicenseReviewed !== true) {
+      blockers.push(`${label}: platformLicenseReviewed must be true only after checking the current ${platform} licence.`);
+    }
+    if (manifest.thirdPartyRightsReviewed !== true) {
+      blockers.push(`${label}: thirdPartyRightsReviewed must be true only after checking people, property, trademarks, music and other third-party rights.`);
+    }
+    return;
+  }
+  blockers.push(`${label}: footageOrigin must be creator_captured_original, licensed_pexels_stock or licensed_pixabay_stock; AI-generated and unverified wildlife footage are prohibited.`);
 }
 
 if (!exists(manifestPath)) {
@@ -240,7 +291,7 @@ if (!exists(manifestPath)) {
   } catch { blockers.push("content/render-manifest.json is not valid JSON."); }
   if (manifest) {
     if (manifest.channel !== "SonicVhibez") blockers.push("Render manifest target must be exactly SonicVhibez.");
-    validateCreatorCapturedFootage(manifest, "content/render-manifest.json");
+    validateWildlifeFootage(manifest, "content/render-manifest.json");
   validateNarrationRights(manifest, "content/render-manifest.json");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
       const assetPath = manifest[key];
@@ -273,7 +324,7 @@ if (!exists(longFormManifestPath)) {
   } catch { blockers.push("content/long-form-render-manifest.json is not valid JSON."); }
   if (longManifest) {
     if (longManifest.channel !== "SonicVhibez") blockers.push("Long-form render manifest target must be exactly SonicVhibez.");
-    validateCreatorCapturedFootage(longManifest, "content/long-form-render-manifest.json");
+    validateWildlifeFootage(longManifest, "content/long-form-render-manifest.json");
     validateNarrationRights(longManifest, "content/long-form-render-manifest.json");
     if (longManifest.targetAspectRatio !== "16:9") blockers.push("Long-form render manifest must specify targetAspectRatio 16:9.");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
