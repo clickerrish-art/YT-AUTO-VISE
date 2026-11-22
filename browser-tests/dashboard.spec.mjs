@@ -140,9 +140,12 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   expect(readinessBody.ready).toBe(false);
   expect(readinessBody.publishingEnabled).toBe(false);
   expect(readinessBody.blockers).toEqual(expect.arrayContaining([
-    expect.stringMatching(/footageOrigin must be creator_captured_original/),
-    expect.stringMatching(/footageCreator must identify the original camera operator/),
-    expect.stringMatching(/captureEvidencePath must reference an existing/)
+    expect.stringMatching(/thirdPartyRightsReviewed must be true only after checking people, property, trademarks, music and other third-party rights/),
+    expect.stringMatching(/narration rights are not cleared for public branded\/production use/),
+    expect.stringMatching(/Manifest asset footagePath is missing/)
+  ]));
+  expect(readinessBody.blockers).not.toEqual(expect.arrayContaining([
+    expect.stringMatching(/footageOrigin must be creator_captured_original/)
   ]));
 
   await page.setViewportSize({ width: 375, height: 812 });
