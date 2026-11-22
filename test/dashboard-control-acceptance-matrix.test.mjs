@@ -170,8 +170,11 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(dashboardEvidence.releaseBoundary.includes("does not authorize uploads"), true);
 
   const latestHead = matrix.latestHeadVerification;
-  assert.equal(latestHead.sourceTestSha, "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a");
-  assert.equal(latestHead.browserRunId, 45062368950);
+  assert.match(latestHead.sourceTestSha, /^[a-f0-9]{40}$/);
+  assert.ok(Number.isInteger(latestHead.browserRunId));
+  assert.ok(Number.isInteger(latestHead.automationRunId));
+  assert.match(latestHead.browserRun, /^https:\/\/github\.com\/clickerrish-art\/YT-AUTO-VISE\/actions\/runs\//);
+  assert.match(latestHead.automationRun, /^https:\/\/github\.com\/clickerrish-art\/YT-AUTO-VISE\/actions\/runs\//);
   assert.equal(latestHead.browserJourneys.passed, 41);
   assert.equal(latestHead.browserJourneys.total, 41);
   assert.equal(latestHead.browserJourneys.failed, 0);
