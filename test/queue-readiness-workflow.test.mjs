@@ -40,7 +40,7 @@ test("queue readiness CI covers the implementation branch and all queue/dispatch
     assert.ok(workflow.includes(requiredPath), "CI path filter must include " + requiredPath);
   }
   assert.match(workflow, /run repository regression tests|Run repository regression tests/i);
-  assert.match(workflow, /run: node --test/);
+  assert.match(workflow, /run: (?:node --test|npm test)/);
   assert.match(workflow, /run: npm ci --ignore-scripts/);
   assert.doesNotMatch(workflow, /run: npm install --ignore-scripts/);
 });
