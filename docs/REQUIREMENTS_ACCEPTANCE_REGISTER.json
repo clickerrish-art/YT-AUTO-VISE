@@ -2692,7 +2692,7 @@
       "DASH_CTRL_RIGHTS_USE_001": "PASS_EVIDENCE — per-asset rights attestation remains separate from overall approval.",
       "MEDIA_001": "BLOCKED — original creator-captured wildlife footage is required; Pexels/Pixabay stock and AI-generated wildlife visuals are excluded from production."
     },
-    "branchInventoryHead": "ece01066248e82c5627ebe1ae47ef35faf33c096"
+    "branchInventoryHead": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8"
   },
   "candidateSourceTestSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
   "latestSourceTestSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
