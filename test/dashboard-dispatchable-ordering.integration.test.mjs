@@ -6,6 +6,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { createTestDashboardProject } from "./helpers/queue-identity-fixture.mjs";
+import { FIXED_NOW, fixedClockEnv } from "./helpers/fixed-clock.mjs";
 
 async function reservePort() {
   const probe = createServer();
@@ -47,10 +48,10 @@ test("dispatchable jobs require valid explicit Johannesburg slots and hold inval
   const stateFile = path.join(stateDir, "dashboard-state.json");
   const today = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
-  }).format(new Date());
+  }).format(new Date(FIXED_NOW));
   const dueTime = minutesAgo => new Intl.DateTimeFormat("en-GB", {
     timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
-  }).format(new Date(Date.now() - minutesAgo * 60_000));
+  }).format(new Date(FIXED_NOW - minutesAgo * 60_000));
   const state = {
     version: 1,
     queueItems: [],
@@ -73,15 +74,14 @@ test("dispatchable jobs require valid explicit Johannesburg slots and hold inval
   const token = "dispatchable-test-token-" + "x".repeat(32);
   const child = spawn(process.execPath, [path.join(project.root, "scripts", "dashboard-server.mjs")], {
     cwd: project.root,
-    env: {
-      ...process.env,
+    env: fixedClockEnv({
       DASHBOARD_OPERATOR_TOKEN: token,
       DASHBOARD_OPERATOR_ID: "dispatchable-test-owner@example.test",
       DASHBOARD_STATE_DIR: stateDir,
       UPLOAD_LOG_DIR: stateDir,
       PORT: String(port),
       DASHBOARD_HOST: "127.0.0.1"
-    },
+    }),
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
