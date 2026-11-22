@@ -34,12 +34,12 @@
       "inventoryArtifactId": 14776042594,
       "inventoryArtifactSha256": "f85a16cc0d25d53f42f55fdb1eb1c3c73f1fd266be35151cd08f3c124260e293"
     },
-    "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363",
+    "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103820",
     "latestInventoryArtifactId": 14776042594,
     "latestInventoryArtifactSha256": "f85a16cc0d25d53f42f55fdb1eb1c3c73f1fd266be35151cd08f3c124260e293",
-    "latestAutomationRunSourceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
+    "latestAutomationRunSourceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
     "inventoryHeadSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
-    "latestInventorySourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
+    "latestInventorySourceTestSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
     "latestInventoryRunId": 45078103823
   },
   "counts": {
@@ -219,8 +219,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/campaign-management-api.integration.test.mjs"
@@ -256,8 +256,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs"
@@ -293,8 +293,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
@@ -331,8 +331,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
@@ -365,8 +365,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
@@ -402,8 +402,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
@@ -430,12 +430,12 @@
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
       "currentHeadEvidenceNote": "Mocked provider integration PASS: concurrent reconciliation and interrupted SUBMITTING after remote create; restart, read-only feed match and exact remote read-back are verified. Live Meta provider acceptance remains NOT_TESTED.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceRunId": 45078103820,
       "authenticationNegativeCurrentHeadSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
       "authenticationNegativeCurrentHeadRunId": 45072112844,
       "mockedIntegrationStatus": "PASS",
@@ -465,12 +465,12 @@
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
       "currentHeadEvidenceNote": "Mocked provider integration PASS: concurrent reconciliation and interrupted SUBMITTING after remote create; restart, read-only feed match and exact remote read-back are verified. Live Meta provider acceptance remains NOT_TESTED.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceRunId": 45078103820,
       "authenticationNegativeCurrentHeadSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
       "authenticationNegativeCurrentHeadRunId": 45072112844,
       "mockedIntegrationStatus": "PASS",
@@ -509,8 +509,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
@@ -546,8 +546,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
@@ -574,8 +574,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
@@ -611,8 +611,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
@@ -639,8 +639,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
@@ -673,8 +673,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
       "currentHeadEvidenceTestFiles": [
         "test/instagram-approval-route-fail-closed.integration.test.mjs"
@@ -707,8 +707,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
@@ -745,8 +745,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
@@ -783,8 +783,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
@@ -857,8 +857,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
@@ -896,8 +896,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-completion.integration.test.mjs"
@@ -933,8 +933,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
@@ -970,8 +970,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
@@ -1007,8 +1007,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
@@ -1053,8 +1053,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -1090,8 +1090,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -1127,8 +1127,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -1164,8 +1164,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
@@ -1202,8 +1202,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-parent-relationship.integration.test.mjs"
@@ -1275,8 +1275,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
@@ -1312,8 +1312,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
@@ -1349,8 +1349,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-queue-diagnostics.integration.test.mjs"
@@ -1386,8 +1386,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-render-recovery-reconcile.integration.test.mjs"
@@ -1423,8 +1423,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-retry.integration.test.mjs"
@@ -1460,8 +1460,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
@@ -1498,8 +1498,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
@@ -1535,8 +1535,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs"
@@ -1573,8 +1573,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-rights-verification.integration.test.mjs"
@@ -1624,8 +1624,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-cancellation.integration.test.mjs"
@@ -1663,8 +1663,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-validation-idempotency.integration.test.mjs"
@@ -1700,8 +1700,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
@@ -1735,8 +1735,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/nature-frontiers-media-register-api.test.mjs"
@@ -1769,8 +1769,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
@@ -1804,8 +1804,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
@@ -1839,8 +1839,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
@@ -1876,8 +1876,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs",
@@ -1915,8 +1915,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-task-runner.test.mjs"
@@ -1952,8 +1952,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs"
@@ -1986,8 +1986,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Only auth-negative checks re-executed; overall BLOCKED/NOT_TESTED classification preserved.",
       "currentHeadEvidenceTestFiles": [
         "test/upload-reconcile-fail-closed.integration.test.mjs",
@@ -2024,8 +2024,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-      "currentHeadEvidenceRunId": 45075651363,
+      "currentHeadEvidenceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "currentHeadEvidenceRunId": 45078103820,
       "currentHeadEvidenceNote": "Local route regression is included in exact-head full suite; no provider publication claim.",
       "currentHeadEvidenceTestFiles": [
         "test/worker-quarantine-release.test.mjs"
@@ -2345,8 +2345,8 @@
   "currentHeadReconciliation": {
     "status": "PARTIAL",
     "observedImplementationHeadSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
-    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363",
-    "regressionRunId": 45075651363,
+    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103820",
+    "regressionRunId": 45078103820,
     "regressionRunResults": {
       "nodePassed": 1130,
       "nodeFailed": 0,
@@ -2422,9 +2422,9 @@
     "note": "Historical exact-SHA result only; superseded for GET /api/jobs/dispatchable and POST /api/jobs/produce by the newer owner-approval gate."
   },
   "latestExactHeadRegression": {
-    "sourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-    "automationRunId": 45075651363,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363",
+    "sourceTestSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+    "automationRunId": 45078103820,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103820",
     "nodeTestFiles": 191,
     "nodePassed": 1130,
     "nodeFailed": 0,
@@ -2437,8 +2437,8 @@
       "passed": 50,
       "total": 50
     },
-    "browserRunId": 45075651491,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651491",
+    "browserRunId": 45078103699,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103699",
     "browserJourneys": {
       "passed": 41,
       "total": 41,
@@ -2453,18 +2453,18 @@
     },
     "productionReadiness": {
       "status": "HOLD",
-      "runId": 45075651463,
+      "runId": 45078103669,
       "blockers": 22
     },
-    "queueReadinessRunId": 45075651341,
-    "deploymentRecoveryRunId": 45075651539,
-    "runnerBridgeSafetyRunId": 45075651397,
-    "cloudflareDurableStateRunId": 45075651458,
-    "contentQualityRunId": 45075651343,
-    "metadataRunId": 45075651509,
-    "baselineComparisonRunId": 45075651378,
-    "branchInventoryRunId": 45075651420,
-    "productionQualityEnforcementRunId": 45075651340
+    "queueReadinessRunId": 45078103694,
+    "deploymentRecoveryRunId": 45078103645,
+    "runnerBridgeSafetyRunId": 45078103883,
+    "cloudflareDurableStateRunId": 45078103819,
+    "contentQualityRunId": 45078103839,
+    "metadataRunId": 45078103758,
+    "baselineComparisonRunId": 45078103596,
+    "branchInventoryRunId": 45078103823,
+    "productionQualityEnforcementRunId": 45078103656
   },
   "cloudflareProductionState": {
     "sourceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
