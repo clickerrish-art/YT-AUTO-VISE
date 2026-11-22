@@ -115,6 +115,8 @@ test("AI wildlife generation remains disabled while licensed stock acquisition i
   assert.ok(codeCells.every(cell => (Array.isArray(cell.source) ? cell.source.join("") : cell.source)
     .startsWith('raise RuntimeError("DISABLED_BY_OWNER_AI_WILDLIFE_VISUAL_POLICY')));
   assert.ok(acquisitionScript.includes("policy.stockMediaAllowed !== true"));
+  assert.ok(acquisitionScript.includes("policy.stockVideoFootageAllowed !== true"));
+  assert.ok(acquisitionScript.includes("policy.stockPhotographsAllowed !== false"));
   assert.ok(acquisitionScript.includes('"pexels-11528208"'));
   assert.ok(!acquisitionScript.includes('"pexels-31702128"'));
   assert.ok(acquisitionScript.includes("full decode "));
@@ -169,6 +171,8 @@ test("Pexels acquisition is conditional, review-only and fully decoded", () => {
   assert.ok(crocodileAcquisition.includes("fullDecode: \"PASS\""));
   assert.ok(crocodileAcquisition.includes("releaseEligible: false"));
   assert.ok(crocodileAcquisition.includes("publicPublishingEnabled:false"));
+  assert.ok(crocodileAcquisition.includes("owner.mediaRules.stockVideoFootageAllowed !== true"));
+  assert.ok(crocodileAcquisition.includes("owner.mediaRules.stockPhotographsAllowed !== false"));
   assert.ok(workflow.includes("contains(github.event.head_commit.message, '[acquire-media]')"));
   assert.ok(workflow.includes("node scripts/acquire-short-001-assets.mjs"));
   assert.ok(workflow.includes("node scripts/acquire-crocodile-footage-review.mjs"));
