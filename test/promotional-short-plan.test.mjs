@@ -7,7 +7,7 @@ const checkedInPlan = JSON.parse(fs.readFileSync("content/promotional-short-plan
 const products = JSON.parse(fs.readFileSync("config/products.json", "utf8")).products;
 const clone = value => structuredClone(value);
 const validatePlan = (plan, productRows = products, options = {}) => validatePromotionalShortPlan(plan, productRows, {
-  now: new Date("2026-11-22T10:30:00+02:00"),
+  now: new Date("2026-11-22T11:05:00+02:00"),
   ...options
 });
 
@@ -701,4 +701,39 @@ test("current search-intent evidence is mandatory, dated, sourced and fresh for 
   const invented = clone(valid);
   invented.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.estimatedMonthlySearches = 900000;
   assert.ok(validatePlan(invented, products, { now }).some(error => /do not invent volume or competition metrics/.test(error)));
+});
+
+
+test("2026-12-28 creator-education drafts preserve product-specific disclosure and research gates", () => {
+  const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-28");
+  assert.ok(week);
+  assert.equal(week.status, "DRAFT_ONLY");
+  assert.equal(week.items.length, 2);
+  const thumbnail = week.items.find(row => row.id === "sonicvhibez-short-017-thumbnail-brief");
+  const wildlifeTitle = week.items.find(row => row.id === "sonicvhibez-short-018-wildlife-video-titles");
+  assert.ok(thumbnail);
+  assert.ok(wildlifeTitle);
+  assert.equal(thumbnail.primaryKeyword, "YouTube thumbnail brief");
+  assert.ok(thumbnail.title.toLowerCase().indexOf(thumbnail.primaryKeyword) <= 24);
+  assert.equal(thumbnail.productUrl, "https://selar.com/539497q11t");
+  assert.equal(thumbnail.disclosure.status, "HOLD");
+  assert.match(thumbnail.script, /^\\[INTERNAL HOLD — NOT SPOKEN\\./);
+  assert.ok(thumbnail.description.indexOf("DISCLOSURE HOLD") < thumbnail.description.indexOf(thumbnail.productUrl));
+  assert.equal(thumbnail.keywordEvidence.type, "qualitative_search_intent");
+  assert.ok(thumbnail.keywordEvidence.sources.length >= 2);
+  assert.equal(wildlifeTitle.primaryKeyword, "YouTube titles for wildlife videos");
+  assert.ok(wildlifeTitle.title.toLowerCase().indexOf(wildlifeTitle.primaryKeyword) <= 24);
+  assert.equal(wildlifeTitle.productUrl, "https://selar.com/0u19v8u99l");
+  assert.equal(wildlifeTitle.disclosure.status, "APPROVED");
+  const approvedText = products.find(row => row.id === "wildlife-creators-vault").promotionGate.disclosure.text;
+  assert.ok(wildlifeTitle.script.indexOf("Advertisement.") < wildlifeTitle.script.indexOf(approvedText));
+  assert.match(wildlifeTitle.description, /^ADVERTISEMENT$/m);
+  assert.ok(wildlifeTitle.description.indexOf(approvedText) < wildlifeTitle.description.indexOf(wildlifeTitle.productUrl));
+  assert.equal(wildlifeTitle.keywordEvidence.type, "qualitative_search_intent");
+  assert.ok(wildlifeTitle.keywordEvidence.sources.length >= 3);
+  assert.ok(week.items.every(row => row.status === "DRAFT_ONLY" && row.visibility === "private" && row.targetSeconds === 55));
+  assert.equal(checkedInPlan.publicationEnabled, false);
+  assert.equal(checkedInPlan.schedulingEnabled, false);
+  assert.doesNotMatch(JSON.stringify(week), /"(?:scheduledAt|publishedAt|publicationAt|actualPublishedAt)"\\s*:/i);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
