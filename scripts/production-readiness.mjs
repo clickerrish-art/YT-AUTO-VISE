@@ -180,8 +180,12 @@ if (!exists(mediaInventoryPath)) {
       const excludedAssets = inventory.assets.filter(asset =>
         asset?.excludedFromProduction === true || asset?.status === "EXCLUDED_NOT_USED"
       );
+      // Review-eligible candidates are not automatically production selections.
+      // Only assets explicitly selected for this release enter the fail-closed media gate.
       const selectedAssets = inventory.assets.filter(asset =>
-        asset?.excludedFromProduction !== true && asset?.status !== "EXCLUDED_NOT_USED"
+        asset?.selectedForProduction === true &&
+        asset?.excludedFromProduction !== true &&
+        asset?.status !== "EXCLUDED_NOT_USED"
       );
       const unresolvedAssets = selectedAssets.filter(asset => {
         const sourceMethod = asset?.sourceMethod;
