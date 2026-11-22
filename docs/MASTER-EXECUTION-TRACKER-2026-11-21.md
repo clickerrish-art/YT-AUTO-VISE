@@ -669,3 +669,50 @@ The exact-head report groups into these outstanding requirements:
 - Complete API-001, DASH-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 with exact-head, production-relevant evidence. Passing unit tests or CI alone does not complete these gates.
 
 **Release remains HOLD.** No genuine production package, rights clearance, owner approval, final rendered video, one-shot upload authorization or verified live publication exists. Public/unattended publishing remains disabled; SonicVhibez is the only permitted YouTube destination; Nature Frontiers remains a separate Meta brand.
+
+
+---
+
+## Latest verification correction — 22 November 2026
+
+This section supersedes the earlier paragraph in this checkpoint that said the source tree differed from the c788 recovery bundle only in two test assertions. That statement became stale after the Speechma manual-only implementation changes.
+
+### Current branch and release safety
+
+- Branch HEAD before this register update: `c7d711b385cd443b59a9594cf26c57c121159400`.
+- `main` remains `3795519ccbf58fd02d74458624b58dd2e44a88c0`, unchanged.
+- PR #1 remains OPEN / DRAFT / UNMERGED; mergeable=false.
+- Branch comparison: 5,233 ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`.
+- No merge, PR readiness change, reset, rebase, force-push, history rewrite or main-branch write occurred.
+
+### Narration implementation correction
+
+The application source now records Speechma Andrew as the owner-selected zero-cost audition and enforces a manual-only free-site workflow. The config and readiness gate explicitly prohibit automated browser access, scripts, bots and automated CAPTCHA solving; only the official paid API is allowed for automation, and it is not authorized. The security-code, 2,000-character standard conversion, browser-local history and MP3 retention requirements are represented in config, decision evidence and regression assertions. Local Piper/Edge TTS remains disabled. This is not narrator or production approval; no audio has been generated.
+
+Official current Speechma Terms: https://speechma.com/terms
+Official English voice list: https://speechma.com/voices/english
+
+### Exact-head test and readiness evidence
+
+- Source recovery bundle run [44970777305](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970777305): PASS on `ce11456e1f9b2ed0328639ac33c8548c2247b0e1`.
+- Upload-ledger read-only run [44970777315](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970777315): PASS; this is not owner attestation of manual/local/third-party uploads.
+- Cloudflare bridge safety [44970777365](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970777365): PASS.
+- Deployment recovery smoke [44970777283](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970777283): PASS; simulation is not a live production deployment or independent restore.
+- Production readiness [44970777303](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970777303): HOLD, 27 blockers; report uploaded. No upload, schedule or publication was attempted.
+- Queue readiness [44970777295](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970777295): regression step failed at 1,084/1,085 Node tests, zero skipped. The single failure was a malformed regex delimiter in `tests/production-readiness.test.mjs`, not a production behavior failure. The delimiter was corrected in the current branch test file.
+- Automation run [44970777298](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44970777298): CANCELLED; not a pass.
+- On a reconstructed source copy with the current manual-only policy and corrected regex, 49 targeted Node tests and all 104 Python tests passed locally, zero failures and zero skips. The full 189-file Node suite has not been rerun after the regex correction. Current full-suite acceptance remains NOT_TESTED.
+
+The latest 27-blocker readiness report is still applicable to the current application code; the only later code-tree change after that report was a test assertion, followed by this documentation update. A fresh full-suite run is still required for engineering acceptance.
+
+### Next executable sequence
+
+1. Obtain exact-current-head full regression PASS, then mark the narration-policy implementation accepted.
+2. Resolve the owner-approved operational-to-detailed queue identity mapping.
+3. Acquire original creator-captured wildlife media, provenance and written commercial rights.
+4. Perform the manual Speechma Andrew audition, retain the MP3, obtain listening approval and bind it to the exact hash.
+5. Complete short and long-form renders, captions, thumbnails, scientific/factual review, metadata and exact-hash quality approvals.
+6. Reconcile the public YouTube video's format/date and all manual/local/third-party upload attempts; only then consider one-shot private-upload authorization.
+7. Complete SCHED-001, STATE-001, DEPLOY-001, API-001, DASH-001, GIT-002 and Nature Frontiers/Metricool separation with live evidence.
+
+**Release remains HOLD.** No final production media or public publishing authorization exists.
