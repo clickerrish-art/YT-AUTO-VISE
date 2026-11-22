@@ -27,8 +27,8 @@
         "height": 2160,
         "durationSeconds": 14
       },
-      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
-      "originalSourceUrl": null,
+      "sourceMatchStatus": "SOURCE_PAGE_METADATA_MATCH_PENDING_LOCAL_FILE_AND_VISUAL_CONFIRMATION",
+      "originalSourceUrl": "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/",
       "creatorConfirmed": false,
       "downloadDate": null,
       "localMediaPath": null,
@@ -48,12 +48,29 @@
         "metadataMatch": "EXACT",
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
-      "excludedFromProduction": true,
-      "exclusionReason": "Not excluded because of stock-media type: the 2026-11-22 owner policy permits qualifying Pexels/Pixabay footage. This candidate may enter review, but remains held from final production until exact Canva-to-source visual matching, local original MP4 acquisition, SHA-256, full decode, third-party rights and human review are complete.",
+      "excludedFromProduction": false,
+      "exclusionReason": "Not excluded from review: owner permits qualifying Pexels/Pixabay stock. Final production remains held pending local original MP4, SHA-256, full decode, third-party rights and human review.",
       "excludedAt": "2026-11-18",
       "reviewRenderEligible": true,
       "productionEligible": false,
-      "releaseEligible": false
+      "releaseEligible": false,
+      "sourcePageUrl": "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/",
+      "sourcePlatform": "Pexels",
+      "sourceMethod": "PEXELS_LICENSED_STOCK",
+      "creatorName": "Magda Ehlers",
+      "sourceTitle": "Majestic African Elephant in Natural Habitat",
+      "sourcePageMetadata": {
+        "durationSeconds": 14,
+        "width": 3840,
+        "height": 2160,
+        "fps": 25
+      },
+      "creatorCapturedOriginal": false,
+      "platformLicenseReviewed": true,
+      "licenseEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
+      "thirdPartyRightsReviewed": false,
+      "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
+      "sha256": null
     },
     {
       "canvaAssetId": "VAHZ9hEjS0U",
@@ -70,14 +87,14 @@
         "height": 1080,
         "durationSeconds": 14
       },
-      "sourceMatchStatus": "METADATA_DURATION_MISMATCH_PENDING_VISUAL_CONFIRMATION",
-      "originalSourceUrl": null,
+      "sourceMatchStatus": "CANVA_DURATION_13S_VS_SOURCE_14S_PENDING_VISUAL_CONFIRMATION",
+      "originalSourceUrl": "https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/",
       "creatorConfirmed": false,
       "downloadDate": null,
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "HOLD_SOURCE_METADATA_DURATION_MISMATCH_PENDING_EXACT_MATCH",
+      "status": "HOLD_CANVA_SOURCE_DURATION_MISMATCH_PENDING_VISUAL_CONFIRMATION",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "An Aerial Footage of Zebras and Wildebeests",
@@ -92,11 +109,28 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Source page duration is 14 seconds while the Canva asset is 13 seconds. The owner policy permits Pexels/Pixabay stock, but this candidate remains held until the exact derivative/trim relationship is established and original MP4, hash, full decode, rights and human review are complete.",
+      "exclusionReason": "The Canva import is 13 seconds while the Pexels source page is 14 seconds. Keep excluded until the exact source/trim relationship is verified.",
       "excludedAt": "2026-11-18",
       "reviewRenderEligible": false,
       "productionEligible": false,
-      "releaseEligible": false
+      "releaseEligible": false,
+      "sourcePageUrl": "https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/",
+      "sourcePlatform": "Pexels",
+      "sourceMethod": "PEXELS_LICENSED_STOCK",
+      "creatorName": "Taryn Elliott",
+      "sourceTitle": "An Aerial Footage of Zebras and Wildebeests",
+      "sourcePageMetadata": {
+        "durationSeconds": 14,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25
+      },
+      "creatorCapturedOriginal": false,
+      "platformLicenseReviewed": true,
+      "licenseEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
+      "thirdPartyRightsReviewed": false,
+      "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
+      "sha256": null
     },
     {
       "canvaAssetId": "VAHZ9niQJoo",
@@ -113,8 +147,8 @@
         "height": 1080,
         "durationSeconds": 25
       },
-      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
-      "originalSourceUrl": null,
+      "sourceMatchStatus": "SOURCE_PAGE_METADATA_MATCH_PENDING_LOCAL_FILE_AND_VISUAL_CONFIRMATION",
+      "originalSourceUrl": "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/",
       "creatorConfirmed": false,
       "downloadDate": null,
       "localMediaPath": null,
@@ -134,12 +168,29 @@
         "metadataMatch": "EXACT",
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
-      "excludedFromProduction": true,
-      "exclusionReason": "Not excluded because of stock-media type: the 2026-11-22 owner policy permits qualifying Pexels/Pixabay footage. This candidate may enter review, but remains held from final production until exact Canva-to-source visual matching, local original MP4 acquisition, SHA-256, full decode, third-party rights and human review are complete.",
+      "excludedFromProduction": false,
+      "exclusionReason": "Not excluded from review: owner permits qualifying Pexels/Pixabay stock. Final production remains held pending local original MP4, SHA-256, full decode, third-party rights and human review.",
       "excludedAt": "2026-11-18",
       "reviewRenderEligible": true,
       "productionEligible": false,
-      "releaseEligible": false
+      "releaseEligible": false,
+      "sourcePageUrl": "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/",
+      "sourcePlatform": "Pexels",
+      "sourceMethod": "PEXELS_LICENSED_STOCK",
+      "creatorName": "Taryn Elliott",
+      "sourceTitle": "Zebras and Wildebeests Grazing in the Meadows",
+      "sourcePageMetadata": {
+        "durationSeconds": 25,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25
+      },
+      "creatorCapturedOriginal": false,
+      "platformLicenseReviewed": true,
+      "licenseEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
+      "thirdPartyRightsReviewed": false,
+      "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
+      "sha256": null
     },
     {
       "canvaAssetId": "VAHZ9i3Hx6U",
@@ -156,8 +207,8 @@
         "height": 1080,
         "durationSeconds": 21
       },
-      "sourceMatchStatus": "METADATA_MATCH_PENDING_VISUAL_CONFIRMATION",
-      "originalSourceUrl": null,
+      "sourceMatchStatus": "SOURCE_PAGE_METADATA_MATCH_PENDING_LOCAL_FILE_AND_VISUAL_CONFIRMATION",
+      "originalSourceUrl": "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/",
       "creatorConfirmed": false,
       "downloadDate": null,
       "localMediaPath": null,
@@ -177,12 +228,29 @@
         "metadataMatch": "EXACT",
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
-      "excludedFromProduction": true,
-      "exclusionReason": "Not excluded because of stock-media type: the 2026-11-22 owner policy permits qualifying Pexels/Pixabay footage. This candidate may enter review, but remains held from final production until exact Canva-to-source visual matching, local original MP4 acquisition, SHA-256, full decode, third-party rights and human review are complete.",
+      "excludedFromProduction": false,
+      "exclusionReason": "Not excluded from review: owner permits qualifying Pexels/Pixabay stock. Final production remains held pending local original MP4, SHA-256, full decode, third-party rights and human review.",
       "excludedAt": "2026-11-18",
       "reviewRenderEligible": true,
       "productionEligible": false,
-      "releaseEligible": false
+      "releaseEligible": false,
+      "sourcePageUrl": "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/",
+      "sourcePlatform": "Pexels",
+      "sourceMethod": "PEXELS_LICENSED_STOCK",
+      "creatorName": "Taryn Elliott",
+      "sourceTitle": "Giraffe in the Open Fields",
+      "sourcePageMetadata": {
+        "durationSeconds": 21,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25
+      },
+      "creatorCapturedOriginal": false,
+      "platformLicenseReviewed": true,
+      "licenseEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
+      "thirdPartyRightsReviewed": false,
+      "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
+      "sha256": null
     },
     {
       "canvaAssetId": "VAHZ9oFCiak",
@@ -195,7 +263,7 @@
       "candidateSourceUrl": null,
       "candidateCreator": null,
       "candidateMetadata": null,
-      "sourceMatchStatus": "UNRESOLVED_SOURCE_URL_AND_CREATOR_NOT_RECORDED",
+      "sourceMatchStatus": "UNRESOLVED_SOURCE_PAGE_CREATOR",
       "originalSourceUrl": null,
       "creatorConfirmed": false,
       "downloadDate": null,
@@ -228,16 +296,24 @@
       "excludedAt": "2026-11-18",
       "reviewRenderEligible": false,
       "productionEligible": false,
-      "releaseEligible": false
+      "releaseEligible": false,
+      "sourceMethod": "UNVERIFIED",
+      "sourcePlatform": null,
+      "creatorName": null,
+      "creatorCapturedOriginal": false,
+      "platformLicenseReviewed": false,
+      "licenseEvidencePath": null,
+      "thirdPartyRightsReviewed": false,
+      "rightsEvidencePath": null
     }
   ],
   "blockingEvidence": [
-    "Three Pexels candidates have exact source-page metadata matches and may enter review under the 2026-11-22 owner policy, but local original MP4 bytes, hashes, full decode, visual match and third-party rights remain pending.",
-    "One aerial zebra candidate has a 1-second Canva/source duration mismatch and remains held pending exact derivative/trim verification.",
-    "One lion candidate has no verified exact Pexels source page or creator and remains excluded.",
+    "Three Pexels candidates have exact source-page metadata matches and may enter review under the 2026-11-22 owner policy; local MP4 bytes, hashes, full decode, visual match, third-party rights and human review remain pending.",
+    "One zebra aerial candidate has a 1-second Canva/source duration mismatch (13s versus 14s) and remains excluded until the exact trim/source relationship is verified.",
+    "One lion candidate has no verified exact source page or creator and remains excluded.",
     "No imported Canva candidate is rights-cleared or release-eligible."
   ],
-  "notes": "The owner now permits qualifying Pexels/Pixabay stock for SonicVhibez under asset-level review gates. Three exact-metadata candidates may enter acquisition and review; one duration-mismatch asset and one unresolved-source lion remain held. None is production-ready until exact source matching, local original MP4, SHA-256, full technical decode, third-party rights and human approval.",
+  "notes": "The owner permits qualifying Pexels/Pixabay wildlife video footage for SonicVhibez under asset-level review gates. Three exact-metadata Pexels imports may enter acquisition and review; one duration-mismatch zebra import and one unresolved lion remain held. No stock photographs are authorized by this update. No candidate is production-ready until exact source matching, local original MP4, SHA-256, full technical decode, third-party rights and human approval.",
   "historicalBlockingEvidence": [
     "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
     "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
@@ -249,12 +325,13 @@
     "status": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_REVIEW_GATES",
     "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": true,
+    "stockVideoFootageAllowed": true,
+    "stockPhotographsAllowed": false,
     "pexelsAllowed": true,
     "pixabayAllowed": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
     "importedCanvaAssetsProductionEligible": false,
     "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
-    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
-    "note": "Pexels/Pixabay stock is permitted for review subject to exact source match, local original bytes, hash, technical review, third-party rights and human approval. Canva imports are not automatically production-eligible."
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
   }
 }
