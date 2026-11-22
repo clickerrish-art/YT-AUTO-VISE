@@ -377,7 +377,7 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed dashboard browser run 45058706943 with 41/41 Chromium journeys and automation run 45058706978 with 191/191 Node test files (1,129 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The behavioral matrix records 121/121 controls, 17/17 forms and 15/15 cross-cutting dimensions, with exact-source field interaction, mapped action, validation, accessibility, mobile, selected persistence/restart/concurrency and disabled-state evidence. Overall acceptance is NOT_TESTED: not every applicable control has individually accepted positive success, authorization, durable persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior.",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed dashboard browser run 45058706943 with 41/41 Chromium journeys and automation run 45058706978 with 191/191 Node test files (1,129 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The behavioral matrix records 121/121 controls, 17/17 forms and 15/15 cross-cutting dimensions, with exact-source field interaction, mapped action, validation, accessibility, mobile, selected persistence/restart/concurrency and disabled-state evidence. overallAcceptance is NOT_TESTED: not every applicable control has individually accepted positive success, authorization, durable persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T19:07:49Z"
     },
     {
@@ -669,9 +669,124 @@
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00",
-      "currentHeadEvidenceNote": "NOT_TESTED — live compare at branch HEAD b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00: main 3795519ccbf58fd02d74458624b58dd2e44a88c0; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch 5,532 commits ahead and 17 behind; PR reports 549 changed files (GitHub compare file listing is capped at 300). Branch protection is UNVERIFIED, not assumed disabled or enabled: the protection endpoint returns HTTP 403. Full semantic review of all branch-only/base-only changes remains incomplete; no merge, rebase, reset, cherry-pick, force-push or destructive reconciliation was performed.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:12:13Z"
+      "currentHeadEvidenceSha": "12777e433041783d61856732d3800830415bf4d5",
+      "currentHeadEvidenceNote": "NOT_TESTED — live compare at branch HEAD 12777e433041783d61856732d3800830415bf4d5: main 3795519ccbf58fd02d74458624b58dd2e44a88c0; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch 5,532 commits ahead and 17 behind; PR reports 549 changed files. All 17 base-only commits have now been semantically reviewed, including the six net changed paths: three Wikimedia rights-review records remain excluded and are not in the branch; the main Pexels 30026544 record is superseded by the branch's owner-policy-aligned candidate-for-review record; both narration workflows are safer on the branch (fully disabled/manual-only) than main's schedule-removed but still manual/push workflows; the remaining changes are revert pairs or evidence corrections already reflected in the branch. The branch retains test/restore-facebook-draft-history.test.mjs (SHA b6d4ab9c30d1e025bf2e55bddae446d96a2cb2a3) and tests/restore-state.test.mjs (SHA a6adf492914697ac750b20bfb4e14899edda6156); package-lock.json is a valid npm lockfile and CI install/audit pass. No cherry-pick, merge or reconciliation of the 17 base-only commits is needed. Full semantic review of the 5,532 branch-only commits and all 549 changed paths remains incomplete. Branch protection is UNVERIFIED because the endpoint returns HTTP 403. No merge, rebase, reset, cherry-pick, force-push or destructive reconciliation was performed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:19:53Z",
+      "baseOnlyReview": {
+        "reviewedAt": "2026-11-22",
+        "base": "codex/marketing-machine-audit-fixes",
+        "head": "main",
+        "mainHead": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+        "branchHead": "12777e433041783d61856732d3800830415bf4d5",
+        "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
+        "commitsReviewed": 17,
+        "netChangedPaths": 6,
+        "decisions": [
+          {
+            "sha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+            "message": "Exclude stock wildlife source from current production",
+            "path": "content/media/wikimedia-wildebeest-ambush-2016-rights-review.json",
+            "decision": "KEEP_EXCLUDED; Wikimedia is not within the owner's Pexels/Pixabay stock permission."
+          },
+          {
+            "sha": "450aef056c429ffda10865c0a0b24dea3de82be9",
+            "message": "Exclude stock wildlife source from current production",
+            "path": "content/media/wikimedia-nairobi-crocodile-2025-rights-review.json",
+            "decision": "KEEP_EXCLUDED; Wikimedia is not within the owner's Pexels/Pixabay stock permission."
+          },
+          {
+            "sha": "c1e5c0713c67b196153615e73f2defd8cce11517",
+            "message": "Exclude stock wildlife source from current production",
+            "path": "content/media/wikimedia-kruger-tilapia-2015-rights-review.json",
+            "decision": "KEEP_EXCLUDED; Wikimedia is not within the owner's Pexels/Pixabay stock permission."
+          },
+          {
+            "sha": "ae3200a9ef9b4877fafaf246c5640b851ec712e9",
+            "message": "Exclude stock wildlife source from current production",
+            "path": "content/media/pexels-crocodile-30026544-rights-review.json",
+            "decision": "BRANCH_VERSION_SUPERSEDES; branch record permits review under the 2026-11-22 owner policy but keeps rights, local bytes, hash, decode and human approval gates open."
+          },
+          {
+            "sha": "861173281b6253c839e6923182b1d3fdf3280b0a",
+            "message": "Remove accidentally added non-lock workflow content and restore main tree",
+            "path": "package-lock.json",
+            "decision": "NO_ACTION; branch package-lock.json is a valid lockfile and npm ci/audit pass."
+          },
+          {
+            "sha": "8bcf2a9e684d8fc78c5589f3c89d1ebdc5ac0e96",
+            "message": "",
+            "path": "package-lock.json",
+            "decision": "REVERT_PAIR; transient YAML-in-lockfile addition is removed by 861173; no net runtime change."
+          },
+          {
+            "sha": "69b933c6e00f902035d6f5bcef97dd9dd9f7787f",
+            "message": "Disable scheduled Edge TTS narration; preserve manual and push triggers",
+            "path": ".github/workflows/free-narration-artifact.yml",
+            "decision": "BRANCH_SAFER; branch workflow is fully disabled with if:false and manual dispatch only."
+          },
+          {
+            "sha": "7efc548065385051f7c69377f87b77a35065ce74",
+            "message": "Disable scheduled Edge TTS long-form narration runs",
+            "path": ".github/workflows/generate-long-form-narration.yml",
+            "decision": "BRANCH_SAFER; branch workflow is fully disabled with if:false and manual dispatch only."
+          },
+          {
+            "sha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
+            "message": "Revert accidental implementation-only files from main",
+            "path": "implementation-only files and docs",
+            "decision": "NO_ACTION; net revert effects reviewed; branch remains isolated."
+          },
+          {
+            "sha": "a10eca5d13da0b120eb55b2c9c40bb2c488eb61a",
+            "message": "Avoid slow apt index refresh in narration review runner",
+            "path": ".github/workflows/american-narration-review.yml",
+            "decision": "REVERT_PAIR; workflow addition is removed by 2cd6; no net change to main."
+          },
+          {
+            "sha": "5af11d8d63e36808ca8c77f5435a29a965270254",
+            "message": "Correct Metricool cross-brand evidence field",
+            "path": "docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json",
+            "decision": "ALREADY_REFLECTED; branch register has the current Nature Frontiers/SonicVhibez cross-brand finding."
+          },
+          {
+            "sha": "2e4153c8252349d1a7c5655f5cdc00da557c597e",
+            "message": "Revert accidental default-branch file creation",
+            "path": "test/nature-frontiers-interstitial-content.test.mjs",
+            "decision": "REVERT_PAIR; transient test addition is removed; no net effect."
+          },
+          {
+            "sha": "71ed56fe9cc4e8c41ef45f90a6a991a6a0dcf84b",
+            "message": "Test non-commercial Nature Frontiers interstitial safeguards",
+            "path": "test/nature-frontiers-interstitial-content.test.mjs",
+            "decision": "REVERT_PAIR; transient test addition is removed by 2e4153; no net effect."
+          },
+          {
+            "sha": "69fdf35c90f980c142be3aaffa863304bc7eaa25",
+            "message": "Remove accidental test-file addition from main",
+            "path": "test/github-oidc-token.test.mjs",
+            "decision": "REVERT_PAIR; transient test addition is removed; no net effect."
+          },
+          {
+            "sha": "c82056491d3ab8902f0ff70e0c30bb10ffe5e01d",
+            "message": "Test GitHub OIDC token expiry and refresh",
+            "path": "test/github-oidc-token.test.mjs",
+            "decision": "REVERT_PAIR; transient test addition is removed by 69fdf35; no net effect."
+          },
+          {
+            "sha": "fa00d28e7f58911482686e4ad69fac9f4701a2e6",
+            "message": "Revert unintended test-file write to default branch",
+            "path": "test/restore-facebook-draft-history.test.mjs",
+            "decision": "PRESERVE_BRANCH_TEST; branch deliberately retains the cross-run restoration test and companion restore-state test."
+          },
+          {
+            "sha": "71578dafc24e5d48173dce3f4e392e18e42aa40e",
+            "message": "Exercise cross-run history restoration with mocked GitHub artifact API",
+            "path": "test/restore-facebook-draft-history.test.mjs",
+            "decision": "PRESERVE_BRANCH_TEST; the restoration test remains in the branch and is covered by the current regression suite."
+          }
+        ],
+        "conclusion": "The 17 base-only commits were reviewed and do not require cherry-picking or merging. Branch-only review remains incomplete."
+      }
     },
     {
       "id": "DEPLOY-001",
