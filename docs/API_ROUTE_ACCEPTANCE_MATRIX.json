@@ -2432,7 +2432,7 @@
     "pythonPassed": 108,
     "pythonFailed": 0,
     "pythonSkipped": 0,
-    "npmAuditVulnerabilities": 0,
+    "npmAuditVulnerabilities": null,
     "protectedRouteAuthNegative": {
       "passed": 50,
       "total": 50
@@ -2464,7 +2464,8 @@
     "metadataRunId": 45078103758,
     "baselineComparisonRunId": 45078103596,
     "branchInventoryRunId": 45078103823,
-    "productionQualityEnforcementRunId": 45078103656
+    "productionQualityEnforcementRunId": 45078103656,
+    "npmAuditSourceSha": "d2a7be4733939cffca0423ba28675977af6ab346"
   },
   "cloudflareProductionState": {
     "sourceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
