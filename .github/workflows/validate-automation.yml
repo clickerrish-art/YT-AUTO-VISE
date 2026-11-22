@@ -15,6 +15,7 @@ on:
       - "content/*.json"
       - "content/drafts/*.md"
       - "docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
+      - "docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json"
       - "config/narration-voice-candidates.json"
       - "config/products.json"
       - "config/weekly-content-plan.json"
