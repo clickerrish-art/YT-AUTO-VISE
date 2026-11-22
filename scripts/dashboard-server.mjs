@@ -1,6 +1,7 @@
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import crypto from "node:crypto";
 import { metaCredentialFingerprint, fingerprintsMatch } from "./meta-credential-fingerprint.mjs";
 import { ensureSafeDirectoryPath } from "./safe-directory-path.mjs";
@@ -42,6 +43,27 @@ import { instagramApprovalFingerprint } from "./instagram-autonomous-publisher.m
 import { validateProductionQualityScorecard, qualityScorecardSha256 } from "./production-quality-scorecard.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+function loadFacebookPublishingConfig() {
+  const testConfigPath = process.env.DASHBOARD_TEST_FACEBOOK_CONFIG_PATH;
+  if (!testConfigPath) {
+    return loadFacebookPublishingConfig();
+  }
+  if (process.env.NODE_ENV !== "test") {
+    throw new Error("DASHBOARD_TEST_FACEBOOK_CONFIG_PATH is permitted only when NODE_ENV=test");
+  }
+  const resolved = path.resolve(testConfigPath);
+  const tempRoot = fs.realpathSync(os.tmpdir());
+  const parentDirectory = fs.realpathSync(path.dirname(resolved));
+  if (parentDirectory !== tempRoot && !parentDirectory.startsWith(tempRoot + path.sep)) {
+    throw new Error("Test Facebook config must be stored under the operating-system temporary directory");
+  }
+  const stat = fs.lstatSync(resolved);
+  if (!stat.isFile() || stat.isSymbolicLink()) throw new Error("Test Facebook config must be a regular non-symlink file");
+  const canonical = fs.realpathSync(resolved);
+  if (!canonical.startsWith(tempRoot + path.sep)) throw new Error("Test Facebook config resolves outside the temporary directory");
+  return JSON.parse(fs.readFileSync(canonical, "utf8"));
+}
+
 function readQueueIdentityGate() {
   try {
     const readProjectJson = relativePath => {
@@ -1077,7 +1099,7 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { idea, publishingEnabled: false, publishReady: false });
     }
     if (req.method === "POST" && url.pathname === "/api/facebook/verify-page") {
-      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const config = loadFacebookPublishingConfig();
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const pageAccessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
       const userAccessToken = process.env.META_USER_ACCESS_TOKEN ?? "";
@@ -1104,7 +1126,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "GET" && url.pathname === "/api/facebook/state") {
       const state = loadState();
-      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const config = loadFacebookPublishingConfig();
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const pageVerified = Boolean(verifiedFacebookPageId(state, config));
       const permissionsConfirmed = state.facebookConnection?.permissionsVerified === true && pageVerified;
@@ -1131,7 +1153,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "GET" && url.pathname === "/api/facebook/autonomous-status") {
       try {
-        const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+        const config = loadFacebookPublishingConfig();
         const configuredStateDir = process.env.FACEBOOK_STATE_DIR ?? "";
         const durableStateConfigured = path.isAbsolute(configuredStateDir) && fs.existsSync(configuredStateDir) && fs.statSync(configuredStateDir).isDirectory();
         const state = loadState();
@@ -1225,7 +1247,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/facebook/drafts") {
       const body = await readBody(req);
-      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const config = loadFacebookPublishingConfig();
       const stateBefore = loadState();
       const expectedPageId = verifiedFacebookPageId(stateBefore, config);
       const scheduledTime = body.scheduledTime ?? chooseFacebookExperimentSlot({ date: body.scheduledDate, pillar: body.pillar, format: body.format ?? "text" });
@@ -1252,7 +1274,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/facebook/drafts/evaluate") {
       const body = await readBody(req);
       if (typeof body.draftId !== "string") return json(res, 400, { error: "draftId is required" });
-      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const config = loadFacebookPublishingConfig();
       const release = await acquireStateLock();
       try {
         const state = loadState();
@@ -1282,7 +1304,7 @@ const server = http.createServer(async (req, res) => {
       try {
         const state = loadState();
         const instagramConfig = JSON.parse(fs.readFileSync(path.join(root, "config/instagram-publishing.json"), "utf8"));
-        const facebookConfig = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+        const facebookConfig = loadFacebookPublishingConfig();
         const verifiedPageId = verifiedFacebookPageId(state, facebookConfig);
         if (!verifiedPageId || verifiedPageId !== instagramConfig.facebookPageId ||
             process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID !== verifiedPageId) {
@@ -1331,7 +1353,7 @@ const server = http.createServer(async (req, res) => {
         const index = state.facebookDrafts.findIndex(item => item.id === body.draftId);
         if (index < 0) return json(res, 404, { error: "Facebook draft not found" });
         const draft = state.facebookDrafts[index];
-        const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+        const config = loadFacebookPublishingConfig();
         const expectedPageId = verifiedFacebookPageId(state, config);
         const boundDraft = expectedPageId ? { ...draft, expectedPageId } : draft;
         const evaluation = evaluateFacebookDraft(boundDraft, { existingDrafts: state.facebookDrafts.filter(item => item.id !== draft.id), recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root });
@@ -1358,7 +1380,7 @@ const server = http.createServer(async (req, res) => {
       if (typeof body.draftId !== "string" || body.confirmProviderDraft !== true) {
         return json(res, 400, { error: "draftId and explicit confirmProviderDraft=true are required for one unpublished provider-draft operation" });
       }
-      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const config = loadFacebookPublishingConfig();
       const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
       const envProviderDraftsEnabled = process.env.FACEBOOK_PROVIDER_DRAFTS_ENABLED === "YES";
       const initialState = loadState();
@@ -1601,7 +1623,7 @@ const server = http.createServer(async (req, res) => {
       if (["UNPUBLISHED_PROVIDER_DRAFT_VERIFIED", "FAILED"].includes(attemptBefore.status)) {
         return json(res, 200, { attempt: attemptBefore, reused: true, publishingEnabled: false });
       }
-      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const config = loadFacebookPublishingConfig();
       const expectedPageId = verifiedFacebookPageId(stateBefore, config);
       const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
       if (!expectedPageId || expectedPageId !== attemptBefore.destinationPageId || accessToken.length < 20) {
@@ -1652,7 +1674,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && url.pathname === "/api/facebook/publish") {
       const body = await readBody(req);
       if (typeof body.draftId !== "string" || body.confirmOperation !== true) return json(res, 400, { error: "draftId and explicit confirmOperation=true are required for a single authorized Facebook scheduling operation" });
-      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const config = loadFacebookPublishingConfig();
       const envPageId = process.env.NATURE_FRONTIERS_FACEBOOK_PAGE_ID ?? "";
       const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
       const apiVersion = config.apiVersion ?? META_GRAPH_API_VERSION;
