@@ -48,6 +48,7 @@ export async function approveFacebookCandidate({
     const rl = createInterface({ input: stdin, output: stdout });
     try { return await rl.question(prompt); } finally { rl.close(); }
   },
+  write = value => write(value),
   now = new Date().toISOString()
 } = {}) {
   if (typeof slotId !== "string" || !slotId.trim()) fail("An exact candidate slot ID is required");
@@ -70,7 +71,7 @@ export async function approveFacebookCandidate({
   if (!Array.isArray(item.claims) || item.claims.length === 0) fail("Candidate must include sourced factual claims before review");
   if (!Array.isArray(item.media) || item.media.length === 0) fail("Candidate must include final media and rights evidence before review");
 
-  stdout.write("\nNATURE FRONTIERS — FACTUAL CLAIM REVIEW\n");
+  write("\nNATURE FRONTIERS — FACTUAL CLAIM REVIEW\n");
   for (let index = 0; index < item.claims.length; index++) {
     const claim = item.claims[index];
     if (typeof claim?.text !== "string" || !claim.text.trim() ||
@@ -78,9 +79,9 @@ export async function approveFacebookCandidate({
         typeof claim.sourceExcerpt !== "string" || claim.sourceExcerpt.trim().length < 25) {
       fail("Every claim needs text, source URLs and a substantive source excerpt");
     }
-    stdout.write("\nClaim " + (index + 1) + ": " + claim.text + "\n");
-    stdout.write("Sources: " + JSON.stringify(claim.sourceUrls) + "\nExcerpt: " + claim.sourceExcerpt + "\n");
-    stdout.write("Open each source and verify that it supports the complete claim with its qualifications.\n");
+    write("\nClaim " + (index + 1) + ": " + claim.text + "\n");
+    write("Sources: " + JSON.stringify(claim.sourceUrls) + "\nExcerpt: " + claim.sourceExcerpt + "\n");
+    write("Open each source and verify that it supports the complete claim with its qualifications.\n");
     if (await confirm("Type exactly VERIFY CLAIM " + slotId + " " + (index + 1) + ": ") !==
         "VERIFY CLAIM " + slotId + " " + (index + 1)) fail("Claim review was not confirmed; no approval was written");
     const claimHash = sha256(Buffer.from(String(claim.text), "utf8"));
@@ -97,7 +98,7 @@ export async function approveFacebookCandidate({
     };
   }
 
-  stdout.write("\nNATURE FRONTIERS — FINAL MEDIA AND RIGHTS REVIEW\n");
+  write("\nNATURE FRONTIERS — FINAL MEDIA AND RIGHTS REVIEW\n");
   for (let index = 0; index < item.media.length; index++) {
     const asset = item.media[index] ?? {};
     const rights = asset.rightsRecord ?? {};
@@ -116,7 +117,7 @@ export async function approveFacebookCandidate({
         (rights.expiresAt != null && (!Number.isFinite(Date.parse(rights.expiresAt)) || Date.parse(rights.expiresAt) <= Date.parse(now)))) {
       fail("Rights evidence fields are incomplete or expired for asset " + (index + 1));
     }
-    stdout.write([
+    write([
       "Media " + (index + 1) + ": " + String(asset.id ?? "unnamed"),
       "Path: " + asset.path,
       "SHA-256: " + actualMediaHash,
@@ -126,18 +127,22 @@ export async function approveFacebookCandidate({
       "License: " + rights.license,
       "Commercial use: " + rights.commercialUse,
       "Social media use: " + rights.socialMediaUse,
+      "Permitted use: commercial=" + String(rights.commercialUse === true) + "; social media=" + String(rights.socialMediaUse === true),
       "Provenance verified: " + rights.provenanceVerified,
+      "Attribution required: " + String(rights.attributionRequired === true),
+      "Attribution text: " + String(rights.attributionText ?? "not supplied"),
+      "Rights expiry: " + String(rights.expiresAt ?? "not supplied"),
       "Synthetic/altered origin known: " + rights.syntheticOrAlteredKnown
     ].join("\n") + "\n");
     if (await confirm("Type exactly VERIFY MEDIA " + slotId + " " + (index + 1) + " after inspecting the actual file and licence: ") !==
         "VERIFY MEDIA " + slotId + " " + (index + 1)) fail("Media/rights review was not confirmed; no approval was written");
   }
 
-  stdout.write("\nFINAL CAPTION\n" + item.caption + "\n");
-  stdout.write("Links: " + JSON.stringify(item.links ?? []) + "\n");
+  write("\nFINAL CAPTION\n" + item.caption + "\n");
+  write("Links: " + JSON.stringify(item.links ?? []) + "\n");
   const fingerprint = facebookPayloadFingerprint(item);
-  stdout.write("Exact content fingerprint: " + fingerprint + "\n");
-  stdout.write("The publisher will independently rerun all policy, rights, source, duplicate, cadence and destination checks. This signature does not enable publishing.\n");
+  write("Exact content fingerprint: " + fingerprint + "\n");
+  write("The publisher will independently rerun all policy, rights, source, duplicate, cadence and destination checks. This signature does not enable publishing.\n");
   const reason = await confirm("Enter the reason for approving this exact candidate: ");
   if (typeof reason !== "string" || reason.trim().length < 3 || reason.length > 1000) fail("A meaningful approval reason is required");
   if (await confirm("Type exactly APPROVE " + slotId + " to sign: ") !== "APPROVE " + slotId) {
