@@ -101,8 +101,8 @@ async function downloadPexels(asset, destination) {
 async function main() {
   const register = JSON.parse(await fsp.readFile(REGISTER_PATH, "utf8"));
   const policy = register.currentProductionPolicy ?? {};
-  if (policy.stockMediaAllowed !== true || policy.originalCreatorCapturedMediaRequired !== false) {
-    console.error("BLOCKED: Pexels stock acquisition is disabled. Current production requires original creator-captured wildlife media; Pexels may remain reference-only and must not be downloaded for production.");
+  if (policy.stockMediaAllowed !== true || policy.stockVideoFootageAllowed !== true || policy.stockPhotographsAllowed !== false || policy.aiGeneratedWildlifeVisualsAllowed !== false || policy.originalCreatorCapturedMediaRequired !== false) {
+    console.error("BLOCKED: only qualifying licensed Pexels/Pixabay video footage is permitted; stock photographs and AI-generated wildlife visuals remain disabled.");
     return 2;
   }
   await fsp.mkdir(MEDIA_ROOT, { recursive: true });
