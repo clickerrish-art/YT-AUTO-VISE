@@ -152,7 +152,7 @@ test("All manual alternate-narrator entry points enforce the owner decision", ()
   const policy = readJson("../config/narration-voice-candidates.json");
   assert.equal(policy.ownerDecision.approvedVoice, "Roderic — Authoritative & Refined");
   assert.equal(policy.ownerDecision.approvedVoiceStatus, "HISTORICAL_PREFERENCE_NOT_APPROVED_FOR_COMMERCIAL_RELEASE");
-  assert.equal(policy.ownerDecision.alternativeVoicesAuthorized, true);
+  assert.equal(policy.ownerDecision.alternativeVoicesAuthorized, false);
   assert.equal(policy.ownerDecision.selectionStatus, "OWNER_SELECTED_WADE_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED");
   assert.equal(policy.ownerDecision.selectedAlternative.voiceId, "a3a4aa242aaf431ea8ec2c4b3bb332fa");
   assert.equal(policy.ownerDecision.selectedAlternative.productionApproved, false);
