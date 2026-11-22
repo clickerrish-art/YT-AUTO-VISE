@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process";
 import { buildBranchReconciliationReport, renderMarkdown } from "../scripts/branch-reconciliation-report.mjs";
 
 function git(cwd, ...args) {
-  return execFileSync("git", args, { cwd, encoding: "utf8", stdio: "pipe" }).trim();
+  return execFileSync("git", args, { cwd, encoding: "utf8", stdio: "pipe", maxBuffer: 64 * 1024 * 1024 }).trim();
 }
 
 test("branch reconciliation report inventories branch-only/base-only commits and per-commit files without mutation", () => {
@@ -44,6 +44,39 @@ test("branch reconciliation report inventories branch-only/base-only commits and
     assert.equal(report.safety.destructiveReconciliationPerformed, false);
     assert.match(renderMarkdown(report), /Branch-only commit inventory/);
     assert.equal(git(cwd, "status", "--porcelain"), before, "report generation must not mutate the worktree");
+  } finally {
+    fs.rmSync(cwd, { recursive: true, force: true });
+  }
+});
+
+
+test("branch reconciliation report handles inventories larger than Node's default exec buffer", () => {
+  const cwd = fs.mkdtempSync(path.join(os.tmpdir(), "branch-reconciliation-large-"));
+  try {
+    git(cwd, "init", "-b", "main");
+    git(cwd, "config", "user.name", "Test User");
+    git(cwd, "config", "user.email", "test@example.invalid");
+    git(cwd, "remote", "add", "origin", "https://example.invalid/repo.git");
+    fs.writeFileSync(path.join(cwd, "README.md"), "base\n");
+    git(cwd, "add", "README.md");
+    git(cwd, "commit", "-m", "base readme");
+    git(cwd, "branch", "work");
+    git(cwd, "checkout", "work");
+
+    const payload = path.join(cwd, "payload");
+    fs.mkdirSync(payload);
+    const suffix = "x".repeat(230);
+    for (let index = 0; index < 6000; index += 1) {
+      fs.writeFileSync(path.join(payload, \`\${String(index).padStart(5, "0")}-\${suffix}\`), "x\n");
+    }
+    git(cwd, "add", "payload");
+    git(cwd, "commit", "-m", "large inventory fixture");
+
+    const report = buildBranchReconciliationReport({ baseRef: "main", headRef: "work", cwd });
+    assert.equal(report.branchOnlyCommitCount, 1);
+    assert.equal(report.branchOnlyCommits[0].files.length, 6000);
+    assert.equal(report.finalTreeChangedFiles.length, 6000);
+    assert.equal(report.workingTree.clean, true);
   } finally {
     fs.rmSync(cwd, { recursive: true, force: true });
   }

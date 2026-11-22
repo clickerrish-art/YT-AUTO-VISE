@@ -4,8 +4,17 @@ import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+// Large, intentionally divergent histories can produce multi-megabyte --name-status
+// output. Node's 1 MiB execFileSync default truncated valid inventories with ENOBUFS.
+const GIT_OUTPUT_MAX_BUFFER = 64 * 1024 * 1024;
+
 function git(args, cwd) {
-  return execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  return execFileSync("git", args, {
+    cwd,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    maxBuffer: GIT_OUTPUT_MAX_BUFFER
+  });
 }
 
 export function parseGitLogWithFiles(raw) {
