@@ -15,7 +15,7 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 5496,
+    "branchAheadBy": 5499,
     "branchBehindBy": 17,
     "changedFiles": 546,
     "branchProtectionEnabled": null,
@@ -390,12 +390,12 @@
       "restartRecovery": "NOT_TESTED — known-ID reconciliation is designed for post-restart read-only recovery; test execution pending.",
       "externalOperation": "Requires renewed Meta Page token and verified Page access for read-only provider lookup; no create retry or publish action is performed.",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "Added on exact implementation SHA bb31f150153da0519564708eb6a012294e95493b. No exact-SHA CI/test run or live provider verification has occurred. A missing match is not proof of non-creation because Meta documents that unpublished posts may not appear in /feed. The explicit config/facebook-publishing.json providerDraftsEnabled flag is false by default.",
+      "notes": "Added on exact implementation SHA 603722e352c787f118256a3400603842a41c041f. No exact-SHA CI/test run or live provider verification has occurred. A missing match is not proof of non-creation because Meta documents that unpublished posts may not appear in /feed. The explicit config/facebook-publishing.json providerDraftsEnabled flag is false by default. The create route re-runs the complete rights/compliance evaluation after read-only Page identity verification and immediately before durable attempt preparation.",
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "NOT_TESTED",
-      "currentHeadEvidenceSha": "bb31f150153da0519564708eb6a012294e95493b",
-      "currentHeadEvidenceNote": "Implementation and regression tests committed; syntax-only parsing passed on source SHA fc4ca389d06bc3a6fbde5b82e539d4098675f445, but no Node test or CI run has executed after the current config update. Do not count source presence or parser checks as route acceptance.",
+      "currentHeadEvidenceSha": "603722e352c787f118256a3400603842a41c041f",
+      "currentHeadEvidenceNote": "Implementation and regression tests committed; syntax-only parsing passed for dashboard-server.mjs on this SHA, but no Node test or CI run has executed. Do not count source presence or parser checks as route acceptance.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-page-adapter.test.mjs",
         "test/dashboard-server.test.mjs"
@@ -415,12 +415,12 @@
       "restartRecovery": "NOT_TESTED — persisted attempts can be reconciled by remote ID or bounded read-only search; test evidence pending.",
       "externalOperation": "Meta Page token and owner-enabled provider-draft configuration are required for a real provider operation; publishing remains disabled.",
       "overallAcceptance": "NOT_TESTED",
-      "notes": "Added on exact implementation SHA bb31f150153da0519564708eb6a012294e95493b. This is repository code, not a completed acceptance result. Provider creation is disabled by default; route requires config.providerDraftsEnabled=true, FACEBOOK_PROVIDER_DRAFTS_ENABLED=YES, emergencyStop=false, dryRun=false, exact verified Page and explicit operator confirmation. It never schedules or publishes. No exact-SHA CI/test run or live provider write has occurred. The explicit config/facebook-publishing.json providerDraftsEnabled flag is false by default.",
+      "notes": "Added on exact implementation SHA 603722e352c787f118256a3400603842a41c041f. This is repository code, not a completed acceptance result. Provider creation is disabled by default; route requires config.providerDraftsEnabled=true, FACEBOOK_PROVIDER_DRAFTS_ENABLED=YES, emergencyStop=false, dryRun=false, exact verified Page and explicit operator confirmation. It never schedules or publishes. No exact-SHA CI/test run or live provider write has occurred. The explicit config/facebook-publishing.json providerDraftsEnabled flag is false by default. The create route re-runs the complete rights/compliance evaluation after read-only Page identity verification and immediately before durable attempt preparation.",
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "NOT_TESTED",
-      "currentHeadEvidenceSha": "bb31f150153da0519564708eb6a012294e95493b",
-      "currentHeadEvidenceNote": "Implementation and regression tests committed; syntax-only parsing passed on source SHA fc4ca389d06bc3a6fbde5b82e539d4098675f445, but no Node test or CI run has executed after the current config update. Do not count source presence or parser checks as route acceptance.",
+      "currentHeadEvidenceSha": "603722e352c787f118256a3400603842a41c041f",
+      "currentHeadEvidenceNote": "Implementation and regression tests committed; syntax-only parsing passed for dashboard-server.mjs on this SHA, but no Node test or CI run has executed. Do not count source presence or parser checks as route acceptance.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-page-adapter.test.mjs",
         "test/dashboard-server.test.mjs"
@@ -2187,13 +2187,13 @@
     "latestCandidateHeadSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
     "latestCandidateRegressionStatus": "PASS — exact source/test SHA; 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero skips/failures, npm audit zero vulnerabilities; 41/41 dashboard browser journeys passed on the same SHA. Seven API routes remain blocked, including two owner-mapping-gated routes.",
     "latestCandidateEvidenceNote": "Exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 passed the complete automation run 45024548346 and dashboard browser run 45024548303. The complete suite reran every endpoint-specific API success/fail-closed test and all 48 route authentication-negative cases. This is local application/fixture evidence, not live provider acceptance. Preserve seven blocked routes: Facebook/Instagram provider approvals/publication and Page identity, queue dispatch/production pending owner-signed exact queue identity mapping, and YouTube upload-attempt reconciliation requiring authoritative remote history.",
-    "implementationHead": "bb31f150153da0519564708eb6a012294e95493b",
+    "implementationHead": "603722e352c787f118256a3400603842a41c041f",
     "protectedApiRoutes": 50,
     "providerDraftRoutes": [
       "POST /api/facebook/drafts/provider",
       "POST /api/facebook/drafts/provider/reconcile"
     ],
-    "providerDraftAcceptance": "NOT_TESTED — exact-SHA tests have not run. Explicit config flag providerDraftsEnabled=false and environment switch default off; no live provider write."
+    "providerDraftAcceptance": "NOT_TESTED — exact-SHA tests have not run. Explicit config flag providerDraftsEnabled=false and environment switch default off; route repeats rights/compliance evaluation immediately before durable attempt preparation. No live provider write."
   },
   "dashboardBrowserE2eRefreshRequest": {
     "requestedAt": "2026-11-20",
