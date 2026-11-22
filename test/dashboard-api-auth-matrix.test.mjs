@@ -191,12 +191,20 @@ test("API acceptance matrix exactly matches every live server API route", () => 
   assert.equal(natureRegister?.overallAcceptance, "PASS",
     "the authenticated read-only Nature Frontiers media-register contract is accepted independently of media rights approval");
   assert.equal(matrix.counts.overallPass, 41);
-  assert.equal(matrix.counts.overallNotTested, 0);
+  assert.equal(matrix.counts.overallNotTested, 2, "the two new provider-draft routes remain NOT_TESTED until positive acceptance completes");
   assert.equal(matrix.counts.overallBlocked, 7);
-  assert.equal(matrix.counts.authNegativePass, 48,
-    "the matrix must record exact-head authentication-negative PASS for all 48 protected routes");
+  assert.equal(matrix.counts.authNegativePass, 50,
+    "the matrix must record exact-head authentication-negative PASS for all 50 protected routes");
   assert.equal(matrix.counts.routes, actual.length,
     "the acceptance matrix route count must match the live source inventory");
+  for (const providerPath of ["/api/facebook/drafts/provider", "/api/facebook/drafts/provider/reconcile"]) {
+    const providerRoute = matrix.routes.find(route => route.method === "POST" && route.path === providerPath);
+    assert.ok(providerRoute, `provider route ${providerPath} must be inventoried`);
+    assert.equal(providerRoute.overallAcceptance, "NOT_TESTED",
+      "authentication rejection alone must not promote a provider-draft route to overall PASS");
+    assert.equal(providerRoute.authenticationNegativeCurrentHead, "PASS");
+    assert.match(providerRoute.authenticationNegative, /648d3e0f1339a53cc73086afd949d50ca72536f0/);
+  }
   assert.equal(matrix.counts.authNegativePass, matrix.routes.filter(route => /PASS/.test(route.authenticationNegative)).length,
     "every inventoried route must have exact-source missing/invalid-credential coverage");
   assert.equal(matrix.counts.overallPass,

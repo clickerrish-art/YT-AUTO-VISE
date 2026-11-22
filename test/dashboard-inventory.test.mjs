@@ -19,7 +19,7 @@ test("dashboard static inventory reports all declared controls, forms and litera
   assert.equal(inventory.counts.routes, inventory.routes.length);
   assert.equal(inventory.counts.controls, 121);
   assert.equal(inventory.counts.forms, 17);
-  assert.equal(inventory.counts.routes, 52);
+  assert.equal(inventory.counts.routes, 54);
   assert.equal(inventory.controls.filter(control => control.form !== null).length, 104,
     "all form-owned controls must be counted independently from standalone controls");
   assert.equal(inventory.controls.filter(control => control.form === null).length, 17,
@@ -30,7 +30,7 @@ test("dashboard static inventory reports all declared controls, forms and litera
     select: 27,
     textarea: 17,
   });
-  assert.deepEqual(inventory.counts.routesByMethod, { GET: 18, POST: 34 });
+  assert.deepEqual(inventory.counts.routesByMethod, { GET: 18, POST: 36 });
 
   assert.ok(inventory.controls.every(control => Number.isInteger(control.line) && control.line > 0));
   assert.ok(inventory.forms.every(form => Number.isInteger(form.line) && form.line > 0));

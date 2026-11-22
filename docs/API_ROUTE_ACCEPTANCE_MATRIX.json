@@ -26,15 +26,15 @@
   },
   "counts": {
     "routes": 50,
-    "authNegativePass": 48,
+    "authNegativePass": 50,
     "overallPass": 41,
     "overallNotTested": 2,
     "overallBlocked": 7,
     "authNegativePassHistorical": 45,
-    "authNegativePassCurrentHead": 48
+    "authNegativePassCurrentHead": 50
   },
   "evidence": {
-    "authMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
+    "authMatrix": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45037884539",
     "nodeAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034162",
     "dashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41201034132",
     "workerLeaseCommit": "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/d9bdfbb4a79d4a1030edb208d8754fda88852c9b",
@@ -168,7 +168,7 @@
     "apiRouteAcceptanceAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346",
     "apiRouteAcceptanceDashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303"
   },
-  "disclaimer": "The API route matrix is synchronized to the source-derived dashboard API inventory. Exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 passed automation run 45024548346: 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The same exact-SHA run includes 48/48 protected-route missing/invalid-authentication checks and endpoint-specific local integration coverage for all 41 routes classified PASS. Dashboard browser E2E passed 41/41 journeys on the same exact SHA in run 45024548303. Seven routes remain BLOCKED: five depend on real Meta/YouTube provider identity, rights, compliance or authoritative history; two positive dispatch/production routes remain owner-gated until the exact queue mapping is signed. Fail-closed negative paths are tested. This does not claim live provider acceptance, remote publication, owner authorization or production readiness.",
+  "disclaimer": "The API route matrix is synchronized to the source-derived dashboard API inventory. Exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 passed automation run 45024548346: 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The same exact-SHA run includes 48/48 protected-route missing/invalid-authentication checks and endpoint-specific local integration coverage for all 41 routes classified PASS. Dashboard browser E2E passed 41/41 journeys on the same exact SHA in run 45024548303. Seven routes remain BLOCKED: five depend on real Meta/YouTube provider identity, rights, compliance or authoritative history; two positive dispatch/production routes remain owner-gated until the exact queue mapping is signed. Fail-closed negative paths are tested. This does not claim live provider acceptance, remote publication, owner authorization or production readiness. Exact source/test SHA 648d3e0f1339a53cc73086afd949d50ca72536f0 also passed the all-routes missing/invalid-credential subtest: 50/50 protected API routes rejected unauthenticated and invalid-token requests before mutation. The overall automation workflow failed four separate acceptance assertions; this auth-negative subtest does not promote either provider-draft route beyond NOT_TESTED.",
   "routes": [
     {
       "method": "POST",
@@ -381,7 +381,7 @@
       "path": "/api/facebook/drafts/provider/reconcile",
       "classification": "read-only Meta unpublished provider-draft reconciliation",
       "authRequired": "operator token",
-      "authenticationNegative": "NOT_TESTED on current implementation SHA; the real-server protected-route matrix includes this route but has not run on the current SHA.",
+      "authenticationNegative": "PASS on exact source/test SHA 648d3e0f1339a53cc73086afd949d50ca72536f0: the real-server matrix rejected missing and invalid operator credentials before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45037884539.",
       "authorizedSuccess": "NOT_TESTED — read-only reconciliation can verify a known remote ID or search for a unique exact-caption unpublished candidate; zero matches remain unresolved and never authorize a retry.",
       "inputValidation": "NOT_TESTED — requires an existing durable attempt ID, exact configured Page identity and secure token; no provider mutation occurs.",
       "durablePersistence": "NOT_TESTED — reconciliation outcome and remote receipt are persisted in the attempt ledger and draft state; restart verification pending.",
@@ -393,9 +393,9 @@
       "notes": "Added on exact implementation SHA 603722e352c787f118256a3400603842a41c041f. No exact-SHA CI/test run or live provider verification has occurred. A missing match is not proof of non-creation because Meta documents that unpublished posts may not appear in /feed. The explicit config/facebook-publishing.json providerDraftsEnabled flag is false by default. The create route re-runs the complete rights/compliance evaluation after read-only Page identity verification and immediately before durable attempt preparation.",
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "authenticationNegativeCurrentHead": "NOT_TESTED",
-      "currentHeadEvidenceSha": "603722e352c787f118256a3400603842a41c041f",
-      "currentHeadEvidenceNote": "Implementation and regression tests committed; syntax-only parsing passed for dashboard-server.mjs on this SHA, but no Node test or CI run has executed. Do not count source presence or parser checks as route acceptance.",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "648d3e0f1339a53cc73086afd949d50ca72536f0",
+      "currentHeadEvidenceNote": "Missing/invalid operator-credential rejection passed in the all-routes real-server auth subtest on exact source/test SHA 648d3e0f1339a53cc73086afd949d50ca72536f0 (run 45037884539). This is authentication-negative evidence only; authorized positive operation, validation, persistence, concurrency, audit and restart acceptance remain NOT_TESTED.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-page-adapter.test.mjs",
         "test/dashboard-server.test.mjs"
@@ -406,7 +406,7 @@
       "path": "/api/facebook/drafts/provider",
       "classification": "one-shot unpublished Meta Page provider-draft creation",
       "authRequired": "operator token",
-      "authenticationNegative": "NOT_TESTED on current implementation SHA; the real-server protected-route matrix includes this route but has not run on the current SHA.",
+      "authenticationNegative": "PASS on exact source/test SHA 648d3e0f1339a53cc73086afd949d50ca72536f0: the real-server matrix rejected missing and invalid operator credentials before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45037884539.",
       "authorizedSuccess": "NOT_TESTED — implementation requires a current exact-payload approval, verified Page identity and permissions, owner-enabled provider-draft-only switches, and explicit operator confirmation. No live provider write is claimed.",
       "inputValidation": "NOT_TESTED — adapter rejects missing/expired authorization, wrong Page, invalid token, modified approval payload and unsafe media before mutation; exact-SHA test execution pending.",
       "durablePersistence": "NOT_TESTED — server writes a one-shot attempt record before provider mutation; restart verification remains pending.",
@@ -418,9 +418,9 @@
       "notes": "Added on exact implementation SHA 603722e352c787f118256a3400603842a41c041f. This is repository code, not a completed acceptance result. Provider creation is disabled by default; route requires config.providerDraftsEnabled=true, FACEBOOK_PROVIDER_DRAFTS_ENABLED=YES, emergencyStop=false, dryRun=false, exact verified Page and explicit operator confirmation. It never schedules or publishes. No exact-SHA CI/test run or live provider write has occurred. The explicit config/facebook-publishing.json providerDraftsEnabled flag is false by default. The create route re-runs the complete rights/compliance evaluation after read-only Page identity verification and immediately before durable attempt preparation.",
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "authenticationNegativeCurrentHead": "NOT_TESTED",
-      "currentHeadEvidenceSha": "603722e352c787f118256a3400603842a41c041f",
-      "currentHeadEvidenceNote": "Implementation and regression tests committed; syntax-only parsing passed for dashboard-server.mjs on this SHA, but no Node test or CI run has executed. Do not count source presence or parser checks as route acceptance.",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "648d3e0f1339a53cc73086afd949d50ca72536f0",
+      "currentHeadEvidenceNote": "Missing/invalid operator-credential rejection passed in the all-routes real-server auth subtest on exact source/test SHA 648d3e0f1339a53cc73086afd949d50ca72536f0 (run 45037884539). This is authentication-negative evidence only; authorized positive operation, validation, persistence, concurrency, audit and restart acceptance remain NOT_TESTED.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-page-adapter.test.mjs",
         "test/dashboard-server.test.mjs"

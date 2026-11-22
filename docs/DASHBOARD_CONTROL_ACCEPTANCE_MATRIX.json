@@ -5,7 +5,7 @@
   "branch": "codex/marketing-machine-audit-fixes",
   "sourceHead": "701cf7b66f535288cdb96ebb5224b3d04652116b",
   "sourceBlobs": {
-    "dashboardHtml": "6a5b7a6ba833be9921be93243c07ed6425a66814",
+    "dashboardHtml": "aa9ad10df1489e00869045a4997e98c33dfd093f",
     "dashboardInventoryScript": "ba28f86acf755ada2ea922b192b9b120355ce201"
   },
   "status": "PASS",
