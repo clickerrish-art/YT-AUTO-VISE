@@ -425,7 +425,7 @@ test("readiness blocks selected licensed wildlife assets until source, local MP4
 test("review-eligible Pexels candidates do not become selected production inputs implicitly", () => {
   const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
   assert.equal(inventory.releaseAuthorized, false);
-  assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction === false).length, 3);
+  assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction === false).length, 8);
   assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true).length, 2);
   assert.equal(inventory.status, "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW");
   assert.ok(inventory.assets.every(asset => asset.selectedForProduction === false));
@@ -443,7 +443,7 @@ test("licensed Pexels candidates can pass the source gate when all asset-level r
   try {
     const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
     const candidates = inventory.assets.filter(asset => asset.reviewRenderEligible === true);
-    assert.equal(candidates.length, 3);
+    assert.equal(candidates.length, 8);
     const localHash = createHash("sha256").update(fs.readFileSync("package.json")).digest("hex");
     for (const asset of candidates) {
       asset.status = "CLEARED";
