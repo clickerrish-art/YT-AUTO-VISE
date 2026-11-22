@@ -131,8 +131,8 @@
     "note": "No bot-driven likes, comments, replies, follows, DMs, engagement exchanges, artificial views/clicks, or unsolicited outreach. Human-initiated genuine interaction is outside automation and must comply with platform rules."
   },
   "productionPolicy": {
-    "originalCreatorCapturedMediaRequired": true,
-    "stockMediaAllowed": false,
+    "originalCreatorCapturedMediaRequired": false,
+    "stockMediaAllowed": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
     "requiredMediaProvenance": "CREATOR_IDENTITY_CHAIN_OF_CUSTODY_ORIGINAL_BYTES_SHA256",
     "narrationVoice": "Roderic — Authoritative & Refined",
@@ -140,6 +140,10 @@
     "alternativeNarratorAuthorized": false,
     "paidUpgradeAuthorized": false,
     "publishingEnabled": false,
-    "privateUploadRequiresExactOneShotOwnerAuthorization": true
+    "privateUploadRequiresExactOneShotOwnerAuthorization": true,
+    "pexelsAllowed": true,
+    "pixabayAllowed": true,
+    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
   }
 }
