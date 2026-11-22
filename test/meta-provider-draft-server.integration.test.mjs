@@ -195,13 +195,13 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   assert.ok(attempt, "durable provider attempt must survive the API request");
   assert.equal(attempt.status, "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED");
   assert.equal(attempt.remotePostId, remotePostId);
-  assert.equal(attempt.pageId, pageId);
+  assert.equal(attempt.destinationPageId, pageId);
   assert.match(attempt.payloadSha256, /^[a-f0-9]{64}$/);
   assert.match(attempt.approvalFingerprint, /^[a-f0-9]{64}$/);
   assert.equal(state.publishingEnabled, false);
   assert.equal(state.providerDraftsEnabled, true);
 
-  const reconcile = await request(base, "/api/facebook/drafts/provider/reconcile", "POST", { draftId, attemptId: attempt.attemptId }, operatorToken);
+  const reconcile = await request(base, "/api/facebook/drafts/provider/reconcile", "POST", { draftId, attemptId: attempt.id }, operatorToken);
   const reconciled = await readJson(reconcile);
   assert.equal(reconciled.status, 200, JSON.stringify(reconciled.body));
   assert.equal(createCalls, 1, "reconciliation must remain read-only and never create a second object");
