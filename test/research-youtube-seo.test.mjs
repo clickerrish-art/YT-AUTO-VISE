@@ -96,6 +96,32 @@ test("Nile crocodile relevance excludes generic wildlife titles and keeps generi
   assert.ok(candidate.unmatchedSampleVideos.some(video => video.title.includes("Silverback")));
 });
 
+test("African documentary and creator-education phrases require the actual intent terms", () => {
+  const results = makeResults();
+  results[4].videos = [
+    { videoId: "video000001", title: "A Lion Faced A Warrior #Lion #Safari #AnimalEncounter", channelTitle: "Animal Chronicles", publishedAt: "2026-11-01T00:00:00Z", viewCount: 7000 },
+    { videoId: "video000002", title: "African Wildlife Documentary: River Giants", channelTitle: "Nature Notes", publishedAt: "2026-11-01T00:00:00Z", viewCount: 1000 }
+  ];
+  results[5].videos = [
+    { videoId: "video000001", title: "Untold Stories of Elephants", channelTitle: "Nature Notes", publishedAt: "2026-11-01T00:00:00Z", viewCount: 5000 },
+    { videoId: "video000002", title: "Wildlife Storytelling in Three Clear Shots", channelTitle: "Creator School", publishedAt: "2026-11-01T00:00:00Z", viewCount: 1000 }
+  ];
+  results[6].videos = [
+    { videoId: "video000001", title: "Hugh Laurie Got the Strangest Advice While Filming With a Lion", channelTitle: "Fame Uncut", publishedAt: "2026-11-01T00:00:00Z", viewCount: 6000 },
+    { videoId: "video000002", title: "How to Film Wildlife Up Close: Camera Tips", channelTitle: "Creator School", publishedAt: "2026-11-01T00:00:00Z", viewCount: 1000 }
+  ];
+  const report = buildSeoResearchReport({ channel, queryResults: results, generatedAt: "2026-11-09T16:00:00Z" });
+  const africa = report.keywordCandidates.find(item => item.phrase === "African wildlife documentary");
+  const storytelling = report.keywordCandidates.find(item => item.phrase === "wildlife video storytelling");
+  const filmmaking = report.keywordCandidates.find(item => item.phrase === "wildlife filmmaking tips");
+  assert.equal(africa.exactTitleSignalResultsCount, 1);
+  assert.equal(africa.relatedTitleSignalResultsCount, 1);
+  assert.equal(storytelling.exactTitleSignalResultsCount, 1);
+  assert.equal(storytelling.relatedTitleSignalResultsCount, 1);
+  assert.equal(filmmaking.exactTitleSignalResultsCount, 1);
+  assert.equal(filmmaking.relatedTitleSignalResultsCount, 1);
+});
+
 test("off-topic entertainment and potential AI sources are excluded from positive view totals", () => {
   const results = makeResults();
   results[0].videos = [
