@@ -93,9 +93,9 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
   const worker = byId("SCHED-WORKER-DISPATCH-001");
   assert.equal(worker.status, "NOT_TESTED");
   assert.equal(worker.currentHeadStatus, "NOT_TESTED");
-  assert.equal(worker.currentHeadEvidenceSha, "668a8779f8a2894f99ed935d0c8bf13f2f215e64");
-  assert.match(worker.currentHeadEvidenceNote, /HTTP 409 preflight cooldown/);
-  assert.match(worker.currentHeadEvidenceNote, /failed cooldown persistence causing a non-retryable stop and retained process lock/);
+  assert.equal(worker.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
+  assert.match(worker.currentHeadEvidenceNote, /persisted HTTP 409 preflight cooldown across restart/);
+  assert.match(worker.currentHeadEvidenceNote, /fail-stop with retained process lock when cooldown persistence fails/);
   assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
 
   const scheduler = byId("SCHED-001");
