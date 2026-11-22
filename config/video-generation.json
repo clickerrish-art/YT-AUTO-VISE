@@ -121,7 +121,9 @@
     "stockMediaAllowed": true,
     "pexelsAllowed": true,
     "pixabayAllowed": true,
-    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json"
+    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "stockVideoFootageAllowed": true,
+    "stockPhotographsAllowed": false
   },
   "requiredGenerationEvidence": [
     "wanGpCommit",
