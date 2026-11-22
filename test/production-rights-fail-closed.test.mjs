@@ -288,3 +288,34 @@ test("Imported Canva media inventory includes acquired crocodile clips without s
     asset.humanVisualReview === "PENDING_FULL_PLAYBACK"
   ));
 });
+
+
+test("Previously shared Pexels acquisition selects only four confirmed user-shared sources", () => {
+  const register = readJson("../content/media/pexels-user-shared-candidates-2026-11-22.json");
+  const script = readText("../scripts/acquire-previously-shared-pexels-candidates.mjs");
+  const selectedIds = [
+    "pexels-video-8268897",
+    "pexels-video-9655785",
+    "pexels-video-30175165",
+    "pexels-video-2835528"
+  ];
+  assert.equal(register.assets.length, 6);
+  for (const id of selectedIds) {
+    const asset = register.assets.find(candidate => candidate.assetId === id);
+    assert.ok(asset, `Missing previously shared Pexels candidate: ${id}`);
+    assert.equal(asset.sourceFileStatus, "NOT_DOWNLOADED");
+    assert.equal(asset.sha256, null);
+    assert.ok(asset.downloadUrl.startsWith("https://videos.pexels.com/video-files/"));
+    assert.ok(script.includes(id));
+  }
+  assert.ok(!script.includes("pexels-video-33260728"), "duration-mismatched possible match must stay out of automatic acquisition");
+  assert.ok(!script.includes("pexels-video-30026544"), "crocodile clip is already acquired in the separate long-form set");
+  assert.ok(script.includes("tile=4x1"));
+  assert.ok(script.includes("fullDecode"));
+  assert.ok(script.includes("thirdPartyRightsReviewed: false"));
+  assert.ok(script.includes("releaseEligible: false"));
+  const possibleMatch = register.assets.find(asset => asset.assetId === "pexels-video-33260728");
+  assert.equal(possibleMatch.sourceMatchStatus, "POSSIBLE_MATCH_NOT_CONFIRMED_DURATION_MISMATCH");
+  const elephant = register.assets.find(asset => asset.assetId === "pexels-video-2835528");
+  assert.match(elephant.editorialRisk, /Asian elephant/i);
+});
