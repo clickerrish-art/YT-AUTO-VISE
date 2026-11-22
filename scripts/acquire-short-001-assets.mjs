@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Acquire the three editorially selected Pexels clips for Short 001.
+ * Legacy Pexels review acquisition. It refuses to run unless an explicit owner policy override is active.
  * The output is a review artifact, never a final production/rights approval.
  * No narration, rendering, upload, scheduling or publishing occurs.
  */
@@ -14,6 +14,7 @@ import { pipeline } from "node:stream/promises";
 
 const ROOT = process.cwd();
 const REGISTER_PATH = path.join(ROOT, "content/approved-pexels-footage.json");
+const OWNER_POLICY_PATH = path.join(ROOT, "content/owner-media-policy-override-2026-11-22.json");
 const OUTPUT_ROOT = path.join(ROOT, "artifacts/short-001");
 const MEDIA_ROOT = path.join(OUTPUT_ROOT, "media");
 const PREVIEW_ROOT = path.join(OUTPUT_ROOT, "preview");
@@ -100,9 +101,17 @@ async function downloadPexels(asset, destination) {
 
 async function main() {
   const register = JSON.parse(await fsp.readFile(REGISTER_PATH, "utf8"));
+  const owner = JSON.parse(await fsp.readFile(OWNER_POLICY_PATH, "utf8"));
   const policy = register.currentProductionPolicy ?? {};
-  if (policy.stockMediaAllowed !== true || policy.stockVideoFootageAllowed !== true || policy.stockPhotographsAllowed !== false || policy.aiGeneratedWildlifeVisualsAllowed !== false || policy.originalCreatorCapturedMediaRequired !== false) {
-    console.error("BLOCKED: only qualifying licensed Pexels/Pixabay video footage is permitted; stock photographs and AI-generated wildlife visuals remain disabled.");
+  if (owner.status !== "ACTIVE_WITH_ASSET_LEVEL_REVIEW_GATES"
+      || owner.mediaRules?.pexelsLicensedStockAllowed !== true
+      || owner.mediaRules?.stockVideoFootageAllowed !== true
+      || policy.stockMediaAllowed !== true
+      || policy.stockVideoFootageAllowed !== true
+      || policy.stockPhotographsAllowed !== false
+      || policy.aiGeneratedWildlifeVisualsAllowed !== false
+      || policy.originalCreatorCapturedMediaRequired !== false) {
+    console.error("BLOCKED: Pexels/Pixabay stock acquisition is not authorized by the current owner media policy; original creator-captured footage is required for production.");
     return 2;
   }
   await fsp.mkdir(MEDIA_ROOT, { recursive: true });

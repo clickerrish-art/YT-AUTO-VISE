@@ -35,9 +35,9 @@
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
-      "currentHeadEvidenceSha": "b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00",
-      "currentHeadEvidenceNote": "PASS — PR #1 remains OPEN, DRAFT and UNMERGED; current main HEAD 3795519ccbf58fd02d74458624b58dd2e44a88c0, implementation branch HEAD b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00, merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Compare shows 5,532 commits ahead / 17 behind and PR reports 549 changed files. All writes in this execution targeted only codex/marketing-machine-audit-fixes; main was not modified. No merge, reset, rebase, force-push or destructive reconciliation was performed. Branch protection is unverified because the protection endpoint returns 403; GIT-002 semantic review remains NOT_TESTED.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:12:13Z"
+      "currentHeadEvidenceSha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
+      "currentHeadEvidenceNote": "PASS — PR #1 remains OPEN, DRAFT and UNMERGED; current main HEAD 3795519ccbf58fd02d74458624b58dd2e44a88c0, implementation branch HEAD 42753d3133fb17027131e5cd06fa1983d6ce48be, merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Compare shows 5,543 commits ahead / 17 behind and PR reports 549 changed files. All writes in this execution targeted only codex/marketing-machine-audit-fixes; main was not modified. No merge, reset, rebase, force-push or destructive reconciliation was performed. Branch protection is unverified because the protection endpoint returns 403; GIT-002 semantic review remains NOT_TESTED.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:31:00Z"
     },
     {
       "id": "CI-001",
@@ -425,7 +425,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed the local scheduling/worker regression suite: 1,129 Node tests across 191 files, zero failures/skips, including Africa/Johannesburg timezone, actual elapsed 72-hour spacing, no same-local-day publication, long_form→long_form→short ordering, DST, leases, cancellation, retry/backoff persistence, dead-letter and restart safety. Read-only YouTube inventory run 45054962924 authenticated the exact @sonicvhibez channel with both required OAuth scopes and returned a complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos; the upload-ledger scan 45054962928 found no previous private-upload workflow run. The local upload ledger is gitignored and the owner’s manual/local/third-party attempt attestation is valid only through 2026-11-18, so later out-of-band attempts remain unverified. The rolling cycle remains owner-approved with no weekly target: long_form→long_form→short, at least 72 elapsed hours between actual publications, 216 hours for a full cycle, Africa/Johannesburg and no same local day. No publication has occurred since the cycle approval. Long-form render manifests remain BLOCKED pending release-cleared footage, a commercially eligible manual-audition-approved narration voice, rights and human review. Keep scheduling and uploads disabled.",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed the local scheduling/worker regression suite: 1,129 Node tests across 191 files, zero failures/skips, including Africa/Johannesburg timezone, actual elapsed 72-hour spacing, no same-local-day publication, long_form→long_form→short ordering, DST, leases, cancellation, retry/backoff persistence, dead-letter and restart safety. Read-only YouTube inventory run 45060415083 authenticated the exact @sonicvhibez channel with both required OAuth scopes and returned a complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos; the upload-ledger scan 45054962928 found no previous private-upload workflow run. The local upload ledger is gitignored and the owner’s manual/local/third-party attempt attestation is valid only through 2026-11-18, so later out-of-band attempts remain unverified. The rolling cycle remains owner-approved with no weekly target: long_form→long_form→short, at least 72 elapsed hours between actual publications, 216 hours for a full cycle, Africa/Johannesburg and no same local day. No publication has occurred since the cycle approval. Long-form render manifests remain BLOCKED pending release-cleared footage, a commercially eligible manual-audition-approved narration voice, rights and human review. Keep scheduling and uploads disabled.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T19:07:49Z"
     },
     {
@@ -518,7 +518,7 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
       "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceNote": "PASS for controlled staging persistence/recovery, not production deployment. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed 191/191 Node files, 1,129 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities (run 45058706978). Deployment recovery smoke 45058706854 passed; Cloudflare runner-bridge safety 45058706915 passed; read-only authenticated Cloudflare staging smoke passed health, authentication, state/ETag, backup-list and runner-session checks. Read-only account evidence shows staging D1 bound with one dashboard_state row and five backups; runner tables remain empty and R2 is unavailable. This validates staging persistence/recovery only, not production durability or live worker state.",
+      "currentHeadEvidenceNote": "PASS for controlled staging persistence/recovery, not production deployment. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed 191/191 Node files, 1,129 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities (run 45058706978). deployment recovery smoke 45058706854 passed; Cloudflare runner-bridge safety 45058706915 passed; read-only authenticated Cloudflare staging smoke passed health, authentication, state/ETag, backup-list and runner-session checks. Read-only account evidence shows staging D1 bound with one dashboard_state row and five backups; runner tables remain empty and R2 is unavailable. This validates staging persistence/recovery only, not production durability or live worker state.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T19:07:49Z"
     },
     {
@@ -536,8 +536,9 @@
       "acceptanceCriterion": "Authenticated YouTube API identity matches the independently verified SonicVhibez channel ID and never resolves to Nature Frontiers.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "Read-only YouTube identity/OAuth inventory run 45054962924 verified owner-supplied channel ID UCSlkuPfHH78oGC1o418HV4w, handle @sonicvhibez, and both youtube.upload and youtube.readonly scopes. The provider display title is SonicVibes, which differs from the SonicVhibez brand spelling; the handle and channel ID match, but keep the title discrepancy visible and do not infer public-upload authorization. Fresh manual/local/third-party upload-attempt attestation after 2026-11-18 is still required."
+      "currentHeadEvidenceSha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
+      "currentHeadEvidenceNote": "Read-only YouTube identity/OAuth inventory run 45060415083 verified owner-supplied channel ID UCSlkuPfHH78oGC1o418HV4w, handle @sonicvhibez, and both youtube.upload and youtube.readonly scopes. The provider display title is SonicVibes, which differs from the SonicVhibez brand spelling; the handle and channel ID match, but the title discrepancy remains visible and must be owner-confirmed before any publishing. OAuth identity verification is not publishing authorization.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:31:00Z"
     },
     {
       "id": "YT-002",
@@ -549,13 +550,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40203508332",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/tree/668a8779f8a2894f99ed935d0c8bf13f2f215e64/content/media"
       ],
-      "nextAction": "Extract and review the existing crocodile Pexels artifact; obtain the manual Speechma Andrew audition audio and SHA-256 through the owner-controlled browser audition, then listen and approve or reject it for the intended commercial use. Complete per-asset rights and qualified zoological review, final captions/render/thumbnail/metadata and hash-bound owner approval. The CSG review email remains unsent until the owner explicitly authorizes sending. Do not upload or schedule.",
+      "nextAction": "Re-upload the original creator-captured video and any additional original clips; complete provenance, rights, SHA-256 and technical review. Separately, perform the owner-controlled manual Speechma Andrew audition, download the audition MP3 and provide it for listening and hash verification; do not automate the free site or use a paid API. Complete qualified zoological review, final narration, captions, thumbnail, render and exact-hash owner approval. Keep upload/scheduling disabled; the CSG review email remains unsent until explicitly authorized.",
       "assessmentCommitSha": "defe68872edc1a24e404a17a4e997e98708826b6",
       "acceptanceCriterion": "Playable 50–60s 9:16 Short and 6–10 minute long-form outputs decode fully, match manifests/checksums, carry verified rights evidence, and have recorded human review bound to exact hashes.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "BLOCKED. Five Pexels Nile-crocodile clips now exist in review artifact 14735172901 from workflow run 44975292889; the acquisition workflow recorded hashes, technical probes and full-decode PASS, but the 451MB archive has not been extracted into the project workspace or visually reviewed here. Pexels/Pixabay video is permitted by the owner's 2026-11-22 policy only after asset-level third-party-rights and human review; licence presence alone is not final clearance. No final render, final captions, approved narration or complete rights package exists. Speechma Andrew (US male) is the owner-selected zero-cost manual browser audition candidate only; no audition audio/hash or final production approval is present, and free-site automation/paid API are not authorized. The CSG independent-review request remains a Gmail draft and has not been sent; qualified zoological review and exact-hash owner approval remain pending."
+      "currentHeadEvidenceSha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
+      "currentHeadEvidenceNote": "BLOCKED. No eligible original creator-captured wildlife MP4 is available in the accessible project files. The six Pexels crocodile clips in review artifact 14736582634 total 151.819967 seconds but are excluded from production by the user's original-capture-only instruction and the revoked owner-policy override; they are review-only and not release-eligible. The previously uploaded original three-minute video could not be located in the accessible conversation/Library file search. No final render, captions, thumbnail, approved narration or complete rights package exists. Speechma Andrew (US male) is the selected manual zero-cost browser audition candidate only; no audition MP3 or SHA-256 is present and no final voice approval exists. Automated free-site generation and paid APIs are not authorized. The CSG independent-review request remains a Gmail draft and has not been sent; qualified zoological review and exact-hash owner approval remain pending.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:31:00Z"
     },
     {
       "id": "YT-003",
@@ -631,9 +633,9 @@
       "acceptanceCriterion": "Repository owner enables branch protection and required status checks and verifies the settings before integration.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00",
+      "currentHeadEvidenceSha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
       "currentHeadEvidenceNote": "BLOCKED — current branch protection cannot be independently verified. The live GitHub branch-protection endpoint returned HTTP 403 Resource not accessible by integration. No PASS or disabled status is inferred. Repository owner/admin must inspect Settings → Branches and verify required status checks and protection rules.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:12:13Z"
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:31:00Z"
     },
     {
       "id": "GIT-002",
@@ -669,15 +671,15 @@
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "12777e433041783d61856732d3800830415bf4d5",
-      "currentHeadEvidenceNote": "NOT_TESTED — live compare at branch HEAD 12777e433041783d61856732d3800830415bf4d5: main 3795519ccbf58fd02d74458624b58dd2e44a88c0; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch 5,532 commits ahead and 17 behind; PR reports 549 changed files. All 17 base-only commits have now been semantically reviewed, including the six net changed paths: three Wikimedia rights-review records remain excluded and are not in the branch; the main Pexels 30026544 record is superseded by the branch's owner-policy-aligned candidate-for-review record; both narration workflows are safer on the branch (fully disabled/manual-only) than main's schedule-removed but still manual/push workflows; the remaining changes are revert pairs or evidence corrections already reflected in the branch. The branch retains test/restore-facebook-draft-history.test.mjs (SHA b6d4ab9c30d1e025bf2e55bddae446d96a2cb2a3) and tests/restore-state.test.mjs (SHA a6adf492914697ac750b20bfb4e14899edda6156); package-lock.json is a valid npm lockfile and CI install/audit pass. No cherry-pick, merge or reconciliation of the 17 base-only commits is needed. Full semantic review of the 5,532 branch-only commits and all 549 changed paths remains incomplete. Branch protection is UNVERIFIED because the endpoint returns HTTP 403. No merge, rebase, reset, cherry-pick, force-push or destructive reconciliation was performed.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:19:53Z",
+      "currentHeadEvidenceSha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
+      "currentHeadEvidenceNote": "NOT_TESTED — live compare at branch HEAD 42753d3133fb17027131e5cd06fa1983d6ce48be: main 3795519ccbf58fd02d74458624b58dd2e44a88c0; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch 5,543 commits ahead and 17 behind; PR reports 549 changed files. All 17 base-only commits have been semantically reviewed. The three Wikimedia rights records remain excluded; the Pexels candidate record is retained for review/audit only and does not authorize production under the original creator-captured-only policy; both narration workflows are fully disabled/manual-only on the branch; remaining base-only changes are revert pairs or evidence corrections already reflected in the branch. The two subsequent branch-only manifest commits were also reviewed: they correctly mark Pexels stock as non-release-eligible and preserve the original-only owner policy. Full semantic review of the 5,543 branch-only commits and all 549 changed paths remains incomplete. Branch protection is UNVERIFIED because the endpoint returns HTTP 403. No merge, rebase, reset, cherry-pick, force-push or destructive reconciliation was performed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:31:00Z",
       "baseOnlyReview": {
         "reviewedAt": "2026-11-22",
         "base": "codex/marketing-machine-audit-fixes",
         "head": "main",
         "mainHead": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-        "branchHead": "12777e433041783d61856732d3800830415bf4d5",
+        "branchHead": "42753d3133fb17027131e5cd06fa1983d6ce48be",
         "mergeBase": "45352b73bb6cc4787b2a49988b575afb754ab627",
         "commitsReviewed": 17,
         "netChangedPaths": 6,
@@ -704,7 +706,7 @@
             "sha": "ae3200a9ef9b4877fafaf246c5640b851ec712e9",
             "message": "Exclude stock wildlife source from current production",
             "path": "content/media/pexels-crocodile-30026544-rights-review.json",
-            "decision": "BRANCH_VERSION_SUPERSEDES; branch record permits review under the 2026-11-22 owner policy but keeps rights, local bytes, hash, decode and human approval gates open."
+            "decision": "BRANCH_VERSION_REVIEW_ONLY; branch retains Pexels source metadata for audit/review only. The user's original creator-captured-only production instruction excludes Pexels/Pixabay stock; no production permission is conferred."
           },
           {
             "sha": "861173281b6253c839e6923182b1d3fdf3280b0a",
@@ -785,7 +787,24 @@
             "decision": "PRESERVE_BRANCH_TEST; the restoration test remains in the branch and is covered by the current regression suite."
           }
         ],
-        "conclusion": "The 17 base-only commits were reviewed and do not require cherry-picking or merging. Branch-only review remains incomplete."
+        "conclusion": "The 17 base-only commits were reviewed and do not require cherry-picking or merging. Branch-only review remains incomplete.",
+        "postReviewCriticalFilesReviewed": [
+          {
+            "path": "content/render-manifest.json",
+            "sha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
+            "finding": "Pexels review preview remains BLOCKED_UNAUTHORIZED_STOCK_SUBSTITUTION; no release eligibility."
+          },
+          {
+            "path": "content/long-form-render-manifest.json",
+            "sha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
+            "finding": "Original creator-captured media required; Pexels candidates are review-only and releaseEligible=false."
+          },
+          {
+            "path": "content/owner-media-policy-override-2026-11-22.json",
+            "sha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
+            "finding": "REVOKED_UNSUPPORTED_OWNER_ATTRIBUTION; stock video/photos and AI wildlife visuals not authorized."
+          }
+        ]
       }
     },
     {
@@ -2200,11 +2219,12 @@
         "Current candidate f1206b8b6ac3728839b453d41a51625d3f4561e8 has no production media files in its recursive Git tree and no media/ directory. Production-readiness run 43698330848 explicitly reports missing short and long-form render manifests and missing media/next-short.mp4. Genuine source footage, rights evidence, final render and human review are absent; no synthetic or unlicensed asset was substituted.",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/668a8779f8a2894f99ed935d0c8bf13f2f215e64/workflows/sonicvhibez-ltx-nile-crocodile-corrected-v2.json"
       ],
-      "nextAction": "Extract the five-clip review artifact 14735172901 (workflow run 44975292889) into the project workspace, verify every file against its recorded SHA-256/ffprobe/full-decode manifest, then complete exact source-page, creator, licence, third-party-rights, location and human visual review. Use only approved clips in a source-bound scene plan; complete narration, captions, render and exact-hash owner review. No RunComfy import or paid GPU credit is required for this review path.",
+      "nextAction": "Re-upload the original three-minute creator-captured wildlife MP4 that was previously shared, plus any additional original footage needed for the 6–10 minute long-form edit. Then verify creator/camera-operator identity, capture date/location, provenance, rights/permissions, exact SHA-256, ffprobe metadata, full decode and full human playback. Do not use Pexels, Pixabay, NOAA, Internet Archive, stock photographs or AI-generated wildlife visuals as production substitutes. Only after the original media passes review should the edit, narration, captions, thumbnail, final render and exact-hash owner approval proceed.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "BLOCKED. The five Pexels Nile-crocodile source clips were acquired into GitHub Actions review artifact 14735172901 from run 44975292889 (451,078,011 bytes); the acquisition script recorded per-file hashes, ffprobe metadata and full-decode PASS, and the workflow completed successfully. The artifact has not been extracted into the project workspace or visually reviewed in this runtime; the ZIP exceeded the Files materialization limit and the local container runtime was unavailable. The owner-approved 2026-11-22 policy permits Pexels/Pixabay stock video subject to asset-level rights review; platform licence review is not final third-party rights clearance. Exact location/creator attribution, scene continuity, human visual/editorial review, final captions, narration, final render and hash-bound approval remain pending. No AI wildlife visuals or paid GPU credits were used."
+      "currentHeadEvidenceSha": "42753d3133fb17027131e5cd06fa1983d6ce48be",
+      "currentHeadEvidenceNote": "BLOCKED. The current owner media policy is ORIGINAL_CREATOR_CAPTURED_ONLY: Pexels/Pixabay stock links are explicitly excluded from production, and content/owner-media-policy-override-2026-11-22.json is REVOKED_UNSUPPORTED_OWNER_ATTRIBUTION. Six Pexels crocodile clips exist only in review artifact 14736582634 (workflow run 44978618279; 151.819967 seconds total; six technical probes and six full-decode passes; 495,680,798 bytes; first five SHA-256 values are in the candidate manifest and the sixth hash remains inside the unextracted archive). These clips contribute zero production-eligible seconds and are not approved for use. A Library and conversation-file search did not locate the previously uploaded original three-minute wildlife video. The other indexed videos are a mixed Pexels/NOAA promotional Short or an AI-generated Nature Frontiers draft and are not eligible SonicVhibez production media. No eligible original MP4, final render, or exact-hash release approval is available.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:31:00Z"
     },
     {
       "id": "SEO-001",

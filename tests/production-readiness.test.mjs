@@ -417,7 +417,13 @@ test("readiness blocks selected licensed wildlife assets until source, local MP4
     assert.equal(blocker.controlOwner, "external_owner_or_human_reviewer");
     assert.ok(blocker.evidence.path.endsWith("sonicvhibez-imported-media-inventory.json"));
     assert.match(blocker.message, /VAHZ9kg2rvg/);
-    assert.match(blocker.resolution, /Pexels\/Pixabay source page/);
+    assert.match(blocker.resolution, /original camera operator/);
+    assert.match(blocker.resolution, /capture-provenance/);
+    assert.match(blocker.resolution, /original MP4/);
+    assert.match(blocker.resolution, /SHA-256/);
+    assert.match(blocker.resolution, /third-party rights/);
+    assert.match(blocker.resolution, /human visual review/);
+    assert.match(blocker.resolution, /Pexels\/Pixabay stock is not eligible/i);
     assert.match(blocker.resolution, /original MP4/);
     assert.match(blocker.resolution, /SHA-256/);
     assert.match(blocker.resolution, /third-party rights/);
@@ -443,7 +449,7 @@ test("review-eligible Pexels candidates do not become selected production inputs
   assert.ok(report.notes.some(note => note.includes("0 selected/unresolved; release not authorized")));
 });
 
-test("licensed Pexels candidates can pass the source gate when all asset-level rights checks are complete", () => {
+test("Pexels stock remains blocked by original-only policy even when asset-level rights fields are marked complete", () => {
   const directory = fs.mkdtempSync(path.join(process.cwd(), "content", ".sonicvhibez-stock-acceptance-"));
   try {
     const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
@@ -483,26 +489,36 @@ test("licensed Pexels candidates can pass the source gate when all asset-level r
     });
     assert.equal(result.status, 2, "other production prerequisites must still keep the overall project on HOLD");
     const report = JSON.parse(result.stdout);
-    assert.equal(report.blockers.some(item => item.message.includes("selected imported wildlife asset")), false,
-      "fully verified licensed Pexels sources should pass the media-source gate");
+    assert.equal(report.blockers.some(item => item.message.includes("selected imported wildlife asset")), true,
+      "Pexels stock must remain blocked under original creator-captured-only policy");
+    const mediaBlocker = report.blockers.find(item => item.message.includes("selected imported wildlife asset"));
+    assert.match(mediaBlocker.resolution, /original camera operator/);
+    assert.match(mediaBlocker.resolution, /original MP4/);
+    assert.match(mediaBlocker.resolution, /SHA-256/);
+    assert.match(mediaBlocker.resolution, /Pexels\/Pixabay stock is not eligible/i);
   } finally {
     fs.rmSync(directory, { recursive: true, force: true });
   }
 });
 
-test("short and long-form manifest templates support licensed Pexels/Pixabay footage with fail-closed rights gates", () => {
+test("short and long-form manifest templates require original creator-captured footage and reject stock", () => {
   for (const file of [
     "content/render-manifest.example.json",
     "content/long-form-render-manifest.example.json"
   ]) {
     const manifest = JSON.parse(fs.readFileSync(file, "utf8"));
-    assert.equal(manifest.footageOrigin, "licensed_pexels_stock");
-    assert.equal(manifest.creatorCapturedOriginal, false);
-    assert.ok(Array.isArray(manifest.footageSourceUrls) && manifest.footageSourceUrls.length > 0);
-    assert.match(manifest.footageSourceManifest, /ASSET_LEVEL_SOURCE_MANIFEST/);
+    assert.equal(manifest.footageOrigin, "creator_captured_original");
+    assert.equal(manifest.creatorCapturedOriginal, true);
+    assert.ok(Array.isArray(manifest.footageSourceUrls) && manifest.footageSourceUrls.length === 0);
+    assert.match(manifest.captureEvidencePath, /CAPTURE_EVIDENCE/);
+    assert.match(manifest.footageSourceManifest, /ORIGINAL_MEDIA_PROVENANCE_MANIFEST/);
     assert.equal(manifest.platformLicenseReviewed, false);
     assert.equal(manifest.thirdPartyRightsReviewed, false);
-    assert.equal(manifest.stockVideoFootageAllowed, true);
+    assert.equal(manifest.stockVideoFootageAllowed, false);
+    assert.equal(manifest.originalCreatorCapturedMediaRequired, true);
+    assert.equal(manifest.stockMediaAllowed, false);
+    assert.equal(manifest.pexelsAllowed, false);
+    assert.equal(manifest.pixabayAllowed, false);
     assert.equal(manifest.stockPhotographsAllowed, false);
     assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, false);
     assert.equal(manifest.rightsConfirmed, false);

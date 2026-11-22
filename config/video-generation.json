@@ -117,12 +117,12 @@
     "youtubeChannel": "SonicVhibez",
     "neverTargetNatureFrontiers": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
-    "originalCreatorCapturedMediaRequired": false,
-    "stockMediaAllowed": true,
-    "pexelsAllowed": true,
-    "pixabayAllowed": true,
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "pexelsAllowed": false,
+    "pixabayAllowed": false,
     "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
-    "stockVideoFootageAllowed": true,
+    "stockVideoFootageAllowed": false,
     "stockPhotographsAllowed": false
   },
   "requiredGenerationEvidence": [
