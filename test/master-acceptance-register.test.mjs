@@ -34,12 +34,12 @@ test("the owner-approved rolling publication cadence is no longer marked blocked
 test("API and dashboard acceptance statuses retain their exact evidence boundaries", () => {
   const api = byId("API-001");
   assert.equal(api.status, "BLOCKED");
-  assert.equal(api.currentHeadEvidenceSha, "61d116ede6c4abc9977078e88864d8571cdadccb");
-  assert.match(api.currentHeadEvidenceNote, /42\/42 authorized application-level positive routes PASS/);
+  assert.equal(api.currentHeadEvidenceSha, "5d1e4082e365511b9cf6e5a36fca7169eb360a73");
+  assert.match(api.currentHeadEvidenceNote, /41\/48 routes with accepted endpoint-specific local integration evidence/);
   assert.match(api.currentHeadEvidenceNote, /48\/48 protected API routes/);
-  assert.match(api.currentHeadEvidenceNote, /six provider\/production routes remain BLOCKED/);
-  assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, "61d116ede6c4abc9977078e88864d8571cdadccb");
-  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1043);
+  assert.match(api.currentHeadEvidenceNote, /seven blocked routes/);
+  assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, "6087b4088699a10359aeab99bee3d17cdd9722ad");
+  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1107);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.skipped, 0);
   assert.equal(register.latestExactCiCheckpoint.browserE2EStatus, "NOT_RUN_ON_THIS_SHA");
@@ -47,7 +47,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   const dashboard = byId("DASH-001");
   assert.equal(dashboard.status, "NOT_TESTED");
   assert.equal(dashboard.currentHeadStatus, "NOT_TESTED");
-  assert.equal(dashboard.currentHeadEvidenceSha, "668a8779f8a2894f99ed935d0c8bf13f2f215e64");
+  assert.equal(dashboard.currentHeadEvidenceSha, "5d1e4082e365511b9cf6e5a36fca7169eb360a73");
   assert.match(dashboard.currentHeadEvidenceNote, /121\/121 controls/);
   assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
   assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
