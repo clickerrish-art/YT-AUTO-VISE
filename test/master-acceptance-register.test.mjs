@@ -37,7 +37,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.equal(api.currentHeadEvidenceSha, "648d3e0f1339a53cc73086afd949d50ca72536f0");
   assert.match(api.currentHeadEvidenceNote, /41\/50 PASS, 2\/50 NOT_TESTED/);
   assert.match(api.currentHeadEvidenceNote, /50\/50 protected API routes/);
-  assert.match(api.currentHeadEvidenceNote, /seven blocked routes/);
+  assert.match(api.currentHeadEvidenceNote, /7\\/50 BLOCKED by owner\\/provider prerequisites/);
   assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
   assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1107);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
