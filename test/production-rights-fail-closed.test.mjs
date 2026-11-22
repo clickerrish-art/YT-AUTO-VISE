@@ -164,7 +164,7 @@ test("NOAA and Wikimedia leads remain excluded while Pexels candidates can enter
   assert.equal(candidates.assets.filter(asset => asset.status === "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_PENDING_EXTRACTION_FULL_DECODE_PASS").length, 1);
   const supplemental = candidates.assets.find(asset => asset.assetId === "pexels-video-20443910");
   assert.equal(supplemental.acquisitionArtifactId, 14736582634);
-  assert.equal(supplemental.latestAcquisitionWorkflowRunId, undefined);
+  assert.equal(supplemental.acquisitionWorkflowRunId, 44978618279);
   assert.equal(supplemental.localOriginalBytesAvailableInArtifact, true);
   assert.equal(supplemental.sha256, null);
   assert.equal(supplemental.sha256Status, "RECORDED_IN_ACQUISITION_MANIFEST_PENDING_EXTRACTION");
