@@ -206,7 +206,7 @@
       "fps": 25,
       "canvaAssetId": null,
       "sourceOrigin": "SUPPLEMENTAL_PEXELS_DISCOVERED_2026-11-22",
-      "status": "DISCOVERED_NOT_ACQUIRED",
+      "status": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_PENDING_EXTRACTION_FULL_DECODE_PASS",
       "visualReview": "PENDING_HUMAN_FULL_PLAYBACK",
       "thirdPartyRightsReview": "PENDING",
       "rightsVerified": false,
@@ -215,16 +215,17 @@
       "releaseEligible": false,
       "publicPublishingEnabled": false,
       "selectedForProduction": false,
-      "fullDecode": "NOT_RUN",
-      "acquisitionArtifactId": null,
-      "localOriginalBytesAvailableInArtifact": false,
-      "sha256Status": "NOT_RECORDED",
-      "technicalProbe": "NOT_RUN",
+      "fullDecode": "PASS",
+      "acquisitionArtifactId": 14736582634,
+      "localOriginalBytesAvailableInArtifact": true,
+      "sha256Status": "RECORDED_IN_ACQUISITION_MANIFEST_PENDING_EXTRACTION",
+      "technicalProbe": "PASS",
       "actual": null,
       "fileSizeBytes": null,
       "sha256": null,
-      "mediaFile": null,
-      "previewFrame": null
+      "mediaFile": "media/pexels-20443910.mp4",
+      "previewFrame": "preview/pexels-20443910.jpg",
+      "acquisitionWorkflowRunId": 44978618279
     }
   ],
   "notes": [
@@ -233,7 +234,8 @@
     "The acquisition log confirms five assets, 137.974967 seconds total source duration and five full-decode passes. Per-asset SHA-256 values and exact ffprobe measurements are in acquisition-manifest.json inside the artifact; they have not yet been copied into this durable register.",
     "This is review-only source acquisition. Third-party rights, complete human playback, scientific scene-to-claim review, final owner approval and release eligibility remain pending.",
     "Do not merge South Africa, Kenya and Zambia scenes into one encounter or imply a single location. Keep source geography distinct.",
-    "Correction 2026-11-22: supplemental candidate 20443910 was discovered after the five-file acquisition and is not present in artifact 14735172901. It is not acquired, hashed, probed, decoded or production-eligible; acquire it separately before changing this status."
+    "Correction 2026-11-22: supplemental candidate 20443910 was discovered after the five-file acquisition and is not present in artifact 14735172901. It is not acquired, hashed, probed, decoded or production-eligible; acquire it separately before changing this status.",
+    "Correction 2026-11-22: supplemental candidate 20443910 was subsequently acquired for review in workflow run 44978618279, artifact 14736582634. The six-file acquisition summary reports 151.819967 source seconds and six full-decode passes. Its per-file SHA-256 is recorded in the artifact acquisition manifest but has not yet been extracted into this register. It remains supplemental, not selected for production or release."
   ],
   "acquisition": {
     "status": "SUCCESS",
@@ -261,5 +263,17 @@
     "releaseEligible": false
   },
   "totalAcquiredDurationSeconds": 137.974967,
-  "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED"
+  "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED",
+  "latestAcquisition": {
+    "workflowRunId": 44978618279,
+    "artifactId": 14736582634,
+    "artifactName": "sonicvhibez-long-form-001-pexels-crocodile-review",
+    "artifactSha256": "96a70c3b667b324cb9843f6896f05aede5a0104d44673660e046057b4741eecb",
+    "artifactSizeBytes": 495680798,
+    "expiresAt": "2026-12-06T03:01:25Z",
+    "assetCount": 6,
+    "totalActualSourceSeconds": 151.819967,
+    "fullDecodePasses": 6,
+    "sourceFileHashForSupplemental": "Recorded inside artifact acquisition-manifest.json; extraction pending."
+  }
 }
