@@ -292,6 +292,31 @@ test("publication timestamps at any depth and live scheduling are forbidden in t
   assert.ok(validatePlan(unsafe, products).some(error => /schedulingEnabled must remain false/.test(error)));
 });
 
+test("draft plans reject nested auto-publish and non-draft flags at any depth", () => {
+  const unsafeCases = [
+    ["autoPublish", true],
+    ["auto_publish", true],
+    ["auto-publish", true],
+    ["draft", false],
+    ["draft", "false"],
+    ["publishingEnabled", true],
+    ["schedulingEnabled", true]
+  ];
+  for (const [key, value] of unsafeCases) {
+    const unsafe = clone(checkedInPlan);
+    unsafe.weeks[0].items[0].provider = { youtube: { [key]: value } };
+    const errors = validatePlan(unsafe, products);
+    assert.ok(
+      errors.some(error => error.includes(`plan.weeks[0].items[0].provider.youtube.${key}`)),
+      `${key}=${String(value)} must fail closed at any depth`
+    );
+  }
+
+  const safe = clone(checkedInPlan);
+  safe.weeks[0].items[0].provider = { youtube: { autoPublish: false, draft: true } };
+  assert.deepEqual(validatePlan(safe, products), []);
+});
+
 test("draft plans reject alternate actual and scheduled publication timestamp field names at any depth", () => {
   for (const key of ["actualPublishedTimestamp","actualPublicationTimestamp","actualPublishTimestamp","scheduledPublicationTimestamp","scheduledPublishTimestamp","plannedPublicationTimestamp","plannedPublishTimestamp","publishedTime","publicationTime","publishTime","scheduledTime","plannedTime","actualTime","publishedDateTime","publicationDateTime","publishDateTime","scheduledDateTime","plannedDateTime","actualDateTime","actualPublishDateTime","scheduledPublishDateTime","plannedPublishDateTime"]) {
     const unsafe = clone(checkedInPlan);
