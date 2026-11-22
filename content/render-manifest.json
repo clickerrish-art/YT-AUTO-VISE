@@ -17,7 +17,7 @@
   "hasPaidPromotion": true,
   "sourceScriptPath": "content/short-001-wildlife-video-storytelling.md",
   "notes": [
-    "Owner instruction dated 2026-11-22 permits qualifying Pexels/Pixabay licensed footage for SonicVhibez. Three recovered Pexels clips are used in a silent 55.033-second review preview; full third-party rights and final human review remain pending. The fourth primary clip is excluded for visible enclosure/barrier and partial person.",
+    "Pexels/Pixabay clips remain review-only references; no owner authorization for stock substitution exists. This silent preview is not a final production or release asset.",
     "HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs on 2026-11-21; public branded or commercial use is prohibited. Keep this narration internal-only.",
     "The current Roderic Short narration is documented in short-001-roderic-narration-generation.json; HeyGen's written denial is recorded in heygen-roderic-commercial-rights-determination-2026-11-21.json. It remains internal-only and is not production-eligible.",
     "The existing SRT was aligned to the previous Roderic audition and is NOT approved or synchronized to the Norman review WAV; regenerate and verify captions against the final approved narration.",
@@ -29,7 +29,7 @@
     "Owner selected Speechma Andrew (English, United States, male standard voice) on 2026-11-22 for a zero-cost browser audition only. No audio has been generated, no final audio hash exists, and no production approval or publication authorization exists. Speechma's Terms grant commercial output rights subject to the Terms and third-party rights; the actual output and all inputs still require review."
   ],
   "containsAIWildlifeVisuals": false,
-  "wildlifeVisualSourcePolicy": "ORIGINAL_OR_LICENSED_PEXELS_PIXABAY_WITH_ASSET_LEVEL_REVIEW",
+  "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
   "mediaProvenanceStatus": "REVIEW_ONLY_PREVIEW_HASH_VERIFIED_FINAL_SOURCE_RIGHTS_AND_NARRATION_PENDING",
   "narrationRightsDeterminationEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
   "sourceScriptBlobSha": "a44823bcfbe915b51fcdf9a911066d6dd659f310",
@@ -37,7 +37,7 @@
   "sourceHashType": "GIT_BLOB_SHA",
   "captionHashType": "GIT_BLOB_SHA",
   "referenceOnlyRightsResearchEvidence": "short-001-pexels-rights-evidence.json",
-  "footageEligibilityStatus": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
+  "footageEligibilityStatus": "BLOCKED_UNAUTHORIZED_STOCK_SUBSTITUTION",
   "narrationRightsStatus": "NOT_GENERATED_PENDING_AUDITION",
   "narrationPublicBrandedDistributionAllowed": false,
   "narrationCommercialUseAllowed": false,
@@ -71,9 +71,9 @@
     "outputFormat": "MP3",
     "paidApiAuthorized": false
   },
-  "stockMediaAllowed": true,
-  "pexelsAllowed": true,
-  "pixabayAllowed": true,
+  "stockMediaAllowed": false,
+  "pexelsAllowed": false,
+  "pixabayAllowed": false,
   "aiGeneratedWildlifeVisualsAllowed": false,
   "ownerMediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
   "reviewOnlyPreview": {
@@ -97,6 +97,7 @@
   "platformLicenseReviewed": true,
   "thirdPartyRightsReviewed": false,
   "creatorConfirmed": false,
-  "stockVideoFootageAllowed": true,
-  "stockPhotographsAllowed": false
+  "stockVideoFootageAllowed": false,
+  "stockPhotographsAllowed": false,
+  "originalCreatorCapturedMediaRequired": true
 }
