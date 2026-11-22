@@ -27,7 +27,7 @@ test("approximately 55-second scripts accept 150-wpm tolerance and reject overlo
   const plan = clone(checkedInPlan);
   const item = plan.weeks.find(week => week.weekOf === "2026-11-23")
     .items.find(row => row.id === "sonicvhibez-short-007-ethical-wildlife-filming");
-  const measuredWords = item.script.trim().split(/\\s+/).filter(Boolean).length;
+  const measuredWords = item.script.trim().split(/\s+/).filter(Boolean).length;
   assert.equal(measuredWords, 141);
   assert.deepEqual(validatePlan(plan, products), []);
 
@@ -653,7 +653,7 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
 
 
 test("current search-intent evidence is mandatory, dated, sourced and fresh for current/future drafts", () => {
-  const now = new Date("2026-11-21T14:40:00+02:00");
+  const now = new Date("2026-11-22T10:00:00+02:00");
   const valid = clone(checkedInPlan);
   assert.deepEqual(validatePlan(valid, products, { now }), []);
 
@@ -666,7 +666,7 @@ test("current search-intent evidence is mandatory, dated, sourced and fresh for 
   assert.ok(validatePlan(stale, products, { now }).some(error => /current search-intent evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(valid);
-  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-21T14:50:00+02:00";
+  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-22T10:10:00+02:00";
   assert.ok(validatePlan(future, products, { now }).some(error => /current search-intent evidence cannot be more than 5 minutes in the future/.test(error)));
 
   const insecure = clone(valid);
