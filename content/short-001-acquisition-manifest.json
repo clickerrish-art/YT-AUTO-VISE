@@ -214,7 +214,11 @@
       "previewSha256": "c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844",
       "previewDurationSeconds": 55.033333,
       "previewResolution": "720x1280",
-      "previewStatus": "REVIEW_ONLY_NOT_RELEASE_CLEARED"
+      "previewStatus": "REVIEW_ONLY_NOT_RELEASE_CLEARED",
+      "recoveredPackageSha256": "7b69c231dd393c3351469f4ef8e5de4147fc75465e23f40a0f966feef7a50185",
+      "recoveredPackageSizeBytes": 83910657,
+      "packageContents": "Four Pexels MP4 source files plus preview frames and acquisition manifest; all four source MP4 SHA-256 values match the recorded asset hashes and all four full FFmpeg decodes passed.",
+      "recoveredAt": "2026-11-22"
     }
   },
   "previews": {
@@ -247,6 +251,10 @@
     "nextRequiredAction": "Full playback, collar-context and third-party-rights review; owner approval; production narration and captions; final 1080x1920 export; final compliance review."
   },
   "notes": [
-    "Current owner policy supersedes the historical Pexels selection: all four clips are reference-only and excluded from production because the project requires genuine original creator-captured wildlife media. The platform licence does not satisfy this requirement."
+    "Current owner policy dated 2026-11-22 permits qualifying licensed Pexels/Pixabay wildlife video footage for SonicVhibez, subject to asset-level rights and editorial gates.",
+    "Three of the four owner-selected Pexels clips are used as separate illustrative examples in the silent visual review. The fourth clip is excluded from this edit because it visibly shows an enclosure/barrier and a partial foreground person.",
+    "All four original downloaded MP4 files have matching SHA-256 values and full FFmpeg decode passes. This is technical integrity evidence, not human full-playback or rights clearance.",
+    "The Pexels platform licence permits qualifying commercial use and modification subject to its restrictions. Third-party rights, the visible lion collar/strap context, full human playback, final owner approval, narration, captions and publication remain unresolved.",
+    "No AI-generated wildlife visuals are permitted. The silent 55.033-second 720x1280 preview is review-only and is not a final narrated 1080x1920 production master."
   ]
 }
