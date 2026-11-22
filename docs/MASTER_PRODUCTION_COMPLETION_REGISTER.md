@@ -1609,3 +1609,37 @@ The existing public YouTube video remains unclassified pending owner review. The
 ### Follow-up exact branch inventory — 22 November 2026
 
 The latest branch-head inventory completed after the acceptance-register refresh: [run 45076990843](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45076990843) on branch head `9be0798efc5dc85fb651232323f35ec8fabd0012`. It confirms **5,605 commits ahead / 0 behind**, **548 changed paths**, zero deletions and a clean working tree. Artifact `14775921167` SHA-256 `d9dd3b49eb1ae7b4d23fec43ca42f6cb9d00cb33a0eadd08272ca4f6006ffd77`. This is an inventory only; it does not authorize merge/rebase/reset/force-push or replace the outstanding 548-path semantic review. The latest application/test evidence remains exact source/test SHA `d2a7be4733939cffca0423ba28675977af6ab346`; later commits only refresh acceptance matrices/registers and inventory pointers.
+
+
+### Itemized production-readiness blocker reconciliation — 22 November 2026
+
+The latest readiness run [45077475969](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45077475969) on branch head `ece01066248e82c5627ebe1ae47ef35faf33c096` produced **22 blockers**. Diagnostic artifact `14775334415`, SHA-256 `ed9c2b5fe9e5c434332cc532c59bcc5346739fd6b7c2e712eb600e722d17e17e`. Readiness and metadata validation exit codes are both `2` (intentional HOLD). All four YouTube secrets are configured; no secret values are disclosed.
+
+| # | Blocker ID | Reconciliation |
+|---:|---|---|
+| 1 | `RDY-80A6BF70F7FE` | Owner queue-identity approval file absent; two operational long-form items and cycle position 1 lack approved mapping. |
+| 2 | `RDY-10D9D60C22A5` | Short manifest stock policy hold: only original creator-captured footage is eligible. |
+| 3 | `RDY-55A2491343AE` | Speechma Andrew manual zero-cost audition, actual audio and exact-hash owner approval missing. |
+| 4 | `RDY-93F84DBDCB44` | Short original footage file missing. |
+| 5 | `RDY-7EC64DE8E92E` | Short narration MP3 missing. |
+| 6 | `RDY-33CDEB9448E4` | Short media rights confirmation pending genuine license/permission review. |
+| 7 | `RDY-953B00FE1CFC` | Short third-party rights review pending (people, property, trademarks, music, other rights). |
+| 8 | `RDY-E76C6F6896E0` | Short human content/compliance review pending. |
+| 9 | `RDY-CF39E0DCDDCE` | Long-form manifest stock policy hold: only original creator-captured footage is eligible. |
+| 10 | `RDY-BA4688DC4110` | Long-form narration audition, actual audio and exact-hash owner approval missing. |
+| 11 | `RDY-D5E74BFC896B` | Original long-form footage file missing. |
+| 12 | `RDY-6706D03BD203` | Production narration WAV missing. |
+| 13 | `RDY-15BDEB8B90E0` | Long-form captions SRT missing. |
+| 14 | `RDY-EF19160F89FB` | Long-form media rights confirmation pending. |
+| 15 | `RDY-B7FD1B926EE7` | Long-form third-party rights review pending. |
+| 16 | `RDY-9F64A4A468D6` | Long-form human content/compliance review pending. |
+| 17 | `RDY-59F6FCE1F9B0` | Metadata human review and explicit READY_FOR_PRIVATE_UPLOAD status missing. |
+| 18 | `RDY-4E9BD4C5E14F` | Metadata rights confirmation pending. |
+| 19 | `RDY-36AA230A31D7` | Metadata human compliance review pending. |
+| 20 | `RDY-0E98CB4E03DE` | Exact-hash-bound human production approval and UPLOAD_APPROVAL_PATH missing. |
+| 21 | `RDY-3DA0707998B8` | Final Short MP4 missing; render depends on original footage, narration and review inputs. |
+| 22 | `RDY-D849996022ED` | Fresh local/workflow/owner upload-attempt reconciliation missing or stale; uncertain upload must not be retried. |
+
+**Classification:** owner input/approval, original asset acquisition, rights review, human compliance/metadata review, render output and upload-history reconciliation. The two stock-policy blockers are correct fail-closed enforcement, not defects to suppress. Several blockers repeat across Short and long-form manifests because each asset/format needs its own evidence. The readiness HOLD is not caused by missing YouTube secrets.
+
+**Required resolution:** supply original camera-captured footage; manually audition and approve a commercially usable narrator; create and review final captions/metadata; verify rights and compliance per asset; provide the queue identity approval; bind human production approval to exact final hashes; refresh upload-attempt reconciliation. No flags may be set to manufacture approval, no stock/AI substitute may be used, and no uncertain upload may be retried.
