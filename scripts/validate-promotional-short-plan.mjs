@@ -129,6 +129,24 @@ function findPublicationTimestampPaths(value, currentPath = "plan", matches = []
   return matches;
 }
 
+function findUnsafePublicationFlagPaths(value, currentPath = "plan", matches = []) {
+  if (value === null || typeof value !== "object") return matches;
+  if (Array.isArray(value)) {
+    value.forEach((entry, index) => findUnsafePublicationFlagPaths(entry, `${currentPath}[${index}]`, matches));
+    return matches;
+  }
+  for (const [key, child] of Object.entries(value)) {
+    const childPath = `${currentPath}.${key}`;
+    const normalizedKey = normalizePublicationKey(key);
+    const mustBeFalse = new Set(["autopublish", "publicationenabled", "publishingenabled", "schedulingenabled"]);
+    const invalid = (mustBeFalse.has(normalizedKey) && child !== false)
+      || (normalizedKey === "draft" && child !== true);
+    if (invalid) matches.push(childPath);
+    findUnsafePublicationFlagPaths(child, childPath, matches);
+  }
+  return matches;
+}
+
 export function validatePromotionalShortPlan(plan, products, options = {}) {
   const errors = [];
   const referenceNow = options.now instanceof Date && Number.isFinite(options.now.getTime()) ? options.now : new Date();
@@ -148,6 +166,11 @@ export function validatePromotionalShortPlan(plan, products, options = {}) {
   const publicationTimestampPaths = findPublicationTimestampPaths(plan);
   if (publicationTimestampPaths.length) {
     errors.push("publication timestamps are forbidden in a draft-preparation plan: " + publicationTimestampPaths.join(", "));
+  }
+  const unsafePublicationFlagPaths = findUnsafePublicationFlagPaths(plan);
+  if (unsafePublicationFlagPaths.length) {
+    errors.push("draft-preparation plans must keep autoPublish/publication/publishing/scheduling flags false and draft flags true: "
+      + unsafePublicationFlagPaths.join(", "));
   }
   if (!Array.isArray(products)) errors.push("product registry must contain a products array");
 
