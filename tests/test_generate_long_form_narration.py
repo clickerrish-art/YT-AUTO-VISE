@@ -17,7 +17,7 @@ SPEC.loader.exec_module(MODULE)
 class LongFormNarrationCleaningTests(unittest.TestCase):
 
     def test_alternative_voice_generation_is_blocked_by_current_owner_policy(self):
-        with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+        with self.assertRaisesRegex(SystemExit, "Speechma Andrew is the only owner-selected zero-cost audition"):
             MODULE.require_noncommercial_audition(True)
 
 

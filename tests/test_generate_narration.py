@@ -65,7 +65,7 @@ class NarrationTests(unittest.TestCase):
 
     def test_alternative_voice_audition_is_blocked_by_current_owner_policy(self):
         for acknowledged in (False, True):
-            with self.assertRaisesRegex(SystemExit, "owner has not authorized an alternative narrator"):
+            with self.assertRaisesRegex(SystemExit, "Speechma Andrew is the only owner-selected zero-cost audition"):
                 module.require_noncommercial_audition(acknowledged)
 
     def test_edge_tts_audition_notice_explicitly_prohibits_commercial_use(self):

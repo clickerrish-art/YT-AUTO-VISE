@@ -82,7 +82,7 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /content\/render-manifest\.json/);
   assert.match(result.stdout, /long-form-render-manifest/);
   assert.match(result.stdout, /narration rights are not cleared for public branded\/production use/i);
-  assert.match(result.stdout, /owner selected Wade.*further review only.*insufficient Free-plan speech allowance/i);
+  assert.match(result.stdout, /owner selected Speechma Andrew.*zero-cost browser audition.*No audition audio has been generated/i);
   assert.match(result.stdout, /No Piper\/Edge TTS or other alternative narrator is authorized/);
   assert.doesNotMatch(result.stdout, /Owner-authorized zero-cost alternative auditions are permitted/);
   assert.match(result.stdout, /footageOrigin must be creator_captured_original/);
@@ -116,8 +116,8 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and age-awar
   assert.ok(narrationRightsBlockers.some(blocker => blocker.message.includes("content/render-manifest.json")));
   assert.ok(narrationRightsBlockers.some(blocker => blocker.message.includes("content/long-form-render-manifest.json")));
   assert.ok(narrationRightsBlockers.every(blocker => blocker.controlOwner === "external_owner_or_human_reviewer"));
-  assert.ok(narrationRightsBlockers.every(blocker => blocker.message.includes("Wade") && blocker.message.includes("insufficient Free-plan speech allowance")));
-  assert.ok(narrationRightsBlockers.every(blocker => blocker.message.includes("No Piper/Edge TTS or other alternative narrator is authorized")));
+  assert.ok(narrationRightsBlockers.every(blocker => blocker.message.includes("Speechma Andrew") && blocker.message.includes("No audition audio has been generated")));
+  assert.ok(narrationRightsBlockers.every(blocker => blocker.message.includes("Do not use HeyGen Free-plan Roderic or Wade audio")));
   for (const blocker of report.blockers) {
     assert.match(blocker.id, /^RDY-[A-F0-9]{12}$/);
     assert.ok(["critical", "high"].includes(blocker.severity));

@@ -44,7 +44,7 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.productUrl, "https://selar.com/0u19v8u99l");
 });
 
-test("narration generation remains disabled while Roderic commercial rights are denied", () => {
+test("local narration generation remains disabled while Speechma Andrew browser audition is pending", () => {
   for (const [workflow, disabledJob] of [[narrationWorkflow, "generate:"], [shortNarrationWorkflow, "generate-audio:"]]) {
     assert.match(workflow, /workflow_dispatch/);
     assert.ok(workflow.includes(disabledJob));
@@ -55,13 +55,15 @@ test("narration generation remains disabled while Roderic commercial rights are 
   assert.equal(narrationPolicy.ownerDecision.approvedVoiceId, "b5c5b28db1ea408abc7d851202983bdb");
   assert.equal(narrationPolicy.ownerDecision.alternativeVoicesAuthorized, false);
   assert.equal(narrationPolicy.ownerDecision.selectionStatus, "OWNER_SELECTED_WADE_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED");
-  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.voiceId, "a3a4aa242aaf431ea8ec2c4b3bb332fa");
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.provider, "Speechma");
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.name, "Andrew");
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.voiceId, null);
   assert.equal(narrationPolicy.ownerDecision.selectedAlternative.productionApproved, false);
-  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.commercialUseAllowed, false);
+  assert.equal(narrationPolicy.ownerDecision.selectedAlternative.commercialUseAllowed, true);
   assert.equal(narrationPolicy.ownerDecision.paidUpgradeAuthorized, false);
-  assert.equal(narrationPolicy.ownerDecision.commercialRightsStatus, "HEYGEN_FREE_PLAN_OUTPUT_RESTRICTED_TO_PERSONAL_NON_COMMERCIAL_INTERNAL_EVALUATION");
+  assert.equal(narrationPolicy.ownerDecision.commercialRightsStatus, "SPEECHMA_TERMS_GRANT_COMMERCIAL_OUTPUT_LICENSE_SUBJECT_TO_THIRD_PARTY_RIGHTS; NO_AUDIO_GENERATED_OR_APPROVED");
   assert.match(narrationPolicyHelper, /alternativeVoicesAuthorized/);
-  assert.match(narrationPolicyHelper, /BLOCKED: the owner has not authorized an alternative narrator/);
+  assert.match(narrationPolicyHelper, /BLOCKED: Speechma Andrew is the only owner-selected zero-cost audition/);
   for (const generator of [longNarrationGenerator, shortNarrationGenerator]) {
     assert.match(generator, /require_owner_authorized_alternative_voice/);
     assert.match(generator, /not commercially cleared/i);
