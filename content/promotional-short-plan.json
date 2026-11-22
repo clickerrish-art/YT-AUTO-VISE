@@ -425,7 +425,7 @@
           "targetSeconds": 55,
           "title": "Ethical Wildlife Photography: 4 Rules for Safer Filming",
           "primaryKeyword": "ethical wildlife photography",
-          "script": "Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. Want wildlife footage that shows natural behaviour without disturbing the animal? Start with distance, not a closer camera position. First, check the local park or reserve rules; safe distances vary by species and place. Second, use binoculars or a zoom lens instead of approaching. Third, watch the animal: if it freezes, changes direction, gives warning signals or moves away, back off and give it space. Fourth, never feed, bait, chase, corner, use flash at close range or alter vegetation to force a shot. Stay on designated paths and let wildlife choose its own behaviour. The Complete YouTube Wildlife Creator's Vault is a resource to review for planning a wildlife channel. Advertisement.",
+          "script": "Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business.\n\nWant wildlife footage without disturbing the animal? Follow four rules.\n\nFirst, check park and reserve rules. Safe distances vary by species and location; never copy a number from another place.\n\nSecond, use binoculars or a long lens instead of moving closer.\n\nThird, watch the animal, not just your screen. If it freezes, becomes alert, changes direction or moves away, stop and back off.\n\nFourth, never feed, bait, chase or deliberately flush wildlife for a shot. Avoid close flash and altering vegetation. Stay on marked paths; leave nests and dens undisturbed.\n\nResearch the species and season. Caption only what the footage shows, and avoid sharing precise locations for vulnerable animals.\n\nThe Complete YouTube Wildlife Creator's Vault is a resource to review when planning a wildlife channel.",
           "description": "ADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nEthical wildlife photography: four ways to capture natural behaviour without changing an animal's actions. Safe distances vary by species and location; follow local rules and back away if wildlife reacts.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nhttps://selar.com/0u19v8u99l\n\nFilm responsibly. Never bait, chase, feed or disturb wildlife for footage.",
           "productUrl": "https://selar.com/0u19v8u99l",
           "productId": "wildlife-creators-vault",
@@ -501,23 +501,23 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T11:15:25+02:00",
-            "note": "Fresh global search results for the exact phrase “ethical wildlife photography” show informational intent around working distance, long lenses, stress signals, avoiding bait and protecting habitat. This is qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available.",
+            "researchedAt": "2026-11-22T09:56:16+02:00",
+            "note": "Fresh qualitative search-intent evidence for the exact phrase “ethical wildlife photography” and closely related questions about filming wildlife without disturbance. Current indexed results surface practical guidance on species- and location-specific distance, long lenses, stress signs, habitat protection and accurate captions. No measured global search volume, competition score or growth metric was retrieved. YouTube autocomplete was not available in the connected tools; no paid keyword credits were used.",
             "sources": [
+              {
+                "title": "Ethical wildlife photography – how photographers can keep themselves and animals safe — BC SPCA",
+                "url": "https://spca.bc.ca/about-us/our-work/wild-animal-programs/ethical-wildlife-photography-how-photographers-can-keep-themselves-and-animals-safe/",
+                "whyRelevant": "Current guidance says safe distance varies by species, recommends binoculars or a zoom lens, describes species-specific stress signs, and warns against feeding, spooking, close flash and altering vegetation. Retrieved 22 November 2026."
+              },
+              {
+                "title": "Ethical Wildlife Photography — U.S. National Park Service",
+                "url": "https://www.nps.gov/sajh/planyourvisit/ethical-wildlife-photography.htm",
+                "whyRelevant": "Park-specific guidance demonstrates why creators must follow local rules rather than copy one universal distance; it recommends distance and a zoom lens. Its 75-foot rule applies to San Juan Island National Historical Park, not every location. Retrieved 22 November 2026."
+              },
               {
                 "title": "Ethical wildlife photography for mammals — Mammal Society",
                 "url": "https://mammal.org.uk/position-statements/ethicalwildlifephotography",
-                "whyRelevant": "Conservation-society guidance prioritizes wildlife welfare, long lenses and avoiding disturbance, baiting, intrusive equipment and misleading captions. Accessed 21 November 2026."
-              },
-              {
-                "title": "Audubon’s Guide to Ethical Bird Photography and Videography",
-                "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
-                "whyRelevant": "The guide applies directly to wildlife video, recommending telephoto distance, no chasing or baiting, habitat protection and care around sensitive locations. Accessed 21 November 2026."
-              },
-              {
-                "title": "Guide To Ethical Wildlife Photography — Mile High Wildlife Photo Club",
-                "url": "https://www.mhwpc.org/info/guide_to_ethical_wildlife_photography.php",
-                "whyRelevant": "Recent guidance describes animal stress signs, backing away, avoiding bait and respecting nesting areas and access rules. Accessed 21 November 2026."
+                "whyRelevant": "Conservation guidance recommends long lenses, avoiding disturbance, researching species and seasonal needs, captioning accurately and protecting sensitive animal locations. Retrieved 22 November 2026."
               }
             ]
           }
