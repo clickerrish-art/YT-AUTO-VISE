@@ -149,11 +149,18 @@ export function validatePublicationSlot(proposed, existingItems = [], {
 
     const status = String(item.status ?? "").toLowerCase();
     const actualStatuses = new Set(["published", "public", "private", "unlisted"]);
-    const timeValue = actualStatuses.has(status) ? (item.actualPublishedAt ?? item.publishedAt) : item.scheduledAt;
+    // YouTube's snippet.publishedAt for a never-published private upload is its
+    // upload time, not a public/unlisted publication time. A private item counts
+    // toward spacing only when the owner-reviewed history supplies actualPublishedAt.
+    const timeValue = status === "private"
+      ? item.actualPublishedAt
+      : actualStatuses.has(status) ? (item.actualPublishedAt ?? item.publishedAt) : item.scheduledAt;
     if (timeValue === undefined || timeValue === null || timeValue === "") {
-      errors.push(actualStatuses.has(status)
-        ? `active item ${id} is missing publishedAt/actualPublishedAt (actual publication timestamp)`
-        : `active item ${id} is missing scheduledAt`);
+      errors.push(status === "private"
+        ? `active private item ${id} is missing actualPublishedAt; publishedAt/uploadedAt is not proof of publication`
+        : actualStatuses.has(status)
+          ? `active item ${id} is missing publishedAt/actualPublishedAt (actual publication timestamp)`
+          : `active item ${id} is missing scheduledAt`);
       continue;
     }
     let timestamp;
@@ -326,10 +333,14 @@ export function evaluateNextPublication({
       return null;
     }
     // Creation and scheduled times do not prove when a remote publication actually occurred.
-    const timestamp = item.actualPublishedAt ?? item.publishedAt;
+    // For a private video, YouTube's publishedAt can be the upload time; only the
+    // owner-reconciled actualPublishedAt may count toward the publication cycle.
+    const timestamp = status === "private" ? item.actualPublishedAt : (item.actualPublishedAt ?? item.publishedAt);
     const parsedTimestamp = parseStrictTimestamp(timestamp);
     if (!Number.isFinite(parsedTimestamp)) {
-      errors.push(`history item ${item.id} is missing a verified actual ISO timestamp with timezone`);
+      errors.push(status === "private"
+        ? `private history item ${item.id} requires actualPublishedAt; publishedAt/uploadedAt is not proof of publication`
+        : `history item ${item.id} is missing a verified actual ISO timestamp with timezone`);
       return null;
     }
     const format = item.format ?? item.contentType ?? null;
