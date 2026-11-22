@@ -49,6 +49,21 @@ These four exact Pexels source pages were identified from the existing SonicVhib
 
 The fifth Canva import, a 9-second lion close-up (asset VAHZ9oFCiak), has no exact source page or creator verified and remains excluded. The three exact-metadata candidates are review-only, not production- or release-cleared.
 
+## Previously shared Pexels wildlife footage recovered from the 13 November production history
+
+The following Pexels sources were re-identified from the earlier user-shared footage list. Exact source-page URLs and direct CDN download URLs are recorded in `content/media/pexels-user-shared-candidates-2026-11-22.json`. All pages currently display the Pexels free-use licence. **Except for crocodile 30026544, the original MP4 files have not yet been downloaded, hashed, probed or fully decoded.** No item is selected for production or release-cleared.
+
+| Pexels ID | Creator | Subject / page title | Page metadata | Editorial/technical gate |
+|---|---|---|---|---|
+| 8268897 | Nicky Pe | A Meerkat Standing | 21s, 3840×2160, 25fps | Likely match to the historical “Meerkat on alert” 20s record; one-second duration discrepancy; full playback required |
+| 33260728 | Magda Ehlers | Playful Meerkats in Their Natural Habitat | 15s, 3840×2160, 25fps | Possible match to historical “Meerkats exploring” 18s record; duration mismatch means identity is not confirmed; excluded from automated acquisition |
+| 9655785 | Anthony | Meerkats (*Suricata suricatta*) Digging in Ground | 17s, 1920×1080; page says 50fps | Direct CDN filename advertises 25fps; actual source fps must be established by ffprobe; no retiming |
+| 30175165 | Regan Dsouza | King Cobra Eating Another Snake in the Wild | 10s, 1920×1080, 25fps | Page describes a King cobra feeding; visually confirm species, prey and action before factual narration |
+| 2835528 | PMA Rakson | A Family of Elephant Roaming at a Grassland | 22s, 1920×1080; page says 50fps | Direct CDN filename advertises 25fps; page tags suggest Asian elephant/Sri Lanka/Kaziranga context; never label as African elephant without verification |
+| 30026544 | Johnny Tilly | Crocodile Resting on Riverbank in South Africa | 36.24s, 1920×1080, 25fps | Already acquired, hashed and fully decoded in the crocodile review artifacts; cross-reference the crocodile source register, do not count twice |
+
+The four confirmed non-crocodile clips (8268897, 9655785, 30175165 and 2835528) are the next Pexels acquisition candidates. The 33260728 possible match is held until the historical source identity is reconciled. The 30026544 crocodile clip is already included in the six-file crocodile acquisition. Keep species, geography and captive/wild context accurate; do not mix unrelated species into a single animal-encounter narrative.
+
 ## Pixabay platform licence review
 
 Official current terms:
