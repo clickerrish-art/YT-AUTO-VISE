@@ -111,5 +111,21 @@
       "canvaAssetId": "VAHbmVmwByo",
       "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING"
     }
-  ]
+  ],
+  "footageOrigin": "licensed_pexels_stock",
+  "creatorCapturedOriginal": false,
+  "footageCreator": "Multiple Pexels contributors; see asset-level source manifest",
+  "footageSourceUrls": [
+    "https://www.pexels.com/video/crocodile-resting-on-riverbank-in-south-africa-30026544/",
+    "https://www.pexels.com/video/close-up-of-nile-crocodile-in-african-waters-31702202/",
+    "https://www.pexels.com/video/majestic-nile-crocodile-basking-on-riverbank-31702221/",
+    "https://www.pexels.com/video/wild-nile-crocodile-in-natural-habitat-31702245/",
+    "https://www.pexels.com/video/aerial-view-of-crocodiles-in-lower-zambezi-river-31998380/"
+  ],
+  "footageSourceManifest": "content/media/pexels-crocodile-candidates-2026-11-22.json",
+  "platformLicenseReviewed": true,
+  "thirdPartyRightsReviewed": false,
+  "creatorConfirmed": false,
+  "stockVideoFootageAllowed": true,
+  "stockPhotographsAllowed": false
 }
