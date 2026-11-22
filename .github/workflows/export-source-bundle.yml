@@ -109,3 +109,4 @@ jobs:
 # Recovery refresh: deterministic full-history export requested 2026-11-17.
 
 # Quality-enforcement implementation: refresh exact-commit source bundle and verification evidence.
+# 2026-11-22: trigger a fresh exact-ref source recovery export so full engineering tests can run against this branch.
