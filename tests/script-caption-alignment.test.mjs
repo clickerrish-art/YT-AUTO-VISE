@@ -2,23 +2,17 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 
-test("Short 001 narration draft remains aligned with timed caption beats", () => {
+test("Short 001 legacy captions are not misrepresented as final captions for the new narration draft", () => {
   const script = fs.readFileSync("content/short-001-wildlife-video-storytelling.md", "utf8").toLowerCase();
   const srt = fs.readFileSync("content/short-001-wildlife-video-storytelling.srt", "utf8").toLowerCase();
-  const requiredBeats = [
-    ["opening hook", "want better wildlife videos"],
-    ["one clear story", "one clear story"],
-    ["shot planning", "plan three shots"],
-    ["ethical distance", "keep a safe distance"],
-    ["patient observation", "patient observation"],
-    ["readable captions and rights-cleared music", "music you have permission to use"],
-    ["closing takeaway", "one useful takeaway"],
-    ["approved product call to action", "wildlife creator"]
-  ];
-  for (const [label, phrase] of requiredBeats) {
-    assert.ok(script.includes(phrase), `script missing ${label}: ${phrase}`);
-    assert.ok(srt.includes(phrase), `timed captions missing ${label}: ${phrase}`);
-  }
+  const manifest = JSON.parse(fs.readFileSync("content/render-manifest.json", "utf8"));
+  assert.ok(script.includes("plan three shot roles"));
+  assert.ok(script.includes("must not be used as final captions"));
+  assert.ok(srt.includes("plan three shots"));
+  assert.ok(srt.includes("music you have permission to use"));
+  assert.equal(manifest.narrationRightsStatus, "NOT_GENERATED_PENDING_AUDITION");
+  assert.equal(manifest.narrationProductionUseAllowed, false);
+  assert.equal(manifest.narrationPublicBrandedDistributionAllowed, false);
 });
 
 test("Short 001 timed captions finish within 250ms of the generated narration duration", () => {
