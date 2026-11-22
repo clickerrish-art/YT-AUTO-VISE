@@ -30,6 +30,7 @@ test("licensed Pexels source matches can enter review without becoming release-c
     assert.equal(asset.humanVisualReview, "NOT_DONE");
     assert.equal(asset.productionEligible, false);
     assert.equal(asset.releaseEligible, false);
+    assert.equal(asset.selectedForProduction, false);
   }
   for (const asset of inventory.assets.filter(asset => asset.reviewRenderEligible === true)) {
     assert.equal(asset.sourceMethod, "PEXELS_LICENSED_STOCK");
