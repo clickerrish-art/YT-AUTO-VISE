@@ -676,7 +676,7 @@
     "Supplemental crocodile Pexels 20443910 has no Canva asset ID; its original MP4 is in the review artifact, but its per-file SHA-256 remains pending extraction. It is not selected for production.",
     "No imported Canva candidate is rights-cleared or release-eligible."
   ],
-  "notes": "The owner permits qualifying Pexels/Pixabay stock video for SonicVhibez under asset-level review gates. The original five Canva imports remain three review candidates and two excluded assets. Five additional Canva-imported crocodile Pexels clips are now also inventoried as review candidates: their original MP4s are present in GitHub review artifact 14736582634, five per-file SHA-256 values are recorded, and all five passed technical probe/full decode. Their original bytes are not yet materialized into the local production workspace; full human playback, third-party-rights review and explicit production selection remain pending. The sixth supplemental crocodile clip 20443910 has no Canva asset ID and remains in the separate source register with its per-file SHA pending extraction. No candidate is selected for production or release-authorized.",
+  "notes": "The ten imported Canva wildlife clips remain provenance/review-only inventory records. Pexels/Pixabay stock is not authorized as a substitute for original creator-captured wildlife media. The original five Canva imports remain three review candidates and two excluded assets. Five additional Canva-imported crocodile Pexels clips remain review-only: their original MP4s are present in GitHub review artifact 14736582634, five per-file SHA-256 values are recorded, and all five passed technical probe/full decode. Their original bytes are not materialized into the local production workspace; full human playback, third-party-rights review and explicit production selection remain pending. The sixth supplemental crocodile clip 20443910 has no Canva asset ID and remains in the separate source register with its per-file SHA pending extraction. No stock candidate is production-eligible, selected for production or release-authorized.",
   "historicalBlockingEvidence": [
     "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
     "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
@@ -685,13 +685,13 @@
     "No footage rights or human visual review is marked complete."
   ],
   "currentProductionPolicy": {
-    "status": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_REVIEW_GATES",
-    "originalCreatorCapturedMediaRequired": false,
-    "stockMediaAllowed": true,
-    "stockVideoFootageAllowed": true,
+    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY_STOCK_EXCLUDED",
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "stockVideoFootageAllowed": false,
     "stockPhotographsAllowed": false,
-    "pexelsAllowed": true,
-    "pixabayAllowed": true,
+    "pexelsAllowed": false,
+    "pixabayAllowed": false,
     "aiGeneratedWildlifeVisualsAllowed": false,
     "importedCanvaAssetsProductionEligible": false,
     "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
