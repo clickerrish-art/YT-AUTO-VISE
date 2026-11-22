@@ -187,8 +187,8 @@ test("Pexels acquisition is conditional, review-only and fully decoded", () => {
   assert.ok(crocodileAcquisition.includes("publicPublishingEnabled:false"));
   assert.ok(crocodileAcquisition.includes("owner.mediaRules.stockVideoFootageAllowed !== true"));
   assert.ok(crocodileAcquisition.includes("owner.mediaRules.stockPhotographsAllowed !== false"));
-  assert.ok(crocodileAcquisition.includes("pexels-20443910"));
-  assert.ok(crocodileAcquisition.includes("tile=6x1"));
+  assert.ok(!crocodileAcquisition.includes("20443910"), "supplemental clip must not enter owner-shared acquisition");
+  assert.ok(crocodileAcquisition.includes("tile=5x1"));
   assert.ok(workflow.includes("contains(github.event.head_commit.message, '[acquire-media]')"));
   assert.ok(workflow.includes("node scripts/acquire-short-001-assets.mjs"));
   assert.ok(workflow.includes("node scripts/acquire-crocodile-footage-review.mjs"));
