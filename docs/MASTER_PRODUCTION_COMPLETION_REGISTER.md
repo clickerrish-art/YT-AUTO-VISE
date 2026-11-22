@@ -1161,3 +1161,8 @@ The exact-head report groups into these outstanding requirements:
 - Complete API-001, DASH-001, SCHED-001, STATE-001, DEPLOY-001 and GIT-002 with exact-head, production-relevant evidence. Passing unit tests or CI alone does not complete these gates.
 
 **Release remains HOLD.** No genuine production package, rights clearance, owner approval, final rendered video, one-shot upload authorization or verified live publication exists. Public/unattended publishing remains disabled; SonicVhibez is the only permitted YouTube destination; Nature Frontiers remains a separate Meta brand.
+
+
+### Manual-only Speechma execution guard — 22 November 2026
+
+The current implementation now records Speechma Andrew as the owner-selected, zero-cost audition candidate and enforces `MANUAL_BROWSER_ONLY`: free-site automation and CAPTCHA bots are prohibited by provider Terms; the only automation path is the paid official API, which remains unauthorized. The readiness report states the manual security-code requirement, 2,000-character standard conversion limit, browser-local history and MP3 retention requirement. Regression assertions verify these constraints. No audition audio exists and no production approval is granted.
