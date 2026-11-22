@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "effectiveDate": "2026-11-22",
+  "supersedes": "2026-11-21 original creator-captured-media-only restriction",
+  "ownerInstruction": "Use footage previously shared by the owner unless the individual asset is not legally usable for the intended purpose. The owner states that approximately 99% of the shared footage comes from Pexels and Pixabay.",
+  "mediaRules": {
+    "originalCreatorCapturedAllowed": true,
+    "pexelsLicensedStockAllowed": true,
+    "pixabayLicensedStockAllowed": true,
+    "otherStockAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "standaloneUnmodifiedStockRedistributionAllowed": false,
+    "requireExactSourcePage": true,
+    "requirePlatformLicenseEvidence": true,
+    "requireOriginalFileAndSha256": true,
+    "requireTechnicalProbeAndFullDecode": true,
+    "requireAssetLevelThirdPartyRightsReview": true,
+    "requireHumanVisualEditorialReview": true,
+    "requireExactCreatorCreditInInternalLedger": true,
+    "requireNoImpliedEndorsement": true
+  },
+  "releaseGates": {
+    "platformLicenseReviewIsNotFinalRightsClearance": true,
+    "unresolvedThirdPartyRightsBlockRelease": true,
+    "unresolvedHumanReviewBlocksRelease": true,
+    "misleadingSpeciesLocationOrBehaviorClaimsBlockRelease": true,
+    "finalEditMustNotImplySeparateClipsAreOneEncounter": true,
+    "publicOrUnattendedPublishingRemainsDisabled": true
+  },
+  "allowedLicenseFamilies": {
+    "pexels": "Pexels License, subject to current terms and third-party rights",
+    "pixabay": "Pixabay Content License, subject to current terms and third-party rights"
+  },
+  "provenance": {
+    "sourceConversationDate": "2026-11-22",
+    "decisionScope": "SonicVhibez wildlife productions",
+    "brandSeparation": "Nature Frontiers remains a separate brand and must not be selected as a YouTube destination.",
+    "zeroCost": "No paid footage, subscriptions, API calls, upgrades or infrastructure without explicit owner approval."
+  },
+  "status": "ACTIVE_WITH_ASSET_LEVEL_REVIEW_GATES"
+}
