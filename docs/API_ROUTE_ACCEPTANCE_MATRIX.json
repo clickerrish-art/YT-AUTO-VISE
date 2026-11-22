@@ -32,9 +32,10 @@
       "compareApiFileListLimitReached": true,
       "inventoryArtifactRunId": 45075651420
     },
-    "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45072112844",
+    "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363",
     "latestInventoryArtifactId": 14774824316,
-    "latestInventoryArtifactSha256": "399c11ccaf9649942e8d0df0675ddaeebfd44463207b62d140bbba50a2c2bf43"
+    "latestInventoryArtifactSha256": "399c11ccaf9649942e8d0df0675ddaeebfd44463207b62d140bbba50a2c2bf43",
+    "latestAutomationRunSourceSha": "d2a7be4733939cffca0423ba28675977af6ab346"
   },
   "counts": {
     "routes": 50,
