@@ -236,6 +236,9 @@ if (!exists(mediaInventoryPath)) {
 
 function validateWildlifeFootage(manifest, label) {
   const origin = manifest.footageOrigin;
+  if (manifest.aiGeneratedWildlifeVisualsAllowed !== false) {
+    blockers.push(`${label}: AI-generated wildlife visuals must remain prohibited.`);
+  }
   if (typeof manifest.footageCreator !== "string" || !manifest.footageCreator.trim()) {
     blockers.push(`${label}: footageCreator must identify the original camera operator or licensed stock contributor(s).`);
   }
@@ -248,6 +251,9 @@ function validateWildlifeFootage(manifest, label) {
     return;
   }
   if (origin === "licensed_pexels_stock" || origin === "licensed_pixabay_stock") {
+    if (manifest.stockVideoFootageAllowed !== true || manifest.stockPhotographsAllowed !== false) {
+      blockers.push(`${label}: only licensed stock video footage is permitted; stock photographs must remain disabled.`);
+    }
     if (manifest.creatorCapturedOriginal !== false) {
       blockers.push(`${label}: creatorCapturedOriginal must be false for licensed stock footage; never label stock as owner-shot.`);
     }
