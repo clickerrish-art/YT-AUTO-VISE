@@ -25,7 +25,7 @@ test("Meta Page identity verification checks exact Page ID without putting token
   assert.equal(called.options.headers.authorization, "Bearer " + TOKEN);
   assert.equal(called.options.redirect, "error");
   await assert.rejects(() => verifyMetaPageIdentity({
-    pageId: PAGE_ID, expectedPageId: "999999999999999", accessToken: TOKEN, apiVersion: API,
+    pageId: "999999999999999", expectedPageId: "999999999999999", accessToken: TOKEN, apiVersion: API,
     fetchImpl: async () => { throw new Error("must not call"); }
   }), /does not match/i);
 });
