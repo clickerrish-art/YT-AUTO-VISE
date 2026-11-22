@@ -261,3 +261,30 @@ test("All manual alternate-narrator entry points enforce the owner decision", ()
   }
   assert.ok(readText("../scripts/narration_policy.py").includes("owner has not authorized an alternative narrator"));
 });
+
+
+test("Imported Canva media inventory includes acquired crocodile clips without selecting them for release", () => {
+  const inventory = readJson("../content/sonicvhibez-imported-media-inventory.json");
+  const crocodileAssets = inventory.assets.filter(asset =>
+    typeof asset.sourceAssetId === "string" && asset.sourceAssetId.startsWith("pexels-video-") &&
+    asset.sourceAssetId !== "pexels-video-20443910"
+  );
+  assert.equal(inventory.assets.length, 10);
+  assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction !== true).length, 8);
+  assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true || asset.status === "EXCLUDED_NOT_USED").length, 2);
+  assert.equal(inventory.assets.filter(asset => asset.selectedForProduction === true).length, 0);
+  assert.equal(inventory.releaseAuthorized, false);
+  assert.equal(crocodileAssets.length, 5);
+  assert.ok(crocodileAssets.every(asset =>
+    asset.reviewRenderEligible === true &&
+    asset.selectedForProduction === false &&
+    asset.productionEligible === false &&
+    asset.releaseEligible === false &&
+    asset.localMediaPath === null &&
+    /^[a-f0-9]{64}$/.test(asset.sha256) &&
+    asset.originalBytesAvailableInGitHubArtifact === true &&
+    asset.originalBytesAvailableLocally === false &&
+    asset.thirdPartyRightsReviewed === false &&
+    asset.humanVisualReview === "PENDING_FULL_PLAYBACK"
+  ));
+});
