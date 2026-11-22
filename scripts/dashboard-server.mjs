@@ -36,7 +36,7 @@ import {
   FACEBOOK_PUBLISHING_DEFAULTS, createFacebookDraft, evaluateFacebookDraft,
   approveFacebookDraft, facebookApprovalFingerprint, chooseFacebookExperimentSlot, summarizeFacebookExperiment, generateFacebookIdea, assertFacebookPublishAllowed
 } from "./facebook-pipeline.mjs";
-import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, MetaPageApiError } from "./meta-page-adapter.mjs";
+import { verifyMetaPageIdentity, verifyMetaPagePermissions, publishMetaPagePost, fetchMetaPagePost, createMetaUnpublishedPageDraft, fetchMetaUnpublishedPageDraft, reconcileMetaUnpublishedPageDraft, metaProviderDraftPayloadSha256, MetaPageApiError } from "./meta-page-adapter.mjs";
 import { approveInstagramCandidate } from "./instagram-approval-service.mjs";
 import { instagramApprovalFingerprint } from "./instagram-autonomous-publisher.mjs";
 import { validateProductionQualityScorecard, qualityScorecardSha256 } from "./production-quality-scorecard.mjs";
@@ -150,7 +150,7 @@ if (initialStateEntry && (initialStateEntry.isSymbolicLink() || !initialStateEnt
 if (!initialStateEntry) {
   const queue = JSON.parse(fs.readFileSync(path.join(root, "content/queue.json"), "utf8"));
   const campaignConfig = JSON.parse(fs.readFileSync(path.join(root, "config/campaigns.json"), "utf8"));
-  const initial = { version: 1, queueItems: queue.items ?? [], campaigns: campaignConfig.campaigns ?? [], audit: [], jobs: [], uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: [] };
+  const initial = { version: 1, queueItems: queue.items ?? [], campaigns: campaignConfig.campaigns ?? [], audit: [], jobs: [], uploads: [], facebookDrafts: [], facebookPosts: [], facebookAttempts: [], facebookProviderDraftAttempts: [] };
   try {
     atomicCreateJson(stateFile, initial, { mode: 0o600 });
   } catch (error) {
@@ -180,7 +180,7 @@ if (stateApiUrl) {
 function loadState() {
   const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
   for (const key of ["queueItems", "audit", "jobs", "uploads"]) if (!Array.isArray(state[key])) throw new Error("Invalid state schema: " + key);
-  for (const key of ["facebookDrafts", "facebookPosts", "facebookAttempts"]) {
+  for (const key of ["facebookDrafts", "facebookPosts", "facebookAttempts", "facebookProviderDraftAttempts"]) {
     // Missing keys are supported for legacy-state migration; present but malformed history
     // must fail closed rather than silently erasing duplicate-prevention/reconciliation data.
     if (state[key] === undefined) state[key] = [];
@@ -1351,6 +1351,287 @@ const server = http.createServer(async (req, res) => {
         return json(res, 200, { draft: state.facebookDrafts[index], evaluation, publishingEnabled: false });
       } finally { release(); }
     }
+    if (req.method === "POST" && url.pathname === "/api/facebook/drafts/provider") {
+      const body = await readBody(req);
+      if (typeof body.draftId !== "string" || body.confirmProviderDraft !== true) {
+        return json(res, 400, { error: "draftId and explicit confirmProviderDraft=true are required for one unpublished provider-draft operation" });
+      }
+      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
+      const envProviderDraftsEnabled = process.env.FACEBOOK_PROVIDER_DRAFTS_ENABLED === "YES";
+      const initialState = loadState();
+      const expectedPageId = verifiedFacebookPageId(initialState, config);
+      const permissionsConfirmed = initialState.facebookConnection?.permissionsVerified === true && Boolean(expectedPageId);
+      const blockers = [];
+      if (config.providerDraftsEnabled !== true) blockers.push("config/facebook-publishing.json providerDraftsEnabled must be explicitly enabled by the owner");
+      if (config.emergencyStop !== false) blockers.push("Facebook emergency stop is active");
+      if (config.dryRun !== false) blockers.push("Facebook dryRun must be explicitly disabled by the owner for this one provider-draft operation");
+      if (!envProviderDraftsEnabled) blockers.push("FACEBOOK_PROVIDER_DRAFTS_ENABLED must equal YES as the separate provider-draft kill switch");
+      if (!expectedPageId || expectedPageId !== config.destinationPageId) blockers.push("A recently verified Nature Frontiers Page must match the configured destination Page ID");
+      if (accessToken.length < 20) blockers.push("META_PAGE_ACCESS_TOKEN is missing from the secure runtime environment");
+      if (!permissionsConfirmed) blockers.push("A recent verified Meta Page permission check is required");
+      if (blockers.length) return json(res, 409, { error: "Provider-draft configuration is not ready; no remote mutation was attempted", blockers, publishingEnabled: false, remoteMutationAttempted: false });
+
+      let draftSnapshot;
+      let evaluation;
+      {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          draftSnapshot = state.facebookDrafts.find(item => item.id === body.draftId);
+          if (!draftSnapshot) return json(res, 404, { error: "Facebook draft not found" });
+          evaluation = evaluateFacebookDraft(draftSnapshot, {
+            existingDrafts: state.facebookDrafts.filter(item => item.id !== draftSnapshot.id && !["REJECTED", "CANCELLED"].includes(item.status)),
+            recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root
+          });
+          const fingerprint = facebookApprovalFingerprint(draftSnapshot);
+          if (draftSnapshot.status !== "APPROVED_DRAFT" || draftSnapshot.approval?.decision !== "APPROVE" ||
+              draftSnapshot.approval?.fingerprint !== fingerprint || !evaluation.ok) {
+            return json(res, 409, { error: "Provider draft requires a current exact-payload human approval and passing rights/compliance evaluation", evaluation, publishingEnabled: false });
+          }
+          const previous = state.facebookProviderDraftAttempts.find(item =>
+            item.draftId === draftSnapshot.id && item.approvalFingerprint === fingerprint
+          );
+          if (previous) {
+            if (previous.status === "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED") {
+              return json(res, 200, { attempt: previous, reused: true, publishingEnabled: false });
+            }
+            return json(res, 409, {
+              error: "A provider-draft attempt already exists; reconcile it before any further mutation",
+              attempt: previous, retryAllowed: false, publishingEnabled: false
+            });
+          }
+        } finally { release(); }
+      }
+
+      let identity;
+      try {
+        identity = await verifyMetaPageIdentity({
+          pageId: config.destinationPageId, expectedPageId, accessToken,
+          apiVersion: config.apiVersion ?? META_GRAPH_API_VERSION,
+          expectedPageName: config.destinationPageName ?? "", fetchImpl: fetch
+        });
+      } catch (error) {
+        return json(res, 502, { error: error instanceof Error ? error.message : "Meta Page identity verification failed", publishingEnabled: false, remoteMutationAttempted: false });
+      }
+
+      const apiVersion = config.apiVersion ?? META_GRAPH_API_VERSION;
+      let attempt;
+      {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          if (verifiedFacebookPageId(state, config) !== expectedPageId) {
+            return json(res, 409, { error: "Verified Page identity changed or expired during provider-draft authorization" });
+          }
+          const current = state.facebookDrafts.find(item => item.id === body.draftId);
+          if (!current || current.status !== "APPROVED_DRAFT" ||
+              current.approval?.fingerprint !== draftSnapshot.approval?.fingerprint ||
+              facebookApprovalFingerprint(current) !== current.approval?.fingerprint) {
+            return json(res, 409, { error: "Draft or exact approval changed during Page identity verification; review again" });
+          }
+          const prior = state.facebookProviderDraftAttempts.find(item =>
+            item.draftId === current.id && item.approvalFingerprint === current.approval.fingerprint
+          );
+          if (prior) return json(res, 409, { error: "A concurrent provider-draft attempt was recorded; reconcile it before any further mutation", attempt: prior, retryAllowed: false });
+          const issuedAt = new Date().toISOString();
+          const authorization = {
+            operation: "CREATE_UNPUBLISHED_PROVIDER_DRAFT", confirmed: true, oneShot: true,
+            draftId: current.id, pageId: expectedPageId,
+            approvalFingerprint: current.approval.fingerprint,
+            payloadSha256: metaProviderDraftPayloadSha256(current),
+            nonce: crypto.randomBytes(24).toString("hex"),
+            issuedAt, expiresAt: new Date(Date.now() + 2 * 60_000).toISOString()
+          };
+          attempt = {
+            id: crypto.randomUUID(), kind: "FACEBOOK_PROVIDER_DRAFT_ATTEMPT",
+            draftId: current.id, destinationPageId: expectedPageId,
+            approvalFingerprint: current.approval.fingerprint,
+            payloadSha256: authorization.payloadSha256,
+            idempotencyKey: "facebook-provider-draft:" + current.id + ":" + current.approval.fingerprint,
+            nonce: authorization.nonce, status: "SUBMITTING", retryAllowed: false,
+            caption: current.caption, remotePostId: null,
+            pageIdentity: { pageId: identity.pageId, pageName: identity.pageName, checkedAt: identity.checkedAt },
+            startedAt: issuedAt, updatedAt: issuedAt, actor: operatorId
+          };
+          state.facebookProviderDraftAttempts.push(attempt);
+          state.audit.push({
+            id: crypto.randomUUID(), action: "FACEBOOK_PROVIDER_DRAFT_ATTEMPT_PREPARED",
+            attemptId: attempt.id, draftId: current.id, approvalFingerprint: current.approval.fingerprint,
+            payloadSha256: authorization.payloadSha256, destinationPageId: expectedPageId,
+            at: issuedAt, actor: operatorId, explicitOneShotAuthorization: true,
+            published: false, scheduled: false
+          });
+          await saveState(state);
+          draftSnapshot = current;
+        } finally { release(); }
+      }
+
+      let submitted;
+      try {
+        const authorization = {
+          operation: "CREATE_UNPUBLISHED_PROVIDER_DRAFT", confirmed: true, oneShot: true,
+          draftId: draftSnapshot.id, pageId: expectedPageId,
+          approvalFingerprint: draftSnapshot.approval.fingerprint,
+          payloadSha256: attempt.payloadSha256, nonce: attempt.nonce,
+          issuedAt: attempt.startedAt, expiresAt: new Date(Date.parse(attempt.startedAt) + 2 * 60_000).toISOString()
+        };
+        submitted = await createMetaUnpublishedPageDraft({
+          draft: draftSnapshot, pageId: expectedPageId, expectedPageId, accessToken,
+          apiVersion, permissionsVerified: permissionsConfirmed, authorization,
+          fetchImpl: fetch, rootDir: root
+        });
+      } catch (error) {
+        const uncertain = error instanceof MetaPageApiError && error.uncertain === true;
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.facebookProviderDraftAttempts.findIndex(item => item.id === attempt.id);
+          if (index >= 0) state.facebookProviderDraftAttempts[index] = {
+            ...state.facebookProviderDraftAttempts[index],
+            status: uncertain ? "NEEDS_RECONCILIATION" : "FAILED",
+            retryAllowed: false,
+            error: error instanceof Error ? error.message : "Meta provider-draft create failed",
+            errorCode: error instanceof MetaPageApiError ? error.code : null,
+            updatedAt: new Date().toISOString()
+          };
+          state.audit.push({ id: crypto.randomUUID(), action: uncertain ? "FACEBOOK_PROVIDER_DRAFT_OUTCOME_UNCERTAIN" : "FACEBOOK_PROVIDER_DRAFT_FAILED", attemptId: attempt.id, at: new Date().toISOString(), actor: operatorId, retryAllowed: false });
+          await saveState(state);
+        } finally { release(); }
+        return json(res, uncertain ? 502 : 409, {
+          error: error instanceof Error ? error.message : "Meta provider-draft create failed",
+          attemptId: attempt.id, status: uncertain ? "NEEDS_RECONCILIATION" : "FAILED",
+          retryAllowed: false, publishingEnabled: false
+        });
+      }
+
+      {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.facebookProviderDraftAttempts.findIndex(item => item.id === attempt.id);
+          if (index < 0) throw new Error("Durable provider-draft attempt disappeared after remote submission");
+          state.facebookProviderDraftAttempts[index] = {
+            ...state.facebookProviderDraftAttempts[index],
+            status: "REMOTE_UNPUBLISHED_UNVERIFIED", remotePostId: submitted.remotePostId,
+            photoId: submitted.photoId, updatedAt: new Date().toISOString()
+          };
+          state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PROVIDER_DRAFT_REMOTE_ID_RECORDED", attemptId: attempt.id, remotePostId: submitted.remotePostId, at: new Date().toISOString(), actor: operatorId });
+          await saveState(state);
+        } finally { release(); }
+      }
+
+      let remote;
+      try {
+        remote = await fetchMetaUnpublishedPageDraft({
+          remotePostId: submitted.remotePostId, expectedPageId, accessToken,
+          apiVersion, fetchImpl: fetch, expectedMessage: draftSnapshot.caption
+        });
+      } catch (error) {
+        const release = await acquireStateLock();
+        try {
+          const state = loadState();
+          const index = state.facebookProviderDraftAttempts.findIndex(item => item.id === attempt.id);
+          if (index >= 0) state.facebookProviderDraftAttempts[index] = {
+            ...state.facebookProviderDraftAttempts[index], status: "NEEDS_RECONCILIATION",
+            remotePostId: submitted.remotePostId, retryAllowed: false,
+            error: error instanceof Error ? error.message : "Provider-draft read-back failed",
+            updatedAt: new Date().toISOString()
+          };
+          state.audit.push({ id: crypto.randomUUID(), action: "FACEBOOK_PROVIDER_DRAFT_READBACK_FAILED", attemptId: attempt.id, remotePostId: submitted.remotePostId, at: new Date().toISOString(), actor: operatorId, retryAllowed: false });
+          await saveState(state);
+        } finally { release(); }
+        return json(res, 502, { error: "Provider draft may exist but its unpublished state was not verified; reconcile before any further action", attemptId: attempt.id, remotePostId: submitted.remotePostId, status: "NEEDS_RECONCILIATION", retryAllowed: false, publishingEnabled: false });
+      }
+
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.facebookProviderDraftAttempts.findIndex(item => item.id === attempt.id);
+        if (index < 0) throw new Error("Provider-draft attempt disappeared after remote verification");
+        state.facebookProviderDraftAttempts[index] = {
+          ...state.facebookProviderDraftAttempts[index], status: "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED",
+          remotePostId: remote.remotePostId, remoteVerification: remote,
+          verifiedAt: remote.verifiedAt, retryAllowed: false, updatedAt: new Date().toISOString()
+        };
+        const draftIndex = state.facebookDrafts.findIndex(item => item.id === draftSnapshot.id);
+        if (draftIndex >= 0) state.facebookDrafts[draftIndex] = {
+          ...state.facebookDrafts[draftIndex],
+          providerDraft: { status: "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED", remotePostId: remote.remotePostId, verifiedAt: remote.verifiedAt, isPublished: false }
+        };
+        state.audit.push({
+          id: crypto.randomUUID(), action: "FACEBOOK_PROVIDER_DRAFT_VERIFIED_UNPUBLISHED",
+          attemptId: attempt.id, draftId: draftSnapshot.id, remotePostId: remote.remotePostId,
+          approvalFingerprint: attempt.approvalFingerprint, payloadSha256: attempt.payloadSha256,
+          isPublished: false, at: new Date().toISOString(), actor: operatorId,
+          publishingEnabled: false
+        });
+        await saveState(state);
+        return json(res, 200, {
+          attempt: state.facebookProviderDraftAttempts[index],
+          providerDraft: remote, publishingEnabled: false,
+          note: "Provider draft is unpublished and is not scheduled or approved for publication."
+        });
+      } finally { release(); }
+    }
+
+    if (req.method === "POST" && url.pathname === "/api/facebook/drafts/provider/reconcile") {
+      const body = await readBody(req);
+      if (typeof body.attemptId !== "string") return json(res, 400, { error: "attemptId is required" });
+      const stateBefore = loadState();
+      const attemptBefore = stateBefore.facebookProviderDraftAttempts.find(item => item.id === body.attemptId);
+      if (!attemptBefore) return json(res, 404, { error: "Provider-draft attempt not found" });
+      if (["UNPUBLISHED_PROVIDER_DRAFT_VERIFIED", "FAILED"].includes(attemptBefore.status)) {
+        return json(res, 200, { attempt: attemptBefore, reused: true, publishingEnabled: false });
+      }
+      const config = JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
+      const expectedPageId = verifiedFacebookPageId(stateBefore, config);
+      const accessToken = process.env.META_PAGE_ACCESS_TOKEN ?? "";
+      if (!expectedPageId || expectedPageId !== attemptBefore.destinationPageId || accessToken.length < 20) {
+        return json(res, 409, { error: "The exact verified Nature Frontiers Page and secure Page token are required for read-only reconciliation", retryAllowed: false });
+      }
+      let result;
+      try {
+        result = await reconcileMetaUnpublishedPageDraft({
+          pageId: expectedPageId, expectedPageId, accessToken,
+          apiVersion: config.apiVersion ?? META_GRAPH_API_VERSION,
+          caption: attemptBefore.caption, attemptStartedAt: attemptBefore.startedAt,
+          remotePostId: attemptBefore.remotePostId ?? null, fetchImpl: fetch
+        });
+      } catch (error) {
+        return json(res, 502, { error: error instanceof Error ? error.message : "Provider-draft reconciliation failed", retryAllowed: false });
+      }
+      const release = await acquireStateLock();
+      try {
+        const state = loadState();
+        const index = state.facebookProviderDraftAttempts.findIndex(item => item.id === body.attemptId);
+        if (index < 0) return json(res, 404, { error: "Provider-draft attempt disappeared during reconciliation" });
+        const confirmed = result.outcome === "CONFIRMED_UNPUBLISHED";
+        state.facebookProviderDraftAttempts[index] = {
+          ...state.facebookProviderDraftAttempts[index],
+          status: confirmed ? "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED" : "NEEDS_RECONCILIATION",
+          remotePostId: result.receipt?.remotePostId ?? state.facebookProviderDraftAttempts[index].remotePostId ?? null,
+          remoteVerification: result.receipt ?? result,
+          retryAllowed: false, updatedAt: new Date().toISOString(),
+          verifiedAt: confirmed ? result.receipt.verifiedAt : null
+        };
+        if (confirmed) {
+          const draftIndex = state.facebookDrafts.findIndex(item => item.id === attemptBefore.draftId);
+          if (draftIndex >= 0) state.facebookDrafts[draftIndex] = {
+            ...state.facebookDrafts[draftIndex],
+            providerDraft: { status: "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED", remotePostId: result.receipt.remotePostId, verifiedAt: result.receipt.verifiedAt, isPublished: false }
+          };
+        }
+        state.audit.push({
+          id: crypto.randomUUID(), action: confirmed ? "FACEBOOK_PROVIDER_DRAFT_RECONCILED_UNPUBLISHED" : "FACEBOOK_PROVIDER_DRAFT_RECONCILIATION_UNRESOLVED",
+          attemptId: body.attemptId, outcome: result.outcome, remotePostId: result.receipt?.remotePostId ?? null,
+          at: new Date().toISOString(), actor: operatorId, retryAllowed: false
+        });
+        await saveState(state);
+        return json(res, confirmed ? 200 : 409, { attempt: state.facebookProviderDraftAttempts[index], reconciliation: result, retryAllowed: false, publishingEnabled: false });
+      } finally { release(); }
+    }
+
     if (req.method === "POST" && url.pathname === "/api/facebook/publish") {
       const body = await readBody(req);
       if (typeof body.draftId !== "string" || body.confirmOperation !== true) return json(res, 400, { error: "draftId and explicit confirmOperation=true are required for a single authorized Facebook scheduling operation" });
