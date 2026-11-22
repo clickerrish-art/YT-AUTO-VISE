@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Acquire shared and supplemental Pexels Nile-crocodile source clips for review.
+/** Acquire the five owner-shared Pexels Nile-crocodile source clips for review. Supplemental 20443910 is excluded from future automatic intake.
  * This is zero-cost source intake only: no edit, narration, upload, scheduling or publication.
  * Every acquired asset remains rights-unverified and release-ineligible until human review.
  */
