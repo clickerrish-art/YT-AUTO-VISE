@@ -46,7 +46,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 function loadFacebookPublishingConfig() {
   const testConfigPath = process.env.DASHBOARD_TEST_FACEBOOK_CONFIG_PATH;
   if (!testConfigPath) {
-    return loadFacebookPublishingConfig();
+    return JSON.parse(fs.readFileSync(path.join(root, "config/facebook-publishing.json"), "utf8"));
   }
   if (process.env.NODE_ENV !== "test") {
     throw new Error("DASHBOARD_TEST_FACEBOOK_CONFIG_PATH is permitted only when NODE_ENV=test");

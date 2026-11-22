@@ -16,6 +16,7 @@ const pageToken = "test-page-access-token-" + "p".repeat(32);
 const userToken = "test-user-access-token-" + "u".repeat(32);
 const operatorToken = "test-provider-draft-token-" + "o".repeat(40);
 const remotePostId = pageId + "_987654321";
+const caption = "TEST ONLY: Field observations describe what was seen, record context, and distinguish evidence from interpretation.";
 const apiVersion = "v27.0";
 
 function sha256(bytes) { return crypto.createHash("sha256").update(bytes).digest("hex"); }
@@ -85,7 +86,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
       }
       if (req.method === "GET" && apiPath === remotePostId) {
         readBackCalls += 1;
-        return send(200, { id: remotePostId, from: { id: pageId }, message: "Mock unpublished draft", is_published: false, created_time: "2026-11-22T12:00:00+0000" });
+        return send(200, { id: remotePostId, from: { id: pageId }, message: caption, is_published: false, created_time: "2026-11-22T12:00:00+0000" });
       }
       return send(404, { error: { message: "Unexpected mocked Graph API route", path: apiPath, method: req.method } });
     });
@@ -156,7 +157,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   const draftResponse = await request(base, "/api/facebook/drafts", "POST", {
     id: draftId,
     topic: "Responsible wildlife observation test",
-    caption: "TEST ONLY: Field observations describe what was seen, record context, and distinguish evidence from interpretation.",
+    caption,
     pillar: "wildlife_behaviour",
     scheduledDate: new Date(Date.now() + 5 * 86_400_000).toISOString().slice(0, 10),
     scheduledTime: "08:00",
@@ -181,6 +182,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
     request(base, "/api/facebook/drafts/provider", "POST", payload, operatorToken).then(readJson)
   ]);
   assert.ok([200, 409].includes(first.status) && [200, 409].includes(second.status), JSON.stringify({ first, second }));
+  assert.ok(first.status === 200 || second.status === 200, "at least one concurrent request must receive the verified provider-draft result");
   assert.equal(createCalls, 1, "concurrent duplicate requests must create exactly one remote object");
   assert.match(createBody, /name="published"\r?\n\r?\nfalse/);
   assert.doesNotMatch(createBody, /scheduled_publish_time/);
