@@ -103,7 +103,7 @@ def main() -> int:
         return 2
     if (generation_policy.get("productionDisposition", {}).get("enabled") is not True or
             generation_policy.get("safety", {}).get("aiGeneratedWildlifeVisualsAllowed") is not True):
-        print("BLOCKED: AI-generated wildlife media is disabled by the current original creator-captured-media policy; no generated shot may be imported into production.", file=sys.stderr)
+        print("BLOCKED: AI-generated wildlife media is disabled by the current owner media policy; no generated shot may be imported into production.", file=sys.stderr)
         return 2
     video = Path(args.video).resolve()
     manifest_path = Path(args.manifest).resolve()
