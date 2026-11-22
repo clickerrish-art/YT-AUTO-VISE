@@ -364,6 +364,7 @@ test("readiness blocks selected licensed wildlife assets until source, local MP4
     inventory.assets[0].status = "HOLD";
     inventory.assets[0].excludedFromProduction = false;
     inventory.assets[0].selectedForProduction = true;
+    inventory.assets[0].selectedForProduction = true;
     const inventoryPath = path.join(directory, "sonicvhibez-imported-media-inventory.json");
     fs.writeFileSync(inventoryPath, JSON.stringify(inventory, null, 2));
     const relativeInventoryPath = path.relative(process.cwd(), inventoryPath);
@@ -416,6 +417,7 @@ test("licensed Pexels candidates can pass the source gate when all asset-level r
     for (const asset of candidates) {
       asset.status = "CLEARED";
       asset.excludedFromProduction = false;
+      asset.selectedForProduction = true;
       asset.selectedForProduction = true;
       asset.creatorCapturedOriginal = false;
       asset.sourceMethod = "PEXELS_LICENSED_STOCK";
