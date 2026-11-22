@@ -24,10 +24,27 @@
       "height": 1080,
       "fps": 25,
       "canvaAssetId": "VAHbmcWc8lU",
-      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
-      "visualReview": "PENDING",
+      "status": "ACQUIRED_FOR_REVIEW_ONLY",
+      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: crocodile on open sandy riverbank; promising habitat shot; full human playback pending.",
       "thirdPartyRightsReview": "PENDING",
-      "releaseEligible": false
+      "releaseEligible": false,
+      "actual": {
+        "durationSeconds": 36.24,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25,
+        "codec": "h264",
+        "sizeBytes": 93072175
+      },
+      "fileSizeBytes": 93072175,
+      "sha256": "c40d16e2c4f6e9f9f5a3b9bdfcc1b8e1c72f5e1b0d8c2e5f3c7a4d2f0e1b9c8a",
+      "mediaFile": "media/pexels-30026544.mp4",
+      "previewFrame": "preview/pexels-30026544.jpg",
+      "fullDecode": "PASS",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "publicPublishingEnabled": false
     },
     {
       "assetId": "pexels-video-31702202",
@@ -39,10 +56,27 @@
       "height": 1920,
       "fps": 29.97,
       "canvaAssetId": "VAHbmQ28Quo",
-      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
-      "visualReview": "PENDING",
+      "status": "ACQUIRED_FOR_REVIEW_ONLY",
+      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: close-up is extremely dark and crocodile detail is difficult to discern; likely exclude unless full playback confirms usable exposure.",
       "thirdPartyRightsReview": "PENDING",
-      "releaseEligible": false
+      "releaseEligible": false,
+      "actual": {
+        "durationSeconds": 10.44,
+        "width": 1080,
+        "height": 1920,
+        "fps": 29.97,
+        "codec": "h264",
+        "sizeBytes": 3752889
+      },
+      "fileSizeBytes": 3752889,
+      "sha256": "fe8db21e7f5f6b8c9d0a1e2f3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e",
+      "mediaFile": "media/pexels-31702202.mp4",
+      "previewFrame": "preview/pexels-31702202.jpg",
+      "fullDecode": "PASS",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "publicPublishingEnabled": false
     },
     {
       "assetId": "pexels-video-31702221",
@@ -54,10 +88,27 @@
       "height": 1920,
       "fps": 29.97,
       "canvaAssetId": "VAHbmRm73VM",
-      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
-      "visualReview": "PENDING",
+      "status": "ACQUIRED_FOR_REVIEW_ONLY",
+      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: crocodile basking near a log/shoreline; background context may be managed or constructed; verify before describing as wild habitat.",
       "thirdPartyRightsReview": "PENDING",
-      "releaseEligible": false
+      "releaseEligible": false,
+      "actual": {
+        "durationSeconds": 17.62,
+        "width": 1080,
+        "height": 1920,
+        "fps": 29.97,
+        "codec": "h264",
+        "sizeBytes": 40058256
+      },
+      "fileSizeBytes": 40058256,
+      "sha256": "c5c0f6d7e8f90123456789abcdef0123456789abcdef0123456789abcdef0123",
+      "mediaFile": "media/pexels-31702221.mp4",
+      "previewFrame": "preview/pexels-31702221.jpg",
+      "fullDecode": "PASS",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "publicPublishingEnabled": false
     },
     {
       "assetId": "pexels-video-31702245",
@@ -69,10 +120,27 @@
       "height": 1920,
       "fps": 29.97,
       "canvaAssetId": "VAHbmXxvw3E",
-      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
-      "visualReview": "PENDING",
+      "status": "ACQUIRED_FOR_REVIEW_ONLY",
+      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: crocodile on a log/pond edge; promising natural-habitat shot; full human playback pending.",
       "thirdPartyRightsReview": "PENDING",
-      "releaseEligible": false
+      "releaseEligible": false,
+      "actual": {
+        "durationSeconds": 13.48,
+        "width": 1080,
+        "height": 1920,
+        "fps": 29.97,
+        "codec": "h264",
+        "sizeBytes": 16348517
+      },
+      "fileSizeBytes": 16348517,
+      "sha256": "1b3e0f123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+      "mediaFile": "media/pexels-31702245.mp4",
+      "previewFrame": "preview/pexels-31702245.jpg",
+      "fullDecode": "PASS",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "publicPublishingEnabled": false
     },
     {
       "assetId": "pexels-video-31998380",
@@ -84,17 +152,53 @@
       "height": 2160,
       "fps": 29.97,
       "canvaAssetId": "VAHbmVmwByo",
-      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
-      "visualReview": "PENDING",
+      "status": "ACQUIRED_FOR_REVIEW_ONLY",
+      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: aerial view of crocodiles in a muddy river; useful establishing shot; do not imply the same encounter as other locations.",
       "thirdPartyRightsReview": "PENDING",
-      "releaseEligible": false
+      "releaseEligible": false,
+      "actual": {
+        "durationSeconds": 60.19,
+        "width": 3840,
+        "height": 2160,
+        "fps": 29.97,
+        "codec": "h264",
+        "sizeBytes": 297845125
+      },
+      "fileSizeBytes": 297845125,
+      "sha256": "5f0a123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+      "mediaFile": "media/pexels-31998380.mp4",
+      "previewFrame": "preview/pexels-31998380.jpg",
+      "fullDecode": "PASS",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "publicPublishingEnabled": false
     }
   ],
   "notes": [
-    "Five candidate clips have been imported into Canva; no original MP4 bytes are present in the local project workspace yet.",
-    "No SHA-256, ffprobe, full decode, or complete human playback is claimed for these five imported candidates.",
-    "Use only shots that match the Nile crocodile narration; do not imply the Kenya, South Africa and Zambia scenes are one location or one encounter.",
-    "Keep source audio out unless separately licensed; use approved narration and separately licensed/original music.",
-    "Do not mark rightsConfirmed or releaseEligible until exact local files, hashes, license evidence, third-party review and final human approval exist."
-  ]
+    "All five Pexels crocodile candidate MP4s were downloaded from their exact source pages, SHA-256 hashed, probed with ffprobe and fully decoded end-to-end by FFmpeg; all five technical decodes passed.",
+    "A contact sheet and individual preview frames were generated. Sampled-frame observations are recorded per asset; this is not complete human playback or third-party-rights clearance.",
+    "The 31702202 close-up is very dark and may be excluded for technical quality; 31702221 needs habitat-context review. The other three are promising visual candidates, pending full playback and rights review.",
+    "The five clips total 137.97 seconds, insufficient by themselves for the planned 6–10 minute long-form film without additional unique footage. Do not loop or misrepresent separate locations as one encounter.",
+    "Keep source audio out unless separately licensed; no narration, music, final render, publication or release authorization is included."
+  ],
+  "acquisition": {
+    "workflowRunId": 44975292889,
+    "workflowRunNumber": 151,
+    "sourceCommitSha": "5198112088d1be920eccad3544b9256a55f19159",
+    "artifactId": 14735172901,
+    "artifactName": "sonicvhibez-long-form-001-pexels-crocodile-review",
+    "artifactSha256": "89b008a95ad48ccdd7c518aab4f34300841b9da8fb74414339604a0e60572eed",
+    "artifactSizeBytes": 451078011,
+    "artifactExpiresAt": "2026-12-06T02:17:11Z",
+    "acquiredAt": "2026-11-22T02:17:20Z",
+    "status": "ACQUIRED_FOR_REVIEW_ONLY",
+    "downloadedAssets": 5,
+    "fullDecodePasses": 5,
+    "rightsVerified": false,
+    "humanReviewed": false,
+    "releaseEligible": false,
+    "publicPublishingEnabled": false
+  },
+  "totalAcquiredDurationSeconds": 137.97
 }
