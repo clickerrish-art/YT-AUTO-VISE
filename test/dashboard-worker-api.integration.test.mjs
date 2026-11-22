@@ -6,6 +6,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { createTestDashboardProject } from "./helpers/queue-identity-fixture.mjs";
+import { FIXED_NOW, fixedClockEnv } from "./helpers/fixed-clock.mjs";
 
 async function reservePort() {
   const server = createServer();
@@ -26,8 +27,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
   const workerToken = "worker-test-token-" + "w".repeat(32);
   const child = spawn(process.execPath, [path.join(project.root, "scripts", "dashboard-server.mjs")], {
     cwd: project.root,
-    env: {
-      ...process.env,
+    env: fixedClockEnv({
       DASHBOARD_OPERATOR_TOKEN: operatorToken,
       DASHBOARD_WORKER_TOKEN: workerToken,
       DASHBOARD_OPERATOR_ID: "test-owner@example.test",
@@ -35,7 +35,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
       UPLOAD_LOG_DIR: stateDir,
       PORT: String(port),
       DASHBOARD_HOST: "127.0.0.1"
-    },
+    }),
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
@@ -65,7 +65,7 @@ test("scoped worker credential can only read dispatchable jobs and cannot access
     status: "APPROVED_PLAN_ONLY",
     review: { decision: "APPROVE", approvalSha256: "a".repeat(64) }
   };
-  const now = new Date();
+  const now = new Date(FIXED_NOW);
   const today = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
   }).format(now);
