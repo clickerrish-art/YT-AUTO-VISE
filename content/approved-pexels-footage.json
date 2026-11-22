@@ -587,30 +587,31 @@
     "note": "Pexels/Pixabay platform licensing does not override the user's original creator-captured-only production requirement."
   },
   "productionDisposition": {
-    "status": "LICENSED_STOCK_REVIEW_ALLOWED; FINAL_RELEASE_HOLD",
+    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_PRODUCTION",
     "productionEligible": false,
-    "reviewRenderEligible": true,
+    "reviewRenderEligible": false,
     "policy": {
-      "originalCreatorCapturedMediaRequired": false,
-      "stockMediaAllowed": true,
-      "pexelsAllowed": true,
-      "pixabayAllowed": true,
+      "originalCreatorCapturedMediaRequired": true,
+      "stockMediaAllowed": false,
+      "pexelsAllowed": false,
+      "pixabayAllowed": false,
       "aiGeneratedWildlifeVisualsAllowed": false,
-      "stockVideoFootageAllowed": true,
+      "stockVideoFootageAllowed": false,
       "stockPhotographsAllowed": false
     },
-    "reason": "The owner explicitly superseded the original-only restriction on 2026-11-22. Pexels/Pixabay licensed footage may be used after platform-license review, exact file acquisition, hash and technical verification, third-party-rights checks and human review.",
-    "nextRequiredAction": "Complete full playback and third-party-rights review for the three selected clips; resolve the resting-lion collar context; obtain owner release approval; then complete final narrated render and compliance review."
+    "reason": "Current owner production policy requires original creator-captured wildlife media. Prior stock-source acquisition/review activity does not authorize stock footage as a production substitute.",
+    "nextRequiredAction": "Do not select these stock candidates for production. Obtain genuine original creator-captured footage with provenance, exact source files and hashes, third-party-rights review and human approval."
   },
   "notes": [
-    "Owner instruction dated 2026-11-22 supersedes the original-creator-captured-only policy for SonicVhibez and permits qualifying Pexels/Pixabay footage under their actual licences. AI-generated wildlife visuals remain prohibited."
+    "The Pexels source records below are retained for provenance research and review history only. No Pexels/Pixabay stock footage is authorized as a production substitute for original creator-captured wildlife media. All listed assets remain excluded from production and release; general platform licensing is not owner production authorization."
   ],
   "ownerInstructionOverride": {
     "date": "2026-11-22",
-    "scope": "The owner explicitly instructed that previously shared Pexels/Pixabay footage should be used unless it is not copyright-usable. This authorizes source acquisition and review of the additional Pexels candidates, not automatic production selection or publication.",
-    "approvalStatus": "REVIEW_AND_ACQUISITION_ONLY",
+    "scope": "Research, provenance matching and acquisition review of previously shared stock candidates only; not production substitution or release authorization.",
+    "approvalStatus": "REVIEW_AND_ACQUISITION_ONLY_NOT_PRODUCTION_AUTHORIZATION",
     "releaseAuthorized": false,
-    "paidServicesAuthorized": false
+    "paidServicesAuthorized": false,
+    "revocationReason": "The current owner-media-policy record explicitly requires original creator-captured wildlife media and excludes Pexels/Pixabay stock from production."
   },
   "latestCrocodileReviewArtifact": {
     "workflowRunId": 44978618279,
