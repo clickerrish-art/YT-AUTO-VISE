@@ -413,7 +413,7 @@
     "status": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_RIGHTS_GATES",
     "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": true,
-    "stockPhotographsAllowed": true,
+    "stockPhotographsAllowed": false,
     "pexelsAllowed": true,
     "pixabayAllowed": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
@@ -425,7 +425,8 @@
     "humanVisualReviewRequired": true,
     "finalOwnerApprovalRequired": true,
     "publicPublishingEnabled": false,
-    "policyEvidence": "content/owner-media-policy-override-2026-11-22.json"
+    "policyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "stockVideoFootageAllowed": true
   },
   "productionDisposition": {
     "status": "LICENSED_STOCK_REVIEW_ALLOWED; FINAL_RELEASE_HOLD",
@@ -436,7 +437,9 @@
       "stockMediaAllowed": true,
       "pexelsAllowed": true,
       "pixabayAllowed": true,
-      "aiGeneratedWildlifeVisualsAllowed": false
+      "aiGeneratedWildlifeVisualsAllowed": false,
+      "stockVideoFootageAllowed": true,
+      "stockPhotographsAllowed": false
     },
     "reason": "The owner explicitly superseded the original-only restriction on 2026-11-22. Pexels/Pixabay licensed footage may be used after platform-license review, exact file acquisition, hash and technical verification, third-party-rights checks and human review.",
     "nextRequiredAction": "Complete full playback and third-party-rights review for the three selected clips; resolve the resting-lion collar context; obtain owner release approval; then complete final narrated render and compliance review."
