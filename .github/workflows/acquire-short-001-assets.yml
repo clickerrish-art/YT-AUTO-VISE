@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/acquire-short-001-assets.yml"
       - "scripts/acquire-short-001-assets.mjs"
+      - "scripts/acquire-crocodile-footage-review.mjs"
       - "content/approved-pexels-footage.json"
       - "content/owner-media-policy-override-2026-11-22.json"
       - "content/media/pexels-license-evidence-2026-11-22.md"
@@ -28,7 +29,7 @@ jobs:
   acquire:
     name: Download, probe, hash and decode owner-approved Pexels clips
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Require review-only acknowledgement for manual runs
         if: github.event_name == 'workflow_dispatch'
@@ -83,5 +84,16 @@ jobs:
         with:
           name: sonicvhibez-short-001-pexels-review-assets
           path: artifacts/short-001/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Check crocodile acquisition script syntax
+        run: node --check scripts/acquire-crocodile-footage-review.mjs
+      - name: Acquire, hash, probe and fully decode Pexels crocodile candidates
+        run: node scripts/acquire-crocodile-footage-review.mjs
+      - name: Upload crocodile source media and evidence for human review
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-long-form-001-pexels-crocodile-review
+          path: artifacts/long-form-001/pexels-candidates/
           if-no-files-found: error
           retention-days: 14
