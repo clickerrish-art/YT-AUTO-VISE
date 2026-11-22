@@ -716,3 +716,104 @@ The latest 27-blocker readiness report is still applicable to the current applic
 7. Complete SCHED-001, STATE-001, DEPLOY-001, API-001, DASH-001, GIT-002 and Nature Frontiers/Metricool separation with live evidence.
 
 **Release remains HOLD.** No final production media or public publishing authorization exists.
+
+
+---
+
+## Verified execution checkpoint — 22 November 2026 (current application tree)
+
+**Release remains HOLD.** This checkpoint supersedes the earlier failed-run and partial-regression notes above. The application/test tree verified here is `f00cc2c898bb85990206301f1433758638286510`; the following register commit is documentation-only.
+
+### Repository safety
+
+- `main` remains `3795519ccbf58fd02d74458624b58dd2e44a88c0`, unchanged.
+- Implementation branch: `codex/marketing-machine-audit-fixes`.
+- PR #1 remains OPEN / DRAFT / UNMERGED; mergeable=false.
+- Comparison before this register update: 5,239 commits ahead / 17 behind; merge base `45352b73bb6cc4787b2a49988b575afb754ab627`; GitHub reports 530 changed files. Compare API file output is capped at 300, so GIT-002 still requires semantic review.
+- No merge, readiness change, main write, reset, rebase, force-push or history rewrite.
+
+### Exact-head engineering results — PASS
+
+All results below are for application/test head `f00cc2c898bb85990206301f1433758638286510`.
+
+| Workflow | Run | Result |
+|---|---:|---|
+| Validate SonicVhibez automation | [44971543080](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543080) | PASS |
+| Queue readiness | [44971543131](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543131) | PASS |
+| Dashboard browser E2E | [44971543086](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543086) | PASS — 41/41 journeys |
+| Deployment recovery smoke | [44971543135](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543135) | PASS — smoke/simulation only |
+| Cloudflare runner bridge safety | [44971543075](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543075) | PASS |
+| Temporary source recovery bundle | [44971543176](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543176) | PASS |
+| Production readiness | [44971543116](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543116) | HOLD — 27 blockers |
+
+Regression detail:
+- Dedicated automation runner: **1,097 Node tests passed, 0 failed, 0 skipped; 104 Python tests passed**.
+- Queue-readiness runner: **1,100 Node tests passed, 0 failed, 0 skipped**.
+- Locked dependency installation, isolated normal lifecycle-script install, npm dependency audit, FFmpeg-backed renderer tests, JavaScript syntax checks, Python compilation, Speechma policy gate, campaign destinations/disclosures, promotional Shorts cap, review metadata safety and queue invariants all passed.
+- The earlier malformed readiness-test regex and stale Wade expectation were corrected. The exact-head full validation now passes.
+- Dashboard browser tests passed all 41 journeys. This does not alone close DASH-001's full behavior/role acceptance matrix.
+- Deployment recovery and bridge results are not proof of a live production publisher, actual external publication or independent backup restore.
+
+### Queue and narrator consistency
+
+The queue proposal exposed stale Roderic-exclusive wording. The operational queue, detailed long-form queue and both render manifests now agree:
+
+- Existing HeyGen Roderic WAV remains internal-only and commercially ineligible.
+- Speechma Andrew is the owner-selected **manual, zero-cost audition candidate only**.
+- No production narrator is approved; no Andrew audio exists; no final audio hash or listening approval exists.
+- The free Speechma site must not be automated; its Terms prohibit scripts, bots and automated CAPTCHA solving. The official API is paid and not authorized. A per-generation security code is required; standard conversion is limited to 2,000 characters; browser history is local, so the MP3 must be downloaded and preserved in project-controlled storage.
+- Local Piper/Edge TTS, paid API, paid upgrades and unapproved voice substitution remain disabled.
+- Regression tests now enforce this distinction in the config, queue and render manifests.
+
+Queue-readiness PASS produced a non-approving template. Both operational-to-detailed `detailedItemId` values remain blank; `ownerApproved=false` and `status=PENDING_OWNER_APPROVAL`. This is intentional: the existing titles do not prove an unambiguous mapping. Owner selection and approval are still required.
+
+### Current 27 production-readiness blockers
+
+The exact-head readiness report lists:
+
+1. Owner-approved operational-to-detailed queue identity mapping.
+2. Short package — original footage origin.
+3. Short package — named footage creator/operator.
+4. Short package — capture-provenance evidence.
+5. Short package — commercially eligible narration rights.
+6. Short package — actual footage file.
+7. Short package — actual narration file.
+8. Short package — footage licence evidence.
+9. Short package — rights confirmation after checking every asset.
+10. Short package — human compliance review.
+11. Long-form package — original footage origin.
+12. Long-form package — named footage creator/operator.
+13. Long-form package — capture-provenance evidence.
+14. Long-form package — commercially eligible narration rights.
+15. Long-form package — actual footage file.
+16. Long-form package — actual narration file.
+17. Long-form package — final captions file.
+18. Long-form package — footage licence evidence.
+19. Long-form package — rights confirmation after checking every asset.
+20. Long-form package — human compliance review.
+21. Metadata — human review and explicit `READY_FOR_PRIVATE_UPLOAD` state.
+22. Metadata — verified media rights.
+23. Metadata — completed human compliance review.
+24. Exact-hash-bound human quality approval and configured `UPLOAD_APPROVAL_PATH`.
+25. Actual rendered short `media/next-short.mp4`.
+26. Complete owner-reviewed YouTube public/private/unlisted history.
+27. Current local, workflow and owner-attested upload-attempt reconciliation.
+
+### External inputs and production work still required
+
+1. **Queue owner decision:** identify the exact detailed item for each operational long-form ID, explicitly designate cycle position 1, set position 2, and sign the approval template. Do not infer a mapping from similar titles.
+2. **Original wildlife media:** supply creator-captured camera files, creator/operator identity, capture date/location evidence, written commercial rights, source provenance and exact hashes. AI wildlife imagery and generic stock are not acceptable substitutes.
+3. **Narration:** manually generate the Speechma Andrew audition, enter the security code, download the MP3, preserve it in project storage, verify duration/quality/pronunciation, and obtain owner listening approval tied to the exact audio SHA-256. This cannot be automated under the free-site Terms.
+4. **Long-form production:** complete the Nile crocodile documentary's zoological/factual review, original footage edit, lawful narration, captions, truthful thumbnail, final metadata, full playback/quality review and exact-hash approval.
+5. **Short production:** create the required original-media short in 9:16 at 50–60 seconds, with verified narration, captions, thumbnail, rights review and exact-hash approval.
+6. **YouTube history:** latest read-only inventory [44971395848](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971395848) verified the channel identity and complete inventory: one public 20-second video `LjePS02hA1o`, zero private and zero unlisted videos. Its format remains unclassified pending owner review. Confirm the YouTube Studio publication timestamp and attest to every manual/local/third-party upload attempt since 18 November.
+7. **Private upload:** only after all media, rights, human review and one-shot authorization are bound to the exact job, files, metadata, thumbnail, captions and channel. Verify remote video ID and final privacy. Never blindly retry an uncertain upload.
+8. **Scheduling:** resolve the mathematical cadence conflict. Three publications per 7-day week cannot satisfy a minimum 72-hour gap (`3 × 72 = 216` hours). Owner must approve a feasible cadence or explicitly change the interval. Then prove Africa/Johannesburg timing, DST, no same-calendar-day publication, rolling long-form → long-form → short order, leases, cancellation, retry/backoff, dead-letter and restart recovery using actual remote publication timestamps.
+9. **State and recovery:** staging last showed five backups with latest source revision 2 while live was revision 3; R2 access returned 403 and no independent restore was proven. Obtain owner-approved R2/storage decision, create a current backup and complete a real isolated restore drill.
+10. **Deployment:** deploy and verify the production publisher Worker, production secrets/OIDC trust, scheduler/cron, monitoring and rollback. A recovery smoke PASS is not a live production deployment.
+11. **API acceptance:** complete the externally gated Facebook Page verification, draft approval, publishing, upload reconciliation and production job-execution paths with real authorized provider evidence.
+12. **Dashboard acceptance:** retain the 41/41 browser PASS, then complete the full behavior-level matrix for all 121 controls and 17 forms, including role permissions, server-side state transitions and production evidence.
+13. **Git safety:** complete GIT-002 semantic review of the 5,239-ahead/17-behind divergence, inspect the full 530-file PR diff (not only the 300-file compare response), review main-branch protection and workflow risks, and preserve PR #1 as draft/unmerged until owner review.
+14. **Nature Frontiers/Meta separation:** remove the cross-brand SonicVhibez YouTube association from the Nature Frontiers Metricool configuration through authorized owner UI/support; reconcile the 20 legacy drafts and eight `draft=false/autoPublish=true` records. Do not publish YouTube through Metricool. Keep Nature Frontiers separate from SonicVhibez.
+
+**Release remains HOLD.** Engineering validation, queue readiness and dashboard journeys now pass, but no final wildlife production package, rights clearance, narrator approval, owner queue mapping, production deployment, private upload authorization or verified live publication exists. The 27 blockers remain the production completion gate.
