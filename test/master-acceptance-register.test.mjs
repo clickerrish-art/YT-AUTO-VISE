@@ -10,6 +10,7 @@ const register = JSON.parse(fs.readFileSync(
 ));
 const rows = register.requirements;
 const byId = id => rows.find(row => row.id === id);
+const exactSha = register.currentExactHeadExecution.sourceTestSha;
 
 test("master acceptance register totals reconcile to all 89 requirements", () => {
   assert.equal(rows.length, 89);
@@ -18,6 +19,9 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
     return result;
   }, {});
   assert.deepEqual(counts, { PASS: 71, NOT_TESTED: 8, BLOCKED: 10 });
+  assert.equal(register.requirementStatusReevaluation.status, "NOT_REEVALUATED");
+  assert.equal(register.requirementCountsStatus, "HISTORICAL_NOT_REEVALUATED");
+  assert.ok(register.currentHeadOpenDependencies.some(item => item.id === "ORIGINAL-WILDLIFE-FOOTAGE" && item.status === "BLOCKED"));
 });
 
 test("the owner-approved rolling publication cadence is no longer marked blocked", () => {
@@ -34,11 +38,15 @@ test("the owner-approved rolling publication cadence is no longer marked blocked
 test("API and dashboard acceptance statuses retain their exact evidence boundaries", () => {
   const api = byId("API-001");
   assert.equal(api.status, "BLOCKED");
-  assert.equal(api.currentHeadEvidenceSha, "6a49517beaad31ad094216df9801e1b6642099a6");
+  assert.equal(api.currentHeadEvidenceSha, exactSha);
   assert.match(api.currentHeadEvidenceNote, /41\/50 PASS, 2\/50 NOT_TESTED/);
   assert.match(api.currentHeadEvidenceNote, /50\/50 protected API routes/);
   assert.match(api.currentHeadEvidenceNote, /7\/50 BLOCKED by owner\/provider prerequisites/);
-  assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, "6a49517beaad31ad094216df9801e1b6642099a6");
+  assert.equal(api.mockedProviderDraftIntegrationStatus, "PASS");
+  assert.equal(api.liveProviderAcceptance, "NOT_TESTED");
+  assert.match(api.currentHeadEvidenceNote, /concurrent reconciliation fencing.*interrupted SUBMITTING/i);
+  assert.match(api.nextAction, /ambiguous create\/read-back outcomes/i);
+  assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, exactSha);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1129);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.skipped, 0);
@@ -47,7 +55,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   const dashboard = byId("DASH-001");
   assert.equal(dashboard.status, "NOT_TESTED");
   assert.equal(dashboard.currentHeadStatus, "NOT_TESTED");
-  assert.equal(dashboard.currentHeadEvidenceSha, "6a49517beaad31ad094216df9801e1b6642099a6");
+  assert.equal(dashboard.currentHeadEvidenceSha, exactSha);
   assert.match(dashboard.currentHeadEvidenceNote, /121\/121 controls/);
   assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
   assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
@@ -56,26 +64,26 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
 
   const state = byId("STATE-001");
   assert.equal(state.status, "PASS");
-  assert.equal(state.currentHeadEvidenceSha, "6a49517beaad31ad094216df9801e1b6642099a6");
+  assert.equal(state.currentHeadEvidenceSha, exactSha);
   assert.match(state.currentHeadEvidenceNote, /deployment recovery smoke/);
   assert.match(state.currentHeadEvidenceNote, /runner-bridge safety/);
 
   const worker = byId("SCHED-WORKER-DISPATCH-001");
   assert.equal(worker.status, "NOT_TESTED");
-  assert.equal(worker.currentHeadEvidenceSha, "6a49517beaad31ad094216df9801e1b6642099a6");
+  assert.equal(worker.currentHeadEvidenceSha, exactSha);
   assert.match(worker.currentHeadEvidenceNote, /all 38 test\/worker-runner\.test\.mjs cases/);
   assert.match(worker.currentHeadEvidenceNote, /retained process lock when cooldown persistence fails/);
   assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
 
   const scheduler = byId("SCHED-001");
   assert.equal(scheduler.status, "NOT_TESTED");
-  assert.equal(scheduler.currentHeadEvidenceSha, "6a49517beaad31ad094216df9801e1b6642099a6");
+  assert.equal(scheduler.currentHeadEvidenceSha, exactSha);
   assert.match(scheduler.currentHeadEvidenceNote, /manual\/local\/third-party attempt attestation/);
   assert.match(scheduler.nextAction, /fresh owner attestation/);
 
   const deployment = byId("DEPLOY-001");
   assert.equal(deployment.status, "NOT_TESTED");
-  assert.equal(deployment.currentHeadEvidenceSha, "6a49517beaad31ad094216df9801e1b6642099a6");
+  assert.equal(deployment.currentHeadEvidenceSha, exactSha);
   assert.match(deployment.currentHeadEvidenceNote, /No SonicVhibez production render\/publisher Worker/);
 });
 
@@ -93,7 +101,7 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
   const worker = byId("SCHED-WORKER-DISPATCH-001");
   assert.equal(worker.status, "NOT_TESTED");
   assert.equal(worker.currentHeadStatus, "NOT_TESTED");
-  assert.equal(worker.currentHeadEvidenceSha, "6a49517beaad31ad094216df9801e1b6642099a6");
+  assert.equal(worker.currentHeadEvidenceSha, exactSha);
   assert.match(worker.currentHeadEvidenceNote, /persisted HTTP 409 preflight cooldown across restart/);
   assert.match(worker.currentHeadEvidenceNote, /fail-stop with retained process lock when cooldown persistence fails/);
   assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
