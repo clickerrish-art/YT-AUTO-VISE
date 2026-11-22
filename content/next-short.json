@@ -3,7 +3,7 @@
   "channel": "SonicVhibez",
   "channelId": "UCSlkuPfHH78oGC1o418HV4w",
   "title": "Wildlife Documentary Storytelling: 3 Shots, One Clear Story",
-  "description": "Turn wildlife clips into a clear story: choose one animal behavior, build a hook, and use only footage you have permission to publish.\n\nADVERTISEMENT — OWNER-APPROVED DIRECT-SALES DISCLOSURE: This video features the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business.\n\nPRODUCTION HOLD: No AI-generated wildlife visuals or generic stock footage are permitted. The current Roderic HeyGen Free-plan narration is internal-only after HeyGen denied commercial-use permission; no alternative narrator is approved. Final narration and required disclosures must be confirmed against the cleared final media before release.\n\nExplore the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l\n\nAlways verify footage, music, image rights, and factual accuracy before publishing.",
+  "description": "Turn wildlife clips into a clear story: choose one animal behavior, build a hook, and use only footage you have permission to publish.\n\nADVERTISEMENT — OWNER-APPROVED DIRECT-SALES DISCLOSURE: This video features the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l. This product is sold through my own Selar business; purchases generate revenue for my business.\n\nPRODUCTION HOLD: AI-generated wildlife visuals are prohibited. Owner-approved Pexels/Pixabay licensed footage may be used only with exact source provenance, platform-license evidence, file hashes, technical verification, third-party-rights review and human approval. The current Roderic HeyGen Free-plan narration is internal-only after HeyGen denied commercial-use permission; no alternative narrator is approved. Final narration and required disclosures must be confirmed against the cleared final media before release.\n\nExplore the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l\n\nAlways verify footage, music, image rights, and factual accuracy before publishing.",
   "tags": [
     "wildlife video",
     "wildlife filmmaking",
@@ -19,7 +19,7 @@
   "containsSyntheticMedia": true,
   "rightsConfirmed": false,
   "complianceReviewed": false,
-  "notes": "Draft metadata only; not publish-ready. The exact direct-sales disclosure wording remains owner-approved for this product promotion, and hasPaidPromotion must remain true. However, original creator-captured wildlife media is not yet supplied or rights-cleared. Stock footage and AI-generated wildlife visuals are prohibited as substitutes. HeyGen explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the current Roderic sample is internal-only, and no alternative narrator or paid upgrade is authorized. Existing narration/caption artifacts are stale and must not be treated as release assets. Fresh authenticated YouTube OAuth and complete upload-history reconciliation are required before any upload; current refresh-token grant previously returned invalid_grant. Keep status HOLD_FOR_MEDIA_AND_HUMAN_REVIEW, rightsConfirmed=false, complianceReviewed=false, and publishing disabled.",
+  "notes": "Draft metadata only; not publish-ready. The exact direct-sales disclosure wording remains owner-approved for this product promotion, and hasPaidPromotion must remain true. However, qualifying Pexels/Pixabay licensed footage is now permitted under the owner's 2026-11-22 instruction, but exact asset-level rights and human review remain pending. AI-generated wildlife visuals remain prohibited. HeyGen explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the current Roderic sample is internal-only, and no alternative narrator or paid upgrade is authorized. Existing narration/caption artifacts are stale and must not be treated as release assets. Fresh authenticated YouTube OAuth and complete upload-history reconciliation are required before any upload; current refresh-token grant previously returned invalid_grant. Keep status HOLD_FOR_MEDIA_AND_HUMAN_REVIEW, rightsConfirmed=false, complianceReviewed=false, and publishing disabled.",
   "promotionDisclosure": {
     "status": "APPROVED",
     "type": "direct_sales_revenue",
@@ -29,12 +29,18 @@
   },
   "contentType": "short",
   "productionPolicy": {
-    "originalCreatorCapturedMediaRequired": true,
-    "stockMediaAllowed": false,
+    "originalCreatorCapturedMediaRequired": false,
+    "stockMediaAllowed": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
     "narrationRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION",
     "narrator": "Roderic — Authoritative & Refined",
     "alternativeNarratorAuthorized": false,
-    "publishingEnabled": false
+    "publishingEnabled": false,
+    "pexelsAllowed": true,
+    "pixabayAllowed": true,
+    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+    "reviewOnlyPreview": "media/rendered-drafts/SonicVhibez_Short001_Visual_Review_ONLY.mp4",
+    "releaseEligible": false
   }
 }
