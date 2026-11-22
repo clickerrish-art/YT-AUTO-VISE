@@ -86,7 +86,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
       }
       if (req.method === "GET" && apiPath === remotePostId) {
         readBackCalls += 1;
-        return send(200, { id: remotePostId, from: { id: pageId }, message: caption, is_published: false, created_time: "2026-11-22T12:00:00+0000" });
+        return send(200, { id: remotePostId, from: { id: pageId }, message: caption, is_published: false, permalink_url: "https://www.facebook.com/" + remotePostId, created_time: "2026-11-22T12:00:00+0000" });
       }
       return send(404, { error: { message: "Unexpected mocked Graph API route", path: apiPath, method: req.method } });
     });
@@ -191,7 +191,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   const stateResponse = await request(base, "/api/facebook/state", "GET", undefined, operatorToken);
   assert.equal(stateResponse.status, 200);
   const state = await stateResponse.json();
-  const attempt = state.facebookProviderDraftAttempts?.find(item => item.draftId === draftId);
+  const attempt = state.providerDraftAttempts?.find(item => item.draftId === draftId);
   assert.ok(attempt, "durable provider attempt must survive the API request");
   assert.equal(attempt.status, "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED");
   assert.equal(attempt.remotePostId, remotePostId);
@@ -199,6 +199,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   assert.match(attempt.payloadSha256, /^[a-f0-9]{64}$/);
   assert.match(attempt.approvalFingerprint, /^[a-f0-9]{64}$/);
   assert.equal(state.publishingEnabled, false);
+  assert.equal(state.providerDraftsEnabled, true);
 
   const reconcile = await request(base, "/api/facebook/drafts/provider/reconcile", "POST", { draftId, attemptId: attempt.attemptId }, operatorToken);
   const reconciled = await readJson(reconcile);
