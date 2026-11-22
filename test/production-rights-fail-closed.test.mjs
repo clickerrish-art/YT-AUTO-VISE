@@ -95,6 +95,7 @@ test("Nature Frontiers and SonicVhibez production both remain original-capture-o
   const nature = readJson("../content/nature-frontiers-media-register.json");
   const short = readJson("../content/short-001-acquisition-manifest.json");
   const owner = readJson("../content/owner-media-policy-override-2026-11-22.json");
+  const acquisitionWorkflow = readText("../.github/workflows/acquire-short-001-assets.yml");
   assert.equal(nature.policy.originalCreatorCapturedMediaRequired, true);
   assert.equal(nature.policy.stockMediaAllowed, false);
   assert.equal(nature.policy.aiGeneratedWildlifeVisualsAllowed, false);
@@ -149,7 +150,7 @@ test("AI wildlife generation and Pexels acquisition remain disabled under origin
   assert.ok(importer.includes("AI-generated wildlife media is disabled by the current owner media policy"));
 });
 
-test("NOAA, Wikimedia and Pexels stock remain excluded from production while review records are retained", () => {
+test("NOAA, Wikimedia and Pexels stock remain excluded from production while reference records are retained", () => {
   const noaa = readJson("../content/asset-candidates/noaa-spiny-lobsters-california.json");
   assert.equal(noaa.currentProductionDisposition.productionEligible, false);
   assert.equal(noaa.ownerAuthorization.currentStatus, "SUPERSEDED_BY_2026-11-21_ORIGINAL_MEDIA_POLICY");
@@ -168,9 +169,12 @@ test("NOAA, Wikimedia and Pexels stock remain excluded from production while rev
     "../content/media/pexels-lion-19773061-rights-review.json"
   ]) {
     const record = readJson(path);
+    assert.equal(record.status, "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY", path);
+    assert.equal(record.currentProductionDisposition.status, "EXCLUDED_REFERENCE_ONLY", path);
     assert.equal(record.currentProductionDisposition.productionEligible, false, path);
-    assert.equal(record.currentProductionDisposition.reviewEligible, true, path);
-    assert.equal(record.currentProductionDisposition.releaseEligible, false, path);
+    assert.equal(record.currentProductionDisposition.policy, "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED", path);
+    assert.notEqual(record.currentProductionDisposition.reviewEligible, true, path);
+    assert.notEqual(record.currentProductionDisposition.releaseEligible, true, path);
   }
   const candidates = readJson("../content/media/pexels-crocodile-candidates-2026-11-22.json");
   assert.equal(candidates.assets.length, 6);

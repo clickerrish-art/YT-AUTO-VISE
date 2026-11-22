@@ -413,6 +413,7 @@ test("readiness blocks selected licensed wildlife assets until source, local MP4
     const report = JSON.parse(result.stdout);
     const blocker = report.blockers.find(item => item.message.includes("selected imported wildlife asset"));
     assert.ok(blocker, "selected unverified imported Canva assets must be an explicit production blocker");
+    assert.ok(report.blockers.some(item => item.message.includes("thirdPartyRightsReviewed must be true only after checking people, property, trademarks, music and other third-party rights")));
     assert.equal(blocker.severity, "critical");
     assert.equal(blocker.controlOwner, "external_owner_or_human_reviewer");
     assert.ok(blocker.evidence.path.endsWith("sonicvhibez-imported-media-inventory.json"));
