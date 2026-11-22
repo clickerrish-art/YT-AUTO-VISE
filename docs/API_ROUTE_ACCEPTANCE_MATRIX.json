@@ -6,7 +6,24 @@
   "testedSourceTestSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
   "liveMainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-  "inventory": "{\"totalHandlers\":54,\"protectedApiRoutes\":50,\"nonApiHandlers\":[\"GET /\",\"GET /healthz\",\"GET /readyz\",\"GET /operational-readyz\"],\"branchAheadBy\":5548,\"branchBehindBy\":0,\"changedFiles\":545,\"branchProtectionEnabled\":null,\"branchProtectionStatus\":\"UNVERIFIED — owner-side branch protection settings are not independently verified.\",\"comparisonSourceSha\":\"ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a\",\"mergeBaseSha\":\"3795519ccbf58fd02d74458624b58dd2e44a88c0\",\"latestAutomationRun\":\"https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45062369097\"}",
+  "inventory": {
+    "totalHandlers": 54,
+    "protectedApiRoutes": 50,
+    "nonApiHandlers": [
+      "GET /",
+      "GET /healthz",
+      "GET /readyz",
+      "GET /operational-readyz"
+    ],
+    "branchAheadBy": 5551,
+    "branchBehindBy": 0,
+    "changedFiles": 545,
+    "branchProtectionEnabled": null,
+    "branchProtectionStatus": "UNVERIFIED — GitHub branch-protection endpoint returns HTTP 403; owner-side settings not independently visible.",
+    "comparisonSourceSha": "ed6787545998f99a7178b28f913f159d66a5c01d",
+    "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45065973673"
+  },
   "counts": {
     "routes": 50,
     "authNegativePass": 50,
@@ -186,7 +203,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/campaign-management-api.integration.test.mjs"
       ],
@@ -222,7 +239,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs"
       ],
@@ -258,7 +275,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
         "test/dashboard-api-request-boundaries.test.mjs"
@@ -295,7 +312,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ],
@@ -326,9 +343,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceRunId": 45058706978,
-      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
+      "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+      "currentHeadEvidenceRunId": 45062369097,
+      "currentHeadEvidenceNote": "Negative/authentication and fail-closed paths are covered on exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a; external/provider acceptance remains BLOCKED.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ],
@@ -364,7 +381,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ],
@@ -389,13 +406,12 @@
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceNote": "Partial real-server integration evidence on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 (automation run 45058706978). The integration test covers unauthenticated rejection, explicit confirmation, disabled config kill switch, malformed/unknown reconciliation inputs, mocked unpublished create/read-back, concurrent duplicate fencing, durable attempt/audit persistence and verified-attempt reuse after a full dashboard restart. It does not yet cover missing draftId permutations, concurrent reconciliation, adapter timeout/ambiguous create, interrupted SUBMITTING/NEEDS_RECONCILIATION recovery, or live Meta provider access. Retain NOT_TESTED until those applicable dimensions pass.",
+      "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+      "currentHeadEvidenceNote": "Mock-provider route tests run; concurrent reconciliation after interrupted SUBMITTING remains incomplete, so provider-draft routes stay NOT_TESTED overall.",
       "currentHeadEvidenceTestFiles": [
-        "test/meta-provider-draft-server.integration.test.mjs",
-        "test/dashboard-api-authenticated-route-negative-matrix.test.mjs"
+        "test/meta-provider-draft-server.integration.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceRunId": 45062369097,
       "authenticationNegativeCurrentHeadSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "authenticationNegativeCurrentHeadRunId": 45062369097
     },
@@ -417,13 +433,12 @@
       "lastVerifiedOverallAcceptance": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceNote": "Partial real-server integration evidence on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 (automation run 45058706978). The integration test covers unauthenticated rejection, explicit confirmation, disabled config kill switch, malformed/unknown reconciliation inputs, mocked unpublished create/read-back, concurrent duplicate fencing, durable attempt/audit persistence and verified-attempt reuse after a full dashboard restart. It does not yet cover missing draftId permutations, concurrent reconciliation, adapter timeout/ambiguous create, interrupted SUBMITTING/NEEDS_RECONCILIATION recovery, or live Meta provider access. Retain NOT_TESTED until those applicable dimensions pass.",
+      "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+      "currentHeadEvidenceNote": "Mock-provider route tests run; concurrent reconciliation after interrupted SUBMITTING remains incomplete, so provider-draft routes stay NOT_TESTED overall.",
       "currentHeadEvidenceTestFiles": [
-        "test/meta-provider-draft-server.integration.test.mjs",
-        "test/dashboard-api-authenticated-route-negative-matrix.test.mjs"
+        "test/meta-provider-draft-server.integration.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45058706978,
+      "currentHeadEvidenceRunId": 45062369097,
       "authenticationNegativeCurrentHeadSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "authenticationNegativeCurrentHeadRunId": 45062369097
     },
@@ -456,7 +471,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ],
@@ -492,7 +507,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ],
@@ -517,9 +532,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceRunId": 45058706978,
-      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
+      "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+      "currentHeadEvidenceRunId": 45062369097,
+      "currentHeadEvidenceNote": "Negative/authentication and fail-closed paths are covered on exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a; external/provider acceptance remains BLOCKED.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
       ],
@@ -555,7 +570,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ],
@@ -580,9 +595,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceRunId": 45058706978,
-      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
+      "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+      "currentHeadEvidenceRunId": 45062369097,
+      "currentHeadEvidenceNote": "Negative/authentication and fail-closed paths are covered on exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a; external/provider acceptance remains BLOCKED.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
       ],
@@ -613,9 +628,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceRunId": 45058706978,
-      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
+      "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+      "currentHeadEvidenceRunId": 45062369097,
+      "currentHeadEvidenceNote": "Negative/authentication and fail-closed paths are covered on exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a; external/provider acceptance remains BLOCKED.",
       "currentHeadEvidenceTestFiles": [
         "test/instagram-approval-route-fail-closed.integration.test.mjs"
       ],
@@ -648,7 +663,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/instagram-approval-service.test.mjs"
@@ -685,7 +700,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ],
@@ -722,7 +737,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ],
@@ -758,7 +773,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": null,
       "currentHeadEvidenceRunId": null,
-      "currentHeadEvidenceNote": "Positive dispatch/production behavior remains NOT_TESTED because owner-approved content/queue-identity-approval.json is absent; the owner-signed exact queue identity mapping is required. Fail-closed rejection paths were rerun on 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346.",
+      "currentHeadEvidenceNote": "Positive dispatch is owner-gated because owner-approved content/queue-identity-approval.json is absent; no fabricated mapping or approval.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
         "test/dashboard-dispatchable-ordering.integration.test.mjs"
@@ -795,7 +810,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ],
@@ -833,7 +848,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-completion.integration.test.mjs"
       ],
@@ -869,7 +884,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ],
@@ -905,7 +920,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ],
@@ -941,7 +956,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -986,7 +1001,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ],
@@ -1022,7 +1037,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ],
@@ -1058,7 +1073,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ],
@@ -1094,7 +1109,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "browser-tests/dashboard.spec.mjs"
@@ -1131,7 +1146,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-parent-relationship.integration.test.mjs"
       ],
@@ -1166,7 +1181,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": null,
       "currentHeadEvidenceRunId": null,
-      "currentHeadEvidenceNote": "Positive dispatch/production behavior remains NOT_TESTED because owner-approved content/queue-identity-approval.json is absent; the owner-signed exact queue identity mapping is required. Fail-closed rejection paths were rerun on 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346.",
+      "currentHeadEvidenceNote": "Positive dispatch is owner-gated because owner-approved content/queue-identity-approval.json is absent; no fabricated mapping or approval.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
@@ -1203,7 +1218,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ],
@@ -1239,7 +1254,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ],
@@ -1275,7 +1290,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-queue-diagnostics.integration.test.mjs"
       ],
@@ -1311,7 +1326,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-render-recovery-reconcile.integration.test.mjs"
       ],
@@ -1347,7 +1362,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-retry.integration.test.mjs"
       ],
@@ -1383,7 +1398,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
@@ -1420,7 +1435,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
@@ -1456,7 +1471,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs"
       ],
@@ -1493,7 +1508,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-rights-verification.integration.test.mjs"
       ],
@@ -1543,7 +1558,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-cancellation.integration.test.mjs"
       ],
@@ -1581,7 +1596,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-validation-idempotency.integration.test.mjs"
       ],
@@ -1617,7 +1632,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
         "test/dashboard-api-job-cancellation.integration.test.mjs"
@@ -1651,7 +1666,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/nature-frontiers-media-register-api.test.mjs"
       ],
@@ -1684,7 +1699,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ],
@@ -1718,7 +1733,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ],
@@ -1752,7 +1767,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ],
@@ -1788,7 +1803,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs",
         "test/state-recovery-dashboard.integration.test.mjs"
@@ -1826,7 +1841,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-task-runner.test.mjs"
       ],
@@ -1862,7 +1877,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs"
       ],
@@ -1893,9 +1908,9 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
-      "currentHeadEvidenceRunId": 45058706978,
-      "currentHeadEvidenceNote": "Exact current source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 re-ran the route's fail-closed behavior and all 50 protected-route authentication-negative checks in automation run 45058706978. The route remains BLOCKED by its genuine external owner/provider prerequisite; no live external operation or approval is inferred.",
+      "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+      "currentHeadEvidenceRunId": 45062369097,
+      "currentHeadEvidenceNote": "Negative/authentication and fail-closed paths are covered on exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a; external/provider acceptance remains BLOCKED.",
       "currentHeadEvidenceTestFiles": [
         "test/upload-reconcile-fail-closed.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
@@ -1932,7 +1947,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
       "currentHeadEvidenceRunId": 45062369097,
-      "currentHeadEvidenceNote": "Route-specific regression file(s) included in exact-head full Node suite 45062369097 (ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a); local API acceptance only, not provider publication.",
+      "currentHeadEvidenceNote": "Route-specific integration test file(s) were included in exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a full regression run 45062369097. Local API acceptance only; no provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/worker-quarantine-release.test.mjs"
       ],
@@ -2208,12 +2223,12 @@
     "pythonTests": 108,
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "note": "Exact-head full regression includes 50/50 protected-route missing/invalid-authentication checks. This does not promote blocked or not-tested authorized-positive route operations."
+    "note": "50/50 protected-route missing/invalid-credential checks included in exact-head full regression run 45062369097; does not promote external or owner-gated actions."
   },
   "latestBranchTipAtEvidenceRefresh": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
   "latestApplicationSourceChangeSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
   "latestFullyTestedSourceTestTreeSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
-  "sourceTestEvidenceStatus": "PASS on exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a: 1,129 Node tests across 191 files, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities, 50/50 protected-route authentication-negative checks, and 41/41 dashboard browser journeys. The 41 previously accepted positive route classifications were re-exercised by the exact-head full Node suite; two provider-draft routes remain NOT_TESTED overall and seven routes remain BLOCKED. Production readiness is HOLD with 22 blockers.",
+  "sourceTestEvidenceStatus": "Exact source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a passed 1,129 Node tests across 191 files, 108 Python tests, zero failures/skips, npm audit 0 vulnerabilities, 50/50 protected-route auth-negative checks and 41/41 dashboard browser journeys. 41 API routes remain locally accepted; two provider-draft routes remain NOT_TESTED overall; seven routes remain BLOCKED. Production readiness is HOLD with 22 blockers.",
   "latestApplicationSourceTestTreeSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
   "latestCurrentHeadPositiveEvidence": {
     "sourceTestSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
@@ -2262,7 +2277,8 @@
     "authenticationNegativeRoutesPassed": 50,
     "notTestedRoutesPreserved": 2,
     "blockedRoutesPreserved": 7,
-    "explanation": "Exact-head regression passed; 41 local positive route classifications remain accepted, 50/50 auth-negative checks passed, two routes remain NOT_TESTED and seven remain BLOCKED. This does not establish live provider operations."
+    "explanation": "Exact-head regression passed; 41 local positive route classifications remain accepted, 50/50 auth-negative checks passed, two routes remain NOT_TESTED and seven remain BLOCKED. This does not establish live provider operations.",
+    "ownerGatedRoutes": 2
   },
   "dashboardBrowserE2eRefreshRequest": {
     "requestedAt": "2026-11-22",
