@@ -6,7 +6,9 @@
 
 ## Scope
 
-This review checks the canonical owner-approved Long-form 001 narration against the source map already attached to the script and the underlying scientific references. It is a desk fact-check, not a substitute for a qualified crocodilian/zoological reviewer. It does not approve footage, narration licensing, rights, captions, thumbnails, render quality or publication.\n\n**Media-policy update — 22 November 2026:** The owner's active `content/owner-media-policy-override-2026-11-22.json` explicitly permits qualifying Pexels/Pixabay licensed video footage. This supersedes the prior original-creator-captured-only restriction. Each clip still requires its exact source page, applicable platform licence evidence, original MP4 and SHA-256, technical probe/full decode, third-party-rights review and human visual/editorial approval. AI-generated wildlife visuals, other stock/archive sources, standalone stock redistribution and fabricated encounters remain prohibited.
+This review checks the canonical owner-approved Long-form 001 narration against the source map already attached to the script and the underlying scientific references. It is a desk fact-check, not a substitute for a qualified crocodilian/zoological reviewer. It does not approve footage, narration licensing, rights, captions, thumbnails, render quality or publication.
+
+**Media-policy update — 22 November 2026:** The owner's active `content/owner-media-policy-override-2026-11-22.json` explicitly permits qualifying Pexels/Pixabay licensed video footage. This supersedes the prior original-creator-captured-only restriction. Each clip still requires its exact source page, applicable platform licence evidence, original MP4 and SHA-256, technical probe/full decode, third-party-rights review and human visual/editorial approval. AI-generated wildlife visuals, other stock/archive sources, standalone stock redistribution and fabricated encounters remain prohibited.
 
 ## Claim-to-source assessment
 
@@ -64,7 +66,7 @@ The source reports experiments with 19 naïve juvenile Nile crocodiles tested in
 
 **Research:** desk fact-check complete.  
 **Scientific approval:** NOT PROVIDED.  
-**Original wildlife media:** NOT PROVIDED.  
-**Commercial narration:** BLOCKED by HeyGen's written Roderic Free-plan determination; no alternative voice or paid upgrade authorized.  
+**Wildlife footage:** six Pexels crocodile source MP4s acquired for review (151.819967 seconds); five primary per-file hashes are recorded and the supplemental hash is pending extraction. Full human playback, third-party-rights review and scene-to-claim approval remain pending; no footage is selected for production.  
+**Commercial narration:** Roderic Free-plan audio is not eligible for public/commercial release. Speechma Andrew is selected for a manual zero-cost browser audition only; no MP3 has been generated, listened to, hash-verified or approved for production. No paid API or upgrade is authorized.  
 **Final render / captions / thumbnail / rights approval:** NOT COMPLETE.  
 **Publication:** NOT AUTHORIZED. The script remains private/draft-only and does not reserve a publication slot.
