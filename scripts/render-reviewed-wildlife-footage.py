@@ -46,7 +46,7 @@ def main() -> None:
     if not manifest_path.is_file():
         raise SystemExit(
             "No reviewed footage manifest. Create media/approved-footage/manifest.json "
-            "and add licensed clip files; see docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md."
+            "and add original creator-captured wildlife files; see docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md."
         )
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     clips = manifest.get("clips", [])
