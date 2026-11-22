@@ -44,7 +44,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(api.currentHeadEvidenceNote, /7\/50 BLOCKED by owner\/provider prerequisites/);
   assert.equal(api.mockedProviderDraftIntegrationStatus, "PASS");
   assert.equal(api.liveProviderAcceptance, "NOT_TESTED");
-  assert.match(api.currentHeadEvidenceNote, /concurrent reconciliation fencing.*interrupted SUBMITTING/i);
+  assert.match(api.currentHeadEvidenceNote, /interrupted SUBMITTING.*concurrent reconciliation fencing/i);
   assert.match(api.nextAction, /ambiguous create\/read-back outcomes/i);
   assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, exactSha);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1129);
