@@ -588,13 +588,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918610269",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43918609969"
       ],
-      "nextAction": "Nature Frontiers is a separate brand. Renew the Meta user/Page token securely, verify exact Page identity and permissions, then implement and test the intended draft-only provider create/read-back path in version-controlled code. The deployed Cloudflare Worker is health-only, not a publisher. Keep publishing disabled until identity, rights, signed approval and provider read-back are verified.",
+      "nextAction": "Run the exact-SHA adapter and real-server route tests. Separately renew the Meta token, verify the exact Nature Frontiers Page and permissions, and only then consider an explicitly authorized one-shot unpublished provider draft; keep publishing disabled.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
       "acceptanceCriterion": "The verified Nature Frontiers Page identity and permissions pass live checks; the intended draft-only workflow completes (not skipped) and retains a validated draft artifact without publishing.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
-      "currentHeadEvidenceNote": "Exact candidate 57769 local Nature Frontiers draft and Instagram safety workflows passed without provider writes. Read-only Meta identity run 43942301878 returned HTTP 401 / OAuth error 190 / subcode 463 due to expired session; provider-side draft/publish capability remains blocked and publishing stays disabled."
+      "currentHeadEvidenceNote": "Exact candidate 57769 local Nature Frontiers draft and Instagram safety workflows passed without provider writes. Read-only Meta identity run 43942301878 returned HTTP 401 / OAuth error 190 / subcode 463 due to expired session; provider-side draft/publish capability remains blocked and publishing stays disabled. Repository-owned unpublished provider-draft adapter, authenticated API create/reconcile routes, durable attempt/audit records and dashboard controls were added through commits 33caef9, 4d86f57, dc098ad and 2a81935. Exact-SHA tests have not run, and live Meta token remains expired/unverified; no provider draft was created.",
+      "latestImplementationSha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e"
     },
     {
       "id": "SAFE-001",
@@ -2019,14 +2020,15 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/f41d1d7d5d1e77f23811c12caf076640e8640233/docs/API_ROUTE_ACCEPTANCE_MATRIX.json",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664"
       ],
-      "nextAction": "Resolve the seven explicit route blockers only with genuine evidence: obtain the owner's exact signed queue-identity mapping for GET /api/jobs/dispatchable and POST /api/jobs/produce; verify the real Nature Frontiers Meta Page/Instagram identity and permissions before any provider approval/publish operation; and reconcile complete SonicVhibez YouTube history plus all uncertain upload attempts before POST /api/uploads/reconcile. Keep all seven routes fail-closed; do not create owner approvals, fabricate media/rights, or attempt external publishing.",
+      "nextAction": "Run exact-SHA Node/API/auth/persistence tests for the two new provider-draft routes and complete all seven existing owner/provider gates; do not count the new routes as PASS before execution.",
       "assessmentCommitSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceNote": "BLOCKED overall on API route acceptance. The route matrix remains pinned to exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73: 41/48 routes with accepted endpoint-specific local integration evidence, 48/48 protected API routes reject missing and invalid credentials, and seven blocked routes remain. The complete automation suite reran on exact descendant fae3bf58270b1ffecb038ea0c9a40be0bd340f9 in run 45027788664 with 1,107 Node tests across 189 files and 108 Python tests, zero failures/skips, npm audit zero vulnerabilities. The seven blockers remain two owner-signed queue identity gates and five Meta/YouTube provider or genuine rights/history prerequisites. Fail-closed paths are covered; no owner approval, live provider write or publication is claimed.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:13:51Z"
+      "currentHeadEvidenceNote": "Prior exact-SHA evidence accepts 41 routes and has 48/48 auth-negative checks on its then-current 48-route inventory. The inventory has since grown to 50 routes with two newly implemented unpublished Meta provider-draft routes; those routes have regression tests but no exact-SHA test execution yet. Seven existing routes remain externally/owner gated. Overall API-001 remains BLOCKED.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:13:51Z",
+      "latestImplementationSha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e"
     },
     {
       "id": "API-NEG-001",
@@ -2581,11 +2583,12 @@
     "FAIL": 0
   },
   "apiRouteCounts": {
-    "routes": 48,
-    "PASS": 42,
-    "NOT_TESTED": 0,
-    "BLOCKED": 6,
-    "authenticationNegativePass": 48
+    "routes": 50,
+    "PASS": 41,
+    "NOT_TESTED": 2,
+    "BLOCKED": 7,
+    "authenticationNegativePass": 48,
+    "authenticationNegativeNotTested": 2
   },
   "implementationCommits": [
     "33d6f4c4e6010578ae961f7cf97a7e0e9d70bac7",
@@ -2641,13 +2644,13 @@
   "latestDocumentedPrHeadBeforeRegisterRefresh": "4f38aa392f97e944c97c3d3c312be08e57686069",
   "observedBranchHeadBeforeRegisterRefresh": "57769fa219fe98b52f8b182f3849206ac3c8110c",
   "latestLiveBranchHeadBeforeRegisterRefresh": "61d116ede6c4abc9977078e88864d8571cdadccb",
-  "latestLiveAheadBy": 4798,
-  "latestLiveBehindBy": 13,
-  "latestLiveChangedFiles": 487,
-  "currentLiveHeadBeforeRegisterRefresh": "61d116ede6c4abc9977078e88864d8571cdadccb",
-  "currentLiveAheadBy": 4798,
-  "currentLiveBehindBy": 13,
-  "currentLiveChangedFiles": 487,
+  "latestLiveAheadBy": 5490,
+  "latestLiveBehindBy": 17,
+  "latestLiveChangedFiles": 546,
+  "currentLiveHeadBeforeRegisterRefresh": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e",
+  "currentLiveAheadBy": 5490,
+  "currentLiveBehindBy": 17,
+  "currentLiveChangedFiles": 546,
   "latestInventoryHead": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
   "latestInventoryAheadBy": 4781,
   "latestInventoryBehindBy": 11,
@@ -2657,12 +2660,14 @@
   "latestLiveChangedFilesExact": true,
   "currentLiveChangedFilesExact": true,
   "apiRouteMatrixCounts": {
-    "routes": 48,
+    "routes": 50,
     "authNegativePass": 48,
-    "overallPass": 42,
-    "overallNotTested": 0,
-    "overallBlocked": 6,
-    "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb"
+    "authNegativeNotTested": 2,
+    "overallPass": 41,
+    "overallNotTested": 2,
+    "overallBlocked": 7,
+    "sourceTestSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+    "implementationHeadSha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e"
   },
   "dashboardBrowserJourneys": {
     "total": 41,
@@ -2841,13 +2846,14 @@
     "asOf": "2026-11-05"
   },
   "currentHeadCounts": {
-    "routes": 48,
+    "routes": 50,
     "authNegativePass": 48,
-    "overallPass": 42,
-    "overallNotTested": 0,
-    "overallBlocked": 6
+    "authNegativeNotTested": 2,
+    "overallPass": 41,
+    "overallNotTested": 2,
+    "overallBlocked": 7
   },
-  "latestLiveBranchHead": "61d116ede6c4abc9977078e88864d8571cdadccb",
+  "latestLiveBranchHead": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e",
   "sourceTestLineage": {
     "previousTestedSha": "012eea3f7d2d24ff3cc70947071e74e48efed9bd",
     "currentTestedSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
@@ -3111,15 +3117,15 @@
     }
   },
   "currentHeadStatusSnapshot": {
-    "DASH_001": "NOT_TESTED — current exact head 61d116ede6c4abc9977078e88864d8571cdadccb passes 1,043 Node tests/181 files, but no browser E2E ran on this SHA; the 41/41 Chromium result is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64. Per-control success/authorization/persistence/concurrency/accessibility acceptance remains incomplete.",
-    "API_001": "BLOCKED — 42/42 positive route evidence sets and 48/48 auth-negative checks pass on exact SHA 61d116ede6c4abc9977078e88864d8571cdadccb; six provider/production routes remain BLOCKED.",
+    "DASH_001": "NOT_TESTED — dashboard gained an explicit unpublished provider-draft action and read-only reconciliation display on exact implementation SHA ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e. No browser E2E or per-control acceptance has run on this SHA; prior 41/41 journey evidence is historical.",
+    "API_001": "BLOCKED — route inventory now contains 50 protected API routes: 41 have prior accepted endpoint-specific evidence, two newly added Meta provider-draft routes are NOT_TESTED on exact implementation SHA ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e, and seven pre-existing routes remain blocked by owner/provider prerequisites. Only 48/50 routes have prior authentication-negative evidence; the two new routes are not yet run. The new provider-draft API and read-only reconciliation route are fail-closed by default; no live Meta write occurred.",
     "SCHED_001": "NOT_TESTED — latest read-only identity/inventory evidence from 2026-11-19 found one public 20-second legacy Short and zero private/unlisted videos; upload-scope evidence is now stale, owner attestation is stale after 2026-11-18, and current destination schedule/history cannot be fully inspected.",
     "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — local backoff/persistence/restart tests pass; live OIDC/runner/production publisher prerequisites remain.",
     "STATE_001": "PASS_STAGING — D1 backup/restore and staging recovery evidence pass; production artifact storage is separate.",
     "DEPLOY_001": "NOT_TESTED — exact current-head deployment recovery smoke passed 2/2 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161) and Cloudflare runner-bridge safety passed 4/4 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195); no production Worker or production deployment/rollback was verified.",
-    "GIT_002": "NOT_TESTED — 4798 ahead, 13 behind, 487 changed paths; branch is unprotected and full semantic review remains incomplete.",
+    "GIT_002": "NOT_TESTED — current implementation branch comparison against main reports 5,490 ahead / 17 behind with merge base 45352b73bb6cc4787b2a49988b575afb754ab627. PR #1 reports 546 changed files. Full semantic review is incomplete; branch protection detail remains inaccessible (HTTP 403) and must not be treated as verified.",
     "SCHED_003": "PASS — owner-approved rolling cycle without weekly target; 72-hour and Johannesburg no-same-day rules preserved.",
-    "API_NEG_001": "PASS — 48/48 protected routes reject missing/invalid credentials in exact current-SHA Node run 44884481167.",
+    "API_NEG_001": "NOT_TESTED — 48/50 routes have prior missing/invalid-auth rejection evidence; the two new provider-draft routes are included in the auth-matrix source but have not been executed on the current implementation SHA.",
     "DASH_CTRL_WIRING_001": "PASS_EVIDENCE — 121 controls mapped; overall DASH-001 remains NOT_TESTED.",
     "DASH_CTRL_A11Y_001": "PASS_EVIDENCE — last 41/41 browser journeys are historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64; current head has no browser E2E, so per-control full accessibility acceptance remains open.",
     "DASH_CTRL_FORM_PATHS_001": "PASS_EVIDENCE — 17 form journeys; production-dependent outcomes remain fail-closed.",
@@ -3315,7 +3321,7 @@
       "requiredResolution": "Owner enables/verifies R2 in Cloudflare Dashboard or removes the unused binding; then rerun a read-only artifact accounting check."
     }
   ],
-  "updatedAt": "2026-11-21",
+  "updatedAt": "2026-11-22",
   "currentEvidenceRefresh": {
     "recordedAt": "2026-11-20",
     "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
@@ -3479,5 +3485,57 @@
     "acceptedRoutes": 41,
     "blockedRoutes": 7,
     "verdict": "API-001 BLOCKED — local route acceptance is 41/48; seven owner/provider prerequisites remain unresolved."
+  },
+  "latestImplementationUpdate": {
+    "implementationHeadSha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e",
+    "branch": "codex/marketing-machine-audit-fixes",
+    "commits": [
+      {
+        "sha": "33caef9d8aeaae01c65d2d5b197cb2d01382e7d2",
+        "purpose": "Added separate Meta unpublished Page draft create/read-back/reconciliation adapter with exact approval binding and no automatic retries."
+      },
+      {
+        "sha": "d2be3e2a3d34012946341cfb1e346e6e769b32db",
+        "purpose": "Added 15 adapter regression scenarios for authorization, identity, tampering, timeout, read-back, published-state rejection and recovery."
+      },
+      {
+        "sha": "4d86f57e625e8987ee16dc6f3b634d60d3e10a49",
+        "purpose": "Integrated authenticated provider-draft create/reconcile API routes, durable pre-mutation attempts, audit history and state migration."
+      },
+      {
+        "sha": "df0b045d57a4a32ac360cee140e4d4211da75df2",
+        "purpose": "Extended dashboard-server route authentication and safe-default no-mutation tests."
+      },
+      {
+        "sha": "1ab61b1b3880d0d4ee5e9bb1c66aea18a486372f",
+        "purpose": "Added explicit one-shot provider-draft action to the dashboard."
+      },
+      {
+        "sha": "e26cdb759902e177ab411725b79eefbe20e94507",
+        "purpose": "Corrected provider-draft wrong-Page regression fixture."
+      },
+      {
+        "sha": "3c7ec14c0bb699f9e463c27a84668b073ec8b5d0",
+        "purpose": "Corrected identity/provider wrong-Page regression fixtures."
+      },
+      {
+        "sha": "dc098ad24b1d1876c8d20c882e7cf376f43c6d15",
+        "purpose": "Exposed provider-draft attempt status and history to authenticated dashboard state."
+      },
+      {
+        "sha": "2a81935036ea6096f5ca5347ec027b929f60dbc8",
+        "purpose": "Added dashboard provider-draft attempt display and read-only reconciliation control."
+      },
+      {
+        "sha": "ac2b8b1cbacf5ffd06115cfed5f9b9e63aa4dc2e",
+        "purpose": "Updated API route inventory with two NOT_TESTED endpoints and current branch counts."
+      }
+    ],
+    "verification": {
+      "sourceSyntaxParsing": "PASS — changed JavaScript modules, test files and dashboard inline script parsed after stripping module imports for syntax-only validation; this is not test execution.",
+      "nodeTests": "NOT_TESTED — no writable checkout or available exact-SHA test runner.",
+      "githubActions": "BLOCKED_TOOLING — workflow_dispatch not exposed by connected GitHub tools; TinyFish browser dispatch could not start because its wallet balance is negative. No funds added.",
+      "liveMetaProvider": "NOT_TESTED — no live provider write; safe defaults remain disabled."
+    }
   }
 }
