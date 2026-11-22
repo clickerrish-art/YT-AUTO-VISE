@@ -25,7 +25,7 @@ test("Meta Page identity verification checks exact Page ID without putting token
   assert.equal(called.options.headers.authorization, "Bearer " + TOKEN);
   assert.equal(called.options.redirect, "error");
   await assert.rejects(() => verifyMetaPageIdentity({
-    pageId: "999999999999999", expectedPageId: "999999999999999", accessToken: TOKEN, apiVersion: API,
+    pageId: PAGE_ID, expectedPageId: "999999999999999", accessToken: TOKEN, apiVersion: API,
     fetchImpl: async () => { throw new Error("must not call"); }
   }), /does not match/i);
 });
@@ -435,7 +435,7 @@ test("provider draft rejects a Page identity different from the owner-verified P
   let calls = 0;
   const authorization = { ...providerDraftAuthorization(draft), pageId: "999999999999999" };
   await assert.rejects(() => createMetaUnpublishedPageDraft({
-    draft, pageId: PAGE_ID, expectedPageId: "999999999999999", accessToken: TOKEN,
+    draft, pageId: "999999999999999", expectedPageId: "999999999999999", accessToken: TOKEN,
     permissionsVerified: true, authorization, now: NOW,
     fetchImpl: async () => { calls++; return response({ id: PAGE_ID + "_1" }); }
   }), /does not match the exact verified Nature Frontiers Page/i);
