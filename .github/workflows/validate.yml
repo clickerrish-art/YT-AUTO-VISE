@@ -59,6 +59,11 @@ jobs:
       - name: Validate authoritative draft schedule
         run: npm run validate:schedule
       - name: Report production blockers without publishing
+        env:
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
         run: |
           set +e
           output=$(npm run readiness 2>&1)
