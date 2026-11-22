@@ -1432,6 +1432,20 @@ const server = http.createServer(async (req, res) => {
               facebookApprovalFingerprint(current) !== current.approval?.fingerprint) {
             return json(res, 409, { error: "Draft or exact approval changed during Page identity verification; review again" });
           }
+          // Re-run the full rights/compliance evaluation after the network identity check.
+          // This catches an expired/changed licence file or source artifact before the
+          // durable one-shot attempt is prepared and before any provider mutation.
+          const currentEvaluation = evaluateFacebookDraft(current, {
+            existingDrafts: state.facebookDrafts.filter(item => item.id !== current.id && !["REJECTED", "CANCELLED"].includes(item.status)),
+            recentPosts: state.facebookPosts, expectedPageId, rightsRoot: root
+          });
+          if (!currentEvaluation.ok) {
+            return json(res, 409, {
+              error: "Provider-draft rights/compliance preflight changed during authorization; review the draft again",
+              evaluation: currentEvaluation, publishingEnabled: false, remoteMutationAttempted: false
+            });
+          }
+          current.evaluation = currentEvaluation;
           const prior = state.facebookProviderDraftAttempts.find(item =>
             item.draftId === current.id && item.approvalFingerprint === current.approval.fingerprint
           );
@@ -1452,7 +1466,7 @@ const server = http.createServer(async (req, res) => {
             payloadSha256: authorization.payloadSha256,
             idempotencyKey: "facebook-provider-draft:" + current.id + ":" + current.approval.fingerprint,
             nonce: authorization.nonce, status: "SUBMITTING", retryAllowed: false,
-            caption: current.caption, remotePostId: null,
+            caption: current.caption, complianceVersion: currentEvaluation.complianceVersion, remotePostId: null,
             pageIdentity: { pageId: identity.pageId, pageName: identity.pageName, checkedAt: identity.checkedAt },
             startedAt: issuedAt, updatedAt: issuedAt, actor: operatorId
           };
@@ -1462,6 +1476,7 @@ const server = http.createServer(async (req, res) => {
             attemptId: attempt.id, draftId: current.id, approvalFingerprint: current.approval.fingerprint,
             payloadSha256: authorization.payloadSha256, destinationPageId: expectedPageId,
             at: issuedAt, actor: operatorId, explicitOneShotAuthorization: true,
+            complianceVersion: currentEvaluation.complianceVersion,
             published: false, scheduled: false
           });
           await saveState(state);
