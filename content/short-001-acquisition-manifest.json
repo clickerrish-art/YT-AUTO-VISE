@@ -6,13 +6,16 @@
   "createdAt": "2026-11-19T12:47:41.692Z",
   "sourceSelection": "Four clips explicitly approved by the owner",
   "acquisition": {
-    "workflowRunId": 44576264343,
-    "workflowRunNumber": 119,
-    "artifactId": 14556226994,
-    "artifactName": "sonicvhibez-short-001-approved-pexels-source",
-    "artifactSha256": "5cf86f3f9bbc2fcc4353b0b05141de2e23fe681d10152a02b80712e20287ad52",
-    "artifactExpiresAt": "2026-11-26T17:21:30Z",
-    "exactSourceSha": "fe903d3e7eda9e00fc0ed2ca841b1c75f938438a"
+    "workflowRunId": 44975292889,
+    "workflowRunNumber": 151,
+    "artifactId": 14735735813,
+    "artifactName": "sonicvhibez-short-001-pexels-review-assets",
+    "artifactSha256": "67ef0c5955adc9f6410b41af6a3850cc06fcdc2988ddb3091e0a4c9ede06b28a",
+    "artifactSizeBytes": 68661908,
+    "artifactExpiresAt": "2026-12-06T02:16:28Z",
+    "exactSourceSha": "5198112088d1be920eccad3544b9256a55f19159",
+    "acquiredAt": "2026-11-22T02:16:30Z",
+    "result": "SUCCESS"
   },
   "pexelsLicense": {
     "url": "https://www.pexels.com/license/",
@@ -73,7 +76,8 @@
         "previewUseStatus": "USED_IN_SILENT_55_SECOND_VISUAL_REVIEW_ONLY"
       },
       "preliminaryVisualFlag": "A dark collar/strap is visible on one lion in sampled frames; its function is unverified. Do not imply an uncollared or unmonitored wild encounter; owner/editor context review is required.",
-      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
+      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
+      "fullDecode": "PASS"
     },
     {
       "assetId": "pexels-11760785",
@@ -109,7 +113,8 @@
         "releaseEligible": false,
         "previewUseStatus": "USED_IN_SILENT_55_SECOND_VISUAL_REVIEW_ONLY"
       },
-      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
+      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
+      "fullDecode": "PASS"
     },
     {
       "assetId": "pexels-11528208",
@@ -145,7 +150,8 @@
         "releaseEligible": false,
         "previewUseStatus": "USED_IN_SILENT_55_SECOND_VISUAL_REVIEW_ONLY"
       },
-      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
+      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
+      "fullDecode": "PASS"
     },
     {
       "assetId": "pexels-31702128",
@@ -256,5 +262,28 @@
     "All four original downloaded MP4 files have matching SHA-256 values and full FFmpeg decode passes. This is technical integrity evidence, not human full-playback or rights clearance.",
     "The Pexels platform licence permits qualifying commercial use and modification subject to its restrictions. Third-party rights, the visible lion collar/strap context, full human playback, final owner approval, narration, captions and publication remain unresolved.",
     "No AI-generated wildlife visuals are permitted. The silent 55.033-second 720x1280 preview is review-only and is not a final narrated 1080x1920 production master."
-  ]
+  ],
+  "previousAcquisition": {
+    "workflowRunId": 44576264343,
+    "workflowRunNumber": 119,
+    "artifactId": 14556226994,
+    "artifactName": "sonicvhibez-short-001-approved-pexels-source",
+    "artifactSha256": "5cf86f3f9bbc2fcc4353b0b05141de2e23fe681d10152a02b80712e20287ad52",
+    "artifactExpiresAt": "2026-11-26T17:21:30Z",
+    "exactSourceSha": "fe903d3e7eda9e00fc0ed2ca841b1c75f938438a"
+  },
+  "latestAcquisitionSummary": {
+    "artifactId": 14735735813,
+    "artifactName": "sonicvhibez-short-001-pexels-review-assets",
+    "workflowRunId": 44975292889,
+    "workflowRunNumber": 151,
+    "artifactSha256": "67ef0c5955adc9f6410b41af6a3850cc06fcdc2988ddb3091e0a4c9ede06b28a",
+    "artifactSizeBytes": 68661908,
+    "artifactExpiresAt": "2026-12-06T02:16:28Z",
+    "selectedAssetsDownloaded": 3,
+    "selectedAssetsFullDecodePass": 3,
+    "rightsVerified": false,
+    "humanReviewed": false,
+    "releaseEligible": false
+  }
 }
