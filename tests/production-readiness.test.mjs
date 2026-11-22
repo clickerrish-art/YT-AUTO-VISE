@@ -83,6 +83,8 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /long-form-render-manifest/);
   assert.match(result.stdout, /narration rights are not cleared for public branded\/production use/i);
   assert.match(result.stdout, /owner selected Speechma Andrew.*zero-cost browser audition.*No audition audio has been generated/i);
+  assert.match(result.stdout, /manual browser action/);
+  assert.match(result.stdout, /do not automate Speechma\\s free site/i);
   assert.match(result.stdout, /Do not use HeyGen Free-plan Roderic or Wade audio, and do not run local Piper\\/Edge TTS/);
   assert.doesNotMatch(result.stdout, /Owner-authorized zero-cost alternative auditions are permitted/);
   assert.match(result.stdout, /footageOrigin must be creator_captured_original/);
