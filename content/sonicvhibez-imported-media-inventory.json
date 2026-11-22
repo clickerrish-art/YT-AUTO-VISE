@@ -324,7 +324,7 @@
     "One lion candidate has no verified exact source page or creator and remains excluded.",
     "No imported Canva candidate is rights-cleared or release-eligible."
   ],
-  "notes": "The owner permits qualifying Pexels/Pixabay stock video footage for SonicVhibez under asset-level review gates. Three exact-metadata Pexels imports are review candidates but are not selected for the current release; two remain excluded from production. No candidate has local original MP4 bytes, matching SHA-256, third-party-rights review or human visual approval. Review eligibility is not production selection or release clearance.",
+  "notes": "The owner permits qualifying Pexels/Pixabay stock video footage for SonicVhibez under asset-level review gates. Three exact-metadata Pexels imports are review candidates but are not selected for the current release; two remain held and excluded from production. No candidate has local original MP4 bytes, matching SHA-256, third-party-rights review or human visual approval. Review eligibility is not production selection or release clearance.",
   "historicalBlockingEvidence": [
     "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
     "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
