@@ -6,7 +6,7 @@
   "publicationEnabled": false,
   "schedulingEnabled": false,
   "calendarStatus": "DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES",
-  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp. Added sonicvhibez-short-013-youtube-shorts-analytics for the week beginning 2026-12-14; 55-second private DRAFT_ONLY, qualitative search-intent evidence only, 90-Day Blueprint direct-sales disclosure HOLD, and no publication timestamp. SEO evidence for the two existing drafts in the week beginning 2026-11-23 was refreshed on 2026-11-19 using current qualitative web-search results; no search volume or competition metrics were available. The weekly cap remains two, and all items remain private DRAFT_ONLY with no publication or scheduling timestamps.,Two 55-second Shorts prepared for week beginning 2026-12-21: low-light wildlife photography (Vault, owner-approved direct-sales disclosure) and YouTube script hooks (Prompt Pack, product-specific disclosure HOLD). Both remain private DRAFT_ONLY with no publication or scheduling timestamps. Fresh 19 November qualitative web-search evidence only; no measured volume or competition. Selar pages could not be re-opened in this run; seller registry evidence was last checked 9 November. Fresh 20 November 2026 qualitative SEO refresh completed for the two drafts in the week beginning 2026-11-23; no search-volume or competition metrics were available and no vidIQ credits were spent. The weekly maximum remains exactly two; both items remain DRAFT_ONLY/private with no publication timestamps or scheduling. Fresh qualitative SEO evidence for the two 2026-11-30 drafts was refreshed on 2026-11-21 from wildlife-video fact-check reporting and pre-production/wildlife-filming guidance; no measured volume or competition was available, and no vidIQ credits were used.",
+  "notes": "This is a draft-preparation plan for the week beginning 2026-11-09, not a publication calendar.,No publicationAt, publishedAt or scheduledAt values are permitted in this plan.,A separate verified SonicVhibez destination schedule and complete public/private/unlisted YouTube history are required before any publication-slot calculation or scheduling.,Selar products are the owner's direct-sales business and must not be classified as affiliate commissions. Products hosted outside Selar (including Serengeti and other external sellers) are affiliate promotions. Every promotion remains blocked until its exact relationship and viewer-facing disclosure are verified and owner-approved.,Two 55-second creator-education Shorts are prepared for the week beginning 2026-11-30: a wildlife-video fact-check lesson and a wildlife-documentary shot-list lesson. Both remain DRAFT_ONLY, private and unscheduled; the two-Short weekly cap is enforced, and the Vault direct-sales disclosure is product-specifically approved. Added sonicvhibez-short-011-wildlife-broll for the week beginning 2026-12-07; the weekly maximum remains two, publication/scheduling remain disabled, and the item has no publication timestamp. Added sonicvhibez-short-012-wildlife-video-editing for the week beginning 2026-12-07; vidIQ estimated the primary phrase at 8,456 monthly searches with competition 18/100, and the 2-Short weekly cap remains enforced. The item is private, DRAFT_ONLY and has no publication timestamp. Added sonicvhibez-short-013-youtube-shorts-analytics for the week beginning 2026-12-14; 55-second private DRAFT_ONLY, qualitative search-intent evidence only, 90-Day Blueprint direct-sales disclosure HOLD, and no publication timestamp. SEO evidence for the two existing drafts in the week beginning 2026-11-23 was refreshed on 2026-11-19 using current qualitative web-search results; no search volume or competition metrics were available. The weekly cap remains two, and all items remain private DRAFT_ONLY with no publication or scheduling timestamps.,Two 55-second Shorts prepared for week beginning 2026-12-21: low-light wildlife photography (Vault, owner-approved direct-sales disclosure) and YouTube script hooks (Prompt Pack, product-specific disclosure HOLD). Both remain private DRAFT_ONLY with no publication or scheduling timestamps. Fresh 19 November qualitative web-search evidence only; no measured volume or competition. Selar pages could not be re-opened in this run; seller registry evidence was last checked 9 November. Fresh 20 November 2026 qualitative SEO refresh completed for the two drafts in the week beginning 2026-11-23; no search-volume or competition metrics were available and no vidIQ credits were spent. The weekly maximum remains exactly two; both items remain DRAFT_ONLY/private with no publication timestamps or scheduling. Fresh qualitative SEO evidence for the two 2026-11-30 drafts was refreshed on 2026-11-21 from wildlife-video fact-check reporting and pre-production/wildlife-filming guidance; no measured volume or competition was available, and no vidIQ credits were used. Two new 55-second draft-only creator-education Shorts prepared for the week beginning 2026-12-28: a YouTube thumbnail-brief lesson linked to the Prompt Pack (direct-sales disclosure HOLD) and an accurate wildlife-title lesson linked to the Vault (owner-approved direct-sales disclosure). Fresh qualitative search-intent evidence was checked on 2026-11-22; no search volume or competition metrics were accessed. Both remain private and unscheduled, with no publication timestamps; the two-Short weekly cap remains enforced.",
   "weeks": [
     {
       "weekOf": "2026-11-09",
@@ -1566,6 +1566,243 @@
               }
             ]
           }
+        }
+      ]
+    },
+    {
+      "weekOf": "2026-12-28",
+      "status": "DRAFT_ONLY",
+      "items": [
+        {
+          "id": "sonicvhibez-short-017-thumbnail-brief",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "YouTube Thumbnail Brief: 4 Details Before Design",
+          "primaryKeyword": "YouTube thumbnail brief",
+          "script": "[INTERNAL HOLD — NOT SPOKEN.] Before you open a design tool, write a YouTube thumbnail brief in four lines. First, name the viewer and the question they want answered. Second, state the title’s promise in plain language. Third, choose one genuine image that supports that promise; never invent an encounter or imply a moment your footage does not show. Fourth, set the design limits: one focal point, minimal text, strong contrast, and readable at phone size. Write down the proof element too: what in the actual clip makes the promise credible? Specify what must stay out: fake animals, copied competitor artwork, invented text, or a false reaction. Then check the pair. The title explains the subject; the thumbnail adds a visual reason to care without repeating the title. Preview it small before approval. Save the brief before design begins.",
+          "description": "YouTube thumbnail brief: define the viewer question, title promise, genuine proof image and design limits before anyone starts designing.\n\nDISCLOSURE HOLD — proposed wording is not approved for this product. The direct-sales relationship is owner-confirmed, but exact viewer-facing wording has not been approved. Do not publish or schedule.\nProposed wording, not approved: “This product is sold through my own Selar business; purchases generate revenue for my business.”\n\nResource: The Full Video Creation Prompt Pack Premium Edition\nhttps://selar.com/539497q11t\n\nSeller: Click 47 — listing and seller evidence last verified 2026-11-21; recheck before release.",
+          "productId": "video-creation-prompt-pack-premium",
+          "productUrl": "https://selar.com/539497q11t",
+          "disclosure": {
+            "status": "HOLD",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "holdText": "The exact Selar listing and seller Click 47 were re-verified on 2026-11-21. The direct-sales relationship is owner-confirmed, but no exact viewer-facing disclosure wording is owner-approved for this product. Keep HOLD; do not publish or schedule."
+          },
+          "visibility": "private",
+          "keywordPhrases": [
+            {
+              "phrase": "YouTube thumbnail brief"
+            },
+            {
+              "phrase": "YouTube thumbnail design brief"
+            },
+            {
+              "phrase": "thumbnail brief template"
+            },
+            {
+              "phrase": "YouTube thumbnail prompt"
+            },
+            {
+              "phrase": "mobile-readable YouTube thumbnail"
+            },
+            {
+              "phrase": "thumbnail and title alignment"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-22T10:59:07+02:00",
+            "note": "Qualitative search-intent evidence only. Current web search returned a guide whose title contains the exact phrase “YouTube Thumbnail Brief” and explains the fields creators need to brief a designer. Purdue's guide supports minimal, accessible visual direction. No measured global search volume, competition score or rising-search metric was accessed or claimed; no paid vidIQ keyword credits were used.",
+            "sources": [
+              {
+                "title": "YouTube Thumbnail Brief Template: How to Give Designers or AI Better Direction",
+                "url": "https://www.overseeros.com/blog/youtube-thumbnail-brief-template",
+                "whyRelevant": "Exact phrase match in a 26 June 2026 guide; covers title promise, viewer question, focal point, proof element, constraints and approval criteria."
+              },
+              {
+                "title": "Digital and Social Engagement Guide",
+                "url": "https://marcom.purdue.edu/app/uploads/2024/11/508_Purdue-DigitalSocialEngagement-Guide-Nov2024.pdf",
+                "whyRelevant": "Purdue guidance recommends authentic photography, minimal text and accessible graphic design; supports a concise, mobile-readable brief."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-22T10:59:07+02:00",
+            "note": "Search-intent evidence is qualitative, not volume data: an indexed 2026 guide uses the exact thumbnail-brief query and explains title promise, viewer question, focal point and proof; Purdue's guide supports concise, accessible graphic design.",
+            "sources": [
+              {
+                "title": "YouTube Thumbnail Brief Template: How to Give Designers or AI Better Direction",
+                "url": "https://www.overseeros.com/blog/youtube-thumbnail-brief-template",
+                "whyRelevant": "Exact phrase match in a 26 June 2026 guide; covers title promise, viewer question, focal point, proof element, constraints and approval criteria."
+              },
+              {
+                "title": "Digital and Social Engagement Guide",
+                "url": "https://marcom.purdue.edu/app/uploads/2024/11/508_Purdue-DigitalSocialEngagement-Guide-Nov2024.pdf",
+                "whyRelevant": "Purdue guidance recommends authentic photography, minimal text and accessible graphic design; supports a concise, mobile-readable brief."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "YouTube Thumbnail Brief Template: How to Give Designers or AI Better Direction",
+              "url": "https://www.overseeros.com/blog/youtube-thumbnail-brief-template",
+              "whyUsed": "Exact phrase match in a 26 June 2026 guide; covers title promise, viewer question, focal point, proof element, constraints and approval criteria."
+            },
+            {
+              "title": "Digital and Social Engagement Guide",
+              "url": "https://marcom.purdue.edu/app/uploads/2024/11/508_Purdue-DigitalSocialEngagement-Guide-Nov2024.pdf",
+              "whyUsed": "Purdue guidance recommends authentic photography, minimal text and accessible graphic design; supports a concise, mobile-readable brief."
+            }
+          ],
+          "hashtags": [
+            "#YouTubeThumbnail",
+            "#ThumbnailDesign",
+            "#YouTubeCreator",
+            "#CreatorEducation",
+            "#VideoProduction"
+          ],
+          "thumbnailDirection": "Vertical 9:16 graphic card with four clear fields: VIEWER / PROMISE / PROOF / LIMITS. Use no copied competitor layout and no stock or AI-generated wildlife image. If an animal frame is later used, it must be original owner-supplied footage with verified provenance and rights. Keep the text minimal and test at phone size.",
+          "productionChecklist": [
+            "Use the 4-part brief: viewer question, title promise, proof image and design limits.",
+            "Only use an original owner-supplied wildlife frame if its exact file, creator/source provenance and rights are verified; otherwise use a clean graphic-only layout.",
+            "Do not use AI-generated wildlife imagery or generic stock footage as a substitute for original wildlife media.",
+            "Never invent an animal encounter, reaction, screenshot, statistic or proof element.",
+            "Keep one focal point, minimal text, strong contrast and phone-size legibility; ensure the thumbnail complements rather than repeats the title.",
+            "Spoken script measured at 134 words and an estimated 53.6 seconds at 150 words per minute; final performance still needs a timed recording.",
+            "Use synchronized captions and check 9:16 safe areas on the rendered file.",
+            "Recheck the exact Selar listing and seller Click 47 before release; the registry evidence was last verified 2026-11-21.",
+            "Keep the Prompt Pack direct-sales disclosure on HOLD until the exact viewer-facing wording is owner-approved.",
+            "Complete rights, factual, thumbnail and human playback review against the final asset hashes.",
+            "Keep private and DRAFT_ONLY; do not upload, schedule or publish.",
+            "Do not assign a publication slot until the complete YouTube history and a separate SonicVhibez destination schedule are inspectable; then calculate every 72-hour gap and same-Johannesburg-day check."
+          ]
+        },
+        {
+          "id": "sonicvhibez-short-018-wildlife-video-titles",
+          "channel": "SonicVhibez",
+          "status": "DRAFT_ONLY",
+          "targetSeconds": 55,
+          "title": "YouTube Titles for Wildlife Videos: 3 Accuracy Checks",
+          "primaryKeyword": "YouTube titles for wildlife videos",
+          "script": "Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. YouTube titles for wildlife videos should describe what the footage can prove. Use three checks. First, name the species only when you can identify it confidently; otherwise say “wildlife” or describe the visible subject. Second, choose an observable action—crossing, feeding, resting—not a motive you cannot verify. Third, add context only when it is documented, such as the location or season. For example, “Elephants Cross a Dry Riverbed” is clearer than “You Won’t Believe What Happened” if that is what the clip shows. Keep the primary phrase near the start, but do not force it if the wording becomes awkward. Check that the first seconds and thumbnail deliver the same promise. The Complete YouTube Wildlife Creator’s Vault is a resource to review at the link below.",
+          "description": "YouTube titles for wildlife videos: name only a verified species, describe an observable action and add context only when the footage supports it.\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nResource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF\nhttps://selar.com/0u19v8u99l\n\nKeep the title, thumbnail and opening seconds aligned with the real footage. Do not approach, pursue, bait or disturb wildlife to obtain a shot.",
+          "productId": "wildlife-creators-vault",
+          "productUrl": "https://selar.com/0u19v8u99l",
+          "disclosure": {
+            "status": "APPROVED",
+            "relationshipStatus": "OWNER_CONFIRMED_DIRECT_SALES",
+            "requiredBeforeRelease": true,
+            "approvedAt": "2026-11-10T07:00:36+02:00",
+            "approvalReference": "Owner supplied this exact viewer-facing disclosure in a user-authored ChatGPT message on 2026-11-10 at 07:00:36+02:00: “This product is sold through my own Selar business; purchases generate revenue for my business.” The owner followed on 2026-11-10 at 07:23:41+02:00 with an instruction to proceed to completion while guarding against policy violations. This wording applies only to the Complete YouTube Wildlife Creator's Vault promotion."
+          },
+          "visibility": "private",
+          "keywordPhrases": [
+            {
+              "phrase": "YouTube titles for wildlife videos"
+            },
+            {
+              "phrase": "how to write YouTube titles"
+            },
+            {
+              "phrase": "wildlife video title ideas"
+            },
+            {
+              "phrase": "accurate wildlife video title"
+            },
+            {
+              "phrase": "YouTube title and thumbnail"
+            }
+          ],
+          "keywordEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-22T10:59:07+02:00",
+            "note": "Qualitative search-intent evidence only. vidIQ's current title guide directly addresses how to write YouTube titles, front-loading natural keywords and matching viewer intent; NPS and Audubon provide authoritative ethical-filming context so the title describes observable footage rather than a fabricated or disturbing encounter. No measured global search volume, competition score or rising-search metric was accessed or claimed; no paid vidIQ keyword credits were used.",
+            "sources": [
+              {
+                "title": "How to Write YouTube Titles That Get More Clicks",
+                "url": "https://vidiq.com/blog/post/youtube-video-title/",
+                "whyRelevant": "Updated 19 August 2026; explains viewer-intent matching, natural keyword placement near the beginning and specific, accurate promises. It explicitly says no title formula guarantees views."
+              },
+              {
+                "title": "Photography & Wildlife Watching — Yellowstone National Park",
+                "url": "https://home.nps.gov/yell/planyourvisit/photography.htm",
+                "whyRelevant": "National Park Service guidance says never approach or pursue wildlife for a picture and to back away if an animal moves closer; its distances are Yellowstone-specific and are not generalized here."
+              },
+              {
+                "title": "Audubon’s Guide to Ethical Bird Photography and Videography",
+                "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
+                "whyRelevant": "Audubon emphasizes truthful captions, respecting natural behavior, and retreating if an approach changes a bird's behavior; supports describing only what footage can establish."
+              }
+            ]
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-22T10:59:07+02:00",
+            "note": "The indexed title guide and wildlife-photography guidance support a clear informational query: writing accurate YouTube titles for wildlife footage. This is qualitative intent evidence, not measured search demand.",
+            "sources": [
+              {
+                "title": "How to Write YouTube Titles That Get More Clicks",
+                "url": "https://vidiq.com/blog/post/youtube-video-title/",
+                "whyRelevant": "Updated 19 August 2026; explains viewer-intent matching, natural keyword placement near the beginning and specific, accurate promises. It explicitly says no title formula guarantees views."
+              },
+              {
+                "title": "Photography & Wildlife Watching — Yellowstone National Park",
+                "url": "https://home.nps.gov/yell/planyourvisit/photography.htm",
+                "whyRelevant": "National Park Service guidance says never approach or pursue wildlife for a picture and to back away if an animal moves closer; its distances are Yellowstone-specific and are not generalized here."
+              },
+              {
+                "title": "Audubon’s Guide to Ethical Bird Photography and Videography",
+                "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
+                "whyRelevant": "Audubon emphasizes truthful captions, respecting natural behavior, and retreating if an approach changes a bird's behavior; supports describing only what footage can establish."
+              }
+            ]
+          },
+          "scriptEvidence": [
+            {
+              "title": "How to Write YouTube Titles That Get More Clicks",
+              "url": "https://vidiq.com/blog/post/youtube-video-title/",
+              "whyUsed": "Updated 19 August 2026; explains viewer-intent matching, natural keyword placement near the beginning and specific, accurate promises. It explicitly says no title formula guarantees views."
+            },
+            {
+              "title": "Photography & Wildlife Watching — Yellowstone National Park",
+              "url": "https://home.nps.gov/yell/planyourvisit/photography.htm",
+              "whyUsed": "National Park Service guidance says never approach or pursue wildlife for a picture and to back away if an animal moves closer; its distances are Yellowstone-specific and are not generalized here."
+            },
+            {
+              "title": "Audubon’s Guide to Ethical Bird Photography and Videography",
+              "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
+              "whyUsed": "Audubon emphasizes truthful captions, respecting natural behavior, and retreating if an approach changes a bird's behavior; supports describing only what footage can establish."
+            }
+          ],
+          "hashtags": [
+            "#YouTubeTitles",
+            "#WildlifeFilmmaking",
+            "#WildlifeVideo",
+            "#YouTubeSEO",
+            "#CreatorEducation"
+          ],
+          "thumbnailDirection": "Use one genuine frame from original, owner-supplied, rights-cleared footage, showing only the species and action actually verified. Add a restrained label: NAME / ACTION / CONTEXT. If no suitable original frame is cleared, use a typography-only graphic; no stock or AI wildlife image.",
+          "productionChecklist": [
+            "Confirm species identification from a reliable source before naming it; if uncertain, use a broader description.",
+            "Describe only visible, observable behaviour; do not infer motive or turn an ordinary movement into a hunt, rescue or attack.",
+            "Use location, season and other context only when documented and safe to disclose.",
+            "Never approach, pursue, bait, use playback or disturb wildlife for a better shot; follow site-specific rules.",
+            "Use only original owner-supplied wildlife footage with verified exact files, source provenance and usage rights; no AI-generated wildlife visuals or generic stock substitutes.",
+            "Spoken script measured at 143 words and an estimated 57.2 seconds at 150 words per minute; final performance still needs a timed recording.",
+            "Keep the primary keyword natural near the start of the title and description; do not keyword-stuff or promise rankings.",
+            "Use the exact owner-approved ADVERTISEMENT identifier and direct-sales disclosure in the final video and description.",
+            "Recheck the exact Selar listing and seller Click 47 before release; the registry evidence was last verified 2026-11-21.",
+            "Complete factual, rights, compliance, thumbnail and human playback review against the final asset hashes.",
+            "Keep private and DRAFT_ONLY; do not upload, schedule or publish.",
+            "Do not assign a publication slot until complete YouTube history and the correct SonicVhibez destination schedule are inspected; calculate all gaps explicitly and enforce at least 72 elapsed hours with no same Johannesburg calendar day."
+          ]
         }
       ]
     }
