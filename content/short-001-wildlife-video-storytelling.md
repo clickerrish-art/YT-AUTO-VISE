@@ -1,32 +1,38 @@
 # SonicVhibez Short 001 — production brief
 
-**Status:** SCRIPT DRAFT — approved disclosure retained; a 55.722-second Roderic sample exists for internal audition only. HeyGen Free-plan output is non-commercial and not production-cleared; captions currently align to that audition, not to a licensed production voice. Not rendered, uploaded, scheduled, or published  
+**Status:** SCRIPT DRAFT — a 55.033-second silent visual-review preview exists (720×1280; SHA-256 `c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844`). A 55.722-second HeyGen Roderic sample is internal-evaluation-only and prohibited for public/commercial use. Speechma Andrew (English, United States, male standard voice) is selected for a manual zero-cost browser audition only; no Andrew MP3, licence verification, final audio hash, listening review or production approval exists. The existing SRT aligns to the Roderic audition and must not be used as final captions. Not a final render; not uploaded, scheduled or published  
 **Weekly allowance:** Existing item 1 of 2; this is a revision, not a third Short  
 **Channel:** SonicVhibez only  
 **Target runtime:** 55 seconds  
 **Format:** 9:16 vertical  
-**Preferred voice:** Roderic — Authoritative & Refined. The current HeyGen Free-plan sample is restricted to personal/non-commercial internal evaluation. Do not use it in commercial SonicVhibez production. No alternative voice may be substituted without explicit owner approval  
+**Selected audition voice:** Speechma Andrew — English (United States), male standard. Manual browser audition only; no audio has been generated or approved. Do not automate the Speechma site, use a paid upgrade, or substitute another voice. Verify the exact voice and input rights before production use  
 **Product URL:** https://selar.com/0u19v8u99l
 
 ## YouTube title
 Wildlife Documentary Storytelling: 3 Shots, One Clear Story
 
-## Narration draft (130 words; provisional 55-second caption layout; record and retime against final audio before rendering)
+## Narration draft (139 words; approximately 55 seconds at 151 words per minute; record and retime against approved final audio before rendering)
 
-Want better wildlife videos? Start with one clear story, not a pile of random animal clips. Choose one question your footage can actually answer. Plan three shots: a wide habitat view, a meaningful detail, and the behavior itself. Keep separate moments in their original recorded order; label any reconstruction clearly. Keep a safe distance. Never bait, chase, or disturb wildlife. Use patient observation and steady framing; let natural movement tell the story. Edit out pauses that add no information. Add readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, review the Complete YouTube Wildlife Creator's Vault. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The link is in the description.
+Want better wildlife videos? Start with one clear question, not a pile of random animal clips. These three clips are separate examples, not one encounter. In your own film, follow one real behaviour and keep its related shots in sequence. Plan three shot roles: a wide habitat view, a meaningful detail, and the behaviour itself. Use only footage you have permission to publish. Keep a safe distance. Never bait, chase or disturb wildlife. Let natural movement tell the story. Cut pauses that add no information, use readable captions and music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, explore this resource. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The Complete YouTube Wildlife Creator's Vault – Premium Combo PDF is linked in the description.
 
 ## Draft description — internal hold, not publish-ready
 
-Learn wildlife documentary storytelling with three purposeful shots: establish the habitat, show a meaningful detail, and capture the animal behavior your footage actually supports. Keep a respectful distance and let real movement tell the story.
-
-Promotional resource: Complete YouTube Wildlife Creator’s Vault — Premium Combo PDF  
-https://selar.com/0u19v8u99l
+Learn wildlife documentary storytelling with three purposeful shot roles: a wide habitat view, a meaningful detail, and the behaviour itself. The three clips in this review are separate examples from different sources, not one continuous encounter. In your own film, keep related shots from one real encounter in sequence.
 
 **ADVERTISEMENT — OWNER-APPROVED DIRECT-SALES DISCLOSURE:** This product is sold through my own Selar business; purchases generate revenue for my business.
 
-This is a direct sale through the owner's own Selar business, not an affiliate commission. Keep YouTube's paid-promotion declaration enabled. The listing includes Nature Frontiers wording, but this campaign's promotional destination is SonicVhibez only.
+Explore the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
+https://selar.com/0u19v8u99l
 
-**Release hold:** This draft is not cleared for upload or publication. Genuine rights evidence, final MP4 and thumbnail, factual review, human playback/compliance review, upload-attempt reconciliation, destination verification and the 72-hour spacing check remain required.
+**Footage source references — review-only, not final rights clearance**
+- Lion walking — lifeofhicham, Pexels: https://www.pexels.com/video/a-lion-walkin-in-a-field-11528208/
+- Elephant mother and calf — ROMAN ODINTSOV, Pexels: https://www.pexels.com/video/an-african-elephant-mother-and-her-baby-in-a-grassland-11760785/
+- Resting lions — Lorenzo Boldorini, Pexels: https://www.pexels.com/video/resting-lions-in-african-safari-habitat-29765785/ (visible collar/strap context remains under review; replace if not cleared)
+- Pexels platform licence: https://www.pexels.com/license/
+
+Pexels footage is licensed, not public-domain material. Asset-level third-party rights and final human review remain outstanding. The enclosure/barrier clip (Pexels 31702128) is excluded from this edit. Keep YouTube's paid-promotion declaration enabled. This is a direct sale through the owner's own Selar business, not an affiliate commission.
+
+**Release hold:** This draft is not cleared for upload or publication. Final source-file acquisition, rights review, Andrew voice audition and licence check, approved MP3 and hash, synchronized captions, final 1080×1920 export, truthful thumbnail, factual review, full human playback, upload-attempt reconciliation, destination verification and 72-hour spacing check remain required.
 
 #WildlifeDocumentary #WildlifeStorytelling #WildlifeFilmmaking #YouTubeShorts #NatureEducation
 
@@ -56,28 +62,34 @@ The title leads with the broad, directly relevant “wildlife documentary” phr
 
 ## Thumbnail direction
 
-Use one genuine, rights-cleared animal image in its actual habitat. Keep the animal on the right and clean negative space on the left for **“ONE STORY. 3 SHOTS.”** Use natural anatomy, lighting and behavior; no fabricated danger, composites, logos or watermarks. Keep text inside the vertical Shorts safe area.
+Use a single frame extracted from one fully reviewed, rights-cleared video clip (original or qualifying Pexels/Pixabay footage). Keep the real animal on the right and clean negative space on the left for **“ONE STORY. 3 SHOTS.”** No composite encounter, fabricated danger, AI-generated wildlife, logos or watermarks. Keep text inside the vertical Shorts safe area.
 
-## Shot-by-shot visual plan
+## Shot-by-shot visual plan — current silent review preview
 
-- **0–4s:** Strong, real wildlife moment; on-screen hook: “Make wildlife videos feel like documentaries”
-- **4–12s:** Animal behavior in its natural habitat; establish the question/story
-- **12–22s:** Wide habitat shot, then purposeful close-ups; captions: “Context • Behavior • Story”
-- **22–34s:** Sequence of animal movement with breathing room; show how pacing creates anticipation
-- **34–43s:** Natural sound / respectful observation visuals; caption: “Use footage you have rights to”
-- **43–55s:** Calm wildlife montage and neutral end frame; product mention only after the promotion gate is cleared
+- **0–4s:** Title card: “3 SHOTS. ONE CLEAR STORY.”
+- **4–7s:** Question card: “START WITH THE QUESTION”
+- **7–14s:** Lion walking — wide example; source is a separate Pexels clip
+- **14–17s:** Role card: “WIDE EXAMPLE”
+- **17–35s:** Elephant mother and calf — detail/relationship example; separate Pexels clip
+- **35–38s:** Role card: “DETAIL EXAMPLE”
+- **38–50s:** Resting lions — observation example; collar/strap context is unresolved and this clip must be replaced if it cannot be cleared
+- **50–55s:** End card: “THREE SEPARATE EXAMPLES. NOT ONE ENCOUNTER.” Final narrated edit must extend/retime this end card to fit the approved disclosure and CTA
+
+The preview is silent, 720×1280 and review-only. Final output must be 1080×1920 and 50–60 seconds after the approved narration and captions are available.
 
 ## Production checklist
 
-- [ ] Use genuine, species- and habitat-matched footage; never bait, chase or disturb wildlife.
-- [ ] Confirm every video, still, music and sound-effect asset is cleared for commercial YouTube use.
-- [ ] Preserve real chronology; do not splice separate clips to imply an encounter that did not happen.
-- [ ] Fact-check every animal-behavior claim against reliable sources.
-- [ ] Resolve commercial narration rights: obtain a commercial Roderic licence or explicit owner approval for a zero-cost commercially licensed alternative; generate the production voice and retime captions to that exact audio.
-- [ ] Confirm final runtime is about 55 seconds without unnatural time-stretching.
-- [ ] Check captions at phone size, audio levels, framing and vertical safe areas.
-- [x] Seller identity verified as Click 47 from the exact Selar listing; the listing includes Nature Frontiers branding, while SonicVhibez promotion authorization is separately recorded by the owner.
-- [x] Owner-confirmed Selar relationship: the owner's own business; purchases generate direct sales revenue, not affiliate commission. SonicVhibez promotion authorization is separately recorded.
+- [x] Recovered three Pexels source MP4s for the current silent review preview; source hashes match the acquisition record and full decode passed.
+- [ ] Acquire the five crocodile Pexels sources and the additional exact-match Pexels B-roll candidates into review artifacts; verify source page, creator, licence, original bytes, SHA-256, ffprobe and full decode.
+- [ ] Complete third-party-rights review for every selected clip; resolve the resting-lion collar/strap context or replace that clip. The enclosure/barrier clip is excluded.
+- [ ] Preserve real chronology and label separate examples; never splice clips to imply an encounter that did not happen.
+- [ ] Fact-check every animal-behaviour claim against reliable sources.
+- [ ] Manually audition Speechma Andrew in the browser; verify the exact voice and input rights. No automation, paid upgrade or substitute voice.
+- [ ] Download the exact approved MP3, record SHA-256, listen to the full file, obtain owner approval, then generate captions against that exact audio.
+- [ ] Export final 1080×1920 H.264 at 50–60 seconds; full-decode and inspect full playback with sound and sound-off.
+- [ ] Check captions at phone size, audio levels, framing, vertical safe areas and absence of unwanted watermarks.
+- [x] Seller identity verified as Click 47 from the exact Selar listing; SonicVhibez promotion authorization is separately recorded by the owner.
+- [x] Owner-confirmed Selar relationship: the owner's own business; purchases generate direct sales revenue, not affiliate commission.
 - [ ] Use the exact owner-approved direct-sales disclosure verbatim, say “Advertisement” before it, and show the disclosure clearly on screen; keep the paid-promotion declaration enabled.
 - [ ] Verify SonicVhibez destination identity and inspect complete public/private/unlisted timestamp history before any calendar decision.
 - [ ] Keep private and unscheduled; do not upload or publish until every gate passes.
@@ -85,4 +97,4 @@ Use one genuine, rights-cleared animal image in its actual habitat. Keep the ani
 
 **Destination guard:** SonicVhibez only; never Nature Frontiers.  
 **SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed. No income outcome is guaranteed.  
-**Release state:** HOLD — the exact direct-sales disclosure is owner-approved for this product, but the current Roderic Free-plan sample is non-commercial only; production narration rights, genuine media rights, final assets, human review, upload-attempt reconciliation, destination inspection and spacing verification remain outstanding.
+**Release state:** HOLD — owner-approved direct-sales disclosure is retained; the current 55.033-second silent preview is review-only; three Pexels clips are source/hash/decode verified but asset-level third-party rights and the resting-lion collar context remain open; Andrew is selected for a manual audition only; no final audio, captions, 1080×1920 export, thumbnail, private upload or publication is approved.
