@@ -51,18 +51,20 @@ The fifth Canva import, a 9-second lion close-up (asset VAHZ9oFCiak), has no exa
 
 ## Previously shared Pexels wildlife footage recovered from the 13 November production history
 
-The following Pexels sources were re-identified from the earlier user-shared footage list. Exact source-page URLs and direct CDN download URLs are recorded in `content/media/pexels-user-shared-candidates-2026-11-22.json`. All pages currently display the Pexels free-use licence. **Except for crocodile 30026544, the original MP4 files have not yet been downloaded, hashed, probed or fully decoded.** No item is selected for production or release-cleared.
+The following Pexels sources were re-identified from the earlier user-shared footage list. Exact source-page URLs and direct CDN download URLs are recorded in `content/media/pexels-user-shared-candidates-2026-11-22.json`. All pages currently display the Pexels free-use licence.
 
-| Pexels ID | Creator | Subject / page title | Page metadata | Editorial/technical gate |
+Four confirmed non-crocodile originals were acquired for review in workflow run **44979176830**, artifact **14737325814** (110,781,644 bytes; ZIP SHA-256 `fe042d50611d2144d765fa61eee6cc398e9776e625b3019fd023446f7a7bc526`; expires 6 December 2026). All four passed ffprobe and full FFmpeg decode. Actual total duration is **70.61 seconds**. Per-file SHA-256, file size, exact duration and actual frame rate are in the JSON register and workflow log. The originals remain in the GitHub artifact, not the local production workspace.
+
+| Pexels ID | Creator | Subject / page title | Actual file metadata | Editorial/technical gate |
 |---|---|---|---|---|
-| 8268897 | Nicky Pe | A Meerkat Standing | 21s, 3840×2160, 25fps | Likely match to the historical “Meerkat on alert” 20s record; one-second duration discrepancy; full playback required |
-| 33260728 | Magda Ehlers | Playful Meerkats in Their Natural Habitat | 15s, 3840×2160, 25fps | Possible match to historical “Meerkats exploring” 18s record; duration mismatch means identity is not confirmed; excluded from automated acquisition |
-| 9655785 | Anthony | Meerkats (*Suricata suricatta*) Digging in Ground | 17s, 1920×1080; page says 50fps | Direct CDN filename advertises 25fps; actual source fps must be established by ffprobe; no retiming |
-| 30175165 | Regan Dsouza | King Cobra Eating Another Snake in the Wild | 10s, 1920×1080, 25fps | Page describes a King cobra feeding; visually confirm species, prey and action before factual narration |
-| 2835528 | PMA Rakson | A Family of Elephant Roaming at a Grassland | 22s, 1920×1080; page says 50fps | Direct CDN filename advertises 25fps; page tags suggest Asian elephant/Sri Lanka/Kaziranga context; never label as African elephant without verification |
+| 8268897 | Nicky Pe | A Meerkat Standing | 20.80s, 3840×2160, 25fps; SHA-256 recorded | Acquired and full-decode PASS; likely match to historical “Meerkat on alert” 20s record; complete human playback pending |
+| 33260728 | Magda Ehlers | Playful Meerkats in Their Natural Habitat | Page lists 15s, 3840×2160, 25fps | Possible match to historical “Meerkats exploring” 18s record; duration mismatch means identity is not confirmed; not downloaded or included in automated acquisition |
+| 9655785 | Anthony | Meerkats (*Suricata suricatta*) Digging in Ground | 17.28s, 1920×1080, **25fps actual**; Pexels page says 50fps; SHA-256 recorded | Acquired and full-decode PASS; preserve actual 25fps, do not retime; complete human playback pending |
+| 30175165 | Regan Dsouza | King Cobra Eating Another Snake in the Wild | 10.92s, 1920×1080, 25fps; SHA-256 recorded | Acquired and full-decode PASS; page identifies King cobra feeding; visually confirm species, prey and action before factual narration |
+| 2835528 | PMA Rakson | A Family of Elephant Roaming at a Grassland | 21.61s, 1920×1080, **25fps actual**; Pexels page says 50fps; SHA-256 recorded | Acquired and full-decode PASS; page tags suggest Asian elephant/Sri Lanka/Kaziranga context; never label as African elephant without verification |
 | 30026544 | Johnny Tilly | Crocodile Resting on Riverbank in South Africa | 36.24s, 1920×1080, 25fps | Already acquired, hashed and fully decoded in the crocodile review artifacts; cross-reference the crocodile source register, do not count twice |
 
-The four confirmed non-crocodile clips (8268897, 9655785, 30175165 and 2835528) are the next Pexels acquisition candidates. The 33260728 possible match is held until the historical source identity is reconciled. The 30026544 crocodile clip is already included in the six-file crocodile acquisition. Keep species, geography and captive/wild context accurate; do not mix unrelated species into a single animal-encounter narrative.
+The four confirmed non-crocodile clips (8268897, 9655785, 30175165 and 2835528) are now acquired but remain review-only. The 33260728 possible match is held until the historical source identity is reconciled. The 30026544 crocodile clip is already included in the six-file crocodile acquisition. Two source pages advertise 50fps while the downloaded Pexels CDN files are 25fps; the actual source frame rate is recorded by ffprobe and must be preserved. No full human playback, third-party-rights review, production selection or release approval has been recorded.
 
 ## Pixabay platform licence review
 
