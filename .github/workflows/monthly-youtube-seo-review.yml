@@ -17,6 +17,15 @@ on:
   schedule:
     - cron: "17 6 9 * *"
   workflow_dispatch:
+    inputs:
+      confirm_live_metadata_update:
+        description: "Type YES only after a separate owner approval for this exact metadata package"
+        required: true
+        default: "NO"
+        type: choice
+        options:
+          - "NO"
+          - "YES"
 
 permissions:
   contents: read
@@ -43,15 +52,16 @@ jobs:
         run: node --test test/research-youtube-seo.test.mjs
       - name: Test guarded metadata update and approval boundaries
         run: node --test test/update-youtube-seo-metadata.test.mjs
-      - name: Research South Africa-relevant wildlife search results
+      - name: Research configured wildlife market (global unless explicitly set)
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
+          SEO_REGION_CODE: ${{ vars.SEO_REGION_CODE }}
         run: node scripts/research-youtube-seo.mjs
       - name: Apply exact owner-approved SEO metadata (opt-in; never changes privacy or publishing state)
-        if: ${{ vars.SEO_METADATA_WRITE_ENABLED == 'YES' && vars.SEO_METADATA_DRY_RUN == 'NO' && vars.SEO_METADATA_LIVE_CONFIRM == 'YES' && hashFiles('config/seo-metadata-approval.json') != '' }}
+        if: ${{ github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && github.event_name == 'workflow_dispatch' && inputs.confirm_live_metadata_update == 'YES' && vars.SEO_METADATA_WRITE_ENABLED == 'YES' && vars.SEO_METADATA_DRY_RUN == 'NO' && vars.SEO_METADATA_LIVE_CONFIRM == 'YES' && hashFiles('config/seo-metadata-approval.json') != '' }}
         env:
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}

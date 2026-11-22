@@ -10,11 +10,13 @@ import { pathToFileURL } from "node:url";
 import { verifySonicVhibezChannel } from "./verify-youtube-channel.mjs";
 
 export const SEO_SEED_QUERIES = Object.freeze([
-  "wildlife documentary",
-  "animal documentary",
-  "wild animals",
-  "African wildlife",
-  "animal encounters"
+  "Nile crocodile",
+  "Crocodylus niloticus",
+  "crocodile senses",
+  "water surface waves crocodile",
+  "African wildlife documentary",
+  "wildlife video storytelling",
+  "wildlife filmmaking tips"
 ]);
 const WINDOW_DAYS = 90;
 const MAX_RESULTS_PER_QUERY = 10;
@@ -38,6 +40,15 @@ function required(env, key) {
   return value.trim();
 }
 
+function normalizeSeoRegionCode(value) {
+  if (value === undefined || value === null || value === "") return null;
+  const regionCode = String(value).trim().toUpperCase();
+  if (!/^[A-Z]{2}$/.test(regionCode)) {
+    throw new Error("SEO_REGION_CODE must be an ISO 3166-1 alpha-2 country code; leave it unset for global research");
+  }
+  return regionCode;
+}
+
 function safeOutputDirectory(value) {
   if (typeof value !== "string" || !value.trim() || path.isAbsolute(value) ||
       path.normalize(value).split(path.sep).includes("..")) {
@@ -53,7 +64,9 @@ function formatMarkdown(report) {
     "- Generated: " + report.generatedAt,
     "- Channel: " + report.channel.title + " (" + report.channel.handle + ")",
     "- Channel ID: " + report.channel.id,
-    "- Market: South Africa (ZA), English-language relevance",
+    "- Market: " + (report.market.regionCode
+      ? (report.market.regionCode === "ZA" ? "South Africa (ZA)" : report.market.regionCode) + ", English-language relevance"
+      : "Global (no region filter), English-language relevance"),
     "- Research window: last " + report.windowDays + " days",
     "- Evidence: YouTube search-result video performance proxy",
     "",
@@ -100,7 +113,7 @@ function formatMarkdown(report) {
   return lines.join("\n");
 }
 
-export function buildSeoResearchReport({ channel, queryResults, generatedAt, windowDays = WINDOW_DAYS }) {
+export function buildSeoResearchReport({ channel, queryResults, generatedAt, windowDays = WINDOW_DAYS, regionCode = null }) {
   if (!channel || typeof channel.id !== "string" || !channel.id.trim() ||
       channel.handle?.replace(/^@/, "").toLowerCase() !== "sonicvhibez") {
     throw new Error("SEO report requires the verified SonicVhibez channel identity");
@@ -108,7 +121,8 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
   if (!Array.isArray(queryResults) || queryResults.length !== SEO_SEED_QUERIES.length) {
     throw new Error("SEO research must contain one result set for every configured seed query");
   }
-  const wildlifeTitleSignal = /\b(wildlife|wild|animals?|safari|lions?|elephants?|crocodiles?|hippos?|leopards?|zebras?|rhinos?|buffalo(?:es)?|giraffes?|cheetahs?|hyenas?|pangolins?|mambas?|meerkats?|predators?|birds?|snakes?|turtles?|whales?|sharks?|bears?|wolves?|foxes?|monkeys?|gorillas?|chimpanzees?|baboons?|bisons?|owls?|mammals?|silverbacks?|parrots?|deer|antelopes?|dogs?|cats?|chicks?)\b/i;
+  const normalizedRegionCode = normalizeSeoRegionCode(regionCode);
+  const wildlifeTitleSignal = /\b(wildlife|wild|animals?|safari|lions?|elephants?|crocodiles?|crocodylus|reptiles?|hippos?|leopards?|zebras?|rhinos?|buffalo(?:es)?|giraffes?|cheetahs?|hyenas?|pangolins?|mambas?|meerkats?|predators?|birds?|snakes?|turtles?|whales?|sharks?|bears?|wolves?|foxes?|monkeys?|gorillas?|chimpanzees?|baboons?|bisons?|owls?|mammals?|silverbacks?|parrots?|deer|antelopes?|dogs?|cats?|chicks?)\b/i;
   const offTopicTitleSignal = /\b(skit|funny|hilarious|comedy|ranking|reaction|meme|prank|gaming|cartoon|gameplay|coffee|feces|poop|kopi|expensive)\b/i;
   const candidates = queryResults.map((entry, index) => {
     if (entry.query !== SEO_SEED_QUERIES[index] || !Array.isArray(entry.videos)) {
@@ -140,7 +154,7 @@ export function buildSeoResearchReport({ channel, queryResults, generatedAt, win
     schemaVersion: 1,
     generatedAt: new Date(generatedAt).toISOString(),
     channel: { id: channel.id, title: channel.title, handle: channel.handle },
-    market: { regionCode: "ZA", relevanceLanguage: "en" },
+    market: { regionCode: normalizedRegionCode, scope: normalizedRegionCode ? "COUNTRY" : "GLOBAL", relevanceLanguage: "en" },
     windowDays,
     evidenceType: "YOUTUBE_SEARCH_RESULT_VIDEO_PERFORMANCE_PROXY_NOT_SEARCH_VOLUME",
     searchVolume: null,
@@ -205,6 +219,7 @@ export async function researchSonicVhibezSeo({
     throw new Error("authenticated channel identity changed during SEO research; refusing to continue");
   }
 
+  const regionCode = normalizeSeoRegionCode(env.SEO_REGION_CODE);
   const publishedAfter = new Date(now.getTime() - WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
   const queryResults = [];
   for (const query of SEO_SEED_QUERIES) {
@@ -212,7 +227,7 @@ export async function researchSonicVhibezSeo({
       part: ["snippet"],
       type: "video",
       q: query,
-      regionCode: "ZA",
+      ...(regionCode ? { regionCode } : {}),
       relevanceLanguage: "en",
       order: "viewCount",
       publishedAfter,
@@ -253,7 +268,8 @@ export async function researchSonicVhibezSeo({
     },
     queryResults,
     generatedAt: now,
-    windowDays: WINDOW_DAYS
+    windowDays: WINDOW_DAYS,
+    regionCode
   });
   const directory = safeOutputDirectory(outputDir);
   fs.mkdirSync(directory, { recursive: true, mode: 0o700 });

@@ -100,6 +100,8 @@ test("SEO report ranks the configured phrases using view evidence and never inve
   assert.equal(report.keywordCandidates[0].phrase, SEO_SEED_QUERIES.at(-1));
   assert.equal(report.searchVolume, null);
   assert.equal(report.keywordCompetition, null);
+  assert.equal(report.market.regionCode, null);
+  assert.equal(report.market.scope, "GLOBAL");
   assert.equal(report.evidenceType, "YOUTUBE_SEARCH_RESULT_VIDEO_PERFORMANCE_PROXY_NOT_SEARCH_VOLUME");
   assert.equal(report.actions.metadataWritesPerformed, false);
   assert.equal(report.actions.brandingChanged, false);
@@ -123,7 +125,7 @@ test("monthly research verifies the real channel and writes JSON plus Markdown r
     assert.equal(calls.search.length, SEO_SEED_QUERIES.length);
     for (const [index, args] of calls.search.entries()) {
       assert.equal(args.q, SEO_SEED_QUERIES[index]);
-      assert.equal(args.regionCode, "ZA");
+      assert.equal(args.regionCode, undefined, "do not infer the target market from the account owner's location");
       assert.equal(args.relevanceLanguage, "en");
       assert.equal(args.order, "viewCount");
       assert.equal(args.type, "video");
@@ -134,6 +136,9 @@ test("monthly research verifies the real channel and writes JSON plus Markdown r
     const markdown = fs.readFileSync(result.markdownPath, "utf8");
     assert.equal(json.channel.id, CHANNEL_ID);
     assert.equal(json.keywordCandidates.length, SEO_SEED_QUERIES.length);
+    assert.equal(json.market.scope, "GLOBAL");
+    assert.equal(json.market.regionCode, null);
+    assert.match(markdown, /Global \(no region filter\)/);
     assert.match(markdown, /NOT monthly search-volume estimates/);
     assert.match(markdown, /No channel branding or YouTube metadata was changed/);
     assert.equal(fs.readdirSync(directory).length, 2);
@@ -142,6 +147,39 @@ test("monthly research verifies the real channel and writes JSON plus Markdown r
   }
 });
 
+test("an explicitly configured SEO_REGION_CODE applies a country filter without changing the global default", async () => {
+  const { api, calls } = fakeYoutube();
+  const directory = fs.mkdtempSync(path.join(process.cwd(), ".tmp-sonic-seo-za-"));
+  try {
+    const result = await researchSonicVhibezSeo({
+      env: { ...env, SEO_REGION_CODE: "za" },
+      youtubeFactory: () => api,
+      oauthFactory: fakeOAuthFactory,
+      now: new Date("2026-11-09T16:00:00Z"),
+      outputDir: path.relative(process.cwd(), directory)
+    });
+    assert.equal(result.status, "PASS_READ_ONLY_SEO_RESEARCH");
+    assert.ok(calls.search.every(args => args.regionCode === "ZA"));
+    const json = JSON.parse(fs.readFileSync(result.jsonPath, "utf8"));
+    assert.equal(json.market.regionCode, "ZA");
+    assert.equal(json.market.scope, "COUNTRY");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("invalid SEO_REGION_CODE fails closed before search calls", async () => {
+  const { api, calls } = fakeYoutube();
+  await assert.rejects(
+    researchSonicVhibezSeo({
+      env: { ...env, SEO_REGION_CODE: "SOUTH AFRICA" },
+      youtubeFactory: () => api,
+      oauthFactory: fakeOAuthFactory
+    }),
+    /SEO_REGION_CODE must be an ISO 3166-1 alpha-2 country code/
+  );
+  assert.equal(calls.search.length, 0);
+});
 test("SEO research refuses an unverified channel before running YouTube search", async () => {
   const { api, calls } = fakeYoutube({ wrongIdentity: true });
   await assert.rejects(
