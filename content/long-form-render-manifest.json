@@ -27,7 +27,7 @@
   "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
   "mediaProvenanceStatus": "UNVERIFIED",
   "narrationRightsDeterminationEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
-  "sourceScriptBlobSha": "4d6986a0b09e4f01e3985843d3d0d92d6dea11bc",
+  "sourceScriptBlobSha": "0cf7cdb8469868c359286a8b9b1055e6bd6909a7",
   "sourceScriptHashType": "GIT_BLOB_SHA",
   "scientificReviewPath": "assets/long-form-001-scientific-claim-review.md",
   "scientificReviewBlobSha": "5c794a85fdec74bafb14b832d366edda12007ffb",
@@ -36,7 +36,7 @@
   "narrationPublicBrandedDistributionAllowed": false,
   "narrationCommercialUseAllowed": false,
   "narrationProductionUseAllowed": false,
-  "narrationRestrictionSummary": "HeyGen Free-plan Roderic and Wade outputs remain ineligible for public branded or commercial use. The owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. No audition audio exists, no exact audio hash exists, and no owner listening or production approval has been recorded. Speechma's Terms license lawful generated outputs for commercial use subject to the Terms, Acceptable Use Policy and third-party rights, but do not approve an ungenerated audio file or clear the submitted script/input rights. Production use requires actual output review, verified input rights, owner approval bound to the exact final audio SHA-256, and captions synchronized to that approved narration.",
+  "narrationRestrictionSummary": "HeyGen Free-plan Roderic and Wade outputs are prohibited for public branded or commercial use. The owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. No audition audio exists, no exact audio hash exists, and no owner listening or production approval has been recorded. Speechma's Terms license lawful generated outputs for commercial use subject to the Terms, Acceptable Use Policy and third-party rights, but do not approve an ungenerated audio file or clear the submitted script/input rights. Production use requires actual output review, verified input rights, owner approval bound to the exact final audio SHA-256, and captions synchronized to that approved narration.",
   "alternativeVoiceAuditionStatus": "SPEECHMA_ANDREW_BROWSER_AUDITION_PENDING",
   "selectedNarratorForReview": {
     "provider": "Speechma",
