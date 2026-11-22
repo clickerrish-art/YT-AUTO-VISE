@@ -268,7 +268,7 @@
   "notes": [
     "Existing Pexels/Pixabay source clips are review-only historical material and are not authorized for production. Original creator-captured wildlife footage is required.",
     "Existing Pexels/Pixabay source clips are review-only historical material and are not authorized for production. Original creator-captured wildlife footage is required.",
-    "All four original downloaded MP4 files have matching SHA-256 values and full FFmpeg decode passes. This is technical integrity evidence, not human full-playback or rights clearance.",
+    "All four downloaded Pexels MP4 files have matching SHA-256 values and full FFmpeg decode passes. This is technical integrity evidence only; it does not establish creator-original provenance, production approval, human playback or rights clearance.",
     "Existing Pexels/Pixabay source clips are review-only historical material and are not authorized for production. Original creator-captured wildlife footage is required.",
     "No AI-generated wildlife visuals are permitted. The silent 55.033-second 720x1280 preview is review-only and is not a final narrated 1080x1920 production master."
   ],
