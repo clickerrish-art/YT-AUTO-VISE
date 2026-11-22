@@ -2954,10 +2954,11 @@
     "commitsSincePreviousTestedSha": 32,
     "applicationSourceFilesChangedSincePreviousTestedSha": 0,
     "testFilesAdded": [],
-    "testCasesAdded": 2,
+    "testCasesAdded": 0,
     "testFilesChanged": [
       "test/api-route-acceptance-matrix.test.mjs",
       "test/dashboard-control-acceptance-matrix.test.mjs",
+      "test/master-acceptance-register.test.mjs",
       "test/queue-cadence.test.mjs",
       "tests/production-readiness.test.mjs"
     ],
