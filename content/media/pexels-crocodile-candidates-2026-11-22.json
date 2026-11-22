@@ -24,8 +24,8 @@
       "height": 1080,
       "fps": 25,
       "canvaAssetId": "VAHbmcWc8lU",
-      "status": "ACQUIRED_FOR_REVIEW_ONLY",
-      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: crocodile on open sandy riverbank; promising habitat shot; full human playback pending.",
+      "status": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "visualReview": "PENDING_HUMAN_FULL_PLAYBACK",
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
@@ -44,7 +44,11 @@
       "rightsVerified": false,
       "humanReviewed": false,
       "productionEligible": false,
-      "publicPublishingEnabled": false
+      "publicPublishingEnabled": false,
+      "acquisitionArtifactId": 14735172901,
+      "localOriginalBytesAvailableInArtifact": true,
+      "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
+      "technicalProbe": "PASS"
     },
     {
       "assetId": "pexels-video-31702202",
@@ -56,8 +60,8 @@
       "height": 1920,
       "fps": 29.97,
       "canvaAssetId": "VAHbmQ28Quo",
-      "status": "ACQUIRED_FOR_REVIEW_ONLY",
-      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: close-up is extremely dark and crocodile detail is difficult to discern; likely exclude unless full playback confirms usable exposure.",
+      "status": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "visualReview": "PENDING_HUMAN_FULL_PLAYBACK",
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
@@ -76,7 +80,11 @@
       "rightsVerified": false,
       "humanReviewed": false,
       "productionEligible": false,
-      "publicPublishingEnabled": false
+      "publicPublishingEnabled": false,
+      "acquisitionArtifactId": 14735172901,
+      "localOriginalBytesAvailableInArtifact": true,
+      "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
+      "technicalProbe": "PASS"
     },
     {
       "assetId": "pexels-video-31702221",
@@ -88,8 +96,8 @@
       "height": 1920,
       "fps": 29.97,
       "canvaAssetId": "VAHbmRm73VM",
-      "status": "ACQUIRED_FOR_REVIEW_ONLY",
-      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: crocodile basking near a log/shoreline; background context may be managed or constructed; verify before describing as wild habitat.",
+      "status": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "visualReview": "PENDING_HUMAN_FULL_PLAYBACK",
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
@@ -108,7 +116,11 @@
       "rightsVerified": false,
       "humanReviewed": false,
       "productionEligible": false,
-      "publicPublishingEnabled": false
+      "publicPublishingEnabled": false,
+      "acquisitionArtifactId": 14735172901,
+      "localOriginalBytesAvailableInArtifact": true,
+      "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
+      "technicalProbe": "PASS"
     },
     {
       "assetId": "pexels-video-31702245",
@@ -120,8 +132,8 @@
       "height": 1920,
       "fps": 29.97,
       "canvaAssetId": "VAHbmXxvw3E",
-      "status": "ACQUIRED_FOR_REVIEW_ONLY",
-      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: crocodile on a log/pond edge; promising natural-habitat shot; full human playback pending.",
+      "status": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "visualReview": "PENDING_HUMAN_FULL_PLAYBACK",
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
@@ -140,7 +152,11 @@
       "rightsVerified": false,
       "humanReviewed": false,
       "productionEligible": false,
-      "publicPublishingEnabled": false
+      "publicPublishingEnabled": false,
+      "acquisitionArtifactId": 14735172901,
+      "localOriginalBytesAvailableInArtifact": true,
+      "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
+      "technicalProbe": "PASS"
     },
     {
       "assetId": "pexels-video-31998380",
@@ -152,8 +168,8 @@
       "height": 2160,
       "fps": 29.97,
       "canvaAssetId": "VAHbmVmwByo",
-      "status": "ACQUIRED_FOR_REVIEW_ONLY",
-      "visualReview": "SAMPLED_FRAME_REVIEW_ONLY: aerial view of crocodiles in a muddy river; useful establishing shot; do not imply the same encounter as other locations.",
+      "status": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "visualReview": "PENDING_HUMAN_FULL_PLAYBACK",
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
@@ -172,7 +188,11 @@
       "rightsVerified": false,
       "humanReviewed": false,
       "productionEligible": false,
-      "publicPublishingEnabled": false
+      "publicPublishingEnabled": false,
+      "acquisitionArtifactId": 14735172901,
+      "localOriginalBytesAvailableInArtifact": true,
+      "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
+      "technicalProbe": "PASS"
     },
     {
       "assetId": "pexels-video-20443910",
@@ -186,8 +206,8 @@
       "fps": 25,
       "canvaAssetId": null,
       "sourceOrigin": "SUPPLEMENTAL_PEXELS_DISCOVERED_2026-11-22",
-      "status": "SOURCE_VERIFIED_DOWNLOAD_PENDING",
-      "visualReview": "Pexels page describes a Nile crocodile resting on a sandy riverbank in the wild; download, full decode and visual review pending.",
+      "status": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "visualReview": "PENDING_HUMAN_FULL_PLAYBACK",
       "thirdPartyRightsReview": "PENDING",
       "rightsVerified": false,
       "humanReviewed": false,
@@ -195,34 +215,45 @@
       "releaseEligible": false,
       "publicPublishingEnabled": false,
       "selectedForProduction": false,
-      "fullDecode": "PENDING"
+      "fullDecode": "PASS",
+      "acquisitionArtifactId": 14735172901,
+      "localOriginalBytesAvailableInArtifact": true,
+      "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
+      "technicalProbe": "PASS"
     }
   ],
   "notes": [
-    "All five Pexels crocodile candidate MP4s were downloaded from their exact source pages, SHA-256 hashed, probed with ffprobe and fully decoded end-to-end by FFmpeg; all five technical decodes passed.",
-    "A contact sheet and individual preview frames were generated. Sampled-frame observations are recorded per asset; this is not complete human playback or third-party-rights clearance.",
-    "The 31702202 close-up is very dark and may be excluded for technical quality; 31702221 needs habitat-context review. The other three are promising visual candidates, pending full playback and rights review.",
-    "The five clips total 137.97 seconds, insufficient by themselves for the planned 6–10 minute long-form film without additional unique footage. Do not loop or misrepresent separate locations as one encounter.",
-    "Keep source audio out unless separately licensed; no narration, music, final render, publication or release authorization is included.",
-    "One supplemental Pexels Nile-crocodile source (20443910, Floating Rabbit) was independently identified from its Pexels page and direct download link on 2026-11-22; it is not claimed as a previously shared Canva import and remains download/review pending."
+    "All five owner-selected Pexels crocodile MP4 source files were acquired in GitHub Actions run 44975292889 and uploaded as review artifact 14735172901.",
+    "The acquisition script verified allowlisted Pexels media-host downloads, MP4 container signatures, expected duration tolerance, dimensions, frame rate, ffprobe metadata and full FFmpeg decode for all five files.",
+    "The acquisition log confirms five assets, 137.974967 seconds total source duration and five full-decode passes. Per-asset SHA-256 values and exact ffprobe measurements are in acquisition-manifest.json inside the artifact; they have not yet been copied into this durable register.",
+    "This is review-only source acquisition. Third-party rights, complete human playback, scientific scene-to-claim review, final owner approval and release eligibility remain pending.",
+    "Do not merge South Africa, Kenya and Zambia scenes into one encounter or imply a single location. Keep source geography distinct."
   ],
   "acquisition": {
+    "status": "SUCCESS",
     "workflowRunId": 44975292889,
-    "workflowRunNumber": 151,
-    "sourceCommitSha": "5198112088d1be920eccad3544b9256a55f19159",
+    "workflowRunAttempt": 1,
+    "jobId": 137063717858,
+    "sourceCommit": "5198112088d1be920eccad3544b9256a55f19159",
     "artifactId": 14735172901,
     "artifactName": "sonicvhibez-long-form-001-pexels-crocodile-review",
     "artifactSha256": "89b008a95ad48ccdd7c518aab4f34300841b9da8fb74414339604a0e60572eed",
     "artifactSizeBytes": 451078011,
     "artifactExpiresAt": "2026-12-06T02:17:11Z",
-    "acquiredAt": "2026-11-22T02:17:20Z",
-    "status": "ACQUIRED_FOR_REVIEW_ONLY",
-    "downloadedAssets": 5,
+    "acquiredAt": "2026-11-22T02:17:11Z",
+    "assetCount": 5,
+    "totalActualSourceSeconds": 137.974967,
     "fullDecodePasses": 5,
+    "allSourceFilesFullDecoded": true,
+    "acquisitionManifestPath": "artifacts/long-form-001/pexels-candidates/acquisition-manifest.json",
+    "contactSheetPath": "artifacts/long-form-001/pexels-candidates/preview/crocodile-candidates-contact-sheet.jpg",
+    "sha256Values": "Recorded per asset in the acquisition-manifest.json inside artifact 14735172901; exact per-asset values still need to be copied into the durable repository register after artifact extraction.",
+    "reviewOnly": true,
     "rightsVerified": false,
     "humanReviewed": false,
-    "releaseEligible": false,
-    "publicPublishingEnabled": false
+    "thirdPartyRightsReviewed": false,
+    "releaseEligible": false
   },
-  "totalAcquiredDurationSeconds": 137.974967
+  "totalAcquiredDurationSeconds": 137.974967,
+  "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED"
 }
