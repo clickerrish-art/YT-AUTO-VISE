@@ -182,6 +182,9 @@ if (!exists(mediaInventoryPath)) {
       );
       // Review-eligible candidates are not automatically production selections.
       // Only assets explicitly selected for this release enter the fail-closed media gate.
+      const reviewCandidates = inventory.assets.filter(asset =>
+        asset?.reviewRenderEligible === true && asset?.excludedFromProduction !== true
+      );
       const selectedAssets = inventory.assets.filter(asset =>
         asset?.selectedForProduction === true &&
         asset?.excludedFromProduction !== true &&
@@ -231,7 +234,7 @@ if (!exists(mediaInventoryPath)) {
         const ids = unresolvedAssets.map(asset => asset?.canvaAssetId).filter(Boolean);
         blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported wildlife asset(s) are not fully verified as original or licensed Pexels/Pixabay footage (${ids.join(", ") || "selected inventory not cleared"}); exact creator/source page, original MP4, matching SHA-256, applicable platform licence, third-party rights and human visual review are required before release.`);
       }
-      notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${excludedAssets.length} excluded from production; ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
+      notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${reviewCandidates.length} review candidates; ${excludedAssets.length} excluded from production; ${selectedAssets.length} selected for production; ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
     }
   } catch {
     blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is not valid JSON.");
