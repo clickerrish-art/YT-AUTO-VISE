@@ -32,7 +32,7 @@
   "wildlifeVisualSourcePolicy": "ORIGINAL_OR_LICENSED_PEXELS_PIXABAY_WITH_ASSET_LEVEL_REVIEW",
   "mediaProvenanceStatus": "REVIEW_ONLY_PREVIEW_HASH_VERIFIED_FINAL_SOURCE_RIGHTS_AND_NARRATION_PENDING",
   "narrationRightsDeterminationEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
-  "sourceScriptBlobSha": "385aae1f313877e70bbba129fc3f3548c3e40cdb",
+  "sourceScriptBlobSha": "a44823bcfbe915b51fcdf9a911066d6dd659f310",
   "captionSourceBlobSha": "6a09a58188301ed134912010c6276c6a167544be",
   "sourceHashType": "GIT_BLOB_SHA",
   "captionHashType": "GIT_BLOB_SHA",
