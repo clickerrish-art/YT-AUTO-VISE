@@ -54,7 +54,7 @@ test("local narration generation remains disabled while Speechma Andrew browser 
   }
   assert.equal(narrationPolicy.ownerDecision.approvedVoiceId, "b5c5b28db1ea408abc7d851202983bdb");
   assert.equal(narrationPolicy.ownerDecision.alternativeVoicesAuthorized, false);
-  assert.equal(narrationPolicy.ownerDecision.selectionStatus, "OWNER_SELECTED_WADE_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED");
+  assert.equal(narrationPolicy.ownerDecision.selectionStatus, "OWNER_SELECTED_SPEECHMA_ANDREW_BROWSER_AUDITION_PENDING");
   assert.equal(narrationPolicy.ownerDecision.selectedAlternative.provider, "Speechma");
   assert.equal(narrationPolicy.ownerDecision.selectedAlternative.name, "Andrew");
   assert.equal(narrationPolicy.ownerDecision.selectedAlternative.voiceId, null);
