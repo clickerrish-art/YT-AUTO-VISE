@@ -1,13 +1,10 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-22T13:29:18Z",
+  "generatedAt": "2026-11-22T19:46:30Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "sourceHead": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-  "sourceBlobs": {
-    "dashboardHtml": "aa9ad10df1489e00869045a4997e98c33dfd093f",
-    "dashboardInventoryScript": "ba28f86acf755ada2ea922b192b9b120355ce201"
-  },
+  "sourceHead": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+  "sourceBlobs": "{\"dashboardHtml\":\"aa9ad10df1489e00869045a4997e98c33dfd093f\",\"dashboardInventoryScript\":\"ba28f86acf755ada2ea922b192b9b120355ce201\",\"sourceHeadSha\":\"ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a\"}",
   "status": "PASS",
   "disclaimer": "Behavioral acceptance evidence is attached per control and form and bound to the exact tested commit. Cross-cutting authorization, error handling, persistence/restart, concurrency, keyboard and mobile evidence is recorded separately. Expected fail-closed provider and production holds are accepted outcomes, not successful external operations.",
   "inventory": {
@@ -19455,181 +19452,10 @@
       "step": null
     }
   ],
-  "coverageNote": "Observed coverage is partial and contextual. A passing shared form journey, stable accessible name, or required-field check does not establish all per-control success, validation boundaries, authorization, durable persistence, refresh/restart, concurrency, and accessibility behavior. Overall statuses intentionally remain NOT_TESTED until each applicable dimension has dedicated control-level evidence. Native pattern and URL constraints have separate exact-SHA browser evidence; these checks remain partial and do not complete all control-level acceptance dimensions. Latest exact-source browser run 44548858611 passed 35/35 journeys on source/test SHA 02537b567c81ad972158d617915621f1599716fe. Current evidence now covers stable identity/accessibility across all 121 controls, required-empty validation across 54 required controls and all 17 forms, and native pattern/URL rejection for the eight constrained fields. DASH-001 remains NOT_TESTED overall because positive success paths, authorization, persistence, refresh/restart, concurrency and accessibility behaviors are not yet complete for every applicable control. Latest exact-source browser run 44549995093 passed 36/36 journeys on source/test SHA e70c4c73c0ab74ee494008c6e66953eaf0eb2300. Current evidence covers stable identities/accessibility across 121 controls, required-empty validation across 54 required controls and all 17 forms, seven identifier/hash patterns plus one URL, and all six declared minimum-length constraints. DASH-001 remains NOT_TESTED overall because every control's applicable positive success path, authorization, persistence, refresh/restart, concurrency, error feedback and full accessibility behavior have not yet been individually accepted. Latest exact-source browser run 44551028827 passed 37/37 journeys on source/test SHA fb4f64af8508791ff44c9f1e95ad47c533e8b26e. Current evidence covers stable identities/accessibility across 121 controls, required-empty validation across 54 required controls and all 17 forms, seven identifier/hash patterns plus one URL, all six minlength fields, and all 23 maxlength fields. DASH-001 remains NOT_TESTED overall because each control's applicable positive success path, authorization, persistence, refresh/restart, concurrency, and complete error feedback/accessibility behavior have not yet been individually accepted. Latest exact-source browser run 44552643732 passed 39/39 journeys on source/test SHA 71fe8547bbb605ed258aafa080cd5061b201ec16. In addition to all previously recorded 121-control validation coverage, the run explicitly verifies all seven read-only hash fields, the disabled state-backup action and the qualityScorecardJson review control's malformed-JSON rejection and valid-JSON payload serialization. DASH-001 remains NOT_TESTED overall: positive success, role/authorization, durable persistence, refresh/restart, concurrency/idempotency and complete error feedback/accessibility still require a complete per-control matrix. Latest exact-source browser run 44778971471 passed 41/41 journeys on 668a8779f8a2894f99ed935d0c8bf13f2f215e64; Node run 44778971476 passed 1,042 tests across 181 files with zero failures/skips. The 121-control field-interaction and mapped-action checks, 17 forms and 15 cross-cutting evidence dimensions passed. DASH-001 remains NOT_TESTED overall: not every applicable control's positive success, authorization, persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior has been individually accepted. Current exact head 61d116ede6c4abc9977078e88864d8571cdadccb has 1,043 Node tests and 87 Python tests passing, but no browser E2E on this SHA; the last 41/41 Chromium run is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64. DASH-001 remains NOT_TESTED overall. Latest exact browser run 45026669831 passed 41/41 Chromium journeys on 03d90ef8b1453d066cf2e9d831f193e0d02cced9. Exact automation run 45026140527 on 6087b4088699a10359aeab99bee3d17cdd9722ad passed 1,107 Node tests across 189 files and 108 Python tests, zero failures/skips, npm audit zero vulnerabilities. This evidence refresh does not promote DASH-001: all 121 controls and 17 forms still require complete per-control evidence for applicable positive success, authorization, persistence/restart, concurrency, actionable errors and accessibility; six production-dependent forms remain fail-closed. Latest exact source/test SHA 701cf7b66f535288cdb96ebb5224b3d04652116b passed 41/41 Chromium journeys and the full 1,107-Node/108-Python regression with zero failures/skips and zero npm audit vulnerabilities. This does not promote DASH-001: every applicable control still requires complete per-control evidence for positive success, authorization, persistence/restart, concurrency, actionable errors and accessibility; six production-dependent forms remain fail-closed.",
-  "dashboardEvidence": {
-    "status": "PASS",
-    "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-    "browserTests": 41,
-    "controls": 121,
-    "forms": 17,
-    "crossCuttingDimensions": [
-      {
-        "dimension": "authorization_and_role_enforcement",
-        "title": "dashboard authorization rejects missing and invalid credentials with actionable feedback",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "actionable_error_feedback",
-        "title": "dashboard presents actionable API errors without exposing raw server responses",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "durable_persistence_and_restart",
-        "title": "dashboard state survives a real local server restart",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "concurrency_and_idempotency",
-        "title": "campaign form single-flights a double-click and persists the successful preview after reload",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "concurrency_and_provider_call_idempotency",
-        "title": "narration form persists measured audio and word-boundary captions with a deterministic provider fixture, then reconciles without a second call",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "keyboard_accessibility",
-        "title": "operator token has an accessible label and the dashboard can be connected with keyboard only",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "accessible_names_for_all_controls",
-        "title": "all visible dashboard controls have programmatic accessible names after connection",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "mobile_responsiveness_320px",
-        "title": "connected dashboard fits a 320px mobile viewport without page-level horizontal overflow",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "mobile_responsiveness_375px",
-        "title": "operator dashboard loads the authoritative schedule and persists a draft through the UI",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "required_and_boundary_validation",
-        "title": "every required dashboard field blocks empty form submission without an API mutation",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "malformed_identifier_and_url_validation",
-        "title": "all declared dashboard identifier hashes and URL fields reject malformed values",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "minimum_length_validation",
-        "title": "all declared minimum-length fields reject undersized values without an API mutation",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "maximum_length_validation",
-        "title": "all declared maximum-length fields cap user-entered values without an API mutation",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "read_only_and_disabled_invariants",
-        "title": "read-only hash controls and the disabled backup action cannot be changed or invoked",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      },
-      {
-        "dimension": "all_controls_field_interaction_and_journey_mapping",
-        "title": "all 121 dashboard controls receive field-level interaction and mapped action evidence",
-        "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-        "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-        "observedResult": "PASS"
-      }
-    ],
-    "automation": {
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495020",
-      "testSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-      "nodeTestFiles": 189,
-      "nodeTests": 1107,
-      "nodeSkipped": 0,
-      "pythonTests": 108,
-      "pythonSkipped": 0,
-      "npmAuditVulnerabilities": 0,
-      "pythonEvidenceSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-      "npmAuditEvidenceSha": "701cf7b66f535288cdb96ebb5224b3d04652116b"
-    },
-    "releaseBoundary": "DASH-001 functional acceptance only. Provider publishing remains gated; this evidence does not authorize uploads, publishing, or external provider actions.",
-    "latestExactHeadRun": {
-      "sourceTestSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-      "browserRunId": 45027495188,
-      "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-      "browserTests": 41,
-      "browserPassed": 41,
-      "browserFailed": 0,
-      "browserSkipped": 0,
-      "nodeRunId": 45027495020,
-      "nodeRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495020",
-      "nodeTestFiles": 189,
-      "nodeTests": 1107,
-      "nodeFailed": 0,
-      "nodeSkipped": 0,
-      "pythonRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495020",
-      "pythonEvidenceSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-      "pythonTests": 108,
-      "pythonSkipped": 0,
-      "npmAuditVulnerabilities": 0,
-      "npmAuditEvidenceSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-      "note": "Exact same source/test SHA 701cf7b66f535288cdb96ebb5224b3d04652116b passed 41/41 Chromium journeys, 189/189 Node test files (1,107 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The 121-control, 17-form, 15-dimension behavioral matrix is refreshed. DASH-001 remains NOT_TESTED until every applicable control has complete end-to-end behavioral acceptance."
-    }
-  },
+  "coverageNote": "Observed coverage is partial and contextual. A passing shared form journey, stable accessible name, or required-field check does not establish all per-control success, validation boundaries, authorization, durable persistence, refresh/restart, concurrency, and accessibility behavior. Overall statuses intentionally remain NOT_TESTED until each applicable dimension has dedicated control-level evidence. Native pattern and URL constraints have separate exact-SHA browser evidence; these checks remain partial and do not complete all control-level acceptance dimensions. Latest exact-source browser run 44548858611 passed 35/35 journeys on source/test SHA 02537b567c81ad972158d617915621f1599716fe. Current evidence now covers stable identity/accessibility across all 121 controls, required-empty validation across 54 required controls and all 17 forms, and native pattern/URL rejection for the eight constrained fields. DASH-001 remains NOT_TESTED overall because positive success paths, authorization, persistence, refresh/restart, concurrency and accessibility behaviors are not yet complete for every applicable control. Latest exact-source browser run 44549995093 passed 36/36 journeys on source/test SHA e70c4c73c0ab74ee494008c6e66953eaf0eb2300. Current evidence covers stable identities/accessibility across 121 controls, required-empty validation across 54 required controls and all 17 forms, seven identifier/hash patterns plus one URL, and all six declared minimum-length constraints. DASH-001 remains NOT_TESTED overall because every control's applicable positive success path, authorization, persistence, refresh/restart, concurrency, error feedback and full accessibility behavior have not yet been individually accepted. Latest exact-source browser run 44551028827 passed 37/37 journeys on source/test SHA fb4f64af8508791ff44c9f1e95ad47c533e8b26e. Current evidence covers stable identities/accessibility across 121 controls, required-empty validation across 54 required controls and all 17 forms, seven identifier/hash patterns plus one URL, all six minlength fields, and all 23 maxlength fields. DASH-001 remains NOT_TESTED overall because each control's applicable positive success path, authorization, persistence, refresh/restart, concurrency, and complete error feedback/accessibility behavior have not yet been individually accepted. Latest exact-source browser run 44552643732 passed 39/39 journeys on source/test SHA 71fe8547bbb605ed258aafa080cd5061b201ec16. In addition to all previously recorded 121-control validation coverage, the run explicitly verifies all seven read-only hash fields, the disabled state-backup action and the qualityScorecardJson review control's malformed-JSON rejection and valid-JSON payload serialization. DASH-001 remains NOT_TESTED overall: positive success, role/authorization, durable persistence, refresh/restart, concurrency/idempotency and complete error feedback/accessibility still require a complete per-control matrix. Latest exact-source browser run 44778971471 passed 41/41 journeys on 668a8779f8a2894f99ed935d0c8bf13f2f215e64; Node run 44778971476 passed 1,042 tests across 181 files with zero failures/skips. The 121-control field-interaction and mapped-action checks, 17 forms and 15 cross-cutting evidence dimensions passed. DASH-001 remains NOT_TESTED overall: not every applicable control's positive success, authorization, persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior has been individually accepted. Current exact head 61d116ede6c4abc9977078e88864d8571cdadccb has 1,043 Node tests and 87 Python tests passing, but no browser E2E on this SHA; the last 41/41 Chromium run is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64. DASH-001 remains NOT_TESTED overall. Latest exact browser run 45026669831 passed 41/41 Chromium journeys on 03d90ef8b1453d066cf2e9d831f193e0d02cced9. Exact automation run 45026140527 on 6087b4088699a10359aeab99bee3d17cdd9722ad passed 1,107 Node tests across 189 files and 108 Python tests, zero failures/skips, npm audit zero vulnerabilities. This evidence refresh does not promote DASH-001: all 121 controls and 17 forms still require complete per-control evidence for applicable positive success, authorization, persistence/restart, concurrency, actionable errors and accessibility; six production-dependent forms remain fail-closed. Latest exact source/test SHA 701cf7b66f535288cdb96ebb5224b3d04652116b passed 41/41 Chromium journeys and the full 1,107-Node/108-Python regression with zero failures/skips and zero npm audit vulnerabilities. This does not promote DASH-001: every applicable control still requires complete per-control evidence for positive success, authorization, persistence/restart, concurrency, actionable errors and accessibility; six production-dependent forms remain fail-closed. Exact current-head source/test SHA ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a passed 41/41 Chromium journeys in run 45062368950 and 1,129 Node tests/108 Python tests in run 45062369097, with zero failures/skips and npm audit zero vulnerabilities. DASH-001 remains NOT_TESTED; all per-control acceptance dimensions are not complete.",
+  "dashboardEvidence": "{\"status\":\"PASS\",\"testSha\":\"ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a\",\"browserRun\":\"https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45062368950\",\"browserRunId\":45062368950,\"browserTests\":41,\"browserPassed\":41,\"browserFailed\":0,\"browserSkipped\":0,\"controls\":121,\"forms\":17,\"crossCuttingDimensions\":15,\"automationRun\":\"https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45062369097\",\"automationRunId\":45062369097,\"nodeTestFiles\":191,\"nodeTests\":1129,\"nodeFailed\":0,\"nodeSkipped\":0,\"pythonTests\":108,\"pythonFailed\":0,\"pythonSkipped\":0,\"pythonEvidenceSha\":\"ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a\",\"npmAuditVulnerabilities\":0,\"npmAuditEvidenceSha\":\"ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a\",\"releaseBoundary\":\"Exact-head local dashboard and regression evidence only. DASH-001 remains NOT_TESTED overall until every applicable control's positive success, authorization, persistence/restart, concurrency, error feedback and accessibility dimensions are individually accepted. No publishing or provider action is authorized.\"}",
   "evidenceStatus": "PASS",
   "overallAcceptance": "NOT_TESTED",
   "statusMeaning": "PASS means the listed control evidence and matrix consistency checks passed. It does not mean every applicable control success, authorization, persistence, concurrency, error-feedback and accessibility path has been fully accepted.",
-  "currentHeadRefresh": {
-    "sourceTestSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-    "updatedAt": "2026-11-22T13:29:18Z",
-    "automationRunId": 45027495020,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495020",
-    "nodeTestFiles": 189,
-    "nodeTests": 1107,
-    "nodeFailed": 0,
-    "nodeSkipped": 0,
-    "pythonTests": 108,
-    "pythonFailed": 0,
-    "pythonSkipped": 0,
-    "npmAuditVulnerabilities": 0,
-    "browserE2EStatus": "PASS",
-    "lastBrowserEvidenceSha": "701cf7b66f535288cdb96ebb5224b3d04652116b",
-    "lastBrowserRunId": 45027495188,
-    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188",
-    "controls": 121,
-    "forms": 17,
-    "crossCuttingDimensions": 15,
-    "overallAcceptance": "NOT_TESTED",
-    "note": "Exact source/test SHA 701cf7b66f535288cdb96ebb5224b3d04652116b passed automation/security run 45027495020: 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. Dashboard browser E2E run 45027495188 passed 41/41 Chromium journeys on the same exact SHA. DASH-001 remains NOT_TESTED because not every applicable control has individually accepted positive-success, authorization, durable persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior."
-  }
+  "currentHeadRefresh": "{\"sourceTestSha\":\"ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a\",\"updatedAt\":\"2026-11-22T19:46:30Z\",\"automationRunId\":45062369097,\"automationRun\":\"https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45062369097\",\"nodeTestFiles\":191,\"nodeTests\":1129,\"nodeFailed\":0,\"nodeSkipped\":0,\"pythonTests\":108,\"pythonFailed\":0,\"pythonSkipped\":0,\"npmAuditVulnerabilities\":0,\"browserE2EStatus\":\"PASS\",\"lastBrowserEvidenceSha\":\"ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a\",\"lastBrowserRunId\":45062368950,\"lastBrowserRun\":\"https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45062368950\",\"browserTests\":41,\"browserPassed\":41,\"browserFailed\":0,\"browserSkipped\":0,\"controls\":121,\"forms\":17,\"crossCuttingDimensions\":15,\"overallAcceptance\":\"NOT_TESTED\",\"note\":\"Exact source/test SHA passed full regression and 41/41 Chromium journeys. This does not establish complete per-control acceptance; DASH-001 remains NOT_TESTED.\"}"
 }
