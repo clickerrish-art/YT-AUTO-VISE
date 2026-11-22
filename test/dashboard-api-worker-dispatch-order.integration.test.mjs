@@ -7,6 +7,7 @@ import os from "node:os";
 import path from "node:path";
 import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 import { createTestDashboardProject } from "./helpers/queue-identity-fixture.mjs";
+import { FIXED_NOW, fixedClockEnv } from "./helpers/fixed-clock.mjs";
 const token = "dispatch-order-acceptance-" + "x".repeat(40);
 
 async function reservePort() {
@@ -23,8 +24,7 @@ async function reservePort() {
 function launchDashboard(port, stateDir, projectRoot) {
   const child = spawn(process.execPath, [path.join(projectRoot, "scripts", "dashboard-server.mjs")], {
     cwd: projectRoot,
-    env: {
-      ...process.env,
+    env: fixedClockEnv({
       DASHBOARD_OPERATOR_TOKEN: token,
       DASHBOARD_OPERATOR_ID: "dispatch-order@example.test",
       DASHBOARD_STATE_DIR: stateDir,
@@ -40,7 +40,7 @@ function launchDashboard(port, stateDir, projectRoot) {
       YOUTUBE_CLIENT_SECRET: "",
       YOUTUBE_REFRESH_TOKEN: "",
       SONICVHIBEZ_CHANNEL_ID: ""
-    },
+    }),
     stdio: ["ignore", "pipe", "pipe"]
   });
   let logs = "";
@@ -112,11 +112,11 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   instance = launchDashboard(await reservePort(), stateDir, project.root);
   await waitForReady(instance);
   const state = JSON.parse(fs.readFileSync(statePath, "utf8"));
-  const saturday = futureScheduleDate("Saturday", 1);
-  const tuesday = futureScheduleDate("Tuesday", 2);
+  const saturday = futureScheduleDate("Saturday", 1, new Date(FIXED_NOW));
+  const tuesday = futureScheduleDate("Tuesday", 2, new Date(FIXED_NOW));
   const today = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit"
-  }).format(new Date());
+  }).format(new Date(FIXED_NOW));
   const currentTime = new Intl.DateTimeFormat("en-GB", {
     timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
   }).format(new Date());
