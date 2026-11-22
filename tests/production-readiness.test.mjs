@@ -82,6 +82,9 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /content\/render-manifest\.json/);
   assert.match(result.stdout, /long-form-render-manifest/);
   assert.match(result.stdout, /narration rights are not cleared for public branded\/production use/i);
+  assert.match(result.stdout, /owner selected Wade.*further review only.*insufficient Free-plan speech allowance/i);
+  assert.match(result.stdout, /No Piper\/Edge TTS or other alternative narrator is authorized/);
+  assert.doesNotMatch(result.stdout, /Owner-authorized zero-cost alternative auditions are permitted/);
   assert.match(result.stdout, /footageOrigin must be creator_captured_original/);
   assert.match(result.stdout, /footageCreator must identify the original camera operator/);
   assert.match(result.stdout, /captureEvidencePath must reference an existing/);
