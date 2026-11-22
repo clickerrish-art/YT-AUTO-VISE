@@ -2781,13 +2781,13 @@
   "latestDocumentedPrHeadBeforeRegisterRefresh": "4f38aa392f97e944c97c3d3c312be08e57686069",
   "observedBranchHeadBeforeRegisterRefresh": "57769fa219fe98b52f8b182f3849206ac3c8110c",
   "latestLiveBranchHeadBeforeRegisterRefresh": "61d116ede6c4abc9977078e88864d8571cdadccb",
-  "latestLiveAheadBy": 5500,
-  "latestLiveBehindBy": 17,
-  "latestLiveChangedFiles": 546,
-  "currentLiveHeadBeforeRegisterRefresh": "541d807ade37bbfa560f25ab4c87633da36bfc17",
-  "currentLiveAheadBy": 5500,
-  "currentLiveBehindBy": 17,
-  "currentLiveChangedFiles": 546,
+  "latestLiveAheadBy": 5548,
+  "latestLiveBehindBy": 0,
+  "latestLiveChangedFiles": 545,
+  "currentLiveHeadBeforeRegisterRefresh": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+  "currentLiveAheadBy": 5548,
+  "currentLiveBehindBy": 0,
+  "currentLiveChangedFiles": 545,
   "latestInventoryHead": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
   "latestInventoryAheadBy": 4781,
   "latestInventoryBehindBy": 11,
@@ -2990,7 +2990,7 @@
     "overallNotTested": 2,
     "overallBlocked": 7
   },
-  "latestLiveBranchHead": "541d807ade37bbfa560f25ab4c87633da36bfc17",
+  "latestLiveBranchHead": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
   "sourceTestLineage": {
     "previousTestedSha": "012eea3f7d2d24ff3cc70947071e74e48efed9bd",
     "currentTestedSha": "57769fa219fe98b52f8b182f3849206ac3c8110c",
@@ -3699,5 +3699,55 @@
       "liveMetaProvider": "NOT_TESTED — no provider write; config flag and environment switch remain off, emergency stop on, dry run true, publishing disabled."
     }
   },
-  "latestRegisterRefreshSourceHead": "541d807ade37bbfa560f25ab4c87633da36bfc17"
+  "latestRegisterRefreshSourceHead": "541d807ade37bbfa560f25ab4c87633da36bfc17",
+  "currentExactHeadExecution": {
+    "sourceTestSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+    "branch": "codex/marketing-machine-audit-fixes",
+    "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+    "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+    "aheadBy": 5548,
+    "behindBy": 0,
+    "changedFiles": 545,
+    "automation": {
+      "status": "PASS",
+      "runId": 45062369097,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45062369097",
+      "nodeTestFiles": 191,
+      "nodeTests": 1129,
+      "nodeFailed": 0,
+      "nodeSkipped": 0,
+      "pythonTests": 108,
+      "pythonFailed": 0,
+      "pythonSkipped": 0,
+      "npmAuditVulnerabilities": 0
+    },
+    "dashboardBrowser": {
+      "status": "PASS",
+      "runId": 45062368950,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45062368950",
+      "journeysPassed": 41,
+      "journeysFailed": 0,
+      "journeysSkipped": 0
+    },
+    "productionReadiness": {
+      "status": "HOLD",
+      "runId": 45062369040,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45062369040",
+      "blockers": 22
+    },
+    "requirementRowsReevaluated": false,
+    "note": "Exact-HEAD automation and dashboard browser workflows passed. This does not promote the requirement rows, API routes, dashboard controls, production readiness, live provider operations or owner approvals. Existing acceptance classifications remain conservative pending requirement-by-requirement review."
+  },
+  "requirementStatusReevaluation": {
+    "sourceSha": "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a",
+    "status": "NOT_REEVALUATED",
+    "storedCounts": {
+      "total": 89,
+      "PASS": 71,
+      "NOT_TESTED": 8,
+      "BLOCKED": 10,
+      "FAIL": 0
+    },
+    "explanation": "The 89 requirement classifications are retained as the latest individually recorded statuses; they have not all been re-evaluated on this exact head. Do not present the stored counts as exact-head acceptance."
+  }
 }
