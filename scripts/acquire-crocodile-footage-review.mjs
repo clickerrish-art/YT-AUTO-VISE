@@ -68,7 +68,7 @@ async function download(asset, destination) {
 }
 async function main() {
   const owner = JSON.parse(await fsp.readFile(path.join(ROOT, "content/owner-media-policy-override-2026-11-22.json"), "utf8"));
-  if (owner.status !== "ACTIVE_WITH_ASSET_LEVEL_REVIEW_GATES" || owner.mediaRules.pexelsLicensedStockAllowed !== true || owner.mediaRules.aiGeneratedWildlifeVisualsAllowed !== false) throw new Error("Owner media policy missing or unsafe");
+  if (owner.status !== "ACTIVE_WITH_ASSET_LEVEL_REVIEW_GATES" || owner.mediaRules.pexelsLicensedStockAllowed !== true || owner.mediaRules.stockVideoFootageAllowed !== true || owner.mediaRules.stockPhotographsAllowed !== false || owner.mediaRules.aiGeneratedWildlifeVisualsAllowed !== false) throw new Error("Owner media policy missing or unsafe");
   await fsp.mkdir(MEDIA_ROOT, { recursive: true }); await fsp.mkdir(PREVIEW_ROOT, { recursive: true });
   const acquired = [];
   for (const asset of ASSETS) {
