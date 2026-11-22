@@ -5,7 +5,7 @@
 **Target format:** YouTube long-form, 16:9, 6–10 minutes  
 **Working title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Thumbnail direction:** Use a genuine rights-cleared frame from original or qualifying Pexels/Pixabay crocodile video footage; eye on the right, dark open negative space on the left, exact words “TOO BIG?”; no AI-generated wildlife image, unverified stock/archive image, blood, victim, gore or fabricated attack.  
-**Editorial promise:** Explain how the Nile crocodile's low-profile posture, sensory system and ambush behaviour work together. Use original creator-captured wildlife footage or qualifying Pexels/Pixabay licensed video footage with exact source-page provenance, platform-licence evidence, original MP4, SHA-256, full decode, third-party-rights review and human approval. AI-generated wildlife visuals, other stock/archive sources and fabricated encounters are prohibited.
+**Editorial promise:** Explain how the Nile crocodile's low-profile posture, sensory system and ambush behaviour work together. Use original creator-captured wildlife footage or qualifying Pexels/Pixabay licensed video footage with exact source-page provenance, platform-licence evidence, original MP4, SHA-256, full decode, third-party-rights review and human approval. AI-generated wildlife visuals are prohibited; other stock/archive sources and fabricated encounters are also prohibited.
 
 **Promotion:** NON-COMMERCIAL EDUCATIONAL CONTENT — `hasPaidPromotion=false`. No product CTA, Selar URL, Wildlife Creator's Vault promotion or product sales disclosure belongs in this documentary.
 
