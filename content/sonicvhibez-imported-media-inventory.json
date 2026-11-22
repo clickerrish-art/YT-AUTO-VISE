@@ -9,7 +9,7 @@
     "termsUrl": "https://www.pexels.com/terms-of-service/",
     "lastVerified": "2026-11-17"
   },
-  "status": "EXCLUDED_NOT_USED_FROM_PRODUCTION",
+  "status": "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW",
   "releaseAuthorized": false,
   "assets": [
     {
@@ -34,7 +34,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "EXCLUDED_NOT_USED",
+      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ORIGINAL_MP4_AND_VISUAL_MATCH",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "Majestic African Elephant in Natural Habitat",
@@ -49,8 +49,11 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
-      "excludedAt": "2026-11-18"
+      "exclusionReason": "Not excluded because of stock-media type: the 2026-11-22 owner policy permits qualifying Pexels/Pixabay footage. This candidate may enter review, but remains held from final production until exact Canva-to-source visual matching, local original MP4 acquisition, SHA-256, full decode, third-party rights and human review are complete.",
+      "excludedAt": "2026-11-18",
+      "reviewRenderEligible": true,
+      "productionEligible": false,
+      "releaseEligible": false
     },
     {
       "canvaAssetId": "VAHZ9hEjS0U",
@@ -74,7 +77,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "EXCLUDED_NOT_USED",
+      "status": "HOLD_SOURCE_METADATA_DURATION_MISMATCH_PENDING_EXACT_MATCH",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "An Aerial Footage of Zebras and Wildebeests",
@@ -89,8 +92,11 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
-      "excludedAt": "2026-11-18"
+      "exclusionReason": "Source page duration is 14 seconds while the Canva asset is 13 seconds. The owner policy permits Pexels/Pixabay stock, but this candidate remains held until the exact derivative/trim relationship is established and original MP4, hash, full decode, rights and human review are complete.",
+      "excludedAt": "2026-11-18",
+      "reviewRenderEligible": false,
+      "productionEligible": false,
+      "releaseEligible": false
     },
     {
       "canvaAssetId": "VAHZ9niQJoo",
@@ -114,7 +120,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "EXCLUDED_NOT_USED",
+      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ORIGINAL_MP4_AND_VISUAL_MATCH",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "Zebras and Wildebeests Grazing in the Meadows",
@@ -129,8 +135,11 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
-      "excludedAt": "2026-11-18"
+      "exclusionReason": "Not excluded because of stock-media type: the 2026-11-22 owner policy permits qualifying Pexels/Pixabay footage. This candidate may enter review, but remains held from final production until exact Canva-to-source visual matching, local original MP4 acquisition, SHA-256, full decode, third-party rights and human review are complete.",
+      "excludedAt": "2026-11-18",
+      "reviewRenderEligible": true,
+      "productionEligible": false,
+      "releaseEligible": false
     },
     {
       "canvaAssetId": "VAHZ9i3Hx6U",
@@ -154,7 +163,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "EXCLUDED_NOT_USED",
+      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ORIGINAL_MP4_AND_VISUAL_MATCH",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "Giraffe in the Open Fields",
@@ -169,8 +178,11 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
-      "excludedAt": "2026-11-18"
+      "exclusionReason": "Not excluded because of stock-media type: the 2026-11-22 owner policy permits qualifying Pexels/Pixabay footage. This candidate may enter review, but remains held from final production until exact Canva-to-source visual matching, local original MP4 acquisition, SHA-256, full decode, third-party rights and human review are complete.",
+      "excludedAt": "2026-11-18",
+      "reviewRenderEligible": true,
+      "productionEligible": false,
+      "releaseEligible": false
     },
     {
       "canvaAssetId": "VAHZ9oFCiak",
@@ -190,7 +202,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "EXCLUDED_NOT_USED",
+      "status": "HOLD_UNRESOLVED_SOURCE_URL_AND_CREATOR",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "searchNote": "No exact Pexels source page matching the Canva metadata (3840x2160, 9 seconds) was verified. Similar lion pages surfaced with different metadata and were rejected as source matches.",
@@ -212,16 +224,20 @@
         ]
       },
       "excludedFromProduction": true,
-      "exclusionReason": "Excluded from production because current owner policy requires genuine original creator-captured wildlife media; this Canva/Pexels stock candidate is not admissible as a substitute. This is a quarantine decision, not rights clearance. Keep excluded unless the owner explicitly changes the production-media policy and all source provenance, original media, SHA-256, rights and human-review gates are satisfied.",
-      "excludedAt": "2026-11-18"
+      "exclusionReason": "No exact source page or creator has been verified for this Canva asset. Owner permission to use Pexels/Pixabay does not authorize an unmatched asset; keep excluded until source identity, original MP4, hash, rights and human review are established.",
+      "excludedAt": "2026-11-18",
+      "reviewRenderEligible": false,
+      "productionEligible": false,
+      "releaseEligible": false
     }
   ],
   "blockingEvidence": [
-    "All five imported Canva/Pexels candidates are explicitly excluded from production and remain not rights-cleared.",
-    "No original MP4, exact source match, SHA-256 or human visual review is claimed for these excluded assets.",
-    "Reactivation requires full source provenance, local original media, hash verification, rights review and human visual approval."
+    "Three Pexels candidates have exact source-page metadata matches and may enter review under the 2026-11-22 owner policy, but local original MP4 bytes, hashes, full decode, visual match and third-party rights remain pending.",
+    "One aerial zebra candidate has a 1-second Canva/source duration mismatch and remains held pending exact derivative/trim verification.",
+    "One lion candidate has no verified exact Pexels source page or creator and remains excluded.",
+    "No imported Canva candidate is rights-cleared or release-eligible."
   ],
-  "notes": "All five imported Canva/Pexels wildlife assets are quarantined as EXCLUDED_NOT_USED and retained for audit only. They are not original creator-captured media and are not cleared for any production use. The current production path requires genuine original creator-captured wildlife footage; neither generic stock footage nor AI-generated wildlife visuals may substitute for it.",
+  "notes": "The owner now permits qualifying Pexels/Pixabay stock for SonicVhibez under asset-level review gates. Three exact-metadata candidates may enter acquisition and review; one duration-mismatch asset and one unresolved-source lion remain held. None is production-ready until exact source matching, local original MP4, SHA-256, full technical decode, third-party rights and human approval.",
   "historicalBlockingEvidence": [
     "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
     "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
@@ -230,11 +246,15 @@
     "No footage rights or human visual review is marked complete."
   ],
   "currentProductionPolicy": {
-    "status": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
-    "originalCreatorCapturedMediaRequired": true,
-    "stockMediaAllowed": false,
+    "status": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_REVIEW_GATES",
+    "originalCreatorCapturedMediaRequired": false,
+    "stockMediaAllowed": true,
+    "pexelsAllowed": true,
+    "pixabayAllowed": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
     "importedCanvaAssetsProductionEligible": false,
-    "note": "Only genuine original creator-captured wildlife media with verified provenance, exact source files, hashes, commercial rights and human review may enter production."
+    "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+    "note": "Pexels/Pixabay stock is permitted for review subject to exact source match, local original bytes, hash, technical review, third-party rights and human approval. Canva imports are not automatically production-eligible."
   }
 }
