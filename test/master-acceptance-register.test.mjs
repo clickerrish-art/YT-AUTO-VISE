@@ -60,6 +60,13 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(state.currentHeadEvidenceNote, /deployment recovery smoke/);
   assert.match(state.currentHeadEvidenceNote, /runner-bridge safety/);
 
+  const worker = byId("SCHED-WORKER-DISPATCH-001");
+  assert.equal(worker.status, "NOT_TESTED");
+  assert.equal(worker.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
+  assert.match(worker.currentHeadEvidenceNote, /all 38 test\/worker-runner\.test\.mjs cases/);
+  assert.match(worker.currentHeadEvidenceNote, /retained process lock when cooldown persistence fails/);
+  assert.match(worker.currentHeadEvidenceNote, /live continuous dispatch remains NOT_TESTED/);
+
   const scheduler = byId("SCHED-001");
   assert.equal(scheduler.status, "NOT_TESTED");
   assert.equal(scheduler.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
