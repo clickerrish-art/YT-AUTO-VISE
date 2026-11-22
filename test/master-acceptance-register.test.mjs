@@ -70,7 +70,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   const scheduler = byId("SCHED-001");
   assert.equal(scheduler.status, "NOT_TESTED");
   assert.equal(scheduler.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
-  assert.match(scheduler.currentHeadEvidenceNote, /owner attestation/);
+  assert.match(scheduler.currentHeadEvidenceNote, /manual\/local\/third-party attempt attestation/);
   assert.match(scheduler.nextAction, /fresh owner attestation/);
 
   const deployment = byId("DEPLOY-001");
