@@ -270,6 +270,11 @@ function validateWildlifeFootage(manifest, label) {
         path.isAbsolute(sourceManifest) || !exists(sourceManifest)) {
       blockers.push(`${label}: footageSourceManifest must reference an existing, relative asset-level source manifest.`);
     }
+    const licenseEvidence = manifest.footageLicenseEvidence;
+    if (typeof licenseEvidence !== "string" || !licenseEvidence.trim() ||
+        path.isAbsolute(licenseEvidence) || !exists(licenseEvidence)) {
+      blockers.push(`${label}: footageLicenseEvidence must reference an existing, relative platform-licence evidence file.`);
+    }
     if (manifest.platformLicenseReviewed !== true) {
       blockers.push(`${label}: platformLicenseReviewed must be true only after checking the current ${platform} licence.`);
     }
