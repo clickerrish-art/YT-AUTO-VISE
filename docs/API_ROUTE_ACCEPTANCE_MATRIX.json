@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-22T22:17:23.501Z",
+  "generatedAt": "2026-11-22T22:38:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
@@ -15,30 +15,32 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 5606,
+    "branchAheadBy": 5607,
     "branchBehindBy": 0,
     "changedFiles": 548,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — GitHub branch-protection endpoint returns HTTP 403; owner-side settings are not independently visible.",
-    "comparisonSourceSha": "ece01066248e82c5627ebe1ae47ef35faf33c096",
+    "comparisonSourceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45077475961",
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103823",
     "latestCompareEvidence": {
-      "sourceSha": "ece01066248e82c5627ebe1ae47ef35faf33c096",
-      "aheadBy": 5606,
+      "sourceSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "aheadBy": 5607,
       "behindBy": 0,
       "changedFilesInPullRequest": 548,
       "compareApiFilesReturned": 300,
       "compareApiFileListLimitReached": true,
-      "inventoryArtifactRunId": 45077475961
+      "inventoryArtifactRunId": 45078103823,
+      "inventoryArtifactId": 14776042594,
+      "inventoryArtifactSha256": "f85a16cc0d25d53f42f55fdb1eb1c3c73f1fd266be35151cd08f3c124260e293"
     },
     "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363",
-    "latestInventoryArtifactId": 14775483521,
-    "latestInventoryArtifactSha256": "8d41f756d084990df82496e877b9508ca6aeb16defcce4ce229f0cdcbe69eb54",
+    "latestInventoryArtifactId": 14776042594,
+    "latestInventoryArtifactSha256": "f85a16cc0d25d53f42f55fdb1eb1c3c73f1fd266be35151cd08f3c124260e293",
     "latestAutomationRunSourceSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-    "inventoryHeadSha": "ece01066248e82c5627ebe1ae47ef35faf33c096",
+    "inventoryHeadSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
     "latestInventorySourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-    "latestInventoryRunId": 45077475961
+    "latestInventoryRunId": 45078103823
   },
   "counts": {
     "routes": 50,
@@ -2310,10 +2312,10 @@
     "npmAuditVulnerabilities": 0,
     "note": "50/50 protected-route authentication-negative checks are PASS on exact source/test SHA; authorized-positive route classifications remain 41 PASS, two NOT_TESTED and seven BLOCKED."
   },
-  "latestBranchTipAtEvidenceRefresh": "ece01066248e82c5627ebe1ae47ef35faf33c096",
+  "latestBranchTipAtEvidenceRefresh": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
   "latestApplicationSourceChangeSha": "2aadb00ebf3181f1d1da769681f80fa4f98f5cc8",
   "latestFullyTestedSourceTestTreeSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-  "sourceTestEvidenceStatus": "PASS — exact source/test SHA d2a7be4733939cffca0423ba28675977af6ab346 passed 1,130 Node tests across 191 files, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities.",
+  "sourceTestEvidenceStatus": "PASS — exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8 passed 1,130 Node tests across 191 files, 108 Python tests, and 41/41 Chromium journeys, with zero failures/skips; npm audit zero vulnerabilities. Application source changes remain at 2aadb00ebf3181f1d1da769681f80fa4f98f5cc8; the later commits are acceptance/evidence metadata only.",
   "latestApplicationSourceTestTreeSha": "d2a7be4733939cffca0423ba28675977af6ab346",
   "latestCurrentHeadPositiveEvidence": {
     "sourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
@@ -2337,7 +2339,7 @@
   },
   "currentHeadReconciliation": {
     "status": "PARTIAL",
-    "observedImplementationHeadSha": "d2a7be4733939cffca0423ba28675977af6ab346",
+    "observedImplementationHeadSha": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
     "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363",
     "regressionRunId": 45075651363,
     "regressionRunResults": {
@@ -2358,7 +2360,37 @@
     "notTestedRoutesPreserved": 2,
     "blockedRoutesPreserved": 7,
     "ownerGatedRoutes": 2,
-    "explanation": "Exact source/test SHA passes 1,130 Node tests, 108 Python tests, 50/50 protected-route auth-negative checks and 41/41 Chromium dashboard journeys. 41 local positive route classifications remain accepted; two routes remain NOT_TESTED and seven remain BLOCKED. No live provider writes or publications."
+    "explanation": "Exact source/test SHA passes 1,130 Node tests, 108 Python tests, 50/50 protected-route auth-negative checks and 41/41 Chromium dashboard journeys. 41 local positive route classifications remain accepted; two routes remain NOT_TESTED and seven remain BLOCKED. No live provider writes or publications.",
+    "latestExactHeadWorkflowRunId": 45078103820,
+    "latestExactHeadWorkflowRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103820",
+    "latestExactHeadTests": {
+      "nodePassed": 1130,
+      "nodeFailed": 0,
+      "nodeSkipped": 0,
+      "nodeTestFilesPassed": 191,
+      "pythonPassed": 108,
+      "pythonFailed": 0,
+      "pythonSkipped": 0,
+      "browserPassed": 41,
+      "browserFailed": 0,
+      "browserSkipped": 0,
+      "browserRunId": 45078103699,
+      "npmAuditVulnerabilities": 0
+    },
+    "readiness": {
+      "status": "HOLD",
+      "runId": 45078103669,
+      "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103669",
+      "head": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+      "blockers": 22,
+      "artifactId": 14776146309,
+      "artifactSha256": "dc4de8a531866c825f1c0a2e436e10fe70f1ab48c75941c76a6793d3e46af528",
+      "exitCode": 2,
+      "reportUploaded": true,
+      "readinessJsonError": "",
+      "secretPresence": "All four expected YouTube credential variable names configured; values intentionally not recorded.",
+      "publishingEnabled": false
+    }
   },
   "dashboardBrowserE2eRefreshRequest": {
     "requestedAt": "2026-11-22T21:29:00Z",
@@ -2438,5 +2470,19 @@
     "r2": "NOT_ENABLED",
     "durableObjectNamespaces": 0,
     "note": "Read-only Cloudflare inspection; Nature Frontiers production D1 is separate and must not be reused."
+  },
+  "latestReadinessReconciliation": {
+    "status": "HOLD",
+    "runId": 45078103669,
+    "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45078103669",
+    "head": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
+    "blockers": 22,
+    "artifactId": 14776146309,
+    "artifactSha256": "dc4de8a531866c825f1c0a2e436e10fe70f1ab48c75941c76a6793d3e46af528",
+    "exitCode": 2,
+    "reportUploaded": true,
+    "readinessJsonError": "",
+    "secretPresence": "All four expected YouTube credential variable names configured; values intentionally not recorded.",
+    "publishingEnabled": false
   }
 }
