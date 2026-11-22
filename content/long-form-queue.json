@@ -33,7 +33,7 @@
       "publicationCyclePosition": 1,
       "scheduledAt": null,
       "publishingEnabled": false,
-      "productionNotes": "The current script revision has corrected source attribution and a constrained primary-study claim; the revised script and scene map still require owner and qualified zoological review. The five Pexels and three Wikimedia leads are reference-only and excluded by the current original creator-captured-media policy. No admissible original wildlife footage package is present. HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the existing 398.083-second WAV is internal-only and must not be used in public/commercial production. Roderic remains the exclusive owner-selected narrator; no alternative voice or paid upgrade is authorized. No captions, final render, thumbnail, exact-hash approval, or publication schedule. Keep publishing disabled.",
+      "productionNotes": "The current script revision has corrected source attribution and a constrained primary-study claim; the revised script and scene map still require owner and qualified zoological review. The five Pexels and three Wikimedia leads are reference-only and excluded by the current original creator-captured-media policy. No admissible original wildlife footage package is present. HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the existing 398.083-second WAV is internal-only and must not be used in public/commercial production. The existing Roderic WAV remains internal-only and commercially ineligible. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited; the paid API, local Piper/Edge TTS and paid upgrades are not authorized. No captions, final render, thumbnail, exact-hash approval, or publication schedule. Keep publishing disabled.",
       "narrationStatus": "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE",
       "narrationDurationSeconds": 398.08299319727894,
       "narrationVoice": "Roderic - Authoritative & Refined (exclusive owner-approved narrator)",
@@ -123,14 +123,37 @@
     "originalCreatorCapturedMediaRequired": true,
     "stockMediaAllowed": false,
     "aiGeneratedWildlifeVisualsAllowed": false,
-    "narrator": "Roderic — Authoritative & Refined",
-    "narrationCommercialRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION",
+    "narrator": "No production narrator approved; Speechma Andrew is selected for a manual zero-cost audition only.",
+    "narrationCommercialRightsStatus": "NO_PRODUCTION_NARRATOR_APPROVED; EXISTING_HEYGEN_RODERIC_WAV_INTERNAL_ONLY; SPEECHMA_OUTPUT_LICENSE_SUBJECT_TO_THIRD_PARTY_RIGHTS; NO_AUDIO_GENERATED_OR_APPROVED",
     "alternativeNarratorAuthorized": false,
     "paidUpgradeAuthorized": false,
     "publishingEnabled": false,
-    "releaseRequiresExactHashRightsAndHumanApproval": true
+    "releaseRequiresExactHashRightsAndHumanApproval": true,
+    "selectedNarrationAuditionCandidate": {
+      "provider": "Speechma",
+      "name": "Andrew",
+      "voiceId": null,
+      "voiceIdStatus": "NOT_INDEPENDENTLY_VERIFIED",
+      "voiceType": "Standard",
+      "language": "English",
+      "accent": "United States",
+      "ownerSelectionStatus": "SELECTED_FOR_ZERO_COST_MANUAL_BROWSER_AUDITION_ONLY",
+      "auditionStatus": "NOT_GENERATED",
+      "manualBrowserOnly": true,
+      "automationAllowed": false,
+      "securityCodeRequiredPerGeneration": true,
+      "maximumCharactersPerStandardConversion": 2000,
+      "browserHistoryLocalOnly": true,
+      "outputFormat": "MP3",
+      "commercialUseStatus": "SPEECHMA_TERMS_LICENSE_LAWFUL_OUTPUTS_SUBJECT_TO_THIRD_PARTY_RIGHTS",
+      "commercialUseAllowed": true,
+      "productionApproved": false,
+      "publicationAuthorized": false,
+      "paidApiAuthorized": false,
+      "note": "No output file, exact hash, human listening approval or production approval exists. Download and retain the MP3 after manual browser generation."
+    }
   },
   "notes": [
-    "Current owner production policy (2026-11-21): use genuine original creator-captured wildlife media only. Generic stock/archive footage and AI-generated wildlife visuals are not permitted substitutes. HeyGen denied zero-cost commercial-use rights for Roderic Free-plan output; no alternate narrator or paid upgrade is authorized. All queue items remain planning/draft-only until the source-media, narration, rights, review and release gates pass."
+    "HeyGen denied zero-cost commercial-use rights for the existing Roderic Free-plan output, which remains internal-only. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited by Speechma Terms; the paid API is not authorized. No paid upgrade or paid credits are authorized. All queue items remain planning/draft-only until original media, narration, rights, review and release gates pass."
   ]
 }
