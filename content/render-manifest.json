@@ -84,5 +84,19 @@
     "audio": "NONE",
     "fullDecode": "PASS"
   },
-  "releaseEligible": false
+  "releaseEligible": false,
+  "footageOrigin": "licensed_pexels_stock",
+  "creatorCapturedOriginal": false,
+  "footageCreator": "Multiple Pexels contributors; see asset-level source manifest",
+  "footageSourceUrls": [
+    "https://www.pexels.com/video/resting-lions-in-african-safari-habitat-29765785/",
+    "https://www.pexels.com/video/an-african-elephant-mother-and-her-baby-in-a-grassland-11760785/",
+    "https://www.pexels.com/video/a-lion-walkin-in-a-field-11528208/"
+  ],
+  "footageSourceManifest": "content/short-001-acquisition-manifest.json",
+  "platformLicenseReviewed": true,
+  "thirdPartyRightsReviewed": false,
+  "creatorConfirmed": false,
+  "stockVideoFootageAllowed": true,
+  "stockPhotographsAllowed": false
 }
