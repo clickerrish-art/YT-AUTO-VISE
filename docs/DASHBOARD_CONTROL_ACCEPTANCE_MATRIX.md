@@ -1385,3 +1385,8 @@ At source/test SHA `115fe82252b4fa1ef1eb2f9587bf0653356a6dc9`, the browser E2E w
 - Inventory: 121 controls, 17 forms, 104 form-owned controls, 17 standalone controls and 15 cross-cutting evidence dimensions.
 - **DASH-001 remains NOT_TESTED overall.** The matrix evidence is refreshed, but full per-control positive success, authorization, durable persistence, restart, concurrency, actionable error feedback and accessibility acceptance is not complete.
 - Production readiness remains **HOLD**: [run 45075651463](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651463) reports 22 genuine blockers. No publication, upload or provider write is authorized.
+
+
+### Latest branch inventory pointer
+
+The latest exact branch inventory is [run 45076990843](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45076990843) on branch head `9be0798efc5dc85fb651232323f35ec8fabd0012`: 5,605 commits ahead, zero behind, 548 changed paths, zero deletions and a clean working tree. Artifact `14775921167` SHA-256 `d9dd3b49eb1ae7b4d23fec43ca42f6cb9d00cb33a0eadd08272ca4f6006ffd77`. The application/test evidence above remains bound to source/test SHA `d2a7be4733939cffca0423ba28675977af6ab346`; the intervening commits update acceptance metadata only.

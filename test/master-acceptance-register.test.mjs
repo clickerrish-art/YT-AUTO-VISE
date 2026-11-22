@@ -47,7 +47,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(api.currentHeadEvidenceNote, /interrupted SUBMITTING.*concurrent reconciliation fencing/i);
   assert.match(api.nextAction, /ambiguous create\/read-back outcomes/i);
   assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, exactSha);
-  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1129);
+  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1130);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.skipped, 0);
   assert.equal(register.latestExactCiCheckpoint.browserE2EStatus, "PASS");
