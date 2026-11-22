@@ -85,6 +85,7 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /owner selected Speechma Andrew.*zero-cost browser audition.*No audition audio has been generated/i);
   assert.match(result.stdout, /manual browser action/);
   assert.match(result.stdout, /Under the zero-cost constraint/);
+  assert.match(result.stdout, /download the MP3 for durable project retention/);
   assert.match(result.stdout, /free-site Terms prohibit scripts, bots and automated CAPTCHA solving/);
   assert.match(result.stdout, /only the official API is permitted for automation, and that API is paid/);
   assert.match(result.stdout, /do not automate Speechma's free site/i);
