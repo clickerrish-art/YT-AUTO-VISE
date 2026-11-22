@@ -17,9 +17,9 @@
       "fps": 25,
       "format": "MP4",
       "sourceMatchStatus": "LIKELY_MATCH_DURATION_DIFFERS_BY_1_SECOND",
-      "sourceFileStatus": "NOT_DOWNLOADED",
-      "sha256": null,
-      "fullDecode": "NOT_RUN",
+      "sourceFileStatus": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "sha256": "8e9f8a396b15c9b7b80831702911a54fded1718f24721b11ca28d2bf9262135c",
+      "fullDecode": "PASS",
       "licenseStatus": "PEXELS_PAGE_MARKS_FREE",
       "rightsVerified": false,
       "humanReviewed": false,
@@ -30,7 +30,25 @@
       "downloadUrlAdvertisedFps": 25,
       "acceptedDownloadFps": [
         25
-      ]
+      ],
+      "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED",
+      "fileSizeBytes": 65553109,
+      "actual": {
+        "durationSeconds": 20.8,
+        "width": 3840,
+        "height": 2160,
+        "fps": 25
+      },
+      "technicalProbe": "PASS",
+      "acquisitionArtifactId": 14737325814,
+      "acquisitionWorkflowRunId": 44979176830,
+      "localOriginalBytesAvailableInArtifact": true,
+      "localOriginalBytesAvailableLocally": false,
+      "mediaFile": "media/pexels-video-8268897.mp4",
+      "previewFrame": "preview/pexels-video-8268897.jpg",
+      "productionEligible": false,
+      "fpsMetadataMismatch": false,
+      "sha256Status": "RECORDED_IN_ACQUISITION_MANIFEST_AND_WORKFLOW_LOG"
     },
     {
       "assetId": "pexels-video-33260728",
@@ -72,9 +90,9 @@
       "fps": 50,
       "format": "MP4",
       "sourceMatchStatus": "EXACT_CREATOR_SUBJECT_DURATION_MATCH",
-      "sourceFileStatus": "NOT_DOWNLOADED",
-      "sha256": null,
-      "fullDecode": "NOT_RUN",
+      "sourceFileStatus": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "sha256": "58f5a6037cec96e77dbea28adade4ee3a16003885b5698d2b711fdfd23539575",
+      "fullDecode": "PASS",
       "licenseStatus": "PEXELS_PAGE_MARKS_FREE",
       "rightsVerified": false,
       "humanReviewed": false,
@@ -87,7 +105,25 @@
         25,
         50
       ],
-      "fpsMetadataNote": "Pexels page lists 50fps while the direct download filename advertises 25fps; record actual ffprobe FPS and accept either without retiming."
+      "fpsMetadataNote": "Pexels page lists 50fps while the direct download filename advertises 25fps; record actual ffprobe FPS and accept either without retiming.",
+      "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED",
+      "fileSizeBytes": 12380783,
+      "actual": {
+        "durationSeconds": 17.28,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25
+      },
+      "technicalProbe": "PASS",
+      "acquisitionArtifactId": 14737325814,
+      "acquisitionWorkflowRunId": 44979176830,
+      "localOriginalBytesAvailableInArtifact": true,
+      "localOriginalBytesAvailableLocally": false,
+      "mediaFile": "media/pexels-video-9655785.mp4",
+      "previewFrame": "preview/pexels-video-9655785.jpg",
+      "productionEligible": false,
+      "fpsMetadataMismatch": true,
+      "sha256Status": "RECORDED_IN_ACQUISITION_MANIFEST_AND_WORKFLOW_LOG"
     },
     {
       "assetId": "pexels-video-30175165",
@@ -101,9 +137,9 @@
       "fps": 25,
       "format": "MP4",
       "sourceMatchStatus": "EXACT_CREATOR_SUBJECT_DURATION_MATCH",
-      "sourceFileStatus": "NOT_DOWNLOADED",
-      "sha256": null,
-      "fullDecode": "NOT_RUN",
+      "sourceFileStatus": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "sha256": "8d3a2f268f743dc44e7548a8f0ea94ac40a0d08678702919dc9dc817399f957b",
+      "fullDecode": "PASS",
       "licenseStatus": "PEXELS_PAGE_MARKS_FREE",
       "rightsVerified": false,
       "humanReviewed": false,
@@ -114,7 +150,25 @@
       "downloadUrlAdvertisedFps": 25,
       "acceptedDownloadFps": [
         25
-      ]
+      ],
+      "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED",
+      "fileSizeBytes": 17649470,
+      "actual": {
+        "durationSeconds": 10.92,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25
+      },
+      "technicalProbe": "PASS",
+      "acquisitionArtifactId": 14737325814,
+      "acquisitionWorkflowRunId": 44979176830,
+      "localOriginalBytesAvailableInArtifact": true,
+      "localOriginalBytesAvailableLocally": false,
+      "mediaFile": "media/pexels-video-30175165.mp4",
+      "previewFrame": "preview/pexels-video-30175165.jpg",
+      "productionEligible": false,
+      "fpsMetadataMismatch": false,
+      "sha256Status": "RECORDED_IN_ACQUISITION_MANIFEST_AND_WORKFLOW_LOG"
     },
     {
       "assetId": "pexels-video-2835528",
@@ -128,9 +182,9 @@
       "fps": 50,
       "format": "MP4",
       "sourceMatchStatus": "EXACT_CREATOR_SUBJECT_DURATION_MATCH",
-      "sourceFileStatus": "NOT_DOWNLOADED",
-      "sha256": null,
-      "fullDecode": "NOT_RUN",
+      "sourceFileStatus": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "sha256": "fb4c8ae0fc300330658f51df78d08e131678760f610b1da1a783b421bd782474",
+      "fullDecode": "PASS",
       "licenseStatus": "PEXELS_PAGE_MARKS_FREE",
       "rightsVerified": false,
       "humanReviewed": false,
@@ -143,7 +197,25 @@
         25,
         50
       ],
-      "fpsMetadataNote": "Pexels page lists 50fps while the direct download filename advertises 25fps; record actual ffprobe FPS and accept either without retiming."
+      "fpsMetadataNote": "Pexels page lists 50fps while the direct download filename advertises 25fps; record actual ffprobe FPS and accept either without retiming.",
+      "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED",
+      "fileSizeBytes": 15645085,
+      "actual": {
+        "durationSeconds": 21.61,
+        "width": 1920,
+        "height": 1080,
+        "fps": 25
+      },
+      "technicalProbe": "PASS",
+      "acquisitionArtifactId": 14737325814,
+      "acquisitionWorkflowRunId": 44979176830,
+      "localOriginalBytesAvailableInArtifact": true,
+      "localOriginalBytesAvailableLocally": false,
+      "mediaFile": "media/pexels-video-2835528.mp4",
+      "previewFrame": "preview/pexels-video-2835528.jpg",
+      "productionEligible": false,
+      "fpsMetadataMismatch": true,
+      "sha256Status": "RECORDED_IN_ACQUISITION_MANIFEST_AND_WORKFLOW_LOG"
     },
     {
       "assetId": "pexels-video-30026544",
@@ -179,6 +251,19 @@
     "The Nile crocodile asset 30026544 is a duplicate reference to the already acquired five-clip crocodile review set; do not count it twice.",
     "Only the crocodile asset has original MP4 bytes, SHA-256, ffprobe and full-decode evidence in the current acquisition artifact. The other four source MP4s are not downloaded or hashed.",
     "All Pexels platform pages currently show a free-use listing, but platform licence does not automatically clear third-party rights, property, trademarks, embedded music or source authenticity.",
-    "No asset in this register is selected for production or release-cleared."
-  ]
+    "No asset in this register is selected for production or release-cleared.",
+    "Correction 2026-11-22: four previously shared non-crocodile Pexels originals were acquired in workflow run 44979176830, artifact 14737325814. All four passed ffprobe and full FFmpeg decode; per-file SHA-256 values, file sizes and actual durations/frame rates are recorded above. The two pages that list 50fps (9655785 and 2835528) downloaded as 25fps; preserve actual 25fps and do not retime. All four remain review-only, with no full human playback, third-party-rights clearance or production selection."
+  ],
+  "latestAcquisition": {
+    "workflowRunId": 44979176830,
+    "artifactId": 14737325814,
+    "artifactName": "sonicvhibez-previously-shared-pexels-review-assets",
+    "artifactSha256": "fe042d50611d2144d765fa61eee6cc398e9776e625b3019fd023446f7a7bc526",
+    "artifactSizeBytes": 110781644,
+    "expiresAt": "2026-12-06T03:07:58Z",
+    "assetCount": 4,
+    "totalActualSourceSeconds": 70.61,
+    "fullDecodePasses": 4,
+    "contactSheet": "preview/previously-shared-pexels-contact-sheet.jpg"
+  }
 }
