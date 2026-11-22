@@ -193,6 +193,7 @@ test("API acceptance matrix exactly matches every live server API route", () => 
   assert.equal(matrix.counts.overallPass, 41);
   assert.equal(matrix.counts.overallNotTested, 2, "the two new provider-draft routes remain NOT_TESTED until positive acceptance completes");
   assert.equal(matrix.counts.overallBlocked, 7);
+  assert.equal(matrix.counts.authNegativePassCurrentHead, 50, "the current-head negative-auth evidence count must cover all 50 protected routes");
   assert.equal(matrix.counts.authNegativePass, 50,
     "the matrix must record exact-head authentication-negative PASS for all 50 protected routes");
   assert.equal(matrix.counts.routes, actual.length,
