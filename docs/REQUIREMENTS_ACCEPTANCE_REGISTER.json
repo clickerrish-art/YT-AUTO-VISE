@@ -429,7 +429,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "cd5cc3a1f0fbf7efc6fdff091a97f3cb7da1eb4b",
-      "currentHeadEvidenceNote": "Exact source/test SHA cd5cc3a1f0fbf7efc6fdff091a97f3cb7da1eb4b: local schedule/worker tests pass. Complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos was recorded 2026-11-22; manual/local/third-party attempt attestation is stale after 2026-11-18; actual publication timestamps and 72-hour/no-same-Johannesburg-day remote history remain unverified.",
+      "currentHeadEvidenceNote": "Exact source/test SHA cd5cc3a1f0fbf7efc6fdff091a97f3cb7da1eb4b: local schedule/worker tests pass. complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos was recorded 2026-11-22; manual/local/third-party attempt attestation is stale after 2026-11-18; actual publication timestamps and 72-hour/no-same-Johannesburg-day remote history remain unverified.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T22:23:11.606Z"
     },
     {
