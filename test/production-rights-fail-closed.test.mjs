@@ -147,8 +147,10 @@ test("NOAA and Wikimedia leads remain excluded while Pexels candidates can enter
     assert.equal(record.currentProductionDisposition.releaseEligible, false, path);
   }
   const candidates = readJson("../content/media/pexels-crocodile-candidates-2026-11-22.json");
-  assert.equal(candidates.assets.length, 5);
-  assert.ok(candidates.assets.every(asset => asset.status === "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING" && asset.releaseEligible === false));
+  assert.equal(candidates.assets.length, 6);
+  assert.equal(candidates.assets.filter(asset => asset.status === "ACQUIRED_FOR_REVIEW_ONLY").length, 5);
+  assert.equal(candidates.assets.filter(asset => asset.status === "SOURCE_VERIFIED_DOWNLOAD_PENDING").length, 1);
+  assert.ok(candidates.assets.every(asset => asset.releaseEligible === false && asset.rightsVerified === false && asset.humanReviewed === false));
   const pexelsRegistry = readJson("../content/approved-pexels-footage.json");
   assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, true);
   assert.equal(pexelsRegistry.currentProductionPolicy.pexelsAllowed, true);
@@ -173,6 +175,8 @@ test("Pexels acquisition is conditional, review-only and fully decoded", () => {
   assert.ok(crocodileAcquisition.includes("publicPublishingEnabled:false"));
   assert.ok(crocodileAcquisition.includes("owner.mediaRules.stockVideoFootageAllowed !== true"));
   assert.ok(crocodileAcquisition.includes("owner.mediaRules.stockPhotographsAllowed !== false"));
+  assert.ok(crocodileAcquisition.includes("pexels-20443910"));
+  assert.ok(crocodileAcquisition.includes("tile=6x1"));
   assert.ok(workflow.includes("contains(github.event.head_commit.message, '[acquire-media]')"));
   assert.ok(workflow.includes("node scripts/acquire-short-001-assets.mjs"));
   assert.ok(workflow.includes("node scripts/acquire-crocodile-footage-review.mjs"));
