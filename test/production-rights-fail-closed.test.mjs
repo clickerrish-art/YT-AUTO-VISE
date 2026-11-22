@@ -194,7 +194,8 @@ test("Pexels acquisition is conditional, review-only and fully decoded", () => {
   assert.ok(crocodileAcquisition.includes("publicPublishingEnabled:false"));
   assert.ok(crocodileAcquisition.includes("owner.mediaRules.stockVideoFootageAllowed !== true"));
   assert.ok(crocodileAcquisition.includes("owner.mediaRules.stockPhotographsAllowed !== false"));
-  assert.ok(!crocodileAcquisition.includes("20443910"), "supplemental clip must not enter owner-shared acquisition");
+  assert.ok(!/id:\s*"pexels-20443910"/.test(crocodileAcquisition), "supplemental clip must remain excluded from the automatic asset list");
+  assert.match(crocodileAcquisition, /Supplemental candidate 20443910 is excluded from automated acquisition/);
   assert.ok(crocodileAcquisition.includes("tile=5x1"));
   assert.ok(workflow.includes("contains(github.event.head_commit.message, '[acquire-media]')"));
   assert.ok(workflow.includes("node scripts/acquire-short-001-assets.mjs"));
@@ -322,7 +323,8 @@ test("Previously shared Pexels acquisition selects only four confirmed user-shar
   const possibleMatch = register.assets.find(asset => asset.assetId === "pexels-video-33260728");
   assert.equal(possibleMatch.sourceMatchStatus, "POSSIBLE_MATCH_NOT_CONFIRMED_DURATION_MISMATCH");
   const elephant = register.assets.find(asset => asset.assetId === "pexels-video-2835528");
-  assert.match(elephant.editorialRisk, /Asian elephant/i);
+  assert.match(elephant.editorialRisk, /do not infer family relationships or a specific reserve\/location without visual evidence/i);
+  assert.doesNotMatch(elephant.editorialRisk, /Asian elephant/i);
   const crocodile = register.assets.find(asset => asset.assetId === "pexels-video-30026544");
   assert.equal(crocodile.duplicateOf, "content/media/pexels-crocodile-candidates-2026-11-22.json");
   assert.equal(crocodile.sourceFileStatus, "ACQUIRED_IN_REVIEW_ARTIFACT");
