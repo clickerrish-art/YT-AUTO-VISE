@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 const WORD_MIN = 90;
-const WORD_MAX = 135;
+const WORD_MAX = 150;
 const KEYWORD_EVIDENCE_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
 const KEYWORD_EVIDENCE_FUTURE_SKEW_MS = 5 * 60 * 1000;
 const SELLER_EVIDENCE_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;

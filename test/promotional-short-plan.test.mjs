@@ -7,7 +7,7 @@ const checkedInPlan = JSON.parse(fs.readFileSync("content/promotional-short-plan
 const products = JSON.parse(fs.readFileSync("config/products.json", "utf8")).products;
 const clone = value => structuredClone(value);
 const validatePlan = (plan, productRows = products, options = {}) => validatePromotionalShortPlan(plan, productRows, {
-  now: new Date("2026-11-21T14:40:00+02:00"),
+  now: new Date("2026-11-22T10:00:00+02:00"),
   ...options
 });
 
@@ -21,6 +21,22 @@ test("creator-education Shorts stay within the two-item weekly cap across draft-
   assert.ok(checkedInPlan.weeks[1].items.some(item => item.id === "sonicvhibez-short-006-niche-selection"));
   assert.ok(checkedInPlan.weeks.every(week => week.items.length <= 2));
   assert.ok(checkedInPlan.weeks.every(week => week.items.every(item => item.targetSeconds === 55)));
+});
+
+test("approximately 55-second scripts accept 150-wpm tolerance and reject overlong copy", () => {
+  const plan = clone(checkedInPlan);
+  const item = plan.weeks.find(week => week.weekOf === "2026-11-23")
+    .items.find(row => row.id === "sonicvhibez-short-007-ethical-wildlife-filming");
+  const measuredWords = item.script.trim().split(/\\s+/).filter(Boolean).length;
+  assert.equal(measuredWords, 141);
+  assert.deepEqual(validatePlan(plan, products), []);
+
+  const tooLong = clone(plan);
+  const tooLongItem = tooLong.weeks.find(week => week.weekOf === "2026-11-23")
+    .items.find(row => row.id === item.id);
+  tooLongItem.script += " extra extra extra extra extra extra extra extra extra extra";
+  assert.ok(validatePlan(tooLong, products)
+    .some(error => /script must contain 90–150 words/.test(error)));
 });
 
 test("owner-approved direct-sales disclosure is carried verbatim in the wildlife Short script and description", () => {
