@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "assetId": "pexels-video-19773061",
   "project": "SonicVhibez",
-  "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+  "status": "CANDIDATE_ALLOWED_FOR_REVIEW_UNDER_OWNER_POLICY_2026-11-22",
   "source": {
     "platform": "Pexels",
     "pageUrl": "https://www.pexels.com/video/roar-of-majesty-captivating-moments-with-the-kings-of-the-savanna-19773061/",
@@ -80,9 +80,13 @@
   },
   "releaseDecision": "DO NOT USE IN CURRENT PRODUCTION — REFERENCE ONLY; ORIGINAL CREATOR-CAPTURED MEDIA REQUIRED",
   "currentProductionDisposition": {
-    "status": "EXCLUDED_REFERENCE_ONLY",
+    "status": "CANDIDATE_ALLOWED_FOR_REVIEW_PENDING_FINAL_RIGHTS_AND_OWNER_APPROVAL",
     "productionEligible": false,
-    "policy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
-    "reason": "The Pexels licence permits commercial use subject to its restrictions, but this is stock footage. Current owner production policy requires genuine original creator-captured wildlife footage and prohibits stock footage as a substitute."
+    "reviewEligible": true,
+    "releaseEligible": false,
+    "policy": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_REVIEW",
+    "reason": "The owner explicitly permits qualifying Pexels footage under the 2026-11-22 media policy. This asset has a recorded source page and historical exact-file hash, but third-party rights, current local file availability, final visual review and owner release approval remain outstanding.",
+    "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
   }
 }
