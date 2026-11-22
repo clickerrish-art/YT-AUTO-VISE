@@ -67,7 +67,7 @@ test("branch reconciliation report handles inventories larger than Node's defaul
     fs.mkdirSync(payload);
     const suffix = "x".repeat(230);
     for (let index = 0; index < 6000; index += 1) {
-      fs.writeFileSync(path.join(payload, \`\${String(index).padStart(5, "0")}-\${suffix}\`), "x\n");
+      fs.writeFileSync(path.join(payload, `${String(index).padStart(5, "0")}-${suffix}`), "x\n");
     }
     git(cwd, "add", "payload");
     git(cwd, "commit", "-m", "large inventory fixture");
