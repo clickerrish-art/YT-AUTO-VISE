@@ -93,6 +93,8 @@
     "releaseEligible": false,
     "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
-    "note": "Owner permits qualifying Pexels/Pixabay stock for review and production subject to asset-level rights, provenance, original-file, hash, technical and human-review gates. This record does not grant final rights clearance or publication approval."
+    "note": "Owner permits qualifying Pexels/Pixabay stock for review and production subject to asset-level rights, provenance, original-file, hash, technical and human-review gates. This record does not grant final rights clearance or publication approval.",
+    "stockVideoFootageAllowed": true,
+    "stockPhotographsAllowed": false
   }
 }
