@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "assetId": "pexels-video-30026544",
   "project": "SonicVhibez",
-  "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+  "status": "CANDIDATE_ALLOWED_FOR_REVIEW_PENDING_LOCAL_MP4",
   "source": {
     "platform": "Pexels",
     "pageUrl": "https://www.pexels.com/video/crocodile-resting-on-riverbank-in-south-africa-30026544/",
@@ -66,9 +66,14 @@
   "evidenceNote": "Source-page metadata and platform licence have been reviewed; this record does not assert that the specific media file has been acquired, inspected, or fully rights-cleared. Historical page-level licence research is retained for audit only and does not make this stock-library asset production-eligible.",
   "historicalStatus": "OPEN_SOURCE_FILE_NOT_ACQUIRED",
   "currentProductionDisposition": {
-    "status": "EXCLUDED_REFERENCE_ONLY",
+    "status": "CANDIDATE_ALLOWED_FOR_REVIEW_PENDING_LOCAL_MP4_AND_RIGHTS_REVIEW",
     "productionEligible": false,
-    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
-    "reason": "This Pexels/Wikimedia Commons stock-library source is not eligible under the current owner policy. Genuine original creator-captured wildlife media is required; stock footage cannot substitute, regardless of the platform licence."
+    "reviewEligible": true,
+    "releaseEligible": false,
+    "policy": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_REVIEW",
+    "reason": "The owner explicitly permits qualifying Pexels footage under the 2026-11-22 media policy. The source is imported into Canva, but local original MP4 bytes, SHA-256, full decode, third-party rights and human review remain pending.",
+    "canvaAssetId": "VAHbmcWc8lU",
+    "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
   }
 }
