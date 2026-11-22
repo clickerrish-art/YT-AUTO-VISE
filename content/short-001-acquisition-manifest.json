@@ -239,7 +239,9 @@
       "stockMediaAllowed": true,
       "pexelsAllowed": true,
       "pixabayAllowed": true,
-      "aiGeneratedWildlifeVisualsAllowed": false
+      "aiGeneratedWildlifeVisualsAllowed": false,
+      "stockVideoFootageAllowed": true,
+      "stockPhotographsAllowed": false
     },
     "reason": "Owner instruction on 2026-11-22 permits qualifying Pexels/Pixabay licensed footage. Three clips are included in a silent visual review; one enclosure clip is excluded.",
     "nextRequiredAction": "Full playback, collar-context and third-party-rights review; owner approval; production narration and captions; final 1080x1920 export; final compliance review."
