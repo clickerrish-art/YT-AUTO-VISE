@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Acquire only the four explicitly owner-approved Pexels clips for Short 001.
- * The output is a review artifact, never a production/rights approval.
+ * Acquire the three editorially selected Pexels clips for Short 001.
+ * The output is a review artifact, never a final production/rights approval.
  * No narration, rendering, upload, scheduling or publishing occurs.
  */
 import fs from "node:fs";
@@ -21,8 +21,7 @@ const LICENSE_URL = "https://www.pexels.com/license/";
 const APPROVED_IDS = [
   "pexels-29765785",
   "pexels-11760785",
-  "pexels-11528208",
-  "pexels-31702128"
+  "pexels-11528208"
 ];
 const MAX_FILE_BYTES = 300 * 1024 * 1024;
 
@@ -132,6 +131,7 @@ async function main() {
     const downloaded = await downloadPexels(asset, destination);
     const actual = probeMedia(destination);
     if (!actual.video) throw new Error(asset.id + ": no video stream");
+    run("ffmpeg", ["-hide_banner", "-v", "error", "-i", destination, "-f", "null", "-"], "full decode " + asset.id);
     if (Math.abs(actual.durationSeconds - asset.durationSeconds) > 1.5) {
       throw new Error(asset.id + ": duration mismatch; source page " + asset.durationSeconds + "s, file " + actual.durationSeconds.toFixed(3) + "s");
     }
@@ -162,6 +162,7 @@ async function main() {
       pexelsLicenseReference: LICENSE_URL,
       sourcePageDurationSeconds: asset.durationSeconds,
       actual,
+      fullDecode: "PASS",
       downloadedBytes: downloaded.sizeBytes,
       sha256: sha256File(destination),
       mediaFile: "media/" + filename,
@@ -188,12 +189,14 @@ async function main() {
     contentId: "short-001-wildlife-video-storytelling",
     status: "ACQUIRED_FOR_OWNER_REVIEW_NOT_RELEASE_CLEARED",
     createdAt: new Date().toISOString(),
-    sourceSelection: "Four clips explicitly approved by the owner",
+    sourceSelection: "Three explicitly owner-approved Pexels clips selected for review; the visible-enclosure/person clip is excluded",
     pexelsLicense: {
       url: LICENSE_URL,
       generalLicenseIsNotProofOfAllThirdPartyRights: true,
       sourceSelectionApprovalIsNotFinalReleaseApproval: true,
-      standaloneUnmodifiedRedistributionAllowed: false
+      standaloneUnmodifiedRedistributionAllowed: false,
+      platformLicenseEvidence: "content/media/pexels-license-evidence-2026-11-22.md",
+      ownerPolicyEvidence: "content/owner-media-policy-override-2026-11-22.json"
     },
     assets: acquired,
     previews: { contactSheet: "preview/short-001-contact-sheet.jpg" },
@@ -215,6 +218,7 @@ async function main() {
     status: manifest.status,
     assetCount: acquired.length,
     totalActualSourceSeconds: acquired.reduce((sum, item) => sum + item.actual.durationSeconds, 0),
+    fullDecodePasses: acquired.filter(item => item.fullDecode === "PASS").length,
     contactSheet,
     manifest: path.join(OUTPUT_ROOT, "short-001-acquisition-manifest.json"),
     releaseEligible: false
