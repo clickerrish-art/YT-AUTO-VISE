@@ -115,10 +115,11 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')
         run: node --check scripts/acquire-previously-shared-pexels-candidates.mjs
       - name: Acquire four previously shared Pexels sources for review
+        id: shared_pexels
         if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')
         run: node scripts/acquire-previously-shared-pexels-candidates.mjs
       - name: Upload previously shared Pexels originals and evidence
-        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')
+        if: (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')) && steps.shared_pexels.outputs.new_assets == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: sonicvhibez-previously-shared-pexels-review-assets

@@ -111,16 +111,32 @@ function validatePolicy() {
 async function main() {
   validatePolicy();
   const register = readJson(REGISTER_PATH);
+  const skippedExisting = [];
   const assets = SELECTED_IDS.map(id => {
     const asset = register.assets.find(candidate => candidate.assetId === id);
     assert(asset, `Required user-shared Pexels asset is missing from register: ${id}`);
-    assert(asset.sourceFileStatus === "NOT_DOWNLOADED", `Asset already acquired or status changed: ${id}`);
+    if (asset.sourceFileStatus === "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS" &&
+        asset.acquisitionArtifactId && /^[a-f0-9]{64}$/i.test(asset.sha256 ?? "")) {
+      skippedExisting.push({
+        assetId: asset.assetId,
+        title: asset.title,
+        sourceFileStatus: asset.sourceFileStatus,
+        acquisitionArtifactId: asset.acquisitionArtifactId,
+        acquisitionWorkflowRunId: asset.acquisitionWorkflowRunId ?? null,
+        sha256: asset.sha256,
+        actual: asset.actual ?? null,
+        mediaFile: asset.mediaFile ?? null,
+        releaseEligible: false
+      });
+      return null;
+    }
+    assert(asset.sourceFileStatus === "NOT_DOWNLOADED", `Asset status is neither pending nor safely acquired: ${id}`);
     assert(asset.downloadUrl, `Exact Pexels direct download URL is missing: ${id}`);
     assert(asset.sourceMatchStatus !== "POSSIBLE_MATCH_NOT_CONFIRMED_DURATION_MISMATCH",
       `Unconfirmed source match cannot enter automatic acquisition: ${id}`);
     return asset;
-  });
-  assert(assets.length === 4, "Expected four confirmed user-shared non-crocodile Pexels sources.");
+  }).filter(Boolean);
+  assert(assets.length + skippedExisting.length === 4, "Expected four confirmed user-shared non-crocodile Pexels sources.");
 
   fs.mkdirSync(MEDIA_DIR, { recursive: true });
   fs.mkdirSync(PREVIEW_DIR, { recursive: true });
@@ -182,14 +198,17 @@ async function main() {
     });
   }
 
-  const contactSheet = path.join(PREVIEW_DIR, "previously-shared-pexels-contact-sheet.jpg");
-  execFileSync("ffmpeg", [
-    "-hide_banner", "-loglevel", "error", "-y",
-    "-pattern_type", "glob", "-framerate", "1",
-    "-i", path.join(PREVIEW_DIR, "*.jpg"),
-    "-vf", "tile=4x1:padding=12:margin=12",
-    "-frames:v", "1", contactSheet
-  ], { stdio: "pipe", timeout: 60000 });
+  let contactSheet = null;
+  if (results.length > 0) {
+    contactSheet = path.join(PREVIEW_DIR, "previously-shared-pexels-contact-sheet.jpg");
+    execFileSync("ffmpeg", [
+      "-hide_banner", "-loglevel", "error", "-y",
+      "-pattern_type", "glob", "-framerate", "1",
+      "-i", path.join(PREVIEW_DIR, "*.jpg"),
+      "-vf", "tile=4x1:padding=12:margin=12",
+      "-frames:v", "1", contactSheet
+    ], { stdio: "pipe", timeout: 60000 });
+  }
 
   const manifest = {
     schemaVersion: 1,
@@ -204,6 +223,9 @@ async function main() {
       thirdPartyRightsAutomaticallyCleared: false
     },
     assetCount: results.length,
+    alreadyAcquiredCount: skippedExisting.length,
+    alreadyAcquiredAssets: skippedExisting,
+    newAssetsAcquired: results.length > 0,
     totalActualSourceSeconds: Number(results.reduce((sum, asset) => sum + asset.actual.durationSeconds, 0).toFixed(6)),
     fullDecodePasses: results.filter(asset => asset.fullDecode === "PASS").length,
     assets: results,
@@ -221,12 +243,17 @@ async function main() {
       "The PMA Rakson elephant page tags suggest Asian elephant context. Do not narrate as African elephant without species confirmation.",
       "Platform licence review is not third-party-rights clearance or publication approval."
     ],
-    contactSheet: "preview/previously-shared-pexels-contact-sheet.jpg"
+    contactSheet: contactSheet ? "preview/previously-shared-pexels-contact-sheet.jpg" : null
   };
 
   fs.writeFileSync(path.join(OUTPUT_ROOT, "acquisition-manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
+  if (process.env.GITHUB_OUTPUT) {
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, "new_assets=" + String(results.length > 0) + "\n");
+  }
   console.log(JSON.stringify({
     assetCount: manifest.assetCount,
+    alreadyAcquiredCount: manifest.alreadyAcquiredCount,
+    newAssetsAcquired: manifest.newAssetsAcquired,
     totalActualSourceSeconds: manifest.totalActualSourceSeconds,
     fullDecodePasses: manifest.fullDecodePasses,
     assets: results.map(asset => ({
