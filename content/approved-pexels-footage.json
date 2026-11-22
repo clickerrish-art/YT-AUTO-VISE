@@ -410,12 +410,22 @@
     }
   ],
   "currentProductionPolicy": {
-    "effectiveAt": "2026-11-21",
-    "originalCreatorCapturedMediaRequired": true,
-    "stockMediaAllowed": false,
-    "stockPhotographsAllowed": false,
+    "status": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_RIGHTS_GATES",
+    "originalCreatorCapturedMediaRequired": false,
+    "stockMediaAllowed": true,
+    "stockPhotographsAllowed": true,
+    "pexelsAllowed": true,
+    "pixabayAllowed": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
-    "note": "Earlier source-selection approvals and Pexels platform-license records are retained as historical evidence only. Current SonicVhibez production requires genuine original creator-captured wildlife media; Pexels stock footage and stock photographs must not be used as substitutes."
+    "standaloneUnmodifiedStockRedistributionAllowed": false,
+    "platformLicenseEvidenceRequired": true,
+    "originalFileSha256Required": true,
+    "fullTechnicalDecodeRequired": true,
+    "thirdPartyRightsReviewRequired": true,
+    "humanVisualReviewRequired": true,
+    "finalOwnerApprovalRequired": true,
+    "publicPublishingEnabled": false,
+    "policyEvidence": "content/owner-media-policy-override-2026-11-22.json"
   },
   "productionDisposition": {
     "status": "LICENSED_STOCK_REVIEW_ALLOWED; FINAL_RELEASE_HOLD",
