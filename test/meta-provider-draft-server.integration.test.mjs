@@ -219,8 +219,11 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   assert.equal(state.publishingEnabled, false);
   assert.equal(state.providerDraftsEnabled, true);
 
-  const preparedAuditCount = state.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_ATTEMPT_PREPARED").length;
-  const verifiedAuditCount = state.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_VERIFIED_UNPUBLISHED").length;
+  const auditResponse = await request(base, "/api/state", "GET", undefined, operatorToken);
+  assert.equal(auditResponse.status, 200);
+  const auditState = await auditResponse.json();
+  const preparedAuditCount = auditState.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_ATTEMPT_PREPARED").length;
+  const verifiedAuditCount = auditState.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_VERIFIED_UNPUBLISHED").length;
   assert.equal(preparedAuditCount, 1);
   assert.equal(verifiedAuditCount, 1);
 
@@ -240,8 +243,11 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   assert.equal(restoredAttempt.status, "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED");
   assert.equal(restoredAttempt.remotePostId, remotePostId);
   assert.equal(restored.publishingEnabled, false);
-  assert.equal(restored.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_ATTEMPT_PREPARED").length, preparedAuditCount);
-  assert.equal(restored.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_VERIFIED_UNPUBLISHED").length, verifiedAuditCount);
+  const restoredAuditResponse = await request(base, "/api/state", "GET", undefined, operatorToken);
+  assert.equal(restoredAuditResponse.status, 200);
+  const restoredAudit = await restoredAuditResponse.json();
+  assert.equal(restoredAudit.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_ATTEMPT_PREPARED").length, preparedAuditCount);
+  assert.equal(restoredAudit.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_VERIFIED_UNPUBLISHED").length, verifiedAuditCount);
 
   const reconcile = await request(base, "/api/facebook/drafts/provider/reconcile", "POST", { draftId, attemptId: attempt.id }, operatorToken);
   const reconciled = await readJson(reconcile);
