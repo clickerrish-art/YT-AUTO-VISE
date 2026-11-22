@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "createdAt": "2026-11-22",
+  "purpose": "Pexels crocodile footage candidates imported into the owner's Canva media library for Nile crocodile documentary review. Canva import is not local media acquisition or release clearance.",
+  "platformLicense": {
+    "name": "Pexels License",
+    "url": "https://www.pexels.com/license/",
+    "commercialUsePermittedSubjectToTerms": true,
+    "modificationPermitted": true,
+    "attributionRequired": false,
+    "standaloneUnmodifiedRedistributionAllowed": false,
+    "thirdPartyRightsReviewRequired": true,
+    "evidencePath": "content/media/pexels-license-evidence-2026-11-22.md"
+  },
+  "assets": [
+    {
+      "assetId": "pexels-video-30026544",
+      "creator": "Johnny Tilly",
+      "title": "Crocodile Resting on Riverbank in South Africa",
+      "sourceUrl": "https://www.pexels.com/video/crocodile-resting-on-riverbank-in-south-africa-30026544/",
+      "durationSeconds": 36,
+      "width": 1920,
+      "height": 1080,
+      "fps": 25,
+      "canvaAssetId": "VAHbmcWc8lU",
+      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
+      "visualReview": "PENDING",
+      "thirdPartyRightsReview": "PENDING",
+      "releaseEligible": false
+    },
+    {
+      "assetId": "pexels-video-31702202",
+      "creator": "MC G'Zay",
+      "title": "Close-Up of Nile Crocodile in African Waters",
+      "sourceUrl": "https://www.pexels.com/video/close-up-of-nile-crocodile-in-african-waters-31702202/",
+      "durationSeconds": 10,
+      "width": 1080,
+      "height": 1920,
+      "fps": 29.97,
+      "canvaAssetId": "VAHbmQ28Quo",
+      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
+      "visualReview": "PENDING",
+      "thirdPartyRightsReview": "PENDING",
+      "releaseEligible": false
+    },
+    {
+      "assetId": "pexels-video-31702221",
+      "creator": "MC G'Zay",
+      "title": "Majestic Nile Crocodile Basking on Riverbank",
+      "sourceUrl": "https://www.pexels.com/video/majestic-nile-crocodile-basking-on-riverbank-31702221/",
+      "durationSeconds": 17,
+      "width": 1080,
+      "height": 1920,
+      "fps": 29.97,
+      "canvaAssetId": "VAHbmRm73VM",
+      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
+      "visualReview": "PENDING",
+      "thirdPartyRightsReview": "PENDING",
+      "releaseEligible": false
+    },
+    {
+      "assetId": "pexels-video-31702245",
+      "creator": "MC G'Zay",
+      "title": "Wild Nile Crocodile in Natural Habitat",
+      "sourceUrl": "https://www.pexels.com/video/wild-nile-crocodile-in-natural-habitat-31702245/",
+      "durationSeconds": 13,
+      "width": 1080,
+      "height": 1920,
+      "fps": 29.97,
+      "canvaAssetId": "VAHbmXxvw3E",
+      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
+      "visualReview": "PENDING",
+      "thirdPartyRightsReview": "PENDING",
+      "releaseEligible": false
+    },
+    {
+      "assetId": "pexels-video-31998380",
+      "creator": "Floating Rabbit",
+      "title": "Aerial View of Crocodiles in Lower Zambezi River",
+      "sourceUrl": "https://www.pexels.com/video/aerial-view-of-crocodiles-in-lower-zambezi-river-31998380/",
+      "durationSeconds": 60,
+      "width": 3840,
+      "height": 2160,
+      "fps": 29.97,
+      "canvaAssetId": "VAHbmVmwByo",
+      "status": "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING",
+      "visualReview": "PENDING",
+      "thirdPartyRightsReview": "PENDING",
+      "releaseEligible": false
+    }
+  ],
+  "notes": [
+    "Five candidate clips have been imported into Canva; no original MP4 bytes are present in the local project workspace yet.",
+    "No SHA-256, ffprobe, full decode, or complete human playback is claimed for these five imported candidates.",
+    "Use only shots that match the Nile crocodile narration; do not imply the Kenya, South Africa and Zambia scenes are one location or one encounter.",
+    "Keep source audio out unless separately licensed; use approved narration and separately licensed/original music.",
+    "Do not mark rightsConfirmed or releaseEligible until exact local files, hashes, license evidence, third-party review and final human approval exist."
+  ]
+}
