@@ -50,7 +50,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   Object.assign(config, {
     destinationPageId: pageId,
     destinationPageName: pageName,
-    providerDraftsEnabled: true,
+    providerDraftsEnabled: false,
     publishingEnabled: false,
     dryRun: false,
     emergencyStop: false
@@ -156,7 +156,23 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
     draftId: "malformed", confirmProviderDraft: false
   }, operatorToken);
   assert.equal(malformed.status, 400, "provider-draft mutation must require explicit one-shot confirmation");
-  assert.equal(createCalls, 0, "auth and input rejection must happen before any remote mutation");
+  const disabled = await request(base, "/api/facebook/drafts/provider", "POST", {
+    draftId: "provider-drafts-disabled", confirmProviderDraft: true
+  }, operatorToken);
+  const disabledBody = await disabled.json();
+  assert.equal(disabled.status, 409, "provider-draft creation must fail closed while its config kill switch is off");
+  assert.ok(disabledBody.blockers?.some(item => item.includes("providerDraftsEnabled")), JSON.stringify(disabledBody));
+  assert.equal(createCalls, 0, "auth, input and disabled-provider rejection must happen before any remote mutation");
+  const missingAttemptId = await request(base, "/api/facebook/drafts/provider/reconcile", "POST", {}, operatorToken);
+  assert.equal(missingAttemptId.status, 400, "reconciliation must require a durable attempt ID");
+  const unknownAttempt = await request(base, "/api/facebook/drafts/provider/reconcile", "POST", {
+    attemptId: "does-not-exist"
+  }, operatorToken);
+  assert.equal(unknownAttempt.status, 404, "reconciliation must reject an unknown attempt without contacting Meta");
+  assert.equal(readBackCalls, 0);
+
+  config.providerDraftsEnabled = true;
+  fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\\n", { mode: 0o600 });
 
   const verified = await request(base, "/api/facebook/verify-page", "POST", {}, operatorToken);
   assert.equal(verified.status, 200, await verified.text());
