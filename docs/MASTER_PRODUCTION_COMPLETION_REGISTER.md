@@ -1534,3 +1534,73 @@ The existing public YouTube video remains unclassified pending owner review. The
 - Publishing, private upload, scheduling, Meta publishing, deployment mutation and paid operations remain disabled pending their genuine approvals and prerequisites.
 
 **Checkpoint classification:** exact-head engineering workflows above are PASS where stated; production readiness is FAIL/HOLD; external owner prerequisites remain BLOCKED or NOT_TESTED. No claim of 100% engineering acceptance, operational readiness or production authorization is made. This is an evidence refresh, not a completion declaration.
+
+
+---
+
+## Exact-source execution and acceptance refresh — 22 November 2026
+
+**Application/test source SHA:** `d2a7be4733939cffca0423ba28675977af6ab346`  
+**Branch before this register refresh:** `codex/marketing-machine-audit-fixes`  
+**Main SHA / merge base:** `3795519ccbf58fd02d74458624b58dd2e44a88c0`  
+**PR #1:** OPEN / DRAFT / UNMERGED. Main was not modified.
+
+### Engineering defects corrected
+
+1. **Wildlife production policy enforcement:** `scripts/render-reviewed-wildlife-footage.py` now rejects Pexels/Pixabay stock and AI-generated wildlife visuals for production. Only original creator-captured wildlife media with provenance/rights evidence can proceed. Pexels/Pixabay rights records are explicitly research/review-only; no stock candidate is treated as production-eligible.
+2. **API acceptance matrix integrity:** `docs/API_ROUTE_ACCEPTANCE_MATRIX.json` now stores `inventory` as a JSON object, records owner-gated route counts, separates blocked fail-closed routes from untested positive paths, and binds all current route evidence to the exact source/test SHA. The two positive queue dispatch/production routes remain NOT_TESTED because the owner-approved queue identity file is absent.
+3. **Readiness workflow parity:** the protected YouTube secret environment is supplied consistently to readiness and metadata validation. The exact readiness and metadata checks now agree on 22 blockers; four secret-presence checks are configured. Exit code 2 is the intended HOLD, not a test failure.
+4. **Canonical Node test runner:** content-quality and queue-readiness workflows use the same isolated Node test runner as automation and metadata validation. This removes three helper-module false test counts.
+5. **Johannesburg midnight test reliability:** a test-only fixed clock now stabilizes due-slot, approved-render, dispatch-order and worker-API integration fixtures. The 72-hour minimum, no-same-local-day rule, due-slot validation and production policy were not weakened.
+6. **Worker retry/backoff recovery:** exact-head tests pass persisted retry cooldown across actual process restart, HTTP 409 preflight cooldown, operator-only retry behavior, failed-persistence fail-stop/process-lock retention, corrupt-state rejection and no premature redispatch.
+
+### Exact-source verification
+
+| Check | Exact run | Result |
+|---|---:|---|
+| Full automation/security | [45075651363](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363) | PASS — 1,130 Node tests / 191 files; 108 Python tests; zero failures/skips; npm audit 0 vulnerabilities |
+| Content quality | [45075651343](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651343) | PASS — canonical 1,130-test suite |
+| Metadata validation | [45075651509](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651509) | PASS with production HOLD — 22 blockers |
+| Queue readiness | [45075651341](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651341) | PASS — publishing remains disabled |
+| Dashboard browser E2E | [45075651491](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651491) | PASS — 41/41 journeys |
+| Deployment recovery smoke | [45075651539](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651539) | PASS — isolated recovery validation, not production deployment |
+| Cloudflare durable-state unit | [45075651458](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651458) | PASS — unit/integration checks, not production state |
+| Cloudflare runner bridge safety | [45075651397](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651397) | PASS — safety tests, not live production dispatch |
+| Production quality enforcement | [45075651340](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651340) | PASS — approval gate enforcement, not asset approval |
+| Main/candidate isolated baseline | [45075651378](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651378) | PASS — main has 4 moderate npm audit vulnerabilities; candidate has 0 |
+| Non-destructive branch inventory | [45075651420](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651420) | PASS — 5,603 ahead / 0 behind; 548 changed paths; zero deletions; clean working tree |
+| Production readiness | [45075651463](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651463) | **HOLD** — 22 genuine blockers; no release authorization |
+
+### Exact evidence artifacts
+
+- Readiness diagnostic: artifact `14775395688`, SHA-256 `23dac0ccea81c58aa1b24eabd2cc718824818a4a14051eeb009b04399b5bb716`. It confirms 22 blockers, all four secret-presence checks configured, and readiness exit code 2.
+- Branch inventory: artifact `14774824316`, SHA-256 `399c11ccaf9649942e8d0df0675ddaeebfd44463207b62d140bbba50a2c2bf43`. It records 5,603 branch-only commits, zero base-only commits, 548 changed paths, zero deletions and a clean working tree.
+- Main/candidate baseline: artifact `14775590349`, SHA-256 `516dd986a5f7ef0aef9d33a67d1163c57cd1b0aad65e9e53bda23de84f01fc42`. Main remains unchanged; its four moderate audit findings are not silently transferred to the candidate.
+
+### Acceptance status — not all gates are complete
+
+- **API-001: BLOCKED.** 41/50 routes PASS, two remain NOT_TESTED and seven remain BLOCKED; 50/50 authentication-negative checks pass. Mocked Meta interrupted-SUBMITTING restart and concurrent reconciliation pass; live provider acceptance is NOT_TESTED.
+- **DASH-001: NOT_TESTED overall.** 121 controls, 17 forms, 104 form-owned, 17 standalone, 15 cross-cutting dimensions and 41/41 browser journeys are evidenced. Complete per-control positive-success, authorization, persistence/restart, concurrency, actionable-error and accessibility acceptance is still incomplete.
+- **SCHED-001: NOT_TESTED.** Local scheduling/worker tests pass, including the Johannesburg midnight cases, 72 elapsed hours, no same-day publication, rolling `long_form → long_form → short`, DST, leases, cancellation, dead-letter, retry/backoff and restart. Complete remote YouTube history, actual publication timestamps and fresh manual/local/third-party upload-attempt attestation are still missing.
+- **SCHED-003: PASS.** Owner-approved rolling cycle without a weekly target; at least 72 elapsed hours and no same Johannesburg calendar day.
+- **STATE-001: PASS for tested staging/unit evidence only.** This does not establish production state storage.
+- **DEPLOY-001: NOT_TESTED.** No SonicVhibez production Worker/D1, R2 API returns 403/code 10042, no Durable Object namespace and OIDC trust remains pinned to an old branch.
+- **GIT-002: NOT_TESTED.** Seventeen critical modules have spot review; full 548-path semantic review is incomplete. Branch-protection verification remains unavailable because GitHub returns HTTP 403.
+- **MEDIA-001: BLOCKED.** No verified original camera-captured wildlife media package, final render or exact-hash owner approval is available. Stock and AI wildlife visuals are not production substitutes.
+
+### Genuine external prerequisites still outstanding
+
+1. Owner supplies original creator-captured wildlife footage and rights/provenance evidence; no Pexels/Pixabay or AI substitute.
+2. Owner performs the manual zero-cost Speechma Andrew audition and approves a commercially usable narrator; no production audio has been generated or authorized.
+3. Owner/editor completes final video, thumbnail, captions and metadata, watches the full export and approves exact hashes through the protected approval path.
+4. Owner refreshes the YouTube upload-attempt attestation after 18 November and reconciles the one-public/zero-private/zero-unlisted remote inventory and actual publication timestamps.
+5. Owner supplies the queue identity approval before positive dispatch/production routes can be tested.
+6. Owner/Meta admin authorizes any live unpublished Page-draft acceptance; no live Meta write was performed.
+7. Owner/Metricool support restores or exports the legacy Nature Frontiers brand history and removes the incorrect SonicVhibez YouTube association without enabling publishing.
+8. Cloudflare admin resolves account security, R2 access and protected-ref OIDC trust; a separate SonicVhibez production Worker/D1 and monitored rollback remain unprovisioned.
+9. Repository owner verifies branch protection in Settings → Branches; the integration's branch-protection endpoint returns 403.
+10. Engineering completes semantic review of all 548 changed paths. No merge, rebase, reset, force-push or main modification was performed.
+
+**Release safeguards remain in force:** YouTube public/unattended publishing disabled; no upload or scheduling mutation; Nature Frontiers publishing disabled/dry-run/emergency stop retained; no live Meta provider writes; no paid infrastructure or paid APIs; no owner approval, rights clearance or production success is fabricated.
+
+**Completion assessment:** exact-head automated engineering verification passes for the stated suites, but API-001 is BLOCKED, DASH-001/SCHED-001/DEPLOY-001/GIT-002 remain NOT_TESTED, production readiness is HOLD with 22 blockers, and genuine production authorization has not been obtained. Master completion is therefore **INCOMPLETE**.

@@ -18,10 +18,10 @@ const gitBlobSha = content => createHash("sha1")
   .update(content)
   .digest("hex");
 const inventory = inventoryDashboardSources(html, server);
-const evidenceSha = "3da1750d762a79ac155771b4e38fd358daa8483f";
-const automationEvidenceSha = "3da1750d762a79ac155771b4e38fd358daa8483f";
-const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45074649048";
-const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45074649145";
+const evidenceSha = "d2a7be4733939cffca0423ba28675977af6ab346";
+const automationEvidenceSha = "d2a7be4733939cffca0423ba28675977af6ab346";
+const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651491";
+const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363";
 assert.ok(browserRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
 assert.ok(automationRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
 
