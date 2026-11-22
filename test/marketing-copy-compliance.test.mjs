@@ -37,9 +37,9 @@ test("creator-education long-form script places the exact direct-sales disclosur
   }
   assert.equal((script.match(/ADVERTISEMENT\n\nThis product is sold through my own Selar business/g) ?? []).length, 2);
   assert.ok(script.includes("AI-generated wildlife visuals are prohibited"));
-  assert.ok(script.includes("Do not use stock/archive footage"));
+  assert.ok(script.includes("Other stock/archive sources and AI-generated wildlife visuals are not permitted substitutes"));
   assert.ok(script.includes("internal-evaluation-only"));
-  assert.ok(script.includes("Zero-cost commercially licensed alternative voices may be auditioned only"));
+  assert.ok(script.includes("Speechma Andrew (English US male) is selected for a manual zero-cost browser audition only"));
   assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
 });
 
@@ -50,7 +50,7 @@ test("separate creator-education long-form script has compliant disclosure order
   assert.ok(script.includes("original creator-captured wildlife footage"));
   assert.ok(script.includes("AI-generated wildlife visuals are prohibited"));
   assert.ok(script.includes("cannot be used commercially"));
-  assert.ok(script.includes("Zero-cost commercially licensed alternative voices may be auditioned only"));
+  assert.ok(script.includes("Speechma Andrew (English, United States, male standard voice) is selected for a manual zero-cost browser audition only"));
   assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
   assert.ok(script.includes("Queue ID: `long-story-wildlife-footage`"));
   assert.ok(script.includes("NOT ASSIGNED"));
@@ -72,7 +72,7 @@ test("Episode 001 and 002 metadata drafts disclose direct sales before the produ
     assertDisclosurePrecedesEveryProductMention(draft, path);
     assert.ok(draft.includes("ADVERTISEMENT"));
     assert.ok(draft.includes(SELAR_URL));
-    assert.ok(draft.includes("original creator-captured production footage"));
+    assert.ok(draft.includes("Qualifying Pexels/Pixabay video footage may be used"));
     assert.ok(draft.includes("cannot be publicly redistributed for branded projects"));
     assert.ok(!draft.includes("uses illustrative marine B-roll"));
     assert.ok(!draft.includes("NOAA Fisheries"));
@@ -127,12 +127,12 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.ok(!metadata.includes("ADVERTISEMENT"));
   assert.ok(metadata.includes("hasPaidPromotion=false"));
   assert.ok(metadata.includes("no product CTA"));
-  assert.ok(metadata.includes("original creator-captured wildlife footage"));
+  assert.ok(metadata.includes("qualifying Pexels/Pixabay licensed stock"));
   assert.ok(metadata.includes("AI-generated wildlife visuals"));
   assert.ok(metadata.includes("not permitted substitutes"));
   assert.ok(script.includes("hasPaidPromotion=false"));
   assert.ok(script.includes("No product CTA, Selar URL"));
-  assert.ok(script.includes("Original creator-captured wildlife footage only"));
+  assert.ok(script.includes("qualifying Pexels/Pixabay licensed video footage"));
   assert.ok(script.includes("AI-generated wildlife visuals") && script.includes("prohibited"));
   assert.ok(script.includes("stock/archive footage"));
   assert.ok(script.includes("commercially prohibited by the provider's written determination"));
