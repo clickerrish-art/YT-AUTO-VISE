@@ -8,7 +8,8 @@ import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
 
 test("dashboard never steals an old-looking lock owned by a live process", async (t) => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-lock-"));
-  const port = 28000 + Math.floor(Math.random() * 10000);
+  // Ask the OS for an ephemeral port so parallel CI jobs cannot collide with a random fixed-range port.
+  const port = 0;
   const token = "lock-test-token-" + "x".repeat(40);
   const child = spawn(process.execPath, ["scripts/dashboard-server.mjs"], {
     env: {
@@ -30,17 +31,22 @@ test("dashboard never steals an old-looking lock owned by a live process", async
     child.kill("SIGTERM");
     fs.rmSync(stateDir, { recursive: true, force: true });
   });
-  const base = `http://127.0.0.1:${port}`;
-  let ready = false;
+  let actualPort = null;
   for (let i = 0; i < 60; i++) {
     if (child.exitCode !== null) break;
-    try {
-      const response = await fetch(base + "/healthz");
-      if (response.ok) { ready = true; break; }
-    } catch {}
+    const startedLine = logs.split("\\n").find(line => {
+      try { return JSON.parse(line).event === "dashboard_started"; } catch { return false; }
+    });
+    if (startedLine) {
+      actualPort = JSON.parse(startedLine).port;
+      break;
+    }
     await new Promise(resolve => setTimeout(resolve, 100));
   }
-  assert.equal(ready, true, "server did not start: " + logs);
+  assert.equal(Number.isInteger(actualPort) && actualPort > 0, true, "server did not start: " + logs);
+  const base = `http://127.0.0.1:${actualPort}`;
+  const health = await fetch(base + "/healthz");
+  assert.equal(health.ok, true, "server did not become healthy: " + logs);
 
   fs.mkdirSync(lockDir, { mode: 0o700 });
   fs.writeFileSync(path.join(lockDir, "owner.json"), JSON.stringify({
