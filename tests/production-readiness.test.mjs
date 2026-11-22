@@ -462,3 +462,30 @@ test("production readiness blocks the real repository queue until owner identity
   assert.match(blocker.message, /content\/queue-identity-approval\.json is missing/i);
   assert.equal(report.status, "blocked");
 });
+
+
+test("queue production policy carries the manual-only Speechma audition without approving narration", () => {
+  const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
+  const longFormQueue = JSON.parse(fs.readFileSync("content/long-form-queue.json", "utf8"));
+  const expectedNarrator = "No production narrator approved; Speechma Andrew is selected for a manual zero-cost audition only.";
+  for (const source of [queue, longFormQueue]) {
+    const policy = source.productionPolicy;
+    const candidate = policy.selectedNarrationAuditionCandidate;
+    assert.equal(policy.narrator, expectedNarrator);
+    assert.ok(policy.narrationCommercialRightsStatus.includes("NO_PRODUCTION_NARRATOR_APPROVED"));
+    assert.equal(policy.alternativeNarratorAuthorized, false);
+    assert.equal(policy.paidUpgradeAuthorized, false);
+    assert.equal(policy.publishingEnabled, false);
+    assert.equal(candidate.provider, "Speechma");
+    assert.equal(candidate.name, "Andrew");
+    assert.equal(candidate.manualBrowserOnly, true);
+    assert.equal(candidate.automationAllowed, false);
+    assert.equal(candidate.securityCodeRequiredPerGeneration, true);
+    assert.equal(candidate.maximumCharactersPerStandardConversion, 2000);
+    assert.equal(candidate.browserHistoryLocalOnly, true);
+    assert.equal(candidate.productionApproved, false);
+    assert.equal(candidate.publicationAuthorized, false);
+  }
+  assert.match(longFormQueue.items[0].narrationVoice, /Roderic/);
+  assert.equal(longFormQueue.items[0].narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
+});

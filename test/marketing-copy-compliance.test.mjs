@@ -119,7 +119,7 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.equal(manifest.narrationProductionUseAllowed, false);
   assert.ok(manifest.narrationRestrictionSummary.includes("prohibited for public branded or commercial use"));
   assert.equal(manifest.selectedNarratorForReview.name, "Andrew");
-  assert.equal(manifest.selectedNarratorForReview.ownerSelectionStatus, "SELECTED_FOR_ZERO_COST_BROWSER_AUDITION_ONLY");
+  assert.equal(manifest.selectedNarratorForReview.ownerSelectionStatus, "SELECTED_FOR_ZERO_COST_MANUAL_BROWSER_AUDITION_ONLY");
   assert.equal(manifest.selectedNarratorForReview.commercialUseAllowed, true);
   assert.equal(manifest.selectedNarratorForReview.productionApproved, false);
   assert.equal(manifest.selectedNarratorForReview.publicationAuthorized, false);
