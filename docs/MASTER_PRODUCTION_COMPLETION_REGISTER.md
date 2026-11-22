@@ -1492,3 +1492,45 @@ The existing public YouTube video remains unclassified pending owner review. The
 `main` remains unchanged at `3795519ccbf58fd02d74458624b58dd2e44a88c0`. PR #1 remains OPEN / DRAFT / UNMERGED; mergeable=false. The implementation branch remains 5,240 commits ahead / 17 behind at the verified application tree, with 530 changed files and merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. GIT-002 semantic review remains mandatory; do not merge or alter `main`.
 
 **Release remains HOLD.** Passing engineering tests does not clear the 27 production blockers or authorize publishing.
+
+
+---
+
+## Live execution checkpoint — 22 November 2026 (exact HEAD verification)
+
+**Application/test HEAD:** `0f26450d70e4cb2c3ac75d8a5a922ba542126ce1` (commit time 2026-11-22 21:22:12 UTC). This checkpoint records live GitHub evidence; it does not claim production completion.
+
+### Exact-HEAD workflow outcomes
+
+| Workflow | Run | Observed result |
+|---|---:|---|
+| Validate SonicVhibez automation | [45071733385](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733385) | PASS — completed successfully; unit-test step and all subsequent policy/syntax/compile/staging steps completed |
+| Dashboard browser end-to-end acceptance | [45071733345](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733345) | PASS — completed successfully |
+| SonicVhibez metadata validation | [45071733349](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733349) | PASS — completed successfully |
+| Isolated main/candidate baseline | [45071733362](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733362) | PASS — completed successfully |
+| Queue readiness | [45071733344](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733344) | PASS — completed successfully |
+| Deployment recovery smoke | [45071733342](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733342) | PASS — test/simulation only; not a live production deployment or independent production restore |
+| Cloudflare runner bridge safety | [45071733500](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733500) | PASS — safety tests only; not live job dispatch |
+| Cloudflare durable-state unit checks | [45071733549](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733549) | PASS |
+| Production quality enforcement | [45071733373](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733373) | PASS — enforcement workflow; does not mean production assets are approved |
+| SonicVhibez production readiness | [45071733545](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45071733545) | **FAIL / HOLD** — readiness gate intentionally failed because mandatory production prerequisites remain blocked; diagnostic artifact 14773288427 (SHA-256 `21573a94f426c4437ed2945e81998c3a82d969ed313e075890592ead1d81a045`) was uploaded. The artifact contents/blocker count were not independently extracted in this checkpoint. |
+
+### Live repository reconciliation
+
+- Implementation branch: `codex/marketing-machine-audit-fixes`; application/test HEAD above.
+- `main` remains `3795519ccbf58fd02d74458624b58dd2e44a88c0`.
+- GitHub compare: **5,570 ahead / 0 behind**, merge base equals current `main`; PR #1 reports 545 changed files. The compare endpoint's returned per-file list is capped at 300, so this is not full semantic review.
+- PR #1 remains **OPEN / DRAFT / UNMERGED**. GitHub currently reports mergeable=true; this is not owner approval and does not authorize merging or marking ready.
+- The previous acceptance matrices and requirement register predate this exact HEAD. Their historical PASS counts are not silently promoted to current-head acceptance. Refresh their source-SHA/evidence pointers and re-evaluate applicable requirements separately.
+
+### Release blockers and safeguards
+
+- Production readiness remains **HOLD**. The failure is not a test defect and must not be converted into PASS by changing thresholds or suppressing blockers.
+- The 22 Nov YouTube inventory file records one public 20-second video, zero private and zero unlisted; the video format still requires owner reaffirmation, and the manual/local/third-party upload-attempt attestation is stale after 18 Nov. No uncertain upload may be retried.
+- The current production media rule is original creator-captured wildlife media only. Pexels/Pixabay/stock and AI-generated wildlife visuals are not production substitutes. The checked-in Short visual review is explicitly review-only and has `rightsConfirmed=false`, `complianceReviewed=false`, and `releaseEligible=false`.
+- Speechma Andrew remains a manual zero-cost audition candidate only; no production narration is approved. HeyGen Free-plan narration is not commercially cleared. No voice substitution, paid API or paid upgrade is authorized.
+- Cloudflare evidence remains staging-only: no SonicVhibez production publisher Worker, R2 account activation is blocked by error 10042, production backup/restore is unverified, and account-wide two-factor enforcement is disabled. No production resources or paid infrastructure were created.
+- Nature Frontiers remains separate. Its accessible Metricool brand is still associated with the SonicVhibez YouTube channel; legacy brand history remains inaccessible. No provider mutation or publication was performed.
+- Publishing, private upload, scheduling, Meta publishing, deployment mutation and paid operations remain disabled pending their genuine approvals and prerequisites.
+
+**Checkpoint classification:** exact-head engineering workflows above are PASS where stated; production readiness is FAIL/HOLD; external owner prerequisites remain BLOCKED or NOT_TESTED. No claim of 100% engineering acceptance, operational readiness or production authorization is made. This is an evidence refresh, not a completion declaration.
