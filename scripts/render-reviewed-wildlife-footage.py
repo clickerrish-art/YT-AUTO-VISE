@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Render a review draft from hash-verified original or licensed wildlife footage.
+"""Render a review draft from hash-verified original creator-captured wildlife footage.
 
-Pexels and Pixabay stock footage may be used only under their applicable platform
-licenses, with source-page provenance and saved license evidence. AI-generated wildlife
-visuals remain prohibited. Incomplete third-party or human rights review forces a
-review-only hold; this script never marks a video ready to publish or uploads anything.
+Licensed stock and AI-generated wildlife visuals are not production substitutes and are
+rejected. Incomplete third-party or human rights review forces a review-only hold; this
+script never marks a video ready to publish or uploads anything.
 """
 from __future__ import annotations
 import hashlib, json, re, subprocess
@@ -36,21 +35,8 @@ def validate_clip_source(clip: dict) -> str:
             raise ValueError("ORIGINAL_RECORDING requires creatorCapturedOriginal=true.")
         if not str(clip.get("captureProvenance", "")).strip():
             raise ValueError("Original recordings require captureProvenance.")
-    elif method in ("PEXELS_LICENSED_STOCK", "PIXABAY_LICENSED_STOCK"):
-        expected_platform = "Pexels" if method == "PEXELS_LICENSED_STOCK" else "Pixabay"
-        expected_license = "Pexels License" if expected_platform == "Pexels" else "Pixabay Content License"
-        if clip.get("creatorCapturedOriginal") is not False:
-            raise ValueError("Licensed stock must explicitly set creatorCapturedOriginal=false.")
-        if clip.get("sourcePlatform") != expected_platform:
-            raise ValueError(f"{method} requires sourcePlatform={expected_platform}.")
-        if clip.get("licenseBasis") != expected_license:
-            raise ValueError(f"{method} requires licenseBasis={expected_license}.")
-        if clip.get("platformLicenseReviewed") is not True:
-            raise ValueError("Licensed stock requires platformLicenseReviewed=true.")
-        if not str(clip.get("licenseEvidenceLocation", "")).strip():
-            raise ValueError("Licensed stock requires a saved licenseEvidenceLocation.")
     else:
-        raise ValueError("Unsupported sourceMethod; use ORIGINAL_RECORDING, PEXELS_LICENSED_STOCK, or PIXABAY_LICENSED_STOCK.")
+        raise ValueError("Only original creator-captured wildlife recordings are permitted; licensed stock is not a production substitute.")
     if clip.get("rightsReviewed") is not True and clip.get("reviewOnly") is not True:
         raise ValueError("Incomplete rights review is allowed only for an explicit reviewOnly=true draft.")
     return method
@@ -74,12 +60,6 @@ def main() -> None:
             source_method = validate_clip_source(clip)
         except ValueError as exc:
             raise SystemExit(f"Clip {i}: {exc}") from exc
-        if source_method in ("PEXELS_LICENSED_STOCK", "PIXABAY_LICENSED_STOCK"):
-            evidence_path = inspectNonSymlinkRegularFile(
-                str(ROOT / clip["licenseEvidenceLocation"]), "License evidence"
-            )
-            if ROOT.resolve() not in Path(evidence_path).parents:
-                raise SystemExit(f"Clip {i}: license evidence must remain inside the project root.")
         digest = str(clip.get("originalSha256", ""))
         if not re.fullmatch(r"[a-f0-9]{64}", digest):
             raise SystemExit(f"Clip {i}: originalSha256 must be the exact original-file SHA-256.")
