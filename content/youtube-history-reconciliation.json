@@ -30,7 +30,7 @@
   "latestInventoryEvidence": {
     "workflowRunId": 44964788362,
     "workflowRunAttempt": 1,
-    "jobId": 137031193902,
+    "jobId": 137031236037,
     "sourceCommit": "8a23f3365648e577a1c6e22fae7f5542a232ab9e",
     "verifiedAt": "2026-11-22T00:04:03.023Z",
     "artifactId": 14730044913,
@@ -143,7 +143,7 @@
     "sourceCommit": "8a23f3365648e577a1c6e22fae7f5542a232ab9e",
     "status": "PASS_READ_ONLY_IDENTITY_AND_COMPLETE_INVENTORY_PENDING_OWNER_REVIEW",
     "checkedAt": "2026-11-22T00:04:03.023Z",
-    "jobId": 137031193902,
+    "jobId": 137031236037,
     "artifactId": 14730044913,
     "artifactSha256": "7d58ea5726eeabe90394b77214b0b72e100e4d4a30af490ca0391db43047ba69",
     "inventoryJsonSha256": "e5fc3b11bb457f129bcadf0f956a19ad8a56abd73994d02ceac601ed7b2018f8",
@@ -202,7 +202,8 @@
     "artifactId": 14730044913,
     "artifactSha256": "7d58ea5726eeabe90394b77214b0b72e100e4d4a30af490ca0391db43047ba69",
     "inventoryJsonSha256": "e5fc3b11bb457f129bcadf0f956a19ad8a56abd73994d02ceac601ed7b2018f8",
-    "status": "PARTIAL_OWNER_REAFFIRMATION_AND_LOCAL_ATTEMPT_ATTESTATION_PENDING"
+    "status": "PARTIAL_OWNER_REAFFIRMATION_AND_LOCAL_ATTEMPT_ATTESTATION_PENDING",
+    "jobId": 137031236037
   },
   "publicationHistoryReconciliation": {
     "status": "PENDING_OWNER_REAFFIRMATION",
