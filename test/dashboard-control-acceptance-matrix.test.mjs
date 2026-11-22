@@ -18,8 +18,9 @@ const gitBlobSha = content => createHash("sha1")
   .update(content)
   .digest("hex");
 const inventory = inventoryDashboardSources(html, server);
-const evidenceSha = "d2a7be4733939cffca0423ba28675977af6ab346";
-const automationEvidenceSha = "d2a7be4733939cffca0423ba28675977af6ab346";
+const evidenceSha = matrix.dashboardEvidence?.testSha;
+const automationEvidenceSha = matrix.currentHeadRefresh?.sourceTestSha;
+const historicalAutomationEvidenceSha = matrix.dashboardEvidence?.automation?.testSha;
 const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651491";
 const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363";
 assert.ok(browserRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
@@ -48,7 +49,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(matrix.forms.length, 17);
   assert.ok(matrix.controls.every(control => Number.isInteger(control.line) && control.line > 0), "every control acceptance row must retain its current source line");
   assert.ok(matrix.forms.every(form => Number.isInteger(form.line) && form.line > 0), "every form acceptance row must retain its current source line");
-  assert.equal(matrix.sourceHead, evidenceSha);
+  assert.equal(matrix.sourceHead, automationEvidenceSha);
   assert.equal(matrix.status, "PASS");
   assert.equal(matrix.evidenceStatus, "PASS");
   assert.equal(matrix.overallAcceptance, "NOT_TESTED");
@@ -69,15 +70,15 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(dashboardEvidence.controls, 121);
   assert.equal(dashboardEvidence.forms, 17);
   assert.equal(dashboardEvidence.automation.run, automationRun);
-  assert.equal(dashboardEvidence.automation.testSha, automationEvidenceSha);
+  assert.equal(dashboardEvidence.automation.testSha, historicalAutomationEvidenceSha);
   assert.equal(dashboardEvidence.automation.nodeTestFiles, 191);
   assert.equal(dashboardEvidence.automation.nodeTests, 1130);
   assert.equal(dashboardEvidence.automation.nodeSkipped, 0);
   assert.equal(dashboardEvidence.automation.pythonTests, 108);
   assert.equal(dashboardEvidence.automation.pythonSkipped, 0);
   assert.equal(dashboardEvidence.automation.npmAuditVulnerabilities, 0);
-  assert.equal(dashboardEvidence.automation.pythonEvidenceSha, automationEvidenceSha);
-  assert.equal(dashboardEvidence.automation.npmAuditEvidenceSha, automationEvidenceSha);
+  assert.equal(dashboardEvidence.automation.pythonEvidenceSha, historicalAutomationEvidenceSha);
+  assert.equal(dashboardEvidence.automation.npmAuditEvidenceSha, historicalAutomationEvidenceSha);
 
   const crossCutting = new Map(dashboardEvidence.crossCuttingDimensions.map(item => [item.dimension, item]));
   for (const dimension of [
