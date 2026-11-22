@@ -29,7 +29,7 @@ function listen(server) {
 async function request(base, route, method, body, token) {
   return fetch(new URL(route, base), {
     method,
-    headers: { authorization: "Bearer " + token, "content-type": "application/json", connection: "close" },
+    headers: { "x-operator-token": token, "content-type": "application/json", connection: "close" },
     body: body === undefined ? undefined : JSON.stringify(body)
   });
 }
@@ -95,7 +95,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   const portServer = createServer();
   const port = await listen(portServer);
   await new Promise((resolve, reject) => portServer.close(error => error ? reject(error) : resolve()));
-  const preload = pathToFileURL(path.join(projectRoot, "test", "meta-provider-draft-fetch-preload.mjs")).href;
+  const preload = pathToFileURL(path.join(projectRoot, "test-support", "meta-provider-draft-fetch-preload.mjs")).href;
   const child = spawn(process.execPath, [path.join(projectRoot, "scripts", "dashboard-server.mjs")], {
     cwd: stateDir,
     env: {
