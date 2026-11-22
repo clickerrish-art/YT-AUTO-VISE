@@ -42,3 +42,12 @@ test("YouTube verification mirrors the owner-attested upload-attempt ledger", ()
   assert.match(readiness, /const verificationAttempts = verification\.uploadAttemptReconciliation/);
   assert.match(readiness, /verificationAttempts\?\.status === attempts\.status/);
 });
+
+test("metadata validation readiness receives the same protected YouTube secret environment", () => {
+  const workflow = fs.readFileSync(path.join(root, ".github/workflows/validate.yml"), "utf8");
+  const readinessStep = workflow.match(/- name: Report production blockers without publishing([\\s\\S]*?)(?=\\n      - name:|$)/)?.[1] ?? "";
+  for (const name of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) {
+    assert.match(readinessStep, new RegExp(name + ":\\\\s*\\\\$\\\\{\\\\{\\\\s*secrets\\\\." + name + "\\\\s*\\\\}\\\\}"), name + " must be passed only through the protected Actions secret context");
+  }
+  assert.doesNotMatch(readinessStep, /echo.*(?:YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID)/);
+});
