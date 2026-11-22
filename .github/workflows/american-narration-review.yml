@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   render-review:
-    if: false # Disabled: owner approved Roderic exclusively; no Norman audition or substitution is authorized.
+    if: false # Disabled: owner selected Speechma Andrew for manual browser audition only; local Piper/Edge TTS generation is not authorized.
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
