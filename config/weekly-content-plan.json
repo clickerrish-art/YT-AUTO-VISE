@@ -144,6 +144,8 @@
     "pexelsAllowed": true,
     "pixabayAllowed": true,
     "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
-    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+    "stockVideoFootageAllowed": true,
+    "stockPhotographsAllowed": false
   }
 }
