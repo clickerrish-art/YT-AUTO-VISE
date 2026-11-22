@@ -37,7 +37,7 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.hasPaidPromotion, true);
   assert.equal(shortTemplate.containsSyntheticMedia, true);
   assert.equal(shortTemplate.containsAIWildlifeVisuals, false);
-  assert.equal(shortTemplate.wildlifeVisualSourcePolicy, "ORIGINAL_CREATOR_CAPTURED_ONLY");
+  assert.equal(shortTemplate.wildlifeVisualSourcePolicy, "ORIGINAL_OR_LICENSED_PEXELS_PIXABAY_WITH_ASSET_LEVEL_REVIEW");
   assert.equal(shortTemplate.mediaProvenanceStatus, "UNVERIFIED");
   assert.match(shortTemplate.description, /promotional disclosure/i);
   assert.match(shortTemplate.description, /AI NARRATION/i);
@@ -84,7 +84,7 @@ test("non-commercial audio and unverified wildlife media cannot enter the generi
   assert.match(queuedRenderer, /BLOCKED: the generic text-only draft renderer is disabled/);
 });
 
-test("Pexels stock thumbnail generation is disabled and historical selections are reference-only", () => {
+test("Pexels stock thumbnail generation stays disabled while licensed footage acquisition is review-only", () => {
   assert.match(photoThumbnailGenerator, /BLOCKED: Pexels stock-thumbnail generation is disabled/);
   assert.doesNotMatch(photoThumbnailGenerator, /images\.pexels\.com|pexels\.com\/photo/i);
   assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, false);
