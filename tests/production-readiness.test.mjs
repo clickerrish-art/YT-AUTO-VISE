@@ -116,9 +116,14 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /Do not use HeyGen Free-plan Roderic or Wade audio/);
   assert.match(result.stdout, /do not run local Piper\/Edge TTS/);
   assert.doesNotMatch(result.stdout, /Owner-authorized zero-cost alternative auditions are permitted/);
-  assert.match(result.stdout, /footageOrigin must be creator_captured_original/);
-  assert.match(result.stdout, /footageCreator must identify the original camera operator/);
-  assert.match(result.stdout, /captureEvidencePath must reference an existing/);
+  const shortManifest = JSON.parse(fs.readFileSync("content/render-manifest.json", "utf8"));
+  assert.equal(shortManifest.footageOrigin, "licensed_pexels_stock");
+  assert.equal(shortManifest.creatorCapturedOriginal, false);
+  assert.equal(shortManifest.stockVideoFootageAllowed, true);
+  assert.equal(shortManifest.stockPhotographsAllowed, false);
+  assert.equal(shortManifest.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.ok(Array.isArray(shortManifest.footageSourceUrls) && shortManifest.footageSourceUrls.length >= 3);
+  assert.ok(shortManifest.footageLicenseEvidence);
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
   assert.doesNotMatch(result.stdout, /Metadata needs the verified SonicVhibez YouTube channel ID/);
   assert.match(result.stdout, /SONICVHIBEZ_CHANNEL_ID/);
@@ -428,7 +433,7 @@ test("review-eligible Pexels candidates do not become selected production inputs
   assert.equal(result.status, 2);
   const report = JSON.parse(result.stdout);
   assert.equal(report.blockers.some(item => item.message.includes("selected imported wildlife asset")), false);
-  assert.ok(report.notes.some(note => note.includes("5 assets; 2 excluded from production; 0 selected/unresolved; release not authorized")));
+  assert.ok(report.notes.some(note => note.includes("0 selected/unresolved; release not authorized")));
 });
 
 test("licensed Pexels candidates can pass the source gate when all asset-level rights checks are complete", () => {
