@@ -25,21 +25,21 @@
       "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
       "topic": "Nile crocodile waterline posture, sensory systems and shoreline ambush behaviour",
       "targetMinutes": 8,
-      "status": "PRODUCTION_HOLD_COMMERCIAL_NARRATION_AND_ORIGINAL_MEDIA_MISSING",
+      "status": "PRODUCTION_HOLD_COMMERCIAL_NARRATION_AND_LICENSED_MEDIA_REVIEW",
       "scriptPath": "content/drafts/long-form-001-two-eyes-above-water.md",
       "footageRegisterPath": "content/assets/long-form-001-footage-sourcing.md",
-      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_FOOTAGE_COMMERCIAL_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "releaseStatus": "HOLD_FOR_LICENSED_MEDIA_ACQUISITION_ASSET_LEVEL_RIGHTS_COMMERCIAL_NARRATION_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
       "publicationFormat": "long_form",
       "publicationCyclePosition": 1,
       "scheduledAt": null,
       "publishingEnabled": false,
-      "productionNotes": "The current script revision has corrected source attribution and a constrained primary-study claim; the revised script and scene map still require owner and qualified zoological review. The five Pexels and three Wikimedia leads are reference-only and excluded by the current original creator-captured-media policy. No admissible original wildlife footage package is present. HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the existing 398.083-second WAV is internal-only and must not be used in public/commercial production. The existing Roderic WAV remains internal-only and commercially ineligible. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited; the paid API, local Piper/Edge TTS and paid upgrades are not authorized. No captions, final render, thumbnail, exact-hash approval, or publication schedule. Keep publishing disabled.",
+      "productionNotes": "The current script revision has corrected source attribution and a constrained primary-study claim; the revised script and scene map still require owner and qualified zoological review. The owner explicitly permits qualifying Pexels/Pixabay licensed stock under the 2026-11-22 media-policy override. Five Nile-crocodile Pexels candidates have been imported into Canva; exact local MP4 acquisition, hashes, full decode and third-party/human review remain pending. Three additional Pexels clips for Short 001 have been recovered and used in a silent review preview. Wikimedia leads remain excluded unless separately approved. No crocodile footage is yet release-cleared. HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the existing 398.083-second WAV is internal-only and must not be used in public/commercial production. The existing Roderic WAV remains internal-only and commercially ineligible. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited; the paid API, local Piper/Edge TTS and paid upgrades are not authorized. No captions, final render, thumbnail, exact-hash approval, or publication schedule. Keep publishing disabled.",
       "narrationStatus": "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE",
       "narrationDurationSeconds": 398.08299319727894,
       "narrationVoice": "Roderic - Authoritative & Refined (exclusive owner-approved narrator)",
       "narrationStatusPath": "content/assets/long-form-001-narration-status.md",
       "scriptStatus": "RESEARCH_CORRECTED_AWAITING_OWNER_AND_QUALIFIED_ZOOLOGIST_REVIEW",
-      "footageEligibilityStatus": "BLOCKED_NO_ORIGINAL_CREATOR_CAPTURED_SOURCE",
+      "footageEligibilityStatus": "LICENSED_PEXELS_CANDIDATES_PENDING_LOCAL_ACQUISITION_AND_RIGHTS_REVIEW",
       "narrationRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION"
     },
     {
@@ -120,8 +120,8 @@
     "weeklyTarget": null
   },
   "productionPolicy": {
-    "originalCreatorCapturedMediaRequired": true,
-    "stockMediaAllowed": false,
+    "originalCreatorCapturedMediaRequired": false,
+    "stockMediaAllowed": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
     "narrator": "No production narrator approved; Speechma Andrew is selected for a manual zero-cost audition only.",
     "narrationCommercialRightsStatus": "NO_PRODUCTION_NARRATOR_APPROVED; EXISTING_HEYGEN_RODERIC_WAV_INTERNAL_ONLY; SPEECHMA_OUTPUT_LICENSE_SUBJECT_TO_THIRD_PARTY_RIGHTS; NO_AUDIO_GENERATED_OR_APPROVED",
@@ -151,7 +151,11 @@
       "publicationAuthorized": false,
       "paidApiAuthorized": false,
       "note": "No output file, exact hash, human listening approval or production approval exists. Download and retain the MP3 after manual browser generation."
-    }
+    },
+    "pexelsAllowed": true,
+    "pixabayAllowed": true,
+    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
   },
   "notes": [
     "HeyGen denied zero-cost commercial-use rights for the existing Roderic Free-plan output, which remains internal-only. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited by Speechma Terms; the paid API is not authorized. No paid upgrade or paid credits are authorized. All queue items remain planning/draft-only until original media, narration, rights, review and release gates pass."
