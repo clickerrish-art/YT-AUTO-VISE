@@ -35,7 +35,7 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
         with:
@@ -192,6 +192,29 @@ jobs:
           for f in scripts/*.mjs; do node --check "$f"; done
       - name: Compile Python automation scripts
         run: python -m py_compile scripts/generate-narration.py scripts/generate-authoring-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/render-reviewed-wildlife-footage.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py tests/test_checked_in_release_metadata.py tests/test_reviewed_footage_renderer.py
+
+      - name: Acquire Short 001 Pexels source footage for review
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && contains(github.event.head_commit.message, '[acquire-media]')
+        run: node scripts/acquire-short-001-assets.mjs
+      - name: Upload Short 001 Pexels source footage and evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && contains(github.event.head_commit.message, '[acquire-media]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-short-001-pexels-review-assets
+          path: artifacts/short-001/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Acquire Nile crocodile Pexels source footage for review
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && contains(github.event.head_commit.message, '[acquire-media]')
+        run: node scripts/acquire-crocodile-footage-review.mjs
+      - name: Upload Nile crocodile Pexels source footage and evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && contains(github.event.head_commit.message, '[acquire-media]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-long-form-001-pexels-crocodile-review
+          path: artifacts/long-form-001/pexels-candidates/
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Run read-only authenticated Cloudflare staging smoke
         if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes'
