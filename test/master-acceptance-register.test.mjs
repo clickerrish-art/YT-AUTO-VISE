@@ -38,21 +38,38 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(api.currentHeadEvidenceNote, /41\/48 routes with accepted endpoint-specific local integration evidence/);
   assert.match(api.currentHeadEvidenceNote, /48\/48 protected API routes/);
   assert.match(api.currentHeadEvidenceNote, /seven blocked routes/);
-  assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, "6087b4088699a10359aeab99bee3d17cdd9722ad");
+  assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
   assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1107);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.skipped, 0);
-  assert.equal(register.latestExactCiCheckpoint.browserE2EStatus, "NOT_RUN_ON_THIS_SHA");
+  assert.equal(register.latestExactCiCheckpoint.browserE2EStatus, "PASS");
 
   const dashboard = byId("DASH-001");
   assert.equal(dashboard.status, "NOT_TESTED");
   assert.equal(dashboard.currentHeadStatus, "NOT_TESTED");
-  assert.equal(dashboard.currentHeadEvidenceSha, "5d1e4082e365511b9cf6e5a36fca7169eb360a73");
+  assert.equal(dashboard.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
   assert.match(dashboard.currentHeadEvidenceNote, /121\/121 controls/);
   assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
   assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
   assert.match(dashboard.currentHeadEvidenceNote, /41\/41 Chromium journeys/);
   assert.match(dashboard.currentHeadEvidenceNote, /overallAcceptance is NOT_TESTED/);
+
+  const state = byId("STATE-001");
+  assert.equal(state.status, "PASS");
+  assert.equal(state.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
+  assert.match(state.currentHeadEvidenceNote, /deployment recovery smoke/);
+  assert.match(state.currentHeadEvidenceNote, /runner-bridge safety/);
+
+  const scheduler = byId("SCHED-001");
+  assert.equal(scheduler.status, "NOT_TESTED");
+  assert.equal(scheduler.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
+  assert.match(scheduler.currentHeadEvidenceNote, /owner attestation/);
+  assert.match(scheduler.nextAction, /fresh attestation/);
+
+  const deployment = byId("DEPLOY-001");
+  assert.equal(deployment.status, "NOT_TESTED");
+  assert.equal(deployment.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
+  assert.match(deployment.currentHeadEvidenceNote, /No SonicVhibez production Worker/);
 });
 
 test("Nature Frontiers stays blocked after read-only Metricool reconciliation", () => {
