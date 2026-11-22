@@ -479,7 +479,10 @@ test("provider-draft timeout after remote creation remains uncertain rather than
   await assert.rejects(() => createMetaUnpublishedPageDraft({
     draft, pageId: PAGE_ID, expectedPageId: PAGE_ID, accessToken: TOKEN,
     permissionsVerified: true, authorization: providerDraftAuthorization(draft), now: NOW,
-    fetchImpl: async () => { calls++; throw new Error("response lost after remote creation"); }
+    fetchImpl: async () => {
+      calls++;
+      return { ok: true, status: 200, json: async () => { throw new Error("response body stream lost after Meta accepted create"); } };
+    }
   }), error => error instanceof MetaPageApiError && error.uncertain === true);
   assert.equal(calls, 1);
 });
