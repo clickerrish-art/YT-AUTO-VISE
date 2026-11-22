@@ -15,6 +15,7 @@ test("all five previously imported Canva wildlife clips are inventoried with exa
 test("licensed Pexels source matches can enter review without becoming release-cleared", () => {
   assert.equal(inventory.status, "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW");
   assert.equal(inventory.releaseAuthorized, false);
+  assert.ok(inventory.assets.every(asset => asset.selectedForProduction === false));
   assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true).length, 3);
   assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === false).length, 2);
   assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === false).length, 3);
