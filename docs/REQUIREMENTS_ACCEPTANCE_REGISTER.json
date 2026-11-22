@@ -30,14 +30,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/dbd65dabcc75e993ae73a9e401cf3f471e860f70",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/a16b94e60960aba90fa20adc8fcdaf3057e15d68"
       ],
-      "nextAction": "Live reconciliation on exact tested PR HEAD a16b94e60960aba90fa20adc8fcdaf3057e15d68: PR #1 remains open, draft and unmerged; main fa00d28e7f58911482686e4ad69fac9f4701a2e6; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; compare 2,276 ahead / 2 behind / 184 changed files. All new commits were added only to codex/marketing-machine-audit-fixes. No main edit, merge, reset, rebase, force-push or destructive reconciliation. Human semantic review of the divergent history and owner verification of branch protection remain incomplete.",
+      "nextAction": "Keep PR #1 open/draft/unmerged and main untouched. Complete the separate human semantic review and owner/admin branch-protection verification; do not merge, rebase, reset or force-push.",
       "assessmentCommitSha": "a16b94e60960aba90fa20adc8fcdaf3057e15d68",
       "acceptanceCriterion": "PR #1 remains open, draft and unmerged; main HEAD remains unchanged by this work; all new commits are fast-forward additions to the designated implementation branch.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
-      "currentHeadEvidenceSha": "4dec5f719e0b717893547fbbbe687c7f9f9658db",
-      "currentHeadEvidenceNote": "PASS on source/test tree 4dec5f719e0b717893547fbbbe687c7f9f9658db. PR #1 remains open/draft/unmerged; all changes are on codex/marketing-machine-audit-fixes. Main SHA 2cd6f223b6b673c030974c7f27c5ddf6f41e8b38 was not modified. No merge, reset, rebase, force-push or destructive reconciliation.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T13:01:38.049Z"
+      "currentHeadEvidenceSha": "b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00",
+      "currentHeadEvidenceNote": "PASS — PR #1 remains OPEN, DRAFT and UNMERGED; current main HEAD 3795519ccbf58fd02d74458624b58dd2e44a88c0, implementation branch HEAD b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00, merge base 45352b73bb6cc4787b2a49988b575afb754ab627. Compare shows 5,532 commits ahead / 17 behind and PR reports 549 changed files. All writes in this execution targeted only codex/marketing-machine-audit-fixes; main was not modified. No merge, reset, rebase, force-push or destructive reconciliation was performed. Branch protection is unverified because the protection endpoint returns 403; GIT-002 semantic review remains NOT_TESTED.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:12:13Z"
     },
     {
       "id": "CI-001",
@@ -376,9 +376,9 @@
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed dashboard browser run 45027788734 with 41/41 Chromium journeys; the behavioral matrix records 121/121 controls, 17/17 forms and 15/15 cross-cutting dimensions. Exact automation run 45027788664 passed 189/189 Node test files (1,107 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. This validates mapped field interaction, form/standalone journeys, authentication, accessibility, mobile layout and selected persistence/restart/concurrency behavior. overallAcceptance is NOT_TESTED: not every applicable control has individually accepted positive-success, authorization, durable persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior; this is not a control-count-only acceptance.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed dashboard browser run 45058706943 with 41/41 Chromium journeys and automation run 45058706978 with 191/191 Node test files (1,129 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The behavioral matrix records 121 controls, 17 forms and 15 cross-cutting dimensions, with exact-source field interaction, mapped action, validation, accessibility, mobile, selected persistence/restart/concurrency and disabled-state evidence. Overall acceptance remains NOT_TESTED: not every applicable control has individually accepted positive success, authorization, durable persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:07:49Z"
     },
     {
       "id": "SCHED-001",
@@ -424,9 +424,9 @@
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed the local scheduling/worker regression suite: 1,107 Node tests across 189 files, zero failures/skips, including Africa/Johannesburg timezone, actual elapsed 72-hour spacing, no same-local-day publication, long_form→long_form→short ordering, DST, leases, cancellation, retry/backoff persistence, dead-letter and restart safety. The authenticated read-only YouTube inventory was refreshed on 2026-11-22 at 02:21Z (run 44975699501): exact @sonicvhibez channel, both required OAuth scopes, complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos. The sole video LjePS02hA1o matches the prior owner-reviewed Short and Studio publication date exactly; historical format/date reaffirmation is accepted. The automated upload-ledger scan (run 44975699539) found one prior upload workflow dispatch, its private-upload job was skipped, and zero executed private-upload jobs. However the owner’s manual/local/third-party attempt attestation is valid only through 2026-11-18; the local upload ledger is gitignored and cannot be independently inspected, so out-of-band attempts after that date remain unverified. The owner-approved rolling cycle has no weekly target: long_form→long_form→short, at least 72 elapsed hours between actual publications, 216 hours for a full cycle, Africa/Johannesburg, no same local day. The only verified publication is the legacy Short before the cycle start; there have been zero publications since approval, zero consecutive gaps to verify, and the next expected format is long_form. The long-form render manifests remain BLOCKED_NOT_RENDERABLE pending release-cleared footage, commercial narration rights and human review. Keep scheduling and uploads disabled until the owner refreshes the out-of-band attempt attestation and all production gates pass.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed the local scheduling/worker regression suite: 1,129 Node tests across 191 files, zero failures/skips, including Africa/Johannesburg timezone, actual elapsed 72-hour spacing, no same-local-day publication, long_form→long_form→short ordering, DST, leases, cancellation, retry/backoff persistence, dead-letter and restart safety. Read-only YouTube inventory run 45054962924 authenticated the exact @sonicvhibez channel with both required OAuth scopes and found one public legacy Short, zero private and zero unlisted videos; the upload-ledger scan 45054962928 found no previous private-upload workflow run. The local upload ledger is gitignored and the owner’s manual/local/third-party attempt attestation is valid only through 2026-11-18, so later out-of-band attempts remain unverified. The rolling cycle remains owner-approved with no weekly target: long_form→long_form→short, at least 72 elapsed hours between actual publications, 216 hours for a full cycle, Africa/Johannesburg and no same local day. No publication has occurred since the cycle approval. Long-form render manifests remain BLOCKED pending release-cleared footage, a commercially eligible manual-audition-approved narration voice, rights and human review. Keep scheduling and uploads disabled.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:07:49Z"
     },
     {
       "id": "SCHED-WORKER-MULTIPROCESS-001",
@@ -517,9 +517,9 @@
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
-      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "currentHeadEvidenceNote": "PASS for controlled staging persistence/recovery, not production deployment. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed the complete automation suite: 189/189 Node files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities (run 45027788664). Exact-HEAD deployment recovery smoke 45027788708 passed its replacement/restart/persistent-state check; Cloudflare runner-bridge safety 45027788689 passed syntax and mocked runner/artifact integrity tests. The authenticated read-only Cloudflare staging smoke passed health, unauthenticated/authorized state, ETag/revision, backup-list integrity and runner-session checks. Read-only Cloudflare account inspection confirms the staging Worker is deployed with STATE_DB bound; D1 contains one dashboard_state row and five dashboard_backups. Runner tables are empty and R2 is unavailable. This validates staging state durability/recovery only; it does not certify production deployment.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceNote": "PASS for controlled staging persistence/recovery, not production deployment. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed 191/191 Node files, 1,129 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities (run 45058706978). Deployment recovery smoke 45058706854 passed; Cloudflare runner-bridge safety 45058706915 passed; read-only authenticated Cloudflare staging smoke passed health, authentication, state/ETag, backup-list and runner-session checks. Read-only account evidence shows staging D1 bound with one dashboard_state row and five backups; runner tables remain empty and R2 is unavailable. This validates staging persistence/recovery only, not production durability or live worker state.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:07:49Z"
     },
     {
       "id": "YT-001",
@@ -631,8 +631,9 @@
       "acceptanceCriterion": "Repository owner enables branch protection and required status checks and verifies the settings before integration.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "12c28787923384d5ba767614c89c09b4b328cd9a",
-      "currentHeadEvidenceNote": "No full acceptance evidence for this requirement exists on the exact current source/test SHA; retain previous evidence only as historical."
+      "currentHeadEvidenceSha": "b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00",
+      "currentHeadEvidenceNote": "BLOCKED — current branch protection cannot be independently verified. The live GitHub branch-protection endpoint returned HTTP 403 Resource not accessible by integration. No PASS or disabled status is inferred. Repository owner/admin must inspect Settings → Branches and verify required status checks and protection rules.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:12:13Z"
     },
     {
       "id": "GIT-002",
@@ -663,14 +664,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595474867",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/commit/668a8779f8a2894f99ed935d0c8bf13f2f215e64"
       ],
-      "nextAction": "Complete human semantic review of all changed paths and have the repository owner enable/verify branch protection and required checks. Preserve divergence; do not merge, rebase, reset, force-push or destructively reconcile.",
+      "nextAction": "Complete human semantic review of the 5,532 branch-only and 17 base-only commits, all 549 changed paths and critical modules; obtain owner/admin verification of branch protection. Preserve divergence; do not merge, rebase, reset, force-push or destructively reconcile.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-      "currentHeadEvidenceNote": "NOT_TESTED — live comparison at exact branch HEAD 61d116ede6c4abc9977078e88864d8571cdadccb: main 861173281b6253c839e6923182b1d3fdf3280b0a; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch 4798 commits ahead and 13 behind; PR #1 has 487 changed files. Branch is unprotected; PR remains open/draft/unmerged and mergeability is dirty. Full semantic review and safe reconciliation of divergence remain incomplete; no history rewrite or destructive reconciliation was performed.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
+      "currentHeadEvidenceSha": "b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00",
+      "currentHeadEvidenceNote": "NOT_TESTED — live compare at branch HEAD b25b1a6210e4ab3987e1f0f06260c6cbe0b10f00: main 3795519ccbf58fd02d74458624b58dd2e44a88c0; merge base 45352b73bb6cc4787b2a49988b575afb754ab627; implementation branch 5,532 commits ahead and 17 behind; PR reports 549 changed files (GitHub compare file listing is capped at 300). Branch protection is UNVERIFIED, not assumed disabled or enabled: the protection endpoint returns HTTP 403. Full semantic review of all branch-only/base-only changes remains incomplete; no merge, rebase, reset, cherry-pick, force-push or destructive reconciliation was performed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:12:13Z"
     },
     {
       "id": "DEPLOY-001",
@@ -697,9 +698,9 @@
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed automation/security run 45027788664 (1,107 Node tests across 189 files, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities), deployment recovery smoke 45027788708 and runner-bridge safety 45027788689. Read-only Cloudflare inspection confirms sonicvhibez-durable-state-staging is deployed with workers.dev enabled and STATE_DB bound; D1 has one dashboard_state row and five backups. Its ARTIFACTS R2 binding targets sonicvhibez-artifacts-staging, but the account R2 API returns HTTP 403 because R2 is not enabled; runner artifact tables are empty. This is staging-only. No SonicVhibez production render/publisher Worker, production D1/R2 artifact store, production monitoring or production rollback was verified; OIDC trust and branch protection still require owner/admin action. Do not enable production publishing.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed automation/security run 45058706978 (1,129 Node tests across 191 files, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities), deployment recovery smoke 45058706854 and runner-bridge safety 45058706915. Read-only authenticated Cloudflare staging smoke passed health/state/backup/runner-session checks; staging D1 is bound and has one state row plus five backups. The ARTIFACTS R2 binding is configured but account R2 API returns HTTP 403 because R2 is not enabled; runner artifact tables are empty. No SonicVhibez production render/publisher Worker, production D1/R2 artifact store, production monitoring or production rollback was verified; OIDC trust and branch protection require owner/admin action. Do not enable production publishing.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:07:49Z"
     },
     {
       "id": "MEDIA-SEC-001",
@@ -2021,7 +2022,7 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45037884539"
       ],
-      "nextAction": "Complete the remaining provider-draft route dimensions: concurrent reconciliation fencing, ambiguous create/read-back failures, interrupted SUBMITTING and NEEDS_RECONCILIATION restart recovery, and complete missing/invalid payload permutations. Then complete the seven owner/provider-gated routes only when their genuine prerequisites exist. Do not enable publishing.",
+      "nextAction": "Complete concurrent reconciliation fencing, ambiguous create/read-back failures, interrupted SUBMITTING and NEEDS_RECONCILIATION restart recovery, and missing/invalid payload permutations for the two provider-draft routes. Then complete the seven owner/provider-gated routes only when genuine prerequisites exist; never enable publishing.",
       "assessmentCommitSha": "648d3e0f1339a53cc73086afd949d50ca72536f0",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
       "lastVerifiedStatus": "BLOCKED",
@@ -2198,9 +2199,9 @@
       "acceptanceCriterion": "The worker uses a separate scoped token, can only list dispatchable jobs and invoke the renderer, filters unapproved render plans, applies bounded conflict backoff, preserves state for read-only listings and stops its poll wait promptly.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "currentHeadEvidenceNote": "NOT_TESTED for live worker operation; local worker safety is verified. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed 1,107 Node tests across 189 files, zero failures/skips, including all 38 test/worker-runner.test.mjs cases: persisted HTTP 409 preflight cooldown across restart, no early redispatch, fail-stop with retained process lock when cooldown persistence fails, uncertain-dispatch quarantine persistence, multi-process cooldown/restart, bounded Retry-After and prompt shutdown. The Cloudflare staging state Worker is deployed, but the live render-worker bridge is not operationally deployed: runner_state, runner_control, runner_artifacts and runner_artifact_parts each contain zero rows; R2 API access returns HTTP 403 because R2 is not enabled; staging OIDC trust remains pinned to an old branch/workflow. Live worker dispatch remains NOT_TESTED; no render job or publication was executed.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
+      "currentHeadEvidenceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "currentHeadEvidenceNote": "NOT_TESTED for live worker operation; local worker safety is verified. Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed 1,129 Node tests across 191 files, zero failures/skips, including the worker-runner and worker-backoff persistence suites: queued/approved-plan-only listing, sequential least-privilege dispatch, bounded Retry-After handling, persisted HTTP 409/429 cooldown across restart, shutdown interruption, uncertain-outcome quarantine and fail-stop with retained process lock when persistence fails. The Cloudflare staging state Worker is deployed, but the live render-worker bridge is not operationally deployed: runner_state, runner_control, runner_artifacts and runner_artifact_parts contain zero rows; R2 API access returns HTTP 403 because R2 is not enabled; staging OIDC trust remains pinned to an old branch/workflow. Live worker dispatch remains NOT_TESTED; no render job or publication was executed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T19:07:49Z"
     },
     {
       "id": "DEPLOY-SERVICE-READINESS-001",
@@ -2878,24 +2879,24 @@
   },
   "latestLiveCompareAt": "2026-11-18T09:49:03+02:00",
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-    "automationRun": 45027788664,
+    "exactSourceTestSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+    "automationRun": 45058706978,
     "nodeTestFiles": {
-      "passed": 189,
+      "passed": 191,
       "failed": 0,
       "skipped": 0
     },
     "nodeTests": {
-      "passed": 1107,
+      "passed": 1129,
       "failed": 0,
       "skipped": 0
     },
-    "browserE2ERun": 45027788734,
+    "browserE2ERun": 45058706943,
     "browserE2EStatus": "PASS",
     "lastBrowserE2E": {
-      "sourceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "browserRun": 45027788734,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788734",
+      "sourceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "browserRun": 45058706943,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45058706943",
       "browserJourneys": {
         "passed": 41,
         "total": 41,
@@ -2907,29 +2908,29 @@
       "passed": 108,
       "failed": 0,
       "skipped": 0,
-      "sourceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664"
+      "sourceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45058706978"
     },
     "npmAuditVulnerabilities": 0,
-    "npmAuditSourceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-    "lockfileRun": 44884481144,
-    "runnerBridgeSafetyRun": 45027788689,
-    "deploymentRecoveryRun": 45027788708,
+    "npmAuditSourceSha": "6a49517beaad31ad094216df9801e1b6642099a6",
+    "lockfileRun": 45058706978,
+    "runnerBridgeSafetyRun": 45058706915,
+    "deploymentRecoveryRun": 45058706854,
     "routeMatrix": {
-      "routes": 48,
+      "routes": 50,
       "overallPass": 41,
-      "overallNotTested": 0,
+      "overallNotTested": 2,
       "overallBlocked": 7,
-      "authenticationNegativePass": 48,
-      "sourceTestSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73"
+      "authenticationNegativePass": 50,
+      "sourceTestSha": "6a49517beaad31ad094216df9801e1b6642099a6"
     },
     "productionReadiness": {
       "status": "HOLD",
-      "run": 45027788633,
-      "sourceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9"
+      "run": 45058707355,
+      "sourceSha": "6a49517beaad31ad094216df9801e1b6642099a6"
     },
-    "note": "Exact current source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed automation/security run 45027788664: 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities, JavaScript syntax and Python compilation passed, and authenticated read-only Cloudflare staging smoke passed. Dashboard browser E2E 45027788734 passed 41/41 Chromium journeys on the same SHA. Deployment recovery smoke 45027788708 and Cloudflare runner-bridge safety 45027788689 passed on the same SHA. Queue readiness 45027788617 passed with publishing disabled. Production readiness 45027788633 remains HOLD; media acquisition/upload steps were skipped and no publishing occurred. API route matrix remains 41/48 accepted, 48/48 auth-negative PASS, seven blocked by owner/provider prerequisites.",
-    "queueReadinessRun": 45027788617
+    "queueReadinessRun": 45058706866,
+    "note": "Exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 passed automation/security run 45058706978: 191/191 Node test files, 1,129 Node tests, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities, JavaScript syntax and Python compilation passed, and read-only authenticated Cloudflare staging smoke passed. Dashboard browser E2E 45058706943 passed 41/41 Chromium journeys on the same SHA. Deployment recovery smoke 45058706854 and Cloudflare runner-bridge safety 45058706915 passed on the same source/test tree. Queue readiness 45058706866 passed with public publishing disabled and produced a non-approving queue proposal artifact; no owner approval file was created. Production readiness 45058707355 remains HOLD; media acquisition/upload steps were skipped and no publishing occurred. API route matrix remains 41/50 accepted, 2/50 NOT_TESTED and 7/50 BLOCKED; all 50 protected-route auth-negative cases pass."
   },
   "latestFullNodeRegression": {
     "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
