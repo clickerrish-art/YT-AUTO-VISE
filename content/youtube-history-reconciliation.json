@@ -69,7 +69,7 @@
   },
   "uploadAttemptReconciliation": {
     "status": "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS",
-    "inspectedAt": "2026-11-21T16:42:47.153Z",
+    "inspectedAt": "2026-11-22T00:05:50.959Z",
     "evidence": {
       "workflowDispatchRunsInspected": 1,
       "privateUploadWorkflowRunId": 42569826008,
@@ -84,25 +84,25 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs?event=workflow_dispatch"
       ],
       "automatedLedgerValidation": {
-        "runId": 44926048762,
-        "jobId": 136912254452,
-        "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
-        "completedAt": "2026-11-21T16:42:47.153Z",
+        "runId": 44964938424,
+        "jobId": 137031716355,
+        "sourceCommit": "34fdd7f23759ca1882eb052952af5465ca0eae18",
+        "completedAt": "2026-11-22T00:05:50.959Z",
         "conclusion": "success",
         "mode": "initialize",
         "inspectedWorkflowRuns": 1,
         "executedPrivateUploadRuns": 0,
         "previousLedgerRunId": "NONE",
-        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44926048762"
+        "logReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44964938424"
       },
       "uploadWorkflowDispatchRunsFound": 1,
       "repositoryWorkflowDispatchRunsInspected": 5,
       "latestUploadWorkflowDispatchAt": "2026-11-09T05:53:10Z",
       "currentGitHubScan": {
-        "inspectedAt": "2026-11-21T16:42:47.153Z",
-        "workflowRunId": 44926048762,
-        "jobId": 136912254452,
-        "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
+        "inspectedAt": "2026-11-22T00:05:50.959Z",
+        "workflowRunId": 44964938424,
+        "jobId": 137031716355,
+        "sourceCommit": "34fdd7f23759ca1882eb052952af5465ca0eae18",
         "priorUploadWorkflowRunsInspected": 1,
         "uploadPrivateWorkflowDispatchRuns": 1,
         "uploadArtifactPrivatelyWorkflowDispatchRuns": 0,
@@ -120,7 +120,7 @@
       "statement": "The owner confirmed there were no manual, local, or external YouTube upload attempts other than the inventoried video LjePS02hA1o.",
       "scope": "Manual, local, and third-party/out-of-band upload attempts",
       "appliesToVideoId": "LjePS02hA1o",
-      "note": "This owner attestation covers attempts only through 2026-11-18. The 2026-11-21 automated GitHub scan again found zero executed private-upload jobs, but does not inspect manual/local/third-party activity after 2026-11-18. Keep publication blocked until the owner refreshes that attestation.",
+      "note": "The owner attestation covers manual/local/third-party attempts only through 2026-11-18. The 2026-11-22 automated GitHub upload-ledger scan found zero executed private-upload jobs among the one prior workflow run it inspected; it does not inspect manual/local/third-party activity after 2026-11-18. Refresh owner attestation before publication.",
       "validThrough": "2026-11-18",
       "freshnessStatus": "STALE_FOR_LOCAL_OR_MANUAL_ATTEMPTS_AFTER_2026-11-18"
     },
@@ -134,7 +134,7 @@
       "accessibleFromGitHubRepository": false,
       "ownerAttestationRequiredForManualOrLocalAttemptsAfter": "2026-11-18"
     },
-    "note": "Automated GitHub Actions upload-history scan refreshed on 2026-11-21: one prior upload workflow dispatch was inspected, its private-upload job was skipped, no upload-artifact-privately dispatch was found, and zero private-upload jobs executed. The separate local attempt ledger is gitignored and inaccessible from the repository. Owner attestation for manual/local/third-party attempts remains valid only through 2026-11-18."
+    "note": "The 2026-11-22 automated GitHub scan (run 44964938424) inspected one prior upload workflow run, found its private-upload job was skipped, found zero upload-artifact-privately dispatches and zero executed private-upload jobs. This is GitHub Actions evidence only. The local upload-attempt ledger is gitignored and inaccessible from the repository. Owner attestation for manual/local/third-party attempts remains valid only through 2026-11-18."
   },
   "currentFreshnessStatus": "FRESH_AUTOMATED_INVENTORY_PENDING_OWNER_REAFFIRMATION_AND_LOCAL_ATTEMPT_ATTESTATION",
   "lastSuccessfulInventoryAt": "2026-11-22T00:04:03.023Z",
