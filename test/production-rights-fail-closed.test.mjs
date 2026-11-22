@@ -105,6 +105,8 @@ test("Nature Frontiers and SonicVhibez production both remain original-capture-o
   assert.equal(owner.mediaRules.pexelsLicensedStockAllowed, false);
   assert.equal(owner.mediaRules.pixabayLicensedStockAllowed, false);
   assert.equal(owner.mediaRules.stockVideoFootageAllowed, false);
+  assert.match(acquisitionWorkflow, /if: false # Disabled:/);
+  assert.doesNotMatch(acquisitionWorkflow, /^\s*push:/m);
   assert.equal(owner.mediaRules.originalCreatorCapturedMediaRequired, true);
   assert.equal(owner.mediaRules.stockPhotographsAllowed, false);
   assert.equal(owner.mediaRules.aiGeneratedWildlifeVisualsAllowed, false);
@@ -198,6 +200,7 @@ test("Pexels acquisition fails closed while the owner media policy is revoked", 
   const shortAcquisition = readText("../scripts/acquire-short-001-assets.mjs");
   const crocodileAcquisition = readText("../scripts/acquire-crocodile-footage-review.mjs");
   const workflow = readText("../.github/workflows/validate-automation.yml");
+  const acquisitionWorkflow = readText("../.github/workflows/acquire-short-001-assets.yml");
   const owner = readJson("../content/owner-media-policy-override-2026-11-22.json");
   assert.equal(owner.status, "REVOKED_UNSUPPORTED_OWNER_ATTRIBUTION");
   assert.equal(owner.mediaRules.stockVideoFootageAllowed, false);

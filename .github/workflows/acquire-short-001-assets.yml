@@ -1,20 +1,7 @@
-# 2026-11-22: one-time review-only acquisition of owner-approved Pexels assets; no publication approval.
-name: Acquire owner-approved Pexels footage for Short 001 review
+# Disabled: Pexels/Pixabay stock is excluded by the user's original creator-captured-only production policy.
+name: Pexels acquisition disabled by original-capture-only policy
 
 on:
-  push:
-    branches: [codex/marketing-machine-audit-fixes]
-    paths:
-      - ".github/workflows/acquire-short-001-assets.yml"
-      - "scripts/acquire-short-001-assets.mjs"
-      - "scripts/acquire-crocodile-footage-review.mjs"
-      - "scripts/acquire-previously-shared-pexels-candidates.mjs"
-      - "content/media/pexels-user-shared-candidates-2026-11-22.json"
-      - "scripts/acquire-user-shared-pixabay-candidates.mjs"
-      - "content/media/pixabay-user-shared-candidates-2026-11-22.json"
-      - "content/approved-pexels-footage.json"
-      - "content/owner-media-policy-override-2026-11-22.json"
-      - "content/media/pexels-license-evidence-2026-11-22.md"
   workflow_dispatch:
     inputs:
       review_only:
@@ -32,7 +19,8 @@ concurrency:
 
 jobs:
   acquire:
-    name: Download, probe, hash and decode owner-approved Pexels clips
+    name: Pexels acquisition disabled by owner media policy
+    if: false # Disabled: user excludes Pexels/Pixabay stock; original creator-captured footage is required.
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
