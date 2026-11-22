@@ -54,6 +54,6 @@ test("metadata validation readiness receives the same protected YouTube secret e
 
 test("content quality workflow uses the canonical isolated Node test runner", () => {
   const workflow = fs.readFileSync(path.join(root, ".github/workflows/content-quality.yml"), "utf8");
-  assert.match(workflow, /npm test 2>&1 \\| tee/);
-  assert.doesNotMatch(workflow, /node --test 2>&1 \\| tee/);
+  assert.match(workflow, /npm test 2>&1 \| tee/);
+  assert.doesNotMatch(workflow, /node --test 2>&1 \| tee/);
 });
