@@ -119,11 +119,16 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /do not run local Piper\/Edge TTS/);
   assert.doesNotMatch(result.stdout, /Owner-authorized zero-cost alternative auditions are permitted/);
   const shortManifest = JSON.parse(fs.readFileSync("content/render-manifest.json", "utf8"));
-  assert.equal(shortManifest.footageOrigin, "licensed_pexels_stock");
+  assert.equal(shortManifest.footageOrigin, "licensed_pexels_stock", "the existing preview remains accurately labelled as stock");
   assert.equal(shortManifest.creatorCapturedOriginal, false);
-  assert.equal(shortManifest.stockVideoFootageAllowed, true);
+  assert.equal(shortManifest.originalCreatorCapturedMediaRequired, true);
+  assert.equal(shortManifest.stockMediaAllowed, false);
+  assert.equal(shortManifest.pexelsAllowed, false);
+  assert.equal(shortManifest.pixabayAllowed, false);
+  assert.equal(shortManifest.stockVideoFootageAllowed, false);
   assert.equal(shortManifest.stockPhotographsAllowed, false);
   assert.equal(shortManifest.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.match(result.stdout, /only original creator-captured wildlife footage is eligible for production/);
   assert.ok(Array.isArray(shortManifest.footageSourceUrls) && shortManifest.footageSourceUrls.length >= 3);
   assert.ok(shortManifest.footageLicenseEvidence);
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
