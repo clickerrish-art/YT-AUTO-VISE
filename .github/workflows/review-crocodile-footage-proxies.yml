@@ -24,7 +24,7 @@ jobs:
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: sonicvhibez-long-form-001-pexels-crocodile-review
-          run-id: 44975292889
+          run-id: 44978618279
           github-token: ${{ github.token }}
           path: source
 
@@ -39,8 +39,8 @@ jobs:
         run: |
           set -euo pipefail
           mapfile -t sources < <(find source -type f -path '*/media/*.mp4' -print | sort)
-          if [ "${#sources[@]}" -ne 5 ]; then
-            echo "::error::Expected exactly five acquired source MP4s; found ${#sources[@]}."
+          if [ "${#sources[@]}" -ne 6 ]; then
+            echo "::error::Expected exactly six acquired source MP4s; found ${#sources[@]}."
             printf '%s\n' "${sources[@]}"
             exit 1
           fi
@@ -60,7 +60,7 @@ jobs:
           done
           ffmpeg -hide_banner -loglevel error -y -pattern_type glob -framerate 1 -i 'preview/*.jpg' -vf 'tile=3x2:padding=12:margin=12' -frames:v 1 preview/crocodile-candidates-contact-sheet.jpg
           cp "$(find source -type f -name acquisition-manifest.json -print -quit)" review-proxies/acquisition-manifest.json
-          echo "PASS: five source files verified and five review proxies created with source audio retained where present."
+          echo "PASS: six source files verified and six review proxies created with source audio retained where present."
           du -sh source review-proxies preview
 
       - name: Upload review-only proxies and evidence
