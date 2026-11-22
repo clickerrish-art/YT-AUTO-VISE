@@ -119,7 +119,13 @@
       "productionApproved": false,
       "publicationAuthorized": false,
       "auditionGenerationStatus": "NOT_GENERATED",
-      "note": "The owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. Speechma's published Terms grant a perpetual, royalty-free commercial license for lawful outputs subject to the Terms, Acceptable Use Policy and third-party rights. No audio has been generated, listened to or approved. This selection authorizes only the Speechma browser audition, not local Piper/Edge TTS generation or production use."
+      "note": "The owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. Speechma's published Terms grant a perpetual, royalty-free commercial license for lawful outputs subject to the Terms, Acceptable Use Policy and third-party rights. No audio has been generated, listened to or approved. This selection authorizes only the Speechma browser audition, not local Piper/Edge TTS generation or production use.",
+      "manualBrowserOnly": true,
+      "automationAllowed": false,
+      "securityCodeRequiredPerGeneration": true,
+      "maximumCharactersPerStandardConversion": 2000,
+      "browserHistoryLocalOnly": true,
+      "retentionRequirement": "Download the MP3 and store it in a project-controlled artifact location; browser history is not durable project storage."
     },
     "selectionStatus": "OWNER_SELECTED_SPEECHMA_ANDREW_BROWSER_AUDITION_PENDING",
     "paidUpgradeAuthorized": false,
@@ -127,6 +133,18 @@
     "decisionDate": "2026-11-22",
     "decisionEvidence": "On 2026-11-22 the owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. The official Speechma Terms state a worldwide, non-exclusive, perpetual, royalty-free license to use, publish, distribute and monetize lawful outputs, subject to the Terms, Acceptable Use Policy and third-party rights. No audition audio has been generated or approved. No paid service or credits are authorized.",
     "commercialUseRule": "Speechma's published Terms license lawful generated outputs for commercial use, subject to input rights, third-party rights, acceptable-use rules and required disclosures. This does not approve an ungenerated audio file. Do not use HeyGen Free-plan Roderic or Wade audio. Do not enable local Piper/Edge TTS generation; only the owner-selected Speechma browser audition is authorized. Production use requires actual audio review and owner approval bound to its exact final SHA-256.",
-    "alternativeVoiceAuthorizationScope": "Speechma Andrew browser audition only; local Piper/Edge TTS generators remain disabled; no production approval or publication authorization."
+    "alternativeVoiceAuthorizationScope": "Speechma Andrew browser audition only; local Piper/Edge TTS generators remain disabled; no production approval or publication authorization.",
+    "auditionExecutionPolicy": {
+      "mode": "MANUAL_BROWSER_ONLY",
+      "freeSiteAutomationAllowed": false,
+      "officialApiAutomationAllowed": true,
+      "officialApiPaid": true,
+      "zeroCostConstraintForbidsPaidApi": true,
+      "securityCodeRequiredPerGeneration": true,
+      "maximumCharactersPerStandardConversion": 2000,
+      "outputFormat": "MP3",
+      "historyPersistence": "BROWSER_LOCAL_ONLY",
+      "retentionRequirement": "Download the MP3 and store it in a project-controlled artifact location."
+    }
   }
 }
