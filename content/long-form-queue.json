@@ -155,7 +155,9 @@
     "pexelsAllowed": true,
     "pixabayAllowed": true,
     "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
-    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+    "stockVideoFootageAllowed": true,
+    "stockPhotographsAllowed": false
   },
   "notes": [
     "HeyGen denied zero-cost commercial-use rights for the existing Roderic Free-plan output, which remains internal-only. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited by Speechma Terms; the paid API is not authorized. No paid upgrade or paid credits are authorized. All queue items remain planning/draft-only until original media, narration, rights, review and release gates pass."
