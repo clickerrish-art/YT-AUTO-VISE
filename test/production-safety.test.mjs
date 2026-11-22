@@ -90,6 +90,8 @@ test("Pexels stock thumbnail generation stays disabled while licensed footage ac
   assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, true);
   assert.equal(pexelsRegistry.currentProductionPolicy.originalCreatorCapturedMediaRequired, false);
   assert.equal(pexelsRegistry.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(pexelsRegistry.currentProductionPolicy.stockVideoFootageAllowed, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.stockPhotographsAllowed, false);
   assert.match(pexelsAcquisitionWorkflow, /workflow_dispatch/);
   assert.match(pexelsAcquisitionWorkflow, /review_only/);
   assert.match(pexelsAcquisitionWorkflow, /default: true/);
