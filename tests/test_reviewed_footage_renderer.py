@@ -61,30 +61,50 @@ class ReviewedFootageRendererSafetyTests(unittest.TestCase):
             "reviewOnly": True
         }
 
-    def test_accepts_pexels_stock_for_review_only_without_claiming_rights_clearance(self):
+    def test_rejects_pexels_stock_even_when_license_and_review_evidence_exist(self):
         renderer = self._load_renderer_module()
         clip = self._stock_clip("Pexels")
-        self.assertEqual(renderer.validate_clip_source(clip), "PEXELS_LICENSED_STOCK")
-        self.assertFalse(clip["rightsReviewed"])
-        self.assertTrue(clip["reviewOnly"])
-
-    def test_accepts_pixabay_stock_for_review_only_without_claiming_rights_clearance(self):
-        renderer = self._load_renderer_module()
-        clip = self._stock_clip("Pixabay")
-        self.assertEqual(renderer.validate_clip_source(clip), "PIXABAY_LICENSED_STOCK")
-
-    def test_rejects_stock_without_platform_license_review(self):
-        renderer = self._load_renderer_module()
-        clip = self._stock_clip("Pexels")
-        clip["platformLicenseReviewed"] = False
-        with self.assertRaisesRegex(ValueError, "platformLicenseReviewed=true"):
+        with self.assertRaisesRegex(ValueError, "Only original creator-captured wildlife recordings"):
             renderer.validate_clip_source(clip)
 
-    def test_rejects_stock_without_review_only_or_human_rights_review(self):
+    def test_rejects_pixabay_stock_even_when_license_and_review_evidence_exist(self):
         renderer = self._load_renderer_module()
-        clip = self._stock_clip("Pexels")
-        clip["reviewOnly"] = False
-        with self.assertRaisesRegex(ValueError, "reviewOnly=true"):
+        clip = self._stock_clip("Pixabay")
+        with self.assertRaisesRegex(ValueError, "Only original creator-captured wildlife recordings"):
+            renderer.validate_clip_source(clip)
+
+    def test_accepts_original_creator_capture_with_capture_provenance(self):
+        renderer = self._load_renderer_module()
+        clip = {
+            "sourceMethod": "ORIGINAL_RECORDING",
+            "creatorCapturedOriginal": True,
+            "creatorIdentity": "Camera operator",
+            "file": "wildlife.mp4",
+            "sourceUrl": "https://example.com/original-recording",
+            "licenseBasis": "Original creator-owned recording; permissions documented separately",
+            "attribution": "Camera operator",
+            "originalSha256": "a" * 64,
+            "captureProvenance": "Original camera file recorded by the named creator",
+            "rightsReviewed": False,
+            "reviewOnly": True
+        }
+        self.assertEqual(renderer.validate_clip_source(clip), "ORIGINAL_RECORDING")
+
+    def test_rejects_original_recording_without_capture_provenance(self):
+        renderer = self._load_renderer_module()
+        clip = {
+            "sourceMethod": "ORIGINAL_RECORDING",
+            "creatorCapturedOriginal": True,
+            "creatorIdentity": "Camera operator",
+            "file": "wildlife.mp4",
+            "sourceUrl": "https://example.com/original-recording",
+            "licenseBasis": "Original recording",
+            "attribution": "Camera operator",
+            "originalSha256": "a" * 64,
+            "rightsReviewed": False,
+            "reviewOnly": True
+        }
+        with self.assertRaisesRegex(ValueError, "captureProvenance"):
             renderer.validate_clip_source(clip)
 
     def test_rejects_ai_generated_wildlife_visuals(self):
