@@ -173,6 +173,29 @@
       "humanReviewed": false,
       "productionEligible": false,
       "publicPublishingEnabled": false
+    },
+    {
+      "assetId": "pexels-video-20443910",
+      "creator": "Floating Rabbit",
+      "title": "Basking Crocodile — Nile crocodile resting on sandy riverbank",
+      "sourceUrl": "https://www.pexels.com/video/basking-crocodile-20443910/",
+      "downloadUrl": "https://videos.pexels.com/video-files/20443910/20443910-uhd_3840_2160_25fps.mp4",
+      "durationSeconds": 13,
+      "width": 3840,
+      "height": 2160,
+      "fps": 25,
+      "canvaAssetId": null,
+      "sourceOrigin": "SUPPLEMENTAL_PEXELS_DISCOVERED_2026-11-22",
+      "status": "SOURCE_VERIFIED_DOWNLOAD_PENDING",
+      "visualReview": "Pexels page describes a Nile crocodile resting on a sandy riverbank in the wild; download, full decode and visual review pending.",
+      "thirdPartyRightsReview": "PENDING",
+      "rightsVerified": false,
+      "humanReviewed": false,
+      "productionEligible": false,
+      "releaseEligible": false,
+      "publicPublishingEnabled": false,
+      "selectedForProduction": false,
+      "fullDecode": "PENDING"
     }
   ],
   "notes": [
@@ -180,7 +203,8 @@
     "A contact sheet and individual preview frames were generated. Sampled-frame observations are recorded per asset; this is not complete human playback or third-party-rights clearance.",
     "The 31702202 close-up is very dark and may be excluded for technical quality; 31702221 needs habitat-context review. The other three are promising visual candidates, pending full playback and rights review.",
     "The five clips total 137.97 seconds, insufficient by themselves for the planned 6–10 minute long-form film without additional unique footage. Do not loop or misrepresent separate locations as one encounter.",
-    "Keep source audio out unless separately licensed; no narration, music, final render, publication or release authorization is included."
+    "Keep source audio out unless separately licensed; no narration, music, final render, publication or release authorization is included.",
+    "One supplemental Pexels Nile-crocodile source (20443910, Floating Rabbit) was independently identified from its Pexels page and direct download link on 2026-11-22; it is not claimed as a previously shared Canva import and remains download/review pending."
   ],
   "acquisition": {
     "workflowRunId": 44975292889,
