@@ -70,7 +70,9 @@
       "licenseEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "thirdPartyRightsReviewed": false,
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
-      "sha256": null
+      "sha256": null,
+      "selectedForProduction": false,
+      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
     },
     {
       "canvaAssetId": "VAHZ9hEjS0U",
@@ -130,7 +132,9 @@
       "licenseEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "thirdPartyRightsReviewed": false,
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
-      "sha256": null
+      "sha256": null,
+      "selectedForProduction": false,
+      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
     },
     {
       "canvaAssetId": "VAHZ9niQJoo",
@@ -190,7 +194,9 @@
       "licenseEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "thirdPartyRightsReviewed": false,
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
-      "sha256": null
+      "sha256": null,
+      "selectedForProduction": false,
+      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
     },
     {
       "canvaAssetId": "VAHZ9i3Hx6U",
@@ -250,7 +256,9 @@
       "licenseEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "thirdPartyRightsReviewed": false,
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
-      "sha256": null
+      "sha256": null,
+      "selectedForProduction": false,
+      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
     },
     {
       "canvaAssetId": "VAHZ9oFCiak",
@@ -304,7 +312,9 @@
       "platformLicenseReviewed": false,
       "licenseEvidencePath": null,
       "thirdPartyRightsReviewed": false,
-      "rightsEvidencePath": null
+      "rightsEvidencePath": null,
+      "selectedForProduction": false,
+      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
     }
   ],
   "blockingEvidence": [
@@ -333,5 +343,12 @@
     "importedCanvaAssetsProductionEligible": false,
     "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
+  },
+  "selectionPolicy": {
+    "status": "EXPLICIT_SELECTION_REQUIRED",
+    "rule": "Review eligibility and source-page metadata matches do not imply that a clip is selected for the current production. Set selectedForProduction=true only when the asset is referenced by the active render manifest and selected for that exact release.",
+    "currentReleaseSelectedAssetCount": 0,
+    "activeShort001Sources": "content/short-001-acquisition-manifest.json",
+    "activeLongFormSources": "content/long-form-render-manifest.json"
   }
 }
