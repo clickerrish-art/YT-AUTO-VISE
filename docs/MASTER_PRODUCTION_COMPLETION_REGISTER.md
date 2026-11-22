@@ -57,14 +57,22 @@ Pexels licence evidence: `content/media/pexels-license-evidence-2026-11-22.md`
 
 ### Crocodile footage acquisition
 
-Five Pexels crocodile candidates have been imported into Canva for the Nile crocodile documentary:
-- Johnny Tilly — Pexels 30026544, 36 seconds, South Africa.
-- MC G'Zay — Pexels 31702202, 10 seconds.
-- MC G'Zay — Pexels 31702221, 17 seconds, Kenya.
-- MC G'Zay — Pexels 31702245, 13 seconds.
-- Floating Rabbit — Pexels 31998380, 60 seconds, Lower Zambezi, Zambia.
+Five Pexels crocodile candidates were imported into Canva and their five original MP4s were subsequently acquired for review:
+- Johnny Tilly — Pexels 30026544, actual 36.240 seconds, South Africa.
+- MC G'Zay — Pexels 31702202, actual 10.444 seconds, vertical close-up.
+- MC G'Zay — Pexels 31702221, actual 17.618 seconds, Kenya.
+- MC G'Zay — Pexels 31702245, actual 13.480 seconds, natural-habitat shot.
+- Floating Rabbit — Pexels 31998380, actual 60.193 seconds, Lower Zambezi, Zambia.
 
-Canva asset IDs, source pages and current acquisition state are in `content/media/pexels-crocodile-candidates-2026-11-22.json`. These five originals are **not yet present as local MP4 bytes**; no local SHA-256, ffprobe, full decode or full visual review is claimed. The acquisition script `scripts/acquire-crocodile-footage-review.mjs` now downloads and verifies them for review only. Short 001 acquisition is handled by `scripts/acquire-short-001-assets.mjs`; the enclosure clip is excluded.
+Original source acquisition: GitHub Actions run 44975292889, artifact 14735172901 (451,078,011 bytes; expires 6 December 2026). All five MP4s passed ffprobe and complete FFmpeg decoding; per-asset SHA-256 values are in `content/media/pexels-crocodile-candidates-2026-11-22.json`. Total original footage duration is 137.974967 seconds.
+
+Human-review proxies: run 44978177399, artifact 14736034084 (44,522,612 bytes; expires 29 November 2026). Five aspect-safe proxy renders, a contact sheet and the acquisition manifest were uploaded successfully, retaining source audio where present. Proxy creation passed; full human playback has not yet been completed.
+
+Preliminary sampled-frame screening identifies three review candidates and two excluded/held clips. **Zero clips are selected for production or release-cleared.** Third-party rights, complete human playback, exact scene-to-claim mapping and owner selection remain mandatory. Keep South Africa, Kenya and Zambia as separate locations and never imply that separate clips document one continuous encounter.
+
+The supplemental Pexels 20443910 (Floating Rabbit) is a discovered candidate only; it was not included in the five-file artifact and is correctly recorded as `DISCOVERED_NOT_ACQUIRED`. Do not count it as acquired or use it in the edit until separately downloaded, hashed, probed and decoded.
+
+Canva asset IDs and source pages are in `content/media/pexels-crocodile-candidates-2026-11-22.json`. The acquisition script `scripts/acquire-crocodile-footage-review.mjs` acquires source media for review only. Short 001 acquisition is handled by `scripts/acquire-short-001-assets.mjs`; its enclosure clip remains excluded.
 
 ### Software and policy corrections
 
