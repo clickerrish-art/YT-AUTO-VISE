@@ -41,6 +41,8 @@
     "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
     "reviewOnlyPreview": "media/rendered-drafts/SonicVhibez_Short001_Visual_Review_ONLY.mp4",
-    "releaseEligible": false
+    "releaseEligible": false,
+    "stockVideoFootageAllowed": true,
+    "stockPhotographsAllowed": false
   }
 }
