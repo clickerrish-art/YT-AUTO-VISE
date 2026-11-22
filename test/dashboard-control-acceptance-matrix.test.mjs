@@ -184,6 +184,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(latestHead.nodeFailed, 0);
   assert.equal(latestHead.nodeSkipped, 0);
   assert.equal(latestHead.pythonTests, 108);
-  assert.equal(latestHead.npmAuditVulnerabilities, 0);
+  assert.equal(latestHead.npmAuditVulnerabilities, null);
+  assert.equal(latestHead.npmAuditLastVerifiedSha, historicalAutomationEvidenceSha);
   assert.equal(latestHead.overallAcceptance, "NOT_TESTED");
 });
