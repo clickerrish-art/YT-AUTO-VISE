@@ -3,6 +3,7 @@
 **Status:** SCRIPT DRAFT — a 55.033-second silent visual-review preview exists (720×1280; SHA-256 `c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844`). A 55.722-second HeyGen Roderic sample is internal-evaluation-only and prohibited for public/commercial use. Speechma Andrew (English, United States, male standard voice) is selected for a manual zero-cost browser audition only; no Andrew MP3, licence verification, final audio hash, listening review or production approval exists. The existing SRT aligns to the Roderic audition and must not be used as final captions. Not a final render; not uploaded, scheduled or published  
 **Weekly allowance:** Existing item 1 of 2; this is a revision, not a third Short  
 **Channel:** SonicVhibez only  
+**Brand separation:** This content is for SonicVhibez only, never Nature Frontiers.  
 **Target runtime:** 55 seconds  
 **Format:** 9:16 vertical  
 **Selected audition voice:** Speechma Andrew — English (United States), male standard. Manual browser audition only; no audio has been generated or approved. Do not automate the Speechma site, use a paid upgrade, or substitute another voice. Verify the exact voice and input rights before production use  
@@ -11,9 +12,9 @@
 ## YouTube title
 Wildlife Documentary Storytelling: 3 Shots, One Clear Story
 
-## Narration draft (139 words; approximately 55 seconds at 151 words per minute; record and retime against approved final audio before rendering)
+## Narration draft (140 words; approximately 55 seconds at 151 words per minute; record and retime against approved final audio before rendering)
 
-Want better wildlife videos? Start with one clear question, not a pile of random animal clips. These three clips are separate examples, not one encounter. In your own film, follow one real behaviour and keep its related shots in sequence. Plan three shot roles: a wide habitat view, a meaningful detail, and the behaviour itself. Use only footage you have permission to publish. Keep a safe distance. Never bait, chase or disturb wildlife. Let natural movement tell the story. Cut pauses that add no information, use readable captions and music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, explore this resource. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The Complete YouTube Wildlife Creator's Vault – Premium Combo PDF is linked in the description.
+Want better wildlife videos? Start with one clear question, not a pile of random animal clips. These three clips are separate examples, not one encounter. In your own film, follow one real behaviour and keep its related shots in sequence. Plan three shot roles: a wide habitat view, a meaningful detail, and the behaviour itself. Use only footage you have permission to publish. Keep a safe distance. Never bait, chase, or disturb wildlife. Let natural movement tell the story. Cut pauses that add no information, use readable captions and only music you have permission to use. Finish with one useful takeaway. For more wildlife creator planning, explore this resource. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. The Complete YouTube Wildlife Creator's Vault – Premium Combo PDF is linked in the description.
 
 ## Draft description — internal hold, not publish-ready
 
@@ -54,7 +55,7 @@ These are vidIQ estimated monthly searches and competition indicators, not indep
 | how to make wildlife documentary | 18,193 | 64 | 32 | +20.4% |
 | wildlife filmmaking tips (seed) | <750 | 0 | 17 | unavailable |
 
-The title leads with the broad, directly relevant “wildlife documentary” phrase, while the description and tags narrow the lesson to storytelling and three-shot structure. The low-demand seed is retained only as a supporting phrase. YouTube search results also surfaced tutorials on wildlife documentary storytelling and beginner documentary planning, supporting an instructional rather than trend-chasing angle. No third-party SEO score is claimed.
+The title leads with the broad, directly relevant “wildlife documentary” phrase, while the description and tags narrow the lesson to storytelling and three-shot structure. The low-demand seed is retained only as a supporting phrase. YouTube search results also surfaced tutorials on wildlife documentary storytelling and beginner documentary planning, supporting an instructional rather than trend-chasing angle. No third-party SEO score is claimed. No SEO score, ranking, reach, or sales outcome is guaranteed.
 
 ## Hashtags
 
