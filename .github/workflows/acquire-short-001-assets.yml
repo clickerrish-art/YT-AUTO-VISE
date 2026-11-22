@@ -9,6 +9,8 @@ on:
       - "scripts/acquire-crocodile-footage-review.mjs"
       - "scripts/acquire-previously-shared-pexels-candidates.mjs"
       - "content/media/pexels-user-shared-candidates-2026-11-22.json"
+      - "scripts/acquire-user-shared-pixabay-candidates.mjs"
+      - "content/media/pixabay-user-shared-candidates-2026-11-22.json"
       - "content/approved-pexels-footage.json"
       - "content/owner-media-policy-override-2026-11-22.json"
       - "content/media/pexels-license-evidence-2026-11-22.md"
@@ -115,5 +117,19 @@ jobs:
         with:
           name: sonicvhibez-previously-shared-pexels-review-assets
           path: artifacts/previously-shared-pexels-candidates/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Check previously shared Pixabay acquisition script syntax
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pixabay]')
+        run: node --check scripts/acquire-user-shared-pixabay-candidates.mjs
+      - name: Acquire six previously shared Pixabay sources for review
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pixabay]')
+        run: node scripts/acquire-user-shared-pixabay-candidates.mjs
+      - name: Upload previously shared Pixabay originals and evidence
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pixabay]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-user-shared-pixabay-review-assets
+          path: artifacts/user-shared-pixabay-candidates/
           if-no-files-found: error
           retention-days: 14
