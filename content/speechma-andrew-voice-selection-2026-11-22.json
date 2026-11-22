@@ -40,6 +40,16 @@
       "maximumCharactersPerStandardConversion": 2000,
       "downloadFormat": "MP3",
       "securityCodeRequiredPerGeneration": true
+    },
+    "automationPolicy": {
+      "freeSite": "MANUAL_BROWSER_ONLY",
+      "scriptsBotsAndAutomatedCaptchaSolving": "PROHIBITED_BY_TERMS",
+      "onlyPermittedAutomation": "OFFICIAL_SPEECHMA_API",
+      "officialApiPricing": "PAID; NOT_AUTHORIZED_UNDER_ZERO_COST_CONSTRAINT",
+      "securityCodeRequiredPerGeneration": true,
+      "maximumCharactersPerStandardConversion": 2000,
+      "browserHistoryLocalOnly": true,
+      "retentionRequirement": "Download MP3 and preserve it in a project-controlled artifact location."
     }
   },
   "audition": {
@@ -52,7 +62,9 @@
     "pronunciationReview": "PENDING",
     "pacingAndExpressivenessReview": "PENDING",
     "productionApproved": false,
-    "publicationAuthorized": false
+    "publicationAuthorized": false,
+    "manualBrowserActionRequired": true,
+    "automationAllowed": false
   },
   "safety": {
     "paidSpend": false,
@@ -61,11 +73,11 @@
     "captionsSynchronized": false,
     "publishingEnabled": false
   },
-  "nextRequiredAction": "Generate a short Andrew audition using the Speechma free browser tool, download the MP3, preserve it in a project-controlled artifact location, verify duration and audio integrity, then obtain owner listening approval before production use.",
+  "nextRequiredAction": "Manually generate a short Andrew audition in the Speechma free browser tool, enter the displayed security code, download the MP3, preserve it in a project-controlled artifact location, verify duration and audio integrity, then obtain owner listening approval before production use. Do not automate the free site or use the paid API.",
   "notes": [
     "This decision supersedes the previous Wade review-only selection as the intended zero-cost audition candidate.",
     "Andrew's English, Male, United States listing is visible in Speechma's official English voice library; a dedicated voice ID was not independently verified.",
     "No audition has been generated or approved. Selection of a candidate is not final narrator approval.",
-    "No browser automation was run because the available browser-automation wallet is below zero and the user requires zero cost."
+    "The free-site Terms prohibit scripts, bots and automated CAPTCHA solving; only the official API is permitted for automation, and that API is paid. The zero-cost audition must be performed manually in the browser with its per-generation security code."
   ]
 }
