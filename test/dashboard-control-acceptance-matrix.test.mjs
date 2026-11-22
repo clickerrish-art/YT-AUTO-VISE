@@ -168,4 +168,13 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
 
   assert.equal(matrix.disclaimer.includes("exact tested commit"), true);
   assert.equal(dashboardEvidence.releaseBoundary.includes("does not authorize uploads"), true);
+
+  const latestHead = matrix.latestHeadVerification;
+  assert.equal(latestHead.sourceTestSha, "ed924e6a2ab131c0eed91b7637b1dfc1ea684e5a");
+  assert.equal(latestHead.browserRunId, 45062368950);
+  assert.equal(latestHead.browserJourneys.passed, 41);
+  assert.equal(latestHead.nodeTests, 1129);
+  assert.equal(latestHead.pythonTests, 108);
+  assert.equal(latestHead.npmAuditVulnerabilities, 0);
+  assert.equal(latestHead.overallAcceptance, "NOT_TESTED");
 });
