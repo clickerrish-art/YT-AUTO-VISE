@@ -1314,3 +1314,44 @@ The exact-head readiness report lists:
 14. **Nature Frontiers/Meta separation:** remove the cross-brand SonicVhibez YouTube association from the Nature Frontiers Metricool configuration through authorized owner UI/support; reconcile the 20 legacy drafts and eight `draft=false/autoPublish=true` records. Do not publish YouTube through Metricool. Keep Nature Frontiers separate from SonicVhibez.
 
 **Release remains HOLD.** Engineering validation, queue readiness and dashboard journeys now pass, but no final wildlife production package, rights clearance, narrator approval, owner queue mapping, production deployment, private upload authorization or verified live publication exists. The 27 blockers remain the production completion gate.
+
+
+---
+
+## Latest exact-head completion checkpoint — 22 November 2026
+
+**Verified application/test tree:** `e3f9ea8bdebc06e6c1d6ed7ae496480eadc12119`. The next register update is documentation-only.
+
+### Current exact-head validation
+
+- [Validate SonicVhibez automation — 44971946718](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971946718): **PASS**. Node.js test totals: **1,098 passed / 0 failed / 0 skipped**. Python: **104 passed**. Locked dependency install, isolated lifecycle install, npm audit, FFmpeg renderer integration, Speechma policy guard, campaign/disclosure checks, promotional Shorts cap, review metadata, queue invariants, JavaScript syntax, Python compilation and read-only Cloudflare staging smoke all passed.
+- Production readiness [44971946717](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971946717): **HOLD — 27 blockers**. Diagnostic report uploaded. No production upload or schedule was attempted.
+- Cloudflare runner bridge [44971946720](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971946720): PASS.
+- Deployment recovery smoke [44971946729](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971946729): PASS; this is not proof of live production deployment or independent restore.
+- Queue readiness [44971543131](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543131): PASS; 1,100 Node tests, zero failures/skips, queue policy validation and isolated proposal generation.
+- Dashboard E2E [44971543086](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543086): PASS, 41/41 browser journeys.
+- Source recovery bundle [44971543176](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44971543176): PASS.
+
+### Queue identity template is now persisted
+
+`content/queue-identity-approval.template.json` is now in the repository. It is explicitly non-approving:
+- `status=PENDING_OWNER_APPROVAL`
+- `ownerApproved=false`
+- `approvedBy`, `approvedAt` and `approvalReference` are blank
+- Both `detailedItemId` values remain blank; cycle positions 1 and 2 are recorded
+- The two SHA-256 fields pin the canonical operational and detailed queue JSON objects
+- A regression test recomputes both hashes and rejects stale or modified queue data
+
+This template is not `content/queue-identity-approval.json` and cannot satisfy the owner approval gate. The owner must select both detailed identities, explicitly designate cycle position 1, complete the approval fields and create the signed approval file. Do not infer mappings from similar titles.
+
+### Production gate remains unchanged
+
+The exact-head readiness report still lists 27 blockers: queue identity approval (1); short package provenance, narration, files, licences and human review (9); long-form package provenance, narration, footage, captions, licences and human review (10); metadata review/rights/compliance (3); exact-hash quality approval (1); final short MP4 (1); complete owner-reviewed YouTube history (1); and upload-attempt reconciliation (1).
+
+The existing public YouTube video remains unclassified pending owner review. The manual Speechma Andrew audition remains outstanding. No original production wildlife media, approved production narration, final renders, captions, final thumbnail, exact-hash quality approval, one-shot private-upload authorization or verified live publication exists.
+
+### Repository state
+
+`main` remains unchanged at `3795519ccbf58fd02d74458624b58dd2e44a88c0`. PR #1 remains OPEN / DRAFT / UNMERGED; mergeable=false. The implementation branch remains 5,240 commits ahead / 17 behind at the verified application tree, with 530 changed files and merge base `45352b73bb6cc4787b2a49988b575afb754ab627`. GIT-002 semantic review remains mandatory; do not merge or alter `main`.
+
+**Release remains HOLD.** Passing engineering tests does not clear the 27 production blockers or authorize publishing.
