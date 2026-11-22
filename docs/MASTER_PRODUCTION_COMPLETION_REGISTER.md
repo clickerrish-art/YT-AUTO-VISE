@@ -1,5 +1,62 @@
 # Latest master-completion snapshot — 19 November 2026
 
+## Execution addendum — 22 November 2026 (current media-policy and production update)
+
+> This addendum is the current operational status and supersedes older statements below that prohibit all Pexels/Pixabay stock for SonicVhibez. Historical snapshots remain preserved for audit. Nature Frontiers remains a separate brand and its independent media policy is not changed by this SonicVhibez owner instruction.
+
+### Owner media-policy decision
+
+The owner explicitly instructed: use previously shared footage unless an individual asset is not legally usable, noting that approximately 99% of the shared footage comes from Pexels and Pixabay. Effective 22 November 2026, qualifying Pexels/Pixabay licensed stock is allowed for SonicVhibez subject to exact source-page provenance, platform-licence evidence, original MP4 acquisition, SHA-256, technical probe and full decode, third-party-rights review, human visual review and final owner approval. Pexels/Pixabay licences are not public-domain declarations and do not automatically clear people, property, trademarks, music or other third-party rights. AI-generated wildlife visuals remain prohibited. Other stock/archive sources remain excluded unless separately approved. Public and unattended publishing remain disabled.
+
+Policy evidence: `content/owner-media-policy-override-2026-11-22.json`  
+Pexels licence evidence: `content/media/pexels-license-evidence-2026-11-22.md`
+
+### Completed media recovery and first review render
+
+- Recovered the four-clip Short 001 Pexels acquisition ZIP from GitHub Actions artifact **14700765594**.
+- All four original MP4 files were extracted; their SHA-256 values matched the historical acquisition manifest; all four completed full FFmpeg decode.
+- Three clips were selected for a silent visual review: lion walking (lifeofhicham), elephant mother and calf (ROMAN ODINTSOV), and resting lions (Lorenzo Boldorini). The resting-lion source includes a visible dark collar/strap; its context is not verified and is explicitly flagged.
+- The fourth clip (MC G'Zay, Pexels 31702128) is excluded from this edit because the sampled frames show an enclosure/barrier and a partial foreground person. This is an editorial exclusion, not a claim that the platform licence is invalid.
+- Created `SonicVhibez_Short001_Visual_Review_ONLY.mp4`: 55.033 seconds, 720×1280, H.264, 30 fps, no audio, full decode PASS, SHA-256 `c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844`. It uses three separate examples and does not imply one continuous animal encounter. This is a review-only visual preview, not a final narrated Short or publication master.
+- Evidence: `content/short-001-visual-review-evidence-2026-11-22.json`. The MP4 is retained as a conversation deliverable, not committed as a repository binary.
+
+### Crocodile footage acquisition
+
+Five Pexels crocodile candidates have been imported into Canva for the Nile crocodile documentary:
+- Johnny Tilly — Pexels 30026544, 36 seconds, South Africa.
+- MC G'Zay — Pexels 31702202, 10 seconds.
+- MC G'Zay — Pexels 31702221, 17 seconds, Kenya.
+- MC G'Zay — Pexels 31702245, 13 seconds.
+- Floating Rabbit — Pexels 31998380, 60 seconds, Lower Zambezi, Zambia.
+
+Canva asset IDs, source pages and current acquisition state are in `content/media/pexels-crocodile-candidates-2026-11-22.json`. These five originals are **not yet present as local MP4 bytes**; no local SHA-256, ffprobe, full decode or full visual review is claimed. The acquisition script `scripts/acquire-crocodile-footage-review.mjs` now downloads and verifies them for review only. Short 001 acquisition is handled by `scripts/acquire-short-001-assets.mjs`; the enclosure clip is excluded.
+
+### Software and policy corrections
+
+- The reviewed-footage renderer now accepts original recordings and qualifying Pexels/Pixabay stock for review renders when platform-licence evidence is present. Incomplete rights checks force a review-only hold. The renderer never grants release approval.
+- Updated Short 001, long-form, queue and weekly-plan media policy fields; updated Pexels source records; preserved Nature Frontiers' separate stock-exclusion policy.
+- Added a conditional source-acquisition stage to `.github/workflows/validate-automation.yml`. It runs only on a push to the implementation branch whose commit message contains `[acquire-media]`, and only after the full validation job passes. It uploads the acquired source files and evidence as short-retention review artifacts; it does not render or publish.
+- A previous exact-head regression run had 1,098 passes, 3 failures and zero skips. Those three failures were stale assertions enforcing the superseded original-only Pexels policy. The corresponding test assertions have been updated; the new exact-SHA validation run must pass before this change is considered verified.
+
+### Remaining production and operational blockers
+
+1. **Short 001 narration:** Speechma Andrew is selected for a manual, zero-cost browser audition only. No approved MP3, exact audio hash, full listening review or owner production approval exists. Free-site automation is prohibited; do not automate the browser or substitute another voice.
+2. **Short 001 rights/editorial:** Complete full playback and third-party-rights review for the three selected clips; resolve the resting-lion collar/strap context; approve the exact asset list. The 720×1280 preview must be rebuilt at final 1080×1920 after approved narration and captions exist.
+3. **Long-form 001 footage:** Acquire the five crocodile Pexels MP4s into a review artifact; verify original bytes, SHA-256, duration, dimensions, frame rate and full decode; inspect every clip; keep South Africa, Kenya and Zambia contexts distinct; select only scenes that match the factual script.
+4. **Long-form 001 research:** Complete owner and qualified zoological review of the Nile crocodile script and scene-to-claim map. Do not infer animal intent, location, species or behaviour beyond evidence.
+5. **Narration/captions:** Generate Andrew manually on Speechma, download the MP3, record its exact hash, listen in full, obtain owner approval, then regenerate and validate captions against that exact audio. Existing HeyGen Roderic/Wade free-plan audio remains prohibited for public branded/commercial production.
+6. **Final packaging:** Produce final 16:9 long-form and 9:16 Short exports; inspect full playback; create truthful thumbnails; approve titles, descriptions, tags, disclosures and product links; record all final hashes and source credits.
+7. **YouTube:** Reconfirm the exact SonicVhibez channel identity and upload-capable OAuth scope; reconcile complete public/private/unlisted history and upload-attempt ledger; private upload only after exact one-shot owner authorization; read back remote video ID, privacy and metadata. No public/unattended upload.
+8. **Scheduling:** Keep the rolling `long_form → long_form → short` sequence, Africa/Johannesburg timezone, minimum 72 elapsed hours between actual publications and no same Johannesburg calendar day. A full three-gap cycle is at least 216 hours; no seven-day publication promise is made. Actual remote history still gates scheduling.
+9. **Dashboard/API/state/recovery:** Continue exact-SHA acceptance for user journeys, authenticated routes, durable state, leases, retry/backoff, dead-letter handling, cancellation, restart recovery, backup/restore and remote provider reconciliation. Passing unit tests alone does not close live-provider gates.
+10. **Facebook/Meta:** Nature Frontiers remains separate from SonicVhibez. Keep Meta publishing disabled until Page identity, permissions, draft approval, rights and provider-side receipts are independently verified.
+11. **Release/deployment/Git:** Preserve the implementation branch and draft/unmerged PR state. Do not merge, close, mark ready, reset, rebase, force-push or rewrite history. Verify deployment and all release gates at the exact final SHA.
+
+**Current release decision: HOLD — NOT MASTER COMPLETE.** No final narrated Short, final long-form documentary, publication-ready media, private upload receipt or public publication is claimed. The first recovered footage preview and policy corrections are real progress, but they do not establish 100% completion.
+
+---
+
+
 **Latest branch inventory checkpoint:** `4f38aa392f97e944c97c3d3c312be08e57686069` (run [44595474867](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595474867)); current exact source/test candidate: `4f38aa392f97e944c97c3d3c312be08e57686069`. Full automation/security [44595474749](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595474749) passed **1,038 Node tests across 181 files, 87 Python tests, zero failures/skips and zero npm audit vulnerabilities**.  
 **Current master acceptance register:** 89 requirements — **72 PASS / 7 NOT_TESTED / 10 BLOCKED / 0 FAIL**. SCHED-003 is now PASS from explicit owner approval; the live YouTube history gate remains open.  
 Release decision: **HOLD**. This is not a production-complete or risk-free release.
