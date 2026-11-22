@@ -96,7 +96,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   const port = await listen(portServer);
   await new Promise((resolve, reject) => portServer.close(error => error ? reject(error) : resolve()));
   const preload = pathToFileURL(path.join(projectRoot, "test-support", "meta-provider-draft-fetch-preload.mjs")).href;
-  const child = spawn(process.execPath, [path.join(projectRoot, "scripts", "dashboard-server.mjs")], {
+  const childOptions = {
     cwd: stateDir,
     env: {
       ...process.env,
@@ -118,27 +118,45 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
       FACEBOOK_PUBLISH_ENABLED: "NO"
     },
     stdio: ["ignore", "pipe", "pipe"]
-  });
+  };
   let logs = "";
-  child.stdout.on("data", chunk => { logs += chunk.toString(); });
-  child.stderr.on("data", chunk => { logs += chunk.toString(); });
+  const startChild = () => {
+    const processChild = spawn(process.execPath, [path.join(projectRoot, "scripts", "dashboard-server.mjs")], childOptions);
+    processChild.stdout.on("data", chunk => { logs += chunk.toString(); });
+    processChild.stderr.on("data", chunk => { logs += chunk.toString(); });
+    return processChild;
+  };
+  const waitReady = async () => {
+    let ready = false;
+    for (let i = 0; i < 60; i++) {
+      try {
+        const response = await fetch("http://127.0.0.1:" + port + "/healthz", { headers: { connection: "close" } });
+        if (response.ok) { ready = true; break; }
+      } catch {}
+      await new Promise(resolve => setTimeout(resolve, 50));
+    }
+    assert.equal(ready, true, "dashboard server did not become ready: " + logs);
+  };
+  let child = startChild();
   t.after(async () => {
-    child.kill("SIGTERM");
+    if (child && child.exitCode === null) child.kill("SIGTERM");
     graph.close();
     fs.rmSync(stateDir, { recursive: true, force: true });
     fs.rmSync(mediaPath, { force: true });
     fs.rmSync(licensePath, { force: true });
   });
   const base = "http://127.0.0.1:" + port;
-  let ready = false;
-  for (let i = 0; i < 60; i++) {
-    try {
-      const response = await fetch(base + "/healthz", { headers: { connection: "close" } });
-      if (response.ok) { ready = true; break; }
-    } catch {}
-    await new Promise(resolve => setTimeout(resolve, 50));
-  }
-  assert.equal(ready, true, "dashboard server did not become ready: " + logs);
+  await waitReady();
+  const unauthenticated = await fetch(base + "/api/facebook/drafts/provider", {
+    method: "POST", headers: { "content-type": "application/json", connection: "close" },
+    body: JSON.stringify({ draftId: "unauthorized", confirmProviderDraft: true })
+  });
+  assert.equal(unauthenticated.status, 401, "provider-draft mutation must reject unauthenticated callers");
+  const malformed = await request(base, "/api/facebook/drafts/provider", "POST", {
+    draftId: "malformed", confirmProviderDraft: false
+  }, operatorToken);
+  assert.equal(malformed.status, 400, "provider-draft mutation must require explicit one-shot confirmation");
+  assert.equal(createCalls, 0, "auth and input rejection must happen before any remote mutation");
 
   const verified = await request(base, "/api/facebook/verify-page", "POST", {}, operatorToken);
   assert.equal(verified.status, 200, await verified.text());
@@ -201,8 +219,33 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   assert.equal(state.publishingEnabled, false);
   assert.equal(state.providerDraftsEnabled, true);
 
+  const preparedAuditCount = state.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_ATTEMPT_PREPARED").length;
+  const verifiedAuditCount = state.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_VERIFIED_UNPUBLISHED").length;
+  assert.equal(preparedAuditCount, 1);
+  assert.equal(verifiedAuditCount, 1);
+
+  await new Promise((resolve, reject) => {
+    child.once("error", reject);
+    child.once("exit", resolve);
+    child.kill("SIGTERM");
+  });
+  child = startChild();
+  await waitReady();
+
+  const restoredResponse = await request(base, "/api/facebook/state", "GET", undefined, operatorToken);
+  assert.equal(restoredResponse.status, 200);
+  const restored = await restoredResponse.json();
+  const restoredAttempt = restored.providerDraftAttempts?.find(item => item.id === attempt.id);
+  assert.ok(restoredAttempt, "provider-draft attempt must survive a full dashboard process restart");
+  assert.equal(restoredAttempt.status, "UNPUBLISHED_PROVIDER_DRAFT_VERIFIED");
+  assert.equal(restoredAttempt.remotePostId, remotePostId);
+  assert.equal(restored.publishingEnabled, false);
+  assert.equal(restored.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_ATTEMPT_PREPARED").length, preparedAuditCount);
+  assert.equal(restored.audit.filter(event => event.action === "FACEBOOK_PROVIDER_DRAFT_VERIFIED_UNPUBLISHED").length, verifiedAuditCount);
+
   const reconcile = await request(base, "/api/facebook/drafts/provider/reconcile", "POST", { draftId, attemptId: attempt.id }, operatorToken);
   const reconciled = await readJson(reconcile);
   assert.equal(reconciled.status, 200, JSON.stringify(reconciled.body));
   assert.equal(createCalls, 1, "reconciliation must remain read-only and never create a second object");
+  assert.equal(readBackCalls, 1, "reusing a verified attempt after restart must not repeat provider read-back");
 });
