@@ -142,7 +142,7 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.ok(script.includes("No audition audio has been generated"));
   assert.ok(script.includes("No narrator is approved for production."));
   assert.ok(script.includes("No paid upgrade is authorized."));
-  assert.ok(metadata.includes("selected Wade — Resonant & Narrative"));
+  assert.ok(metadata.includes("selected Speechma Andrew"));
   assert.ok(metadata.includes("zero-cost browser audition only"));
   assert.ok(metadata.includes("No audition audio has been generated"));
   assert.ok(metadata.includes("No narrator is approved for production"));
