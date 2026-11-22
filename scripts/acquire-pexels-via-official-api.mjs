@@ -36,6 +36,7 @@ function buildSourceInventory() {
   const approved = readJson("content/approved-pexels-footage.json");
   const crocodile = readJson("content/media/pexels-crocodile-candidates-2026-11-22.json");
   const userShared = readJson("content/media/pexels-user-shared-candidates-2026-11-22.json");
+  const importedInventory = readJson("content/sonicvhibez-imported-media-inventory.json");
   const byId = new Map();
 
   const add = (idValue, source) => {
@@ -99,6 +100,25 @@ function buildSourceInventory() {
       sourceGroup: "crocodile-long-form",
       editorialStatus: "REVIEW_ONLY_PENDING_FULL_PLAYBACK",
       editorialNotes: asset.editorialRisk ?? null
+    });
+  }
+
+  for (const asset of importedInventory.assets ?? []) {
+    const sourceUrl = asset.sourcePageUrl ?? asset.candidateSourceUrl ?? asset.originalSourceUrl ?? null;
+    if (!sourceUrl || !sourceUrl.includes("pexels.com/video/")) continue;
+    add(sourceUrl, {
+      sourceUrl,
+      title: asset.sourceTitle ?? asset.subject ?? asset.title,
+      expectedCreator: asset.creatorName ?? asset.candidateCreator ?? null,
+      expectedDurationSeconds: asset.sourcePageMetadata?.durationSeconds ?? asset.canvaMetadata?.durationSeconds ?? null,
+      expectedWidth: asset.sourcePageMetadata?.width ?? asset.canvaMetadata?.width ?? null,
+      expectedHeight: asset.sourcePageMetadata?.height ?? asset.canvaMetadata?.height ?? null,
+      expectedFps: asset.sourcePageMetadata?.fps ?? null,
+      canvaAssetId: asset.canvaAssetId ?? null,
+      sourceGroup: "previously-imported-canva-library",
+      editorialStatus: asset.status ?? "REVIEW_ONLY_PENDING_FULL_PLAYBACK",
+      editorialExcluded: asset.excludedFromProduction === true,
+      editorialNotes: asset.exclusionReason ?? null
     });
   }
 
