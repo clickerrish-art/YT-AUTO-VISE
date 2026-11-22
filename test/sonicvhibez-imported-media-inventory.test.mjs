@@ -37,7 +37,7 @@ test("imported Canva clips remain held from release while exact-match Pexels sou
 
 test("general Pexels license policy and candidate pages are not treated as asset-specific rights clearance", () => {
   assert.equal(inventory.policyReference.reviewStatus, "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY");
-  assert.match(inventory.notes, /permits qualifying Pexels\\/Pixabay stock/);
+  assert.ok(inventory.notes.includes("permits qualifying Pexels/Pixabay stock"));
   assert.match(inventory.notes, /remain held/);
   assert.ok(inventory.blockingEvidence.some(item => /not rights-cleared/i.test(item)));
   assert.equal(inventory.assets.find(asset => asset.canvaAssetId === "VAHZ9oFCiak").sourceMatchStatus, "UNRESOLVED_SOURCE_URL_AND_CREATOR_NOT_RECORDED");
