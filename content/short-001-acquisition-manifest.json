@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "project": "SonicVhibez",
   "contentId": "short-001-wildlife-video-storytelling",
-  "status": "ACQUIRED_FOR_OWNER_REVIEW_NOT_RELEASE_CLEARED",
+  "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED",
   "createdAt": "2026-11-19T12:47:41.692Z",
   "sourceSelection": "Four clips explicitly approved by the owner",
   "acquisition": {
@@ -24,8 +24,8 @@
     "officialCommercialUseHelpUrl": "https://help.pexels.com/hc/en-us/articles/360042295214-Can-I-use-the-photos-and-videos-for-a-commercial-project",
     "platformLicenseReview": {
       "reviewedAt": "2026-11-19T15:05:00Z",
-      "reviewedBy": "ChatGPT research; not owner sign-off",
-      "status": "PLATFORM_LICENSE_CONFIRMED_THIRD_PARTY_RIGHTS_REMAIN_UNVERIFIED",
+      "reviewedBy": "Official Pexels source pages and published licence terms reviewed; owner explicitly permitted qualifying Pexels/Pixabay footage on 2026-11-22.",
+      "status": "PEXELS_PLATFORM_LICENSE_CONFIRMED; OWNER_POLICY_ALLOWS_REVIEW_USE",
       "commercialUsePermittedByPlatformLicense": true,
       "attributionRequired": false,
       "attributionRecommended": true,
@@ -70,10 +70,10 @@
         "fullHumanPlaybackCompleted": false,
         "rightsVerified": false,
         "releaseEligible": false,
-        "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
+        "previewUseStatus": "USED_IN_SILENT_55_SECOND_VISUAL_REVIEW_ONLY"
       },
       "preliminaryVisualFlag": "A dark collar/strap is visible on one lion in sampled frames; its function is unverified. Do not imply an uncollared or unmonitored wild encounter; owner/editor context review is required.",
-      "productionEligibility": "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
+      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
     },
     {
       "assetId": "pexels-11760785",
@@ -107,9 +107,9 @@
         "fullHumanPlaybackCompleted": false,
         "rightsVerified": false,
         "releaseEligible": false,
-        "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
+        "previewUseStatus": "USED_IN_SILENT_55_SECOND_VISUAL_REVIEW_ONLY"
       },
-      "productionEligibility": "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
+      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
     },
     {
       "assetId": "pexels-11528208",
@@ -143,9 +143,9 @@
         "fullHumanPlaybackCompleted": false,
         "rightsVerified": false,
         "releaseEligible": false,
-        "previewUseStatus": "INCLUDED_IN_SILENT_VISUAL_REVIEW_PREVIEW_ONLY"
+        "previewUseStatus": "USED_IN_SILENT_55_SECOND_VISUAL_REVIEW_ONLY"
       },
-      "productionEligibility": "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
+      "productionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
     },
     {
       "assetId": "pexels-31702128",
@@ -182,7 +182,8 @@
         "releaseEligible": false,
         "previewUseStatus": "EXCLUDED_FROM_VISUAL_REVIEW_PREVIEW_DUE_TO_VISIBLE_ENCLOSURE_AND_PARTIAL_FOREGROUND_PERSON"
       },
-      "productionEligibility": "EXCLUDED_REFERENCE_ONLY_NOT_ORIGINAL_CREATOR_CAPTURED_MEDIA"
+      "productionEligibility": "EXCLUDED_EDITORIAL_VISIBLE_ENCLOSURE_AND_PARTIAL_PERSON",
+      "humanVisualReview": "EXCLUDED_FROM_SHORT_001_AFTER_CONTACT_SHEET_REVIEW"
     }
   ],
   "independentVerification": {
@@ -203,6 +204,17 @@
       "tool": "FFmpeg",
       "method": "Each downloaded MP4 was decoded end-to-end to a null output; no decode errors were reported.",
       "limitation": "Technical decode integrity only; not full human playback review, third-party-rights clearance, or release approval."
+    },
+    "currentChatRuntimeRecovery": {
+      "artifactId": 14700765594,
+      "archiveRecovered": true,
+      "allFourSha256Matched": true,
+      "allFourFullDecodePass": true,
+      "visualReviewPreview": "SonicVhibez_Short001_Visual_Review_ONLY.mp4",
+      "previewSha256": "c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844",
+      "previewDurationSeconds": 55.033333,
+      "previewResolution": "720x1280",
+      "previewStatus": "REVIEW_ONLY_NOT_RELEASE_CLEARED"
     }
   },
   "previews": {
@@ -216,18 +228,21 @@
     "publicPublishingEnabled": false,
     "privateUploadAuthorized": false,
     "releaseEligible": false,
-    "note": "Pexels' published platform license and the four individual source pages were checked. This confirms the platform-license terms only; possible third-party rights, complete source playback, final edit, narration rights, and human owner/compliance approval remain outstanding. The visible-enclosure clip is excluded from the current preview."
+    "note": "Pexels licensed stock is permitted for review under the 2026-11-22 owner instruction, but this acquisition manifest does not clear third-party rights, full playback, the collar context, final owner approval, narration, captions or publication. The visual review is not a release master."
   },
   "productionDisposition": {
-    "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+    "status": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY; FINAL_RELEASE_HOLD",
     "productionEligible": false,
+    "reviewRenderEligible": true,
     "policy": {
-      "originalCreatorCapturedMediaRequired": true,
-      "stockMediaAllowed": false,
+      "originalCreatorCapturedMediaRequired": false,
+      "stockMediaAllowed": true,
+      "pexelsAllowed": true,
+      "pixabayAllowed": true,
       "aiGeneratedWildlifeVisualsAllowed": false
     },
-    "reason": "The four Pexels clips were previously selected/acquired for review, but they are stock footage, not original creator-captured wildlife media. They are retained as reference-only acquisition evidence and must not be used in production as substitutes.",
-    "nextRequiredAction": "Acquire genuine original creator-captured wildlife footage with creator identity, source provenance, original file bytes, SHA-256, full technical decode, commercial-use rights and human review."
+    "reason": "Owner instruction on 2026-11-22 permits qualifying Pexels/Pixabay licensed footage. Three clips are included in a silent visual review; one enclosure clip is excluded.",
+    "nextRequiredAction": "Full playback, collar-context and third-party-rights review; owner approval; production narration and captions; final 1080x1920 export; final compliance review."
   },
   "notes": [
     "Current owner policy supersedes the historical Pexels selection: all four clips are reference-only and excluded from production because the project requires genuine original creator-captured wildlife media. The platform licence does not satisfy this requirement."
