@@ -1,6 +1,17 @@
 name: Acquire licensed wildlife footage through official APIs
 
 on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - ".github/workflows/acquire-licensed-stock-via-official-apis.yml"
+      - "scripts/acquire-pexels-via-official-api.mjs"
+      - "scripts/acquire-pixabay-via-official-api.mjs"
+      - "content/approved-pexels-footage.json"
+      - "content/owner-media-policy-override-2026-11-22.json"
+      - "content/media/pexels-crocodile-candidates-2026-11-22.json"
+      - "content/media/pexels-user-shared-candidates-2026-11-22.json"
+      - "content/media/pixabay-user-shared-candidates-2026-11-22.json"
   workflow_dispatch:
     inputs:
       review_only:
@@ -18,6 +29,7 @@ concurrency:
 
 jobs:
   acquire:
+    if: ${{ github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-official-stock-review-only]') }}
     name: Acquire and verify Pexels/Pixabay media through official APIs
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -26,6 +38,7 @@ jobs:
       PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
     steps:
       - name: Require review-only acknowledgement
+        if: github.event_name == 'workflow_dispatch'
         env:
           REVIEW_ONLY: ${{ inputs.review_only }}
         run: |
