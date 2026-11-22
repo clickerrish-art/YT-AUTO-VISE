@@ -365,16 +365,18 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595475031",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
+        "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303",
+        "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346"
       ],
       "nextAction": "Complete per-control positive success, authorization, persistence/restart, concurrency, error feedback and accessibility acceptance for every applicable control; keep DASH-001 NOT_TESTED until the complete behavioral matrix is independently accepted.",
       "assessmentCommitSha": "dcd68fab0a6df4d2142b35bf0a3edfbf49b7afe8",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Historical exact-SHA browser evidence 668a8779f8a2894f99ed935d0c8bf13f2f215e64 passed 41/41 Chromium journeys; its matrix records 121/121 controls, 17/17 forms and 15/15 cross-cutting dimensions for mapped field-interaction/expected-outcome checks. Current exact head 61d116ede6c4abc9977078e88864d8571cdadccb passes 1,043 Node tests across 181 files but has no browser E2E run; the historical 41/41 result is not current-SHA evidence. Per-control positive success, authorization, persistence, refresh/restart, concurrency, error-feedback and full accessibility acceptance remains incomplete; overallAcceptance is NOT_TESTED.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 passed dashboard browser run 45024548303 with 41/41 Chromium journeys and the acceptance matrix's 121/121 control mappings, 17/17 forms and 15/15 cross-cutting dimensions. The exact-SHA automation run 45024548346 passed 189/189 Node test files (1,107 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. These results validate field interaction, mapped form/standalone journeys, authentication, accessibility, mobile layout and selected persistence/restart/concurrency behavior. DASH-001 remains NOT_TESTED because not every applicable control has individually accepted positive-success, authorization, durable persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior; this is not a control-count-only acceptance.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T12:55:31Z"
     },
     {
       "id": "SCHED-001",
@@ -2851,23 +2853,24 @@
   },
   "latestLiveCompareAt": "2026-11-18T09:49:03+02:00",
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-    "automationRun": 44884481167,
+    "exactSourceTestSha": "6087b4088699a10359aeab99bee3d17cdd9722ad",
+    "automationRun": 45026140527,
     "nodeTestFiles": {
-      "passed": 181,
+      "passed": 189,
       "failed": 0,
       "skipped": 0
     },
     "nodeTests": {
-      "passed": 1043,
+      "passed": 1107,
       "failed": 0,
       "skipped": 0
     },
     "browserE2ERun": null,
     "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
     "lastBrowserE2E": {
-      "sourceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "run": 44778971471,
+      "sourceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "browserRun": 45024548303,
+      "run": "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303",
       "browserJourneys": {
         "passed": 41,
         "total": 41,
@@ -2876,24 +2879,24 @@
       }
     },
     "pythonTests": {
-      "passed": 87,
+      "passed": 108,
       "failed": 0,
       "skipped": 0,
-      "sourceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167"
+      "sourceSha": "6087b4088699a10359aeab99bee3d17cdd9722ad",
+      "run": "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45026140527"
     },
     "npmAuditVulnerabilities": 0,
-    "npmAuditSourceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
+    "npmAuditSourceSha": "6087b4088699a10359aeab99bee3d17cdd9722ad",
     "lockfileRun": 44884481144,
-    "runnerBridgeSafetyRun": 44884481195,
-    "deploymentRecoveryRun": 44884481161,
+    "runnerBridgeSafetyRun": 45026140600,
+    "deploymentRecoveryRun": 45026140629,
     "routeMatrix": {
       "routes": 48,
-      "overallPass": 42,
+      "overallPass": 41,
       "overallNotTested": 0,
-      "overallBlocked": 6,
+      "overallBlocked": 7,
       "authenticationNegativePass": 48,
-      "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb"
+      "sourceTestSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73"
     },
     "productionReadiness": {
       "status": "HOLD",
@@ -2901,7 +2904,7 @@
       "sourceSha": "764e2c74e0d7331e2d914498fc581ec034366c86",
       "blockers": 19
     },
-    "note": "Exact current source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb: automation/security https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167 passed 1,043 Node tests across 181/181 files, zero failures/skips; 87 Python tests, zero failures/skips; npm audit 0 vulnerabilities; JavaScript syntax and Python compilation passed; promotional Shorts plan, schedule/queue, campaign isolation and read-only Cloudflare staging checks passed. Lockfile workflow https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481144 also passed the clean locked install, 1,043 Node tests, schedule/campaign validation and syntax checks. Deployment recovery https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161 passed 2/2 tests; Cloudflare runner-bridge safety https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195 passed 4/4 tests. No browser E2E ran on this SHA; the last 41/41 browser result is historical on 668a8779f8a2894f99ed935d0c8bf13f2f215e64 (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471). The latest readiness run was on parent SHA 764e2c74e0d7331e2d914498fc581ec034366c86 and returned HOLD with 19 blockers (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44883587818); no readiness run was triggered on the content-only descendant."
+    "note": "Exact current docs/workflow/test checkpoint 6087b4088699a10359aeab99bee3d17cdd9722ad passed automation/security run 45026140527: 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 separately passed 41/41 dashboard Chromium journeys in run 45024548303 and the same full automation suite in run 45024548346. The current checkpoint adds only acceptance-evidence/workflow metadata after that application SHA; no browser run is claimed on 6087b4088699a10359aeab99bee3d17cdd9722ad. API route matrix: 41/48 accepted, 48/48 authentication-negative PASS, seven owner/provider routes remain BLOCKED. Production readiness and DASH-001 remain separate."
   },
   "latestFullNodeRegression": {
     "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
