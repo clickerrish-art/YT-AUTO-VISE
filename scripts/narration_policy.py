@@ -15,5 +15,5 @@ def require_owner_authorized_alternative_voice() -> None:
     if decision.get("alternativeVoicesAuthorized") is not True:
         raise SystemExit(
             "BLOCKED: Speechma Andrew is the only owner-selected zero-cost audition and must be generated through the browser tool. "
-            "This local Piper/Edge TTS generator is not authorized; no audio will be generated."
+            "The owner has not authorized an alternative narrator for this local Piper/Edge TTS generation; no audio will be generated."
         )
