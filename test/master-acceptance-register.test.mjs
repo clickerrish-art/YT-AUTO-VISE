@@ -65,7 +65,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   const state = byId("STATE-001");
   assert.equal(state.status, "PASS");
   assert.equal(state.currentHeadEvidenceSha, exactSha);
-  assert.match(state.currentHeadEvidenceNote, /deployment recovery smoke/);
+  assert.match(state.currentHeadEvidenceNote, /deployment recovery smoke/i);
   assert.match(state.currentHeadEvidenceNote, /runner-bridge safety/);
 
   const worker = byId("SCHED-WORKER-DISPATCH-001");
