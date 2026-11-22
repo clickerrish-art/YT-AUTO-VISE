@@ -172,7 +172,7 @@ test("Meta provider-draft API creates one unpublished object, fences concurrent 
   assert.equal(readBackCalls, 0);
 
   config.providerDraftsEnabled = true;
-  fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n", { mode: 0o600 });
 
   const verified = await request(base, "/api/facebook/verify-page", "POST", {}, operatorToken);
   assert.equal(verified.status, 200, await verified.text());
