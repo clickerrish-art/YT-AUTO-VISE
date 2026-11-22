@@ -87,13 +87,15 @@ test("non-commercial audio and unverified wildlife media cannot enter the generi
 test("Pexels stock thumbnail generation stays disabled while licensed footage acquisition is review-only", () => {
   assert.match(photoThumbnailGenerator, /BLOCKED: Pexels stock-thumbnail generation is disabled/);
   assert.doesNotMatch(photoThumbnailGenerator, /images\.pexels\.com|pexels\.com\/photo/i);
-  assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, false);
-  assert.equal(pexelsRegistry.currentProductionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.originalCreatorCapturedMediaRequired, false);
+  assert.equal(pexelsRegistry.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
   assert.match(pexelsAcquisitionWorkflow, /workflow_dispatch/);
-  assert.match(pexelsAcquisitionWorkflow, /reference_only/);
-  assert.match(pexelsAcquisitionWorkflow, /default: false/);
-  assert.match(pexelsAcquisitionWorkflow, /if: false # Disabled:/);
-  assert.doesNotMatch(pexelsAcquisitionWorkflow, /^\s*(push|pull_request|schedule):/m);
+  assert.match(pexelsAcquisitionWorkflow, /review_only/);
+  assert.match(pexelsAcquisitionWorkflow, /default: true/);
+  assert.doesNotMatch(pexelsAcquisitionWorkflow, /if: false # Disabled:/);
+  assert.match(pexelsAcquisitionWorkflow, /^\s*push:/m);
+  assert.match(pexelsAcquisitionWorkflow, /acquire-crocodile-footage-review\.mjs/);
 });
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
