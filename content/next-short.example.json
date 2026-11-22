@@ -26,5 +26,7 @@
   },
   "containsAIWildlifeVisuals": false,
   "wildlifeVisualSourcePolicy": "ORIGINAL_OR_LICENSED_PEXELS_PIXABAY_WITH_ASSET_LEVEL_REVIEW",
-  "mediaProvenanceStatus": "UNVERIFIED"
+  "mediaProvenanceStatus": "UNVERIFIED",
+  "stockVideoFootageAllowed": true,
+  "stockPhotographsAllowed": false
 }
