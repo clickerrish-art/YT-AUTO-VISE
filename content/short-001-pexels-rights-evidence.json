@@ -3,7 +3,7 @@
   "project": "SonicVhibez",
   "contentId": "short-001-wildlife-video-storytelling",
   "createdAt": "2026-11-19",
-  "status": "PLATFORM_LICENSE_DOCUMENTED_BUT_EXCLUDED_BY_CURRENT_ORIGINAL_MEDIA_REQUIREMENT",
+  "status": "PLATFORM_LICENSE_DOCUMENTED_REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22",
   "sourceLicense": {
     "name": "Pexels License",
     "url": "https://www.pexels.com/license/",
@@ -71,19 +71,28 @@
     "rightsConfirmed": false,
     "humanReviewCompleted": false,
     "publishingEnabled": false,
-    "currentProductionEligibility": false
+    "currentProductionEligibility": false,
+    "reviewRenderEligible": true,
+    "releaseEligible": false
   },
   "limitations": [
     "Pexels platform license is not a guarantee that all third-party rights, releases or permissions are present.",
-    "The three selected clips total approximately 37.65 seconds and were repeated to produce a 56.71-second visual-only timing preview; repeated footage is not a final edit decision.",
+    "The historical 56.71-second preview repeated footage. It is superseded by the 55.033-second 720x1280 review preview recorded in content/short-001-visual-review-evidence-2026-11-22.json, which uses three separate clips without repeating footage.",
     "The preview is 720x1280 and silent; final target is 1080x1920 with approved narration and synchronized captions.",
-    "No music, final thumbnail, final metadata, human video approval or private-upload authorization is included."
+    "No music, final thumbnail, final metadata, human video approval or private-upload authorization is included.",
+    "The new 55.033-second visual review remains silent and review-only; final narration, synchronized captions, full rights review and owner approval are still pending."
   ],
   "currentProductionPolicy": {
-    "status": "REFERENCE_ONLY_NOT_PRODUCTION_APPROVED",
-    "originalCreatorCapturedMediaRequired": true,
-    "stockMediaAllowed": false,
+    "status": "LICENSED_PEXELS_PIXABAY_ALLOWED_WITH_ASSET_LEVEL_REVIEW_GATES",
+    "originalCreatorCapturedMediaRequired": false,
+    "stockMediaAllowed": true,
+    "pexelsAllowed": true,
+    "pixabayAllowed": true,
     "aiGeneratedWildlifeVisualsAllowed": false,
-    "note": "Platform licence evidence does not override the current requirement for genuine original creator-captured wildlife media."
+    "reviewRenderEligible": true,
+    "releaseEligible": false,
+    "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+    "note": "Owner permits qualifying Pexels/Pixabay stock for review and production subject to asset-level rights, provenance, original-file, hash, technical and human-review gates. This record does not grant final rights clearance or publication approval."
   }
 }
