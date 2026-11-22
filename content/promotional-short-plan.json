@@ -604,23 +604,23 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T11:15:25+02:00",
-            "note": "Fresh global search results for the exact phrase “how to outline a YouTube video” show direct how-to and template intent around a clear viewer promise, ordered main points, supporting examples or proof, visual notes and one useful ending action. This is qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available.",
+            "researchedAt": "2026-11-22T10:25:57+02:00",
+            "note": "Fresh qualitative search-intent evidence for the exact query “how to outline a YouTube video” and related creator questions about structuring a video before scripting. Current search results show repeated how-to/template intent around a one-sentence promise, a hook, three to five ordered beats, supporting examples or proof, visual notes and a single clear ending action. No measured global search volume, competition score or growth metric was retrieved; no paid keyword credits were used.",
             "sources": [
               {
                 "title": "How to Outline a YouTube Video (Step-by-Step Template) — Tublify",
                 "url": "https://tublify.vercel.app/blog/how-to-outline-youtube-video",
-                "whyRelevant": "A 4 November 2026 guide matches the exact query and covers a promise, hook, ordered sections, visuals and a clear ending. Accessed 21 November 2026."
+                "whyRelevant": "A guide dated 4 November 2026 directly matches the query and recommends a one-sentence promise, separate hook, 3–6 focused sections, visual changes and a specific next-video ending. Retrieved 22 November 2026."
               },
               {
-                "title": "YouTube Video Script Outliner — YTSEOHub",
-                "url": "https://ytseohub.com/script/script-outliner",
-                "whyRelevant": "The page explains a practical outline with a hook, main points, proof, CTA and visual notes, matching the four-step lesson. Accessed 21 November 2026."
+                "title": "Free Script Outline Generator — YouTube Video Beats — HypeNest",
+                "url": "https://hypenest.ai/tools/script-outline-generator",
+                "whyRelevant": "Current search result explains a hook, 3–5 main beats, examples or proof, visual notes and one CTA, matching the Short's practical outline workflow. Retrieved 22 November 2026."
               },
               {
-                "title": "YouTube Script Outliner — ToolsVenue",
-                "url": "https://toolsvenue.com/youtube-script-outliner/",
-                "whyRelevant": "The guide describes structured outlines with a hook, sections, timestamps and an outro, supporting demand for a step-by-step planning workflow. Accessed 21 November 2026."
+                "title": "YouTube Video Outline Generator — AresGen",
+                "url": "https://www.aresgen.com/templates/youtube-video-outline",
+                "whyRelevant": "Template result identifies working title and target audience as key inputs, then structures the outline into a hook, ordered sections and a closing CTA. Retrieved 22 November 2026."
               }
             ]
           },
