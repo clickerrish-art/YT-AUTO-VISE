@@ -1996,16 +1996,20 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595475031",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45026140527",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/f41d1d7d5d1e77f23811c12caf076640e8640233/docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
       ],
-      "nextAction": "Resolve the six external gates only with genuine owner/provider evidence: Meta Page/Instagram identity and permissions, human draft approval, genuine media/rights/review for production jobs, and exact remote upload-attempt reconciliation. Keep all routes fail-closed until then.",
-      "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
+      "nextAction": "Resolve the seven explicit route blockers only with genuine evidence: obtain the owner's exact signed queue-identity mapping for GET /api/jobs/dispatchable and POST /api/jobs/produce; verify the real Nature Frontiers Meta Page/Instagram identity and permissions before any provider approval/publish operation; and reconcile complete SonicVhibez YouTube history plus all uncertain upload attempts before POST /api/uploads/reconcile. Keep all seven routes fail-closed; do not create owner approvals, fabricate media/rights, or attempt external publishing.",
+      "assessmentCommitSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-      "currentHeadEvidenceNote": "BLOCKED overall on exact source/test SHA 61d116ede6c4abc9977078e88864d8571cdadccb. Current automation run 44884481167 passed 1,043 Node tests across 181 files, including 42/42 authorized application-level positive routes PASS and 48/48 protected API routes rejecting missing/invalid authentication. six provider/production routes remain BLOCKED: POST /api/facebook/drafts/approve, POST /api/facebook/publish, POST /api/facebook/verify-page, POST /api/instagram/approve, POST /api/jobs/produce and POST /api/uploads/reconcile. No live provider write or production publication was attempted.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceNote": "BLOCKED overall on exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73. Full automation run 45024548346 passed 189/189 Node test files (1,107 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities; dashboard browser run 45024548303 passed 41/41 journeys on the same SHA. A further exact-head automation rerun on docs/workflow-only descendant 6087b4088699a10359aeab99bee3d17cdd9722ad passed in run 45026140527. The source-derived route matrix records 48/48 protected routes rejecting missing and invalid credentials, 41/48 routes with accepted endpoint-specific local integration evidence, and seven blocked routes. Two owner-gated routes require a real owner-signed exact queue mapping; five provider/production operations require genuine Meta identity/permissions, rights/compliance or complete YouTube upload-history reconciliation. Fail-closed negative paths are tested. No live provider write, owner approval, remote publication or production readiness is claimed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:13:51Z"
     },
     {
       "id": "API-NEG-001",
@@ -3165,21 +3169,23 @@
     },
     "apiRouteAggregate": {
       "routes": 48,
-      "PASS": 42,
+      "PASS": 41,
       "NOT_TESTED": 0,
-      "BLOCKED": 6,
+      "BLOCKED": 7,
       "authenticationNegativePass": 48
     },
     "apiRouteCurrentHeadSnapshot": {
       "routes": 48,
-      "PASS": 42,
+      "PASS": 41,
       "NOT_TESTED": 0,
-      "BLOCKED": 6,
+      "BLOCKED": 7,
       "authenticationNegativePass": 48,
-      "asOf": "2026-11-21T08:24:00Z",
-      "testedSourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
-      "note": "42 authorized local routes and 48/48 auth-negative checks passed in the exact current-branch full regression; six provider/production operations remain BLOCKED."
+      "asOf": "2026-11-22T13:13:51Z",
+      "testedSourceTestSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346",
+      "latestExactHeadAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45026140527",
+      "dashboardBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303",
+      "note": "Exact application source/test SHA has 41/48 API routes accepted with endpoint-specific local success and applicable persistence/audit/concurrency/restart evidence; all 48/48 protected routes reject missing and invalid credentials. Seven routes remain blocked: five external provider/production gates and two positive dispatch/production routes requiring a real owner-signed queue identity mapping. Fail-closed negative paths are tested. No provider publication or fabricated owner approval is claimed."
     }
   },
   "additionalOpenBlockers": [
@@ -3433,5 +3439,24 @@
       ]
     },
     "note": "The PR removes automatic push/schedule triggers from Edge TTS narration workflows and adds explicit non-commercial internal-audition guards/manifests. The successful workflow run is on the exact current PR head. The PR is not mergeable against its recorded base; current main has advanced. No rebase, branch update, merge or main modification was attempted. Main still has automatic narration workflow triggers until a reviewed fix lands."
+  },
+  "latestApiAcceptanceRefresh": {
+    "recordedAt": "2026-11-22T13:13:51Z",
+    "sourceTestSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+    "latestBranchHead": "6087b4088699a10359aeab99bee3d17cdd9722ad",
+    "automationRun": 45024548346,
+    "nodeTestFiles": 189,
+    "nodeTests": 1107,
+    "pythonTests": 108,
+    "skipped": 0,
+    "npmAuditVulnerabilities": 0,
+    "browserRun": 45024548303,
+    "browserJourneys": 41,
+    "browserPassed": 41,
+    "routeCount": 48,
+    "authNegativePassed": 48,
+    "acceptedRoutes": 41,
+    "blockedRoutes": 7,
+    "verdict": "API-001 BLOCKED — local route acceptance is 41/48; seven owner/provider prerequisites remain unresolved."
   }
 }
