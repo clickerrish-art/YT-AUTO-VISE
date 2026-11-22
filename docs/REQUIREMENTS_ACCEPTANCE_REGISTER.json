@@ -367,16 +367,18 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971471",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167",
         "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303",
-        "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346"
+        "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788734",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664"
       ],
       "nextAction": "Complete per-control positive success, authorization, persistence/restart, concurrency, error feedback and accessibility acceptance for every applicable control; keep DASH-001 NOT_TESTED until the complete behavioral matrix is independently accepted.",
       "assessmentCommitSha": "dcd68fab0a6df4d2142b35bf0a3edfbf49b7afe8",
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 passed dashboard browser run 45024548303 with 41/41 Chromium journeys and the acceptance matrix's 121/121 controls mapped in the behavioral acceptance matrix, 17/17 forms and 15/15 cross-cutting dimensions. The exact-SHA automation run 45024548346 passed 189/189 Node test files (1,107 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. These results validate field interaction, mapped form/standalone journeys, authentication, accessibility, mobile layout and selected persistence/restart/concurrency behavior. overallAcceptance is NOT_TESTED. DASH-001 remains NOT_TESTED because not every applicable control has individually accepted positive-success, authorization, durable persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior; this is not a control-count-only acceptance.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T12:55:31Z"
+      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed dashboard browser run 45027788734 with 41/41 Chromium journeys; the behavioral matrix records 121/121 controls, 17/17 forms and 15/15 cross-cutting dimensions. Exact automation run 45027788664 passed 189/189 Node test files (1,107 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. This validates mapped field interaction, form/standalone journeys, authentication, accessibility, mobile layout and selected persistence/restart/concurrency behavior. overallAcceptance is NOT_TESTED: not every applicable control has individually accepted positive-success, authorization, durable persistence, refresh/restart, concurrency, error-feedback and full accessibility behavior; this is not a control-count-only acceptance.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
     },
     {
       "id": "SCHED-001",
@@ -409,16 +411,17 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595474754",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595474996",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44725743866",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971476",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664"
       ],
       "nextAction": "Obtain a fresh attestation covering manual/local/third-party YouTube attempts after 2026-11-18, then refresh the authenticated read-only channel/scope/history inventory before any spacing decision.",
       "assessmentCommitSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Latest read-only YouTube identity/inventory evidence from 2026-11-19 verified SonicVibes/@sonicvhibez, channel ID UCSlkuPfHH78oGC1o418HV4w, and a complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos. Its actualPublishedAt is 2026-10-22T15:05:56Z (2026-10-22 17:05:56 Africa/Johannesburg). That is 713.1 elapsed hours before the 2026-11-21 10:12:48 SAST check, but the owner attestation covers manual/local/third-party attempts only through 2026-11-18 and is now stale; upload-scope evidence checked 2026-11-19 is also stale under the 24-hour freshness rule. Metricool exposes no distinct SonicVhibez destination or schedule. Therefore complete current publication history, queued schedule and the 72-hour gate remain unverified; do not schedule or upload.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
+      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed 1,107 Node tests across 189 files with zero failures/skips, including local Africa/Johannesburg timezone, actual elapsed 72-hour spacing, no same-local-day publication, long_form→long_form→short ordering, DST, leases, cancellation, retry/backoff persistence, dead-letter and restart safety. However the latest read-only YouTube identity/inventory evidence is still from 2026-11-19 and records a complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos. Its actualPublishedAt is 2026-10-22T15:05:56Z. The owner attestation covers manual/local/third-party YouTube attempts only through 2026-11-18 and is stale; upload-scope evidence is also stale under the 24-hour freshness rule. Therefore current remote publication history, queued schedule and 72-hour gate remain unverified; do not schedule or upload.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
     },
     {
       "id": "SCHED-WORKER-MULTIPROCESS-001",
@@ -499,16 +502,19 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44552068277",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44555237191",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971474",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971535"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971535",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788708",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788689"
       ],
       "nextAction": "Preserve the staging D1 backup/restore evidence. Do not claim production durability until R2 or an owner-approved durable alternative is available and live runner-state/backoff/artifact persistence is proven.",
       "assessmentCommitSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "PASS for staging persistence/recovery evidence, not production deployment. Prior controlled staging D1 backup/restore and read-only D1 smoke passed; current deployment recovery smoke 44778971474 and runner-bridge safety 44778971535 passed on exact SHA 668a8779f8a2894f99ed935d0c8bf13f2f215e64. The Cloudflare staging smoke confirmed backup inventory unchanged, unauthenticated runner status rejected, authenticated status read accepted, and no remote state mutation. R2 remains disabled at account level, so durable remote artifact storage and production state acceptance remain blocked under DEPLOY-001.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T15:30:00Z"
+      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
+      "currentHeadEvidenceNote": "PASS for controlled staging persistence/recovery, not production deployment. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed the complete automation suite: 189/189 Node files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities (run 45027788664). Exact-HEAD deployment recovery smoke 45027788708 passed its replacement/restart/persistent-state check; Cloudflare runner-bridge safety 45027788689 passed syntax and mocked runner/artifact integrity tests. The authenticated read-only Cloudflare staging smoke also passed in automation run 45027788664 without remote mutation. This validates local/staging backup, restore, restart and fail-closed recovery only; R2 remains unavailable and no production Worker or production durability is certified.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
     },
     {
       "id": "YT-001",
@@ -675,16 +681,19 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/cloudflare/worker.js",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/codex/marketing-machine-audit-fixes/cloudflare/staging-snapshot/README.md",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971474",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971535"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971535",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788708",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788689"
       ],
       "nextAction": "Owner/admin must verify and enable branch protection, align OIDC trust to the exact protected ref/workflow, approve and deploy the manual-only runner bridge to staging, and provide durable artifact storage. Do not deploy or enable production publishing.",
       "assessmentCommitSha": "4819a6ed6553a87913aa8edc07a0aca09979831e",
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
-      "currentHeadEvidenceNote": "NOT_TESTED — exact current-head deployment recovery smoke passed 2/2 tests (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481161) and Cloudflare runner-bridge safety passed 4/4 tests (https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481195); this is test-runner/staging evidence only. No production Worker, production deployment or production rollback was verified.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-21T08:24:00Z"
+      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed the automation/security suite (1,107 Node tests across 189 files, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities; run 45027788664). Exact-HEAD deployment recovery smoke 45027788708 passed; runner-bridge safety 45027788689 passed; authenticated read-only Cloudflare staging smoke passed in 45027788664. These are local/staging tests only. No SonicVhibez production Worker, production D1, durable R2 artifact store, production monitoring or production rollback was verified; R2 remains unavailable and staging OIDC trust/branch protection still require owner/admin action. Do not enable production publishing.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
     },
     {
       "id": "MEDIA-SEC-001",
@@ -2002,7 +2011,8 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45026140527",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/f41d1d7d5d1e77f23811c12caf076640e8640233/docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/blob/f41d1d7d5d1e77f23811c12caf076640e8640233/docs/API_ROUTE_ACCEPTANCE_MATRIX.json",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664"
       ],
       "nextAction": "Resolve the seven explicit route blockers only with genuine evidence: obtain the owner's exact signed queue-identity mapping for GET /api/jobs/dispatchable and POST /api/jobs/produce; verify the real Nature Frontiers Meta Page/Instagram identity and permissions before any provider approval/publish operation; and reconcile complete SonicVhibez YouTube history plus all uncertain upload attempts before POST /api/uploads/reconcile. Keep all seven routes fail-closed; do not create owner approvals, fabricate media/rights, or attempt external publishing.",
       "assessmentCommitSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
@@ -2010,7 +2020,7 @@
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceNote": "BLOCKED overall on exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73. Full automation run 45024548346 passed 189/189 Node test files (1,107 tests), 108 Python tests, zero failures/skips and npm audit zero vulnerabilities; dashboard browser run 45024548303 passed 41/41 journeys on the same SHA. A further exact-head automation rerun on docs/workflow-only descendant 6087b4088699a10359aeab99bee3d17cdd9722ad passed in run 45026140527. The source-derived route matrix records 48/48 protected API routes rejecting missing and invalid credentials, 41/48 routes with accepted endpoint-specific local integration evidence, and seven blocked routes. Two owner-gated routes require a real owner-signed exact queue mapping; five provider/production operations require genuine Meta identity/permissions, rights/compliance or complete YouTube upload-history reconciliation. Fail-closed negative paths are tested. No live provider write, owner approval, remote publication or production readiness is claimed.",
+      "currentHeadEvidenceNote": "BLOCKED overall on API route acceptance. The route matrix remains pinned to exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73: 48/48 protected API routes reject missing and invalid credentials, 41/48 routes have accepted endpoint-specific local integration evidence, and seven remain blocked. The complete automation suite reran on exact descendant fae3bf58270b1ffecb038ea0c9a40be0bd340f9 in run 45027788664 with 1,107 Node tests across 189 files and 108 Python tests, zero failures/skips, npm audit zero vulnerabilities. The seven blockers remain two owner-signed queue identity gates and five Meta/YouTube provider or genuine rights/history prerequisites. Fail-closed paths are covered; no owner approval, live provider write or publication is claimed.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T13:13:51Z"
     },
     {
@@ -2853,8 +2863,8 @@
   },
   "latestLiveCompareAt": "2026-11-18T09:49:03+02:00",
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "6087b4088699a10359aeab99bee3d17cdd9722ad",
-    "automationRun": 45026140527,
+    "exactSourceTestSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
+    "automationRun": 45027788664,
     "nodeTestFiles": {
       "passed": 189,
       "failed": 0,
@@ -2865,12 +2875,12 @@
       "failed": 0,
       "skipped": 0
     },
-    "browserE2ERun": null,
-    "browserE2EStatus": "NOT_RUN_ON_THIS_SHA",
+    "browserE2ERun": 45027788734,
+    "browserE2EStatus": "PASS",
     "lastBrowserE2E": {
-      "sourceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "browserRun": 45024548303,
-      "run": "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303",
+      "sourceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
+      "browserRun": 45027788734,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788734",
       "browserJourneys": {
         "passed": 41,
         "total": 41,
@@ -2882,14 +2892,14 @@
       "passed": 108,
       "failed": 0,
       "skipped": 0,
-      "sourceSha": "6087b4088699a10359aeab99bee3d17cdd9722ad",
-      "run": "https://clickerrish-art/YT-AUTO-VISE/actions/runs/45026140527"
+      "sourceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664"
     },
     "npmAuditVulnerabilities": 0,
-    "npmAuditSourceSha": "6087b4088699a10359aeab99bee3d17cdd9722ad",
+    "npmAuditSourceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
     "lockfileRun": 44884481144,
-    "runnerBridgeSafetyRun": 45026140600,
-    "deploymentRecoveryRun": 45026140629,
+    "runnerBridgeSafetyRun": 45027788689,
+    "deploymentRecoveryRun": 45027788708,
     "routeMatrix": {
       "routes": 48,
       "overallPass": 41,
@@ -2900,11 +2910,11 @@
     },
     "productionReadiness": {
       "status": "HOLD",
-      "run": 44883587818,
-      "sourceSha": "764e2c74e0d7331e2d914498fc581ec034366c86",
-      "blockers": 19
+      "run": 45027788633,
+      "sourceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9"
     },
-    "note": "Exact current docs/workflow/test checkpoint 6087b4088699a10359aeab99bee3d17cdd9722ad passed automation/security run 45026140527: 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 separately passed 41/41 dashboard Chromium journeys in run 45024548303 and the same full automation suite in run 45024548346. The current checkpoint adds only acceptance-evidence/workflow metadata after that application SHA; no browser run is claimed on 6087b4088699a10359aeab99bee3d17cdd9722ad. API route matrix: 41/48 accepted, 48/48 authentication-negative PASS, seven owner/provider routes remain BLOCKED. Production readiness and DASH-001 remain separate."
+    "note": "Exact current source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed automation/security run 45027788664: 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities, JavaScript syntax and Python compilation passed, and authenticated read-only Cloudflare staging smoke passed. Dashboard browser E2E 45027788734 passed 41/41 Chromium journeys on the same SHA. Deployment recovery smoke 45027788708 and Cloudflare runner-bridge safety 45027788689 passed on the same SHA. Queue readiness 45027788617 passed with publishing disabled. Production readiness 45027788633 remains HOLD; media acquisition/upload steps were skipped and no publishing occurred. API route matrix remains 41/48 accepted, 48/48 auth-negative PASS, seven blocked by owner/provider prerequisites.",
+    "queueReadinessRun": 45027788617
   },
   "latestFullNodeRegression": {
     "sourceTestSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
