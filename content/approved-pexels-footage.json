@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "project": "SonicVhibez",
-  "purpose": "Historical record of user-selected Pexels wildlife source candidates and acquisition/licence research. Reference-only; excluded from current production under the original creator-captured-media policy.",
+  "purpose": "Owner-approved Pexels wildlife source candidates and acquisition/licence research. Pexels stock may now be used in SonicVhibez production subject to asset-level provenance, licence evidence, technical verification, third-party rights and human review.",
   "createdAt": "2026-11-19",
   "approvalRecord": {
-    "primaryClips": "Historical source-selection approval for four Pexels clips; superseded for production use by the 2026-11-21 original creator-captured-media requirement.",
-    "supplementalClips": "Historical source-selection records for supplemental Pexels candidates; reference-only and not production eligible.",
-    "scopeLimit": "These historical source selections do not constitute current production approval. Current owner policy excludes all Pexels stock footage and stock photographs, regardless of source selection or platform licence. No asset may be rendered or published as production media."
+    "primaryClips": "The owner explicitly approved the four primary Pexels clips and on 2026-11-22 instructed that previously shared Pexels/Pixabay footage be used unless an individual asset is not legally usable. Three clips are eligible for review-only use under the Pexels License; the enclosure/person clip remains editorially excluded.",
+    "supplementalClips": "Supplemental Pexels candidates are eligible for acquisition and review under the 2026-11-22 owner media-policy override; no candidate becomes release-cleared until its own file, hash, technical probe, third-party rights and human review are complete.",
+    "scopeLimit": "The 2026-11-22 owner instruction supersedes the 2026-11-21 original creator-captured-only restriction for SonicVhibez. Pexels/Pixabay licensed stock is permitted subject to the exact platform licence and all asset-level release gates. AI-generated wildlife visuals remain prohibited."
   },
   "license": {
     "name": "Pexels License",
@@ -30,7 +30,7 @@
     "rightsEvidenceComplete": false,
     "finalVideoReviewComplete": false,
     "releaseEligible": false,
-    "note": "Pexels MP4 bytes and technical probes were acquired in historical workflow artifacts. They remain reference-only and are excluded from production by the current original creator-captured-media policy. No rendering or publication is authorized.",
+    "note": "The four primary MP4 files were recovered from GitHub Actions artifact 14700765594 in the current ChatGPT runtime on 2026-11-22; hashes match the historical acquisition manifest and all four decode end-to-end. Three clips were used in a silent 55.033-second visual review; the enclosure clip was excluded. This does not constitute final rights clearance or owner release approval.",
     "workflowArtifactAvailable": true,
     "latestWorkflowRunId": 44887585580,
     "latestArtifactId": 14700765594,
@@ -38,7 +38,18 @@
     "latestArtifactSha256": null,
     "latestArtifactExpiresAt": "2026-11-28T09:01:42Z",
     "exactHeadSha": "c0ba24274180287b54bc3a5c90561b53aaf6ecc9",
-    "latestArtifactSizeBytes": 83910657
+    "latestArtifactSizeBytes": 83910657,
+    "currentChatRuntimeRecovery": {
+      "date": "2026-11-22",
+      "artifactId": 14700765594,
+      "archive": "sonicvhibez-short-001-approved-pexels-source.zip",
+      "filesRecovered": 4,
+      "fullDecodePass": true,
+      "sha256MatchesHistoricalManifest": true,
+      "threeClipsUsedInSilentReview": true,
+      "oneClipExcludedForEditorialReasons": true,
+      "projectWorkspaceCopyCommitted": false
+    }
   },
   "durationSummary": {
     "primaryClipDurationSeconds": 53,
@@ -65,7 +76,7 @@
       "downloadedLocally": false,
       "localPath": null,
       "sha256": "f01daff991cb07920e63f1a5914e3f4bc94cb32ec56cb676a5951c38aba256a6",
-      "rightsEvidenceStatus": "SOURCE_LICENSE_RECORDED; FILE_HASH_AND_TECHNICAL_PROBE_VERIFIED_IN_WORKFLOW_ARTIFACT; THIRD_PARTY_RIGHTS_AND_OWNER_REVIEW_PENDING",
+      "rightsEvidenceStatus": "PEXELS_PLATFORM_LICENSE_REVIEWED; ORIGINAL_BYTES_RECOVERED; SHA256_MATCHED; FULL_DECODE_PASS; THIRD_PARTY_RIGHTS_AND_FINAL_HUMAN_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/29765785/12791465_1080_1920_25fps.mp4",
       "workflowArtifactId": 14550112825,
       "acquiredInWorkflowRunId": 44564081260,
@@ -76,8 +87,8 @@
         "height": 1920,
         "fps": 25
       },
-      "humanVisualReview": "SAMPLED_REVIEW_ONLY; OWNER_FINAL_REVIEW_PENDING",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "humanVisualReview": "REPRESENTATIVE_FRAME_REVIEW_COMPLETE; FULL_PLAYBACK_AND_OWNER_CONTEXT_REVIEW_PENDING",
+      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
     },
     {
       "id": "pexels-11760785",
@@ -93,7 +104,7 @@
       "downloadedLocally": false,
       "localPath": null,
       "sha256": "3417c7da10506e28124faece24b908e842a58b3e99d340d013f62c375d8c4e57",
-      "rightsEvidenceStatus": "SOURCE_LICENSE_RECORDED; FILE_HASH_AND_TECHNICAL_PROBE_VERIFIED_IN_WORKFLOW_ARTIFACT; THIRD_PARTY_RIGHTS_AND_OWNER_REVIEW_PENDING",
+      "rightsEvidenceStatus": "PEXELS_PLATFORM_LICENSE_REVIEWED; ORIGINAL_BYTES_RECOVERED; SHA256_MATCHED; FULL_DECODE_PASS; THIRD_PARTY_RIGHTS_AND_FINAL_HUMAN_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/11760785/11760785-uhd_2160_4096_30fps.mp4",
       "workflowArtifactId": 14550112825,
       "acquiredInWorkflowRunId": 44564081260,
@@ -104,8 +115,8 @@
         "height": 4096,
         "fps": 29.97002997002997
       },
-      "humanVisualReview": "SAMPLED_REVIEW_ONLY; OWNER_FINAL_REVIEW_PENDING",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "humanVisualReview": "REPRESENTATIVE_FRAME_REVIEW_COMPLETE; FULL_PLAYBACK_AND_OWNER_CONTEXT_REVIEW_PENDING",
+      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
     },
     {
       "id": "pexels-11528208",
@@ -121,7 +132,7 @@
       "downloadedLocally": false,
       "localPath": null,
       "sha256": "ace119137620bbdf6b372504f8e1dbae9bdd7ee9febe86a667d597ac6d46bada",
-      "rightsEvidenceStatus": "SOURCE_LICENSE_RECORDED; FILE_HASH_AND_TECHNICAL_PROBE_VERIFIED_IN_WORKFLOW_ARTIFACT; THIRD_PARTY_RIGHTS_AND_OWNER_REVIEW_PENDING",
+      "rightsEvidenceStatus": "PEXELS_PLATFORM_LICENSE_REVIEWED; ORIGINAL_BYTES_RECOVERED; SHA256_MATCHED; FULL_DECODE_PASS; THIRD_PARTY_RIGHTS_AND_FINAL_HUMAN_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/11528208/11528208-uhd_2158_3840_30fps.mp4",
       "workflowArtifactId": 14550112825,
       "acquiredInWorkflowRunId": 44564081260,
@@ -132,8 +143,8 @@
         "height": 3840,
         "fps": 30
       },
-      "humanVisualReview": "SAMPLED_REVIEW_ONLY; OWNER_FINAL_REVIEW_PENDING",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "humanVisualReview": "REPRESENTATIVE_FRAME_REVIEW_COMPLETE; FULL_PLAYBACK_AND_OWNER_CONTEXT_REVIEW_PENDING",
+      "currentProductionEligibility": "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22"
     },
     {
       "id": "pexels-31702128",
@@ -160,8 +171,8 @@
         "height": 1920,
         "fps": 29.97002997002997
       },
-      "humanVisualReview": "EXCLUDED_FROM_CURRENT_PREVIEW_VISIBLE_ENCLOSURE_AND_PARTIAL_PERSON",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "humanVisualReview": "SAMPLED_REVIEW_COMPLETE; EXCLUDED_FROM_SHORT_001",
+      "currentProductionEligibility": "EXCLUDED_EDITORIAL_VISIBLE_ENCLOSURE_AND_PARTIAL_PERSON"
     },
     {
       "id": "pexels-37425422",
@@ -179,7 +190,7 @@
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/37425422/15850521_1440_2560_30fps.mp4",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-37412830",
@@ -197,7 +208,7 @@
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/37412830/15845485_3840_2160_25fps.mp4",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-34746031",
@@ -215,7 +226,7 @@
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/34746031/14729820_3840_2160_25fps.mp4",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-37402195",
@@ -233,7 +244,7 @@
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/37402195/15840909_1440_2560_30fps.mp4",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-35806524",
@@ -251,7 +262,7 @@
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/35806524/15180879_3840_2160_30fps.mp4",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-5214258",
@@ -269,7 +280,7 @@
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/5214258/5214258-hd_1920_1080_25fps.mp4",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-35900770",
@@ -287,7 +298,7 @@
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/35900770/15227471_2160_3840_30fps.mp4",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-33430867",
@@ -305,7 +316,7 @@
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
       "downloadUrl": "https://videos.pexels.com/video-files/33430867/14227748_2160_3840_50fps.mp4",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-38885261",
@@ -323,7 +334,7 @@
       "localPath": null,
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-3206125",
@@ -341,7 +352,7 @@
       "localPath": null,
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-37393230",
@@ -359,7 +370,7 @@
       "localPath": null,
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-3842814",
@@ -377,7 +388,7 @@
       "localPath": null,
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     },
     {
       "id": "pexels-5146599",
@@ -395,7 +406,7 @@
       "localPath": null,
       "sha256": null,
       "rightsEvidenceStatus": "SOURCE_LICENSE_VERIFIED; FILE_HASH_AND_MEDIA_REVIEW_PENDING",
-      "currentProductionEligibility": "REFERENCE_ONLY_EXCLUDED_FROM_PRODUCTION_UNDER_CURRENT_ORIGINAL_MEDIA_REQUIREMENT"
+      "currentProductionEligibility": "CANDIDATE_ONLY_PENDING_ORIGINAL_FILE_ACQUISITION_AND_REVIEW"
     }
   ],
   "currentProductionPolicy": {
@@ -405,5 +416,22 @@
     "stockPhotographsAllowed": false,
     "aiGeneratedWildlifeVisualsAllowed": false,
     "note": "Earlier source-selection approvals and Pexels platform-license records are retained as historical evidence only. Current SonicVhibez production requires genuine original creator-captured wildlife media; Pexels stock footage and stock photographs must not be used as substitutes."
-  }
+  },
+  "productionDisposition": {
+    "status": "LICENSED_STOCK_REVIEW_ALLOWED; FINAL_RELEASE_HOLD",
+    "productionEligible": false,
+    "reviewRenderEligible": true,
+    "policy": {
+      "originalCreatorCapturedMediaRequired": false,
+      "stockMediaAllowed": true,
+      "pexelsAllowed": true,
+      "pixabayAllowed": true,
+      "aiGeneratedWildlifeVisualsAllowed": false
+    },
+    "reason": "The owner explicitly superseded the original-only restriction on 2026-11-22. Pexels/Pixabay licensed footage may be used after platform-license review, exact file acquisition, hash and technical verification, third-party-rights checks and human review.",
+    "nextRequiredAction": "Complete full playback and third-party-rights review for the three selected clips; resolve the resting-lion collar context; obtain owner release approval; then complete final narrated render and compliance review."
+  },
+  "notes": [
+    "Owner instruction dated 2026-11-22 supersedes the original-creator-captured-only policy for SonicVhibez and permits qualifying Pexels/Pixabay footage under their actual licences. AI-generated wildlife visuals remain prohibited."
+  ]
 }
