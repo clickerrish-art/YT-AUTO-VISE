@@ -48,17 +48,19 @@ jobs:
           : > review-proxies/proxy-manifest.txt
           for src in "${sources[@]}"; do
             name="$(basename "$src" .mp4)"
-            out="review-proxies/${name}-review-720p.mp4"
-            ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,avg_frame_rate -show_entries format=duration,size -of json "$src" > "review-proxies/${name}-source-probe.json"
-            ffmpeg -hide_banner -loglevel error -y -i "$src" -vf "scale='min(1280,iw)':-2" -c:v libx264 -preset veryfast -crf 25 -an -movflags +faststart "$out"
-            ffmpeg -hide_banner -loglevel error -y -ss 0.5 -i "$src" -frames:v 1 -vf "scale=480:270:force_original_aspect_ratio=decrease,pad=480:270:(ow-iw)/2:(oh-ih)/2" "preview/${name}.jpg"
+            out="review-proxies/${name}-review-proxy.mp4"
+            ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,avg_frame_rate,sample_rate,channels -show_entries format=duration,size -of json "$src" > "review-proxies/${name}-source-probe.json"
+            ffmpeg -hide_banner -loglevel error -y -i "$src" -map 0:v:0 -map '0:a?' -vf "scale='min(1280,iw)':'min(1280,ih)':force_original_aspect_ratio=decrease" -c:v libx264 -preset veryfast -crf 25 -c:a aac -b:a 128k -ar 48000 -movflags +faststart "$out"
+            duration="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$src")"
+            seek="$(awk -v d="$duration" 'BEGIN { printf "%.3f", d / 2 }')"
+            ffmpeg -hide_banner -loglevel error -y -ss "$seek" -i "$src" -frames:v 1 -vf "scale=480:270:force_original_aspect_ratio=decrease,pad=480:270:(ow-iw)/2:(oh-ih)/2" "preview/${name}.jpg"
             printf '%s  ' "$(sha256sum "$src" | cut -d' ' -f1)" >> review-proxies/proxy-manifest.txt
             printf '%s  ' "$(sha256sum "$out" | cut -d' ' -f1)" >> review-proxies/proxy-manifest.txt
             printf '%s\n' "$name" >> review-proxies/proxy-manifest.txt
           done
           ffmpeg -hide_banner -loglevel error -y -pattern_type glob -framerate 1 -i 'preview/*.jpg' -vf 'tile=3x2:padding=12:margin=12' -frames:v 1 preview/crocodile-candidates-contact-sheet.jpg
           cp "$(find source -type f -name acquisition-manifest.json -print -quit)" review-proxies/acquisition-manifest.json
-          echo "PASS: five source files verified and five visual-review proxies created."
+          echo "PASS: five source files verified and five review proxies created with source audio retained where present."
           du -sh source review-proxies preview
 
       - name: Upload review-only proxies and evidence
