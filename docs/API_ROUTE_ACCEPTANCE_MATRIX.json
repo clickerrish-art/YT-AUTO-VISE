@@ -333,7 +333,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": null,
       "currentHeadEvidenceRunId": null,
-      "currentHeadEvidenceNote": "Positive dispatch/production behavior remains NOT_TESTED because the owner-signed exact queue identity mapping is absent. Fail-closed rejection paths were rerun on 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346.",
+      "currentHeadEvidenceNote": "Positive dispatch/production behavior remains NOT_TESTED because owner-approved content/queue-identity-approval.json is absent; the owner-signed exact queue identity mapping is required. Fail-closed rejection paths were rerun on 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
         "test/dashboard-dispatchable-ordering.integration.test.mjs"
@@ -1346,7 +1346,7 @@
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": null,
       "currentHeadEvidenceRunId": null,
-      "currentHeadEvidenceNote": "Positive dispatch/production behavior remains NOT_TESTED because the owner-signed exact queue identity mapping is absent. Fail-closed rejection paths were rerun on 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346.",
+      "currentHeadEvidenceNote": "Positive dispatch/production behavior remains NOT_TESTED because owner-approved content/queue-identity-approval.json is absent; the owner-signed exact queue identity mapping is required. Fail-closed rejection paths were rerun on 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
