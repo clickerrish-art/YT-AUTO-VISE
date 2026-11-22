@@ -70,16 +70,16 @@ This checkpoint supersedes the earlier same-day status where the evidence below 
 **Current decision: HOLD — NOT 100% MASTER COMPLETE.** Original crocodile footage acquisition and proxy generation have passed technical checks, but the proxies have not received complete human playback; no footage is selected or release-cleared. Commercially eligible narration, human rights/editorial approval, synchronized captions, final exports, current upload-attempt attestation, exact-hash approvals and exact-SHA release verification remain open.
 
 
-> Current media-policy and production update. The historical 19 November snapshot is retained below for audit.
+> Historical media-policy update — 22 November 2026. The 22 November stock-media override was subsequently revoked and must not be treated as current owner approval. This historical section is retained for audit only.
 
-> This addendum is the current operational status and supersedes older statements below that prohibit all Pexels/Pixabay stock for SonicVhibez. Historical snapshots remain preserved for audit. Nature Frontiers remains a separate brand and its independent media policy is not changed by this SonicVhibez owner instruction.
+> **Current policy as of 23 November 2026:** original creator-captured wildlife footage/photography only. Pexels, Pixabay, other stock and AI-generated wildlife visuals are excluded from production and remain reference/review-only. Nature Frontiers remains a separate brand with its own media policy.
 
-### Owner media-policy decision
+### Historical owner media-policy override — REVOKED
 
-The owner explicitly instructed: use previously shared footage unless an individual asset is not legally usable, noting that approximately 99% of the shared footage comes from Pexels and Pixabay. Effective 22 November 2026, qualifying Pexels/Pixabay licensed stock is allowed for SonicVhibez subject to exact source-page provenance, platform-licence evidence, original MP4 acquisition, SHA-256, technical probe and full decode, third-party-rights review, human visual review and final owner approval. Pexels/Pixabay licences are not public-domain declarations and do not automatically clear people, property, trademarks, music or other third-party rights. AI-generated wildlife visuals remain prohibited. Other stock/archive sources remain excluded unless separately approved. Public and unattended publishing remain disabled.
+The 22 November 2026 file `content/owner-media-policy-override-2026-11-22.json` has status `REVOKED_UNSUPPORTED_OWNER_ATTRIBUTION`. Its revocation reason states that no user instruction authorizing Pexels/Pixabay stock as a substitute for original creator-captured wildlife media was found, and that the record must not be used as owner approval. Any earlier statement in this document that qualifying Pexels/Pixabay stock was authorized for production is superseded and incorrect. Existing Pexels/Pixabay acquisitions remain review-only; no stock clip is selected or release-cleared. Only original camera-captured media with verified creator/source provenance, original file and SHA-256, technical probe/full decode, asset-level third-party-rights review, human visual/editorial review and final exact-hash owner approval may proceed. AI-generated wildlife visuals remain prohibited. Zero-cost constraints and the separation of Nature Frontiers from SonicVhibez remain unchanged.
 
-Policy evidence: `content/owner-media-policy-override-2026-11-22.json`  
-Pexels licence evidence: `content/media/pexels-license-evidence-2026-11-22.md`
+Policy record (revoked): `content/owner-media-policy-override-2026-11-22.json`  
+Historical platform-license research: `content/media/pexels-license-evidence-2026-11-22.md` (research only; not production authorization).
 
 ### Completed media recovery and first review render
 
