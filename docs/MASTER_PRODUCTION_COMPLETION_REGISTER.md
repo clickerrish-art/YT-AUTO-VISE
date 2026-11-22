@@ -1,6 +1,6 @@
-# Latest master-completion snapshot — 19 November 2026
+# Execution addendum — 22 November 2026
 
-## Execution addendum — 22 November 2026 (current media-policy and production update)
+> Current media-policy and production update. The historical 19 November snapshot is retained below for audit.
 
 > This addendum is the current operational status and supersedes older statements below that prohibit all Pexels/Pixabay stock for SonicVhibez. Historical snapshots remain preserved for audit. Nature Frontiers remains a separate brand and its independent media policy is not changed by this SonicVhibez owner instruction.
 
@@ -19,6 +19,8 @@ Pexels licence evidence: `content/media/pexels-license-evidence-2026-11-22.md`
 - The fourth clip (MC G'Zay, Pexels 31702128) is excluded from this edit because the sampled frames show an enclosure/barrier and a partial foreground person. This is an editorial exclusion, not a claim that the platform licence is invalid.
 - Created `SonicVhibez_Short001_Visual_Review_ONLY.mp4`: 55.033 seconds, 720×1280, H.264, 30 fps, no audio, full decode PASS, SHA-256 `c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844`. It uses three separate examples and does not imply one continuous animal encounter. This is a review-only visual preview, not a final narrated Short or publication master.
 - Evidence: `content/short-001-visual-review-evidence-2026-11-22.json`. The MP4 is retained as a conversation deliverable, not committed as a repository binary.
+- Recovered older Library exports were independently probed and decoded to prevent misleading filenames from being treated as final: `SonicVhibez_Wildlife_Creators_Vault_Short_PUBLICATION_READY.mp4` is only **19.600 seconds** (1080×1920, H.264, 30 fps, AAC 96 kHz mono); the similarly named candidate is 19.523 seconds and the mixed cut is 19.633 seconds. All decode, but all fail the required 50–60-second duration. The mixed cut also contains an enclosure scene. None is a final Short.
+- `SonicVhibez-episode-2-narration-timed-review-v14.mp4` is a 407.6-second (6:47.6) 1920×1080 slide/graphic creator-education draft with an audio track. It is **not** the canonical Nile crocodile documentary, contains narration that is not approved for public/commercial production, and is not a final master. It may be used only as a structural reference pending approved narration and real wildlife footage.
 
 ### Crocodile footage acquisition
 
