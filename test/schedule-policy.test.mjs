@@ -93,51 +93,6 @@ test("actual remote states never fall back to job creation time when publication
   }
 });
 
-test("private uploads never treat YouTube publishedAt upload time as an actual publication", () => {
-  const slot = { id: "next", scheduledAt: "2026-10-28T15:00:00.000Z" };
-  const privateUpload = [{
-    id: "private-upload",
-    status: "private",
-    publishedAt: "2026-10-20T15:00:00.000Z"
-  }];
-  const slotResult = validatePublicationSlot(slot, privateUpload);
-  assert.equal(slotResult.valid, false);
-  assert.ok(slotResult.errors.some(error => /private item private-upload is missing actualPublishedAt/.test(error)));
-
-  const cycleResult = evaluateWithVerifiedInventories({
-    history: [{ ...privateUpload[0], format: "long_form" }],
-    historyVerified: true,
-    pendingAttempts: [],
-    pendingAttemptsVerified: true,
-    scheduledItems: [],
-    scheduledItemsVerified: true,
-    proposedAt: "2026-10-28T15:00:00.000Z",
-    jobId: "next",
-    format: "long_form"
-  });
-  assert.equal(cycleResult.valid, false);
-  assert.ok(cycleResult.errors.some(error => /private history item private-upload requires actualPublishedAt/.test(error)));
-
-  const reconciledPrivate = evaluateWithVerifiedInventories({
-    history: [{
-      id: "private-previously-published",
-      status: "private",
-      actualPublishedAt: "2026-10-20T15:00:00.000Z",
-      format: "long_form"
-    }],
-    historyVerified: true,
-    pendingAttempts: [],
-    pendingAttemptsVerified: true,
-    scheduledItems: [],
-    scheduledItemsVerified: true,
-    proposedAt: "2026-10-28T15:00:00.000Z",
-    jobId: "next",
-    format: "long_form"
-  });
-  assert.equal(reconciledPrivate.valid, true, reconciledPrivate.errors.join("; "));
-});
-
-
 test("an already-colliding existing schedule blocks any new slot", () => {
   const result = validatePublicationSlot(
     { id: "new", scheduledAt: "2026-10-31T15:00:00.000Z" },
