@@ -22,7 +22,7 @@ test("Long-form manifest pins current script and scientific review and remains b
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
   assert.equal(manifest.footageLicenseEvidence, "");
-  assert.equal(manifest.narrationRightsDeterminationEvidence, "heygen-roderic-commercial-rights-determination-2026-11-21.json");
+  assert.equal(manifest.narrationRightsDeterminationEvidence, "speechma-andrew-voice-selection-2026-11-22.json");
 });
 
 test("Short manifest pins exact source files and excludes Pexels stock from production", () => {
@@ -153,12 +153,14 @@ test("All manual alternate-narrator entry points enforce the owner decision", ()
   assert.equal(policy.ownerDecision.approvedVoice, "Roderic — Authoritative & Refined");
   assert.equal(policy.ownerDecision.approvedVoiceStatus, "HISTORICAL_PREFERENCE_NOT_APPROVED_FOR_COMMERCIAL_RELEASE");
   assert.equal(policy.ownerDecision.alternativeVoicesAuthorized, false);
-  assert.equal(policy.ownerDecision.selectionStatus, "OWNER_SELECTED_WADE_FOR_FURTHER_REVIEW_NOT_PRODUCTION_APPROVED");
-  assert.equal(policy.ownerDecision.selectedAlternative.voiceId, "a3a4aa242aaf431ea8ec2c4b3bb332fa");
+  assert.equal(policy.ownerDecision.selectionStatus, "OWNER_SELECTED_SPEECHMA_ANDREW_BROWSER_AUDITION_PENDING");
+  assert.equal(policy.ownerDecision.selectedAlternative.provider, "Speechma");
+  assert.equal(policy.ownerDecision.selectedAlternative.name, "Andrew");
+  assert.equal(policy.ownerDecision.selectedAlternative.voiceId, null);
   assert.equal(policy.ownerDecision.selectedAlternative.productionApproved, false);
-  assert.equal(policy.ownerDecision.selectedAlternative.commercialUseAllowed, false);
+  assert.equal(policy.ownerDecision.selectedAlternative.commercialUseAllowed, true);
   assert.equal(policy.ownerDecision.paidUpgradeAuthorized, false);
-  assert.equal(policy.ownerDecision.commercialRightsStatus, "HEYGEN_FREE_PLAN_OUTPUT_RESTRICTED_TO_PERSONAL_NON_COMMERCIAL_INTERNAL_EVALUATION");
+  assert.equal(policy.ownerDecision.commercialRightsStatus, "SPEECHMA_TERMS_GRANT_COMMERCIAL_OUTPUT_LICENSE_SUBJECT_TO_THIRD_PARTY_RIGHTS; NO_AUDIO_GENERATED_OR_APPROVED");
   for (const path of [
     "../scripts/generate-narration.py",
     "../scripts/generate_long_form_narration.py",
