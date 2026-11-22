@@ -206,7 +206,7 @@
       "fps": 25,
       "canvaAssetId": null,
       "sourceOrigin": "SUPPLEMENTAL_PEXELS_DISCOVERED_2026-11-22",
-      "status": "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS",
+      "status": "DISCOVERED_NOT_ACQUIRED",
       "visualReview": "PENDING_HUMAN_FULL_PLAYBACK",
       "thirdPartyRightsReview": "PENDING",
       "rightsVerified": false,
@@ -215,11 +215,16 @@
       "releaseEligible": false,
       "publicPublishingEnabled": false,
       "selectedForProduction": false,
-      "fullDecode": "PASS",
-      "acquisitionArtifactId": 14735172901,
-      "localOriginalBytesAvailableInArtifact": true,
-      "sha256Status": "RECORDED_IN_ARTIFACT_ACQUISITION_MANIFEST",
-      "technicalProbe": "PASS"
+      "fullDecode": "NOT_RUN",
+      "acquisitionArtifactId": null,
+      "localOriginalBytesAvailableInArtifact": false,
+      "sha256Status": "NOT_RECORDED",
+      "technicalProbe": "NOT_RUN",
+      "actual": null,
+      "fileSizeBytes": null,
+      "sha256": null,
+      "mediaFile": null,
+      "previewFrame": null
     }
   ],
   "notes": [
@@ -227,7 +232,8 @@
     "The acquisition script verified allowlisted Pexels media-host downloads, MP4 container signatures, expected duration tolerance, dimensions, frame rate, ffprobe metadata and full FFmpeg decode for all five files.",
     "The acquisition log confirms five assets, 137.974967 seconds total source duration and five full-decode passes. Per-asset SHA-256 values and exact ffprobe measurements are in acquisition-manifest.json inside the artifact; they have not yet been copied into this durable register.",
     "This is review-only source acquisition. Third-party rights, complete human playback, scientific scene-to-claim review, final owner approval and release eligibility remain pending.",
-    "Do not merge South Africa, Kenya and Zambia scenes into one encounter or imply a single location. Keep source geography distinct."
+    "Do not merge South Africa, Kenya and Zambia scenes into one encounter or imply a single location. Keep source geography distinct.",
+    "Correction 2026-11-22: supplemental candidate 20443910 was discovered after the five-file acquisition and is not present in artifact 14735172901. It is not acquired, hashed, probed, decoded or production-eligible; acquire it separately before changing this status."
   ],
   "acquisition": {
     "status": "SUCCESS",
