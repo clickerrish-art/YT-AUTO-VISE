@@ -1000,9 +1000,9 @@ No media render, narration generation, upload, schedule or publication was perfo
 
 - Implementation branch: codex/marketing-machine-audit-fixes
 - Verified code HEAD: c290bac5431c7b46b42b19e74a2c65a04f0a4512 (full regression PASS)
-- Latest documentation-only HEAD: 5f30c84e989c9d9586980375a874481f1f804a55 (only the two master tracker documents changed after the tested code SHA)
 - main: 3795519ccbf58fd02d74458624b58dd2e44a88c0
-- Latest divergence: 5,194 ahead / 17 behind
+- Divergence at the tested code HEAD: 5,192 ahead / 17 behind
+- Subsequent commits after c290 contain only the two master tracker documents; no application or test source changed after the verified code SHA.
 - PR #1: open, draft, unmerged; head matches the implementation branch
 - Branch protection: disabled on both main and implementation branch
 - No main commit, merge, PR state change, rebase, reset, force-push, or history rewrite was performed.
