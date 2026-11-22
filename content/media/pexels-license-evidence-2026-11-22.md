@@ -1,4 +1,4 @@
-# Licensed wildlife footage evidence — 22 November 2026
+# Licensed Pexels and Pixabay wildlife footage evidence — 22 November 2026
 
 ## Owner decision
 
@@ -51,11 +51,30 @@ The fifth Canva import, a 9-second lion close-up (asset VAHZ9oFCiak), has no exa
 
 ## Pixabay platform licence review
 
-Official licence summary: https://pixabay.com/service/license-summary/
+Official current terms:
+- Full Terms: https://pixabay.com/service/terms/ (last updated 20 October 2026).
+- Licence summary: https://pixabay.com/service/license-summary/
 
-Pixabay grants a free, worldwide, non-exclusive licence to use and modify eligible content, including commercial uses, subject to its Content License and restrictions. Attribution is generally not required. Standalone redistribution/resale, certain trademark/endorsement uses and other restricted uses are not permitted. The platform licence does not grant every depicted person's, property's, trademark owner's or other third party's rights; asset-level rights review remains required.
+Pixabay's current Content License grants a worldwide, perpetual, non-exclusive, royalty-free right to download, use, copy, modify or adapt eligible content for commercial or non-commercial purposes, subject to prohibited uses. Attribution is not mandatory. Standalone resale/redistribution, certain trademark/endorsement uses and misleading uses are prohibited. The licence does not automatically clear identifiable people, property, trademarks, music, other embedded works or other third-party rights. These six user-shared videos were published after 9 January 2019, so they are recorded under the Pixabay Content License, not the older CC0 rule.
 
-**Inventory finding:** No exact Pixabay source page or local Pixabay MP4 was identified in the current SonicVhibez-specific recovered media inventory. No Pixabay clip is being claimed as acquired or used. Nature Frontiers media records remain separate and are not silently transferred into SonicVhibez.
+### Previously shared Pixabay wildlife videos recovered from the 15 November conversation
+
+The exact user-shared URLs and contributor identities have now been recovered. Platform pages currently display the Pixabay Content License. **None of these six original MP4 files has been downloaded, hashed, probed, fully decoded or visually reviewed in the current project workspace.** They are candidates only, not production-selected or release-cleared.
+
+| Pixabay ID | Contributor | Listing title | Published | Format / resolution / fps | Source page | Current editorial gate |
+|---|---|---|---|---|---|---|
+| 111414 | NickyPe | Lion, Predator, Masculine | 2022-03-22 | MP4, 3840×2160, 25fps | https://pixabay.com/videos/lion-predator-masculine-mane-zoo-111414/ | HOLD — listing tags include Zoo; never represent as wild until full playback confirms context |
+| 173139 | FestiMania | Snake, Cobra, Serpent | 2023-07-26 | MP4, 3840×2160, 30fps | https://pixabay.com/videos/snake-cobra-serpent-snake-tongue-173139/ | Review candidate — exact cobra species not established; no King Cobra claims without verification |
+| 263732 | MikoEP | Lion, Big Cat, Wildlife | 2025-03-10 | MP4, 1080×1920, 30fps | https://pixabay.com/videos/lion-big-cat-wildlife-predator-263732/ | Review candidate — wild status, location and exact behaviour require full playback |
+| 323312 | Solarselle77 | Lion, Male Lion, King | 2025-12-20 | MP4, 3328×1856, 24fps | https://pixabay.com/videos/lion-male-lion-king-mane-face-323312/ | Review candidate — male-lion close-up listing; wild status/location unverified |
+| 127476 | Eaktas06 | Monkey, Baboon, Ape | 2022-08-26 | MP4, 1920×1080, 29fps | https://pixabay.com/videos/monkey-baboon-ape-primate-animals-127476/ | Review candidate — actual primate species and behaviour require verification |
+| 216696 | NickyPe | Baboons, Apes, Cub | 2024-06-15 | MP4, 3840×2160, 29fps | https://pixabay.com/videos/baboons-apes-cub-family-tree-trunk-216696/ | Review candidate — species, age class and family relationship require full playback |
+
+The structured per-asset register is `content/media/pixabay-user-shared-candidates-2026-11-22.json`. All six are marked `sourceFileStatus=NOT_DOWNLOADED`, `sha256=null`, `fullDecode=NOT_RUN`, `rightsVerified=false`, `humanReviewed=false`, `selectedForProduction=false` and `releaseEligible=false`. Do not use these candidates as B-roll until the original files are acquired and the editorial gates pass.
+
+### Additional Pixabay crocodile lead (not user-shared)
+
+[Pexels/Pixabay candidate 173059](https://pixabay.com/videos/crocodile-animal-wildlife-nature-173059/) by VarietycinemaProduction is listed as MP4, 3840×2160, 50fps and free under the Pixabay Content License. It was found during production research, not recovered as a user-shared asset. Species, scene context and actual file remain unverified; it is not acquired or used. Do not infer species from the generic title.
 
 ## Owner permission scope
 
@@ -85,6 +104,6 @@ The five acquired files total 137.974967 seconds. The likely usable subset from 
 
 - The three Short 001 clips are platform-licensed, technically verified and used in a silent visual review; complete human playback, collar context, third-party-rights and owner release approval remain outstanding.
 - The fourth Short 001 clip is excluded for editorial reasons, not because its Pexels licence is invalid.
-- The five crocodile candidates are imported into Canva but their original MP4 bytes have not yet been acquired into the local production workspace; no local SHA-256 or full decode is claimed.
-- No asset is marked release-cleared by this document.
+- Five crocodile source MP4s have now been acquired in review artifact 14735172901, hashed, probed and fully decoded; five aspect-safe review proxies were generated in artifact 14736034084. Complete human playback, third-party-rights review and scene selection remain pending. The original source bytes are retained in the GitHub artifact, not yet materialized into the local production workspace.
+- The six user-shared Pixabay URLs are now recovered and licence terms checked, but no Pixabay original MP4 bytes, SHA-256, technical probes or full playback are available.\n- No asset is marked release-cleared by this document.
 - The 55.033-second Short 001 file is a 720×1280 silent review-only export, not a final narrated production master.
