@@ -717,7 +717,7 @@ test("2026-12-28 creator-education drafts preserve product-specific disclosure a
   assert.ok(thumbnail.title.toLowerCase().indexOf(thumbnail.primaryKeyword) <= 24);
   assert.equal(thumbnail.productUrl, "https://selar.com/539497q11t");
   assert.equal(thumbnail.disclosure.status, "HOLD");
-  assert.match(thumbnail.script, /^\\[INTERNAL HOLD — NOT SPOKEN\\./);
+  assert.match(thumbnail.script, /^\[INTERNAL HOLD — NOT SPOKEN\./);
   assert.ok(thumbnail.description.indexOf("DISCLOSURE HOLD") < thumbnail.description.indexOf(thumbnail.productUrl));
   assert.equal(thumbnail.keywordEvidence.type, "qualitative_search_intent");
   assert.ok(thumbnail.keywordEvidence.sources.length >= 2);
@@ -734,6 +734,6 @@ test("2026-12-28 creator-education drafts preserve product-specific disclosure a
   assert.ok(week.items.every(row => row.status === "DRAFT_ONLY" && row.visibility === "private" && row.targetSeconds === 55));
   assert.equal(checkedInPlan.publicationEnabled, false);
   assert.equal(checkedInPlan.schedulingEnabled, false);
-  assert.doesNotMatch(JSON.stringify(week), /"(?:scheduledAt|publishedAt|publicationAt|actualPublishedAt)"\\s*:/i);
+  assert.doesNotMatch(JSON.stringify(week), /"(?:scheduledAt|publishedAt|publicationAt|actualPublishedAt)"\s*:/i);
   assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
