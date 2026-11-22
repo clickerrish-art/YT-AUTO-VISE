@@ -513,7 +513,7 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
       "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "currentHeadEvidenceNote": "PASS for controlled staging persistence/recovery, not production deployment. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed the complete automation suite: 189/189 Node files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities (run 45027788664). Exact-HEAD deployment recovery smoke 45027788708 passed its replacement/restart/persistent-state check; Cloudflare runner-bridge safety 45027788689 passed syntax and mocked runner/artifact integrity tests. The authenticated read-only Cloudflare staging smoke also passed in automation run 45027788664 without remote mutation. This validates local/staging backup, restore, restart and fail-closed recovery only; R2 remains unavailable and no production Worker or production durability is certified.",
+      "currentHeadEvidenceNote": "PASS for controlled staging persistence/recovery, not production deployment. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed the complete automation suite: 189/189 Node files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities (run 45027788664). Exact-HEAD deployment recovery smoke 45027788708 passed its replacement/restart/persistent-state check; Cloudflare runner-bridge safety 45027788689 passed syntax and mocked runner/artifact integrity tests. The authenticated read-only Cloudflare staging smoke passed health, unauthenticated/authorized state, ETag/revision, backup-list integrity and runner-session checks. Read-only Cloudflare account inspection confirms the staging Worker is deployed with STATE_DB bound; D1 contains one dashboard_state row and five dashboard_backups. Runner tables are empty and R2 is unavailable. This validates staging state durability/recovery only; it does not certify production deployment.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
     },
     {
@@ -692,7 +692,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
-      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed the automation/security suite (1,107 Node tests across 189 files, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities; run 45027788664). Exact-HEAD deployment recovery smoke 45027788708 passed; runner-bridge safety 45027788689 passed; authenticated read-only Cloudflare staging smoke passed in 45027788664. These are local/staging tests only. No SonicVhibez production Worker, production D1, durable R2 artifact store, production monitoring or production rollback was verified; R2 remains unavailable and staging OIDC trust/branch protection still require owner/admin action. Do not enable production publishing.",
+      "currentHeadEvidenceNote": "NOT_TESTED overall. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed automation/security run 45027788664 (1,107 Node tests across 189 files, 108 Python tests, zero failures/skips, npm audit zero vulnerabilities), deployment recovery smoke 45027788708 and runner-bridge safety 45027788689. Read-only Cloudflare inspection confirms sonicvhibez-durable-state-staging is deployed with workers.dev enabled and STATE_DB bound; D1 has one dashboard_state row and five backups. Its ARTIFACTS R2 binding targets sonicvhibez-artifacts-staging, but the account R2 API returns HTTP 403 because R2 is not enabled; runner artifact tables are empty. This is staging-only. No SonicVhibez production render/publisher Worker, production D1/R2 artifact store, production monitoring or production rollback was verified; OIDC trust and branch protection still require owner/admin action. Do not enable production publishing.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
     },
     {
@@ -2020,7 +2020,7 @@
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceNote": "BLOCKED overall on API route acceptance. The route matrix remains pinned to exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73: 48/48 protected API routes reject missing and invalid credentials, 41/48 routes have accepted endpoint-specific local integration evidence, and seven remain blocked. The complete automation suite reran on exact descendant fae3bf58270b1ffecb038ea0c9a40be0bd340f9 in run 45027788664 with 1,107 Node tests across 189 files and 108 Python tests, zero failures/skips, npm audit zero vulnerabilities. The seven blockers remain two owner-signed queue identity gates and five Meta/YouTube provider or genuine rights/history prerequisites. Fail-closed paths are covered; no owner approval, live provider write or publication is claimed.",
+      "currentHeadEvidenceNote": "BLOCKED overall on API route acceptance. The route matrix remains pinned to exact application source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73: 41/48 routes with accepted endpoint-specific local integration evidence, 48/48 protected API routes reject missing and invalid credentials, and seven routes remain blocked. The complete automation suite reran on exact descendant fae3bf58270b1ffecb038ea0c9a40be0bd340f9 in run 45027788664 with 1,107 Node tests across 189 files and 108 Python tests, zero failures/skips, npm audit zero vulnerabilities. The seven blockers remain two owner-signed queue identity gates and five Meta/YouTube provider or genuine rights/history prerequisites. Fail-closed paths are covered; no owner approval, live provider write or publication is claimed.",
       "currentHeadEvidenceUpdatedAt": "2026-11-22T13:13:51Z"
     },
     {
@@ -2180,16 +2180,19 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595475574",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44595474812",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971474",
-        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971535"
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44778971535",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788664",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788708",
+        "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027788689"
       ],
       "nextAction": "Owner/admin must protect the implementation branch, align OIDC trust to the protected ref/workflow, deploy the manual-only bridge to staging and prove read-only/no-op runtime plus durable lease/backoff/artifact state. No production dispatch or publishing.",
       "assessmentCommitSha": "4fdebfa13f818f9554ea55e3a17ecc54efa82cdc",
       "acceptanceCriterion": "The worker uses a separate scoped token, can only list dispatchable jobs and invoke the renderer, filters unapproved render plans, applies bounded conflict backoff, preserves state for read-only listings and stops its poll wait promptly.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "668a8779f8a2894f99ed935d0c8bf13f2f215e64",
-      "currentHeadEvidenceNote": "Historical worker dispatch preflight returned HTTP 409 preflight cooldown; failed cooldown persistence causing a non-retryable stop and retained process lock. Local worker dispatch/backoff/persistence tests pass; current deployment recovery 44778971474 and runner-bridge safety 44778971535 pass on 668a8779f8a2894f99ed935d0c8bf13f2f215e64. Live worker dispatch remains NOT_TESTED: staging OIDC trust is pinned to an old branch/workflow, runner D1 has no operational rows, R2 is disabled and no SonicVhibez production publisher Worker exists.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-19T19:12:50Z"
+      "currentHeadEvidenceSha": "fae3bf58270b1ffecb038ea0c9a40be0bd340f9",
+      "currentHeadEvidenceNote": "NOT_TESTED for live worker operation; local worker safety is verified. Exact source/test SHA fae3bf58270b1ffecb038ea0c9a40be0bd340f9 passed 1,107 Node tests across 189 files, zero failures/skips, including all 38 test/worker-runner.test.mjs cases: persisted HTTP 409 preflight cooldown across restart, no early redispatch, fail-stop with retained process lock when cooldown persistence fails, uncertain-dispatch quarantine persistence, multi-process cooldown/restart, bounded Retry-After and prompt shutdown. The Cloudflare staging state Worker is deployed, but the live render-worker bridge is not operationally deployed: runner_state, runner_control, runner_artifacts and runner_artifact_parts each contain zero rows; R2 API access returns HTTP 403 because R2 is not enabled; staging OIDC trust remains pinned to an old branch/workflow. Therefore live continuous dispatch remains NOT_TESTED; no render job or publication was executed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-22T13:32:50Z"
     },
     {
       "id": "DEPLOY-SERVICE-READINESS-001",
