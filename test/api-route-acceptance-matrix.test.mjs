@@ -63,7 +63,7 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
     "API positive-route evidence must identify an exact tested source/test SHA");
   assert.equal(matrix.currentHeadReconciliation?.status, "PARTIAL");
   assert.equal(matrix.currentHeadReconciliation?.positiveRoutesReconciled, 41);
-  assert.equal(matrix.currentHeadReconciliation?.blockedRoutesPreserved, 6);
+  assert.equal(matrix.currentHeadReconciliation?.blockedRoutesPreserved, 7);
   assert.equal(matrix.currentHeadReconciliation?.ownerGatedRoutes, 2);
   assert.equal(matrix.latestCurrentHeadPositiveEvidence?.sourceTestSha, currentSha);
 
@@ -94,6 +94,17 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
       assert.equal(route.currentHeadStatus, "BLOCKED");
       assert.equal(route.currentHeadEvidenceSha, currentSha);
     }
+  }
+
+  const providerDraftRoutes = matrix.routes.filter(route => route.path.includes("/drafts/provider"));
+  assert.equal(providerDraftRoutes.length, 2);
+  for (const route of providerDraftRoutes) {
+    assert.equal(route.overallAcceptance, "NOT_TESTED");
+    assert.equal(route.currentHeadStatus, "NOT_TESTED");
+    assert.equal(route.currentHeadEvidenceSha, currentSha);
+    assert.ok(Number.isInteger(route.currentHeadEvidenceRunId));
+    assert.ok(route.currentHeadEvidenceTestFiles?.includes("test/meta-provider-draft-server.integration.test.mjs"));
+    assert.match(route.currentHeadEvidenceNote, /concurrent reconciliation.*interrupted SUBMITTING/i);
   }
 
   const expectedBlocked = [
