@@ -34,10 +34,10 @@
         "height": 1080,
         "fps": 25,
         "codec": "h264",
-        "sizeBytes": 93072175
+        "sizeBytes": 60635377
       },
-      "fileSizeBytes": 93072175,
-      "sha256": "c40d16e2c4f6e9f9f5a3b9bdfcc1b8e1c72f5e1b0d8c2e5f3c7a4d2f0e1b9c8a",
+      "fileSizeBytes": 60635377,
+      "sha256": "58983cbf529731f91856911c71c3baf86b4558e3e76f40eedd907eb9352b37a8",
       "mediaFile": "media/pexels-30026544.mp4",
       "previewFrame": "preview/pexels-30026544.jpg",
       "fullDecode": "PASS",
@@ -61,15 +61,15 @@
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
-        "durationSeconds": 10.44,
+        "durationSeconds": 10.443767,
         "width": 1080,
         "height": 1920,
-        "fps": 29.97,
+        "fps": 29.97002997002997,
         "codec": "h264",
-        "sizeBytes": 3752889
+        "sizeBytes": 3768933
       },
-      "fileSizeBytes": 3752889,
-      "sha256": "fe8db21e7f5f6b8c9d0a1e2f3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e",
+      "fileSizeBytes": 3768933,
+      "sha256": "bfd5892a6d88661f97ff7c3fd24a4d44880de4a5a0e68f8ac65d42f0f525ff5c",
       "mediaFile": "media/pexels-31702202.mp4",
       "previewFrame": "preview/pexels-31702202.jpg",
       "fullDecode": "PASS",
@@ -93,15 +93,15 @@
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
-        "durationSeconds": 17.62,
+        "durationSeconds": 17.6176,
         "width": 1080,
         "height": 1920,
-        "fps": 29.97,
+        "fps": 29.97002997002997,
         "codec": "h264",
-        "sizeBytes": 40058256
+        "sizeBytes": 15470145
       },
-      "fileSizeBytes": 40058256,
-      "sha256": "c5c0f6d7e8f90123456789abcdef0123456789abcdef0123456789abcdef0123",
+      "fileSizeBytes": 15470145,
+      "sha256": "c31d4bc25d13115fc332aa65f8f306697e08c760895ac1f9dff1b0a2e1db99e7",
       "mediaFile": "media/pexels-31702221.mp4",
       "previewFrame": "preview/pexels-31702221.jpg",
       "fullDecode": "PASS",
@@ -125,15 +125,15 @@
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
-        "durationSeconds": 13.48,
+        "durationSeconds": 13.480133,
         "width": 1080,
         "height": 1920,
-        "fps": 29.97,
+        "fps": 29.97002997002997,
         "codec": "h264",
-        "sizeBytes": 16348517
+        "sizeBytes": 11803470
       },
-      "fileSizeBytes": 16348517,
-      "sha256": "1b3e0f123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+      "fileSizeBytes": 11803470,
+      "sha256": "de3c3a47107e1c5ed30738155515e12a2328b1a7dc91f8b3cadc47536ad6ab8b",
       "mediaFile": "media/pexels-31702245.mp4",
       "previewFrame": "preview/pexels-31702245.jpg",
       "fullDecode": "PASS",
@@ -157,15 +157,15 @@
       "thirdPartyRightsReview": "PENDING",
       "releaseEligible": false,
       "actual": {
-        "durationSeconds": 60.19,
+        "durationSeconds": 60.193467,
         "width": 3840,
         "height": 2160,
-        "fps": 29.97,
+        "fps": 29.97002997002997,
         "codec": "h264",
-        "sizeBytes": 297845125
+        "sizeBytes": 359206497
       },
-      "fileSizeBytes": 297845125,
-      "sha256": "5f0a123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+      "fileSizeBytes": 359206497,
+      "sha256": "4eef20f3ed6bcbe086513d10a6f9c3f6770cf2957a66d36a4e840ac595324464",
       "mediaFile": "media/pexels-31998380.mp4",
       "previewFrame": "preview/pexels-31998380.jpg",
       "fullDecode": "PASS",
@@ -200,5 +200,5 @@
     "releaseEligible": false,
     "publicPublishingEnabled": false
   },
-  "totalAcquiredDurationSeconds": 137.97
+  "totalAcquiredDurationSeconds": 137.974967
 }
