@@ -103,7 +103,7 @@ test("Pexels stock thumbnail and footage acquisition stay disabled under origina
 });
 
 test("quality workflow runs tests and explicitly avoids certifying runtime", () => {
-  assert.match(qualityWorkflow, /node --test/);
+  assert.match(qualityWorkflow, /npm test/);
   assert.match(qualityWorkflow, /does not certify a 6-minute runtime/);
   assert.doesNotMatch(qualityWorkflow, /upload-video|publish-video|youtube\.upload/i);
 });
