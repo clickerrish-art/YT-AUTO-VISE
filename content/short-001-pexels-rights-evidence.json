@@ -26,7 +26,9 @@
       "sha256": "f01daff991cb07920e63f1a5914e3f4bc94cb32ec56cb676a5951c38aba256a6",
       "durationSeconds": 12.16,
       "technicalProbe": "PASS_H264_MP4",
-      "visualReview": "SAMPLED; lion tracking collars visible; avoid unsupported claims about animal status or behaviour"
+      "visualReview": "SAMPLED; lion tracking collars visible; avoid unsupported claims about animal status or behaviour",
+      "fullDecode": "PASS",
+      "downloadedBytes": 24028876
     },
     {
       "id": "pexels-11760785",
@@ -36,7 +38,9 @@
       "sha256": "3417c7da10506e28124faece24b908e842a58b3e99d340d013f62c375d8c4e57",
       "durationSeconds": 18.623,
       "technicalProbe": "PASS_H264_MP4",
-      "visualReview": "SAMPLED; elephant mother and calf visible"
+      "visualReview": "SAMPLED; elephant mother and calf visible",
+      "fullDecode": "PASS",
+      "downloadedBytes": 21909387
     },
     {
       "id": "pexels-11528208",
@@ -46,7 +50,9 @@
       "sha256": "ace119137620bbdf6b372504f8e1dbae9bdd7ee9febe86a667d597ac6d46bada",
       "durationSeconds": 6.868,
       "technicalProbe": "PASS_H264_MP4",
-      "visualReview": "SAMPLED; lion tracking collar visible; avoid unsupported claims about animal status or behaviour"
+      "visualReview": "SAMPLED; lion tracking collar visible; avoid unsupported claims about animal status or behaviour",
+      "fullDecode": "PASS",
+      "downloadedBytes": 23170674
     }
   ],
   "excludedAssets": [
@@ -96,5 +102,19 @@
     "note": "Owner permits qualifying Pexels/Pixabay stock for review and production subject to asset-level rights, provenance, original-file, hash, technical and human-review gates. This record does not grant final rights clearance or publication approval.",
     "stockVideoFootageAllowed": true,
     "stockPhotographsAllowed": false
+  },
+  "acquisitionVerification": {
+    "workflowRunId": 44975292889,
+    "workflowRunNumber": 151,
+    "artifactId": 14735735813,
+    "artifactName": "sonicvhibez-short-001-pexels-review-assets",
+    "artifactSha256": "67ef0c5955adc9f6410b41af6a3850cc06fcdc2988ddb3091e0a4c9ede06b28a",
+    "artifactSizeBytes": 68661908,
+    "allThreeSelectedAssetsDownloaded": true,
+    "allThreeSelectedAssetsFullDecodePass": true,
+    "rightsVerified": false,
+    "thirdPartyRightsReviewed": false,
+    "humanReviewed": false,
+    "releaseEligible": false
   }
 }
