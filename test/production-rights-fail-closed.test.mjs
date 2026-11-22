@@ -184,7 +184,7 @@ test("Production queues and Short candidates reflect current media and narration
   assert.equal(nextShort.productionPolicy.originalCreatorCapturedMediaRequired, false);
   assert.equal(nextShort.productionPolicy.stockMediaAllowed, true);
   assert.equal(nextShort.productionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
-  assert.equal(nextShort.productionPolicy.narrationRightsStatus, "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION");
+  assert.equal(nextShort.productionPolicy.narrationRightsStatus, "SPEECHMA_ANDREW_MANUAL_BROWSER_AUDITION_PENDING_NO_AUDIO_OR_PRODUCTION_APPROVAL");
   assert.equal(longQueue.productionPolicy.originalCreatorCapturedMediaRequired, false);
   assert.equal(longQueue.productionPolicy.stockMediaAllowed, true);
   assert.equal(queue.productionPolicy.originalCreatorCapturedMediaRequired, false);
