@@ -303,8 +303,13 @@ test("Previously shared Pexels acquisition selects only four confirmed user-shar
   for (const id of selectedIds) {
     const asset = register.assets.find(candidate => candidate.assetId === id);
     assert.ok(asset, `Missing previously shared Pexels candidate: ${id}`);
-    assert.equal(asset.sourceFileStatus, "NOT_DOWNLOADED");
-    assert.equal(asset.sha256, null);
+    assert.equal(asset.sourceFileStatus, "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS");
+    assert.match(asset.sha256, /^[a-f0-9]{64}$/);
+    assert.equal(asset.acquisitionArtifactId, 14737325814);
+    assert.equal(asset.fullDecode, "PASS");
+    assert.equal(asset.rightsVerified, false);
+    assert.equal(asset.humanReviewed, false);
+    assert.equal(asset.selectedForProduction, false);
     assert.ok(asset.downloadUrl.startsWith("https://videos.pexels.com/video-files/"));
     assert.ok(script.includes(id));
   }
@@ -318,4 +323,10 @@ test("Previously shared Pexels acquisition selects only four confirmed user-shar
   assert.equal(possibleMatch.sourceMatchStatus, "POSSIBLE_MATCH_NOT_CONFIRMED_DURATION_MISMATCH");
   const elephant = register.assets.find(asset => asset.assetId === "pexels-video-2835528");
   assert.match(elephant.editorialRisk, /Asian elephant/i);
+  const crocodile = register.assets.find(asset => asset.assetId === "pexels-video-30026544");
+  assert.equal(crocodile.duplicateOf, "content/media/pexels-crocodile-candidates-2026-11-22.json");
+  assert.equal(crocodile.sourceFileStatus, "ACQUIRED_IN_REVIEW_ARTIFACT");
+  assert.equal(register.latestAcquisition.assetCount, 4);
+  assert.equal(register.latestAcquisition.fullDecodePasses, 4);
+  assert.equal(register.latestAcquisition.totalActualSourceSeconds, 70.61);
 });
