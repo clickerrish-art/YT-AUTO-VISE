@@ -2315,7 +2315,7 @@
   "latestBranchTipAtEvidenceRefresh": "d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8",
   "latestApplicationSourceChangeSha": "2aadb00ebf3181f1d1da769681f80fa4f98f5cc8",
   "latestFullyTestedSourceTestTreeSha": "d2a7be4733939cffca0423ba28675977af6ab346",
-  "sourceTestEvidenceStatus": "PASS — exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8 passed 1,130 Node tests across 191 files, 108 Python tests, and 41/41 Chromium journeys, with zero failures/skips; npm audit zero vulnerabilities. Application source changes remain at 2aadb00ebf3181f1d1da769681f80fa4f98f5cc8; the later commits are acceptance/evidence metadata only.",
+  "sourceTestEvidenceStatus": "PASS — exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8 passed 1,130 Node tests across 191 files, 108 Python tests and 41/41 Chromium journeys, with zero failures/skips. npm audit zero vulnerabilities was last independently verified on exact source/test SHA d2a7be4733939cffca0423ba28675977af6ab346; it was not rerun in workflow 45078103820.",
   "latestApplicationSourceTestTreeSha": "d2a7be4733939cffca0423ba28675977af6ab346",
   "latestCurrentHeadPositiveEvidence": {
     "sourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
@@ -2375,7 +2375,8 @@
       "browserFailed": 0,
       "browserSkipped": 0,
       "browserRunId": 45078103699,
-      "npmAuditVulnerabilities": 0
+      "npmAuditVulnerabilities": null,
+      "npmAuditLastVerifiedSha": "d2a7be4733939cffca0423ba28675977af6ab346"
     },
     "readiness": {
       "status": "HOLD",
