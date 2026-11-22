@@ -465,13 +465,37 @@ if (!exists(youtubeVerificationPath)) {
       const channel = verification.channel;
       const inventoryArtifact = verification.inventoryArtifact;
       const expectedChannelId = process.env.SONICVHIBEZ_CHANNEL_ID;
+      const priorOwnerReview = verification.previousSuccessfulVerification?.publicationHistoryReconciliation;
+      const priorOwnerVideo = verification.previousSuccessfulVerification?.videos?.find(video =>
+        video?.id === reconciliation.videos?.[0]?.id
+      );
+      const reconciledVideo = reconciliation.videos?.[0];
+      const priorOwnerReviewMatchesFreshRecord =
+        priorOwnerReview?.status === "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY" &&
+        priorOwnerReview?.verifiedBy === "clickerrish-art" &&
+        priorOwnerVideo?.ownerConfirmed === true &&
+        priorOwnerVideo?.format === reconciledVideo?.format &&
+        priorOwnerVideo?.visibility === reconciledVideo?.visibility &&
+        priorOwnerVideo?.youtubePublishedAt === reconciledVideo?.actualPublishedAt &&
+        priorOwnerVideo?.duration === reconciledVideo?.latestInventoryMatch?.duration &&
+        priorOwnerVideo?.ownerReview?.format === reconciledVideo?.format &&
+        priorOwnerVideo?.ownerReview?.studioPublicationDateConfirmed === true &&
+        priorOwnerVideo?.ownerReview?.reaffirmedAt === "2026-11-18" &&
+        verification.videos?.length === 1 &&
+        verification.videos[0]?.id === reconciledVideo?.id &&
+        verification.videos[0]?.visibility === reconciledVideo?.visibility &&
+        verification.videos[0]?.youtubePublishedAt === reconciledVideo?.actualPublishedAt &&
+        verification.videos[0]?.duration === reconciledVideo?.latestInventoryMatch?.duration;
+      const publicationReviewAccepted =
+        publication?.status === "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY" ||
+        (publication?.status === "PRIOR_OWNER_REVIEW_MATCHES_FRESH_INVENTORY" && priorOwnerReviewMatchesFreshRecord);
       const historyMatches = verification.channelIdentityVerified === true &&
         verification.uploadsInventoryComplete === true &&
         typeof channel?.id === "string" &&
         (!expectedChannelId || channel.id === expectedChannelId) &&
         ["SonicVhibez", "SonicVibes"].includes(channel.title) &&
         channel.handle === "@sonicvhibez" &&
-        publication?.status === "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY" &&
+        publicationReviewAccepted &&
         publication.freshInventoryRunId === verification.workflowRunId &&
         publication.freshInventoryArtifactSha256 === inventoryArtifact?.sha256 &&
         reconciliation.complete === true &&
