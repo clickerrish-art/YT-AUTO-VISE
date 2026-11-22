@@ -4,7 +4,7 @@
 **Updated:** 2026-11-20  
 **Status:** SOURCING LEADS ONLY — no source file downloaded, decoded, visually reviewed, or approved for the final edit.
 
-**SUPERSEDED BY CURRENT OWNER MEDIA POLICY — 2026-11-21:** All Pexels and Wikimedia Commons entries below are historical research leads only. They are stock/archive library material, not original creator-captured production media, and are excluded from the current edit. Do not download, render, or use them as substitutes. The current production requirement is genuine original creator-captured wildlife footage with creator/source provenance, exact original file bytes and SHA-256, commercial rights, full technical/visual inspection, and exact-hash human approval.
+**OWNER MEDIA POLICY UPDATE — 2026-11-22:** The owner explicitly superseded the 21 November original-creator-captured-only restriction and now permits qualifying Pexels/Pixabay licensed video footage. This does not permit other stock/archive sources, stock photographs, AI-generated wildlife visuals, standalone unmodified redistribution or fabricated encounters. Each permitted clip still requires exact source-page provenance, platform-licence evidence, original MP4 bytes and SHA-256, technical probe/full decode, third-party-rights review and human visual/editorial approval. The five acquired crocodile clips are review-only; use the current JSON source register for their actual SHA-256 values and per-asset status. The Wikimedia Commons candidate below is excluded by the current source policy.
 
 ## Zero-cost candidates
 
