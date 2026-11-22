@@ -25,7 +25,12 @@
       "humanReviewed": false,
       "selectedForProduction": false,
       "releaseEligible": false,
-      "editorialRisk": "Listing describes watchful meerkats standing alert on a tree trunk in the wild; full playback still needed to confirm the visible behaviour and any embedded marks."
+      "editorialRisk": "Listing describes watchful meerkats standing alert on a tree trunk in the wild; full playback still needed to confirm the visible behaviour and any embedded marks.",
+      "downloadUrl": "https://videos.pexels.com/video-files/8268897/8268897-uhd_3840_2160_25fps.mp4",
+      "downloadUrlAdvertisedFps": 25,
+      "acceptedDownloadFps": [
+        25
+      ]
     },
     {
       "assetId": "pexels-video-33260728",
@@ -47,7 +52,13 @@
       "humanReviewed": false,
       "selectedForProduction": false,
       "releaseEligible": false,
-      "editorialRisk": "The creator and subject match the historical record, but the current source page says 15 seconds while the previous record says 18 seconds. Do not treat as the exact shared file until matched."
+      "editorialRisk": "The creator and subject match the historical record, but the current source page says 15 seconds while the previous record says 18 seconds. Do not treat as the exact shared file until matched.",
+      "downloadUrl": null,
+      "downloadUrlAdvertisedFps": null,
+      "acceptedDownloadFps": [
+        25
+      ],
+      "fpsMetadataNote": "Not included in automated acquisition until the 15s source page is confirmed against the historical 18s user-shared asset."
     },
     {
       "assetId": "pexels-video-9655785",
@@ -69,7 +80,14 @@
       "humanReviewed": false,
       "selectedForProduction": false,
       "releaseEligible": false,
-      "editorialRisk": "Listing identifies Suricata suricatta and describes digging/exploration in the wild; verify the actual clip before using it to support a behavioural claim."
+      "editorialRisk": "Listing identifies Suricata suricatta and describes digging/exploration in the wild; verify the actual clip before using it to support a behavioural claim.",
+      "downloadUrl": "https://videos.pexels.com/video-files/9655785/9655785-hd_1920_1080_25fps.mp4",
+      "downloadUrlAdvertisedFps": 25,
+      "acceptedDownloadFps": [
+        25,
+        50
+      ],
+      "fpsMetadataNote": "Pexels page lists 50fps while the direct download filename advertises 25fps; record actual ffprobe FPS and accept either without retiming."
     },
     {
       "assetId": "pexels-video-30175165",
@@ -91,7 +109,12 @@
       "humanReviewed": false,
       "selectedForProduction": false,
       "releaseEligible": false,
-      "editorialRisk": "Pexels page identifies a King cobra feeding on another snake in natural habitat. Full playback must verify species, action, any prey species, and that no graphic overlay/watermark is present."
+      "editorialRisk": "Pexels page identifies a King cobra feeding on another snake in natural habitat. Full playback must verify species, action, any prey species, and that no graphic overlay/watermark is present.",
+      "downloadUrl": "https://videos.pexels.com/video-files/30175165/12939136_1920_1080_25fps.mp4",
+      "downloadUrlAdvertisedFps": 25,
+      "acceptedDownloadFps": [
+        25
+      ]
     },
     {
       "assetId": "pexels-video-2835528",
@@ -113,7 +136,14 @@
       "humanReviewed": false,
       "selectedForProduction": false,
       "releaseEligible": false,
-      "editorialRisk": "Listing describes elephants roaming grassland; do not infer family relationships or a specific reserve/location without visual evidence."
+      "editorialRisk": "Listing describes elephants roaming grassland; do not infer family relationships or a specific reserve/location without visual evidence.",
+      "downloadUrl": "https://videos.pexels.com/video-files/2835528/2835528-hd_1920_1080_25fps.mp4",
+      "downloadUrlAdvertisedFps": 25,
+      "acceptedDownloadFps": [
+        25,
+        50
+      ],
+      "fpsMetadataNote": "Pexels page lists 50fps while the direct download filename advertises 25fps; record actual ffprobe FPS and accept either without retiming."
     },
     {
       "assetId": "pexels-video-30026544",
@@ -136,7 +166,12 @@
       "selectedForProduction": false,
       "releaseEligible": false,
       "duplicateOf": "content/media/pexels-crocodile-candidates-2026-11-22.json",
-      "editorialRisk": "Already acquired for review; source and location must remain distinct from Kenya and Zambia clips. No final selection or release approval."
+      "editorialRisk": "Already acquired for review; source and location must remain distinct from Kenya and Zambia clips. No final selection or release approval.",
+      "downloadUrl": "https://videos.pexels.com/video-files/30026544/12882200_1920_1080_25fps.mp4",
+      "downloadUrlAdvertisedFps": 25,
+      "acceptedDownloadFps": [
+        25
+      ]
     }
   ],
   "notes": [
