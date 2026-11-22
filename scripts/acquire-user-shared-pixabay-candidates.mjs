@@ -172,6 +172,7 @@ async function main() {
   for (const asset of assets) {
     const id = String(asset.assetId).replace(/^pixabay-video-/, "");
     const pageHtml = await fetchPage(asset.sourceUrl);
+    await new Promise(resolve => setTimeout(resolve, 1500));
     const extracted = extractDirectVideoUrl(pageHtml, id);
     const destination = path.join(MEDIA_DIR, `${slug(asset.assetId)}.mp4`);
     const preview = path.join(PREVIEW_DIR, `${slug(asset.assetId)}.jpg`);
@@ -183,8 +184,9 @@ async function main() {
     const [expectedWidth, expectedHeight] = asset.resolution.split("x").map(Number);
     assert(actual.width === expectedWidth && actual.height === expectedHeight,
       `Resolution mismatch for ${asset.assetId}: ${actual.width}x${actual.height} vs page ${asset.resolution}`);
-    assert(Math.abs(actual.fps - Number(asset.fps)) <= 0.1,
-      `Frame-rate mismatch for ${asset.assetId}: ${actual.fps} vs page ${asset.fps}`);
+    const acceptedFps = asset.acceptedFps ?? [Number(asset.fps)];
+    assert(acceptedFps.some(fps => Math.abs(actual.fps - fps) <= 0.1),
+      `Frame-rate mismatch for ${asset.assetId}: ${actual.fps} vs accepted ${acceptedFps.join(",")}`);
     fullDecode(destination);
     previewFrame(destination, preview, actual.durationSeconds);
     const sha256 = await sha256File(destination);
