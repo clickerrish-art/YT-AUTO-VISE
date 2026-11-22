@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "OWNER_AUTHORIZED_ZERO_COST_ALTERNATIVE_VOICE_AUDITION_PENDING_HUMAN_REVIEW",
-  "provider": "piper_local",
+  "status": "OWNER_SELECTED_SPEECHMA_ANDREW_MANUAL_BROWSER_AUDITION_PENDING",
+  "provider": "Speechma",
   "model": {
     "repository": "rhasspy/piper-voices",
     "revision": "8e602cc224300e0961258a0c885bccbfcc515a7f",
@@ -32,9 +32,29 @@
     "modelCardSha256": "60eaf4d10009d1bd4a1aa555d337dae00f60421d72fee415b9139a021e7cb5d0",
     "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md",
     "rightsStatus": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED",
-    "status": "HISTORICAL_NORMAN_AUDITION_ONLY_NOT_AUTHORIZED"
+    "status": "HISTORICAL_NORMAN_PIPER_AUDITION_ONLY_NOT_CURRENT"
   },
   "candidates": [
+    {
+      "id": "speechma-andrew",
+      "provider": "Speechma",
+      "voiceId": null,
+      "narrator": "Andrew",
+      "gender": "male",
+      "accent": "English (United States)",
+      "locale": "en-US",
+      "voiceType": "standard",
+      "priority": 1,
+      "rightsStatus": "SPEECHMA_TERMS_GRANT_COMMERCIAL_OUTPUT_LICENSE_SUBJECT_TO_TERMS_ACCEPTABLE_USE_AND_THIRD_PARTY_RIGHTS",
+      "sampleUrl": "https://speechma.com/voices/english",
+      "status": "OWNER_SELECTED_MANUAL_BROWSER_AUDITION_PENDING",
+      "productionApproved": false,
+      "manualBrowserOnly": true,
+      "automationAllowed": false,
+      "securityCodeRequiredPerGeneration": true,
+      "maximumCharactersPerStandardConversion": 2000,
+      "outputFormat": "MP3"
+    },
     {
       "id": "norman",
       "voiceId": "en_US-norman-medium",
@@ -43,50 +63,50 @@
       "gender": "male",
       "accent": "American English (en_US)",
       "vocalDirection": "Mature approximately-45-year-old character; clean, clear, warm, confident, passionate wildlife storyteller; natural conversational pacing; controlled emphasis; never robotic or overacted.",
-      "priority": 1,
+      "priority": 2,
       "rightsStatus": "OFFICIAL_PIPER_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN_SOURCE_RECORDINGS; PINNED_MODEL_CARD_REVIEWED",
       "sampleUrl": "https://huggingface.co/rhasspy/piper-voices/resolve/8e602cc224300e0961258a0c885bccbfcc515a7f/en/en_US/norman/medium/samples/speaker_0.mp3",
-      "status": "CURRENT_AUDITION_CANDIDATE_OWNER_LISTENING_REQUIRED",
+      "status": "HISTORICAL_NORMAN_PIPER_AUDITION_ONLY_NOT_CURRENT",
       "productionApproved": false
     }
   ],
   "audition": {
-    "status": "CURRENT_OWNER_AUTHORIZED_ALTERNATIVE_AUDITION_REVIEW_REQUIRED",
-    "generatedByWorkflow": true,
-    "chosenVoice": "norman",
-    "chosenVoiceId": "en_US-norman-medium",
-    "selectedAt": "2026-11-18",
-    "requirements": [
-      "Listen to the complete current Short script rendered in the American voice.",
-      "Assess clarity, warmth, mature vocal character, passion, conversational realism and wildlife-storytelling suitability.",
-      "Do not claim an exact human age; 45 years is a requested perceived vocal character only.",
-      "Validate pinned model card, dataset rights and engine license for intended commercial use.",
-      "Record owner approval against exact final narration WAV SHA-256 before production use."
-    ],
+    "status": "OWNER_SELECTED_MANUAL_BROWSER_AUDITION_PENDING",
+    "provider": "Speechma",
+    "chosenVoice": "Andrew",
+    "voiceId": null,
+    "locale": "en-US",
+    "gender": "male",
+    "voiceType": "standard",
+    "manualBrowserOnly": true,
+    "automationAllowed": false,
+    "securityCodeRequiredPerGeneration": true,
+    "maximumCharactersPerStandardConversion": 2000,
+    "outputFormat": "MP3",
+    "generatedByWorkflow": false,
+    "auditionGenerationStatus": "NOT_GENERATED",
+    "commercialUseStatus": "SPEECHMA_TERMS_GRANT_COMMERCIAL_OUTPUT_LICENSE_SUBJECT_TO_TERMS_ACCEPTABLE_USE_AND_THIRD_PARTY_RIGHTS",
+    "commercialUseAllowed": true,
     "productionApproved": false,
     "finalNarration": false,
-    "renderedAt": "2026-11-19T16:13:33Z",
-    "workflowRunId": 44563576507,
-    "artifactId": 14550782584,
-    "artifactName": "sonicvhibez-american-wildlife-encounter-voice-review",
-    "audioSha256": "f68b0b9b453948688f08f800dbf61ccd9188d1976308d94f27bb2cd58b543813",
-    "durationSeconds": 53.023,
-    "sourceScriptSha256": "20f807f0a1c6afd62ced948cfc8d8ed21478d479a76cc287eae62411bc185c53",
     "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
-    "commercialAttributionReview": "OFFICIAL_PIPER_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; PINNED_MODEL_CARD_AND_ENGINE_LICENCE_RECORDED",
-    "artifactSha256": "f1cb09dc70baf54156435e55ddc0656010848e492ec5969c014f352f6ac45d93",
-    "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md"
+    "thirdPartyInputRightsReview": "PENDING",
+    "termsUrl": "https://speechma.com/terms",
+    "officialVoiceLibraryUrl": "https://speechma.com/voices/english",
+    "retentionRequirement": "Manually download the MP3 and store it in a project-controlled artifact location; browser history is not durable project storage.",
+    "note": "The owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. Speechma's published Terms grant commercial output rights subject to the Terms, Acceptable Use Policy and third-party rights. Free-site automation is prohibited; use the browser manually only. No audio has been generated, listened to or approved. This selection authorizes audition only, not production or publication."
   },
   "rendering": {
     "script": "scripts/render_american_narration.py",
     "workflow": ".github/workflows/american-narration-review.yml",
     "output": "american-short-001-narration-review.wav",
-    "status": "REVIEW_RENDERED_HUMAN_REVIEW_REQUIRED",
-    "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
-    "commercialAttributionReview": "PIPER_OFFICIAL_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; OWNER_REVIEW_REQUIRED",
+    "status": "DISABLED_BY_OWNER_SPEECHMA_BROWSER_ONLY",
+    "humanVoiceQualityReview": "NOT_APPLICABLE_TO_CURRENT_SELECTION",
+    "commercialAttributionReview": "NOT_CURRENT",
     "productionApproved": false,
     "finalNarration": false,
-    "latestEvidencePath": "content/american-narration-review-evidence.json"
+    "latestEvidencePath": "content/american-narration-review-evidence.json",
+    "note": "The previous Norman/Piper review artifact is historical. Local Piper/Edge TTS generation is not authorized; the current selection is Speechma Andrew manual browser audition only."
   },
   "previousCandidate": {
     "id": "banjo",
@@ -146,5 +166,32 @@
       "historyPersistence": "BROWSER_LOCAL_ONLY",
       "retentionRequirement": "Download the MP3 and store it in a project-controlled artifact location."
     }
+  },
+  "historicalPiperAudition": {
+    "status": "CURRENT_OWNER_AUTHORIZED_ALTERNATIVE_AUDITION_REVIEW_REQUIRED",
+    "generatedByWorkflow": true,
+    "chosenVoice": "norman",
+    "chosenVoiceId": "en_US-norman-medium",
+    "selectedAt": "2026-11-18",
+    "requirements": [
+      "Listen to the complete current Short script rendered in the American voice.",
+      "Assess clarity, warmth, mature vocal character, passion, conversational realism and wildlife-storytelling suitability.",
+      "Do not claim an exact human age; 45 years is a requested perceived vocal character only.",
+      "Validate pinned model card, dataset rights and engine license for intended commercial use.",
+      "Record owner approval against exact final narration WAV SHA-256 before production use."
+    ],
+    "productionApproved": false,
+    "finalNarration": false,
+    "renderedAt": "2026-11-19T16:13:33Z",
+    "workflowRunId": 44563576507,
+    "artifactId": 14550782584,
+    "artifactName": "sonicvhibez-american-wildlife-encounter-voice-review",
+    "audioSha256": "f68b0b9b453948688f08f800dbf61ccd9188d1976308d94f27bb2cd58b543813",
+    "durationSeconds": 53.023,
+    "sourceScriptSha256": "20f807f0a1c6afd62ced948cfc8d8ed21478d479a76cc287eae62411bc185c53",
+    "humanVoiceQualityReview": "PENDING_OWNER_LISTENING",
+    "commercialAttributionReview": "OFFICIAL_PIPER_COMMERCIAL_USE_LISTED_PUBLIC_DOMAIN; PINNED_MODEL_CARD_AND_ENGINE_LICENCE_RECORDED",
+    "artifactSha256": "f1cb09dc70baf54156435e55ddc0656010848e492ec5969c014f352f6ac45d93",
+    "commercialUseEvidenceUrl": "https://github.com/OHF-Voice/piper1-gpl/blob/main/docs/COMMERCIAL_USE.md"
   }
 }
