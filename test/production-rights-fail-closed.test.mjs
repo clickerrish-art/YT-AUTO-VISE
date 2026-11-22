@@ -131,8 +131,33 @@ test("NOAA and Wikimedia leads remain excluded while Pexels candidates can enter
     assert.equal(record.currentProductionDisposition.reviewEligible, true, path);
     assert.equal(record.currentProductionDisposition.releaseEligible, false, path);
   }
+  const candidates = readJson("../content/media/pexels-crocodile-candidates-2026-11-22.json");
+  assert.equal(candidates.assets.length, 5);
+  assert.ok(candidates.assets.every(asset => asset.status === "CANVA_IMPORTED_LOCAL_ORIGINAL_BYTES_AND_HASH_PENDING" && asset.releaseEligible === false));
+  const pexelsRegistry = readJson("../content/approved-pexels-footage.json");
+  assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.pexelsAllowed, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.pixabayAllowed, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
   const thumbnailScript = readText("../scripts/create-noaa-lobster-thumbnail-review.py");
   assert.ok(thumbnailScript.includes("BLOCKED: NOAA B-roll is stock/archive footage"));
+});
+
+test("Pexels acquisition is conditional, review-only and fully decoded", () => {
+  const shortAcquisition = readText("../scripts/acquire-short-001-assets.mjs");
+  const crocodileAcquisition = readText("../scripts/acquire-crocodile-footage-review.mjs");
+  const workflow = readText("../.github/workflows/validate-automation.yml");
+  assert.ok(shortAcquisition.includes("rightsVerified: false"));
+  assert.ok(shortAcquisition.includes("humanReviewed: false"));
+  assert.ok(shortAcquisition.includes("releaseEligible: false"));
+  assert.ok(shortAcquisition.includes("full decode "));
+  assert.ok(crocodileAcquisition.includes("fullDecode: \"PASS\""));
+  assert.ok(crocodileAcquisition.includes("releaseEligible: false"));
+  assert.ok(crocodileAcquisition.includes("publicPublishingEnabled: false"));
+  assert.ok(workflow.includes("contains(github.event.head_commit.message, '[acquire-media]')"));
+  assert.ok(workflow.includes("node scripts/acquire-short-001-assets.mjs"));
+  assert.ok(workflow.includes("node scripts/acquire-crocodile-footage-review.mjs"));
+  assert.ok(workflow.indexOf("Run unit tests and require zero skips") < workflow.indexOf("Acquire Short 001 Pexels source footage for review"));
 });
 
 test("Production queues and Short candidates reflect current media and narration blockers", () => {
