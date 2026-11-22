@@ -1,34 +1,34 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-22T12:55:31Z",
+  "generatedAt": "2026-11-22T00:00:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-  "liveMainSha": "861173281b6253c839e6923182b1d3fdf3280b0a",
+  "liveMainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
   "inventory": {
-    "totalHandlers": 52,
-    "protectedApiRoutes": 48,
+    "totalHandlers": 54,
+    "protectedApiRoutes": 50,
     "nonApiHandlers": [
       "GET /",
       "GET /healthz",
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 4550,
-    "branchBehindBy": 9,
-    "changedFiles": 454,
+    "branchAheadBy": 5490,
+    "branchBehindBy": 17,
+    "changedFiles": 546,
     "branchProtectionEnabled": null,
-    "branchProtectionStatus": "UNVERIFIED — branch objects report protected=false, but the detailed protection endpoint returns HTTP 403.",
+    "branchProtectionStatus": "UNVERIFIED — branch protection detail endpoint returns HTTP 403; no PASS inferred.",
     "comparisonSourceSha": "2cd6f223b6b673c030974c7f27c5ddf6f41e8b38",
     "mergeBaseSha": "45352b73bb6cc4787b2a49988b575afb754ab627",
     "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527617041"
   },
   "counts": {
-    "routes": 48,
+    "routes": 50,
     "authNegativePass": 48,
     "overallPass": 41,
-    "overallNotTested": 0,
+    "overallNotTested": 2,
     "overallBlocked": 7,
     "authNegativePassHistorical": 45,
     "authNegativePassCurrentHead": 48
@@ -171,480 +171,6 @@
   "disclaimer": "The API route matrix is synchronized to the source-derived dashboard API inventory. Exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 passed automation run 45024548346: 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The same exact-SHA run includes 48/48 protected-route missing/invalid-authentication checks and endpoint-specific local integration coverage for all 41 routes classified PASS. Dashboard browser E2E passed 41/41 journeys on the same exact SHA in run 45024548303. Seven routes remain BLOCKED: five depend on real Meta/YouTube provider identity, rights, compliance or authoritative history; two positive dispatch/production routes remain owner-gated until the exact queue mapping is signed. Fail-closed negative paths are tested. This does not claim live provider acceptance, remote publication, owner authorization or production readiness.",
   "routes": [
     {
-      "method": "GET",
-      "path": "/api/facebook/autonomous-status",
-      "classification": "read-only autonomous publisher status",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "PASS",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
-        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
-        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/facebook/idea",
-      "classification": "read-only content idea generation",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "PASS",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
-        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
-        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/facebook/state",
-      "classification": "read-only Meta state inspection",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "PASS",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
-        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
-        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/instagram/status",
-      "classification": "Nature Frontiers Instagram operations status (authenticated, read-only)",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS — exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64; test/dashboard-server.test.mjs passed in the 62/62 Instagram safety suite on run 43774533777. Authenticated GET returns HTTP 200, identifies the Nature Frontiers destination, confirms read-only/no-provider-mutation behavior, reports fail-closed switches and does not expose the operator token.",
-      "inputValidation": "NOT_APPLICABLE — read-only GET accepts no caller-supplied body or query parameters.",
-      "durablePersistence": "NOT_APPLICABLE — read-only status endpoint does not mutate persistent state.",
-      "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
-      "concurrency": "NOT_APPLICABLE — authenticated read-only status GET performs no state transition or mutation.",
-      "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
-      "externalOperation": "NOT_APPLICABLE — endpoint reports local configuration and verified receipts; it does not call Meta or publish.",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-head local integration test verifies authenticated status response, Nature Frontiers destination, read-only/no-provider-mutation boundary, fail-closed publishing switches, unconfigured Instagram account ID, numeric linked Page ID and operator-token redaction. It deliberately does not claim live Meta connectivity or authorize publishing.",
-      "testEvidence": {
-        "test": "test/dashboard-server.test.mjs and test/dashboard-ui-contract.test.mjs",
-        "exactTestedSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533777",
-        "scenario": "Authenticated GET /api/instagram/status returns HTTP 200 and safe read-only status; publishing remains disabled, dry-run and emergency stop remain active, Instagram business account remains unset, configured Page ID is numeric, and operator token is absent from response."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-server.test.mjs",
-        "test/instagram-approval-service.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/jobs/dispatchable",
-      "classification": "read-only scoped worker dispatch inventory",
-      "authRequired": "operator token or scoped worker token; worker token is restricted to this GET and POST /api/jobs/produce",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS — the worker credential receives only queued jobs whose production plan is explicitly APPROVED_PLAN_ONLY with an APPROVE decision and a 64-character approval receipt field; a draft plan is withheld. The fixture is synthetic and is not proof of genuine human approval.",
-      "inputValidation": "PASS — limit must be an integer from 1 to 100; worker identity must match the bounded identifier policy; invalid limit/identity return HTTP 400.",
-      "durablePersistence": "N/A — read-only; four concurrent requests preserve the exact persisted state bytes.",
-      "auditEvidence": "N/A — read-only; no audit event is written.",
-      "concurrency": "PASS — four concurrent authenticated reads return the same payload and leave persisted state byte-identical.",
-      "restartRecovery": "N/A — read-only route with no durable mutation.",
-      "externalOperation": "none",
-      "overallAcceptance": "BLOCKED",
-      "notes": "The endpoint only selects candidates for dispatch. The render endpoint still revalidates the full script/narration/captions/production-plan/rights/compliance/metadata/media evidence and can reject a candidate without rendering. It does not upload or publish. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A. Latest guard: fail-closed queue identity reconciliation is now required before dispatch/production; integration regressions have been added but are NOT_TESTED on the current branch head. Current repository owner-approval gate overrides historical positive evidence; dispatch/render remains blocked until the owner supplies the exact mapping.",
-      "testEvidence": {
-        "test": "test/dashboard-worker-api.integration.test.mjs; test/worker-runner.test.mjs; test/dashboard-api-auth-matrix.test.mjs",
-        "exactTestedSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435",
-        "scenario": "Real dashboard API test admits a synthetic APPROVED_PLAN_ONLY candidate, withholds a queued draft plan, validates invalid limits/worker IDs, rejects worker access to operator state and direct lease claims, returns 404 for an unknown render job, and verifies four concurrent identical reads preserve state byte-for-byte. Worker-runner tests verify sequential dispatch, 409 handling, 30-second initial backoff, credential scoping, HTTPS/loopback rules and prompt polling shutdown.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "NOT_TESTED",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": null,
-      "currentHeadEvidenceRunId": null,
-      "currentHeadEvidenceNote": "Positive dispatch/production behavior remains NOT_TESTED because owner-approved content/queue-identity-approval.json is absent; the owner-signed exact queue identity mapping is required. Fail-closed rejection paths were rerun on 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
-        "test/dashboard-dispatchable-ordering.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/jobs/narration/audio",
-      "classification": "read-only verified audio stream",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS — read-only; durable state remains byte-identical under concurrent requests.",
-      "auditEvidence": "PASS — no audit event or other state mutation occurs.",
-      "concurrency": "PASS — four simultaneous authenticated reads return the same hash-bound bundle or exact audio bytes.",
-      "restartRecovery": "PASS — successful read-back after server restart is covered by the same real-server test.",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-server.test.mjs — real HTTP server",
-        "exactTestedSha": "8dddba57804bc04080930742a9bdbd74f6dc05bd",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292433645",
-        "scenarios": "Four simultaneous authenticated GET /api/jobs/narration/review requests return the same hash-bound script/transcript bundle; four simultaneous GET /api/jobs/narration/audio requests return the exact verified audio bytes. Durable dashboard state remains byte-identical, including audit history. The same real-server test also verifies missing/unknown job rejection and successful read-back after restart.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-server.test.mjs",
-        "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/jobs/narration/review",
-      "classification": "read-only narration review bundle",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS — read-only; durable state remains byte-identical under concurrent requests.",
-      "auditEvidence": "PASS — no audit event or other state mutation occurs.",
-      "concurrency": "PASS — four simultaneous authenticated reads return the same hash-bound bundle or exact audio bytes.",
-      "restartRecovery": "PASS — successful read-back after server restart is covered by the same real-server test.",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-server.test.mjs — real HTTP server",
-        "exactTestedSha": "8dddba57804bc04080930742a9bdbd74f6dc05bd",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292433645",
-        "scenarios": "Four simultaneous authenticated GET /api/jobs/narration/review requests return the same hash-bound script/transcript bundle; four simultaneous GET /api/jobs/narration/audio requests return the exact verified audio bytes. Durable dashboard state remains byte-identical, including audit history. The same real-server test also verifies missing/unknown job rejection and successful read-back after restart.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/jobs/queue-diagnostics",
-      "classification": "read-only production queue diagnostics",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS — authenticated operator receives read-only queued/dispatchable/held counts, blocker summaries and per-job diagnostics in Africa/Johannesburg.",
-      "inputValidation": "PASS — limit is constrained to an integer from 1 to 100; limit 101 returns HTTP 400 without mutation.",
-      "durablePersistence": "N/A — read-only GET; persisted state remains byte-identical.",
-      "auditEvidence": "N/A — read-only GET; no audit events are created.",
-      "concurrency": "PASS — four concurrent authenticated reads return consistent held-job diagnostics and preserve state byte-for-byte.",
-      "restartRecovery": "N/A — read-only GET; no durable state is changed.",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA real-server integration proves operator authentication, bounded limit validation, Africa/Johannesburg slot interpretation, explicit missing-authoring/render-plan/future-slot blockers, four-way concurrent read stability, no audit mutation and byte-identical durable state. The route does not dispatch, retry, upload or publish. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-api-queue-diagnostics.integration.test.mjs",
-        "exactTestedSha": "e3a872309b6531d7bc03a22ae0f941a40d77c51a",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488289397",
-        "scenario": "Exact-SHA content-quality CI passed 719 Node tests with zero failures/skips; real-server test verifies unauthenticated 401, invalid limit 400, four concurrent authenticated reads, correct held-job blocker counts and byte-identical state/audit preservation.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-queue-diagnostics.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/jobs/review/bundle",
-      "classification": "local production-review evidence bundle",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS — authenticated operator receives only the hash-verified review bundle or the requested exact media preview.",
-      "inputValidation": "PASS — incomplete/mutated artifact evidence is rejected with HTTP 409; preview kinds are constrained to video, thumbnail and captions.",
-      "durablePersistence": "N/A — read-only GET; no state mutation.",
-      "auditEvidence": "N/A — read-only GET; no audit mutation.",
-      "concurrency": "N/A — read-only GET.",
-      "restartRecovery": "N/A — read-only GET; the route does not create durable state.",
-      "externalOperation": "local media/artifact access",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA real-server integration verifies operator authentication, byte-exact video/thumbnail/captions previews, metadata hash binding and fail-closed 409 responses after any artifact or metadata mutation. No publication or state mutation occurs. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-review-preview.integration.test.mjs",
-        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
-        "scenario": "Real HTTP integration test proves unauthenticated bundle/preview requests return 401; authenticated review bundle returns verified video, thumbnail, captions and metadata; previews serve byte-exact artifacts; changed video, thumbnail, captions or metadata returns 409. Publishing remains disabled.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-review-approval.integration.test.mjs",
-        "test/dashboard-review-preview.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/jobs/review/preview",
-      "classification": "local production-review media preview",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS — authenticated operator receives only the hash-verified review bundle or the requested exact media preview.",
-      "inputValidation": "PASS — incomplete/mutated artifact evidence is rejected with HTTP 409; preview kinds are constrained to video, thumbnail and captions.",
-      "durablePersistence": "N/A — read-only GET; no state mutation.",
-      "auditEvidence": "N/A — read-only GET; no audit mutation.",
-      "concurrency": "N/A — read-only GET.",
-      "restartRecovery": "N/A — read-only GET; the route does not create durable state.",
-      "externalOperation": "local media/artifact access",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA real-server integration verifies operator authentication, byte-exact video/thumbnail/captions previews, metadata hash binding and fail-closed 409 responses after any artifact or metadata mutation. No publication or state mutation occurs. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-review-preview.integration.test.mjs",
-        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
-        "scenario": "Real HTTP integration test proves unauthenticated bundle/preview requests return 401; authenticated review bundle returns verified video, thumbnail, captions and metadata; previews serve byte-exact artifacts; changed video, thumbnail, captions or metadata returns 409. Publishing remains disabled.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-review-approval.integration.test.mjs",
-        "test/dashboard-review-preview.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/nature-frontiers/media-register",
-      "classification": "Nature Frontiers provider-independent media register (read-only)",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS — exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64; the full 894-test Node suite passed with zero failures and zero skips in run 43774533849. test/nature-frontiers-media-register-api.test.mjs verifies authenticated HTTP 200, live read-only register payload, real registered asset, validation result, no state-file path disclosure and publishing disabled.",
-      "inputValidation": "PASS — register is parsed and validated with validateMediaRegister; malformed/unavailable register returns a safe server error.",
-      "durablePersistence": "NOT_APPLICABLE — read-only register is sourced from the checked-in provider-independent JSON register.",
-      "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
-      "concurrency": "NOT_APPLICABLE — read-only GET performs no state transition.",
-      "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
-      "externalOperation": "NOT_APPLICABLE — no provider API or external publishing call is used.",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-head integration test verifies authenticated read-only access to the checked-in provider-independent register, source/license/inspection/approval fields, and validation response. Rights review and publication remain separate gates; the endpoint does not approve or publish media.",
-      "testEvidence": {
-        "test": "test/nature-frontiers-media-register-api.test.mjs",
-        "exactTestedSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533849",
-        "scenario": "Real local dashboard server: unauthenticated request rejected; authenticated GET returns HTTP 200 with Nature Frontiers register, registered asset and rights/inspection/approval statuses; no stateFile path is exposed."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/nature-frontiers-media-register-api.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/state",
-      "classification": "read-only state inspection",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "PASS",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
-        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
-        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-readonly.integration.test.mjs",
-        "test/state-recovery-dashboard.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/state/backups",
-      "classification": "Cloudflare durable-state backup listing",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS — exact-candidate staging smoke 43700604171 starts the real Node dashboard with Cloudflare Access credentials and verifies authenticated GET /api/state/backups returns HTTP 200, revision 2 and three retained backup records.",
-      "inputValidation": "NOT_APPLICABLE — read-only route has no request body or query parameters.",
-      "durablePersistence": "PASS — Node dashboard reads the D1-backed backup inventory through CloudflareDashboardStateClient; every returned backup has a non-empty ID, positive source revision, 64-character SHA-256 and valid timestamp, and no state_json is exposed.",
-      "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
-      "concurrency": "NOT_APPLICABLE — read-only backup listing does not perform a compare-and-swap write.",
-      "restartRecovery": "NOT_APPLICABLE — read-only backup listing has no state transition to recover.",
-      "externalOperation": "PASS — Cloudflare Access service token and policy authenticate the Node dashboard to the deployed staging Worker; direct Worker and Node-mediated state/backup reads succeed.",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-candidate staging smoke 43700604171 passed on source SHA cabd871847f14b6667adb43af1dbacaaa81f35b2; the current branch HEAD dba1b095300ab05833b485aa607385f6231955e8 differs only by the validate-automation workflow concurrency setting. The smoke verifies Cloudflare Access authentication, unauthenticated rejection, Node dashboard startup against an exact pre-seeded local snapshot, authenticated Node GET /api/state and GET /api/state/backups, revision 2, three retained backups, publishing disabled and byte-identical remote state before/after. No remote write was performed.",
-      "testEvidence": {
-        "test": "scripts/cloudflare-staging-auth-smoke.mjs",
-        "exactTestedSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43700604171",
-        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43700604234",
-        "scenario": "Read-only authenticated Node-to-Cloudflare integration through the real dashboard server; state and backup list retrieved; remote state hash/revision unchanged; weak W/\"2\" ETag revision matched by the client."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-cloudflare-state.integration.test.mjs"
-      ]
-    },
-    {
-      "method": "GET",
-      "path": "/api/tasks",
-      "classification": "read-only task inventory",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "PASS",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
-        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
-        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-readonly.integration.test.mjs"
-      ]
-    },
-    {
       "method": "POST",
       "path": "/api/campaigns/manage",
       "classification": "campaign preview, activation/deactivation",
@@ -684,41 +210,6 @@
     },
     {
       "method": "POST",
-      "path": "/api/drafts",
-      "classification": "local draft/job creation",
-      "authRequired": "operator token",
-      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS",
-      "restartRecovery": "PASS",
-      "externalOperation": "none",
-      "overallAcceptance": "PASS",
-      "notes": "Exact-SHA real-server coverage in dashboard-server, request-boundary and draft-update concurrency tests verifies authorized creation, validation, duplicate/slot rejection, durable queue/job/audit writes, idempotency and restart read-back. Public publishing remains disabled. Exact candidate 8272d2e39868237c05b2951f37bcade6ae6608c4 also verifies past scheduled slots return 409 before state/audit mutation. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
-      "testEvidence": {
-        "test": "test/dashboard-server.test.mjs; test/dashboard-api-request-boundaries.test.mjs; test/dashboard-api-draft-update-concurrency.integration.test.mjs",
-        "exactTestedSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
-        "scenario": "Authenticated draft creation, duplicate and slot conflict rejection, persistence/audit/idempotency/restart, plus past-date rejection with byte-identical state and no audit mutation.",
-        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
-        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
-        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
-      },
-      "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
-      "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
-      "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
-        "test/dashboard-api-request-boundaries.test.mjs"
-      ]
-    },
-    {
-      "method": "POST",
       "path": "/api/drafts/update",
       "classification": "local draft editing",
       "authRequired": "operator token",
@@ -753,24 +244,24 @@
     },
     {
       "method": "POST",
-      "path": "/api/facebook/drafts",
-      "classification": "local draft creation",
+      "path": "/api/drafts",
+      "classification": "local draft/job creation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "PASS — concurrent identical submissions serialize to exactly one 201 creation and one 409 duplicate rejection; only one durable draft and one FACEBOOK_DRAFT_CREATED audit event are recorded.",
-      "restartRecovery": "PASS — after graceful server shutdown and a fresh server process, GET /api/facebook/state returns the one winning draft and durable audit history; publishing remains disabled.",
-      "externalOperation": "none; local draft only",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
+      "externalOperation": "none",
       "overallAcceptance": "PASS",
-      "notes": "Accepted as a local Nature Frontiers draft-creation route, not provider-side Meta creation or publication. Exact-SHA test test/facebook-dashboard.test.mjs on 1ac677fd302cb499e8aa07acc869ace81c8ac1d8 covers authorized draft creation, invalid/duplicate-content/same-day rejection, concurrent identical IDs (one 201, one 409), one durable draft/one creation audit, and real server restart with API read-back. Publishing remains disabled and no external provider mutation occurs. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "notes": "Exact-SHA real-server coverage in dashboard-server, request-boundary and draft-update concurrency tests verifies authorized creation, validation, duplicate/slot rejection, durable queue/job/audit writes, idempotency and restart read-back. Public publishing remains disabled. Exact candidate 8272d2e39868237c05b2951f37bcade6ae6608c4 also verifies past scheduled slots return 409 before state/audit mutation. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
       "testEvidence": {
-        "test": "test/facebook-dashboard.test.mjs — real HTTP server",
-        "exactTestedSha": "1ac677fd302cb499e8aa07acc869ace81c8ac1d8",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288488223",
-        "scenarios": "Concurrent duplicate creation is single-winner; one persisted draft and audit event; graceful shutdown/restart read-back through GET /api/facebook/state; local-only and publishing disabled.",
+        "test": "test/dashboard-server.test.mjs; test/dashboard-api-request-boundaries.test.mjs; test/dashboard-api-draft-update-concurrency.integration.test.mjs",
+        "exactTestedSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
+        "scenario": "Authenticated draft creation, duplicate and slot conflict rejection, persistence/audit/idempotency/restart, plus past-date rejection with byte-identical state and no audit mutation.",
         "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
         "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
@@ -782,7 +273,42 @@
       "currentHeadEvidenceRunId": 45024548346,
       "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
-        "test/facebook-dashboard.test.mjs"
+        "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
+        "test/dashboard-api-request-boundaries.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/facebook/autonomous-status",
+      "classification": "read-only autonomous publisher status",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
+      "externalOperation": "none",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
+        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
+        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
     },
     {
@@ -852,6 +378,124 @@
     },
     {
       "method": "POST",
+      "path": "/api/facebook/drafts/provider/reconcile",
+      "classification": "read-only Meta unpublished provider-draft reconciliation",
+      "authRequired": "operator token",
+      "authenticationNegative": "NOT_TESTED on current implementation SHA; the real-server protected-route matrix includes this route but has not run on the current SHA.",
+      "authorizedSuccess": "NOT_TESTED — read-only reconciliation can verify a known remote ID or search for a unique exact-caption unpublished candidate; zero matches remain unresolved and never authorize a retry.",
+      "inputValidation": "NOT_TESTED — requires an existing durable attempt ID, exact configured Page identity and secure token; no provider mutation occurs.",
+      "durablePersistence": "NOT_TESTED — reconciliation outcome and remote receipt are persisted in the attempt ledger and draft state; restart verification pending.",
+      "auditEvidence": "NOT_TESTED — confirmed and unresolved outcomes produce operator-attributed audit events; test execution pending.",
+      "concurrency": "NOT_TESTED — concurrent reconciliation behavior has not been exercised on the current SHA.",
+      "restartRecovery": "NOT_TESTED — known-ID reconciliation is designed for post-restart read-only recovery; test execution pending.",
+      "externalOperation": "Requires renewed Meta Page token and verified Page access for read-only provider lookup; no create retry or publish action is performed.",
+      "overallAcceptance": "NOT_TESTED",
+      "notes": "Added on exact implementation SHA 2a81935036ea6096f5ca5347ec027b929f60dbc8. No exact-SHA CI/test run or live provider verification has occurred. A missing match is not proof of non-creation because Meta documents that unpublished posts may not appear in /feed.",
+      "lastVerifiedOverallAcceptance": "NOT_TESTED",
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "NOT_TESTED",
+      "currentHeadEvidenceSha": "2a81935036ea6096f5ca5347ec027b929f60dbc8",
+      "currentHeadEvidenceNote": "Implementation and regression tests committed, but no test run on this SHA. Do not count source presence as route acceptance.",
+      "currentHeadEvidenceTestFiles": [
+        "test/meta-page-adapter.test.mjs",
+        "test/dashboard-server.test.mjs"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/facebook/drafts/provider",
+      "classification": "one-shot unpublished Meta Page provider-draft creation",
+      "authRequired": "operator token",
+      "authenticationNegative": "NOT_TESTED on current implementation SHA; the real-server protected-route matrix includes this route but has not run on the current SHA.",
+      "authorizedSuccess": "NOT_TESTED — implementation requires a current exact-payload approval, verified Page identity and permissions, owner-enabled provider-draft-only switches, and explicit operator confirmation. No live provider write is claimed.",
+      "inputValidation": "NOT_TESTED — adapter rejects missing/expired authorization, wrong Page, invalid token, modified approval payload and unsafe media before mutation; exact-SHA test execution pending.",
+      "durablePersistence": "NOT_TESTED — server writes a one-shot attempt record before provider mutation; restart verification remains pending.",
+      "auditEvidence": "NOT_TESTED — attempt preparation, remote ID, read-back success/failure and reconciliation are written to the dashboard audit history; test evidence pending.",
+      "concurrency": "NOT_TESTED — state lock and per-draft approval fingerprint fence concurrent duplicate attempts; test evidence pending.",
+      "restartRecovery": "NOT_TESTED — persisted attempts can be reconciled by remote ID or bounded read-only search; test evidence pending.",
+      "externalOperation": "Meta Page token and owner-enabled provider-draft configuration are required for a real provider operation; publishing remains disabled.",
+      "overallAcceptance": "NOT_TESTED",
+      "notes": "Added on exact implementation SHA 2a81935036ea6096f5ca5347ec027b929f60dbc8. This is repository code, not a completed acceptance result. Provider creation is disabled by default; route requires config.providerDraftsEnabled=true, FACEBOOK_PROVIDER_DRAFTS_ENABLED=YES, emergencyStop=false, dryRun=false, exact verified Page and explicit operator confirmation. It never schedules or publishes. No exact-SHA CI/test run or live provider write has occurred.",
+      "lastVerifiedOverallAcceptance": "NOT_TESTED",
+      "currentHeadStatus": "NOT_TESTED",
+      "authenticationNegativeCurrentHead": "NOT_TESTED",
+      "currentHeadEvidenceSha": "2a81935036ea6096f5ca5347ec027b929f60dbc8",
+      "currentHeadEvidenceNote": "Implementation and regression tests committed, but no test run on this SHA. Do not count source presence as route acceptance.",
+      "currentHeadEvidenceTestFiles": [
+        "test/meta-page-adapter.test.mjs",
+        "test/dashboard-server.test.mjs"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/facebook/drafts",
+      "classification": "local draft creation",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS — concurrent identical submissions serialize to exactly one 201 creation and one 409 duplicate rejection; only one durable draft and one FACEBOOK_DRAFT_CREATED audit event are recorded.",
+      "restartRecovery": "PASS — after graceful server shutdown and a fresh server process, GET /api/facebook/state returns the one winning draft and durable audit history; publishing remains disabled.",
+      "externalOperation": "none; local draft only",
+      "overallAcceptance": "PASS",
+      "notes": "Accepted as a local Nature Frontiers draft-creation route, not provider-side Meta creation or publication. Exact-SHA test test/facebook-dashboard.test.mjs on 1ac677fd302cb499e8aa07acc869ace81c8ac1d8 covers authorized draft creation, invalid/duplicate-content/same-day rejection, concurrent identical IDs (one 201, one 409), one durable draft/one creation audit, and real server restart with API read-back. Publishing remains disabled and no external provider mutation occurs. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/facebook-dashboard.test.mjs — real HTTP server",
+        "exactTestedSha": "1ac677fd302cb499e8aa07acc869ace81c8ac1d8",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41288488223",
+        "scenarios": "Concurrent duplicate creation is single-winner; one persisted draft and audit event; graceful shutdown/restart read-back through GET /api/facebook/state; local-only and publishing disabled.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/facebook-dashboard.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/facebook/idea",
+      "classification": "read-only content idea generation",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
+      "externalOperation": "none",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
+        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
+        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
+      ]
+    },
+    {
+      "method": "POST",
       "path": "/api/facebook/publish",
       "classification": "external Meta publication",
       "authRequired": "operator token",
@@ -873,6 +517,40 @@
       "currentHeadEvidenceNote": "Exact-SHA fail-closed negative-path tests reran in automation run 45024548346. External provider/owner prerequisite remains unresolved; no provider success or publication is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/facebook/state",
+      "classification": "read-only Meta state inspection",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
+      "externalOperation": "none",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
+        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
+        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ]
     },
     {
@@ -932,25 +610,57 @@
       ]
     },
     {
+      "method": "GET",
+      "path": "/api/instagram/status",
+      "classification": "Nature Frontiers Instagram operations status (authenticated, read-only)",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS — exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64; test/dashboard-server.test.mjs passed in the 62/62 Instagram safety suite on run 43774533777. Authenticated GET returns HTTP 200, identifies the Nature Frontiers destination, confirms read-only/no-provider-mutation behavior, reports fail-closed switches and does not expose the operator token.",
+      "inputValidation": "NOT_APPLICABLE — read-only GET accepts no caller-supplied body or query parameters.",
+      "durablePersistence": "NOT_APPLICABLE — read-only status endpoint does not mutate persistent state.",
+      "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
+      "concurrency": "NOT_APPLICABLE — authenticated read-only status GET performs no state transition or mutation.",
+      "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
+      "externalOperation": "NOT_APPLICABLE — endpoint reports local configuration and verified receipts; it does not call Meta or publish.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-head local integration test verifies authenticated status response, Nature Frontiers destination, read-only/no-provider-mutation boundary, fail-closed publishing switches, unconfigured Instagram account ID, numeric linked Page ID and operator-token redaction. It deliberately does not claim live Meta connectivity or authorize publishing.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs and test/dashboard-ui-contract.test.mjs",
+        "exactTestedSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533777",
+        "scenario": "Authenticated GET /api/instagram/status returns HTTP 200 and safe read-only status; publishing remains disabled, dry-run and emergency stop remain active, Instagram business account remains unset, configured Page ID is numeric, and operator token is absent from response."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-server.test.mjs",
+        "test/instagram-approval-service.test.mjs"
+      ]
+    },
+    {
       "method": "POST",
-      "path": "/api/jobs",
-      "classification": "content job creation",
+      "path": "/api/jobs/authoring/review",
+      "classification": "script approval",
       "authRequired": "operator token",
       "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
       "durablePersistence": "PASS",
       "auditEvidence": "PASS",
-      "concurrency": "PASS",
+      "concurrency": "PASS — concurrent identical approvals return one original receipt and one exact-retry reuse; a changed reason returns 409 without state/audit mutation.",
       "restartRecovery": "PASS",
-      "externalOperation": "none",
+      "externalOperation": "test operator approval only; real human review must remain genuine",
       "overallAcceptance": "PASS",
-      "notes": "Exact-SHA real-server coverage verifies authenticated job creation, idempotency, conflicting input and schedule-slot rejection, concurrent identical submissions, worker lifecycle and restart persistence. Exact candidate 8272d2e39868237c05b2951f37bcade6ae6608c4 rejects past direct job reservations with 409 before queue/job/audit mutation. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "notes": "The route's concurrency and receipt-integrity behaviour is accepted with a synthetic test operator. This does not constitute genuine human editorial approval. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
       "testEvidence": {
-        "test": "test/dashboard-api-concurrency-restart.test.mjs; test/dashboard-task-runner.test.mjs; test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
-        "exactTestedSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
-        "scenario": "Authenticated job creation, idempotency, conflicts, concurrency and restart; past direct job schedule returns 409 with byte-identical state and no audit mutation.",
+        "test": "test/dashboard-server.test.mjs — real HTTP dashboard server",
+        "exactTestedSha": "e1e7dd94ba289ef2d84ac2c35c7124e76521045e",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292924301",
+        "scenarios": "Concurrent identical script approvals return one original 200 response and one idempotent 200 reuse, with exactly one SCRIPT_REVISION_APPROVED_FOR_NARRATION audit event. A changed review reason returns 409 and preserves durable state/audit byte-for-byte. Stale script hashes are rejected; the subsequent server restart and hash-bound narration review read-back verify the current script approval remains intact. This is synthetic test-operator workflow evidence, not genuine human editorial approval.",
         "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
         "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
@@ -962,8 +672,7 @@
       "currentHeadEvidenceRunId": 45024548346,
       "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
-        "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
-        "test/dashboard-api-job-cancellation.integration.test.mjs"
+        "test/dashboard-server.test.mjs"
       ]
     },
     {
@@ -1002,37 +711,38 @@
       ]
     },
     {
-      "method": "POST",
-      "path": "/api/jobs/authoring/review",
-      "classification": "script approval",
-      "authRequired": "operator token",
+      "method": "GET",
+      "path": "/api/jobs/dispatchable",
+      "classification": "read-only scoped worker dispatch inventory",
+      "authRequired": "operator token or scoped worker token; worker token is restricted to this GET and POST /api/jobs/produce",
       "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS — concurrent identical approvals return one original receipt and one exact-retry reuse; a changed reason returns 409 without state/audit mutation.",
-      "restartRecovery": "PASS",
-      "externalOperation": "test operator approval only; real human review must remain genuine",
-      "overallAcceptance": "PASS",
-      "notes": "The route's concurrency and receipt-integrity behaviour is accepted with a synthetic test operator. This does not constitute genuine human editorial approval. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "authorizedSuccess": "PASS — the worker credential receives only queued jobs whose production plan is explicitly APPROVED_PLAN_ONLY with an APPROVE decision and a 64-character approval receipt field; a draft plan is withheld. The fixture is synthetic and is not proof of genuine human approval.",
+      "inputValidation": "PASS — limit must be an integer from 1 to 100; worker identity must match the bounded identifier policy; invalid limit/identity return HTTP 400.",
+      "durablePersistence": "N/A — read-only; four concurrent requests preserve the exact persisted state bytes.",
+      "auditEvidence": "N/A — read-only; no audit event is written.",
+      "concurrency": "PASS — four concurrent authenticated reads return the same payload and leave persisted state byte-identical.",
+      "restartRecovery": "N/A — read-only route with no durable mutation.",
+      "externalOperation": "none",
+      "overallAcceptance": "BLOCKED",
+      "notes": "The endpoint only selects candidates for dispatch. The render endpoint still revalidates the full script/narration/captions/production-plan/rights/compliance/metadata/media evidence and can reject a candidate without rendering. It does not upload or publish. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A. Latest guard: fail-closed queue identity reconciliation is now required before dispatch/production; integration regressions have been added but are NOT_TESTED on the current branch head. Current repository owner-approval gate overrides historical positive evidence; dispatch/render remains blocked until the owner supplies the exact mapping.",
       "testEvidence": {
-        "test": "test/dashboard-server.test.mjs — real HTTP dashboard server",
-        "exactTestedSha": "e1e7dd94ba289ef2d84ac2c35c7124e76521045e",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292924301",
-        "scenarios": "Concurrent identical script approvals return one original 200 response and one idempotent 200 reuse, with exactly one SCRIPT_REVISION_APPROVED_FOR_NARRATION audit event. A changed review reason returns 409 and preserves durable state/audit byte-for-byte. Stale script hashes are rejected; the subsequent server restart and hash-bound narration review read-back verify the current script approval remains intact. This is synthetic test-operator workflow evidence, not genuine human editorial approval.",
+        "test": "test/dashboard-worker-api.integration.test.mjs; test/worker-runner.test.mjs; test/dashboard-api-auth-matrix.test.mjs",
+        "exactTestedSha": "6b8bfe653490b829f6036648ab5bae51e131f4ac",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42506189435",
+        "scenario": "Real dashboard API test admits a synthetic APPROVED_PLAN_ONLY candidate, withholds a queued draft plan, validates invalid limits/worker IDs, rejects worker access to operator state and direct lease claims, returns 404 for an unknown render job, and verifies four concurrent identical reads preserve state byte-for-byte. Worker-runner tests verify sequential dispatch, 409 handling, 30-second initial backoff, credential scoping, HTTPS/loopback rules and prompt polling shutdown.",
         "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
         "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
       },
       "lastVerifiedOverallAcceptance": "PASS",
-      "currentHeadStatus": "PASS",
+      "currentHeadStatus": "NOT_TESTED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
-      "currentHeadEvidenceRunId": 45024548346,
-      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceSha": null,
+      "currentHeadEvidenceRunId": null,
+      "currentHeadEvidenceNote": "Positive dispatch/production behavior remains NOT_TESTED because owner-approved content/queue-identity-approval.json is absent; the owner-signed exact queue identity mapping is required. Fail-closed rejection paths were rerun on 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346.",
       "currentHeadEvidenceTestFiles": [
-        "test/dashboard-server.test.mjs"
+        "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
+        "test/dashboard-dispatchable-ordering.integration.test.mjs"
       ]
     },
     {
@@ -1174,25 +884,25 @@
       ]
     },
     {
-      "method": "POST",
-      "path": "/api/jobs/narration",
-      "classification": "narration generation",
+      "method": "GET",
+      "path": "/api/jobs/narration/audio",
+      "classification": "read-only verified audio stream",
       "authRequired": "operator token",
       "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
       "authorizedSuccess": "PASS",
       "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS — two simultaneous identical requests returned one 201 generation and one 200 idempotent reuse; both responses shared the same narration artifact hashes, with exactly one AUTHORING_NARRATION_STARTED and one AUTHORING_NARRATION_DRAFT_READY audit event.",
-      "restartRecovery": "PASS",
-      "externalOperation": "free Edge TTS used in CI; provider availability external",
+      "durablePersistence": "PASS — read-only; durable state remains byte-identical under concurrent requests.",
+      "auditEvidence": "PASS — no audit event or other state mutation occurs.",
+      "concurrency": "PASS — four simultaneous authenticated reads return the same hash-bound bundle or exact audio bytes.",
+      "restartRecovery": "PASS — successful read-back after server restart is covered by the same real-server test.",
+      "externalOperation": "none",
       "overallAcceptance": "PASS",
-      "notes": "Exact-SHA browser/backend E2E acceptance proves simultaneous duplicate narration requests produce one durable generation and one idempotent reuse, matching artifact hashes, one start/ready audit pair, and publishing remains disabled. Dashboard integration requests now disable HTTP keep-alive to avoid stale-socket reuse during long test operations; nine test servers reserve OS-selected ephemeral ports. No rights, human media review, production render or upload is implied. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
       "testEvidence": {
-        "test": "browser-tests/dashboard.spec.mjs",
-        "exactTestedSha": "fadf7ed58d8d1be5dc2e7999152601702df58788",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405548",
-        "scenario": "Two simultaneous identical POST /api/jobs/narration requests return one 201 and one 200 with reused=true/idempotent=true; both responses bind identical artifacts; exactly one start and one ready audit record persist; publishingEnabled remains false.",
+        "test": "test/dashboard-server.test.mjs — real HTTP server",
+        "exactTestedSha": "8dddba57804bc04080930742a9bdbd74f6dc05bd",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292433645",
+        "scenarios": "Four simultaneous authenticated GET /api/jobs/narration/review requests return the same hash-bound script/transcript bundle; four simultaneous GET /api/jobs/narration/audio requests return the exact verified audio bytes. Durable dashboard state remains byte-identical, including audit history. The same real-server test also verifies missing/unknown job rejection and successful read-back after restart.",
         "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
         "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
@@ -1205,9 +915,8 @@
       "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
-        "browser-tests/dashboard.spec.mjs"
-      ],
-      "currentHeadEvidenceBrowserRunId": 44778360071
+        "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
+      ]
     },
     {
       "method": "POST",
@@ -1237,6 +946,40 @@
           "fresh server restart retains the reconciled draft, review bundle, audio bytes and audit receipt"
         ],
         "limitation": "The MP3 is generated test audio (silence) for duration/container/hash verification; it is not production narration, a human-reviewed asset, or publishing evidence.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs/narration/review",
+      "classification": "read-only narration review bundle",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS — read-only; durable state remains byte-identical under concurrent requests.",
+      "auditEvidence": "PASS — no audit event or other state mutation occurs.",
+      "concurrency": "PASS — four simultaneous authenticated reads return the same hash-bound bundle or exact audio bytes.",
+      "restartRecovery": "PASS — successful read-back after server restart is covered by the same real-server test.",
+      "externalOperation": "none",
+      "overallAcceptance": "PASS",
+      "notes": "A PASS in an individual field records only that tested slice; it does not imply full route acceptance. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-server.test.mjs — real HTTP server",
+        "exactTestedSha": "8dddba57804bc04080930742a9bdbd74f6dc05bd",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41292433645",
+        "scenarios": "Four simultaneous authenticated GET /api/jobs/narration/review requests return the same hash-bound script/transcript bundle; four simultaneous GET /api/jobs/narration/audio requests return the exact verified audio bytes. Durable dashboard state remains byte-identical, including audit history. The same real-server test also verifies missing/unknown job rejection and successful read-back after restart.",
         "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
         "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
@@ -1284,6 +1027,42 @@
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/jobs/narration",
+      "classification": "narration generation",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS — two simultaneous identical requests returned one 201 generation and one 200 idempotent reuse; both responses shared the same narration artifact hashes, with exactly one AUTHORING_NARRATION_STARTED and one AUTHORING_NARRATION_DRAFT_READY audit event.",
+      "restartRecovery": "PASS",
+      "externalOperation": "free Edge TTS used in CI; provider availability external",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA browser/backend E2E acceptance proves simultaneous duplicate narration requests produce one durable generation and one idempotent reuse, matching artifact hashes, one start/ready audit pair, and publishing remains disabled. Dashboard integration requests now disable HTTP keep-alive to avoid stale-socket reuse during long test operations; nine test servers reserve OS-selected ephemeral ports. No rights, human media review, production render or upload is implied. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "browser-tests/dashboard.spec.mjs",
+        "exactTestedSha": "fadf7ed58d8d1be5dc2e7999152601702df58788",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41407405548",
+        "scenario": "Two simultaneous identical POST /api/jobs/narration requests return one 201 and one 200 with reused=true/idempotent=true; both responses bind identical artifacts; exactly one start and one ready audit record persist; publishingEnabled remains false.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-server.test.mjs",
+        "browser-tests/dashboard.spec.mjs"
+      ],
+      "currentHeadEvidenceBrowserRunId": 44778360071
     },
     {
       "method": "POST",
@@ -1354,6 +1133,40 @@
     },
     {
       "method": "POST",
+      "path": "/api/jobs/production-plan/review",
+      "classification": "hash-bound production plan review",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS — concurrent identical approvals yield one 200 commit and one 409 stale duplicate; exactly one approval audit event is recorded.",
+      "restartRecovery": "PASS",
+      "externalOperation": "human/media approval remains external",
+      "overallAcceptance": "PASS",
+      "notes": "The API review transaction is accepted with synthetic fixtures and test operator identity only. Genuine human review and production media approval remain separate gates. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/production-plan-api.test.mjs — real HTTP dashboard server",
+        "exactTestedSha": "77af9f231d9c71f6ec5ee0b4fa757af9009b1941",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41290348544",
+        "scenarios": "Concurrent identical plan submissions produce one 201 creation and one 200 idempotent reuse; exact retry reuses without a second audit event; a conflicting revision returns 409 with byte-identical state. Concurrent identical approvals produce one 200 and one 409, exactly one approval audit event, and the plan/approval receipt survives a fresh server process. All media, narration and rights records are synthetic engineering fixtures; no genuine human approval or publication.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/production-plan-api.test.mjs"
+      ]
+    },
+    {
+      "method": "POST",
       "path": "/api/jobs/production-plan",
       "classification": "production plan submission",
       "authRequired": "operator token",
@@ -1387,25 +1200,25 @@
       ]
     },
     {
-      "method": "POST",
-      "path": "/api/jobs/production-plan/review",
-      "classification": "hash-bound production plan review",
+      "method": "GET",
+      "path": "/api/jobs/queue-diagnostics",
+      "classification": "read-only production queue diagnostics",
       "authRequired": "operator token",
       "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
-      "authorizedSuccess": "PASS",
-      "inputValidation": "PASS",
-      "durablePersistence": "PASS",
-      "auditEvidence": "PASS",
-      "concurrency": "PASS — concurrent identical approvals yield one 200 commit and one 409 stale duplicate; exactly one approval audit event is recorded.",
-      "restartRecovery": "PASS",
-      "externalOperation": "human/media approval remains external",
+      "authorizedSuccess": "PASS — authenticated operator receives read-only queued/dispatchable/held counts, blocker summaries and per-job diagnostics in Africa/Johannesburg.",
+      "inputValidation": "PASS — limit is constrained to an integer from 1 to 100; limit 101 returns HTTP 400 without mutation.",
+      "durablePersistence": "N/A — read-only GET; persisted state remains byte-identical.",
+      "auditEvidence": "N/A — read-only GET; no audit events are created.",
+      "concurrency": "PASS — four concurrent authenticated reads return consistent held-job diagnostics and preserve state byte-for-byte.",
+      "restartRecovery": "N/A — read-only GET; no durable state is changed.",
+      "externalOperation": "none",
       "overallAcceptance": "PASS",
-      "notes": "The API review transaction is accepted with synthetic fixtures and test operator identity only. Genuine human review and production media approval remain separate gates. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "notes": "Exact-SHA real-server integration proves operator authentication, bounded limit validation, Africa/Johannesburg slot interpretation, explicit missing-authoring/render-plan/future-slot blockers, four-way concurrent read stability, no audit mutation and byte-identical durable state. The route does not dispatch, retry, upload or publish. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
       "testEvidence": {
-        "test": "test/production-plan-api.test.mjs — real HTTP dashboard server",
-        "exactTestedSha": "77af9f231d9c71f6ec5ee0b4fa757af9009b1941",
-        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41290348544",
-        "scenarios": "Concurrent identical plan submissions produce one 201 creation and one 200 idempotent reuse; exact retry reuses without a second audit event; a conflicting revision returns 409 with byte-identical state. Concurrent identical approvals produce one 200 and one 409, exactly one approval audit event, and the plan/approval receipt survives a fresh server process. All media, narration and rights records are synthetic engineering fixtures; no genuine human approval or publication.",
+        "test": "test/dashboard-api-queue-diagnostics.integration.test.mjs",
+        "exactTestedSha": "e3a872309b6531d7bc03a22ae0f941a40d77c51a",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42488289397",
+        "scenario": "Exact-SHA content-quality CI passed 719 Node tests with zero failures/skips; real-server test verifies unauthenticated 401, invalid limit 400, four concurrent authenticated reads, correct held-job blocker counts and byte-identical state/audit preservation.",
         "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
         "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
         "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
@@ -1417,7 +1230,7 @@
       "currentHeadEvidenceRunId": 45024548346,
       "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
-        "test/production-plan-api.test.mjs"
+        "test/dashboard-api-queue-diagnostics.integration.test.mjs"
       ]
     },
     {
@@ -1486,6 +1299,76 @@
       "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-retry.integration.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs/review/bundle",
+      "classification": "local production-review evidence bundle",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS — authenticated operator receives only the hash-verified review bundle or the requested exact media preview.",
+      "inputValidation": "PASS — incomplete/mutated artifact evidence is rejected with HTTP 409; preview kinds are constrained to video, thumbnail and captions.",
+      "durablePersistence": "N/A — read-only GET; no state mutation.",
+      "auditEvidence": "N/A — read-only GET; no audit mutation.",
+      "concurrency": "N/A — read-only GET.",
+      "restartRecovery": "N/A — read-only GET; the route does not create durable state.",
+      "externalOperation": "local media/artifact access",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server integration verifies operator authentication, byte-exact video/thumbnail/captions previews, metadata hash binding and fail-closed 409 responses after any artifact or metadata mutation. No publication or state mutation occurs. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-review-preview.integration.test.mjs",
+        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
+        "scenario": "Real HTTP integration test proves unauthenticated bundle/preview requests return 401; authenticated review bundle returns verified video, thumbnail, captions and metadata; previews serve byte-exact artifacts; changed video, thumbnail, captions or metadata returns 409. Publishing remains disabled.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-review-approval.integration.test.mjs",
+        "test/dashboard-review-preview.integration.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs/review/preview",
+      "classification": "local production-review media preview",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS — authenticated operator receives only the hash-verified review bundle or the requested exact media preview.",
+      "inputValidation": "PASS — incomplete/mutated artifact evidence is rejected with HTTP 409; preview kinds are constrained to video, thumbnail and captions.",
+      "durablePersistence": "N/A — read-only GET; no state mutation.",
+      "auditEvidence": "N/A — read-only GET; no audit mutation.",
+      "concurrency": "N/A — read-only GET.",
+      "restartRecovery": "N/A — read-only GET; the route does not create durable state.",
+      "externalOperation": "local media/artifact access",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server integration verifies operator authentication, byte-exact video/thumbnail/captions previews, metadata hash binding and fail-closed 409 responses after any artifact or metadata mutation. No publication or state mutation occurs. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-review-preview.integration.test.mjs",
+        "exactTestedSha": "5a4d7ca1299c58732c64d38886622b1fe8d4183c",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42487353423",
+        "scenario": "Real HTTP integration test proves unauthenticated bundle/preview requests return 401; authenticated review bundle returns verified video, thumbnail, captions and metadata; previews serve byte-exact artifacts; changed video, thumbnail, captions or metadata returns 409. Publishing remains disabled.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-review-approval.integration.test.mjs",
+        "test/dashboard-review-preview.integration.test.mjs"
       ]
     },
     {
@@ -1642,6 +1525,72 @@
     },
     {
       "method": "POST",
+      "path": "/api/jobs",
+      "classification": "content job creation",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
+      "externalOperation": "none",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA real-server coverage verifies authenticated job creation, idempotency, conflicting input and schedule-slot rejection, concurrent identical submissions, worker lifecycle and restart persistence. Exact candidate 8272d2e39868237c05b2951f37bcade6ae6608c4 rejects past direct job reservations with 409 before queue/job/audit mutation. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-api-concurrency-restart.test.mjs; test/dashboard-task-runner.test.mjs; test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
+        "exactTestedSha": "8272d2e39868237c05b2951f37bcade6ae6608c4",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
+        "scenario": "Authenticated job creation, idempotency, conflicts, concurrency and restart; past direct job schedule returns 409 with byte-identical state and no audit mutation.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
+        "test/dashboard-api-job-cancellation.integration.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/nature-frontiers/media-register",
+      "classification": "Nature Frontiers provider-independent media register (read-only)",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS — exact source/test SHA 1de17e81bf751c98147aab2a1657d8e5b6c00e64; the full 894-test Node suite passed with zero failures and zero skips in run 43774533849. test/nature-frontiers-media-register-api.test.mjs verifies authenticated HTTP 200, live read-only register payload, real registered asset, validation result, no state-file path disclosure and publishing disabled.",
+      "inputValidation": "PASS — register is parsed and validated with validateMediaRegister; malformed/unavailable register returns a safe server error.",
+      "durablePersistence": "NOT_APPLICABLE — read-only register is sourced from the checked-in provider-independent JSON register.",
+      "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
+      "concurrency": "NOT_APPLICABLE — read-only GET performs no state transition.",
+      "restartRecovery": "NOT_APPLICABLE — read-only GET has no state transition to recover.",
+      "externalOperation": "NOT_APPLICABLE — no provider API or external publishing call is used.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-head integration test verifies authenticated read-only access to the checked-in provider-independent register, source/license/inspection/approval fields, and validation response. Rights review and publication remain separate gates; the endpoint does not approve or publish media.",
+      "testEvidence": {
+        "test": "test/nature-frontiers-media-register-api.test.mjs",
+        "exactTestedSha": "1de17e81bf751c98147aab2a1657d8e5b6c00e64",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43774533849",
+        "scenario": "Real local dashboard server: unauthenticated request rejected; authenticated GET returns HTTP 200 with Nature Frontiers register, registered asset and rights/inspection/approval statuses; no stateFile path is exposed."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/nature-frontiers-media-register-api.test.mjs"
+      ]
+    },
+    {
+      "method": "POST",
       "path": "/api/state/backup",
       "classification": "Cloudflare durable-state backup creation",
       "authRequired": "operator token",
@@ -1660,6 +1609,38 @@
         "exactTestedSha": "41bd4de95d876c9778a4993a0e67ac207d1379ff",
         "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43701290286",
         "scenario": "Real Node dashboard POST /api/state/backup returned HTTP 201; explicit backup was retained in D1 after restore and restart; automatic pre-restore backup was also retained; final backup inventory contained five records."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-cloudflare-state.integration.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/state/backups",
+      "classification": "Cloudflare durable-state backup listing",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS — exact-candidate staging smoke 43700604171 starts the real Node dashboard with Cloudflare Access credentials and verifies authenticated GET /api/state/backups returns HTTP 200, revision 2 and three retained backup records.",
+      "inputValidation": "NOT_APPLICABLE — read-only route has no request body or query parameters.",
+      "durablePersistence": "PASS — Node dashboard reads the D1-backed backup inventory through CloudflareDashboardStateClient; every returned backup has a non-empty ID, positive source revision, 64-character SHA-256 and valid timestamp, and no state_json is exposed.",
+      "auditEvidence": "NOT_APPLICABLE — read-only GET does not mutate state or append an audit event.",
+      "concurrency": "NOT_APPLICABLE — read-only backup listing does not perform a compare-and-swap write.",
+      "restartRecovery": "NOT_APPLICABLE — read-only backup listing has no state transition to recover.",
+      "externalOperation": "PASS — Cloudflare Access service token and policy authenticate the Node dashboard to the deployed staging Worker; direct Worker and Node-mediated state/backup reads succeed.",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-candidate staging smoke 43700604171 passed on source SHA cabd871847f14b6667adb43af1dbacaaa81f35b2; the current branch HEAD dba1b095300ab05833b485aa607385f6231955e8 differs only by the validate-automation workflow concurrency setting. The smoke verifies Cloudflare Access authentication, unauthenticated rejection, Node dashboard startup against an exact pre-seeded local snapshot, authenticated Node GET /api/state and GET /api/state/backups, revision 2, three retained backups, publishing disabled and byte-identical remote state before/after. No remote write was performed.",
+      "testEvidence": {
+        "test": "scripts/cloudflare-staging-auth-smoke.mjs",
+        "exactTestedSha": "cabd871847f14b6667adb43af1dbacaaa81f35b2",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43700604171",
+        "automationCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43700604234",
+        "scenario": "Read-only authenticated Node-to-Cloudflare integration through the real dashboard server; state and backup list retrieved; remote state hash/revision unchanged; weak W/\"2\" ETag revision matched by the client."
       },
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
@@ -1704,6 +1685,41 @@
       ]
     },
     {
+      "method": "GET",
+      "path": "/api/state",
+      "classification": "read-only state inspection",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
+      "externalOperation": "none",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
+        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
+        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly.integration.test.mjs",
+        "test/state-recovery-dashboard.integration.test.mjs"
+      ]
+    },
+    {
       "method": "POST",
       "path": "/api/tasks/run",
       "classification": "operator task execution",
@@ -1736,6 +1752,40 @@
       "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-task-runner.test.mjs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/tasks",
+      "classification": "read-only task inventory",
+      "authRequired": "operator token",
+      "authenticationNegative": "PASS on exact current SHA 61d116ede6c4abc9977078e88864d8571cdadccb: missing and invalid credentials rejected before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44884481167.",
+      "authorizedSuccess": "PASS",
+      "inputValidation": "PASS",
+      "durablePersistence": "PASS",
+      "auditEvidence": "PASS",
+      "concurrency": "PASS",
+      "restartRecovery": "PASS",
+      "externalOperation": "none",
+      "overallAcceptance": "PASS",
+      "notes": "Exact-SHA read-only concurrency acceptance: four simultaneous authorized reads per endpoint return the expected JSON contract; durable state remains byte-identical, no audit mutation occurs, and publishing remains disabled. Exact-candidate rerun on 9e0f9dddb359f5ded0906d8ae156174dd4c390f9: all 141/141 Node test files passed with zero skips in automation/security run 43698639445; the route-specific integration test and protected-route authentication-negative matrix are included in that run. All applicable acceptance dimensions are PASS or explicitly N/A.",
+      "testEvidence": {
+        "test": "test/dashboard-api-readonly-concurrency.integration.test.mjs",
+        "exactTestedSha": "7fb12f05aee8ae646390a0584d7a2605703c2e8f",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41232372051",
+        "scenario": "Four simultaneous authenticated reads per endpoint across five endpoints (20 requests total); all returned validated 200 JSON responses; durable state remained byte-identical and publishing stayed disabled.",
+        "latestExactCandidateSha": "9e0f9dddb359f5ded0906d8ae156174dd4c390f9",
+        "latestCi": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/43698639445",
+        "latestCiResult": "PASS — 141/141 Node test files, zero failures, zero skips; route-specific real-server integration coverage rerun on exact candidate."
+      },
+      "lastVerifiedOverallAcceptance": "PASS",
+      "currentHeadStatus": "PASS",
+      "authenticationNegativeCurrentHead": "PASS",
+      "currentHeadEvidenceSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
+      "currentHeadEvidenceRunId": 45024548346,
+      "currentHeadEvidenceNote": "Rerun on exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 in automation run 45024548346; endpoint-specific integration test file(s) listed for this route were included in the complete 189-file, 1,107-test Node suite. This is local acceptance, not provider publication.",
+      "currentHeadEvidenceTestFiles": [
+        "test/dashboard-api-readonly.integration.test.mjs"
       ]
     },
     {
@@ -2136,7 +2186,14 @@
     "ownerGatedRoutes": 2,
     "latestCandidateHeadSha": "5d1e4082e365511b9cf6e5a36fca7169eb360a73",
     "latestCandidateRegressionStatus": "PASS — exact source/test SHA; 189/189 Node test files, 1,107 Node tests, 108 Python tests, zero skips/failures, npm audit zero vulnerabilities; 41/41 dashboard browser journeys passed on the same SHA. Seven API routes remain blocked, including two owner-mapping-gated routes.",
-    "latestCandidateEvidenceNote": "Exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 passed the complete automation run 45024548346 and dashboard browser run 45024548303. The complete suite reran every endpoint-specific API success/fail-closed test and all 48 route authentication-negative cases. This is local application/fixture evidence, not live provider acceptance. Preserve seven blocked routes: Facebook/Instagram provider approvals/publication and Page identity, queue dispatch/production pending owner-signed exact queue identity mapping, and YouTube upload-attempt reconciliation requiring authoritative remote history."
+    "latestCandidateEvidenceNote": "Exact source/test SHA 5d1e4082e365511b9cf6e5a36fca7169eb360a73 passed the complete automation run 45024548346 and dashboard browser run 45024548303. The complete suite reran every endpoint-specific API success/fail-closed test and all 48 route authentication-negative cases. This is local application/fixture evidence, not live provider acceptance. Preserve seven blocked routes: Facebook/Instagram provider approvals/publication and Page identity, queue dispatch/production pending owner-signed exact queue identity mapping, and YouTube upload-attempt reconciliation requiring authoritative remote history.",
+    "implementationHead": "2a81935036ea6096f5ca5347ec027b929f60dbc8",
+    "protectedApiRoutes": 50,
+    "providerDraftRoutes": [
+      "POST /api/facebook/drafts/provider",
+      "POST /api/facebook/drafts/provider/reconcile"
+    ],
+    "providerDraftAcceptance": "NOT_TESTED — exact-SHA tests and route integration verification pending."
   },
   "dashboardBrowserE2eRefreshRequest": {
     "requestedAt": "2026-11-20",
