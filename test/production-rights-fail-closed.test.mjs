@@ -22,6 +22,11 @@ test("Long-form manifest pins current script and scientific review and remains b
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
   assert.equal(manifest.footageLicenseEvidence, "content/media/pexels-license-evidence-2026-11-22.md");
+  assert.equal(manifest.footageOrigin, "licensed_pexels_stock");
+  assert.equal(manifest.creatorCapturedOriginal, false);
+  assert.equal(manifest.stockVideoFootageAllowed, true);
+  assert.equal(manifest.stockPhotographsAllowed, false);
+  assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, false);
   assert.equal(manifest.narrationRightsDeterminationEvidence, "speechma-andrew-voice-selection-2026-11-22.json");
 });
 
@@ -33,6 +38,10 @@ test("Short manifest pins exact source files and allows only review-only Pexels 
   assert.equal(manifest.captionHashType, "GIT_BLOB_SHA");
   assert.equal(manifest.footageLicenseEvidence, "content/media/pexels-license-evidence-2026-11-22.md");
   assert.equal(manifest.footageEligibilityStatus, "REVIEW_ONLY_ALLOWED_UNDER_OWNER_POLICY_2026-11-22");
+  assert.equal(manifest.footageOrigin, "licensed_pexels_stock");
+  assert.equal(manifest.stockVideoFootageAllowed, true);
+  assert.equal(manifest.stockPhotographsAllowed, false);
+  assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, false);
   assert.equal(manifest.status, "BLOCKED_NOT_RENDERABLE");
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
@@ -79,6 +88,8 @@ test("Nature Frontiers remains stock-excluded while SonicVhibez Pexels footage i
   assert.equal(owner.status, "ACTIVE_WITH_ASSET_LEVEL_REVIEW_GATES");
   assert.equal(owner.mediaRules.pexelsLicensedStockAllowed, true);
   assert.equal(owner.mediaRules.pixabayLicensedStockAllowed, true);
+  assert.equal(owner.mediaRules.stockVideoFootageAllowed, true);
+  assert.equal(owner.mediaRules.stockPhotographsAllowed, false);
   assert.equal(owner.mediaRules.aiGeneratedWildlifeVisualsAllowed, false);
   assert.equal(owner.releaseGates.publicOrUnattendedPublishingRemainsDisabled, true);
   assert.equal(short.productionDisposition.productionEligible, false);
@@ -97,6 +108,8 @@ test("AI wildlife generation remains disabled while licensed stock acquisition i
   assert.equal(generation.primary, false);
   assert.equal(generation.generation.enabled, false);
   assert.equal(generation.safety.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(generation.safety.stockVideoFootageAllowed, true);
+  assert.equal(generation.safety.stockPhotographsAllowed, false);
   const codeCells = notebook.cells.filter(cell => cell.cell_type === "code");
   assert.ok(codeCells.length > 0);
   assert.ok(codeCells.every(cell => (Array.isArray(cell.source) ? cell.source.join("") : cell.source)
@@ -139,6 +152,8 @@ test("NOAA and Wikimedia leads remain excluded while Pexels candidates can enter
   assert.equal(pexelsRegistry.currentProductionPolicy.pexelsAllowed, true);
   assert.equal(pexelsRegistry.currentProductionPolicy.pixabayAllowed, true);
   assert.equal(pexelsRegistry.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(pexelsRegistry.currentProductionPolicy.stockVideoFootageAllowed, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.stockPhotographsAllowed, false);
   const thumbnailScript = readText("../scripts/create-noaa-lobster-thumbnail-review.py");
   assert.ok(thumbnailScript.includes("BLOCKED: NOAA B-roll is stock/archive footage"));
 });
