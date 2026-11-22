@@ -18,10 +18,10 @@ const gitBlobSha = content => createHash("sha1")
   .update(content)
   .digest("hex");
 const inventory = inventoryDashboardSources(html, server);
-const evidenceSha = "701cf7b66f535288cdb96ebb5224b3d04652116b";
-const automationEvidenceSha = "701cf7b66f535288cdb96ebb5224b3d04652116b";
-const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188";
-const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495020";
+const evidenceSha = "3da1750d762a79ac155771b4e38fd358daa8483f";
+const automationEvidenceSha = "3da1750d762a79ac155771b4e38fd358daa8483f";
+const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45074649048";
+const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45074649145";
 assert.ok(browserRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
 assert.ok(automationRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
 
@@ -56,8 +56,8 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
 
   const currentHeadRefresh = matrix.currentHeadRefresh;
   assert.equal(currentHeadRefresh.sourceTestSha, automationEvidenceSha);
-  assert.equal(currentHeadRefresh.nodeTests, 1107);
-  assert.equal(currentHeadRefresh.nodeTestFiles, 189);
+  assert.equal(currentHeadRefresh.nodeTests, 1130);
+  assert.equal(currentHeadRefresh.nodeTestFiles, 191);
   assert.equal(currentHeadRefresh.browserE2EStatus, "PASS");
   assert.equal(currentHeadRefresh.overallAcceptance, "NOT_TESTED");
 
@@ -70,8 +70,8 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(dashboardEvidence.forms, 17);
   assert.equal(dashboardEvidence.automation.run, automationRun);
   assert.equal(dashboardEvidence.automation.testSha, automationEvidenceSha);
-  assert.equal(dashboardEvidence.automation.nodeTestFiles, 189);
-  assert.equal(dashboardEvidence.automation.nodeTests, 1107);
+  assert.equal(dashboardEvidence.automation.nodeTestFiles, 191);
+  assert.equal(dashboardEvidence.automation.nodeTests, 1130);
   assert.equal(dashboardEvidence.automation.nodeSkipped, 0);
   assert.equal(dashboardEvidence.automation.pythonTests, 108);
   assert.equal(dashboardEvidence.automation.pythonSkipped, 0);
@@ -179,7 +179,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(latestHead.browserJourneys.total, 41);
   assert.equal(latestHead.browserJourneys.failed, 0);
   assert.equal(latestHead.browserJourneys.skipped, 0);
-  assert.equal(latestHead.nodeTests, 1129);
+  assert.equal(latestHead.nodeTests, 1130);
   assert.equal(latestHead.nodeFailed, 0);
   assert.equal(latestHead.nodeSkipped, 0);
   assert.equal(latestHead.pythonTests, 108);

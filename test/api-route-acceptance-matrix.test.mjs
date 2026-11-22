@@ -119,7 +119,7 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
   assert.deepEqual(blocked.map(routeKey).sort(), expectedBlocked.sort());
 
   assert.equal(matrix.latestExactHeadRegression?.sourceTestSha, currentSha);
-  assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1129);
+  assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1130);
   assert.equal(matrix.latestExactHeadRegression?.nodeTestFiles, 191);
   assert.equal(matrix.latestExactHeadRegression?.pythonPassed, 108);
   assert.equal(matrix.latestExactHeadRegression?.npmAuditVulnerabilities, 0);
