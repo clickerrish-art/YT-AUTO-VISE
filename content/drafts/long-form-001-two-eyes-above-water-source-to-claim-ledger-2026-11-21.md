@@ -1,12 +1,12 @@
 # Long-form 001 — “Two Eyes Above the Water” Source-to-Claim Review
 
-**Checked:** 21 November 2026  
+**Checked:** 22 November 2026  
 **Canonical script:** `content/drafts/long-form-001-two-eyes-above-water.md`  
 **Status:** DESK FACT-CHECK COMPLETE — QUALIFIED ZOOLOGICAL REVIEW STILL REQUIRED; NOT PRODUCTION OR RELEASE APPROVAL
 
 ## Scope
 
-This review checks the canonical owner-approved Long-form 001 narration against the source map already attached to the script and the underlying scientific references. It is a desk fact-check, not a substitute for a qualified crocodilian/zoological reviewer. It does not approve footage, narration licensing, rights, captions, thumbnails, render quality or publication.
+This review checks the canonical owner-approved Long-form 001 narration against the source map already attached to the script and the underlying scientific references. It is a desk fact-check, not a substitute for a qualified crocodilian/zoological reviewer. It does not approve footage, narration licensing, rights, captions, thumbnails, render quality or publication.\n\n**Media-policy update — 22 November 2026:** The owner's active `content/owner-media-policy-override-2026-11-22.json` explicitly permits qualifying Pexels/Pixabay licensed video footage. This supersedes the prior original-creator-captured-only restriction. Each clip still requires its exact source page, applicable platform licence evidence, original MP4 and SHA-256, technical probe/full decode, third-party-rights review and human visual/editorial approval. AI-generated wildlife visuals, other stock/archive sources, standalone stock redistribution and fabricated encounters remain prohibited.
 
 ## Claim-to-source assessment
 
