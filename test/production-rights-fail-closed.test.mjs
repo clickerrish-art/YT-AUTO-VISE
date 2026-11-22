@@ -153,7 +153,7 @@ test("Pexels acquisition is conditional, review-only and fully decoded", () => {
   assert.ok(shortAcquisition.includes("full decode "));
   assert.ok(crocodileAcquisition.includes("fullDecode: \"PASS\""));
   assert.ok(crocodileAcquisition.includes("releaseEligible: false"));
-  assert.ok(crocodileAcquisition.includes("publicPublishingEnabled: false"));
+  assert.ok(crocodileAcquisition.includes("publicPublishingEnabled:false"));
   assert.ok(workflow.includes("contains(github.event.head_commit.message, '[acquire-media]')"));
   assert.ok(workflow.includes("node scripts/acquire-short-001-assets.mjs"));
   assert.ok(workflow.includes("node scripts/acquire-crocodile-footage-review.mjs"));
