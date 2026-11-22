@@ -18,10 +18,10 @@ const gitBlobSha = content => createHash("sha1")
   .update(content)
   .digest("hex");
 const inventory = inventoryDashboardSources(html, server);
-const evidenceSha = "03d90ef8b1453d066cf2e9d831f193e0d02cced9";
-const automationEvidenceSha = "6087b4088699a10359aeab99bee3d17cdd9722ad";
-const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45026669831";
-const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45026140527";
+const evidenceSha = "701cf7b66f535288cdb96ebb5224b3d04652116b";
+const automationEvidenceSha = "701cf7b66f535288cdb96ebb5224b3d04652116b";
+const browserRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495188";
+const automationRun = "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45027495020";
 assert.ok(browserRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
 assert.ok(automationRun.startsWith("https://github.com/clickerrish-art/YT-AUTO-VISE/"));
 
@@ -56,7 +56,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(currentHeadRefresh.sourceTestSha, automationEvidenceSha);
   assert.equal(currentHeadRefresh.nodeTests, 1107);
   assert.equal(currentHeadRefresh.nodeTestFiles, 189);
-  assert.equal(currentHeadRefresh.browserE2EStatus, "NOT_RUN_ON_THIS_SHA");
+  assert.equal(currentHeadRefresh.browserE2EStatus, "PASS");
   assert.equal(currentHeadRefresh.overallAcceptance, "NOT_TESTED");
 
   const dashboardEvidence = matrix.dashboardEvidence;
