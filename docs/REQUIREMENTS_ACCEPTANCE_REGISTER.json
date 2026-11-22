@@ -2544,7 +2544,7 @@
     "draft": true,
     "merged": false,
     "mergeable": true,
-    "verdict": "Exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8 passed 1,130 Node tests/191 files, 108 Python tests, and 41/41 Chromium journeys, zero failures/skips; npm audit zero vulnerabilities. Latest branch inventory: 5,607 ahead/0 behind, 548 changed paths, zero deletions, clean working tree. API-001 remains BLOCKED; DASH-001/SCHED-001/DEPLOY-001/GIT-002 remain NOT_TESTED. Production readiness HOLD with 22 exact blockers, latest artifact 14776146309. PR #1 remains open/draft/unmerged; main untouched.",
+    "verdict": "Exact branch HEAD d0d3b9a87bc6c090d95c31fdf3abcd82be8876f8 passed 1,130 Node tests/191 files, 108 Python tests, and 41/41 Chromium journeys, zero failures/skips; npm audit zero vulnerabilities remains last verified on d2a7be4733939cffca0423ba28675977af6ab346. Latest branch inventory: 5,607 ahead/0 behind, 548 changed paths, zero deletions, clean working tree. API-001 remains BLOCKED; DASH-001/SCHED-001/DEPLOY-001/GIT-002 remain NOT_TESTED. Production readiness HOLD with 22 exact blockers, latest artifact 14776146309. PR #1 remains open/draft/unmerged; main untouched.",
     "ci": {
       "automationSecurity": {
         "status": "PASS",
@@ -2553,7 +2553,8 @@
         "nodeFiles": 191,
         "pythonTests": 108,
         "skipped": 0,
-        "npmAuditVulnerabilities": 0
+        "npmAuditVulnerabilities": null,
+        "npmAuditLastVerifiedSha": "d2a7be4733939cffca0423ba28675977af6ab346"
       },
       "dashboardE2E": {
         "status": "PASS",
