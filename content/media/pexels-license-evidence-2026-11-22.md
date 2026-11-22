@@ -61,6 +61,26 @@ Pixabay grants a free, worldwide, non-exclusive licence to use and modify eligib
 
 The 22 November owner instruction authorizes qualifying **video footage** from Pexels/Pixabay subject to asset-level review. It does not authorize stock photographs under this change. stockVideoFootageAllowed=true, stockPhotographsAllowed=false, and aiGeneratedWildlifeVisualsAllowed=false are the enforced policy values. Pexels/Pixabay content is licensed content, not public-domain material.
 
+## Nile crocodile source acquisition evidence — 22 November 2026
+
+Five Pexels source MP4s were acquired by the repository's review-only GitHub Actions workflow (run **44975292889**, run number **151**, artifact **14735172901**, artifact name `sonicvhibez-long-form-001-pexels-crocodile-review`). The ZIP artifact SHA-256 is `89b008a95ad48ccdd7c518aab4f34300841b9da8fb74414339604a0e60572eed`; size 451,078,011 bytes; expires 6 December 2026. All five files passed ffprobe and full FFmpeg decode. This is technical acquisition evidence, not rights or publication clearance.
+
+| Pexels ID | Creator | Actual duration | Actual video | File bytes | SHA-256 | Preliminary sampled-frame review |
+|---|---|---:|---|---:|---|---|
+| 30026544 | Johnny Tilly | 36.240s | 1920×1080, 25fps H.264 | 60,635,377 | `58983cbf529731f91856911c71c3baf86b4558e3e76f40eedd907eb9352b37a8` | Open sandy riverbank; promising candidate |
+| 31702202 | MC G'Zay | 10.443767s | 1080×1920, 29.97fps H.264 | 3,768,933 | `bfd5892a6d88661f97ff7c3fd24a4d44880de4a5a0e68f8ac65d42f0f525ff5c` | Very dark; likely exclude unless full playback shows usable detail |
+| 31702221 | MC G'Zay | 17.617600s | 1080×1920, 29.97fps H.264 | 15,470,145 | `c31d4bc25d13115fc332aa65f8f306697e08c760895ac1f9dff1b0a2e1db99e7` | Possible managed/constructed habitat context; do not describe as wild until verified |
+| 31702245 | MC G'Zay | 13.480133s | 1080×1920, 29.97fps H.264 | 11,803,470 | `de3c3a47107e1c5ed30738155515e12a2328b1a7dc91f8b3cadc47536ad6ab8b` | Crocodile on log/pond edge; promising candidate |
+| 31998380 | Floating Rabbit | 60.193467s | 3840×2160, 29.97fps H.264 | 359,206,497 | `4eef20f3ed6bcbe086513d10a6f9c3f6770cf2957a66d36a4e840ac595324464` | Aerial crocodiles in Lower Zambezi; useful establishing shot, separate location |
+
+The five acquired files total 137.974967 seconds. The likely usable subset from preliminary sampling is shorter. No full human playback, third-party-rights review, final clip selection or release approval has been recorded. Do not imply South Africa, Kenya and Zambia footage shows one encounter or one location.
+
+**Supplemental Pexels candidate (not yet acquired):** Floating Rabbit, [Basking Crocodile](https://www.pexels.com/video/basking-crocodile-20443910/), Pexels ID 20443910. The page identifies a Nile crocodile resting on a sandy riverbank, 13 seconds, 3840×2160, 25fps, under the Pexels free licence. Direct media URL for the review acquisition workflow: `https://videos.pexels.com/video-files/20443910/20443910-uhd_3840_2160_25fps.mp4`. This is a supplemental source found during production, not claimed as one of the owner's earlier Canva imports. Download and full decode are pending.
+
+**Species/context exclusions for this Nile-crocodile film:** Pexels 40627960 and 20798092/27064128/20432857 are identified as saltwater crocodiles; 4185628/8838078 and several related pages identify American crocodiles or alligators; 24964228 is associated with Kaziranga National Park, India, and its exact species is not confirmed; 36345575 is tagged as a Saharan crocodile. Do not label these as Nile crocodiles. They may only be considered in a separately narrated, clearly labelled comparative species segment. The Pexels 331427 Pixabay candidate is explicitly AI-generated and is excluded under the project's no-AI-wildlife rule.
+
+**Pixabay candidate:** [Crocodile, Animal, Wildlife — ID 173059](https://pixabay.com/videos/crocodile-animal-wildlife-nature-173059/) by VarietycinemaProduction is listed as MP4, 3840×2160, 50fps and free under the Pixabay Content License. The page has no AI-generated label in its visible text, but species, scene context and actual file remain unverified; a direct download URL is not available through the current retrieval path. It is not acquired or used. Do not infer species from the generic title.
+
 ## Current limitations
 
 - The three Short 001 clips are platform-licensed, technically verified and used in a silent visual review; complete human playback, collar context, third-party-rights and owner release approval remain outstanding.
