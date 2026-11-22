@@ -18,7 +18,14 @@ test("Long-form manifest pins current script and scientific review and remains b
   const review = readText("../content/assets/long-form-001-scientific-claim-review.md");
   assert.equal(manifest.sourceScriptBlobSha, gitBlobSha(script));
   assert.equal(manifest.scientificReviewBlobSha, gitBlobSha(review));
-  assert.equal(manifest.status, "BLOCKED_FOOTAGE_HUMAN_RIGHTS_REVIEW_AND_COMMERCIAL_NARRATION_PENDING");\n  assert.equal(manifest.footageAcquisitionStatus, "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED");\n  assert.equal(manifest.footageAcquisitionArtifact.assetCount, 5);\n  assert.equal(manifest.footageAcquisitionArtifact.fullDecodePasses, 5);\n  assert.equal(manifest.footageCandidates.length, 5);\n  assert.ok(manifest.footageCandidates.every(asset => asset.status === "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED" && asset.fullDecode === "PASS" && /^[a-f0-9]{64}$/.test(asset.sha256) && asset.releaseEligible === false));\n  assert.equal(manifest.supplementalFootageCandidates.length, 1);\n  assert.equal(manifest.supplementalFootageCandidates[0].status, "DISCOVERED_NOT_ACQUIRED");
+  assert.equal(manifest.status, "BLOCKED_FOOTAGE_HUMAN_RIGHTS_REVIEW_AND_COMMERCIAL_NARRATION_PENDING");
+  assert.equal(manifest.footageAcquisitionStatus, "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED");
+  assert.equal(manifest.footageAcquisitionArtifact.assetCount, 5);
+  assert.equal(manifest.footageAcquisitionArtifact.fullDecodePasses, 5);
+  assert.equal(manifest.footageCandidates.length, 5);
+  assert.ok(manifest.footageCandidates.every(asset => asset.status === "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED" && asset.fullDecode === "PASS" && /^[a-f0-9]{64}$/.test(asset.sha256) && asset.releaseEligible === false));
+  assert.equal(manifest.supplementalFootageCandidates.length, 1);
+  assert.equal(manifest.supplementalFootageCandidates[0].status, "DISCOVERED_NOT_ACQUIRED");
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
   assert.equal(manifest.footageLicenseEvidence, "content/media/pexels-license-evidence-2026-11-22.md");
@@ -148,8 +155,13 @@ test("NOAA and Wikimedia leads remain excluded while Pexels candidates can enter
   }
   const candidates = readJson("../content/media/pexels-crocodile-candidates-2026-11-22.json");
   assert.equal(candidates.assets.length, 6);
-  assert.equal(candidates.assets.filter(asset => asset.status === "ACQUIRED_FOR_REVIEW_ONLY").length, 5);
-  assert.equal(candidates.assets.filter(asset => asset.status === "SOURCE_VERIFIED_DOWNLOAD_PENDING").length, 1);
+  assert.equal(candidates.assets.filter(asset => asset.status === "ACQUIRED_IN_REVIEW_ARTIFACT_SHA256_AND_FULL_DECODE_PASS").length, 5);
+  assert.equal(candidates.assets.filter(asset => asset.status === "DISCOVERED_NOT_ACQUIRED").length, 1);
+  const supplemental = candidates.assets.find(asset => asset.assetId === "pexels-video-20443910");
+  assert.equal(supplemental.acquisitionArtifactId, null);
+  assert.equal(supplemental.localOriginalBytesAvailableInArtifact, false);
+  assert.equal(supplemental.sha256, null);
+  assert.equal(supplemental.fullDecode, "NOT_RUN");
   assert.ok(candidates.assets.every(asset => asset.releaseEligible === false && asset.rightsVerified === false && asset.humanReviewed === false));
   const pexelsRegistry = readJson("../content/approved-pexels-footage.json");
   assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, true);
