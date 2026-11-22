@@ -17,7 +17,7 @@ test("all ten previously imported Canva wildlife clips are inventoried with exac
   assert.ok(addedCrocodile.every(asset => asset.sourceAssetId?.startsWith("pexels-video-")));
 });
 
-test("licensed Pexels source matches can enter review without becoming release-cleared", () => {
+test("stock Pexels source matches remain review-only and cannot enter production", () => {
   assert.equal(inventory.status, "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW");
   assert.equal(inventory.releaseAuthorized, false);
   assert.ok(inventory.assets.every(asset => asset.selectedForProduction === false));
@@ -58,12 +58,14 @@ test("licensed Pexels source matches can enter review without becoming release-c
     assert.equal(asset.licenseEvidencePath, "content/media/pexels-license-evidence-2026-11-22.md");
   }
 
-  assert.equal(inventory.currentProductionPolicy.originalCreatorCapturedMediaRequired, false);
-  assert.equal(inventory.currentProductionPolicy.stockMediaAllowed, true);
-  assert.equal(inventory.currentProductionPolicy.stockVideoFootageAllowed, true);
+  assert.equal(inventory.currentProductionPolicy.status, "ORIGINAL_CREATOR_CAPTURED_ONLY_STOCK_EXCLUDED");
+  assert.equal(inventory.currentProductionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(inventory.currentProductionPolicy.stockMediaAllowed, false);
+  assert.equal(inventory.currentProductionPolicy.stockVideoFootageAllowed, false);
   assert.equal(inventory.currentProductionPolicy.stockPhotographsAllowed, false);
-  assert.equal(inventory.currentProductionPolicy.pexelsAllowed, true);
-  assert.equal(inventory.currentProductionPolicy.pixabayAllowed, true);
+  assert.equal(inventory.currentProductionPolicy.pexelsAllowed, false);
+  assert.equal(inventory.currentProductionPolicy.pixabayAllowed, false);
+  assert.equal(inventory.assets.every(asset => asset.selectedForProduction === false && asset.productionEligible === false && asset.releaseEligible === false), true);
   assert.equal(inventory.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
 });
 
@@ -82,7 +84,8 @@ test("duration-mismatch and unresolved-source Canva assets remain excluded", () 
 
 test("general Pexels licence evidence is not treated as asset-specific rights clearance", () => {
   assert.equal(inventory.policyReference.reviewStatus, "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY");
-  assert.ok(inventory.notes.includes("permits qualifying Pexels/Pixabay stock"));
+  assert.match(inventory.notes, /Pexels\/Pixabay stock is not authorized as a substitute/);
+  assert.equal(inventory.currentProductionPolicy.ownerPolicyEvidence, "content/owner-media-policy-override-2026-11-22.json");
   assert.match(inventory.notes, /No candidate is selected for production or release-authorized/);
   assert.ok(inventory.blockingEvidence.some(item => /No imported Canva candidate is rights-cleared/i.test(item)));
 });
