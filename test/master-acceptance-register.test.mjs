@@ -76,7 +76,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   const deployment = byId("DEPLOY-001");
   assert.equal(deployment.status, "NOT_TESTED");
   assert.equal(deployment.currentHeadEvidenceSha, "fae3bf58270b1ffecb038ea0c9a40be0bd340f9");
-  assert.match(deployment.currentHeadEvidenceNote, /No SonicVhibez production Worker/);
+  assert.match(deployment.currentHeadEvidenceNote, /No SonicVhibez production render\/publisher Worker/);
 });
 
 test("Nature Frontiers stays blocked after read-only Metricool reconciliation", () => {
