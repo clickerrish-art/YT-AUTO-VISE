@@ -84,7 +84,7 @@ jobs:
           ffmpeg -version
           ffprobe -version
       - name: Run repository regression tests
-        run: node --test
+        run: npm test
       - name: Verify Speechma Andrew remains manual-audition-only and production-blocked
         run: |
           node --input-type=module <<'NODE'
