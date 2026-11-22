@@ -52,7 +52,7 @@ function validateNarrationRights(manifest, manifestPath) {
     provider.publicBrandedDistributionAllowed === false ||
     provider.commercialUseAllowed === false;
   if (!manifestApproved || !(ownerApproved || providerApproved) || providerDenied) {
-    blockers.push(manifestPath + ": narration rights are not cleared for public branded/production use. The current HeyGen Free-plan Roderic determination is PROVIDER_DENIED; public distribution and commercial/production use are not allowed. Owner-authorized zero-cost alternative auditions are permitted, but audition permission is not production approval. Select a voice with affirmative commercial-use evidence and obtain owner approval of the exact final audio hash; no paid plan or Roderic Free-plan output.");
+    blockers.push(manifestPath + ": narration rights are not cleared for public branded/production use. The current HeyGen Free-plan Roderic determination is PROVIDER_DENIED; public distribution and commercial/production use are not allowed. The owner selected Wade — Resonant & Narrative for further review only, but the requested HeyGen audition is blocked by insufficient Free-plan speech allowance. Wade Free-plan output is restricted to personal, non-commercial internal evaluation and is not production-approved. No Piper/Edge TTS or other alternative narrator is authorized, and no paid credits or upgrade are authorized. Do not substitute a voice or generate production narration. Any future production voice must have affirmative model/data/runtime commercial-use evidence and owner listening approval bound to the exact final audio SHA-256.");
   }
 }
 const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
