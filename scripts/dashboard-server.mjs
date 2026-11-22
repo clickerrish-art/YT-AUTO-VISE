@@ -1124,7 +1124,9 @@ const server = http.createServer(async (req, res) => {
         timezone: config.timezone, dailyTarget: config.dailyTarget, defaultLocalTime: config.defaultLocalTime,
         comparisonLocalTime: config.comparisonLocalTime, drafts: state.facebookDrafts.slice(-30).reverse(),
         posts: state.facebookPosts.slice(-30).reverse(), attempts: state.facebookAttempts.slice(-30).reverse(),
-        experiment, blockers, complianceRuleSet: config.complianceRuleSet
+        experiment, blockers, complianceRuleSet: config.complianceRuleSet,
+        providerDraftsEnabled: config.providerDraftsEnabled === true && process.env.FACEBOOK_PROVIDER_DRAFTS_ENABLED === "YES",
+        providerDraftAttempts: state.facebookProviderDraftAttempts.slice(-30).reverse()
       });
     }
     if (req.method === "GET" && url.pathname === "/api/facebook/autonomous-status") {
