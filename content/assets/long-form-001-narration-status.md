@@ -3,7 +3,7 @@
 **Project:** SonicVhibez  
 **Title:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Generated:** 2026-11-20  
-**Status:** PROVIDER DENIED ZERO-COST COMMERCIAL EXCEPTION — INTERNAL EVALUATION ONLY; NOT ELIGIBLE FOR PUBLIC OR COMMERCIAL RELEASE
+**Status:** EXISTING RODERIC WAV PROHIBITED FOR PUBLIC/COMMERCIAL RELEASE; SPEECHMA ANDREW MANUAL AUDITION PENDING; NO APPROVED PRODUCTION AUDIO
 
 ## Exact generation record
 
@@ -39,7 +39,7 @@ Still required:
 
 <NOT FOR COMMERCIAL RELEASE UNDER CURRENT FREE-PLAN TERMS.>
 
-Narration generation is not narration approval or commercial clearance. The WAV is internal-evaluation-only. The owner has explicitly confirmed Roderic — Authoritative & Refined as the exclusive narrator throughout and rejected Banjo for all future production or auditions. Do not substitute another voice. A paid commercial licence is disallowed by the zero-cost rule; therefore this production remains on hold until a zero-cost commercial-use authorization for Roderic is independently verified. Do not use the Free-plan WAV commercially, upgrade, or bypass the licence. This file also does not establish audio quality, exact spoken-word accuracy, local file integrity, rights clearance for visuals, completed edit, human review, upload authorization, or a YouTube schedule.
+Narration generation is not narration approval or commercial clearance. The WAV is internal-evaluation-only. Historical owner preference (20–21 November): Roderic — Authoritative & Refined was preferred and Banjo was rejected. **Superseding owner decision (22 November): Speechma Andrew (English, United States, male standard voice) was selected for a manual, zero-cost browser audition only.** This is not production or publication approval. No automated Speechma API, browser automation, paid API or paid upgrade is authorized. After the manual audition, the exact downloaded MP3 must be retained, hashed, technically checked, fully listened to and explicitly approved before use. No Andrew MP3, final audio hash, listening approval or production approval currently exists. Do not use the Free-plan WAV commercially, upgrade, or bypass the licence. This file also does not establish audio quality, exact spoken-word accuracy, local file integrity, rights clearance for visuals, completed edit, human review, upload authorization, or a YouTube schedule.
 
 `scheduledAt: null`; publishing remains disabled.
 
@@ -70,6 +70,6 @@ Narration generation is not narration approval or commercial clearance. The WAV 
 
 HeyGen Support has now explicitly denied the requested zero-cost commercial-use exception for both the existing 398.083-second Roderic Free-plan WAV and future Roderic Free-plan generations. The response covers public branded distribution and monetized/commercial use: neither is permitted under the Free plan. The full determination and source support threads are recorded in `content/heygen-roderic-commercial-rights-determination-2026-11-21.json`.
 
-**Current decision:** keep the existing Roderic audio internal-only; do not use it in public SonicVhibez releases, ads, Selar promotion or other commercial output. No paid upgrade is allowed. No other narrator may be auditioned or substituted without the owner's explicit change to the Roderic-only instruction. Consequently, no commercially eligible production narrator is currently available and both long-form and Short renders remain blocked at the narration gate.
+**Current decision:** keep the existing Roderic audio internal-only; do not use it in public SonicVhibez releases, ads, Selar promotion or other commercial output. No paid upgrade is allowed. Speechma Andrew is the only current audition target for this production; no other voice substitution is authorized unless the owner explicitly changes that selection. Consequently, no commercially eligible production narrator is currently available and both long-form and Short renders remain blocked at the narration gate.
 
 The earlier 2026-11-20 paragraphs describing the Legal response as pending are historical and superseded by this final provider determination. Publishing remains disabled.
