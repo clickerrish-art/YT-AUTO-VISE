@@ -510,7 +510,7 @@ This section supersedes older checkpoint statements in the historical audit entr
 - Verified code HEAD: c290bac5431c7b46b42b19e74a2c65a04f0a4512 (full regression PASS)
 - main: 3795519ccbf58fd02d74458624b58dd2e44a88c0
 - Divergence at the tested code HEAD: 5,192 ahead / 17 behind
-- Subsequent commits after c290 changed only documentation and content gate-record files (master tracker documents, creator/reviewer lead notes, disclosure proposals, and YouTube history evidence); no application or test source changed after the verified code SHA.
+- Subsequent commits after c290 changed only the two master tracker documents and the disclosure-proposal Markdown file; no application or test source changed after the verified code SHA.
 - PR #1: open, draft, unmerged; head matches the implementation branch
 - Branch protection: disabled on both main and implementation branch
 - No main commit, merge, PR state change, rebase, reset, force-push, or history rewrite was performed.
