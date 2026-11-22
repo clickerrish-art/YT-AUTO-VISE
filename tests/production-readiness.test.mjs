@@ -363,6 +363,7 @@ test("readiness blocks selected licensed wildlife assets until source, local MP4
     const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
     inventory.assets[0].status = "HOLD";
     inventory.assets[0].excludedFromProduction = false;
+    inventory.assets[0].selectedForProduction = true;
     const inventoryPath = path.join(directory, "sonicvhibez-imported-media-inventory.json");
     fs.writeFileSync(inventoryPath, JSON.stringify(inventory, null, 2));
     const relativeInventoryPath = path.relative(process.cwd(), inventoryPath);
@@ -389,12 +390,13 @@ test("readiness blocks selected licensed wildlife assets until source, local MP4
   }
 });
 
-test("readiness tracks licensed Pexels review candidates and keeps final release blocked", () => {
+test("review-eligible Pexels candidates do not become selected production inputs implicitly", () => {
   const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
   assert.equal(inventory.releaseAuthorized, false);
   assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction === false).length, 3);
   assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true).length, 2);
   assert.equal(inventory.status, "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW");
+  assert.ok(inventory.assets.every(asset => asset.selectedForProduction === false));
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
     cwd: process.cwd(), encoding: "utf8"
   });
@@ -415,6 +417,7 @@ test("licensed Pexels candidates can pass the source gate when all asset-level r
     for (const asset of candidates) {
       asset.status = "CLEARED";
       asset.excludedFromProduction = false;
+      asset.selectedForProduction = true;
       asset.creatorCapturedOriginal = false;
       asset.sourceMethod = "PEXELS_LICENSED_STOCK";
       asset.sourcePlatform = "Pexels";
