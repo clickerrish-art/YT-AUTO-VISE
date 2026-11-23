@@ -26,7 +26,13 @@
     "modelCachePath": "/kaggle/temp/WanGP-data",
     "outputPath": "/kaggle/working/WanGP-outputs",
     "persistOutputsBeforeSessionEnds": true,
-    "ownerPcModelStorageRequired": false
+    "ownerPcModelStorageRequired": false,
+    "zeroCostBackendVerification": {
+      "status": "NOT_VERIFIED",
+      "verified": false,
+      "evidence": null,
+      "notes": "No free GPU backend has been independently verified as available and usable for this project. Do not infer availability from a visible but unselectable Kaggle accelerator."
+    }
   },
   "generation": {
     "preferredModel": "Wan 2.2 TI2V 5B (pinned no-LoRA test profile)",
@@ -52,7 +58,12 @@
     "enabled": false,
     "productionEligible": false,
     "visualSourcePolicy": "DISCLOSED_AI_RECONSTRUCTION_ALLOWED_WHEN_PROVIDER_LICENSE_AND_ZERO_COST_BACKEND_ARE_VERIFIED",
-    "note": "Owner permits high-quality, photorealistic AI wildlife reconstructions only when synthetic media is clearly disclosed. This workflow remains disabled: no zero-cost unattended GPU backend is verified and the pinned mirror checkpoint/VAE provenance remains unresolved. Do not run, spend credits, or import output until both conditions are independently verified."
+    "note": "Owner permits high-quality, photorealistic AI wildlife reconstructions only when synthetic media is clearly disclosed. This workflow remains disabled: no zero-cost unattended GPU backend is verified and the pinned mirror checkpoint/VAE provenance remains unresolved. Do not run, spend credits, or import output until both conditions are independently verified.",
+    "modelRightsVerification": {
+      "status": "HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE",
+      "verified": false,
+      "evidence": null
+    }
   },
   "licensing": {
     "wanGpLicense": "WanGP Community License 2.0",
@@ -145,8 +156,8 @@
   "productionDisposition": {
     "enabled": false,
     "productionEligible": false,
-    "policy": "AI_GENERATED_RECONSTRUCTION_REQUIRED; GENERATION_DISABLED_PENDING_ZERO_COST_BACKEND_AND_MODEL_RIGHTS",
-    "reason": "The current SonicVhibez policy requires disclosed AI-generated wildlife reconstructions and prohibits stock/reference assets as production visuals. This generation backend remains disabled because zero-cost GPU availability and exact checkpoint/VAE provenance and rights are not verified.",
+    "policy": "AI_GENERATED_RECONSTRUCTION_ALLOWED; GENERATION_DISABLED_PENDING_VERIFIED_ZERO_COST_BACKEND_AND_MODEL_RIGHTS",
+    "reason": "SonicVhibez permits clearly disclosed, photorealistic AI wildlife reconstructions. Generation remains disabled until a zero-cost GPU backend is independently verified and the exact pinned checkpoint and VAE provenance/licensing are cleared.",
     "noGenerationAuthorized": true
   }
 }
