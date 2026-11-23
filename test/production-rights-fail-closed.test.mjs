@@ -33,14 +33,14 @@ test("Long-form manifest pins current script and scientific review and remains b
   assert.equal(manifest.supplementalFootageCandidates[0].sha256, null);
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
-  assert.equal(manifest.footageLicenseEvidence, "content/media/pexels-license-evidence-2026-11-22.md");
-  assert.equal(manifest.footageOrigin, "licensed_pexels_stock");
+  assert.equal(manifest.footageLicenseEvidence, "content/ai-generation-evidence/long-form-001.json");
+  assert.equal(manifest.footageOrigin, "ai_generated_reconstruction");
   assert.equal(manifest.creatorCapturedOriginal, false);
   assert.equal(manifest.stockVideoFootageAllowed, false);
-  assert.equal(manifest.originalCreatorCapturedMediaRequired, true);
+  assert.equal(manifest.originalCreatorCapturedMediaRequired, false);
   assert.equal(manifest.stockMediaAllowed, false);
   assert.equal(manifest.stockPhotographsAllowed, false);
-  assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, true);
   assert.equal(manifest.narrationRightsDeterminationEvidence, "speechma-andrew-voice-selection-2026-11-22.json");
 });
 
@@ -50,14 +50,14 @@ test("Short manifest pins exact source files and blocks Pexels stock from produc
   assert.equal(manifest.captionSourceBlobSha, gitBlobSha(readText("../content/short-001-wildlife-video-storytelling.srt")));
   assert.equal(manifest.sourceHashType, "GIT_BLOB_SHA");
   assert.equal(manifest.captionHashType, "GIT_BLOB_SHA");
-  assert.equal(manifest.footageLicenseEvidence, "content/media/pexels-license-evidence-2026-11-22.md");
-  assert.equal(manifest.footageEligibilityStatus, "BLOCKED_UNAUTHORIZED_STOCK_SUBSTITUTION");
-  assert.equal(manifest.footageOrigin, "licensed_pexels_stock");
+  assert.equal(manifest.footageLicenseEvidence, "content/ai-generation-evidence/short-001.json");
+  assert.equal(manifest.footageEligibilityStatus, "BLOCKED_AI_GENERATION_PENDING");
+  assert.equal(manifest.footageOrigin, "ai_generated_reconstruction");
   assert.equal(manifest.stockVideoFootageAllowed, false);
-  assert.equal(manifest.originalCreatorCapturedMediaRequired, true);
+  assert.equal(manifest.originalCreatorCapturedMediaRequired, false);
   assert.equal(manifest.stockMediaAllowed, false);
   assert.equal(manifest.stockPhotographsAllowed, false);
-  assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, true);
   assert.equal(manifest.status, "BLOCKED_NOT_RENDERABLE");
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
@@ -295,8 +295,8 @@ test("Imported Canva media inventory includes acquired crocodile clips without s
     asset.sourceAssetId !== "pexels-video-20443910"
   );
   assert.equal(inventory.assets.length, 10);
-  assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction !== true).length, 8);
-  assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true || asset.status === "EXCLUDED_NOT_USED").length, 2);
+  assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true).length, 8);
+  assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true || asset.status === "EXCLUDED_NOT_USED").length, 10);
   assert.equal(inventory.assets.filter(asset => asset.selectedForProduction === true).length, 0);
   assert.equal(inventory.releaseAuthorized, false);
   assert.equal(crocodileAssets.length, 5);
