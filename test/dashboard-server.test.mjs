@@ -167,7 +167,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.match(unresolvedProduceBody.error, /approved authoring pipeline/i);
   const restoredState = JSON.parse(fs.readFileSync(statePath, "utf8"));
   restoredState.jobs = restoredState.jobs.filter(job => job.id !== "unapproved-production-job");
-  fs.writeFileSync(statePath, JSON.stringify(restoredState, null, 2) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(statePath, JSON.stringify(restoredState, null, 2) + "\n", { mode: 0o600 });
 
   const sourceInventory = inventoryDashboardSources(
     fs.readFileSync(path.join(process.cwd(), "public", "dashboard.html"), "utf8"),
