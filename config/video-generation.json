@@ -3,7 +3,7 @@
   "channel": "SonicVhibez",
   "provider": "wangp_kaggle",
   "primary": false,
-  "status": "DISABLED_BY_OWNER_AI_WILDLIFE_VISUAL_POLICY",
+  "status": "DISABLED_ZERO_COST_BACKEND_AND_MODEL_RIGHTS_NOT_VERIFIED",
   "source": {
     "application": "WanGP",
     "repository": "https://github.com/deepbeepmeep/WanGP",
@@ -51,8 +51,8 @@
     "seedMustBeRecorded": true,
     "enabled": false,
     "productionEligible": false,
-    "visualSourcePolicy": "AI_GENERATED_WILDLIFE_VISUALS_PROHIBITED",
-    "note": "Disabled: the owner permits qualifying Pexels/Pixabay licensed footage but has not authorized AI-generated wildlife scenes. Do not run this model or import generated wildlife visuals into SonicVhibez production."
+    "visualSourcePolicy": "DISCLOSED_AI_RECONSTRUCTION_ALLOWED_WHEN_PROVIDER_LICENSE_AND_ZERO_COST_BACKEND_ARE_VERIFIED",
+    "note": "Owner permits high-quality, photorealistic AI wildlife reconstructions only when synthetic media is clearly disclosed. This workflow remains disabled: no zero-cost unattended GPU backend is verified and the pinned mirror checkpoint/VAE provenance remains unresolved. Do not run, spend credits, or import output until both conditions are independently verified."
   },
   "licensing": {
     "wanGpLicense": "WanGP Community License 2.0",
@@ -116,8 +116,8 @@
     "publishingEnabled": false,
     "youtubeChannel": "SonicVhibez",
     "neverTargetNatureFrontiers": true,
-    "aiGeneratedWildlifeVisualsAllowed": false,
-    "originalCreatorCapturedMediaRequired": true,
+    "aiGeneratedWildlifeVisualsAllowed": true,
+    "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": false,
     "pexelsAllowed": false,
     "pixabayAllowed": false,
