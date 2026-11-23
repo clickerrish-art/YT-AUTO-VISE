@@ -98,11 +98,11 @@ test("legacy worker production remains fail-closed across concurrent retries and
   const concurrent = await Promise.all([produce(), produce()]);
   assert.deepEqual(concurrent.map(result => result.status), [409, 409]);
   for (const result of concurrent) {
-    assert.match(result.body.error, /queue identity reconciliation is not owner-approved/i);
+    assert.match(result.body.error, /approved authoring pipeline/i);
     assert.equal(result.body.renderStarted, false);
     assert.equal(result.body.publishable, false);
     assert.equal(result.body.publishingEnabled, false);
-    assert.equal(result.body.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+    assert.equal(result.body.code, "AUTHORING_PIPELINE_REQUIRED");
   }
   assert.deepEqual(fs.readFileSync(statePath), before,
     "concurrent legacy-production attempts must preserve job, lease and audit state byte-for-byte");
@@ -113,11 +113,11 @@ test("legacy worker production remains fail-closed across concurrent retries and
   await start();
   const afterRestart = await produce();
   assert.equal(afterRestart.status, 409);
-  assert.match(afterRestart.body.error, /queue identity reconciliation is not owner-approved/i);
+  assert.match(afterRestart.body.error, /approved authoring pipeline/i);
   assert.equal(afterRestart.body.renderStarted, false);
   assert.equal(afterRestart.body.publishable, false);
   assert.equal(afterRestart.body.publishingEnabled, false);
-  assert.equal(afterRestart.body.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+  assert.equal(afterRestart.body.code, "AUTHORING_PIPELINE_REQUIRED");
   assert.deepEqual(fs.readFileSync(statePath), before,
     "server restart must not convert a legacy job into an executable production job");
   assert.equal(fs.existsSync(path.join(process.cwd(), "content", "job-render-manifests", jobId + ".json")), false);
