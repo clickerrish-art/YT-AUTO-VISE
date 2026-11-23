@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "status": "MANDATORY",
+  "productionVisualMode": "AI_GENERATED_RECONSTRUCTION_REQUIRED",
+  "userVideoUploadRequired": false,
+  "allowRepurposingExistingProjectMaterial": true,
+  "stockAndThirdPartyVideoProductionAllowed": false,
+  "qualityProfile": "ULTRA_REALISTIC_NO_SLOP",
+  "requiredQualityChecks": [
+    "species and animal anatomy accuracy",
+    "natural, physically plausible animal movement",
+    "coherent habitat, lighting and scene continuity",
+    "no morphing, extra limbs, duplicate animals or visual artifacts",
+    "no repeated filler shots or misleading behavior",
+    "clean editorial pacing, sound and captions"
+  ],
+  "syntheticMediaDisclosureRequired": true,
+  "syntheticMediaDisclosureText": "AI-generated wildlife reconstruction. This is an illustrative recreation, not authentic documentary footage.",
+  "humanVisualReviewRequired": true,
+  "zeroCostDefault": true,
+  "paidGenerationRequiresExplicitOwnerApproval": true
+}
