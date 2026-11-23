@@ -76,7 +76,7 @@
   "pexelsAllowed": false,
   "pixabayAllowed": false,
   "aiGeneratedWildlifeVisualsAllowed": true,
-  "ownerMediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+  "ownerMediaPolicyEvidence": "config/media-production-policy.json",
   "reviewOnlyPreview": {
     "path": "short001_visual_review/SonicVhibez_Short001_Visual_Review_ONLY.mp4",
     "sha256": "c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844",

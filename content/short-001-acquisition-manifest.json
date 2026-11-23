@@ -249,18 +249,19 @@
     "note": "Pexels/Pixabay stock is excluded from production by the current original creator-captured-only policy. This silent preview is historical review material, not a production or release master. Rights, original media, narration, captions, final owner review and publication remain blocked."
   },
   "productionDisposition": {
-    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_PRODUCTION",
+    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_AI_RECONSTRUCTION_PRODUCTION",
     "productionEligible": false,
     "reviewRenderEligible": true,
     "policy": {
-      "status": "ORIGINAL_CREATOR_CAPTURED_ONLY; PEXELS_PIXABAY_EXCLUDED",
-      "originalCreatorCapturedMediaRequired": true,
+      "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY",
+      "originalCreatorCapturedMediaRequired": false,
       "stockMediaAllowed": false,
       "stockPhotographsAllowed": false,
       "pexelsAllowed": false,
       "pixabayAllowed": false,
-      "aiGeneratedWildlifeVisualsAllowed": false,
-      "stockVideoFootageAllowed": false
+      "aiGeneratedWildlifeVisualsAllowed": true,
+      "stockVideoFootageAllowed": false,
+      "mediaPolicyEvidence": "config/media-production-policy.json"
     },
     "reason": "The existing Pexels clips are retained only as historical review material. The user explicitly excludes Pexels/Pixabay links from production; original creator-captured wildlife media is required.",
     "nextRequiredAction": "Obtain the user's original three-minute creator-captured wildlife MP4 (re-upload if unavailable in the accessible Library), verify provenance, SHA-256, technical integrity, rights and full human playback, then complete approved narration, captions, final render and owner review."

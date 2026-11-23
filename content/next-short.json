@@ -29,16 +29,16 @@
   },
   "contentType": "short",
   "productionPolicy": {
-    "originalCreatorCapturedMediaRequired": true,
+    "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": false,
-    "aiGeneratedWildlifeVisualsAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": true,
     "narrationRightsStatus": "SPEECHMA_ANDREW_MANUAL_BROWSER_AUDITION_PENDING_NO_AUDIO_OR_PRODUCTION_APPROVAL",
     "narrator": "Speechma Andrew (English, United States, male standard voice) — audition only",
     "alternativeNarratorAuthorized": false,
     "publishingEnabled": false,
     "pexelsAllowed": false,
     "pixabayAllowed": false,
-    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "mediaPolicyEvidence": "config/media-production-policy.json",
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
     "reviewOnlyPreview": "media/rendered-drafts/SonicVhibez_Short001_Visual_Review_ONLY.mp4",
     "releaseEligible": false,
@@ -46,6 +46,6 @@
     "stockPhotographsAllowed": false,
     "auditionVoice": "Andrew",
     "auditionOnly": true,
-    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY; PEXELS_PIXABAY_EXCLUDED"
+    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY"
   }
 }

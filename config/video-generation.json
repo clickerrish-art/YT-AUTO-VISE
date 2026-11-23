@@ -121,7 +121,7 @@
     "stockMediaAllowed": false,
     "pexelsAllowed": false,
     "pixabayAllowed": false,
-    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "mediaPolicyEvidence": "config/media-production-policy.json",
     "stockVideoFootageAllowed": false,
     "stockPhotographsAllowed": false
   },
@@ -145,7 +145,7 @@
   "productionDisposition": {
     "enabled": false,
     "productionEligible": false,
-    "policy": "AI_GENERATED_WILDLIFE_VISUALS_PROHIBITED",
+    "policy": "AI_GENERATED_RECONSTRUCTION_REQUIRED; GENERATION_DISABLED_PENDING_ZERO_COST_BACKEND_AND_MODEL_RIGHTS",
     "reason": "The owner permits qualifying licensed Pexels/Pixabay stock footage but has not authorized AI-generated wildlife visuals. This WanGP configuration remains a historical technical record only.",
     "noGenerationAuthorized": true
   }

@@ -345,7 +345,7 @@
     },
     "pexelsAllowed": false,
     "pixabayAllowed": false,
-    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "mediaPolicyEvidence": "config/media-production-policy.json",
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
     "stockVideoFootageAllowed": false,
     "stockPhotographsAllowed": false,

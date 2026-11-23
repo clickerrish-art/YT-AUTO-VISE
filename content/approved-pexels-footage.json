@@ -567,13 +567,13 @@
     }
   ],
   "currentProductionPolicy": {
-    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY; PEXELS_PIXABAY_EXCLUDED",
-    "originalCreatorCapturedMediaRequired": true,
+    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY",
+    "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": false,
     "stockPhotographsAllowed": false,
     "pexelsAllowed": false,
     "pixabayAllowed": false,
-    "aiGeneratedWildlifeVisualsAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": true,
     "stockVideoFootageAllowed": false,
     "standaloneUnmodifiedStockRedistributionAllowed": false,
     "platformLicenseEvidenceRequired": true,
@@ -583,21 +583,24 @@
     "humanVisualReviewRequired": true,
     "finalOwnerApprovalRequired": true,
     "publicPublishingEnabled": false,
-    "policyEvidence": "content/owner-media-policy-override-2026-11-22.json",
-    "note": "Pexels/Pixabay platform licensing does not override the user's original creator-captured-only production requirement."
+    "policyEvidence": "config/media-production-policy.json",
+    "note": "Pexels/Pixabay platform licensing does not override the user's original creator-captured-only production requirement.",
+    "mediaPolicyEvidence": "config/media-production-policy.json"
   },
   "productionDisposition": {
-    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_PRODUCTION",
+    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_AI_RECONSTRUCTION_PRODUCTION",
     "productionEligible": false,
     "reviewRenderEligible": false,
     "policy": {
-      "originalCreatorCapturedMediaRequired": true,
+      "originalCreatorCapturedMediaRequired": false,
       "stockMediaAllowed": false,
       "pexelsAllowed": false,
       "pixabayAllowed": false,
-      "aiGeneratedWildlifeVisualsAllowed": false,
+      "aiGeneratedWildlifeVisualsAllowed": true,
       "stockVideoFootageAllowed": false,
-      "stockPhotographsAllowed": false
+      "stockPhotographsAllowed": false,
+      "mediaPolicyEvidence": "config/media-production-policy.json",
+      "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY"
     },
     "reason": "Current owner production policy requires original creator-captured wildlife media. Prior stock-source acquisition/review activity does not authorize stock footage as a production substitute.",
     "nextRequiredAction": "Do not select these stock candidates for production. Obtain genuine original creator-captured footage with provenance, exact source files and hashes, third-party-rights review and human approval."

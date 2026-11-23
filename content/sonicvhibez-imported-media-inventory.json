@@ -685,7 +685,7 @@
     "No footage rights or human visual review is marked complete."
   ],
   "currentProductionPolicy": {
-    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED_STOCK_EXCLUDED",
+    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY",
     "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": false,
     "stockVideoFootageAllowed": false,
@@ -694,8 +694,9 @@
     "pixabayAllowed": false,
     "aiGeneratedWildlifeVisualsAllowed": true,
     "importedCanvaAssetsProductionEligible": false,
-    "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
-    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
+    "ownerPolicyEvidence": "config/media-production-policy.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+    "mediaPolicyEvidence": "config/media-production-policy.json"
   },
   "selectionPolicy": {
     "status": "EXPLICIT_SELECTION_REQUIRED",
