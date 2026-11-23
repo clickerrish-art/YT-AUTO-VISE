@@ -145,7 +145,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     },
     publishingEnabled: false
   });
-  fs.writeFileSync(statePath, JSON.stringify(seededState, null, 2) + "\\n", { mode: 0o600 });
+  fs.writeFileSync(statePath, JSON.stringify(seededState, null, 2) + "\n", { mode: 0o600 });
   const unresolvedDispatch = await fetchDashboard(base + "/api/jobs/dispatchable", { headers: workerHeaders });
   const unresolvedDispatchBody = await unresolvedDispatch.json();
   assert.equal(unresolvedDispatch.status, 200, "the owner-confirmed queue mapping should pass the identity gate");
