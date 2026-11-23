@@ -1,3 +1,15 @@
+## Latest exact source/test evidence refresh — 23 November 2026
+
+- **Tested source/test SHA:** `75eb1cd53899466f45295dffc20ecaeabd64a734`.
+- Full automation/security [run 45150961047](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961047) passed **1,134 Node tests across 192/192 files**, **108/108 Python tests**, zero failures/skips, and npm audit **0 vulnerabilities**.
+- Dashboard browser E2E [run 45150961255](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961255) passed **41/41 Chromium journeys** against the real local dashboard/backend.
+- Current source inventory: **121 controls**, **17 forms**, **104 form-owned controls**, **17 standalone controls**, and **15 cross-cutting evidence dimensions**.
+- API acceptance is **41 PASS / 0 NOT_TESTED / 9 BLOCKED**; all **50/50** protected routes pass missing/invalid-authentication checks. The two mocked Meta provider-draft routes remain BLOCKED for live use pending owner-renewed Page credentials, verified permissions and exact one-shot authorization.
+- **DASH-001 remains NOT_TESTED overall.** The 41 journeys and retained control inventory do not establish complete per-control success, authorization, persistence/restart, concurrency, actionable-error and accessibility acceptance.
+- Production readiness [run 45150961257](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961257) remains **HOLD — 22 blockers**. No upload, schedule, publication or provider mutation was attempted.
+
+---
+
 ## Latest exact-HEAD evidence refresh — 19 November 2026
 
 - **Implementation/source/test HEAD:** `93b4d4ff82c6df5a9aac67ecc16772853b2efb37` (`test: isolate queue traversal sentinel path`). This section supersedes earlier entries below that identify `4dec5f71` or other historical candidates as the latest tree.

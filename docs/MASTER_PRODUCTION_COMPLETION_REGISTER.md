@@ -1,29 +1,30 @@
 ## Current exact-head checkpoint — 23 November 2026
 
-This checkpoint supersedes the older exact-head summaries below. Historical entries remain for audit, but must not override the statuses in this section.
+This checkpoint supersedes the older exact-head summaries below. Historical entries remain for audit, but must not override the statuses in this section. The register update is documentation-only; the verified application/test checkpoint remains pinned to the exact SHA below.
 
-- **Exact tested source/test SHA:** `940fcdd776669c44bdd73619374e567c66655fbd`.
-- **Current branch tip at this register refresh:** `8b44196dfb36bfce1fafe2ebfd0be6c52c81849c` (three later documentation/evidence-only commits; application/test source tree remains the tested SHA above).
+- **Exact tested source/test SHA:** `75eb1cd53899466f45295dffc20ecaeabd64a734`.
 - **Main:** `3795519ccbf58fd02d74458624b58dd2e44a88c0`; unchanged. Merge base remains main.
-- **PR #1:** open, draft, unmerged; no merge, close, ready-for-review, reset, rebase or force-push performed.
-- **Branch inventory:** 5,642 commits ahead / 0 behind main; 548 changed paths; zero deletions; clean inventory. The exact inventory artifact was produced on source/test SHA `940fcdd...` (5,639 ahead) before three documentation-only commits. The 17 critical modules are identified; full semantic review of all 548 paths is not complete.
+- **PR #1:** open, draft, unmerged. No merge, close, ready-for-review, reset, rebase or force-push performed.
+- **Branch comparison at tested SHA:** 5,655 commits ahead / 0 behind main. The last complete inventory artifact (at 96ffab6) recorded 552 changed paths, zero deletions and a clean working tree; the current comparison confirms 5,655 ahead / 0 behind. The 17 critical modules are identified; full semantic review of all 552 paths is not complete.
 - **Branch protection:** not independently verified; the GitHub integration returned HTTP 403. Owner/admin verification remains required.
 
 ### Exact-source verification
 
-The exact source/test SHA `940fcdd...` passed:
+The exact source/test SHA `75eb1cd53899466f45295dffc20ecaeabd64a734` passed:
 
 | Verification | Result | Run |
 |---|---:|---:|
-| Node.js | 1,130 passed / 0 failed / 0 skipped across 191 files | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471) |
-| Python | 108 passed / 0 failed | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471) |
-| npm audit | 0 known vulnerabilities on candidate | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471) |
-| Chromium dashboard E2E | 41/41 passed | [Browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543403) |
-| Content quality | PASS | [Content quality](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543500) |
-| Queue readiness | PASS; production dispatch remains gated | [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543439) |
-| Metadata validation | PASS with production HOLD | [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543539) |
-| Isolated main/candidate baseline | PASS; main has 4 moderate npm findings, candidate has 0 | [Baseline](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543427) |
-| Deployment recovery / runner bridge / durable-state checks | PASS in isolated or staging validation | [Recovery](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543553) · [Runner bridge](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543492) · [Durable state](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543460) |
+| Node.js | 1,134 passed / 0 failed / 0 skipped across 192 files | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961047) |
+| Python | 108 passed / 0 failed / 0 skipped | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961047) |
+| npm audit | 0 known vulnerabilities | [Automation](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961047) |
+| Chromium dashboard E2E | 41/41 passed | [Browser E2E](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961255) |
+| Queue readiness | PASS; production dispatch remains owner-gated | [Queue readiness](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961026) |
+| Metadata validation | PASS with production HOLD | [Metadata](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961011) |
+| Cloudflare runner-bridge safety | PASS | [Runner bridge](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961122) |
+| Cloudflare durable-state checks | PASS | [Durable state](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961118) |
+| Nature Frontiers Instagram safety | PASS; publishing remains disabled | [Instagram safety](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961143) |
+| Nature Frontiers Meta Page connection | PASS for read-only connection verification only | [Meta connection](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961156) |
+| Signed editorial approval safety | PASS | [Editorial safety](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961068) |
 
 These are engineering and local/staging results, not evidence of live publication, production deployment or owner approval.
 
@@ -31,19 +32,19 @@ These are engineering and local/staging results, not evidence of live publicatio
 
 | Gate | Current status | Remaining boundary |
 |---|---|---|
-| API-001 | **BLOCKED** | 50 routes: 41 PASS, 2 NOT_TESTED, 7 BLOCKED; 50/50 auth-negative checks pass. Live provider acceptance is not tested. |
-| DASH-001 | **NOT_TESTED** | 121 controls and 17 forms inventoried; 41/41 browser journeys pass. Complete per-control authorization, persistence/restart, concurrency, actionable-error and accessibility acceptance is incomplete. |
+| API-001 | **BLOCKED** | 50 routes: 41 PASS, 0 NOT_TESTED, 9 BLOCKED; 50/50 auth-negative checks pass. Two mocked Meta provider-draft routes remain blocked for live use pending owner-renewed Page credentials, verified permissions and exact one-shot authorization; two dispatch/production routes remain owner-gated. |
+| DASH-001 | **NOT_TESTED** | 121 controls, 17 forms and 15 cross-cutting dimensions inventoried; 41/41 browser journeys pass. Complete per-control authorization, persistence/restart, concurrency, actionable-error and accessibility acceptance is incomplete. |
 | SCHED-001 | **NOT_TESTED** | Local policy tests pass; complete remote publication history, actual publication timestamps and fresh manual/local/third-party upload-attempt attestation are missing. |
 | SCHED-003 | **PASS** | Owner-approved rolling `long_form → long_form → short` cycle, no weekly target, minimum 72 elapsed hours, Africa/Johannesburg, no same-local-day publication. |
 | SCHED-WORKER-DISPATCH-001 | **NOT_TESTED live** | Local 409 cooldown persistence, restart and fail-stop tests pass; no live production worker dispatch is authorized or verified. |
 | STATE-001 | **PASS — staging only** | Durable-state and recovery checks pass; production state storage is not established. |
 | DEPLOY-001 | **NOT_TESTED** | No SonicVhibez production Worker/D1; R2 API 403/code 10042; no Durable Object namespace; OIDC trust is pinned to an old branch. |
-| GIT-002 | **NOT_TESTED** | Full 548-path semantic review incomplete; branch protection unverified. |
+| GIT-002 | **NOT_TESTED** | Full 552-path semantic review incomplete; branch protection unverified. |
 | Production readiness | **HOLD** | 22 fail-closed blockers remain. Publishing is disabled. |
 
 ### The 22 live production-readiness blockers
 
-The latest exact-head readiness run is [45083543382](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543382). Its report has 22 blockers and an intentional HOLD exit code. The report is not a test-suite failure; it correctly prevents an unsafe release.
+The latest exact-head readiness run is [45150961257](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961257); it retained artifact [14805564390](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45150961257/artifacts/14805564390) with SHA-256 `45b797ea7912c49c0619034bcc0f6d26d75685e2e5dfc9387e1702845f0c4354`. Its report has 22 blockers and an intentional HOLD exit code. The report is not a test-suite failure; it correctly prevents an unsafe release.
 
 1. **RDY-80A6BF70F7FE — Queue identity:** the owner-approved queue identity file is missing; both operational long-form items need exact mappings and cycle-position confirmation.
 2. **RDY-10D9D60C22A5 — Short footage policy:** the Short manifest cannot use Pexels/Pixabay stock as a substitute for original creator-captured footage.
