@@ -9,6 +9,7 @@ import crypto from "node:crypto";
 import { canonicalAuthoringScriptSha256 } from "../scripts/authoring-production-pipeline.mjs";
 import { inventoryDashboardSources } from "../scripts/dashboard-inventory.mjs";
 import { futureScheduleDate } from "./helpers/schedule-fixtures.mjs";
+import { isFreshHistoryEvidence } from "../scripts/history-evidence-freshness.mjs";
 
 async function reservePort() {
   const server = createServer();
@@ -306,7 +307,25 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.ok(readiness.blockers.some(item => /long-form(?: render manifest|-render-manifest)/i.test(item)));
   assert.ok(readiness.blockers.some(item => /SONICVHIBEZ_CHANNEL_ID|channel ID/i.test(item)));
   assert.equal(readiness.blockers.some(item => /CADENCE DECISION REQUIRED/.test(item)), false, "production readiness must recognize the recorded owner-approved rolling cadence");
-  assert.equal(readiness.blockers.some(item => item.includes("complete owner-reviewed public/private/unlisted SonicVhibez history evidence")), false, "the sole historical Short matches the fresh inventory and its prior owner-reviewed classification remains valid");
+  const historyVerification = JSON.parse(fs.readFileSync(path.join(process.cwd(), "content/youtube-channel-verification-status.json"), "utf8"));
+  const historyReconciliation = JSON.parse(fs.readFileSync(path.join(process.cwd(), "content/youtube-history-reconciliation.json"), "utf8"));
+  const historyEvidenceFresh = isFreshHistoryEvidence(historyVerification.checkedAt)
+    && isFreshHistoryEvidence(historyReconciliation.verifiedAt)
+    && Date.parse(historyVerification.inventoryArtifact?.expiresAt ?? "") > Date.now();
+  assert.equal(
+    historyVerification.channelIdentityVerified, true,
+    "the previously verified channel identity must remain explicit"
+  );
+  assert.equal(historyVerification.uploadsInventoryComplete, true);
+  assert.equal(historyReconciliation.complete, true);
+  assert.equal(historyReconciliation.channelId, historyVerification.channel.id);
+  assert.equal(historyReconciliation.videos[0]?.id, historyVerification.videos[0]?.id);
+  assert.equal(historyReconciliation.videos[0]?.actualPublishedAt, historyVerification.videos[0]?.youtubePublishedAt);
+  assert.equal(
+    readiness.blockers.some(item => item.includes("complete owner-reviewed public/private/unlisted SonicVhibez history evidence")),
+    !historyEvidenceFresh,
+    "the 24-hour history freshness gate must block stale inventory even when the prior owner-reviewed video record still matches"
+  );
   assert.equal(readiness.blockers.some(item => /YouTube OAuth upload scope is not independently verified/i.test(item)), false, "the 21 November read-only scope verification is fresh and accepted");
   assert.equal(readiness.blockers.some(item => /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/i.test(item)), false, "a superseded invalid_grant attempt must not override the later successful read-only verification");
   assert.ok(readiness.blockers.some(item => /local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete/i.test(item)), "the stale local attempt attestation must remain a blocker");

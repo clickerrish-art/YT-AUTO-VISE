@@ -11,6 +11,7 @@ import { validateProductPromotionGate } from "./product-promotion-gate.mjs";
 import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
 import { validateProductionQualityApprovalFile } from "./production-quality-approval.mjs";
 import { validateQueueIdentity } from "./queue-identity-policy.mjs";
+import { isFreshHistoryEvidence } from "./history-evidence-freshness.mjs";
 
 const root = process.cwd();
 const blockers = [];
@@ -372,12 +373,7 @@ for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRES
 if (process.env.SONICVHIBEZ_CHANNEL_ID && !/^UC[a-zA-Z0-9_-]{22}$/.test(process.env.SONICVHIBEZ_CHANNEL_ID)) {
   blockers.push("SONICVHIBEZ_CHANNEL_ID does not match the expected YouTube channel-ID format; verify it manually.");
 }
-const MAX_HISTORY_EVIDENCE_AGE_MS = 24 * 60 * 60 * 1000;
-const isFreshHistoryEvidence = value => {
-  const timestamp = Date.parse(value);
-  const now = Date.now();
-  return Number.isFinite(timestamp) && timestamp <= now && now - timestamp <= MAX_HISTORY_EVIDENCE_AGE_MS;
-};
+
 if (!exists(youtubeVerificationPath)) {
   blockers.push("LIVE BLOCKER: read-only YouTube identity and uploads inventory verification evidence is missing.");
 } else {
