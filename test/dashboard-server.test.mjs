@@ -146,25 +146,26 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     publishingEnabled: false
   });
   fs.writeFileSync(statePath, JSON.stringify(seededState, null, 2) + "\n", { mode: 0o600 });
+  const stateBeforeQueueGate = fs.readFileSync(statePath);
   const unresolvedDispatch = await fetchDashboard(base + "/api/jobs/dispatchable", { headers: workerHeaders });
   const unresolvedDispatchBody = await unresolvedDispatch.json();
-  assert.equal(unresolvedDispatch.status, 200, "the owner-confirmed queue mapping should pass the identity gate");
+  assert.equal(unresolvedDispatch.status, 409, "stale queue hashes must block worker dispatch");
+  assert.equal(unresolvedDispatchBody.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+  assert.equal(unresolvedDispatchBody.readOnly, true);
   assert.equal(unresolvedDispatchBody.publishingEnabled, false);
-  assert.equal(unresolvedDispatchBody.queuedCount, 1);
-  assert.equal(unresolvedDispatchBody.queuedWithoutApprovedAuthoring, 1);
-  assert.equal(unresolvedDispatchBody.queuedWithoutApprovedRenderPlan, 1);
-  assert.equal(unresolvedDispatchBody.dispatchableCount, 0);
   assert.deepEqual(unresolvedDispatchBody.jobs, []);
   const unresolvedProduce = await fetchDashboard(base + "/api/jobs/produce", {
     method: "POST", headers: { ...workerHeaders, "content-type": "application/json" },
     body: JSON.stringify({ jobId: "unapproved-production-job" })
   });
   const unresolvedProduceBody = await unresolvedProduce.json();
-  assert.equal(unresolvedProduce.status, 409, "direct production dispatch must fail without the approved authoring pipeline");
+  assert.equal(unresolvedProduce.status, 409, "direct production dispatch must fail while queue identity hashes are stale");
+  assert.equal(unresolvedProduceBody.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
   assert.equal(unresolvedProduceBody.renderStarted, false);
   assert.equal(unresolvedProduceBody.publishable, false);
   assert.equal(unresolvedProduceBody.publishingEnabled, false);
-  assert.match(unresolvedProduceBody.error, /approved authoring pipeline/i);
+  assert.deepEqual(fs.readFileSync(statePath), stateBeforeQueueGate,
+    "queue identity rejection must not mutate the job, lease or audit state");
   const restoredState = JSON.parse(fs.readFileSync(statePath, "utf8"));
   restoredState.jobs = restoredState.jobs.filter(job => job.id !== "unapproved-production-job");
   fs.writeFileSync(statePath, JSON.stringify(restoredState, null, 2) + "\n", { mode: 0o600 });
