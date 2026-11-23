@@ -529,7 +529,7 @@ test("short and long-form manifest templates require original creator-captured f
   }
 });
 
-test("production readiness blocks the real repository queue until owner identity approval exists", () => {
+test("production readiness accepts the exact owner-confirmed queue mapping but remains HOLD for separate production gates", () => {
   const env = { ...process.env };
   delete env.QUEUE_PATH;
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
@@ -537,10 +537,10 @@ test("production readiness blocks the real repository queue until owner identity
   });
   assert.equal(result.status, 2, "production readiness must remain on HOLD");
   const report = JSON.parse(result.stdout);
-  const blocker = report.blockers.find(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/.test(item.message));
-  assert.ok(blocker, "the operational and detailed queue identities must be reconciled");
-  assert.match(blocker.message, /content\/queue-identity-approval\.json is missing/i);
   assert.equal(report.status, "blocked");
+  assert.equal(report.blockers.some(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/.test(item.message)), false);
+  assert.ok(report.notes.some(note => /Queue identity reconciliation: 2 owner-approved long-form mappings verified/.test(note)));
+  assert.ok(report.blockerCount > 0, "media, narration, human-review and history gates must remain blocking");
 });
 
 
@@ -566,9 +566,9 @@ test("queue production policy carries the manual-only Speechma audition without 
     assert.equal(candidate.productionApproved, false);
     assert.equal(candidate.publicationAuthorized, false);
   }
-  assert.match(longFormQueue.items[0].narrationVoice, /Roderic/);
-  assert.match(longFormQueue.items[0].narrationVoice, /internal-only.*not commercially cleared/i);
-  assert.equal(longFormQueue.items[0].narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
+  assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationVoice, /Roderic/);
+  assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationVoice, /internal-only.*not commercially cleared/i);
+  assert.equal(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
 });
 
 
