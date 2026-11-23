@@ -40,7 +40,7 @@ test("current-week wildlife video Short uses fresh measured intent and a matchin
   assert.equal(item.productUrl, "https://selar.com/0u19v8u99l");
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.targetSeconds, 55);
-  assert.deepEqual(validatePlan(checkedInPlan, products, { now: referenceNow }), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
 test("approximately 55-second scripts accept 150-wpm tolerance and reject overlong copy", () => {
@@ -661,7 +661,7 @@ test("November 23 ethical-wildlife and outline Shorts use fresh provider-specifi
   assert.match(outline.description, /DISCLOSURE HOLD/);
   assert.ok(outline.script.trim().split(/\s+/).filter(Boolean).length >= 90);
   assert.ok(outline.script.trim().split(/\s+/).filter(Boolean).length <= 135);
-  assert.deepEqual(validatePlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products, { now: referenceNow }), []);
 });
 
 test("draft plans reject normalized snake-case, kebab-case and nested publication timestamp aliases", () => {
