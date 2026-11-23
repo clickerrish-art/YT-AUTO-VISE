@@ -923,7 +923,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
   assert.equal(authorRenderBypassBody.publishable, false);
-  assert.match(authorRenderBypassBody.error, /queue identity reconciliation is not owner-approved/i);
+  assert.match(authorRenderBypassBody.error, /approved authoring pipeline/i);
   assert.equal(authorRenderBypassBody.jobState, "BLOCKED");
   assert.equal(authorRenderBypassBody.requiresOperatorRetry, false);
   const restoredAuthorState = JSON.parse(fs.readFileSync(dueDispatchStatePath, "utf8"));
@@ -1041,7 +1041,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const renderAttempt = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: renderJob.id }) });
   const renderAttemptBody = await renderAttempt.json();
   assert.equal(renderAttempt.status, 409, JSON.stringify(renderAttemptBody));
-  assert.match(renderAttemptBody.error, /queue identity reconciliation is not owner-approved/i);
+  assert.match(renderAttemptBody.error, /approved authoring pipeline/i);
   assert.equal(renderAttemptBody.renderStarted, false, "legacy draft jobs must be rejected before a renderer process is launched");
   assert.equal(renderAttemptBody.publishable, false);
   const legacyRenderState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
@@ -1136,15 +1136,15 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   // Simulate a legacy/corrupt state file with two different queue items reserving
   // the same local date. A distant new slot must still be blocked until the
   // existing collision is repaired; the validator must not hide duplicates.
-  const statePath = path.join(stateDir, "dashboard-state.json");
-  const collisionState = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  const collisionStatePath = path.join(stateDir, "dashboard-state.json");
+  const collisionState = JSON.parse(fs.readFileSync(collisionStatePath, "utf8"));
   const existingReservation = collisionState.queueItems.find(item => item.id === draft.id);
   collisionState.queueItems.push({
     ...existingReservation,
     id: "dashboard-test-duplicate-reservation",
     title: "Duplicate existing Tuesday reservation"
   });
-  fs.writeFileSync(statePath, JSON.stringify(collisionState, null, 2) + "\n", { mode: 0o600 });
+  fs.writeFileSync(collisionStatePath, JSON.stringify(collisionState, null, 2) + "\n", { mode: 0o600 });
   const distantDraft = {
     id: "dashboard-test-distant-draft", title: "Distant Saturday draft", topic: "creator workflow planning",
     contentType: "short", scheduledDay: "Saturday", scheduledDate: futureScheduleDate("Saturday", 9), productUrl: "https://selar.com/0u19v8u99l"
