@@ -481,7 +481,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "5ce15388b6058cfebc78a15d8431d13dc8e38306",
-      "currentHeadEvidenceNote": "NOT_TESTED — exact source/test SHA 5ce15388b6058cfebc78a15d8431d13dc8e38306 passes local policy/worker tests, but complete remote YouTube publication history, actual publication timestamps and fresh owner manual/local/third-party upload-attempt attestation remain unresolved. Original footage and approved production assets are also missing.",
+      "currentHeadEvidenceNote": "NOT_TESTED — complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos is still missing. Complete remote YouTube publication history, actual publication timestamps and fresh owner manual/local/third-party attempt attestation remain unresolved. Local policy and worker tests pass on exact source/test SHA 5ce15388b6058cfebc78a15d8431d13dc8e38306; no upload occurred and original production media remains absent.",
       "currentHeadEvidenceUpdatedAt": "2026-11-23T10:03:46Z",
       "sourceTestEvidenceRefresh": {
         "sourceSha": "5ce15388b6058cfebc78a15d8431d13dc8e38306",
