@@ -119,7 +119,7 @@ test("dispatchable queue is read-only, approval-gated, ordered by scheduled inst
   }).format(new Date(FIXED_NOW));
   const currentTime = new Intl.DateTimeFormat("en-GB", {
     timeZone: "Africa/Johannesburg", hour: "2-digit", minute: "2-digit", hourCycle: "h23"
-  }).format(new Date());
+  }).format(new Date(FIXED_NOW));
   const fixedCreatedAt = "2026-11-05T12:00:00.000Z";
 
   state.jobs = [
