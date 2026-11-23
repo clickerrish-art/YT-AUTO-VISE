@@ -615,9 +615,17 @@ test("November 23 ethical-wildlife and outline Shorts use fresh qualitative sear
     assert.equal(item.status, "DRAFT_ONLY");
     assert.equal(item.visibility, "private");
     assert.equal(item.targetSeconds, 55);
-    assert.equal(item.keywordEvidence.provider, "web_search");
-    assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
-    assert.match(item.keywordEvidence.note, /no measured global search volume/i);
+    if (item.keywordEvidence.type === "qualitative_search_intent") {
+      assert.equal(item.keywordEvidence.provider, "web_search");
+      assert.match(item.keywordEvidence.note, /no measured global search volume/i);
+      assert.equal(item.keywordEvidence.estimatedMonthlySearches, undefined);
+    } else {
+      assert.equal(item.keywordEvidence.type, "estimated_monthly_searches");
+      assert.equal(item.keywordEvidence.provider, "vidIQ");
+      assert.ok(Number.isFinite(item.keywordEvidence.estimatedMonthlySearches));
+      assert.ok(Number.isFinite(item.keywordEvidence.competition));
+      assert.match(item.keywordEvidence.note, /provider estimates/i);
+    }
     assert.ok(item.keywordEvidence.sources.length >= 2);
     assert.equal(item.currentIntentEvidence.provider, "web_search");
     assert.ok(item.currentIntentEvidence.sources.length >= 2);
@@ -698,7 +706,7 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
 
 
 test("current search-intent evidence is mandatory, dated, sourced and fresh for current/future drafts", () => {
-  const now = new Date("2026-11-22T11:05:00+02:00");
+  const now = new Date("2026-11-23T10:00:00+02:00");
   const valid = clone(checkedInPlan);
   assert.deepEqual(validatePlan(valid, products, { now }), []);
 
