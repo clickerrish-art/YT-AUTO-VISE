@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "assetId": "short-001",
+  "status": "NOT_GENERATED",
+  "provider": null,
+  "model": null,
+  "generationId": null,
+  "promptSha256": null,
+  "outputSha256": null,
+  "syntheticMediaDisclosureRequired": true,
+  "technicalValidationStatus": "NOT_DONE",
+  "rightsReviewStatus": "PENDING",
+  "humanVisualReview": "NOT_DONE",
+  "note": "Template only. No generation has occurred. Populate only from a real completed generation receipt and the exact retained output file; never fabricate IDs, hashes or review results."
+}
