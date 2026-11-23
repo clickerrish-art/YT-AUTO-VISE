@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-23T10:57:22Z",
+  "generatedAt": "2026-11-23T11:15:00Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+  "testedSourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
   "liveMainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "inventory": {
@@ -15,32 +15,32 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 5658,
+    "branchAheadBy": 5664,
     "branchBehindBy": 0,
     "changedFiles": 552,
     "branchProtectionEnabled": null,
     "branchProtectionStatus": "UNVERIFIED — GitHub branch-protection endpoint returns HTTP 403; owner-side settings are not independently visible.",
-    "comparisonSourceSha": "2a20c653e944ea748e9e051ddbce2178551662df",
+    "comparisonSourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45155129033",
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303393",
     "latestCompareEvidence": {
-      "sourceSha": "2a20c653e944ea748e9e051ddbce2178551662df",
-      "aheadBy": 5658,
+      "sourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "aheadBy": 5664,
       "behindBy": 0,
       "changedFilesInPullRequest": 552,
-      "inventoryArtifactRunId": 45155129033,
-      "inventoryArtifactId": 14807239405,
-      "inventoryArtifactSha256": "sha256:e78a5ccc18a4de4ceec2ee0935b34df48aeef716fd3edc27ab08849fc50e0781"
+      "inventoryArtifactRunId": 45162303393,
+      "inventoryArtifactId": 14810998321,
+      "inventoryArtifactSha256": "sha256:845319ce728874137e9c712ee27c1e82e56061c4aed3549eccda657347858348"
     },
-    "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45156940320",
-    "latestInventoryArtifactId": 14807239405,
-    "latestInventoryArtifactSha256": "sha256:e78a5ccc18a4de4ceec2ee0935b34df48aeef716fd3edc27ab08849fc50e0781",
-    "latestAutomationRunSourceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
-    "inventoryHeadSha": "2a20c653e944ea748e9e051ddbce2178551662df",
-    "latestInventorySourceTestSha": "2a20c653e944ea748e9e051ddbce2178551662df",
-    "latestInventoryRunId": 45152184656,
-    "branchTipAtEvidenceRefresh": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
-    "branchTipAheadBy": 5660,
+    "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
+    "latestInventoryArtifactId": 14810998321,
+    "latestInventoryArtifactSha256": "sha256:845319ce728874137e9c712ee27c1e82e56061c4aed3549eccda657347858348",
+    "latestAutomationRunSourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "inventoryHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "latestInventorySourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "latestInventoryRunId": 45162303393,
+    "branchTipAtEvidenceRefresh": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "branchTipAheadBy": 5664,
     "branchTipBehindBy": 0
   },
   "counts": {
@@ -187,7 +187,7 @@
     "apiRouteAcceptanceAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346",
     "apiRouteAcceptanceDashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303"
   },
-  "disclaimer": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49 passed automation run 45160289536: 1,136 Node tests across 192 files, 108 Python tests, 41/41 Chromium journeys, 50/50 protected-route authentication-negative checks, zero failures/skips and npm audit zero vulnerabilities. Baseline comparison run 45160299756 passed on main and candidate; candidate npm audit 0, legacy main audit 4 moderate. API route classification remains 41 PASS / 0 NOT_TESTED / 9 BLOCKED. Production readiness remains HOLD with 22 blockers; no live provider writes, production deployment, media approval or publication is claimed.",
+  "disclaimer": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0 passed automation run 45162303476: 1,136 Node tests across 192 files, 108 Python tests, 41/41 Chromium journeys, 50/50 protected-route authentication-negative checks, zero failures/skips and npm audit zero vulnerabilities. Baseline comparison run 45162303617 passed on main and candidate; candidate npm audit 0, legacy main audit 4 moderate. API route classification remains 41 PASS / 0 NOT_TESTED / 9 BLOCKED. Production readiness remains HOLD with 22 blockers; no live provider writes, production deployment, media approval or publication is claimed.",
   "routes": [
     {
       "method": "POST",
@@ -220,15 +220,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/campaign-management-api.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -257,15 +257,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -294,16 +294,16 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
         "test/dashboard-api-request-boundaries.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -332,15 +332,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -366,15 +366,15 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -403,15 +403,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -431,15 +431,15 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: mocked provider integration covers interrupted SUBMITTING recovery, read-only remote match, exact remote read-back, concurrent reconciliation fencing and restart persistence within the full 1,136-test regression. Live Meta Page credentials/permissions and owner authorization are absent; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: mocked provider integration covers interrupted SUBMITTING recovery, read-only remote match, exact remote read-back, concurrent reconciliation fencing and restart persistence within the full 1,136-test regression. Live Meta Page credentials/permissions and owner authorization are absent; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs",
         "test/meta-page-adapter.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45160289536,
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
+      "currentHeadEvidenceRunId": 45162303476,
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
       "mockedIntegrationStatus": "PASS",
       "mockedIntegrationEvidence": {
         "sourceTestSha": "da7e45cd49128f3580c455bfeebf63dfb7b17383",
@@ -447,7 +447,7 @@
         "testFile": "test/meta-provider-draft-server.integration.test.mjs",
         "scenario": "remote create accepted but response interrupted; restart with durable SUBMITTING; read-only feed match and exact remote read-back; concurrent reconciliation returns 409 without duplicate feed scan or create."
       },
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
       "testEvidence": {
         "test": "test/meta-provider-draft-server.integration.test.mjs; test/meta-page-adapter.test.mjs",
         "exactTestedSha": "96ffab66373265d82de576ee16f414b27d7678c4",
@@ -473,15 +473,15 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: mocked provider integration covers interrupted SUBMITTING recovery, read-only remote match, exact remote read-back, concurrent reconciliation fencing and restart persistence within the full 1,136-test regression. Live Meta Page credentials/permissions and owner authorization are absent; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: mocked provider integration covers interrupted SUBMITTING recovery, read-only remote match, exact remote read-back, concurrent reconciliation fencing and restart persistence within the full 1,136-test regression. Live Meta Page credentials/permissions and owner authorization are absent; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs",
         "test/meta-page-adapter.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45160289536,
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
+      "currentHeadEvidenceRunId": 45162303476,
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
       "mockedIntegrationStatus": "PASS",
       "mockedIntegrationEvidence": {
         "sourceTestSha": "da7e45cd49128f3580c455bfeebf63dfb7b17383",
@@ -489,7 +489,7 @@
         "testFile": "test/meta-provider-draft-server.integration.test.mjs",
         "scenario": "remote create accepted but response interrupted; restart with durable SUBMITTING; read-only feed match and exact remote read-back; concurrent reconciliation returns 409 without duplicate feed scan or create."
       },
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
       "testEvidence": {
         "test": "test/meta-provider-draft-server.integration.test.mjs; test/meta-page-adapter.test.mjs",
         "exactTestedSha": "96ffab66373265d82de576ee16f414b27d7678c4",
@@ -524,15 +524,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -561,15 +561,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -589,15 +589,15 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -626,15 +626,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -654,15 +654,15 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -688,15 +688,15 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/instagram-approval-route-fail-closed.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -722,16 +722,16 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/instagram-approval-service.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -760,15 +760,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -798,15 +798,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -842,8 +842,8 @@
         "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
         "test/dashboard-dispatchable-ordering.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
       "currentHeadEvidenceRun": null
     },
     {
@@ -873,15 +873,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -912,15 +912,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-completion.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -949,15 +949,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -986,15 +986,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1023,16 +1023,16 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1069,15 +1069,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1106,15 +1106,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1143,15 +1143,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1180,17 +1180,17 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
         "browser-tests/dashboard.spec.mjs"
       ],
       "currentHeadEvidenceBrowserRunId": 44778360071,
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1218,15 +1218,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-parent-relationship.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1261,8 +1261,8 @@
         "test/dashboard-api-produce-fail-closed-recovery.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
       "currentHeadEvidenceRun": null
     },
     {
@@ -1292,15 +1292,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1329,15 +1329,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1366,15 +1366,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-queue-diagnostics.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1403,15 +1403,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-render-recovery-reconcile.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1440,15 +1440,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-retry.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1477,16 +1477,16 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1515,16 +1515,16 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
         "test/dashboard-review-preview.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1552,15 +1552,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1590,15 +1590,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-rights-verification.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1641,15 +1641,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-cancellation.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1680,15 +1680,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-validation-idempotency.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1717,16 +1717,16 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
         "test/dashboard-api-job-cancellation.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1752,15 +1752,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/nature-frontiers-media-register-api.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1786,15 +1786,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1821,15 +1821,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1856,15 +1856,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1893,16 +1893,16 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs",
         "test/state-recovery-dashboard.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -1932,15 +1932,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-task-runner.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "GET",
@@ -1969,15 +1969,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -2003,16 +2003,16 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/upload-reconcile-fail-closed.integration.test.mjs",
         "test/external-gated-api-safety.integration.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     },
     {
       "method": "POST",
@@ -2041,15 +2041,15 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "currentHeadEvidenceRunId": 45160289536,
-      "currentHeadEvidenceNote": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "currentHeadEvidenceRunId": 45162303476,
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: local route evidence is included in the full 1,136-test regression; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/worker-quarantine-release.test.mjs"
       ],
-      "authenticationNegativeCurrentHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "authenticationNegativeCurrentHeadRunId": 45160289536,
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536"
+      "authenticationNegativeCurrentHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "authenticationNegativeCurrentHeadRunId": 45162303476,
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476"
     }
   ],
   "liveEvidenceRefresh": {
@@ -2295,16 +2295,16 @@
     }
   },
   "currentBranchCheckpoint": {
-    "sourceTestSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "branchHead": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
-    "aheadBy": 5662,
+    "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "branchHead": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "aheadBy": 5664,
     "behindBy": 0,
     "changedPaths": 552,
-    "inventoryRunId": 45155129033,
-    "inventoryArtifactId": 14807239405,
-    "inventoryArtifactSha256": "sha256:e78a5ccc18a4de4ceec2ee0935b34df48aeef716fd3edc27ab08849fc50e0781",
-    "inventoryHead": "2a20c653e944ea748e9e051ddbce2178551662df",
-    "inventoryAheadBy": 5658,
+    "inventoryRunId": 45162303393,
+    "inventoryArtifactId": 14810998321,
+    "inventoryArtifactSha256": "sha256:845319ce728874137e9c712ee27c1e82e56061c4aed3549eccda657347858348",
+    "inventoryHead": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "inventoryAheadBy": 5664,
     "inventoryBehindBy": 0,
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "finalTreeDeletions": 0,
@@ -2316,26 +2316,25 @@
     "branchProtection": "UNVERIFIED_HTTP_403"
   },
   "currentHeadEvidence": {
-    "sourceTestSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "automationRunId": 45160289536,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
+    "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "automationRunId": 45162303476,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
     "nodeTestFiles": 192,
     "nodeTests": 1136,
     "pythonTests": 108,
-    "pythonEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+    "pythonEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "npmAuditEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+    "npmAuditEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
     "authNegativePass": 50,
     "overallPass": 41,
     "overallNotTested": 0,
     "overallBlocked": 9,
-    "routeAcceptanceMatrixExecutionStatus": "PASS — 41 positive routes have endpoint-specific local evidence; 50/50 auth-negative checks pass; zero routes remain NOT_TESTED and nine remain BLOCKED by owner/provider prerequisites.",
     "browserE2EStatus": "PASS",
-    "lastBrowserEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "lastBrowserRunId": 45160299988,
-    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160299988",
-    "note": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: 1,136 Node tests across 192 files, 108 Python tests, 41/41 Chromium journeys, npm audit zero vulnerabilities and zero failures/skips. API routes: 41 PASS, 0 NOT_TESTED, 9 BLOCKED by genuine owner/provider prerequisites. Live provider and production operations remain gated."
+    "lastBrowserEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "lastBrowserRunId": 45162303495,
+    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303495",
+    "note": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: 1,136 Node tests/192 files, 108 Python tests, 41/41 Chromium journeys, zero failures/skips, npm audit zero vulnerabilities. API: 41 PASS / 0 NOT_TESTED / 9 BLOCKED; 50/50 auth-negative checks pass."
   },
   "latestRegressionEvidence": {
     "recordedAt": "2026-11-20T16:57:46Z",
@@ -2366,27 +2365,26 @@
     "overallPass": 41,
     "overallNotTested": 0,
     "overallBlocked": 9,
-    "sourceTestSha": "b7a8084279b188fc150de82a5b8e935e77d74c49"
+    "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0"
   },
   "latestCurrentHeadAuthenticationEvidence": {
-    "sourceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "runId": 45160289536,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
+    "sourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "runId": 45162303476,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
     "passed": 50,
     "total": 50,
     "failed": 0,
-    "skipped": 0,
-    "note": "Exact source/test SHA includes 50/50 protected-route missing/invalid-authentication checks before mutation."
+    "skipped": 0
   },
-  "latestBranchTipAtEvidenceRefresh": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-  "latestApplicationSourceChangeSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-  "latestFullyTestedSourceTestTreeSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-  "sourceTestEvidenceStatus": "PASS_EXACT_HEAD_FULL_REGRESSION",
-  "latestApplicationSourceTestTreeSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+  "latestBranchTipAtEvidenceRefresh": "a7e8cb38c39444632bd22d603811217fea1527e0",
+  "latestApplicationSourceChangeSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+  "latestFullyTestedSourceTestTreeSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+  "sourceTestEvidenceStatus": "PASS — exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0 passed 1,136 Node tests/192 files, 108 Python tests, 41/41 Chromium journeys, zero failures/skips and npm audit zero. API routes: 41 PASS / 0 NOT_TESTED / 9 BLOCKED; 50/50 auth-negative. Branch: 5,664 ahead / 0 behind, 552 changed paths. Production readiness HOLD with 22 blockers.",
+  "latestApplicationSourceTestTreeSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
   "latestCurrentHeadPositiveEvidence": {
-    "sourceTestSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "runId": 45160289536,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
+    "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "runId": 45162303476,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
     "positiveRouteCount": 41,
     "blockedRouteCount": 9,
     "notTestedRouteCount": 0,
@@ -2394,8 +2392,9 @@
     "nodePassed": 1136,
     "nodeFailed": 0,
     "nodeSkipped": 0,
-    "browserRunId": 45160299988,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160299988",
+    "browserRunId": 45162303495,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303495",
+    "browserEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
     "browserTestsPassed": 41,
     "browserTestsFailed": 0,
     "browserTestsSkipped": 0,
@@ -2403,14 +2402,13 @@
     "pythonFailed": 0,
     "pythonSkipped": 0,
     "npmAuditVulnerabilities": 0,
-    "npmAuditSourceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "note": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: 1,136 Node tests/192 files, 108 Python tests, 41/41 browser journeys, zero failures/skips and npm audit zero vulnerabilities. API routes: 41 PASS, 0 NOT_TESTED and 9 BLOCKED by genuine owner/provider prerequisites. Live provider writes and production operations remain gated."
+    "npmAuditSourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0"
   },
   "currentHeadReconciliation": {
     "status": "PARTIAL",
-    "observedImplementationHeadSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
-    "regressionRunId": 45160289536,
+    "observedImplementationHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
+    "regressionRunId": 45162303476,
     "regressionRunResults": {
       "nodePassed": 1136,
       "nodeFailed": 0,
@@ -2419,8 +2417,7 @@
       "browserPassed": 41,
       "browserFailed": 0,
       "browserSkipped": 0,
-      "browserRunId": 45160299988,
-      "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160299988",
+      "browserRunId": 45162303495,
       "pythonPassed": 108,
       "pythonFailed": 0,
       "pythonSkipped": 0,
@@ -2432,8 +2429,8 @@
     "blockedRoutesPreserved": 9,
     "ownerGatedRoutes": 2,
     "explanation": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49 passes 1,136 Node tests across 192 files, 108 Python tests, 50/50 protected-route auth-negative checks and 41/41 Chromium dashboard journeys; npm audit reports zero vulnerabilities. 41 local positive route classifications remain accepted; zero routes remain NOT_TESTED and nine remain BLOCKED by owner/provider prerequisites. Production readiness remains HOLD with 22 blockers. No live provider writes or publications.",
-    "latestExactHeadWorkflowRunId": 45160289536,
-    "latestExactHeadWorkflowRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
+    "latestExactHeadWorkflowRunId": 45162303476,
+    "latestExactHeadWorkflowRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
     "latestExactHeadTests": {
       "nodePassed": 1136,
       "nodeFailed": 0,
@@ -2451,23 +2448,34 @@
     },
     "readiness": {
       "status": "HOLD",
-      "runId": 45160289490,
-      "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289490",
-      "head": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "blockers": 22,
-      "artifactId": 14809978095,
-      "artifactSha256": "sha256:083f0ccb5a23302485f936228e3aacd00d69f81aee332b6e60e592b6f2321243",
+      "runId": 45162303536,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303536",
+      "head": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "blockerCount": 22,
+      "artifactId": 14812105244,
+      "artifactSha256": "sha256:bbbbbf22d93283282804e719c78b2ad14f2740e3a60a44b08cb0243e138ff1d1",
+      "publishingEnabled": false,
+      "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303536",
       "exitCode": 2,
-      "reportUploaded": true,
-      "readinessJsonError": "",
-      "publishingEnabled": false
+      "reportUploaded": true
     },
     "baselineComparison": {
       "status": "PASS",
-      "runId": 45160299756,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160299756",
-      "mainBaseline": "PASS — 54/54 Node, 8/8 Python; legacy main npm audit reported four moderate vulnerabilities",
-      "candidateCurrentHead": "PASS — 1,136/1,136 Node, 108/108 Python; candidate npm audit zero vulnerabilities",
+      "runId": 45162303617,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303617",
+      "artifactId": 14811083832,
+      "artifactSha256": "sha256:9d96077232e25ad88b8d55e2f6de83c800e86e10288fd74de4f48bdbaa1fc1db",
+      "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+      "mainNodeTests": 54,
+      "mainPythonTests": 8,
+      "mainNpmAuditModerateVulnerabilities": 4,
+      "candidateSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "candidateNodeTests": 1136,
+      "candidateNodeFiles": 192,
+      "candidatePythonTests": 108,
+      "candidateNpmAuditVulnerabilities": 0,
+      "mainBaseline": "PASS",
+      "candidateCurrentHead": "PASS",
       "combinedRerun": "PASS"
     }
   },
@@ -2484,15 +2492,14 @@
     "testsSkipped": 0
   },
   "latestQueueIdentityGuard": {
-    "sourceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "status": "BLOCKED",
-    "runId": 45160300145,
+    "sourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "status": "BLOCKED_OWNER_APPROVAL_ABSENT",
+    "runId": 45162303581,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303581",
+    "artifactId": 14813085678,
+    "artifactSha256": "sha256:8f2651703e7fb666609b8aadcc6ff66883e10ab319fd7d30e493fd636dad76c5",
     "reason": "Owner-approved content/queue-identity-approval.json is absent; the pending template is hash-bound but no mapping or approval has been fabricated.",
-    "operationalLongFormItems": [
-      "long-form-plan-wildlife-video",
-      "long-form-faceless-wildlife-workflow"
-    ],
-    "cyclePositionOne": "Owner mapping required"
+    "dispatchAllowed": false
   },
   "lastVerifiedRouteEvidence": {
     "sourceTestSha": "61d116ede6c4abc9977078e88864d8571cdadccb",
@@ -2501,9 +2508,9 @@
     "note": "Historical exact-SHA result only; superseded for GET /api/jobs/dispatchable and POST /api/jobs/produce by the newer owner-approval gate."
   },
   "latestExactHeadRegression": {
-    "sourceTestSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "automationRunId": 45160289536,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
+    "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "automationRunId": 45162303476,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
     "nodeTestFiles": 192,
     "nodePassed": 1136,
     "nodeFailed": 0,
@@ -2516,9 +2523,9 @@
       "passed": 50,
       "total": 50
     },
-    "browserRunId": 45160299988,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160299988",
-    "browserEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+    "browserRunId": 45162303495,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303495",
+    "browserEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
     "browserJourneys": {
       "passed": 41,
       "total": 41,
@@ -2533,30 +2540,32 @@
     },
     "productionReadiness": {
       "status": "HOLD",
-      "runId": 45160289490,
-      "head": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+      "runId": 45162303536,
+      "head": "a7e8cb38c39444632bd22d603811217fea1527e0",
       "blockers": 22,
-      "artifactId": 14809978095,
-      "artifactSha256": "sha256:083f0ccb5a23302485f936228e3aacd00d69f81aee332b6e60e592b6f2321243"
+      "artifactId": 14812105244,
+      "artifactSha256": "sha256:bbbbbf22d93283282804e719c78b2ad14f2740e3a60a44b08cb0243e138ff1d1"
     },
-    "queueReadinessRunId": 45160300145,
+    "queueReadinessRunId": 45162303581,
     "queueReadiness": "PASS — readiness workflow validates fail-closed owner gate; queue identity approval remains absent",
-    "deploymentRecoveryRunId": 45160299934,
-    "runnerBridgeSafetyRunId": 45160300000,
+    "deploymentRecoveryRunId": 45162303539,
+    "runnerBridgeSafetyRunId": 45162303669,
     "cloudflareStagingSmoke": "PASS_READ_ONLY",
-    "contentQualityRunId": 45160300032,
-    "metadataRunId": 45160300272,
-    "baselineComparisonRunId": 45160299756,
+    "contentQualityRunId": 45162303758,
+    "metadataRunId": 45162303502,
+    "baselineComparisonRunId": 45162303617,
     "baselineComparisonStatus": "PASS",
-    "branchInventoryRunId": 45160299949,
-    "branchInventoryHead": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "branchInventoryArtifactId": 14810238243,
-    "branchInventoryArtifactSha256": "sha256:3fef5252a30325a32eea339a0e9380aeebacfd7d65399513141cedbf2e57fd1a",
-    "branchAheadBy": 5662,
+    "branchInventoryRunId": 45162303393,
+    "branchInventoryHead": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "branchInventoryArtifactId": 14810998321,
+    "branchInventoryArtifactSha256": "sha256:845319ce728874137e9c712ee27c1e82e56061c4aed3549eccda657347858348",
+    "branchAheadBy": 5664,
     "branchBehindBy": 0,
     "changedFiles": 552,
     "branchProtection": "UNVERIFIED_HTTP_403",
-    "npmAuditSourceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49"
+    "npmAuditSourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "queueReadinessArtifactId": 14813085678,
+    "queueReadinessArtifactSha256": "sha256:8f2651703e7fb666609b8aadcc6ff66883e10ab319fd7d30e493fd636dad76c5"
   },
   "cloudflareProductionState": {
     "sourceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
@@ -2571,24 +2580,21 @@
   },
   "latestReadinessReconciliation": {
     "status": "HOLD",
-    "runId": 45160289490,
-    "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289490",
-    "head": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+    "runId": 45162303536,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303536",
+    "head": "a7e8cb38c39444632bd22d603811217fea1527e0",
     "blockers": 22,
-    "artifactId": 14809978095,
-    "artifactSha256": "sha256:083f0ccb5a23302485f936228e3aacd00d69f81aee332b6e60e592b6f2321243",
-    "exitCode": 2,
-    "reportUploaded": true,
-    "readinessJsonError": "",
+    "artifactId": 14812105244,
+    "artifactSha256": "sha256:bbbbbf22d93283282804e719c78b2ad14f2740e3a60a44b08cb0243e138ff1d1",
     "publishingEnabled": false,
-    "note": "Readiness remains HOLD with 22 owner/provider/rights/deployment gates. This exact-head run reports the fresh channel inventory separately from the stale owner attestation for manual/local/third-party attempts."
+    "productionApproval": "NOT_GRANTED"
   },
-  "latestExactHead": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+  "latestExactHead": "a7e8cb38c39444632bd22d603811217fea1527e0",
   "latestExactHeadEvidence": {
-    "recordedAt": "2026-11-23T10:57:22Z",
-    "sourceTestSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-    "automationRunId": 45160289536,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160289536",
+    "recordedAt": "2026-11-23T11:15:00Z",
+    "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "automationRunId": 45162303476,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
     "nodeTestFiles": 192,
     "nodeTests": 1136,
     "nodeFailed": 0,
@@ -2597,36 +2603,51 @@
     "pythonFailed": 0,
     "pythonSkipped": 0,
     "npmAuditVulnerabilities": 0,
-    "browserRunId": 45160299988,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45160299988",
-    "browserEvidenceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+    "browserRunId": 45162303495,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303495",
+    "browserEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
     "browserJourneys": 41,
     "browserPassed": 41,
     "browserFailed": 0,
     "browserSkipped": 0,
-    "productionReadinessRunId": 45160289490,
+    "productionReadinessRunId": 45162303536,
     "productionReadinessStatus": "HOLD",
     "productionReadinessBlockers": 22,
-    "readinessArtifactId": 14809978095,
-    "readinessArtifactSha256": "sha256:083f0ccb5a23302485f936228e3aacd00d69f81aee332b6e60e592b6f2321243",
+    "readinessArtifactId": 14812105244,
+    "readinessArtifactSha256": "sha256:bbbbbf22d93283282804e719c78b2ad14f2740e3a60a44b08cb0243e138ff1d1",
     "apiRoutes": {
       "routes": 50,
       "positivePass": 41,
       "notTested": 0,
       "blocked": 9,
       "authNegativePass": 50,
-      "sourceTestSha": "b7a8084279b188fc150de82a5b8e935e77d74c49"
+      "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0"
     },
     "baselineComparison": {
       "status": "PASS",
-      "runId": 45160299756
+      "runId": 45162303617,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303617",
+      "artifactId": 14811083832,
+      "artifactSha256": "sha256:9d96077232e25ad88b8d55e2f6de83c800e86e10288fd74de4f48bdbaa1fc1db",
+      "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+      "mainNodeTests": 54,
+      "mainPythonTests": 8,
+      "mainNpmAuditModerateVulnerabilities": 4,
+      "candidateSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "candidateNodeTests": 1136,
+      "candidateNodeFiles": 192,
+      "candidatePythonTests": 108,
+      "candidateNpmAuditVulnerabilities": 0,
+      "mainBaseline": "PASS",
+      "candidateCurrentHead": "PASS",
+      "combinedRerun": "PASS"
     },
     "branchInventory": {
-      "runId": 45160299949,
-      "artifactId": 14810238243,
-      "artifactSha256": "sha256:3fef5252a30325a32eea339a0e9380aeebacfd7d65399513141cedbf2e57fd1a",
-      "head": "b7a8084279b188fc150de82a5b8e935e77d74c49",
-      "aheadBy": 5662,
+      "runId": 45162303393,
+      "artifactId": 14810998321,
+      "artifactSha256": "sha256:845319ce728874137e9c712ee27c1e82e56061c4aed3549eccda657347858348",
+      "head": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "aheadBy": 5664,
       "behindBy": 0,
       "changedFiles": 552,
       "deletions": 0,
@@ -2634,21 +2655,44 @@
       "workingTreeClean": true,
       "patchEquivalentCommits": 0
     },
+    "currentBranchTip": {
+      "head": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "aheadBy": 5664,
+      "behindBy": 0,
+      "changedFiles": 552
+    },
+    "queueReadiness": {
+      "status": "PASS_FAIL_CLOSED",
+      "runId": 45162303581,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303581",
+      "artifactId": 14813085678,
+      "artifactSha256": "sha256:8f2651703e7fb666609b8aadcc6ff66883e10ab319fd7d30e493fd636dad76c5",
+      "ownerQueueIdentityApproval": "BLOCKED_ABSENT",
+      "dispatchAllowed": false
+    },
+    "sourceBundle": {
+      "status": "BEHIND_CURRENT_BRANCH_BY_2_COMMITS",
+      "runId": 45160289555,
+      "artifactId": 14809444411,
+      "artifactSha256": "sha256:b71a5a909f4613e5ef6d8aad4ab9483014115f15ec078c729647699384c54b92",
+      "sourceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+      "commitsBehind": 2
+    },
     "youtubeInventory": {
+      "status": "PASS_READ_ONLY",
       "runId": 45160289448,
       "artifactId": 14810127143,
       "artifactSha256": "sha256:2484a419b156967339d08b5f75fdf28585af39970bda0a1631125a28e7ceeb6e",
-      "totalUploads": 1,
-      "public": 1,
-      "private": 0,
-      "unlisted": 0,
+      "sourceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+      "publicItems": 1,
+      "privateItems": 0,
+      "unlistedItems": 0,
       "channelHandle": "@sonicvhibez",
-      "channelId": "UCSlkuPfHH78oGC1o418HV4w",
-      "legacyShortOwnerReviewed": true,
-      "manualLocalThirdPartyAttestationValidThrough": "2026-11-18"
+      "videoId": "LjePS02hA1o",
+      "format": "prior owner-reviewed legacy Short",
+      "ownerAttemptAttestationValidThrough": "2026-11-18"
     },
     "publishingEnabled": false,
-    "releaseDecision": "HOLD",
-    "note": "Exact source/test SHA b7a8084279b188fc150de82a5b8e935e77d74c49: 1,136 Node tests/192 files, 108 Python tests, 41/41 Chromium journeys, 50/50 auth-negative checks, npm audit zero; baseline comparison PASS. Production readiness HOLD22; no production media selected, no owner-hash approval, and no upload authorized."
+    "releaseDecision": "HOLD"
   }
 }
