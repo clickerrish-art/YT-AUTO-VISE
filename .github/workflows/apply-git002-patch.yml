@@ -1,0 +1,102 @@
+name: One-time GIT-002 remediation apply and verification
+on:
+  push:
+    branches:
+      - codex/marketing-machine-audit-fixes
+    paths:
+      - codex/patches/git002.patch.gz.b64
+permissions:
+  contents: write
+jobs:
+  apply-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/marketing-machine-audit-fixes
+          fetch-depth: 0
+      - name: Verify staging base and apply patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=9594f4b1c2d154a1d74c691791c51456bd782821
+          git merge-base --is-ancestor "$BASE" HEAD
+          git diff --quiet "$BASE" HEAD -- . ':(exclude)codex/patches/git002.patch.gz.b64' ':(exclude).github/workflows/apply-git002-patch.yml'
+          test -f codex/patches/git002.patch.gz.b64
+          base64 -d codex/patches/git002.patch.gz.b64 | gzip -dc > "$RUNNER_TEMP/git002.patch"
+          git apply --check "$RUNNER_TEMP/git002.patch"
+          git apply "$RUNNER_TEMP/git002.patch"
+          rm -f codex/patches/git002.patch.gz.b64
+          rm -f .github/workflows/apply-git002-patch.yml
+          git diff --check
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install Chromium for browser acceptance tests
+        run: npx playwright install --with-deps chromium
+      - name: Full Node.js suite
+        shell: bash
+        run: npm test 2>&1 | tee "$RUNNER_TEMP/node-tests.log"
+      - name: Full Python suite
+        shell: bash
+        run: python -m unittest discover -s tests -v 2>&1 | tee "$RUNNER_TEMP/python-tests.log"
+      - name: Browser acceptance suite
+        shell: bash
+        run: npm run test:browser 2>&1 | tee "$RUNNER_TEMP/browser-tests.log"
+      - name: Schedule, campaign and brand-separation validators
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run validate:schedule 2>&1 | tee "$RUNNER_TEMP/schedule-validation.log"
+          npm run validate:campaigns 2>&1 | tee "$RUNNER_TEMP/campaign-validation.log"
+          npm run validate:nature-frontiers-media 2>&1 | tee "$RUNNER_TEMP/nature-frontiers-validation.log"
+      - name: Confirm production remains fail-closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          node scripts/production-readiness.mjs --json > "$RUNNER_TEMP/production-readiness.json"
+          rc=$?
+          set -e
+          test "$rc" -eq 2
+          node --input-type=module - "$RUNNER_TEMP/production-readiness.json" <<'NODE'
+          import fs from 'node:fs';
+          const report = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+          if (report.status !== 'blocked' || report.blockerCount < 1) throw new Error('Production readiness must remain blocked until genuine original media, rights, human approvals and queue identity are verified.');
+          const messages = report.blockers.map(item => item.message).join('\n');
+          if (!/original creator-captured wildlife footage/i.test(messages)) throw new Error('Missing original creator-captured media blocker.');
+          if (!/QUEUE IDENTITY RECONCILIATION REQUIRED/i.test(messages)) throw new Error('Missing stale queue identity approval blocker.');
+          console.log(`PASS: production remains fail-closed with ${report.blockerCount} explicit blockers.`);
+          NODE
+      - name: Upload exact verification logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: git002-exact-sha-verification
+          path: ${{ runner.temp }}/*.log
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Commit and push verified tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+            echo 'Unexpected untracked files after verification; refusing to commit.' >&2
+            git status --short
+            exit 1
+          fi
+          git add -u
+          TREE_BEFORE=$(git write-tree)
+          git commit -m "Fix GIT-002 production policy and acceptance failures"
+          TREE_AFTER=$(git rev-parse HEAD^{tree})
+          test "$TREE_BEFORE" = "$TREE_AFTER"
+          git push origin HEAD:refs/heads/codex/marketing-machine-audit-fixes
+          echo "Verified commit: $(git rev-parse HEAD)"
+          echo "Verified tree: $TREE_AFTER"
