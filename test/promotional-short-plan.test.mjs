@@ -7,7 +7,7 @@ const checkedInPlan = JSON.parse(fs.readFileSync("content/promotional-short-plan
 const products = JSON.parse(fs.readFileSync("config/products.json", "utf8")).products;
 const clone = value => structuredClone(value);
 const validatePlan = (plan, productRows = products, options = {}) => validatePromotionalShortPlan(plan, productRows, {
-  now: new Date("2026-11-22T11:05:00+02:00"),
+  now: new Date("2026-11-23T09:53:00+02:00"),
   ...options
 });
 
@@ -21,6 +21,26 @@ test("creator-education Shorts stay within the two-item weekly cap across draft-
   assert.ok(checkedInPlan.weeks[1].items.some(item => item.id === "sonicvhibez-short-006-niche-selection"));
   assert.ok(checkedInPlan.weeks.every(week => week.items.length <= 2));
   assert.ok(checkedInPlan.weeks.every(week => week.items.every(item => item.targetSeconds === 55)));
+});
+
+test("current-week wildlife video Short uses fresh measured intent and a matching search-led title", () => {
+  const item = checkedInPlan.weeks.find(week => week.weekOf === "2026-11-23")
+    .items.find(row => row.id === "sonicvhibez-short-007-ethical-wildlife-filming");
+  assert.equal(item.primaryKeyword, "how to make wildlife videos");
+  assert.ok(item.title.toLowerCase().startsWith(item.primaryKeyword));
+  assert.equal(item.keywordEvidence.provider, "vidIQ");
+  assert.equal(item.keywordEvidence.type, "estimated_monthly_searches");
+  assert.equal(item.keywordEvidence.estimatedMonthlySearches, 5346);
+  assert.equal(item.keywordEvidence.competition, 17);
+  assert.equal(item.keywordEvidence.relatedKeywords[0].phrase, "wildlife videos");
+  assert.equal(item.keywordEvidence.relatedKeywords[0].estimatedMonthlySearches, 34644);
+  assert.equal(item.currentIntentEvidence.provider, "web_search");
+  assert.ok(item.currentIntentEvidence.sources.some(source => /BC SPCA/.test(source.title)));
+  assert.ok(item.description.toLowerCase().includes(item.primaryKeyword));
+  assert.equal(item.productUrl, "https://selar.com/0u19v8u99l");
+  assert.equal(item.disclosure.status, "APPROVED");
+  assert.equal(item.targetSeconds, 55);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
 test("approximately 55-second scripts accept 150-wpm tolerance and reject overlong copy", () => {
