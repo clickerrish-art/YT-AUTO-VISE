@@ -790,7 +790,7 @@ test("rights asset builder requires explicit per-asset YouTube permission and on
   expect(after.publishingEnabled).toBe(false);
 });
 
-test("production controls disable safely when owner queue identity approval is missing", async ({ page, request }) => {
+test("production controls disable safely when a queued job lacks the approved authoring pipeline", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
   await page.goto("/");
   await page.locator("#token").fill(operatorToken);
@@ -820,12 +820,13 @@ test("production controls disable safely when owner queue identity approval is m
     const blockedRender = await request.post("/api/jobs/produce", { headers, data: { jobId: job.id } });
     expect(blockedRender.status()).toBe(409);
     const blockerBody = await blockedRender.json();
-    expect(blockerBody.error).toMatch(/queue identity reconciliation/i);
+    expect(blockerBody.error).toMatch(/approved authoring pipeline/i);
+    expect(blockerBody.code).toBe("AUTHORING_PIPELINE_REQUIRED");
     expect(blockerBody.blockers).toEqual(expect.arrayContaining([
-      expect.stringMatching(/queue-identity-approval\.json is missing or invalid/i),
-      expect.stringMatching(/cover every operational long-form item exactly once/i),
-      expect.stringMatching(/long-form-plan-wildlife-video/i),
-      expect.stringMatching(/long-form-faceless-wildlife-workflow/i)
+      expect.stringMatching(/Research and source evidence must be attached/i),
+      expect.stringMatching(/exact script and narration\/caption stages must be reviewed/i),
+      expect.stringMatching(/Scene plan, rights\/provenance, quality and compliance evidence must be current/i),
+      expect.stringMatching(/hash-bound production plan must authorize the exact render inputs/i)
     ]));
     expect(blockerBody.publishable).toBe(false);
     expect(blockerBody.jobState).toBe("BLOCKED");
