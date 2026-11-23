@@ -4,7 +4,7 @@ on:
     branches:
       - codex/marketing-machine-audit-fixes
     paths:
-      - codex/patches/git002.patch.gz.b64
+      - codex/patches/git002-04.b64
 permissions:
   contents: write
 jobs:
@@ -22,12 +22,12 @@ jobs:
           set -euo pipefail
           BASE=9594f4b1c2d154a1d74c691791c51456bd782821
           git merge-base --is-ancestor "$BASE" HEAD
-          git diff --quiet "$BASE" HEAD -- . ':(exclude)codex/patches/git002.patch.gz.b64' ':(exclude).github/workflows/apply-git002-patch.yml'
-          test -f codex/patches/git002.patch.gz.b64
-          base64 -d codex/patches/git002.patch.gz.b64 | gzip -dc > "$RUNNER_TEMP/git002.patch"
+          git diff --quiet "$BASE" HEAD -- . ':(exclude)codex/patches' ':(exclude).github/workflows/apply-git002-patch.yml'
+          test -f codex/patches/git002-04.b64
+          cat codex/patches/git002-*.b64 | base64 -d | gzip -dc > "$RUNNER_TEMP/git002.patch"
           git apply --check "$RUNNER_TEMP/git002.patch"
           git apply "$RUNNER_TEMP/git002.patch"
-          rm -f codex/patches/git002.patch.gz.b64
+          rm -f codex/patches/git002-*.b64
           rm -f .github/workflows/apply-git002-patch.yml
           git diff --check
       - uses: actions/setup-node@v4
