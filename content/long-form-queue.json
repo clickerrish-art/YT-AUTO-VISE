@@ -25,7 +25,7 @@
       "title": "How to Plan a Wildlife Video People Want to Watch",
       "topic": "wildlife video planning and story-first production",
       "targetMinutes": 8,
-      "status": "DRAFT_BRIEF_ONLY_PRODUCTION_HOLD",
+      "status": "SCRIPT_DRAFT_NOT_PRODUCTION_APPROVED",
       "scriptPath": "content/long-form-scripts.md",
       "briefPath": "content/long-form-episode-briefs.json",
       "sourceBriefId": "long-001",
@@ -34,14 +34,14 @@
       "scheduledAt": null,
       "publishingEnabled": false,
       "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_MEDIA_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
-      "productionNotes": "Mapped from the owner-confirmed episode brief. The shared narration draft contains the Episode 1 section. This is planning/draft evidence only, not a completed production script approval, rendered video, media clearance, schedule, upload or publication authorization."
+      "productionNotes": "Mapped from the owner-confirmed episode brief. The shared narration draft contains the Episode 1 section. A corresponding narration script draft exists in the shared script file; this is not a production-approved script, rendered video, media clearance, schedule, upload or publication authorization."
     },
     {
       "id": "long-002-faceless-wildlife-workflow",
       "title": "A Beginner Workflow for Faceless Wildlife Videos",
       "topic": "beginner faceless wildlife video production workflow",
       "targetMinutes": 8,
-      "status": "DRAFT_BRIEF_ONLY_PRODUCTION_HOLD",
+      "status": "SCRIPT_DRAFT_NOT_PRODUCTION_APPROVED",
       "scriptPath": "content/long-form-scripts.md",
       "briefPath": "content/long-form-episode-briefs.json",
       "sourceBriefId": "long-002",
@@ -50,7 +50,7 @@
       "scheduledAt": null,
       "publishingEnabled": false,
       "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_MEDIA_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
-      "productionNotes": "Mapped from the owner-confirmed episode brief. The shared narration draft contains the Episode 2 section. This is planning/draft evidence only, not a completed production script approval, rendered video, media clearance, schedule, upload or publication authorization."
+      "productionNotes": "Mapped from the owner-confirmed episode brief. The shared narration draft contains the Episode 2 section. A corresponding narration script draft exists in the shared script file; this is not a production-approved script, rendered video, media clearance, schedule, upload or publication authorization."
     },
     {
       "id": "long-form-001-two-eyes-above-water",
