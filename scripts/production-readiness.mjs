@@ -78,8 +78,10 @@ if (!exists(mediaProductionPolicyPath)) {
         mediaProductionPolicy?.productionVisualMode !== "AI_GENERATED_RECONSTRUCTION_REQUIRED" ||
         mediaProductionPolicy?.userVideoUploadRequired !== false ||
         mediaProductionPolicy?.syntheticMediaDisclosureRequired !== true ||
-        mediaProductionPolicy?.zeroCostDefault !== true) {
-      blockers.push("config/media-production-policy.json does not match the mandatory AI-generated, no-upload, disclosed, zero-cost-default production policy.");
+        mediaProductionPolicy?.zeroCostDefault !== true ||
+        mediaProductionPolicy?.qualityProfile !== "ULTRA_REALISTIC_NO_SLOP" ||
+        mediaProductionPolicy?.humanVisualReviewRequired !== true) {
+      blockers.push("config/media-production-policy.json does not match the mandatory AI-generated, no-upload, disclosed, zero-cost, ultra-realistic, human-reviewed production policy.");
     }
   } catch {
     blockers.push("config/media-production-policy.json is not valid JSON.");
@@ -210,30 +212,13 @@ if (!exists(mediaInventoryPath)) {
         asset?.status !== "EXCLUDED_NOT_USED"
       );
       const unresolvedAssets = selectedAssets.filter(asset => {
-        const sourceMethod = asset?.sourceMethod;
-        const captureEvidence = typeof asset?.captureEvidencePath === "string" &&
-          asset.captureEvidencePath.trim() && !path.isAbsolute(asset.captureEvidencePath) &&
-          exists(asset.captureEvidencePath);
-        const originalSourceVerified = sourceMethod === "ORIGINAL_RECORDING" &&
-          asset?.creatorCapturedOriginal === true && captureEvidence;
-        // Licensed stock is not an authorized substitute for original creator-captured wildlife media.
-        const sourceVerified = originalSourceVerified &&
-          typeof asset?.creatorName === "string" && asset.creatorName.trim().length > 0;
-        const localPath = typeof asset?.localMediaPath === "string" && asset.localMediaPath.trim() &&
-          !path.isAbsolute(asset.localMediaPath) && exists(asset.localMediaPath);
-        const hashVerified = localPath && typeof asset?.sha256 === "string" &&
-          /^[a-f0-9]{64}$/i.test(asset.sha256) &&
-          createHash("sha256").update(fs.readFileSync(path.resolve(root, asset.localMediaPath))).digest("hex") === asset.sha256.toLowerCase();
-        const rightsEvidence = typeof asset?.rightsEvidencePath === "string" &&
-          asset.rightsEvidencePath.trim() && !path.isAbsolute(asset.rightsEvidencePath) &&
-          exists(asset.rightsEvidencePath);
-        return asset?.status !== "CLEARED" || !sourceVerified ||
-          asset?.creatorConfirmed !== true || asset?.rightsConfirmed !== true ||
-          !rightsEvidence || !localPath || !hashVerified || asset?.humanVisualReview !== "PASS";
+        // This Canva import inventory is reference-only. Production visuals must come from the separately
+        // evidenced AI-generation pipeline, never from imported stock or uploaded source footage.
+        return true;
       });
       if (selectedAssets.length > 0 && (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0)) {
         const ids = unresolvedAssets.map(asset => asset?.canvaAssetId).filter(Boolean);
-        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported wildlife asset(s) are not verified as original creator-captured footage (${ids.join(", ") || "selected inventory not cleared"}); exact original camera operator, capture provenance, original MP4, matching SHA-256, rights evidence and human visual review are required before release. Pexels/Pixabay candidates remain review-only and are not production substitutes.`);
+        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} imported Canva/reference wildlife asset(s) are selected as production visuals (${ids.join(", ") || "selected inventory not cleared"}); project policy requires disclosed AI-generated wildlife reconstructions. Imported stock/source footage remains reference-only and cannot satisfy the production visual gate.`);
       }
       notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${reviewCandidates.length} review candidates; ${excludedAssets.length} excluded from production; ${selectedAssets.length} selected for production; ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
     }
