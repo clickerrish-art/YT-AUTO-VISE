@@ -1026,7 +1026,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "5ce15388b6058cfebc78a15d8431d13dc8e38306",
-      "currentHeadEvidenceNote": "NOT_TESTED — deployment recovery and runner-bridge safety checks pass on exact source/test SHA 5ce15388b6058cfebc78a15d8431d13dc8e38306; no SonicVhibez production render/publisher Worker, D1 state store, Durable Object namespace or verified production OIDC trust is established. R2 API remains 403/code 10042.",
+      "currentHeadEvidenceNote": "NOT_TESTED — deployment recovery and runner-bridge safety checks pass on exact source/test SHA 5ce15388b6058cfebc78a15d8431d13dc8e38306; No SonicVhibez production render/publisher Worker, D1 state store, Durable Object namespace or verified production OIDC trust is established. R2 API remains 403/code 10042.",
       "currentHeadEvidenceUpdatedAt": "2026-11-23T10:03:46Z",
       "sourceTestEvidenceRefresh": {
         "sourceSha": "5ce15388b6058cfebc78a15d8431d13dc8e38306",
