@@ -15,9 +15,11 @@ test("committed SonicVhibez queue identity matches both live queues and the owne
   const approval = readJson("content/queue-identity-approval.json");
   const result = validateQueueIdentity({ operationalQueue, detailedQueue, approval });
 
-  assert.equal(result.valid, true, result.errors.join("; "));
-  assert.equal(approval.status, "OWNER_APPROVED");
-  assert.equal(approval.ownerApproved, true);
+  assert.equal(result.valid, false, "queue edits after approval must invalidate the exact-hash approval");
+  assert.ok(result.errors.some(error => /operationalQueueSha256 does not match/.test(error)));
+  assert.ok(result.errors.some(error => /detailedQueueSha256 does not match/.test(error)));
+  assert.equal(approval.status, "STALE_REQUIRES_OWNER_RECONFIRMATION");
+  assert.equal(approval.ownerApproved, false);
   assert.deepEqual(approval.mappings, [
     { operationalItemId: "long-form-plan-wildlife-video", detailedItemId: "long-001-wildlife-video-planning", cyclePosition: 1 },
     { operationalItemId: "long-form-faceless-wildlife-workflow", detailedItemId: "long-002-faceless-wildlife-workflow", cyclePosition: 2 }
@@ -40,9 +42,9 @@ test("production readiness remains HOLD for real media, narration, review and hi
   const report = JSON.parse(run.stdout);
   assert.equal(report.status, "blocked");
   assert.ok(report.blockerCount > 0);
-  assert.equal(report.blockers.some(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/i.test(item.message)), false,
-    "the exact-hash queue identity blocker must be cleared");
-  assert.equal(report.notes.some(note => /Queue identity reconciliation: 2 owner-approved long-form mappings verified/i.test(note)), true);
+  assert.equal(report.blockers.some(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/i.test(item.message)), true,
+    "the stale exact-hash approval must remain a production blocker");
+  assert.equal(report.notes.some(note => /Queue identity reconciliation: 2 owner-approved long-form mappings verified/i.test(note)), false);
   assert.match(report.blockers.map(item => item.message).join("\n"), /original creator-captured wildlife footage|narration rights are not cleared|human content\/compliance review|upload-attempt reconciliation/i);
   assert.equal(readJson("content/queue.json").publishingEnabled, false);
 });
