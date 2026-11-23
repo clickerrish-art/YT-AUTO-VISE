@@ -10,12 +10,12 @@
   "mappings": [
     {
       "operationalItemId": "long-form-plan-wildlife-video",
-      "detailedItemId": "long-001-wildlife-video-planning",
+      "detailedItemId": "",
       "cyclePosition": 1
     },
     {
       "operationalItemId": "long-form-faceless-wildlife-workflow",
-      "detailedItemId": "long-002-faceless-wildlife-workflow",
+      "detailedItemId": "",
       "cyclePosition": 2
     }
   ]
