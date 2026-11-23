@@ -63,14 +63,15 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
     "API positive-route evidence must identify an exact tested source/test SHA");
   assert.equal(matrix.currentHeadReconciliation?.status, "PARTIAL");
   assert.equal(matrix.currentHeadReconciliation?.positiveRoutesReconciled, 41);
-  assert.equal(matrix.currentHeadReconciliation?.blockedRoutesPreserved, 7);
+  assert.equal(matrix.currentHeadReconciliation?.blockedRoutesPreserved, 9);
   assert.equal(matrix.currentHeadReconciliation?.ownerGatedRoutes, 2);
+  assert.equal(matrix.currentHeadReconciliation?.notTestedRoutesPreserved, 0);
   assert.equal(matrix.latestCurrentHeadPositiveEvidence?.sourceTestSha, currentSha);
 
   const positive = matrix.routes.filter(route => route.overallAcceptance === "PASS");
   const blocked = matrix.routes.filter(route => route.overallAcceptance === "BLOCKED");
   assert.equal(positive.length, 41);
-  assert.equal(blocked.length, 7);
+  assert.equal(blocked.length, 9);
 
   for (const route of positive) {
     assert.equal(route.currentHeadStatus, "PASS", `${route.method} ${route.path} must be reconciled`);
@@ -90,6 +91,9 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
       assert.equal(route.currentHeadStatus, "NOT_TESTED");
       assert.equal(route.currentHeadEvidenceSha, null);
       assert.match(route.currentHeadEvidenceNote, /owner-approved content\/queue-identity-approval\.json is absent/i);
+    } else if (route.path.includes("/drafts/provider")) {
+      assert.equal(route.currentHeadStatus, "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES");
+      assert.equal(route.currentHeadEvidenceSha, currentSha);
     } else {
       assert.equal(route.currentHeadStatus, "BLOCKED");
       assert.equal(route.currentHeadEvidenceSha, currentSha);
@@ -99,18 +103,21 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
   const providerDraftRoutes = matrix.routes.filter(route => route.path.includes("/drafts/provider"));
   assert.equal(providerDraftRoutes.length, 2);
   for (const route of providerDraftRoutes) {
-    assert.equal(route.overallAcceptance, "NOT_TESTED");
-    assert.equal(route.currentHeadStatus, "NOT_TESTED");
+    assert.equal(route.overallAcceptance, "BLOCKED");
+    assert.equal(route.currentHeadStatus, "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES");
     assert.equal(route.currentHeadEvidenceSha, currentSha);
     assert.ok(Number.isInteger(route.currentHeadEvidenceRunId));
     assert.ok(route.currentHeadEvidenceTestFiles?.includes("test/meta-provider-draft-server.integration.test.mjs"));
-    assert.match(route.currentHeadEvidenceNote, /concurrent reconciliation.*interrupted SUBMITTING/i);
+    assert.match(route.currentHeadEvidenceNote, /interrupted SUBMITTING.*concurrent reconciliation/i);
+    assert.match(route.currentHeadEvidenceNote, /live Meta Page credentials\/permissions and owner authorization are absent/i);
   }
 
   const expectedBlocked = [
     "POST /api/facebook/drafts/approve",
     "POST /api/facebook/publish",
     "POST /api/facebook/verify-page",
+    "POST /api/facebook/drafts/provider",
+    "POST /api/facebook/drafts/provider/reconcile",
     "POST /api/instagram/approve",
     "GET /api/jobs/dispatchable",
     "POST /api/jobs/produce",
@@ -119,8 +126,8 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
   assert.deepEqual(blocked.map(routeKey).sort(), expectedBlocked.sort());
 
   assert.equal(matrix.latestExactHeadRegression?.sourceTestSha, currentSha);
-  assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1130);
-  assert.equal(matrix.latestExactHeadRegression?.nodeTestFiles, 191);
+  assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1134);
+  assert.equal(matrix.latestExactHeadRegression?.nodeTestFiles, 192);
   assert.equal(matrix.latestExactHeadRegression?.pythonPassed, 108);
   assert.equal(matrix.latestExactHeadRegression?.npmAuditVulnerabilities, 0);
   assert.equal(matrix.latestExactHeadRegression?.npmAuditSourceSha, currentSha);

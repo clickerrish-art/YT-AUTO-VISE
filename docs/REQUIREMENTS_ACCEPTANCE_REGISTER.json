@@ -378,9 +378,9 @@
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "currentHeadEvidenceNote": "Exact source/test SHA 940fcdd776669c44bdd73619374e567c66655fbd: 121/121 controls, 17/17 forms, 15/15 cross-cutting dimensions; 41/41 Chromium journeys PASS. overallAcceptance is NOT_TESTED because every applicable control is not yet individually accepted for success, authorization, persistence/restart, concurrency, actionable errors and accessibility.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T22:23:11.606Z"
+      "currentHeadEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "currentHeadEvidenceNote": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: 121/121 controls, 17/17 forms, 15/15 cross-cutting dimensions; 41/41 Chromium journeys PASS. overallAcceptance is NOT_TESTED because every applicable control is not yet individually accepted for success, authorization, persistence/restart, concurrency, actionable errors and accessibility.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-23T09:14:20Z"
     },
     {
       "id": "SCHED-001",
@@ -428,9 +428,9 @@
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "currentHeadEvidenceNote": "Exact source/test SHA 940fcdd776669c44bdd73619374e567c66655fbd: local schedule/worker tests pass. complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos was recorded 2026-11-22; manual/local/third-party attempt attestation is stale after 2026-11-18; actual publication timestamps and 72-hour/no-same-Johannesburg-day remote history remain unverified.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T22:23:11.606Z"
+      "currentHeadEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "currentHeadEvidenceNote": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: local schedule/worker tests pass. complete one-page inventory of one public 20-second legacy Short with zero private/unlisted videos was recorded 2026-11-22; manual/local/third-party attempt attestation is stale after 2026-11-18; actual publication timestamps and 72-hour/no-same-Johannesburg-day remote history remain unverified.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-23T09:14:20Z"
     },
     {
       "id": "SCHED-WORKER-MULTIPROCESS-001",
@@ -523,9 +523,9 @@
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS_STAGING",
-      "currentHeadEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "currentHeadEvidenceNote": "Exact source/test SHA 940fcdd776669c44bdd73619374e567c66655fbd: durable-state unit/integration, deployment recovery smoke and runner-bridge safety passed. Staging/unit evidence only; production state storage is not established.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T22:23:11.606Z"
+      "currentHeadEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "currentHeadEvidenceNote": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: durable-state unit/integration, deployment recovery smoke and runner-bridge safety passed. Staging/unit evidence only; production state storage is not established.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-23T09:14:20Z"
     },
     {
       "id": "YT-001",
@@ -840,9 +840,9 @@
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "currentHeadEvidenceNote": "Exact source/test SHA 940fcdd776669c44bdd73619374e567c66655fbd: deployment recovery and runner-bridge safety smoke passed. No SonicVhibez production render/publisher Worker or D1; R2 API 403/code 10042; no Durable Object namespace; OIDC trust references old branch; production deployment not tested.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T22:30:06.297Z"
+      "currentHeadEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "currentHeadEvidenceNote": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: deployment recovery and runner-bridge safety smoke passed. No SonicVhibez production render/publisher Worker or D1; R2 API 403/code 10042; no Durable Object namespace; OIDC trust references old branch; production deployment not tested.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-23T09:14:20Z"
     },
     {
       "id": "MEDIA-SEC-001",
@@ -2166,14 +2166,14 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45067515016",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45067515064"
       ],
-      "nextAction": "Complete ambiguous create/read-back outcomes and missing/invalid provider-draft payload permutations; obtain explicit owner authorization before any live Meta draft test. Then complete the seven owner/provider-gated routes only when genuine prerequisites exist; never enable publishing.",
+      "nextAction": "Keep live provider routes blocked until an owner-renewed Meta Page token, independently verified Page permissions and exact one-shot authorization are available; retain publishing disabled. Resolve the other owner/provider prerequisites route by route.",
       "assessmentCommitSha": "648d3e0f1339a53cc73086afd949d50ca72536f0",
       "acceptanceCriterion": "A route-by-route acceptance matrix records exact method/path and independently passing authorized success, unauthorized, invalid input, persistence, failure, concurrency/idempotency, audit and restart evidence as applicable.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "currentHeadEvidenceNote": "Exact source/test SHA 940fcdd776669c44bdd73619374e567c66655fbd: 41/50 PASS, 2/50 NOT_TESTED, 7/50 BLOCKED by owner/provider prerequisites. 50/50 protected API routes reject missing/invalid authentication. Mocked provider-draft integration: interrupted SUBMITTING restart recovery and concurrent reconciliation fencing PASS. Live provider acceptance NOT_TESTED.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T22:23:11.606Z",
+      "currentHeadEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "currentHeadEvidenceNote": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: 41/50 PASS, 0/50 NOT_TESTED, 9/50 BLOCKED by owner/provider prerequisites. 50/50 protected API routes reject missing/invalid authentication. Mocked provider-draft creation and interrupted SUBMITTING recovery, remote read-back and concurrent reconciliation fencing and restart persistence PASS; live Meta Page credentials/permissions and owner authorization remain BLOCKED. No live provider operation is claimed.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-23T09:14:20Z",
       "latestImplementationSha": "603722e352c787f118256a3400603842a41c041f",
       "mockedProviderDraftIntegrationStatus": "PASS",
       "liveProviderAcceptance": "NOT_TESTED"
@@ -2348,9 +2348,9 @@
       "acceptanceCriterion": "The worker uses a separate scoped token, can only list dispatchable jobs and invoke the renderer, filters unapproved render plans, applies bounded conflict backoff, preserves state for read-only listings and stops its poll wait promptly.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "currentHeadEvidenceNote": "Exact source/test SHA 940fcdd776669c44bdd73619374e567c66655fbd: all 38 test/worker-runner.test.mjs cases pass, including persisted HTTP 409 preflight cooldown across restart and fail-stop with retained process lock when cooldown persistence fails. Live worker dispatch remains NOT_TESTED.",
-      "currentHeadEvidenceUpdatedAt": "2026-11-22T22:23:11.606Z"
+      "currentHeadEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "currentHeadEvidenceNote": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: all 38 test/worker-runner.test.mjs cases pass, including persisted HTTP 409 preflight cooldown across restart and fail-stop with retained process lock when cooldown persistence fails. Live worker dispatch remains NOT_TESTED.",
+      "currentHeadEvidenceUpdatedAt": "2026-11-23T09:14:20Z"
     },
     {
       "id": "DEPLOY-SERVICE-READINESS-001",
@@ -3013,8 +3013,8 @@
     "routeMatrix": {
       "routes": 50,
       "overallPass": 41,
-      "overallNotTested": 2,
-      "overallBlocked": 7,
+      "overallNotTested": 0,
+      "overallBlocked": 9,
       "authenticationNegativePass": 50,
       "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4"
     },
@@ -3677,19 +3677,19 @@
   },
   "latestRegisterRefreshSourceHead": "96ffab66373265d82de576ee16f414b27d7678c4",
   "currentExactHeadExecution": {
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
     "branch": "codex/marketing-machine-audit-fixes",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5639,
+    "aheadBy": 5652,
     "behindBy": 0,
-    "changedFiles": 548,
+    "changedFiles": 552,
     "automation": {
       "status": "PASS",
-      "runId": 45083543471,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471",
-      "nodeTestFiles": 191,
-      "nodeTests": 1130,
+      "runId": 45144737151,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151",
+      "nodeTestFiles": 192,
+      "nodeTests": 1134,
       "nodeFailed": 0,
       "nodeSkipped": 0,
       "pythonTests": 108,
@@ -3699,83 +3699,83 @@
     },
     "dashboardBrowser": {
       "status": "PASS",
-      "runId": 45083543403,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543403",
+      "runId": 45144737085,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737085",
       "journeysPassed": 41,
       "journeysFailed": 0,
       "journeysSkipped": 0
     },
     "productionReadiness": {
       "status": "HOLD",
-      "runId": 45083543382,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543382",
+      "runId": 45144736959,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144736959",
       "blockers": 22,
-      "artifactId": 14778470367,
-      "artifactSha256": "6de6ed2f4817befd6df688b76e5894daee3899be0b58fc44eab64303afe61465",
-      "secretPresence": "4/4 expected YouTube credential variable names configured; values not recorded."
+      "artifactId": 14802534911,
+      "artifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071",
+      "secretPresence": "Expected YouTube credential variable names are configured; secret values intentionally not recorded."
     },
     "metadata": {
       "status": "PASS_WITH_HOLD",
-      "runId": 45083543539,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543539",
+      "runId": 45144736844,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144736844",
       "blockers": 22
     },
     "contentQuality": {
       "status": "PASS",
-      "runId": 45083543500,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543500",
-      "tests": 1130,
-      "passed": 1130,
+      "runId": 45144737235,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737235",
+      "tests": 1134,
+      "passed": 1134,
       "failed": 0,
       "skipped": 0
     },
     "queueReadiness": {
       "status": "PASS",
-      "runId": 45083543439,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543439"
+      "runId": 45144737327,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737327"
     },
     "deploymentRecovery": {
       "status": "PASS",
-      "runId": 45083543553,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543553"
+      "runId": 45144737081,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737081"
     },
     "runnerBridgeSafety": {
       "status": "PASS",
-      "runId": 45083543492,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543492"
+      "runId": 45144737116,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737116"
     },
     "cloudflareDurableStateUnit": {
       "status": "PASS",
-      "runId": 45083543460,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543460"
+      "runId": 45144736941,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144736941"
     },
     "baselineComparison": {
       "status": "PASS",
-      "runId": 45083543427,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543427",
+      "runId": 45144737247,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737247",
       "mainNpmAuditVulnerabilities": 4,
       "candidateNpmAuditVulnerabilities": 0
     },
     "branchInventory": {
       "status": "PASS",
-      "runId": 45083543496,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543496",
-      "artifactId": 14777339008,
-      "artifactSha256": "d8146566361ae18539a9995dd6fa893ef91bbf26bea38e5f9c8ff43cf359ed2a",
-      "aheadBy": 5639,
+      "runId": 45144737211,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737211",
+      "artifactId": 14803901540,
+      "artifactSha256": "4283f10f56b1e01b3a98230b660507e3f54d5df5839af2af1b804e55b0ca29fd",
+      "aheadBy": 5652,
       "behindBy": 0,
-      "changedFiles": 548,
+      "changedFiles": 552,
       "deletions": 0,
       "workingTreeClean": true
     },
     "providerDraftInterruptedRecovery": {
       "status": "PASS_MOCKED",
       "testFile": "test/meta-provider-draft-server.integration.test.mjs",
-      "scenario": "Interrupted SUBMITTING restart recovery and concurrent reconciliation fencing; no second create."
+      "scenario": "Exact-SHA mocked provider recovery verifies interrupted SUBMITTING, read-only remote match, exact read-back, concurrent reconciliation fencing and restart persistence; live Page access remains blocked."
     },
     "requirementRowsReevaluated": false,
-    "note": "Exact-head engineering tests and local/staging safety checks pass. Production readiness remains HOLD; no live Meta/YouTube publishing, production deployment, or owner approval was fabricated.",
-    "branchHead": "d6828dc22ec7e2999ece830c2ebaf20990f615c3"
+    "note": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4 passed 1,134 Node tests across 192 files, 108 Python tests, 41/41 browser journeys and npm audit with zero vulnerabilities. Latest branch documentation classifies the two mocked Meta provider-draft routes as externally BLOCKED, not NOT_TESTED; no live Meta/YouTube publishing, production deployment or owner approval is claimed.",
+    "branchHead": "96ffab66373265d82de576ee16f414b27d7678c4"
   },
   "requirementStatusReevaluation": {
     "sourceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
