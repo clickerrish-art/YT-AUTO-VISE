@@ -27,9 +27,11 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
   assert.equal(refresh.rowsRefreshed, 89);
   assert.equal(refresh.fullRequirementReevaluation, false);
   assert.equal(refresh.externalAcceptancePromoted, 0);
-  assert.deepEqual(refresh.currentHeadStatusCounts, { PASS: 68, NOT_TESTED: 8, PASS_STAGING: 1, BLOCKED: 12 });
+  assert.deepEqual(refresh.currentHeadStatusCounts, { PASS: 67, NOT_TESTED: 9, PASS_STAGING: 1, BLOCKED: 12 });
   assert.ok(rows.every(row => row.currentHeadEvidenceSha === exactSha));
   assert.ok(rows.every(row => row.sourceTestEvidenceRefresh?.sourceSha === exactSha));
+  assert.equal(byId("CI-002").currentHeadStatus, "NOT_TESTED");
+  assert.match(byId("CI-002").currentHeadEvidenceNote, /combined isolated main\/candidate baseline rerun is still required/i);
   assert.ok(register.currentHeadOpenDependencies.some(item => item.id === "ORIGINAL-WILDLIFE-FOOTAGE" && item.status === "BLOCKED"));
 });
 
