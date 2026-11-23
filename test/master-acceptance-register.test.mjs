@@ -21,6 +21,15 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
   assert.deepEqual(counts, { PASS: 71, NOT_TESTED: 8, BLOCKED: 10 });
   assert.equal(register.requirementStatusReevaluation.status, "NOT_REEVALUATED");
   assert.equal(register.requirementCountsStatus, "HISTORICAL_NOT_REEVALUATED");
+  const refresh = register.currentHeadSourceTestRefresh;
+  assert.equal(refresh.sourceSha, exactSha);
+  assert.equal(refresh.rowsTotal, 89);
+  assert.equal(refresh.rowsRefreshed, 89);
+  assert.equal(refresh.fullRequirementReevaluation, false);
+  assert.equal(refresh.externalAcceptancePromoted, 0);
+  assert.deepEqual(refresh.currentHeadStatusCounts, { PASS: 68, NOT_TESTED: 8, PASS_STAGING: 1, BLOCKED: 12 });
+  assert.ok(rows.every(row => row.currentHeadEvidenceSha === exactSha));
+  assert.ok(rows.every(row => row.sourceTestEvidenceRefresh?.sourceSha === exactSha));
   assert.ok(register.currentHeadOpenDependencies.some(item => item.id === "ORIGINAL-WILDLIFE-FOOTAGE" && item.status === "BLOCKED"));
 });
 
@@ -121,4 +130,14 @@ test("master completion register mirrors the acceptance totals and release hold"
   assert.match(master, /\*\*DASH-001:\s*NOT_TESTED\.\*\*/);
   assert.doesNotMatch(master, /\$\{(?:run|url)\./);
   assert.match(master, /Release decision:\s*\*\*HOLD\*\*/);
+});
+
+test("FFmpeg and zero-skip requirements have exact current CI evidence", () => {
+  const ffmpeg = byId("CI-FFMPEG-001");
+  assert.equal(ffmpeg.currentHeadStatus, "PASS");
+  assert.match(ffmpeg.currentHeadEvidenceNote, /ffmpeg and ffprobe before Node tests/i);
+  assert.match(ffmpeg.currentHeadEvidenceNote, /N-129000-g64f6bcffaf-20261117/);
+  const skips = byId("CI-TEST-SKIPS-001");
+  assert.equal(skips.currentHeadStatus, "PASS");
+  assert.match(skips.currentHeadEvidenceNote, /1,134 Node tests across 192 files, zero failures and zero skips/i);
 });
