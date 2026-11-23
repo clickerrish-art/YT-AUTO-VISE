@@ -5,11 +5,11 @@
   "contentType": "short",
   "targetSeconds": 55,
   "targetAspectRatio": "9:16",
-  "footagePath": "../media/next-short-footage.mp4",
+  "footagePath": "../artifacts/short-001/ai-generated-wildlife.mp4",
   "narrationPath": "../media/next-short-narration.mp3",
   "captionsPath": "short-001-wildlife-video-storytelling.srt",
   "qualityEvidencePath": "short-quality-evidence.json",
-  "footageLicenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+  "footageLicenseEvidence": "content/ai-generation-evidence/short-001.json",
   "narrationLicenseEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
   "rightsConfirmed": false,
   "complianceReviewed": false,
@@ -17,6 +17,7 @@
   "hasPaidPromotion": true,
   "sourceScriptPath": "content/short-001-wildlife-video-storytelling.md",
   "notes": [
+    "MANDATORY POLICY: production visuals must be ultra-realistic AI-generated wildlife reconstructions. Existing Pexels/NOAA material is retained only as review reference; it is not the production visual source. No AI video has yet been generated.",
     "Pexels/Pixabay clips remain review-only references; no owner authorization for stock substitution exists. This silent preview is not a final production or release asset.",
     "HeyGen Support explicitly denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs on 2026-11-21; public branded or commercial use is prohibited. Keep this narration internal-only.",
     "The current Roderic Short narration is documented in short-001-roderic-narration-generation.json; HeyGen's written denial is recorded in heygen-roderic-commercial-rights-determination-2026-11-21.json. It remains internal-only and is not production-eligible.",
@@ -28,16 +29,16 @@
     "Owner decision 2026-11-22: Speechma Andrew is selected for a manual zero-cost browser audition only. Free-site automation is prohibited; the paid official API is not authorized. No audio has been generated, no final audio hash exists and no production approval or publication authorization exists. Existing Roderic/Norman audition files remain unapproved for production.",
     "Owner selected Speechma Andrew (English, United States, male standard voice) on 2026-11-22 for a zero-cost browser audition only. No audio has been generated, no final audio hash exists, and no production approval or publication authorization exists. Speechma's Terms grant commercial output rights subject to the Terms and third-party rights; the actual output and all inputs still require review."
   ],
-  "containsAIWildlifeVisuals": false,
+  "containsAIWildlifeVisuals": true,
   "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
-  "mediaProvenanceStatus": "REVIEW_ONLY_PREVIEW_HASH_VERIFIED_FINAL_SOURCE_RIGHTS_AND_NARRATION_PENDING",
+  "mediaProvenanceStatus": "AI_GENERATION_PENDING",
   "narrationRightsDeterminationEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
   "sourceScriptBlobSha": "a44823bcfbe915b51fcdf9a911066d6dd659f310",
   "captionSourceBlobSha": "6a09a58188301ed134912010c6276c6a167544be",
   "sourceHashType": "GIT_BLOB_SHA",
   "captionHashType": "GIT_BLOB_SHA",
   "referenceOnlyRightsResearchEvidence": "short-001-pexels-rights-evidence.json",
-  "footageEligibilityStatus": "BLOCKED_UNAUTHORIZED_STOCK_SUBSTITUTION",
+  "footageEligibilityStatus": "BLOCKED_AI_GENERATION_PENDING",
   "narrationRightsStatus": "NOT_GENERATED_PENDING_AUDITION",
   "narrationPublicBrandedDistributionAllowed": false,
   "narrationCommercialUseAllowed": false,
@@ -74,7 +75,7 @@
   "stockMediaAllowed": false,
   "pexelsAllowed": false,
   "pixabayAllowed": false,
-  "aiGeneratedWildlifeVisualsAllowed": false,
+  "aiGeneratedWildlifeVisualsAllowed": true,
   "ownerMediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
   "reviewOnlyPreview": {
     "path": "short001_visual_review/SonicVhibez_Short001_Visual_Review_ONLY.mp4",
@@ -85,7 +86,7 @@
     "fullDecode": "PASS"
   },
   "releaseEligible": false,
-  "footageOrigin": "licensed_pexels_stock",
+  "footageOrigin": "ai_generated_reconstruction",
   "creatorCapturedOriginal": false,
   "footageCreator": "Multiple Pexels contributors; see asset-level source manifest",
   "footageSourceUrls": [
@@ -99,5 +100,11 @@
   "creatorConfirmed": false,
   "stockVideoFootageAllowed": false,
   "stockPhotographsAllowed": false,
-  "originalCreatorCapturedMediaRequired": true
+  "originalCreatorCapturedMediaRequired": false,
+  "reviewPreviewFootagePath": "../media/next-short-footage.mp4",
+  "reviewPreviewFootageOrigin": "licensed_pexels_stock",
+  "aiGenerationEvidencePath": "content/ai-generation-evidence/short-001.json",
+  "aiGenerationStatus": "NOT_GENERATED",
+  "syntheticMediaDisclosureRequired": true,
+  "syntheticMediaDisclosureText": "AI-generated wildlife reconstruction. This is an illustrative recreation, not authentic documentary footage."
 }
