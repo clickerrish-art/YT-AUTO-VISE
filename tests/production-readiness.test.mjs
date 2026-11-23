@@ -211,7 +211,9 @@ test("readiness JSON distinguishes fresh and stale external reconciliation from 
   assert.equal(report.blockers.some(blocker => blocker.evidence.kind === "repository-path-check" && /YouTube OAuth upload scope/.test(blocker.evidence.observed)), false);
   const readinessSource = fs.readFileSync("scripts/production-readiness.mjs", "utf8");
   assert.match(readinessSource, /const attempts = reconciliation\.uploadAttemptReconciliation/);
-  assert.match(readinessSource, /MAX_HISTORY_EVIDENCE_AGE_MS = 24 \* 60 \* 60 \* 1000/);
+  assert.match(readinessSource, /isFreshHistoryEvidence/);
+  const freshnessSource = fs.readFileSync("scripts/history-evidence-freshness.mjs", "utf8");
+  assert.match(freshnessSource, /HISTORY_EVIDENCE_MAX_AGE_MS = 24 \* 60 \* 60 \* 1000/);
   assert.match(readinessSource, /uploadScopeVerified !== true/);
   assert.match(readinessSource, /reconciliation\.verifiedAt === verification\.checkedAt/);
   assert.doesNotMatch(readinessSource, /blockers\.push\("LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
