@@ -488,7 +488,9 @@ if (!exists(youtubeVerificationPath)) {
   }
 }
 function resolutionFor(blocker) {
-  if (/narration rights are not cleared/i.test(blocker)) return "Do not use HeyGen Free-plan Roderic output in public branded or commercial production. Use only a voice with affirmative commercial-use evidence. The owner has authorized zero-cost auditions only; obtain approval of the exact final audio hash before production. No paid plan or Roderic Free-plan output.";
+  if (/QUEUE IDENTITY RECONCILIATION REQUIRED|queue identity approval|queue identity mappings/i.test(blocker)) return "Review content/queue-identity-approval.template.json against the exact current content/queue.json and content/long-form-queue.json. Confirm the topic identity for each operational long_form item, select one unique detailed item per operational item, and align each detailed item's publicationCyclePosition with the rolling long_form → long_form → short cycle. Then create content/queue-identity-approval.json with the exact queue hashes, status OWNER_APPROVED, ownerApproved=true, the approving owner, a timezone-qualified approvedAt timestamp and a non-empty approvalReference. Do not infer or record owner approval on the owner's behalf; keep publishing and dispatch disabled until the signed mapping is present.";
+  if (/narration rights are not cleared/i.test(blocker)) return "Do not use HeyGen Free-plan Roderic/Wade or local Piper/Edge TTS for public branded production. Follow the recorded owner selection of Speechma Andrew for a manual, zero-cost browser audition only; do not automate the free site or use its paid API. Download and retain the actual MP3, verify the script/input rights and applicable Terms, calculate its SHA-256, then obtain human listening and exact-hash production approval before use. Keep publishing disabled; no paid plan or API is authorized.";
+  if (/local, workflow and owner-attested upload-attempt reconciliation/i.test(blocker)) return "Refresh the owner attestation for the period after its recorded valid-through date: confirm whether any manual, local or third-party YouTube upload attempts occurred. If none occurred, record a new dated owner confirmation bound to the current complete read-only inventory and automated ledger scan. If any occurred, reconcile each attempt to its remote video ID, visibility, actual publication timestamp and final status. Never retry an uncertain upload; keep public/unattended publishing disabled.";
   if (/imported wildlife asset/i.test(blocker)) return "For each selected asset, require original creator-captured wildlife footage. Retain the original camera operator's identity, capture date/location, capture-provenance evidence, original MP4, matching SHA-256, full technical decode, rights/permission evidence, a separate third-party rights review covering people, property, trademarks, music and other third-party material, and human visual review. Pexels/Pixabay stock is not eligible as a production substitute even when its platform licence is verified. Do not use AI-generated wildlife visuals or stock footage.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_grant/i.test(blocker)) return "Google rejected the YouTube OAuth refresh token (invalid_grant). Reauthorize the existing OAuth client for the same Google account with the YouTube read-only and upload scopes (https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload), request offline access with explicit consent, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, update only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun the read-only verification workflow. Never paste token values into chat or create a second OAuth client.";
   if (/latest read-only YouTube OAuth attempt.*invalid_grant/i.test(blocker)) return "Google rejected the latest YouTube refresh-token grant (invalid_grant). Reauthorize the existing OAuth client for the same Google account with https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload and offline access, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, replace only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun read-only verification. Never paste token values into chat or create a second OAuth client.";
@@ -519,6 +521,24 @@ function controlOwnerFor(message) {
 }
 
 function evidenceInspectedFor(message) {
+  if (/QUEUE IDENTITY RECONCILIATION REQUIRED|queue identity approval|queue identity mappings/i.test(message)) {
+    return { kind: "repository-path-check", path: queueIdentityApprovalPath, observed: message };
+  }
+  if (/local, workflow and owner-attested upload-attempt reconciliation/i.test(message)) {
+    let reconciliation;
+    try {
+      if (exists(historyReconciliationPath)) reconciliation = JSON.parse(fs.readFileSync(path.resolve(root, historyReconciliationPath), "utf8"));
+    } catch { /* Keep the evidence description explicitly unavailable below. */ }
+    const inventoryVerifiedAt = reconciliation?.latestInventoryEvidence?.verifiedAt ?? reconciliation?.verifiedAt ?? "unavailable";
+    const attestation = reconciliation?.uploadAttemptReconciliation?.ownerAttestation;
+    const validThrough = attestation?.validThrough ?? "unavailable";
+    const attestationStatus = attestation?.freshnessStatus ?? attestation?.status ?? "unavailable";
+    return {
+      kind: "external-reconciliation-required",
+      path: historyReconciliationPath,
+      observed: `Read-only remote inventory verified at ${inventoryVerifiedAt}; owner upload-attempt attestation is ${attestationStatus} and valid through ${validThrough}. GitHub workflow history cannot inspect manual, local or third-party attempts after that date.`
+    };
+  }
   if (/imported wildlife asset/i.test(message)) return {
     kind: "repository-path-check",
     path: mediaInventoryPath,

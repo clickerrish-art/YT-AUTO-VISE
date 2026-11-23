@@ -58,7 +58,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(api.currentHeadEvidenceNote, /interrupted SUBMITTING.*concurrent reconciliation fencing/i);
   assert.match(api.nextAction, /owner-renewed Meta Page token.*exact one-shot authorization/i);
   assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, exactSha);
-  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1134);
+  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1135);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.skipped, 0);
   assert.equal(register.latestExactCiCheckpoint.browserE2EStatus, "PASS");
@@ -141,5 +141,5 @@ test("FFmpeg and zero-skip requirements have exact current CI evidence", () => {
   assert.match(ffmpeg.currentHeadEvidenceNote, /N-129000-g64f6bcffaf-20261117/);
   const skips = byId("CI-TEST-SKIPS-001");
   assert.equal(skips.currentHeadStatus, "PASS");
-  assert.match(skips.currentHeadEvidenceNote, /1,134 Node tests across 192 files, zero failures and zero skips/i);
+  assert.match(skips.currentHeadEvidenceNote, /1,135 Node tests across 192 files, zero failures and zero skips/i);
 });

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawnSync } from "node:child_process";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const expected = new Map([
@@ -52,3 +53,32 @@ test("metadata validation readiness receives the same protected YouTube secret e
   assert.doesNotMatch(readinessStep, /echo.*(?:YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID)/);
 });
 
+
+
+test("readiness report gives actionable queue, narration and upload-attempt owner resolutions", () => {
+  const result = spawnSync(process.execPath, [path.join(root, "scripts/production-readiness.mjs"), "--json"], {
+    cwd: root,
+    encoding: "utf8",
+    env: process.env,
+    maxBuffer: 8 * 1024 * 1024
+  });
+  assert.equal(result.status, 2, result.stderr);
+  const report = JSON.parse(result.stdout);
+  const queue = report.blockers.find(item => item.message.startsWith("QUEUE IDENTITY RECONCILIATION REQUIRED"));
+  assert.ok(queue, "queue identity owner blocker must be present until the owner approves the exact mapping");
+  assert.equal(queue.evidence.path, "content/queue-identity-approval.json");
+  assert.match(queue.resolution, /queue-identity-approval\.template\.json/);
+  assert.match(queue.resolution, /OWNER_APPROVED/);
+  assert.match(queue.resolution, /keep publishing and dispatch disabled/);
+  const narration = report.blockers.find(item => item.message.includes("narration rights are not cleared"));
+  assert.ok(narration);
+  assert.match(narration.resolution, /Speechma Andrew/);
+  assert.match(narration.resolution, /manual, zero-cost browser audition/);
+  assert.match(narration.resolution, /do not automate the free site/);
+  const attempts = report.blockers.find(item => item.message.includes("local, workflow and owner-attested upload-attempt reconciliation"));
+  assert.ok(attempts);
+  assert.equal(attempts.evidence.path, "content/youtube-history-reconciliation.json");
+  assert.match(attempts.evidence.observed, /Read-only remote inventory verified at/);
+  assert.match(attempts.evidence.observed, /valid through 2026-11-18/);
+  assert.match(attempts.resolution, /manual, local or third-party YouTube upload attempts/);
+});

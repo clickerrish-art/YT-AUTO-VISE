@@ -187,7 +187,7 @@
     "apiRouteAcceptanceAutomation": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548346",
     "apiRouteAcceptanceDashboardBrowser": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45024548303"
   },
-  "disclaimer": "The API route matrix is synchronized to the source-derived dashboard API inventory. Exact source/test SHA 5ce15388b6058cfebc78a15d8431d13dc8e38306 passed automation run 45152184922: 192/192 Node test files, 1,134 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The same full suite includes 50/50 protected-route missing/invalid-authentication checks and endpoint-specific local integration coverage for all 41 routes classified PASS. Dashboard browser E2E passed 41/41 journeys on the same exact SHA in run 45152184712. Current route classification: 41 PASS, 0 NOT_TESTED, 9 BLOCKED. The two Meta provider-draft routes have passing mocked create/recovery/reconciliation evidence but remain BLOCKED for live operations until Page credentials, permissions and owner authorization are present; the two queue dispatch/production routes remain owner-gated until exact queue identity is approved. This does not claim live provider acceptance, remote publication, owner authorization or production readiness.",
+  "disclaimer": "The API route matrix is synchronized to the source-derived dashboard API inventory. Exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f passed automation run 45156940320: 192/192 Node test files, 1,135 Node tests, 108 Python tests, zero failures/skips and npm audit zero vulnerabilities. The same full suite includes 50/50 protected-route missing/invalid-authentication checks and endpoint-specific local integration coverage for all 41 routes classified PASS. Dashboard browser E2E passed 41/41 journeys on source SHA 2a20c653e944ea748e9e051ddbce2178551662df in run 45155129112. Current route classification: 41 PASS, 0 NOT_TESTED, 9 BLOCKED. The two Meta provider-draft routes have passing mocked create/recovery/reconciliation evidence but remain BLOCKED for live operations until Page credentials, permissions and owner authorization are present; the two queue dispatch/production routes remain owner-gated until exact queue identity is approved. This does not claim live provider acceptance, remote publication, owner authorization or production readiness.",
   "routes": [
     {
       "method": "POST",
@@ -432,7 +432,7 @@
       "currentHeadStatus": "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
-      "currentHeadEvidenceNote": "Exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: local route evidence is included in the full 1,135-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceNote": "Exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: mocked provider integration covers interrupted SUBMITTING recovery, read-only remote match, exact remote read-back, concurrent reconciliation fencing and restart persistence within the full 1,135-test regression. Live Meta Page credentials/permissions and owner authorization are absent; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs",
         "test/meta-page-adapter.test.mjs"
@@ -474,7 +474,7 @@
       "currentHeadStatus": "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES",
       "authenticationNegativeCurrentHead": "PASS",
       "currentHeadEvidenceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
-      "currentHeadEvidenceNote": "Exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: local route evidence is included in the full 1,135-test regression; no live provider publication or production operation is claimed.",
+      "currentHeadEvidenceNote": "Exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: mocked provider integration covers interrupted SUBMITTING recovery, read-only remote match, exact remote read-back, concurrent reconciliation fencing and restart persistence within the full 1,135-test regression. Live Meta Page credentials/permissions and owner authorization are absent; no live provider publication or production operation is claimed.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs",
         "test/meta-page-adapter.test.mjs"
@@ -2521,7 +2521,8 @@
     "branchAheadBy": 5660,
     "branchBehindBy": 0,
     "changedFiles": 552,
-    "branchProtection": "UNVERIFIED_HTTP_403"
+    "branchProtection": "UNVERIFIED_HTTP_403",
+    "npmAuditSourceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f"
   },
   "cloudflareProductionState": {
     "sourceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",

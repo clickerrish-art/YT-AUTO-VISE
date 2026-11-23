@@ -19630,7 +19630,7 @@
     "forms": 17,
     "crossCuttingDimensions": 15,
     "overallAcceptance": "NOT_TESTED",
-    "note": "Exact implementation/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: 192/192 Node test files (1,135 tests), 108 Python tests and npm audit zero vulnerabilities; zero failures/skips. Latest dashboard browser E2E at 2a20c653e944ea748e9e051ddbce2178551662df passes 41/41 journeys. The 121 controls and 17 forms retain historical per-control evidence, but DASH-001 remains NOT_TESTED until every applicable control has individually accepted authorization, persistence/restart, concurrency, actionable-error and accessibility evidence.",
+    "note": "Exact implementation/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: 192/192 Node test files (1,135 tests), 108 Python tests and npm audit zero vulnerabilities; zero failures/skips. Latest dashboard browser E2E at 2a20c653e944ea748e9e051ddbce2178551662df passes 41/41 Chromium journeys. The 121 controls and 17 forms retain historical per-control evidence, but DASH-001 remains NOT_TESTED until every applicable control has individually accepted authorization, persistence/restart, concurrency, actionable-error and accessibility evidence.",
     "npmAuditLastVerifiedSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f"
   },
   "refreshedAt": "2026-11-23T10:47:19.185Z",

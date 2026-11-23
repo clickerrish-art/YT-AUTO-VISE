@@ -57,7 +57,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
 
   const currentHeadRefresh = matrix.currentHeadRefresh;
   assert.equal(currentHeadRefresh.sourceTestSha, automationEvidenceSha);
-  assert.equal(currentHeadRefresh.nodeTests, 1134);
+  assert.equal(currentHeadRefresh.nodeTests, 1135);
   assert.equal(currentHeadRefresh.nodeTestFiles, 192);
   assert.equal(currentHeadRefresh.browserE2EStatus, "PASS");
   assert.equal(currentHeadRefresh.overallAcceptance, "NOT_TESTED");
@@ -180,7 +180,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(latestHead.browserJourneys.total, 41);
   assert.equal(latestHead.browserJourneys.failed, 0);
   assert.equal(latestHead.browserJourneys.skipped, 0);
-  assert.equal(latestHead.nodeTests, 1134);
+  assert.equal(latestHead.nodeTests, 1135);
   assert.equal(latestHead.nodeTestFiles, 192);
   assert.equal(latestHead.nodeFailed, 0);
   assert.equal(latestHead.nodeSkipped, 0);

@@ -421,7 +421,7 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
-      "currentHeadEvidenceNote": "NOT_TESTED overall — exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f; latest browser E2E 45155129112 at 2a20c653e944ea748e9e051ddbce2178551662df passes 41/41 journeys; 121/121 controls, 17/17 forms, 104 form-owned, 17 standalone and 15/15 cross-cutting dimensions inventoried. Full per-control authorization, success/error, persistence/restart, concurrency and accessibility acceptance remains incomplete; overallAcceptance is NOT_TESTED.",
+      "currentHeadEvidenceNote": "NOT_TESTED overall — exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f; latest browser E2E 45155129112 at 2a20c653e944ea748e9e051ddbce2178551662df passes 41/41 Chromium journeys; 121/121 controls, 17/17 forms, 104 form-owned, 17 standalone and 15/15 cross-cutting dimensions inventoried. Full per-control authorization, success/error, persistence/restart, concurrency and accessibility acceptance remains incomplete; overallAcceptance is NOT_TESTED.",
       "currentHeadEvidenceUpdatedAt": "2026-11-23T10:47:19.185Z",
       "sourceTestEvidenceRefresh": {
         "sourceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
@@ -1999,7 +1999,7 @@
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
       "currentHeadEvidenceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
-      "currentHeadEvidenceNote": "PASS on exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: automation 45156940320 installed FFmpeg before the Node suite and passed 1,135 tests across 192 files with zero skips; the FFmpeg/ffprobe version report was previously verified on the same runner image in run 45152184922.",
+      "currentHeadEvidenceNote": "PASS on exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: automation 45156940320 installed FFmpeg and ffprobe before Node tests and passed 1,135 tests across 192 files with zero skips; runner FFmpeg/ffprobe version N-129000-g64f6bcffaf-20261117 was previously verified in run 45152184922.",
       "currentHeadEvidenceUpdatedAt": "2026-11-23T10:47:19.185Z",
       "sourceTestEvidenceRefresh": {
         "sourceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
@@ -3532,7 +3532,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
-      "currentHeadEvidenceNote": "Exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: all 38 test/worker-runner.mjs cases pass, including persisted HTTP 409 preflight cooldown across restart and fail-stop with retained process lock when cooldown persistence fails. Live worker dispatch remains NOT_TESTED; no production Worker deployment or authorized live dispatch occurred.",
+      "currentHeadEvidenceNote": "Exact source/test SHA fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f: all 38 test/worker-runner.test.mjs cases pass, including persisted HTTP 409 preflight cooldown across restart and fail-stop with retained process lock when cooldown persistence fails. Live worker dispatch remains NOT_TESTED; no production Worker deployment or authorized live dispatch occurred.",
       "currentHeadEvidenceUpdatedAt": "2026-11-23T10:47:19.185Z",
       "sourceTestEvidenceRefresh": {
         "sourceSha": "fbe838ad7da2bd1ab3fb87b95b234216f8f51c7f",
