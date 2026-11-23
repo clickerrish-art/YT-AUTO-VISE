@@ -3532,7 +3532,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
-      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: all 38 test/worker-runner.mjs cases pass, including persisted HTTP 409 preflight cooldown across restart and fail-stop with retained process lock when cooldown persistence fails. Queue identity validation now blocks both GET /api/jobs/dispatchable and POST /api/jobs/produce before mutation; worker treats 409 as non-retryable. Live worker dispatch remains NOT_TESTED; no production Worker deployment or authorized live dispatch occurred.",
+      "currentHeadEvidenceNote": "Exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0: all 38 test/worker-runner.test.mjs cases pass, including persisted HTTP 409 preflight cooldown across restart and fail-stop with retained process lock when cooldown persistence fails. Queue identity validation now blocks both GET /api/jobs/dispatchable and POST /api/jobs/produce before mutation; worker treats 409 as non-retryable. Live worker dispatch remains NOT_TESTED; no production Worker deployment or authorized live dispatch occurred.",
       "currentHeadEvidenceUpdatedAt": "2026-11-23T10:57:22Z",
       "sourceTestEvidenceRefresh": {
         "sourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
