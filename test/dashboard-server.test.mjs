@@ -326,7 +326,12 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     !historyEvidenceFresh,
     "the 24-hour history freshness gate must block stale inventory even when the prior owner-reviewed video record still matches"
   );
-  assert.equal(readiness.blockers.some(item => /YouTube OAuth upload scope is not independently verified/i.test(item)), false, "the 21 November read-only scope verification is fresh and accepted");
+  const uploadScopeEvidenceFresh = isFreshHistoryEvidence(historyVerification.uploadScopeCheckedAt);
+  assert.equal(
+    readiness.blockers.some(item => /YouTube OAuth upload scope is not independently verified/i.test(item)),
+    !uploadScopeEvidenceFresh,
+    "the OAuth upload-scope gate must block when the scope verification is older than 24 hours"
+  );
   assert.equal(readiness.blockers.some(item => /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/i.test(item)), false, "a superseded invalid_grant attempt must not override the later successful read-only verification");
   assert.ok(readiness.blockers.some(item => /local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete/i.test(item)), "the stale local attempt attestation must remain a blocker");
   const operationalReadinessResponse = await fetchDashboard(base + "/operational-readyz");

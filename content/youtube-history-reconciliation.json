@@ -2,16 +2,16 @@
   "schemaVersion": 1,
   "complete": true,
   "channelId": "UCSlkuPfHH78oGC1o418HV4w",
-  "verifiedAt": "2026-11-22T02:21:32.558Z",
-  "verifiedBy": "Prior owner-reviewed YouTube Studio record cross-checked against the fresh read-only inventory; no new owner attestation asserted.",
-  "verificationReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44975699501",
+  "verifiedAt": "2026-11-23T08:09:15.089Z",
+  "verifiedBy": "Prior owner-reviewed YouTube Studio record cross-checked against the fresh 23 November read-only inventory; no new owner attestation asserted.",
+  "verificationReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45136287957",
   "videos": [
     {
       "id": "LjePS02hA1o",
       "format": "short",
       "visibility": "public",
       "actualPublishedAt": "2026-10-22T15:05:56Z",
-      "evidenceReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42609557970; https://www.youtube.com/watch?v=LjePS02hA1o",
+      "evidenceReference": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45136287957; https://www.youtube.com/watch?v=LjePS02hA1o",
       "latestInventoryMatch": {
         "videoId": "LjePS02hA1o",
         "channelId": "UCSlkuPfHH78oGC1o418HV4w",
@@ -21,8 +21,8 @@
         "duration": "PT20S",
         "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
         "comparisonStatus": "EXACT_VIDEO_ID_CHANNEL_VISIBILITY_PUBLISHED_AT_AND_DURATION_MATCH_PRIOR_OWNER_REVIEWED_SHORT",
-        "inventoryArtifactSha256": "f80e67cd4062f5ec2667d445757621ebd5bcaad6bffc9826e5b880ac14ed3500",
-        "inventoryJsonSha256": "4d8ab55061d4da6f994d887879d45a9624ee24e130cf8a504b11f6ed0ed9d3d9",
+        "inventoryArtifactSha256": "828f4164bd0b4a4a1ea372d9db4dfc2039ab43ea64633c3969cec50e220f7df7",
+        "inventoryJsonSha256": "b49030ff9fdc1b96cdfb2fef08caf6981bb752b7499a7e27ad68c543e73a8e7f",
         "priorOwnerReviewDate": "2026-11-18",
         "ownerReaffirmationRequired": false
       },
@@ -38,14 +38,14 @@
     }
   ],
   "latestInventoryEvidence": {
-    "workflowRunId": 44975699501,
+    "workflowRunId": 45136287957,
     "workflowRunAttempt": 1,
-    "jobId": 137064990452,
-    "sourceCommit": "7317143b4ff7a87ddbaf1034dab2a19ba98c5579",
-    "verifiedAt": "2026-11-22T02:21:32.558Z",
-    "artifactId": 14735207134,
-    "artifactSha256": "f80e67cd4062f5ec2667d445757621ebd5bcaad6bffc9826e5b880ac14ed3500",
-    "inventoryJsonSha256": "4d8ab55061d4da6f994d887879d45a9624ee24e130cf8a504b11f6ed0ed9d3d9",
+    "jobId": 137563246158,
+    "sourceCommit": "e7d6ced2269c067b488d55a6e98743dbd58a4ae0",
+    "verifiedAt": "2026-11-23T08:09:15.089Z",
+    "artifactId": 14799632857,
+    "artifactSha256": "828f4164bd0b4a4a1ea372d9db4dfc2039ab43ea64633c3969cec50e220f7df7",
+    "inventoryJsonSha256": "b49030ff9fdc1b96cdfb2fef08caf6981bb752b7499a7e27ad68c543e73a8e7f",
     "complete": true,
     "uploadsPlaylistPages": 1,
     "totalUploads": 1,
@@ -59,7 +59,7 @@
       "https://www.googleapis.com/auth/youtube.upload",
       "https://www.googleapis.com/auth/youtube.readonly"
     ],
-    "grantedOAuthScopes": [
+    "grantedScopes": [
       "https://www.googleapis.com/auth/youtube.readonly",
       "https://www.googleapis.com/auth/youtube.upload"
     ],
@@ -147,22 +147,22 @@
     "note": "The latest automated GitHub scan (run 44975699539) inspected one prior upload workflow dispatch, found its private-upload job was skipped and found zero executed private-upload jobs. This is workflow evidence only. The local upload-attempt ledger is gitignored and inaccessible from GitHub; manual/local/third-party attempts after 2026-11-18 are not covered by the previous owner attestation and require a fresh owner statement before another upload."
   },
   "currentFreshnessStatus": "FRESH_INVENTORY_MATCHES_PRIOR_OWNER_REVIEW; AUTOMATED_UPLOAD_LEDGER_SCAN_FRESH; OWNER_ATTESTATION_FOR_MANUAL_LOCAL_AND_THIRD_PARTY_ATTEMPTS_STALE_AFTER_2026-11-18",
-  "lastSuccessfulInventoryAt": "2026-11-22T02:21:32.558Z",
+  "lastSuccessfulInventoryAt": "2026-11-23T08:09:15.089Z",
   "latestRefreshAttempt": {
-    "workflowRunId": 44975699501,
-    "sourceCommit": "7317143b4ff7a87ddbaf1034dab2a19ba98c5579",
+    "workflowRunId": 45136287957,
+    "sourceCommit": "e7d6ced2269c067b488d55a6e98743dbd58a4ae0",
     "status": "PASS_READ_ONLY_IDENTITY_AND_COMPLETE_INVENTORY_MATCHES_PRIOR_OWNER_REVIEW",
-    "checkedAt": "2026-11-22T02:21:32.558Z",
-    "jobId": 137064990452,
-    "artifactId": 14735207134,
-    "artifactSha256": "f80e67cd4062f5ec2667d445757621ebd5bcaad6bffc9826e5b880ac14ed3500",
-    "inventoryJsonSha256": "4d8ab55061d4da6f994d887879d45a9624ee24e130cf8a504b11f6ed0ed9d3d9",
+    "checkedAt": "2026-11-23T08:09:15.089Z",
+    "jobId": 137563246158,
+    "artifactId": 14799632857,
+    "artifactSha256": "828f4164bd0b4a4a1ea372d9db4dfc2039ab43ea64633c3969cec50e220f7df7",
+    "inventoryJsonSha256": "b49030ff9fdc1b96cdfb2fef08caf6981bb752b7499a7e27ad68c543e73a8e7f",
     "uploadAttempted": false,
     "metadataWriteAttempted": false,
     "publicationStateChanged": false
   },
   "uploadScopeVerified": true,
-  "note": "Fresh 2026-11-22 02:21 read-only inventory (run 44975699501) confirms the authenticated @sonicvhibez channel and one public upload, zero private and zero unlisted uploads; both required OAuth scopes are verified. The sole video exactly matches the prior owner-reviewed Short record. The automated GitHub upload-ledger scan (run 44975699539) inspected one prior upload workflow dispatch, found its private-upload job skipped and zero executed private-upload jobs. The separate local/manual/third-party attempt attestation is valid only through 2026-11-18; do not initiate another upload until the owner refreshes it.",
+  "note": "Fresh 23 November 2026 read-only inventory (run 45136287957) confirms the authenticated @sonicvhibez channel and one public upload, zero private and zero unlisted uploads; both required OAuth scopes are verified. The one video matches the prior owner-reviewed Studio record by exact video ID, channel, visibility, publishedAt timestamp and PT20S duration. The video is a pre-cycle legacy Short, so the approved long_form → long_form → short cycle has not begun. The separate manual/local/third-party attempt attestation remains stale after 2026-11-18; do not schedule or upload until the owner refreshes it.",
   "ownerPublicationHistoryReview": {
     "status": "ACCEPTED_AS_HISTORICAL_PUBLICATION_EVIDENCE",
     "reviewedAt": "2026-11-18",
@@ -205,27 +205,27 @@
     "statusReason": "The only verified remote publication is the owner-reviewed legacy Short, published before the approved cycle start. No long_form publication exists in the complete one-upload channel inventory, so the required long_form → long_form → short sequence and its actual 72-hour intervals cannot yet be demonstrated. The two long-form production manifests remain BLOCKED_NOT_RENDERABLE pending real media, narration, rights evidence and human review."
   },
   "latestRefreshEvidence": {
-    "path": "content/youtube-history-refresh-2026-11-22.json",
-    "workflowRunId": 44964788362,
-    "sourceCommit": "8a23f3365648e577a1c6e22fae7f5542a232ab9e",
-    "verifiedAt": "2026-11-22T00:04:03.023Z",
-    "artifactId": 14730044913,
-    "artifactSha256": "7d58ea5726eeabe90394b77214b0b72e100e4d4a30af490ca0391db43047ba69",
-    "inventoryJsonSha256": "e5fc3b11bb457f129bcadf0f956a19ad8a56abd73994d02ceac601ed7b2018f8",
-    "status": "PARTIAL_OWNER_REAFFIRMATION_AND_LOCAL_ATTEMPT_ATTESTATION_PENDING",
-    "jobId": 137031236037
+    "path": "content/youtube-history-refresh-2026-11-23.json",
+    "workflowRunId": 45136287957,
+    "sourceCommit": "e7d6ced2269c067b488d55a6e98743dbd58a4ae0",
+    "verifiedAt": "2026-11-23T08:09:15.089Z",
+    "artifactId": 14799632857,
+    "artifactSha256": "828f4164bd0b4a4a1ea372d9db4dfc2039ab43ea64633c3969cec50e220f7df7",
+    "inventoryJsonSha256": "b49030ff9fdc1b96cdfb2fef08caf6981bb752b7499a7e27ad68c543e73a8e7f",
+    "status": "FRESH_READ_ONLY_INVENTORY_MATCHES_PRIOR_OWNER_REVIEW; MANUAL_LOCAL_ATTEMPT_ATTESTATION_STALE",
+    "jobId": 137563246158
   },
   "publicationHistoryReconciliation": {
     "status": "PRIOR_OWNER_REVIEW_MATCHES_FRESH_INVENTORY",
     "reconciliationPath": "content/youtube-history-reconciliation.json",
-    "verifiedAt": "2026-11-22T02:21:32.558Z",
-    "verifiedBy": "Prior owner-reviewed YouTube Studio record cross-checked against the fresh read-only inventory; no new owner attestation asserted.",
-    "freshInventoryRunId": 44975699501,
-    "freshInventoryArtifactId": 14735207134,
-    "freshInventoryArtifactSha256": "f80e67cd4062f5ec2667d445757621ebd5bcaad6bffc9826e5b880ac14ed3500",
-    "freshInventoryJsonSha256": "4d8ab55061d4da6f994d887879d45a9624ee24e130cf8a504b11f6ed0ed9d3d9",
+    "verifiedAt": "2026-11-23T08:09:15.089Z",
+    "verifiedBy": "Prior owner-reviewed YouTube Studio record cross-checked against the fresh 23 November read-only inventory; no new owner attestation asserted.",
+    "freshInventoryRunId": 45136287957,
+    "freshInventoryArtifactId": 14799632857,
+    "freshInventoryArtifactSha256": "828f4164bd0b4a4a1ea372d9db4dfc2039ab43ea64633c3969cec50e220f7df7",
+    "freshInventoryJsonSha256": "b49030ff9fdc1b96cdfb2fef08caf6981bb752b7499a7e27ad68c543e73a8e7f",
     "priorOwnerReviewDate": "2026-11-18",
-    "reason": "The prior owner-reviewed Studio record classifies the sole upload as a Short and confirms the Studio publication date. The fresh complete read-only inventory matches the exact video ID, channel ID, public visibility, publishedAt timestamp and PT20S duration. The API's unclassified format label does not conflict with the previously owner-confirmed Short classification."
+    "reason": "The fresh complete public/private/unlisted uploads inventory matches the exact video ID, channel ID, public visibility, YouTube publishedAt timestamp and PT20S duration in the existing owner-reviewed Studio reconciliation. The owner-confirmed Short classification remains historical evidence; the current API format label is still unclassified. No new owner attestation is asserted."
   },
-  "uploadScopeCheckedAt": "2026-11-22T00:04:02.559Z"
+  "uploadScopeCheckedAt": "2026-11-23T08:09:14.618Z"
 }
