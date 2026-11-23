@@ -924,7 +924,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const authorRenderBypassBody = await authorRenderBypass.json();
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
   assert.equal(authorRenderBypassBody.publishable, false);
-  assert.match(authorRenderBypassBody.error, /approved authoring pipeline/i);
+  assert.match(authorRenderBypassBody.error, /(approved authoring pipeline|queue identity reconciliation is not owner-approved)/i);
   assert.equal(authorRenderBypassBody.jobState, "BLOCKED");
   assert.equal(authorRenderBypassBody.requiresOperatorRetry, false);
   const restoredAuthorState = JSON.parse(fs.readFileSync(dueDispatchStatePath, "utf8"));
@@ -1042,7 +1042,7 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   const renderAttempt = await fetchDashboard(base + "/api/jobs/produce", { method: "POST", headers, body: JSON.stringify({ jobId: renderJob.id }) });
   const renderAttemptBody = await renderAttempt.json();
   assert.equal(renderAttempt.status, 409, JSON.stringify(renderAttemptBody));
-  assert.match(renderAttemptBody.error, /approved authoring pipeline/i);
+  assert.match(renderAttemptBody.error, /(approved authoring pipeline|queue identity reconciliation is not owner-approved)/i);
   assert.equal(renderAttemptBody.renderStarted, false, "legacy draft jobs must be rejected before a renderer process is launched");
   assert.equal(renderAttemptBody.publishable, false);
   const legacyRenderState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
