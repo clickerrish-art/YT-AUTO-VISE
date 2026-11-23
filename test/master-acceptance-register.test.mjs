@@ -119,7 +119,7 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
 
   const scheduler = byId("SCHED-001");
   assert.equal(scheduler.status, "NOT_TESTED");
-  assert.match(scheduler.currentHeadEvidenceNote, /complete one-page inventory of one public 20-second legacy Short with zero private\/unlisted videos/);
+  assert.match(scheduler.currentHeadEvidenceNote, /one public 20-second legacy Short, zero private\/unlisted videos/);
   assert.match(scheduler.nextAction, /fresh owner attestation/);
 });
 
