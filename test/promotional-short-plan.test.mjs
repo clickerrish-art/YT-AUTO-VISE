@@ -40,7 +40,7 @@ test("current-week wildlife video Short uses fresh measured intent and a matchin
   assert.equal(item.productUrl, "https://selar.com/0u19v8u99l");
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.targetSeconds, 55);
-  assert.deepEqual(validatePlan(checkedInPlan, products), []);
+  assert.deepEqual(validatePlan(checkedInPlan, products, { now: referenceNow }), []);
 });
 
 test("approximately 55-second scripts accept 150-wpm tolerance and reject overlong copy", () => {
@@ -600,7 +600,7 @@ test("December 14 Shorts analytics lesson uses current official metric definitio
 });
 
 
-test("November 23 ethical-wildlife and outline Shorts use fresh qualitative search evidence and preserve their separate disclosure gates", () => {
+test("November 23 ethical-wildlife and outline Shorts use fresh provider-specific keyword evidence and preserve separate disclosure gates", () => {
   const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-11-23");
   assert.ok(week);
   assert.equal(week.items.length, 2, "the weekly cap is already full; do not add another Short");
@@ -608,6 +608,7 @@ test("November 23 ethical-wildlife and outline Shorts use fresh qualitative sear
   const outline = week.items.find(row => row.id === "sonicvhibez-short-008-youtube-video-outline");
   const vault = products.find(row => row.id === "wildlife-creators-vault");
   const promptPack = products.find(row => row.id === "video-creation-prompt-pack-premium");
+  const referenceNow = new Date("2026-11-23T10:00:00+02:00");
   assert.ok(ethical && outline && vault && promptPack);
 
   for (const item of [ethical, outline]) {
@@ -626,14 +627,19 @@ test("November 23 ethical-wildlife and outline Shorts use fresh qualitative sear
       assert.ok(Number.isFinite(item.keywordEvidence.competition));
       assert.match(item.keywordEvidence.note, /provider estimates/i);
     }
-    assert.ok(item.keywordEvidence.sources.length >= 2);
+    if (item.keywordEvidence.provider === "web_search") {
+      assert.ok(item.keywordEvidence.sources.length >= 2);
+    } else {
+      assert.equal(item.keywordEvidence.provider, "vidIQ");
+      assert.equal(item.keywordEvidence.sources, undefined);
+    }
     assert.equal(item.currentIntentEvidence.provider, "web_search");
     assert.ok(item.currentIntentEvidence.sources.length >= 2);
     for (const researchedAt of [item.keywordEvidence.researchedAt, item.currentIntentEvidence.researchedAt]) {
       const timestamp = Date.parse(researchedAt);
       assert.ok(Number.isFinite(timestamp), "qualitative evidence must have a valid research timestamp");
-      assert.ok(timestamp <= Date.now() + 5 * 60 * 1000, "research timestamps must not be materially in the future");
-      assert.ok(Date.now() - timestamp <= 14 * 24 * 60 * 60 * 1000,
+      assert.ok(timestamp <= referenceNow.getTime() + 5 * 60 * 1000, "research timestamps must not be materially in the future");
+      assert.ok(referenceNow.getTime() - timestamp <= 14 * 24 * 60 * 60 * 1000,
         "qualitative keyword evidence must remain within the validator's 14-day freshness window");
     }
     assert.ok(item.keywordPhrases.length >= 3);
@@ -719,7 +725,7 @@ test("current search-intent evidence is mandatory, dated, sourced and fresh for 
   assert.ok(validatePlan(stale, products, { now }).some(error => /current search-intent evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(valid);
-  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-22T11:11:00+02:00";
+  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-23T10:06:00+02:00";
   assert.ok(validatePlan(future, products, { now }).some(error => /current search-intent evidence cannot be more than 5 minutes in the future/.test(error)));
 
   const insecure = clone(valid);
