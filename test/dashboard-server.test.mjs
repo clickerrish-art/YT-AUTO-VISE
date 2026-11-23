@@ -130,19 +130,41 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
     "x-worker-token": "worker-test-token-" + "y".repeat(40),
     "x-worker-id": "queue-identity-guard-test"
   };
+  const statePath = path.join(stateDir, "dashboard-state.json");
+  const seededState = JSON.parse(fs.readFileSync(statePath, "utf8"));
+  seededState.jobs.push({
+    id: "unapproved-production-job",
+    kind: "CONTENT_PRODUCTION",
+    state: "QUEUED",
+    contentType: "long_form",
+    createdAt: new Date().toISOString(),
+    scheduledSlot: {
+      date: new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Johannesburg", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date()),
+      time: "17:00",
+      timezone: "Africa/Johannesburg"
+    },
+    publishingEnabled: false
+  });
+  fs.writeFileSync(statePath, JSON.stringify(seededState, null, 2) + "\\n", { mode: 0o600 });
   const unresolvedDispatch = await fetchDashboard(base + "/api/jobs/dispatchable", { headers: workerHeaders });
   const unresolvedDispatchBody = await unresolvedDispatch.json();
-  assert.equal(unresolvedDispatch.status, 409, "worker dispatch must fail closed while queue identities lack owner approval");
-  assert.equal(unresolvedDispatchBody.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+  assert.equal(unresolvedDispatch.status, 200, "the owner-confirmed queue mapping should pass the identity gate");
+  assert.equal(unresolvedDispatchBody.publishingEnabled, false);
+  assert.equal(unresolvedDispatchBody.queuedCount, 1);
+  assert.equal(unresolvedDispatchBody.queuedWithoutApprovedAuthoring, 1);
+  assert.equal(unresolvedDispatchBody.queuedWithoutApprovedRenderPlan, 1);
+  assert.equal(unresolvedDispatchBody.dispatchableCount, 0);
   assert.deepEqual(unresolvedDispatchBody.jobs, []);
-  assert.ok(unresolvedDispatchBody.blockers.some(message => /queue-identity-approval\.json is missing/i.test(message)));
   const unresolvedProduce = await fetchDashboard(base + "/api/jobs/produce", {
     method: "POST", headers: { ...workerHeaders, "content-type": "application/json" },
-    body: JSON.stringify({ jobId: "must-not-dispatch" })
+    body: JSON.stringify({ jobId: "unapproved-production-job" })
   });
   const unresolvedProduceBody = await unresolvedProduce.json();
-  assert.equal(unresolvedProduce.status, 409, "direct worker production requests must also fail closed");
-  assert.equal(unresolvedProduceBody.code, "QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
+  assert.equal(unresolvedProduce.status, 409, "direct production dispatch must fail without the approved authoring pipeline");
+  assert.equal(unresolvedProduceBody.renderStarted, false);
+  assert.equal(unresolvedProduceBody.publishable, false);
+  assert.equal(unresolvedProduceBody.publishingEnabled, false);
+  assert.match(unresolvedProduceBody.error, /approved authoring pipeline/i);
 
   const sourceInventory = inventoryDashboardSources(
     fs.readFileSync(path.join(process.cwd(), "public", "dashboard.html"), "utf8"),
