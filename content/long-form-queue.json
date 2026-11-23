@@ -6,7 +6,7 @@
     "max": 10
   },
   "publishingEnabled": false,
-  "status": "PLANNING_ONLY",
+  "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; PLANNING_ONLY",
   "productUrl": "https://selar.com/0u19v8u99l",
   "releaseGates": [
     "original script and research complete",
@@ -33,7 +33,7 @@
       "publicationCyclePosition": 1,
       "scheduledAt": null,
       "publishingEnabled": false,
-      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_MEDIA_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "releaseStatus": "HOLD_FOR_AI_GENERATED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
       "productionNotes": "Mapped from the owner-confirmed episode brief. The shared narration draft contains the Episode 1 section. A corresponding narration script draft exists in the shared script file; this is not a production-approved script, rendered video, media clearance, schedule, upload or publication authorization."
     },
     {
@@ -49,7 +49,7 @@
       "publicationCyclePosition": 2,
       "scheduledAt": null,
       "publishingEnabled": false,
-      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_MEDIA_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "releaseStatus": "HOLD_FOR_AI_GENERATED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
       "productionNotes": "Mapped from the owner-confirmed episode brief. The shared narration draft contains the Episode 2 section. A corresponding narration script draft exists in the shared script file; this is not a production-approved script, rendered video, media clearance, schedule, upload or publication authorization."
     },
     {
@@ -60,17 +60,17 @@
       "status": "PRODUCTION_HOLD_ORIGINAL_MEDIA_NARRATION_RIGHTS_CAPTIONS_AND_HUMAN_REVIEW",
       "scriptPath": "content/drafts/long-form-001-two-eyes-above-water.md",
       "footageRegisterPath": "content/assets/long-form-001-footage-sourcing.md",
-      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_MEDIA_ACQUISITION_ASSET_LEVEL_RIGHTS_COMMERCIAL_NARRATION_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "releaseStatus": "HOLD_FOR_AI_GENERATED_WILDLIFE_VISUALS_ACQUISITION_ASSET_LEVEL_RIGHTS_COMMERCIAL_NARRATION_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
       "publicationFormat": "long_form",
       "scheduledAt": null,
       "publishingEnabled": false,
-      "productionNotes": "The current script revision has corrected source attribution and a constrained primary-study claim; the revised script and scene map still require owner and qualified zoological review. Pexels/Pixabay candidates were acquired and technically decoded for review only; the current ORIGINAL_CREATOR_CAPTURED_ONLY policy excludes them from production. No original creator-captured crocodile footage is available in the project. Three Pexels clips for Short 001 remain a silent review-only preview and are not production assets. Wikimedia leads remain excluded unless separately approved. No crocodile footage is release-cleared. HeyGen Support denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the existing 398.083-second WAV is internal-only and must not be used in public/commercial production. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited; the paid API, local Piper/Edge TTS and paid upgrades are not authorized. No final captions, render, thumbnail, exact-hash approval or publication schedule exists. Keep publishing disabled.",
+      "productionNotes": "The current script revision has corrected source attribution and a constrained primary-study claim; the revised script and scene map still require owner and qualified zoological review. Pexels/Pixabay candidates were acquired and technically decoded for review only; the mandatory AI_GENERATED_RECONSTRUCTION_REQUIRED policy keeps them review-only. No AI-generated crocodile video has yet been generated; do not request a user video upload. Three Pexels clips for Short 001 remain a silent review-only preview and are not production assets. Wikimedia leads remain excluded unless separately approved. No crocodile footage is release-cleared. HeyGen Support denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the existing 398.083-second WAV is internal-only and must not be used in public/commercial production. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited; the paid API, local Piper/Edge TTS and paid upgrades are not authorized. No final captions, render, thumbnail, exact-hash approval or publication schedule exists. Keep publishing disabled.",
       "narrationStatus": "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE",
       "narrationDurationSeconds": 398.08299319727894,
       "narrationVoice": "Existing HeyGen Roderic Free-plan audio is internal-only and not commercially cleared; no production narrator is approved. Speechma Andrew is selected for a manual zero-cost browser audition only.",
       "narrationStatusPath": "content/assets/long-form-001-narration-status.md",
       "scriptStatus": "RESEARCH_CORRECTED_AWAITING_OWNER_AND_QUALIFIED_ZOOLOGIST_REVIEW",
-      "footageEligibilityStatus": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED; PEXELS_PIXABAY_REVIEW_ONLY_EXCLUDED_FROM_PRODUCTION",
+      "footageEligibilityStatus": "AI_GENERATED_RECONSTRUCTION_REQUIRED; PEXELS_PIXABAY_REVIEW_ONLY",
       "narrationRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION"
     },
     {
@@ -193,5 +193,10 @@
   },
   "notes": [
     "HeyGen denied zero-cost commercial-use rights for the existing Roderic Free-plan output, which remains internal-only. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited by Speechma Terms; the paid API is not authorized. No paid upgrade or paid credits are authorized. All queue items remain planning/draft-only until original media, narration, rights, review and release gates pass."
-  ]
+  ],
+  "originalCreatorCapturedMediaRequired": false,
+  "aiGeneratedWildlifeVisualsRequired": true,
+  "aiGeneratedWildlifeVisualsAllowed": true,
+  "userVideoUploadRequired": false,
+  "stockMediaAllowed": false
 }
