@@ -135,7 +135,7 @@ test("the requested weekly target remains planning metadata while the owner-appr
   assert.equal(longFormQueue.cadence.weeklyTarget, null);
   assert.equal("postsPerWeek" in longFormQueue.cadence, false);
   assert.deepEqual(longFormQueue.cadence.draftPreparationDays, ["Tuesday", "Saturday"]);
-  assert.equal(longFormQueue.status, "PLANNING_ONLY");
+  assert.equal(longFormQueue.status, "AI_GENERATED_RECONSTRUCTION_REQUIRED; PLANNING_ONLY");
   assert.equal(longFormQueue.publishingEnabled, false);
   assert.equal(plan.requestedWeeklyCadence.longFormPerWeek, 2);
   assert.equal(plan.requestedWeeklyCadence.shortsPerWeek, 1);
