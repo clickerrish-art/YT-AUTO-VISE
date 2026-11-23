@@ -485,7 +485,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
-      "currentHeadEvidenceNote": "NOT_TESTED — exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0; fresh read-only YouTube inventory run 45160289448 at b7a8084279b188fc150de82a5b8e935e77d74c49 confirms one public 20-second legacy Short, zero private/unlisted videos, matching the prior owner-reviewed Studio record. It predates the approved rolling cycle; no cycle publications exist yet. Owner manual/local/third-party upload-attempt attestation remains valid only through 2026-11-18 and must be refreshed before any upload. No 72-hour cycle sequence exists; no uncertain upload retry is authorized.",
+      "currentHeadEvidenceNote": "NOT_TESTED — exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0; fresh read-only YouTube inventory run 45160289448 at b7a8084279b188fc150de82a5b8e935e77d74c49 confirms one public 20-second legacy Short, zero private/unlisted videos, matching the prior owner-reviewed Studio record. It predates the approved rolling cycle; no cycle publications exist yet. The manual/local/third-party attempt attestation from the owner remains valid only through 2026-11-18 and must be refreshed before any upload. No 72-hour cycle sequence exists; no uncertain upload retry is authorized.",
       "currentHeadEvidenceUpdatedAt": "2026-11-23T10:57:22Z",
       "sourceTestEvidenceRefresh": {
         "sourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
@@ -1040,7 +1040,7 @@
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
       "currentHeadEvidenceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
-      "currentHeadEvidenceNote": "NOT_TESTED — deployment recovery run 45162303539 and runner-bridge safety run 45162303669 pass on exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0; no SonicVhibez production render/publisher Worker, D1 state store, Durable Object namespace or verified production OIDC trust is established. R2 API remains 403/code 10042.",
+      "currentHeadEvidenceNote": "NOT_TESTED — deployment recovery run 45162303539 and runner-bridge safety run 45162303669 pass on exact source/test SHA a7e8cb38c39444632bd22d603811217fea1527e0; No SonicVhibez production render/publisher Worker, D1 state store, Durable Object namespace or verified production OIDC trust is established. R2 API remains 403/code 10042.",
       "currentHeadEvidenceUpdatedAt": "2026-11-23T10:57:22Z",
       "sourceTestEvidenceRefresh": {
         "sourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
