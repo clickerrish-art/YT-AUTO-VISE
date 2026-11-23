@@ -1,28 +1,26 @@
-# WanGP on Kaggle — DISABLED / HISTORICAL ONLY
+# WanGP on Kaggle — PERMITTED BY POLICY, EXECUTION GATED
 
-**Current status — 2026-11-21: DISABLED. DO NOT RUN.**
+**Current status — 2026-11-23: NOT AUTHORIZED TO RUN.**
 
-This runbook is retained only as an audit record. Do not import this notebook into Kaggle, enable Internet, select a GPU, install model weights, launch WanGP, generate a wildlife clip, or import generated output into the repository.
+SonicVhibez permits clearly disclosed, photorealistic AI wildlife reconstructions. This is separate from Nature Frontiers, which retains its original creator-captured media policy. The WanGP notebook and importer must enforce the SonicVhibez policy without treating AI as prohibited.
 
-## Why it is disabled
+## Why generation remains disabled
 
-- Current owner production policy requires genuine original creator-captured wildlife media.
-- AI-generated wildlife visuals are prohibited as substitutes for original wildlife footage or photographs.
-- The exact WanGP-compatible checkpoint/VAE mirror provenance and rights were not verified; the upstream base-model licence does not establish the rights or provenance of converted mirror files.
-- No GPU generation is authorized. The zero-cost constraint forbids paid GPU or hosted generation.
-- The notebook's code cells now raise a policy-blocking error before GPU/model setup.
-- `config/video-generation.json` marks generation disabled and non-primary.
-- `scripts/import_wangp_kaggle_output.py` reads the current policy and rejects generated wildlife output before inspecting/copying a video.
-- The saved Comfy Cloud Arctic/polar-bear text-to-video demo is also disqualified and has not been run.
+- No zero-cost GPU backend has been independently verified as available and usable for this project. A visible but unselectable Kaggle accelerator is not evidence of availability.
+- The exact WanGP-compatible checkpoint/VAE mirror derivative provenance and rights remain unresolved. The upstream base-model licence alone does not prove rights in the converted mirror files.
+- `config/video-generation.json` explicitly permits AI reconstruction but keeps generation disabled, marks zero-cost backend verification false, keeps exact model-rights verification false, and leaves commercial-use approval false.
+- Every notebook code cell checks an immutable, commit-pinned copy of the policy and fails closed unless all generation, zero-cost backend, and exact model-rights gates are explicitly verified.
+- `scripts/import_wangp_kaggle_output.py` requires the same gates before inspecting or copying any generated MP4. Technical import remains distinct from human review and publishing approval.
+- No GPU session, generation, paid service, or model download is authorized by this runbook.
 
 ## Historical technical record
 
-The former experiment used the WanGP source commit `f4cfc1259215577be9a2ee280c41efbedfb4459a`, a Wan2.2-TI2V-5B upstream model, and converted checkpoint/VAE mirrors under `DeepBeepMeep/Wan2.2`. The exact mirror derivative provenance was unresolved. The historical plan was a five-second test shot, not a production documentary.
+The proposed experiment uses the WanGP source commit `f4cfc1259215577be9a2ee280c41efbedfb4459a`, a Wan2.2-TI2V-5B upstream model, and converted checkpoint/VAE mirrors under `DeepBeepMeep/Wan2.2`. The exact mirror derivative provenance was unresolved. The historical plan was a five-second test shot, not a production documentary.
 
-No generation was run and no production output was created. Any existing model setup, source code, license notes, Kaggle notebook outputs or model configuration are historical research only.
+No generation has been authorized under the current policy, and no production output has been created. Do not infer that pinned hashes or an upstream licence resolve the mirror checkpoint/VAE rights hold.
 
 ## Current production path
 
-Acquire genuine original creator-captured wildlife footage directly from the creator or rights holder. Verify creator identity, source provenance, chain of custody, exact original bytes and SHA-256, commercial-use rights, technical quality, complete visual review and exact-hash approval. Only then proceed to source-led editing.
+Once (and only once) the zero-cost backend and exact model/checkpoint/VAE rights are independently verified and the pinned policy is updated to authorize generation, a short internal test may be generated with the pinned no-LoRA profile. Every output must retain the exact generation receipt, source/model revisions, checkpoint/VAE hashes, prompt, negative prompt, seed, settings, Kaggle session reference, output hash, ffprobe report and full-decode result. Human visual, species/factual and synthetic-disclosure review remain mandatory. Generated output is an illustrative reconstruction, never authentic recorded wildlife footage. Paid GPU or hosted generation remains prohibited without explicit owner approval.
 
 See `docs/CONTINUOUS_WILDLIFE_PRODUCTION_SYSTEM.md` for the current production policy and sequential gates.
