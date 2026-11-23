@@ -26,6 +26,32 @@ def sha256_file(path: Path) -> str:
             digest.update(chunk)
     return digest.hexdigest()
 
+def generation_authorization_errors(policy: dict) -> list[str]:
+    """Require permission, a verified zero-cost backend and exact model rights."""
+    if not isinstance(policy, dict):
+        return ["generation policy must be a JSON object"]
+    errors: list[str] = []
+    if policy.get("channel") != "SonicVhibez":
+        errors.append("generation policy channel must be SonicVhibez")
+    if policy.get("safety", {}).get("aiGeneratedWildlifeVisualsAllowed") is not True:
+        errors.append("AI wildlife reconstruction is not permitted by the SonicVhibez policy")
+    if policy.get("generation", {}).get("enabled") is not True:
+        errors.append("generation.enabled must be true")
+    if policy.get("productionDisposition", {}).get("enabled") is not True:
+        errors.append("productionDisposition.enabled must be true")
+    if policy.get("productionDisposition", {}).get("noGenerationAuthorized") is not False:
+        errors.append("productionDisposition.noGenerationAuthorized must be false")
+    if policy.get("runtime", {}).get("zeroCostBackendVerification", {}).get("verified") is not True:
+        errors.append("a zero-cost GPU backend must be independently verified")
+    if policy.get("generation", {}).get("modelRightsVerification", {}).get("verified") is not True:
+        errors.append("exact checkpoint and VAE rights/provenance must be verified")
+    if policy.get("licensing", {}).get("commercialUseApproved") is not True:
+        errors.append("commercial use of the exact model artifacts is not approved")
+    if policy.get("licensing", {}).get("mirrorProvenanceReview", {}).get("status") != "PASS":
+        errors.append("exact mirror checkpoint/VAE provenance review must pass")
+    return errors
+
+
 def validate_manifest(manifest: dict, video: Path) -> list[str]:
     errors: list[str] = []
     if not isinstance(manifest, dict):
@@ -101,9 +127,11 @@ def main() -> int:
     except Exception as exc:
         print("BLOCKED: cannot read current wildlife media generation policy: " + str(exc), file=sys.stderr)
         return 2
-    if (generation_policy.get("productionDisposition", {}).get("enabled") is not True or
-            generation_policy.get("safety", {}).get("aiGeneratedWildlifeVisualsAllowed") is not True):
-        print("BLOCKED: AI-generated wildlife media is disabled by the current owner media policy; no generated shot may be imported into production.", file=sys.stderr)
+    authorization_errors = generation_authorization_errors(generation_policy)
+    if authorization_errors:
+        print("BLOCKED: AI reconstructions are permitted by policy, but generation/import remains disabled until all authorization gates pass.", file=sys.stderr)
+        for error in authorization_errors:
+            print("- " + error, file=sys.stderr)
         return 2
     video = Path(args.video).resolve()
     manifest_path = Path(args.manifest).resolve()
@@ -123,7 +151,7 @@ def main() -> int:
         print("BLOCKED: " + str(exc), file=sys.stderr); return 1
 
     job_dir = root / "media" / "jobs" / args.job_id
-    evidence_dir = root / "content" / "generation-evidence"
+    evidence_dir = root / "content" / "ai-generation-evidence"
     evidence_path = evidence_dir / (args.job_id + ".json")
     target_video = job_dir / "generated-shot.mp4"
     if job_dir.exists() or evidence_path.exists():
