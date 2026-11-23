@@ -113,7 +113,7 @@
       "excludedFromProduction": true,
       "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": "2026-11-18",
-      "reviewRenderEligible": true,
+      "reviewRenderEligible": false,
       "productionEligible": false,
       "releaseEligible": false,
       "sourcePageUrl": "https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/",
@@ -302,7 +302,7 @@
       "excludedFromProduction": true,
       "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": "2026-11-18",
-      "reviewRenderEligible": true,
+      "reviewRenderEligible": false,
       "productionEligible": false,
       "releaseEligible": false,
       "sourceMethod": "UNVERIFIED",
@@ -676,7 +676,7 @@
     "Supplemental crocodile Pexels 20443910 has no Canva asset ID; its original MP4 is in the review artifact, but its per-file SHA-256 remains pending extraction. It is not selected for production.",
     "No imported Canva candidate is rights-cleared or release-eligible."
   ],
-  "notes": "Legacy Canva/Pexels/NOAA media remains reference-only and is excluded from production. Do not request user video uploads. Final production visuals must be disclosed ultra-realistic AI-generated wildlife reconstructions with exact generation receipts, output hashes, provider-rights review, technical validation and human quality review. No AI production render is currently recorded.",
+  "notes": "Legacy Canva/Pexels/NOAA media remains reference-only and is excluded from production. Do not request user video uploads. Final production visuals must be disclosed ultra-realistic AI-generated wildlife reconstructions with exact generation receipts, output hashes, provider-rights review, technical validation and human quality review. No AI production render is currently recorded. AI-generated wildlife reconstruction is allowed only with clear synthetic-media disclosure, exact generation receipts, output hashes, provider-rights review, technical validation and human quality review.",
   "historicalBlockingEvidence": [
     "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
     "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
@@ -685,14 +685,14 @@
     "No footage rights or human visual review is marked complete."
   ],
   "currentProductionPolicy": {
-    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY_STOCK_EXCLUDED",
-    "originalCreatorCapturedMediaRequired": true,
+    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED_STOCK_EXCLUDED",
+    "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": false,
     "stockVideoFootageAllowed": false,
     "stockPhotographsAllowed": false,
     "pexelsAllowed": false,
     "pixabayAllowed": false,
-    "aiGeneratedWildlifeVisualsAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": true,
     "importedCanvaAssetsProductionEligible": false,
     "ownerPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md"
