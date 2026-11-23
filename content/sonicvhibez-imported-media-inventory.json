@@ -9,7 +9,7 @@
     "termsUrl": "https://www.pexels.com/terms-of-service/",
     "lastVerified": "2026-11-17"
   },
-  "status": "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW",
+  "status": "REVIEW_ONLY_LEGACY_STOCK_REFERENCES_NOT_PRODUCTION_MEDIA",
   "releaseAuthorized": false,
   "assets": [
     {
@@ -34,7 +34,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ORIGINAL_MP4_AND_VISUAL_MATCH",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "Majestic African Elephant in Natural Habitat",
@@ -48,8 +48,8 @@
         "metadataMatch": "EXACT",
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
-      "excludedFromProduction": false,
-      "exclusionReason": "Not excluded from review: owner permits qualifying Pexels/Pixabay stock. Final production remains held pending local original MP4, SHA-256, full decode, third-party rights and human review.",
+      "excludedFromProduction": true,
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": "2026-11-18",
       "reviewRenderEligible": true,
       "productionEligible": false,
@@ -72,7 +72,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": null,
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION"
     },
     {
       "canvaAssetId": "VAHZ9hEjS0U",
@@ -96,7 +96,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "HOLD_CANVA_SOURCE_DURATION_MISMATCH_PENDING_VISUAL_CONFIRMATION",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "An Aerial Footage of Zebras and Wildebeests",
@@ -111,9 +111,9 @@
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
       "excludedFromProduction": true,
-      "exclusionReason": "The Canva import is 13 seconds while the Pexels source page is 14 seconds. Keep excluded until the exact source/trim relationship is verified.",
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": "2026-11-18",
-      "reviewRenderEligible": false,
+      "reviewRenderEligible": true,
       "productionEligible": false,
       "releaseEligible": false,
       "sourcePageUrl": "https://www.pexels.com/video/an-aerial-footage-of-zebras-and-wildebeests-5146558/",
@@ -134,7 +134,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": null,
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION"
     },
     {
       "canvaAssetId": "VAHZ9niQJoo",
@@ -158,7 +158,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ORIGINAL_MP4_AND_VISUAL_MATCH",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "Zebras and Wildebeests Grazing in the Meadows",
@@ -172,8 +172,8 @@
         "metadataMatch": "EXACT",
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
-      "excludedFromProduction": false,
-      "exclusionReason": "Not excluded from review: owner permits qualifying Pexels/Pixabay stock. Final production remains held pending local original MP4, SHA-256, full decode, third-party rights and human review.",
+      "excludedFromProduction": true,
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": "2026-11-18",
       "reviewRenderEligible": true,
       "productionEligible": false,
@@ -196,7 +196,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": null,
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION"
     },
     {
       "canvaAssetId": "VAHZ9i3Hx6U",
@@ -220,7 +220,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ORIGINAL_MP4_AND_VISUAL_MATCH",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "pageTitle": "Giraffe in the Open Fields",
@@ -234,8 +234,8 @@
         "metadataMatch": "EXACT",
         "visualMatch": "PENDING_CANVA_ASSET_PREVIEW_ACCESS"
       },
-      "excludedFromProduction": false,
-      "exclusionReason": "Not excluded from review: owner permits qualifying Pexels/Pixabay stock. Final production remains held pending local original MP4, SHA-256, full decode, third-party rights and human review.",
+      "excludedFromProduction": true,
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": "2026-11-18",
       "reviewRenderEligible": true,
       "productionEligible": false,
@@ -258,7 +258,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": null,
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE"
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION"
     },
     {
       "canvaAssetId": "VAHZ9oFCiak",
@@ -278,7 +278,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "NOT_DONE",
-      "status": "HOLD_UNRESOLVED_SOURCE_URL_AND_CREATOR",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-17",
         "searchNote": "No exact Pexels source page matching the Canva metadata (3840x2160, 9 seconds) was verified. Similar lion pages surfaced with different metadata and were rejected as source matches.",
@@ -300,9 +300,9 @@
         ]
       },
       "excludedFromProduction": true,
-      "exclusionReason": "No exact source page or creator has been verified for this Canva asset. Owner permission to use Pexels/Pixabay does not authorize an unmatched asset; keep excluded until source identity, original MP4, hash, rights and human review are established.",
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": "2026-11-18",
-      "reviewRenderEligible": false,
+      "reviewRenderEligible": true,
       "productionEligible": false,
       "releaseEligible": false,
       "sourceMethod": "UNVERIFIED",
@@ -314,7 +314,7 @@
       "thirdPartyRightsReviewed": false,
       "rightsEvidencePath": null,
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE",
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION",
       "sha256": null
     },
     {
@@ -341,7 +341,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "PENDING_FULL_PLAYBACK",
-      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ARTIFACT_EXTRACTION_AND_VISUAL_REVIEW",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-22",
         "pageTitle": "Crocodile Resting on Riverbank in South Africa",
@@ -355,8 +355,8 @@
         "metadataMatch": "VERIFIED_BY_SOURCE_PAGE_AND_ACQUISITION_ARTIFACT",
         "visualMatch": "PENDING_FULL_PLAYBACK"
       },
-      "excludedFromProduction": false,
-      "exclusionReason": "Not excluded from review. Acquired for review only; full human playback, third-party-rights review and explicit production selection remain pending.",
+      "excludedFromProduction": true,
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": null,
       "reviewRenderEligible": true,
       "productionEligible": false,
@@ -379,7 +379,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": "58983cbf529731f91856911c71c3baf86b4558e3e76f40eedd907eb9352b37a8",
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE",
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION",
       "acquisitionArtifactId": 14736582634,
       "originalBytesAvailableInGitHubArtifact": true,
       "originalBytesAvailableLocally": false,
@@ -411,7 +411,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "PENDING_FULL_PLAYBACK",
-      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ARTIFACT_EXTRACTION_AND_VISUAL_REVIEW",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-22",
         "pageTitle": "Close-Up of Nile Crocodile in African Waters",
@@ -425,8 +425,8 @@
         "metadataMatch": "VERIFIED_BY_SOURCE_PAGE_AND_ACQUISITION_ARTIFACT",
         "visualMatch": "PENDING_FULL_PLAYBACK"
       },
-      "excludedFromProduction": false,
-      "exclusionReason": "Not excluded from review. Acquired for review only; full human playback, third-party-rights review and explicit production selection remain pending.",
+      "excludedFromProduction": true,
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": null,
       "reviewRenderEligible": true,
       "productionEligible": false,
@@ -449,7 +449,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": "bfd5892a6d88661f97ff7c3fd24a4d44880de4a5a0e68f8ac65d42f0f525ff5c",
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE",
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION",
       "acquisitionArtifactId": 14736582634,
       "originalBytesAvailableInGitHubArtifact": true,
       "originalBytesAvailableLocally": false,
@@ -481,7 +481,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "PENDING_FULL_PLAYBACK",
-      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ARTIFACT_EXTRACTION_AND_VISUAL_REVIEW",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-22",
         "pageTitle": "Majestic Nile Crocodile Basking on Riverbank",
@@ -495,8 +495,8 @@
         "metadataMatch": "VERIFIED_BY_SOURCE_PAGE_AND_ACQUISITION_ARTIFACT",
         "visualMatch": "PENDING_FULL_PLAYBACK"
       },
-      "excludedFromProduction": false,
-      "exclusionReason": "Not excluded from review. Acquired for review only; full human playback, third-party-rights review and explicit production selection remain pending.",
+      "excludedFromProduction": true,
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": null,
       "reviewRenderEligible": true,
       "productionEligible": false,
@@ -519,7 +519,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": "c31d4bc25d13115fc332aa65f8f306697e08c760895ac1f9dff1b0a2e1db99e7",
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE",
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION",
       "acquisitionArtifactId": 14736582634,
       "originalBytesAvailableInGitHubArtifact": true,
       "originalBytesAvailableLocally": false,
@@ -551,7 +551,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "PENDING_FULL_PLAYBACK",
-      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ARTIFACT_EXTRACTION_AND_VISUAL_REVIEW",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-22",
         "pageTitle": "Wild Nile Crocodile in Natural Habitat",
@@ -565,8 +565,8 @@
         "metadataMatch": "VERIFIED_BY_SOURCE_PAGE_AND_ACQUISITION_ARTIFACT",
         "visualMatch": "PENDING_FULL_PLAYBACK"
       },
-      "excludedFromProduction": false,
-      "exclusionReason": "Not excluded from review. Acquired for review only; full human playback, third-party-rights review and explicit production selection remain pending.",
+      "excludedFromProduction": true,
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": null,
       "reviewRenderEligible": true,
       "productionEligible": false,
@@ -589,7 +589,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": "de3c3a47107e1c5ed30738155515e12a2328b1a7dc91f8b3cadc47536ad6ab8b",
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE",
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION",
       "acquisitionArtifactId": 14736582634,
       "originalBytesAvailableInGitHubArtifact": true,
       "originalBytesAvailableLocally": false,
@@ -621,7 +621,7 @@
       "localMediaPath": null,
       "rightsConfirmed": false,
       "humanVisualReview": "PENDING_FULL_PLAYBACK",
-      "status": "CANDIDATE_REVIEW_PENDING_LOCAL_ARTIFACT_EXTRACTION_AND_VISUAL_REVIEW",
+      "status": "REVIEW_ONLY_AI_RECONSTRUCTION_REFERENCE",
       "sourcePageEvidence": {
         "checkedAt": "2026-11-22",
         "pageTitle": "Aerial View of Crocodiles in Lower Zambezi River",
@@ -635,8 +635,8 @@
         "metadataMatch": "VERIFIED_BY_SOURCE_PAGE_AND_ACQUISITION_ARTIFACT",
         "visualMatch": "PENDING_FULL_PLAYBACK"
       },
-      "excludedFromProduction": false,
-      "exclusionReason": "Not excluded from review. Acquired for review only; full human playback, third-party-rights review and explicit production selection remain pending.",
+      "excludedFromProduction": true,
+      "exclusionReason": "Legacy stock/reference asset retained only for research and visual reference. It is not a production visual source; production uses a disclosed ultra-realistic AI-generated wildlife reconstruction. Do not request a user video upload.",
       "excludedAt": null,
       "reviewRenderEligible": true,
       "productionEligible": false,
@@ -659,7 +659,7 @@
       "rightsEvidencePath": "content/media/pexels-license-evidence-2026-11-22.md",
       "sha256": "4eef20f3ed6bcbe086513d10a6f9c3f6770cf2957a66d36a4e840ac595324464",
       "selectedForProduction": false,
-      "selectionStatus": "REVIEW_CANDIDATE_NOT_SELECTED_FOR_CURRENT_RELEASE",
+      "selectionStatus": "REVIEW_ONLY_NOT_SELECTED_FOR_AI_RECONSTRUCTION_PRODUCTION",
       "acquisitionArtifactId": 14736582634,
       "originalBytesAvailableInGitHubArtifact": true,
       "originalBytesAvailableLocally": false,
@@ -676,7 +676,7 @@
     "Supplemental crocodile Pexels 20443910 has no Canva asset ID; its original MP4 is in the review artifact, but its per-file SHA-256 remains pending extraction. It is not selected for production.",
     "No imported Canva candidate is rights-cleared or release-eligible."
   ],
-  "notes": "The ten imported Canva wildlife clips remain provenance/review-only inventory records. Pexels/Pixabay stock is not authorized as a substitute for original creator-captured wildlife media. The original five Canva imports remain three review candidates and two excluded assets. Five additional Canva-imported crocodile Pexels clips remain review-only: their original MP4s are present in GitHub review artifact 14736582634, five per-file SHA-256 values are recorded, and all five passed technical probe/full decode. Their original bytes are not materialized into the local production workspace; full human playback, third-party-rights review and explicit production selection remain pending. The sixth supplemental crocodile clip 20443910 has no Canva asset ID and remains in the separate source register with its per-file SHA pending extraction. No stock candidate is production-eligible, selected for production or release-authorized.",
+  "notes": "Legacy Canva/Pexels/NOAA media remains reference-only and is excluded from production. Do not request user video uploads. Final production visuals must be disclosed ultra-realistic AI-generated wildlife reconstructions with exact generation receipts, output hashes, provider-rights review, technical validation and human quality review. No AI production render is currently recorded.",
   "historicalBlockingEvidence": [
     "The five Canva asset IDs and media metadata are recorded, but original MP4 files are not present in the repository.",
     "Four candidate Pexels pages were checked against creator, dimensions and duration. Three match the recorded metadata; one zebra clip has a 1-second duration mismatch. Canva-to-Pexels visual matching remains pending because the source preview could not be independently retrieved in this verification pass.",
@@ -703,5 +703,7 @@
     "currentReleaseSelectedAssetCount": 0,
     "activeShort001Sources": "content/short-001-acquisition-manifest.json",
     "activeLongFormSources": "content/long-form-render-manifest.json"
-  }
+  },
+  "productionVisualPolicy": "AI_GENERATED_RECONSTRUCTION_REQUIRED",
+  "userVideoUploadRequired": false
 }
