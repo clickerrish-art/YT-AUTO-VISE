@@ -5,17 +5,17 @@
   "approvedBy": "",
   "approvedAt": "",
   "approvalReference": "",
-  "operationalQueueSha256": "ab24efa412e08578e1a9f2a09de11d19791dfb65cf414afbe65e70df3526bf31",
-  "detailedQueueSha256": "9c1b7b3f02da3fc7704c0c650b8b4e29b504e1cbc12bc308e694a5705abb43ea",
+  "operationalQueueSha256": "a67dc46740d5da1f1b8dce5a5b08c00ff45a14c68de32ec2af51dc307d32fe7c",
+  "detailedQueueSha256": "c2f9273a66bd8117104aec19cd68f0f9242651112cf183e62cdf059a6a14ce77",
   "mappings": [
     {
       "operationalItemId": "long-form-plan-wildlife-video",
-      "detailedItemId": "",
+      "detailedItemId": "long-001-wildlife-video-planning",
       "cyclePosition": 1
     },
     {
       "operationalItemId": "long-form-faceless-wildlife-workflow",
-      "detailedItemId": "",
+      "detailedItemId": "long-002-faceless-wildlife-workflow",
       "cyclePosition": 2
     }
   ]
