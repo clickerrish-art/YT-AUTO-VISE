@@ -329,7 +329,7 @@ test("readiness rejects valid JSON roots that are not objects for every required
     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "readiness-json-root-"));
     try {
       for (const relative of ["scripts", "config", "content"]) fs.mkdirSync(path.join(directory, relative), { recursive: true });
-      for (const relative of ["scripts/production-readiness.mjs", "scripts/production-quality-approval.mjs", "scripts/production-quality-scorecard.mjs", "scripts/safe-media-path.mjs", "scripts/product-promotion-gate.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "scripts/queue-identity-policy.mjs", "config/products.json", "config/weekly-content-plan.json", "content/queue.json"]) {
+      for (const relative of ["scripts/production-readiness.mjs", "scripts/production-quality-approval.mjs", "scripts/production-quality-scorecard.mjs", "scripts/safe-media-path.mjs", "scripts/product-promotion-gate.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "scripts/queue-identity-policy.mjs", "scripts/history-evidence-freshness.mjs", "config/products.json", "config/weekly-content-plan.json", "content/queue.json"]) {
         fs.copyFileSync(path.join(sourceRoot, relative), path.join(directory, relative));
       }
       fs.writeFileSync(path.join(directory, targetPath), "null\n");
