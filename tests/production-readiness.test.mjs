@@ -353,7 +353,7 @@ test("readiness reports malformed render-manifest asset paths without crashing J
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "readiness-manifest-path-"));
   try {
     for (const relative of ["scripts", "config", "content", "media"]) fs.mkdirSync(path.join(directory, relative), { recursive: true });
-    for (const relative of ["scripts/production-readiness.mjs", "scripts/production-quality-approval.mjs", "scripts/production-quality-scorecard.mjs", "scripts/safe-media-path.mjs", "scripts/product-promotion-gate.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "scripts/queue-identity-policy.mjs", "config/products.json", "config/weekly-content-plan.json", "content/queue.json", "content/next-short.json"]) {
+    for (const relative of ["scripts/production-readiness.mjs", "scripts/production-quality-approval.mjs", "scripts/production-quality-scorecard.mjs", "scripts/safe-media-path.mjs", "scripts/product-promotion-gate.mjs", "scripts/schedule-policy.mjs", "scripts/safe-project-file.mjs", "scripts/queue-identity-policy.mjs", "scripts/history-evidence-freshness.mjs", "config/products.json", "config/weekly-content-plan.json", "content/queue.json", "content/next-short.json"]) {
       fs.copyFileSync(path.join(sourceRoot, relative), path.join(directory, relative));
     }
     fs.writeFileSync(path.join(directory, "content/long-form-render-manifest.json"), JSON.stringify({
