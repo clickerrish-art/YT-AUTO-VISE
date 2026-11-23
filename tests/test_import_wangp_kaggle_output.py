@@ -66,8 +66,15 @@ class WanGPKaggleImportTests(unittest.TestCase):
         config = root / "config" / "video-generation.json"
         config.parent.mkdir(parents=True)
         config.write_text(json.dumps({
-            "productionDisposition": {"enabled": False},
-            "safety": {"aiGeneratedWildlifeVisualsAllowed": False}
+            "channel": "SonicVhibez",
+            "productionDisposition": {"enabled": False, "noGenerationAuthorized": True},
+            "safety": {"aiGeneratedWildlifeVisualsAllowed": True},
+            "generation": {"enabled": False, "modelRightsVerification": {"verified": False}},
+            "runtime": {"zeroCostBackendVerification": {"verified": False}},
+            "licensing": {
+                "commercialUseApproved": False,
+                "mirrorProvenanceReview": {"status": "HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE"}
+            }
         }), encoding="utf-8")
         args = [
             str(SCRIPT),
@@ -75,8 +82,13 @@ class WanGPKaggleImportTests(unittest.TestCase):
             "--manifest", str(root / "missing.json"),
             "--repo-root", str(root)
         ]
-        with patch.object(sys, "argv", args):
+        with patch.object(sys, "argv", args), patch("sys.stderr", new_callable=__import__("io").StringIO) as stderr:
             self.assertEqual(module.main(), 2)
+        message = stderr.getvalue()
+        self.assertIn("generation.enabled must be true", message)
+        self.assertIn("zero-cost GPU backend must be independently verified", message)
+        self.assertIn("exact checkpoint and VAE rights/provenance must be verified", message)
+        self.assertNotIn("AI wildlife reconstruction is not permitted", message)
 
     def _authorized_policy(self):
         return {
