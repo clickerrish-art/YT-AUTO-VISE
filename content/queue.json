@@ -37,7 +37,7 @@
         "max": 10
       },
       "status": "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
-      "productionNotes": "Use content/long-form-scripts.md. Narration/audio/caption artifact must be generated and reviewed; add verified rights-cleared visuals and complete content/long-form-render-manifest.json before rendering."
+      "productionNotes": "Use content/long-form-scripts.md. Restructure and repurpose existing project material, then generate an ultra-realistic AI wildlife reconstruction; do not request a user video upload. The final output still requires provider-rights review, approved narration, synchronized captions, synthetic-media disclosure, technical validation and exact-hash human review."
     },
     {
       "id": "long-form-faceless-wildlife-workflow",
@@ -50,7 +50,7 @@
         "max": 10
       },
       "status": "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
-      "productionNotes": "Use content/long-form-scripts.md. Narration/audio/caption artifact must be generated and reviewed; add verified rights-cleared visuals and complete content/long-form-render-manifest.json before rendering."
+      "productionNotes": "Use content/long-form-scripts.md. Restructure and repurpose existing project material, then generate an ultra-realistic AI wildlife reconstruction; do not request a user video upload. The final output still requires provider-rights review, approved narration, synchronized captions, synthetic-media disclosure, technical validation and exact-hash human review."
     },
     {
       "id": "wildlife-vault-001",
@@ -351,7 +351,11 @@
     "stockPhotographsAllowed": false,
     "status": "ORIGINAL_CREATOR_CAPTURED_ONLY; PEXELS_PIXABAY_EXCLUDED"
   },
-  "notes": [
-    "HeyGen denied zero-cost commercial-use rights for the existing Roderic Free-plan output, which remains internal-only. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited by Speechma Terms; the paid API is not authorized. No paid upgrade or paid credits are authorized. All queue items remain planning/draft-only until original media, narration, rights, review and release gates pass."
-  ]
+  "notes": "All queue items remain planning/draft-only until AI-generated wildlife visuals, narration, provider rights, disclosure, technical validation, human review and release gates pass. Never request video uploads. Keep publishing disabled; paid generation requires explicit owner approval.",
+  "originalCreatorCapturedMediaRequired": false,
+  "aiGeneratedWildlifeVisualsRequired": true,
+  "aiGeneratedWildlifeVisualsAllowed": true,
+  "userVideoUploadRequired": false,
+  "stockMediaAllowed": false,
+  "mediaProductionPolicyStatus": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REVIEW_ONLY"
 }
