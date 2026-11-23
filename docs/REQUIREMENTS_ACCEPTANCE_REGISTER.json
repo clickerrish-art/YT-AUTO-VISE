@@ -2972,24 +2972,33 @@
   },
   "latestLiveCompareAt": "2026-11-22T22:23:48.118Z",
   "latestExactCiCheckpoint": {
-    "exactSourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "automationRun": 45083543471,
+    "exactSourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "automationRun": 45144737151,
     "nodeTestFiles": {
-      "passed": 191,
+      "passed": 192,
       "failed": 0,
       "skipped": 0
     },
     "nodeTests": {
-      "passed": 1130,
+      "passed": 1134,
       "failed": 0,
       "skipped": 0
     },
-    "browserE2ERun": 45083543403,
+    "pythonTests": {
+      "passed": 108,
+      "failed": 0,
+      "skipped": 0,
+      "sourceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151"
+    },
+    "npmAuditVulnerabilities": 0,
+    "npmAuditSourceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "browserE2ERun": 45144737085,
     "browserE2EStatus": "PASS",
     "lastBrowserE2E": {
-      "sourceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "browserRun": 45083543403,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543403",
+      "sourceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "browserRun": 45144737085,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737085",
       "browserJourneys": {
         "passed": 41,
         "total": 41,
@@ -2997,37 +3006,23 @@
         "skipped": 0
       }
     },
-    "pythonTests": {
-      "passed": 108,
-      "failed": 0,
-      "skipped": 0,
-      "sourceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471"
-    },
-    "npmAuditVulnerabilities": 0,
-    "npmAuditSourceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "runnerBridgeSafetyRun": 45083543492,
-    "deploymentRecoveryRun": 45083543553,
-    "queueReadinessRun": 45083543439,
-    "cloudflareDurableStateRun": 45083543460,
-    "productionReadiness": {
-      "status": "HOLD",
-      "run": 45083543382,
-      "branchHead": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
-      "sourceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "blockers": 22,
-      "artifactId": 14778470367,
-      "artifactSha256": "6de6ed2f4817befd6df688b76e5894daee3899be0b58fc44eab64303afe61465"
-    },
     "routeMatrix": {
       "routes": 50,
       "overallPass": 41,
       "overallNotTested": 2,
       "overallBlocked": 7,
       "authenticationNegativePass": 50,
-      "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd"
+      "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4"
     },
-    "note": "Exact source/test SHA 940fcdd776669c44bdd73619374e567c66655fbd passed 1,130 Node tests/191 files, 108 Python tests, 41/41 browser journeys, zero failures/skips, npm audit 0. Production readiness remains HOLD with 22 blockers."
+    "productionReadiness": {
+      "status": "HOLD",
+      "run": 45144736959,
+      "sourceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "blockers": 22,
+      "artifactId": 14802534911,
+      "artifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071"
+    },
+    "note": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: 1,134 Node/192 files, 108 Python, 41/41 browser journeys, zero failures/skips, npm audit 0. Production readiness HOLD with 22 blockers."
   },
   "latestFullNodeRegression": {
     "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
@@ -3043,9 +3038,9 @@
     "npmAuditVulnerabilities": 0
   },
   "latestDashboardBrowserE2E": {
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "runId": 45083543403,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543403",
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "runId": 45144737085,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737085",
     "tests": 41,
     "passed": 41,
     "failed": 0,
@@ -3061,39 +3056,39 @@
     "note": "Time-boundary regression tests now use a deterministic Johannesburg clock; all 1,130 Node tests and 108 Python tests pass with zero skips."
   },
   "currentRunEvidence": {
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "nodeRunId": 45083543471,
-    "lockfileRunId": 45083543471,
-    "deploymentRecoveryRunId": 45083543553,
-    "runnerBridgeSafetyRunId": 45083543492,
-    "nodeTests": 1130,
-    "nodeTestFiles": 191,
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "nodeRunId": 45144737151,
+    "lockfileRunId": 45144737151,
+    "deploymentRecoveryRunId": 45144737081,
+    "runnerBridgeSafetyRunId": 45144737116,
+    "nodeTests": 1134,
+    "nodeTestFiles": 192,
     "pythonTests": 108,
-    "pythonEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+    "pythonEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
     "npmAuditVulnerabilities": 0,
-    "npmAuditEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+    "npmAuditEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
     "browserE2EStatus": "PASS",
-    "lastBrowserEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "lastBrowserRunId": 45083543403,
-    "productionReadinessRunId": 45083543382,
-    "productionReadinessEvidenceSha": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
+    "lastBrowserEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "lastBrowserRunId": 45144737085,
+    "productionReadinessRunId": 45144736959,
+    "productionReadinessEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
     "productionReadinessBlockers": 22,
-    "queueReadinessRunId": 45083543439,
+    "queueReadinessRunId": 45144737327,
     "cloudflareStagingAuthSmoke": "NOT_TESTED_ON_PULL_REQUEST",
     "providerDraftInterruptedRecovery": "PASS_MOCKED",
-    "note": "Exact source/test SHA 940fcdd776669c44bdd73619374e567c66655fbd: 1,130 Node/191 files, 108 Python, zero skips/failures, npm audit 0, browser 41/41. Current PR tip d6828dc22ec7e2999ece830c2ebaf20990f615c3 adds evidence-only matrix refreshes; no live provider or production actions.",
-    "branchHead": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
-    "productionReadinessArtifactId": 14778470367,
-    "productionReadinessArtifactSha256": "6de6ed2f4817befd6df688b76e5894daee3899be0b58fc44eab64303afe61465"
+    "note": "Exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: 1,134 Node/192 files, 108 Python, zero skips/failures, npm audit 0, browser 41/41. Production readiness HOLD with 22 owner/media/rights/review blockers.",
+    "branchHead": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "productionReadinessArtifactId": 14802534911,
+    "productionReadinessArtifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071"
   },
   "latestExactHeadSnapshot": {
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
     "branch": "codex/marketing-machine-audit-fixes",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5641,
+    "aheadBy": 5652,
     "behindBy": 0,
-    "changedPaths": 548,
+    "changedPaths": 552,
     "criticalModules": 17,
     "finalTreeDeletions": 0,
     "patchEquivalentCommits": 0,
@@ -3102,77 +3097,76 @@
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
-      "changedFiles": 548
+      "headSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "changedFiles": 552
     },
     "branchProtection": "UNVERIFIED_HTTP_403",
     "ci": {
       "automationSecurity": {
         "status": "PASS",
-        "runId": 45083543471,
-        "nodeTests": 1130,
-        "nodeFiles": 191,
+        "runId": 45144737151,
+        "nodeTests": 1134,
+        "nodeFiles": 192,
         "pythonTests": 108,
         "skipped": 0,
         "npmAuditVulnerabilities": 0
       },
       "dashboardE2E": {
         "status": "PASS",
-        "runId": 45083543403,
-        "sourceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+        "runId": 45144737085,
+        "sourceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
         "journeys": 41,
         "passed": 41
       },
       "queueReadiness": {
         "status": "PASS",
-        "runId": 45083543439,
+        "runId": 45144737327,
         "publishingEnabled": false
       },
       "cloudflareDurableStateUnit": {
         "status": "PASS",
-        "runId": 45083543460
+        "runId": 45144736941
       },
       "cloudflareRunnerBridgeSafety": {
         "status": "PASS",
-        "runId": 45083543492
+        "runId": 45144737116
       },
       "deploymentRecovery": {
         "status": "PASS",
-        "runId": 45083543553
+        "runId": 45144737081
       },
       "contentQuality": {
         "status": "PASS",
-        "runId": 45083543500
+        "runId": 45144737235
       },
       "metadata": {
-        "status": "PASS_WITH_HOLD",
-        "runId": 45083543539,
-        "blockers": 22
+        "status": "PASS",
+        "runId": 45144736844
       },
       "baselineComparison": {
         "status": "PASS",
-        "runId": 45083543427,
+        "runId": 45144737247,
         "mainNpmAuditVulnerabilities": 4,
         "candidateNpmAuditVulnerabilities": 0
       },
       "branchInventory": {
         "status": "PASS",
-        "runId": 45083543496,
-        "head": "940fcdd776669c44bdd73619374e567c66655fbd",
-        "aheadBy": 5639,
+        "runId": 45144737211,
+        "head": "96ffab66373265d82de576ee16f414b27d7678c4",
+        "aheadBy": 5652,
         "behindBy": 0,
-        "changedFiles": 548,
+        "changedFiles": 552,
         "deletions": 0,
-        "artifactId": 14777339008
+        "artifactId": 14803901540
       },
       "productionReadiness": {
         "status": "HOLD",
-        "runId": 45083543382,
-        "head": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
-        "sourceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+        "runId": 45144736959,
+        "head": "96ffab66373265d82de576ee16f414b27d7678c4",
+        "sourceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
         "blockers": 22,
-        "artifactId": 14778470367,
-        "artifactSha256": "6de6ed2f4817befd6df688b76e5894daee3899be0b58fc44eab64303afe61465"
+        "artifactId": 14802534911,
+        "artifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071"
       }
     },
     "api": {
@@ -3192,7 +3186,7 @@
       "DASH_001": "NOT_TESTED"
     },
     "productionReadinessBlockers": 22,
-    "branchHead": "d6828dc22ec7e2999ece830c2ebaf20990f615c3"
+    "branchHead": "96ffab66373265d82de576ee16f414b27d7678c4"
   },
   "dashboardControlMatrixCounts": {
     "controls": 121,
@@ -3261,11 +3255,12 @@
     "browserSkipped": 0
   },
   "latestVerifiedExecution": {
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "branchHead": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
-    "automationRunId": 45083543471,
-    "browserRunId": 45083543403,
-    "nodeTests": 1130,
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "branchHead": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "automationRunId": 45144737151,
+    "browserRunId": 45144737085,
+    "nodeTests": 1134,
+    "nodeFiles": 192,
     "pythonTests": 108,
     "browserJourneys": 41,
     "npmAuditVulnerabilities": 0,
@@ -3420,46 +3415,115 @@
       "requiredResolution": "Owner enables/verifies R2 in Cloudflare Dashboard or removes the unused binding; then rerun a read-only artifact accounting check."
     }
   ],
-  "updatedAt": "2026-11-22T23:32:30Z",
+  "updatedAt": "2026-11-23T09:14:20Z",
   "currentEvidenceRefresh": {
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "branchHead": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
-    "automationRun": 45083543471,
-    "browserRun": 45083543403,
-    "inventoryRun": 45083543496,
-    "readinessRun": 45083543382,
-    "readinessBlockers": 22,
-    "nodeTests": 1130,
-    "pythonTests": 108,
-    "browserJourneys": 41,
-    "npmAuditVulnerabilities": 0,
-    "apiRoutes": {
-      "total": 50,
-      "pass": 41,
-      "notTested": 2,
-      "blocked": 7,
-      "authNegativePass": 50
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "recordedAt": "2026-11-23T09:14:20Z",
+    "ci": {
+      "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "automationRunId": 45144737151,
+      "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151",
+      "nodeTestFiles": 192,
+      "nodeTests": 1134,
+      "nodeFailed": 0,
+      "nodeSkipped": 0,
+      "pythonTests": 108,
+      "pythonFailed": 0,
+      "pythonSkipped": 0,
+      "npmAuditVulnerabilities": 0,
+      "contentQualityRunId": 45144737235,
+      "contentQualityRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737235",
+      "browserRunId": 45144737085,
+      "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737085",
+      "browserJourneys": 41,
+      "browserPassed": 41,
+      "browserFailed": 0,
+      "browserSkipped": 0,
+      "baselineComparisonRunId": 45144737247,
+      "baselineComparisonRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737247",
+      "baselineComparison": "PASS",
+      "metadataRunId": 45144736844,
+      "metadataStatus": "PASS",
+      "queueReadinessRunId": 45144737327,
+      "queueReadinessStatus": "PASS",
+      "deploymentRecoveryRunId": 45144737081,
+      "deploymentRecoveryStatus": "PASS",
+      "runnerBridgeSafetyRunId": 45144737116,
+      "runnerBridgeSafetyStatus": "PASS",
+      "durableStateUnitRunId": 45144736941,
+      "durableStateUnitStatus": "PASS",
+      "durableStatePullRequestRunId": 45144737696,
+      "durableStatePullRequestStatus": "PASS",
+      "productionQualityEnforcementRunId": 45144737440,
+      "productionQualityEnforcementStatus": "PASS",
+      "metaPageConnectionRunId": 45144736951,
+      "metaPageConnectionStatus": "PASS",
+      "instagramSafetyRunId": 45144737053,
+      "instagramSafetyStatus": "PASS",
+      "localNatureFrontiersDraftPackageRunId": 45144737278,
+      "localNatureFrontiersDraftPackageStatus": "PASS",
+      "signedEditorialApprovalSafetyRunId": 45144737018,
+      "signedEditorialApprovalSafetyStatus": "PASS",
+      "productionReadinessRunId": 45144736959,
+      "productionReadinessStatus": "HOLD",
+      "productionReadinessBlockers": 22,
+      "readinessArtifactId": 14802534911,
+      "readinessArtifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071",
+      "apiRoutes": 50,
+      "apiPositivePass": 41,
+      "apiNotTested": 2,
+      "apiBlocked": 7,
+      "apiAuthNegativePass": 50,
+      "dashboardControls": 121,
+      "dashboardForms": 17,
+      "dashboardFormOwned": 104,
+      "dashboardStandalone": 17,
+      "dashboardOverallAcceptance": "NOT_TESTED",
+      "apiOverallAcceptance": "BLOCKED",
+      "schedulingAcceptance": "NOT_TESTED",
+      "deploymentProductionAcceptance": "NOT_TESTED",
+      "gitSemanticAndProtectionAcceptance": "NOT_TESTED",
+      "publishingEnabled": false,
+      "releaseDecision": "HOLD"
     },
-    "dashboard": {
-      "controls": 121,
-      "forms": 17,
-      "overallAcceptance": "NOT_TESTED"
+    "inventory": {
+      "runId": 45144737211,
+      "artifactId": 14803901540,
+      "artifactSha256": "4283f10f56b1e01b3a98230b660507e3f54d5df5839af2af1b804e55b0ca29fd",
+      "head": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "aheadBy": 5652,
+      "behindBy": 0,
+      "changedFiles": 552,
+      "deletions": 0,
+      "criticalModules": 17,
+      "workingTreeClean": true,
+      "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+      "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0"
+    },
+    "requirementCountsStatus": "HISTORICAL_NOT_REEVALUATED",
+    "requirementCounts": {
+      "total": 89,
+      "PASS": 71,
+      "NOT_TESTED": 8,
+      "BLOCKED": 10,
+      "FAIL": 0
     },
     "releaseDecision": "HOLD"
   },
   "latestRegression": {
-    "recordedAt": "2026-11-22T23:32:30Z",
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+    "recordedAt": "2026-11-23T09:14:20Z",
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
     "implementationBranch": "codex/marketing-machine-audit-fixes",
     "runs": [
       {
-        "id": 45083543471,
+        "id": 45144737151,
         "name": "Validate SonicVhibez automation",
         "status": "success",
         "checks": [
           "locked dependency installation",
           "npm audit: 0 vulnerabilities",
-          "191 Node.js test files passed",
+          "192 Node.js test files passed",
+          "1,134 Node tests passed",
           "zero skipped tests",
           "FFmpeg renderer integration tests",
           "campaign destination/disclosure safety",
@@ -3470,15 +3534,15 @@
         ]
       },
       {
-        "id": 45083543500,
+        "id": 45144737235,
         "name": "Content quality checks",
         "status": "success",
         "checks": [
-          "canonical 1,130-test Node suite"
+          "canonical 1,134-test Node suite"
         ]
       },
       {
-        "id": 45083543403,
+        "id": 45144737085,
         "name": "Dashboard browser end-to-end acceptance",
         "status": "success",
         "checks": [
@@ -3486,18 +3550,20 @@
         ]
       },
       {
-        "id": 45083543427,
+        "id": 45144737247,
         "name": "Isolated main/candidate baseline",
         "status": "success",
         "checks": [
-          "main tests pass; main audit 4 moderate; candidate audit 0"
+          "exact main and candidate Node/Python tests pass",
+          "main npm audit 4 moderate",
+          "candidate npm audit 0"
         ]
       }
     ],
     "pythonUnitTests": "PASS_108",
     "browserE2E": "PASS_41_OF_41",
     "acceptancePromotion": "NONE",
-    "note": "Exact-SHA regression evidence only; it does not promote DASH-001, API-001, SCHED-001, DEPLOY-001 or GIT-002 or certify production media/rights/live publishing."
+    "note": "Exact-SHA regression evidence only; does not promote DASH-001, API-001, SCHED-001, DEPLOY-001 or GIT-002, nor certify production media/rights/live publishing."
   },
   "voiceSafetyPRReview": {
     "recordedAt": "2026-11-20T15:46:33Z",
@@ -3527,16 +3593,16 @@
     "note": "The PR removes automatic push/schedule triggers from Edge TTS narration workflows and adds explicit non-commercial internal-audition guards/manifests. The successful workflow run is on the exact current PR head. The PR is not mergeable against its recorded base; current main has advanced. No rebase, branch update, merge or main modification was attempted. Main still has automatic narration workflow triggers until a reviewed fix lands."
   },
   "latestApiAcceptanceRefresh": {
-    "recordedAt": "2026-11-22T23:32:30Z",
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "latestBranchHead": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
-    "automationRun": 45083543471,
-    "nodeTestFiles": 191,
-    "nodeTests": 1130,
+    "recordedAt": "2026-11-23T09:14:20Z",
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "latestBranchHead": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "automationRun": 45144737151,
+    "nodeTestFiles": 192,
+    "nodeTests": 1134,
     "pythonTests": 108,
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "browserRun": 45083543403,
+    "browserRun": 45144737085,
     "browserJourneys": 41,
     "browserPassed": 41,
     "routeCount": 50,
@@ -3545,8 +3611,8 @@
     "notTestedRoutes": 2,
     "blockedRoutes": 7,
     "verdict": "API-001 BLOCKED — 41/50 routes have local positive acceptance, two remain NOT_TESTED and seven remain BLOCKED by owner/provider prerequisites.",
-    "inventoryRunId": 45083543496,
-    "inventoryArtifactId": 14777339008
+    "inventoryRunId": 45144737211,
+    "inventoryArtifactId": 14803901540
   },
   "latestImplementationUpdate": {
     "implementationHeadSha": "d2a7be4733939cffca0423ba28675977af6ab346",
@@ -3589,7 +3655,7 @@
       "liveProviderOperations": "NOT_TESTED"
     }
   },
-  "latestRegisterRefreshSourceHead": "940fcdd776669c44bdd73619374e567c66655fbd",
+  "latestRegisterRefreshSourceHead": "96ffab66373265d82de576ee16f414b27d7678c4",
   "currentExactHeadExecution": {
     "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
     "branch": "codex/marketing-machine-audit-fixes",
@@ -4041,36 +4107,36 @@
     ]
   },
   "branchInventoryHead": "940fcdd776669c44bdd73619374e567c66655fbd",
-  "latestFullNodeTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-  "latestDashboardBrowserTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+  "latestFullNodeTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+  "latestDashboardBrowserTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
   "latestExactHeadRefresh": {
-    "recordedAt": "2026-11-22T23:32:30Z",
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "branchHeadAtRegisterRefresh": "d6828dc22ec7e2999ece830c2ebaf20990f615c3",
+    "recordedAt": "2026-11-23T09:14:20Z",
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "branchHeadAtRegisterRefresh": "96ffab66373265d82de576ee16f414b27d7678c4",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "branchAheadBy": 5641,
+    "branchAheadBy": 5652,
     "branchBehindBy": 0,
-    "changedFiles": 548,
+    "changedFiles": 552,
     "deletions": 0,
     "workingTreeClean": true,
     "inventory": {
-      "runId": 45083543496,
-      "artifactId": 14777339008,
-      "artifactSha256": "d8146566361ae18539a9995dd6fa893ef91bbf26bea38e5f9c8ff43cf359ed2a",
-      "head": "940fcdd776669c44bdd73619374e567c66655fbd",
-      "aheadBy": 5639,
+      "runId": 45144737211,
+      "artifactId": 14803901540,
+      "artifactSha256": "4283f10f56b1e01b3a98230b660507e3f54d5df5839af2af1b804e55b0ca29fd",
+      "head": "96ffab66373265d82de576ee16f414b27d7678c4",
+      "aheadBy": 5652,
       "behindBy": 0,
-      "changedFiles": 548,
+      "changedFiles": 552,
       "deletions": 0,
       "criticalModules": 17
     },
     "verification": {
       "automation": {
-        "runId": 45083543471,
+        "runId": 45144737151,
         "status": "PASS",
-        "nodeTests": 1130,
-        "nodeFiles": 191,
+        "nodeTests": 1134,
+        "nodeFiles": 192,
         "nodeFailed": 0,
         "nodeSkipped": 0,
         "pythonTests": 108,
@@ -4079,13 +4145,13 @@
         "npmAuditVulnerabilities": 0
       },
       "contentQuality": {
-        "runId": 45083543500,
+        "runId": 45144737235,
         "status": "PASS",
-        "nodeTests": 1130,
-        "nodeFiles": 191
+        "nodeTests": 1134,
+        "nodeFiles": 192
       },
       "dashboardBrowser": {
-        "runId": 45083543403,
+        "runId": 45144737085,
         "status": "PASS",
         "journeys": 41,
         "passed": 41,
@@ -4093,61 +4159,61 @@
         "skipped": 0
       },
       "baselineComparison": {
-        "runId": 45083543427,
+        "runId": 45144737247,
         "status": "PASS",
         "mainNpmAuditVulnerabilities": 4,
         "candidateNpmAuditVulnerabilities": 0
       },
       "metadata": {
-        "runId": 45083543539,
-        "status": "PASS_WITH_HOLD"
+        "runId": 45144736844,
+        "status": "PASS"
       },
       "queueReadiness": {
-        "runId": 45083543439,
+        "runId": 45144737327,
         "status": "PASS"
       },
       "deploymentRecovery": {
-        "runId": 45083543553,
+        "runId": 45144737081,
         "status": "PASS"
       },
       "runnerBridgeSafety": {
-        "runId": 45083543492,
+        "runId": 45144737116,
         "status": "PASS"
       },
       "durableStateUnit": {
-        "runId": 45083543460,
+        "runId": 45144736941,
         "status": "PASS"
       },
       "durableStatePullRequest": {
-        "runId": 45083543588,
+        "runId": 45144737696,
         "status": "PASS"
       },
       "productionQualityEnforcement": {
-        "runId": 45083543387,
+        "runId": 45144737440,
         "status": "PASS"
       },
       "metaPageConnection": {
-        "runId": 45083543519,
+        "runId": 45144736951,
         "status": "PASS"
       },
       "instagramSafety": {
-        "runId": 45083543458,
+        "runId": 45144737053,
         "status": "PASS"
       },
       "localNatureFrontiersDraftPackage": {
-        "runId": 45083543409,
+        "runId": 45144737278,
         "status": "PASS"
       },
       "signedEditorialApprovalSafety": {
-        "runId": 45083543390,
+        "runId": 45144737018,
         "status": "PASS"
       },
       "productionReadiness": {
-        "runId": 45083543382,
+        "runId": 45144736959,
         "status": "HOLD",
         "blockers": 22,
-        "artifactId": 14778470367,
-        "artifactSha256": "6de6ed2f4817befd6df688b76e5894daee3899be0b58fc44eab64303afe61465"
+        "artifactId": 14802534911,
+        "artifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071"
       }
     },
     "api": {
@@ -4180,6 +4246,6 @@
     "releaseDecision": "HOLD",
     "productionReadinessBlockers": 22,
     "publishingEnabled": false,
-    "note": "Exact test evidence is on current source/test SHA; current branch tip after it is documentation-only matrix refresh. Requirement-row totals remain historical and not re-evaluated."
+    "note": "Exact-SHA CI evidence refreshed. Requirement-row counts remain historical and have not been re-evaluated; no acceptance row is promoted solely by this regression run."
   }
 }

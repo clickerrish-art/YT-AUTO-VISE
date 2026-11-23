@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-22T22:38:00Z",
+  "generatedAt": "2026-11-23T09:14:20Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "sourceHead": "940fcdd776669c44bdd73619374e567c66655fbd",
+  "sourceHead": "96ffab66373265d82de576ee16f414b27d7678c4",
   "sourceBlobs": {
     "dashboardHtml": "aa9ad10df1489e00869045a4997e98c33dfd093f",
     "dashboardInventoryScript": "ba28f86acf755ada2ea922b192b9b120355ce201"
@@ -19610,12 +19610,12 @@
   "overallAcceptance": "NOT_TESTED",
   "statusMeaning": "PASS means the listed control evidence and matrix consistency checks passed. It does not mean every applicable control success, authorization, persistence, concurrency, error-feedback and accessibility path has been fully accepted.",
   "currentHeadRefresh": {
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "updatedAt": "2026-11-22T23:32:30Z",
-    "automationRunId": 45083543471,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471",
-    "nodeTestFiles": 191,
-    "nodeTests": 1130,
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "updatedAt": "2026-11-23T09:14:20Z",
+    "automationRunId": 45144737151,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151",
+    "nodeTestFiles": 192,
+    "nodeTests": 1134,
     "nodeFailed": 0,
     "nodeSkipped": 0,
     "pythonTests": 108,
@@ -19623,31 +19623,31 @@
     "pythonSkipped": 0,
     "npmAuditVulnerabilities": 0,
     "browserE2EStatus": "PASS",
-    "lastBrowserEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "lastBrowserRunId": 45083543403,
-    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543403",
+    "lastBrowserEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "lastBrowserRunId": 45144737085,
+    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737085",
     "controls": 121,
     "forms": 17,
     "crossCuttingDimensions": 15,
     "overallAcceptance": "NOT_TESTED",
-    "note": "Exact branch HEAD 940fcdd776669c44bdd73619374e567c66655fbd: 191/191 Node test files (1,130 tests), 108 Python tests, 41/41 Chromium journeys and npm audit zero vulnerabilities; zero failures/skips. The dashboard's 121 controls and 17 forms have current browser evidence, but DASH-001 remains NOT_TESTED because not every applicable control has individually accepted success, authorization, persistence, restart, concurrency, actionable-error and accessibility evidence. Historical cross-cutting evidence is retained separately; no external provider publishing is authorized.",
-    "npmAuditLastVerifiedSha": "940fcdd776669c44bdd73619374e567c66655fbd"
+    "note": "Exact branch source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4: 192/192 Node test files (1,134 tests), 108 Python tests, 41/41 Chromium journeys and npm audit zero vulnerabilities; zero failures/skips. The 121 controls and 17 forms retain historical per-control evidence, but DASH-001 remains NOT_TESTED until every applicable control has individually accepted behavior evidence.",
+    "npmAuditLastVerifiedSha": "96ffab66373265d82de576ee16f414b27d7678c4"
   },
   "refreshedAt": "2026-11-22T23:32:30Z",
   "latestHeadVerification": {
-    "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "browserRunId": 45083543403,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543403",
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "browserRunId": 45144737085,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737085",
     "browserJourneys": {
       "passed": 41,
       "total": 41,
       "failed": 0,
       "skipped": 0
     },
-    "automationRunId": 45083543471,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543471",
-    "nodeTestFiles": 191,
-    "nodeTests": 1130,
+    "automationRunId": 45144737151,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151",
+    "nodeTestFiles": 192,
+    "nodeTests": 1134,
     "nodeFailed": 0,
     "nodeSkipped": 0,
     "pythonTests": 108,
@@ -19656,26 +19656,40 @@
     "npmAuditVulnerabilities": 0,
     "productionReadiness": {
       "status": "HOLD",
-      "runId": 45083543382,
+      "runId": 45144736959,
       "blockers": 22,
-      "artifactId": 14778470367,
-      "artifactSha256": "6de6ed2f4817befd6df688b76e5894daee3899be0b58fc44eab64303afe61465"
+      "artifactId": 14802534911,
+      "artifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071"
     },
     "overallAcceptance": "NOT_TESTED",
-    "note": "Exact branch HEAD 940fcdd776669c44bdd73619374e567c66655fbd passed 1,130 Node tests across 191 files, 108 Python tests, 41/41 Chromium journeys and npm audit zero vulnerabilities, with zero failures/skips. DASH-001 remains NOT_TESTED until each applicable control has complete individual behavior evidence. Production readiness remains HOLD with 22 blockers.",
-    "npmAuditLastVerifiedSha": "940fcdd776669c44bdd73619374e567c66655fbd"
+    "note": "Exact source/test SHA verified; dashboard journey suite passes 41/41, but DASH-001 remains NOT_TESTED because per-control acceptance coverage is incomplete.",
+    "npmAuditLastVerifiedSha": "96ffab66373265d82de576ee16f414b27d7678c4"
   },
-  "latestBranchTipAtEvidenceRefresh": "940fcdd776669c44bdd73619374e567c66655fbd",
+  "latestBranchTipAtEvidenceRefresh": "96ffab66373265d82de576ee16f414b27d7678c4",
   "latestBranchInventory": {
-    "runId": 45083543496,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45083543496",
-    "head": "940fcdd776669c44bdd73619374e567c66655fbd",
-    "aheadBy": 5639,
+    "runId": 45144737211,
+    "artifactId": 14803901540,
+    "artifactSha256": "4283f10f56b1e01b3a98230b660507e3f54d5df5839af2af1b804e55b0ca29fd",
+    "head": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "aheadBy": 5652,
     "behindBy": 0,
-    "changedFiles": 548,
+    "changedFiles": 552,
     "deletions": 0,
+    "criticalModules": 17,
     "workingTreeClean": true,
-    "artifactId": 14777339008,
-    "artifactSha256": "d8146566361ae18539a9995dd6fa893ef91bbf26bea38e5f9c8ff43cf359ed2a"
+    "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+    "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0"
+  },
+  "latestExactHeadBrowserVerification": {
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+    "browserRunId": 45144737085,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737085",
+    "journeysPassed": 41,
+    "journeysTotal": 41,
+    "failed": 0,
+    "skipped": 0,
+    "controls": 121,
+    "forms": 17,
+    "overallAcceptance": "NOT_TESTED"
   }
 }
