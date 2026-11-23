@@ -2679,7 +2679,11 @@
     "NOT_TESTED": 2,
     "BLOCKED": 7,
     "authenticationNegativePass": 50,
-    "authenticationNegativeNotTested": 0
+    "authenticationNegativeNotTested": 0,
+    "positivePass": 41,
+    "notTested": 0,
+    "blocked": 9,
+    "authNegativePass": 50
   },
   "implementationCommits": [
     "33d6f4c4e6010578ae961f7cf97a7e0e9d70bac7",
@@ -2755,8 +2759,8 @@
     "authNegativePass": 50,
     "authNegativeNotTested": 0,
     "overallPass": 41,
-    "overallNotTested": 2,
-    "overallBlocked": 7,
+    "overallNotTested": 0,
+    "overallBlocked": 9,
     "sourceTestSha": "d2a7be4733939cffca0423ba28675977af6ab346",
     "implementationHeadSha": "d2a7be4733939cffca0423ba28675977af6ab346"
   },
@@ -3173,8 +3177,8 @@
       "routes": 50,
       "authNegativePass": 50,
       "overallPass": 41,
-      "overallNotTested": 2,
-      "overallBlocked": 7
+      "overallNotTested": 0,
+      "overallBlocked": 9
     },
     "dashboard": {
       "controls": 121,
@@ -3230,7 +3234,15 @@
     "DASH_CTRL_STANDALONE_001": "PASS_EVIDENCE — 17 standalone controls inventoried and exercised.",
     "DASH_CTRL_BLOCKED_API_001": "PASS_EVIDENCE — production-blocked controls map to guarded routes; no external action authorized.",
     "DASH_CTRL_RIGHTS_USE_001": "PASS_EVIDENCE — per-asset rights attestation remains separate from overall approval.",
-    "MEDIA_001": "BLOCKED — original creator-captured wildlife footage required; Pexels/Pixabay/other stock and AI-generated wildlife visuals are excluded from production."
+    "MEDIA_001": "BLOCKED — original creator-captured wildlife footage required; Pexels/Pixabay/other stock and AI-generated wildlife visuals are excluded from production.",
+    "api": {
+      "routes": 50,
+      "positivePass": 41,
+      "notTested": 0,
+      "blocked": 9,
+      "authNegativePass": 50,
+      "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4"
+    }
   },
   "apiRouteStatusSnapshot": {
     "routes": 50,
@@ -3265,7 +3277,7 @@
     "browserJourneys": 41,
     "npmAuditVulnerabilities": 0,
     "productionReadiness": "HOLD — 22 blockers",
-    "apiAcceptance": "BLOCKED",
+    "apiAcceptance": "BLOCKED — 41 PASS / 0 NOT_TESTED / 9 BLOCKED",
     "dashboardAcceptance": "NOT_TESTED",
     "schedulingAcceptance": "NOT_TESTED",
     "deploymentAcceptance": "NOT_TESTED",
@@ -3508,7 +3520,15 @@
       "BLOCKED": 10,
       "FAIL": 0
     },
-    "releaseDecision": "HOLD"
+    "releaseDecision": "HOLD",
+    "api": {
+      "routes": 50,
+      "positivePass": 41,
+      "notTested": 0,
+      "blocked": 9,
+      "authNegativePass": 50,
+      "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4"
+    }
   },
   "latestRegression": {
     "recordedAt": "2026-11-23T09:14:20Z",
@@ -3608,9 +3628,9 @@
     "routeCount": 50,
     "authNegativePassed": 50,
     "acceptedRoutes": 41,
-    "notTestedRoutes": 2,
-    "blockedRoutes": 7,
-    "verdict": "API-001 BLOCKED — 41/50 routes have local positive acceptance, two remain NOT_TESTED and seven remain BLOCKED by owner/provider prerequisites.",
+    "notTestedRoutes": 0,
+    "blockedRoutes": 9,
+    "verdict": "API-001 BLOCKED — 41/50 routes have local positive acceptance; nine remain explicitly BLOCKED by live provider, identity, rights or production prerequisites; zero route rows remain NOT_TESTED.",
     "inventoryRunId": 45144737211,
     "inventoryArtifactId": 14803901540
   },
@@ -4214,15 +4234,25 @@
         "blockers": 22,
         "artifactId": 14802534911,
         "artifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071"
+      },
+      "apiRouteReconciliation": {
+        "runId": 45144737151,
+        "status": "PASS_LOCAL_ACCEPTANCE_WITH_EXTERNAL_HOLDS",
+        "routes": 50,
+        "positivePass": 41,
+        "notTested": 0,
+        "blocked": 9,
+        "authNegativePass": 50
       }
     },
     "api": {
       "routes": 50,
       "positivePass": 41,
-      "notTested": 2,
-      "blocked": 7,
+      "notTested": 0,
+      "blocked": 9,
       "authNegativePass": 50,
-      "liveProviderAcceptance": "NOT_TESTED"
+      "liveProviderAcceptance": "BLOCKED",
+      "note": "41 local route acceptances; nine external/owner-gated routes blocked; zero route rows remain NOT_TESTED. API-001 is still BLOCKED pending genuine provider/owner prerequisites."
     },
     "dashboard": {
       "controls": 121,
@@ -4246,6 +4276,6 @@
     "releaseDecision": "HOLD",
     "productionReadinessBlockers": 22,
     "publishingEnabled": false,
-    "note": "Exact-SHA CI evidence refreshed. Requirement-row counts remain historical and have not been re-evaluated; no acceptance row is promoted solely by this regression run."
+    "note": "Exact-SHA CI evidence refreshed. Requirement-row counts remain historical and have not been re-evaluated; no acceptance row is promoted solely by this regression run. API route classification now distinguishes 41 locally accepted routes from nine explicitly provider/owner-blocked routes; none remain unclassified NOT_TESTED."
   }
 }

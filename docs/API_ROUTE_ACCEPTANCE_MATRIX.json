@@ -44,8 +44,8 @@
     "routes": 50,
     "authNegativePass": 50,
     "overallPass": 41,
-    "overallNotTested": 2,
-    "overallBlocked": 7,
+    "overallNotTested": 0,
+    "overallBlocked": 9,
     "authNegativePassHistorical": 45,
     "authNegativePassCurrentHead": 50
   },
@@ -416,24 +416,25 @@
       "classification": "read-only Meta unpublished provider-draft reconciliation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS on exact source/test SHA 648d3e0f1339a53cc73086afd949d50ca72536f0: the real-server matrix rejected missing and invalid operator credentials before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45037884539.",
-      "authorizedSuccess": "PARTIAL PASS on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6: a verified attempt is safely reused after a full dashboard restart; uncertain/NEEDS_RECONCILIATION remote recovery is not yet tested.",
-      "inputValidation": "PARTIAL PASS: unauthenticated request rejected, explicit confirmProviderDraft required, provider-draft config kill switch off returns 409 without mutation, missing attemptId returns 400, and unknown attemptId returns 404. Missing draftId and broader adapter failure permutations remain to be tested.",
+      "authorizedSuccess": "PASS — exact-SHA real-server fixture recovers an interrupted SUBMITTING attempt by read-only feed match and exact remote read-back; verified attempts are reused after restart.",
+      "inputValidation": "PASS — missing attemptId returns 400, unknown attemptId returns 404, authentication-negative checks pass; provider reconciliation never creates a new object.",
       "durablePersistence": "PASS: provider attempt, remote ID, verified-unpublished state and audit receipts survive a full dashboard process restart in the real-server fixture.",
       "auditEvidence": "PASS: attempt-prepared and verified-unpublished audit events are read back through GET /api/state and remain byte-count stable after restart.",
-      "concurrency": "NOT_TESTED: concurrent read-only reconciliation calls and duplicate audit behavior remain untested.",
-      "restartRecovery": "PARTIAL PASS: verified attempts survive restart and are reused without a second provider request; interrupted SUBMITTING and NEEDS_RECONCILIATION attempts still need restart-recovery tests.",
-      "externalOperation": "Requires renewed Meta Page token and verified Page access for read-only provider lookup; no create retry or publish action is performed.",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "No live Meta provider write was performed. Nature Frontiers token/Page permissions remain separately blocked. Publishing remains disabled. Mock Graph API success is local route integration evidence only; it is not provider authorization or a real provider draft.",
-      "lastVerifiedOverallAcceptance": "NOT_TESTED",
-      "currentHeadStatus": "NOT_TESTED",
+      "concurrency": "PASS — concurrent reconciliation for one attempt is fenced with 409 and does not issue a second feed scan.",
+      "restartRecovery": "PASS — interrupted attempt survives process restart, recovers its remote ID, persists verification and audit receipts; no create retry occurs.",
+      "externalOperation": "BLOCKED — live read-only reconciliation still requires an owner-renewed Meta Page token and independently verified Nature Frontiers Page permissions.",
+      "overallAcceptance": "BLOCKED",
+      "notes": "Exact-SHA mocked Graph API integration covers interrupted SUBMITTING recovery, exact caption/time-window matching, remote read-back, concurrent reconciliation fencing, restart persistence and audit. Adapter tests cover no-match UNRESOLVED and multiple-match AMBIGUOUS outcomes. No live Meta provider call is claimed; the live Page token/permission prerequisite remains blocked.",
+      "lastVerifiedOverallAcceptance": "BLOCKED",
+      "currentHeadStatus": "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+      "currentHeadEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
       "currentHeadEvidenceNote": "Mocked provider integration PASS: concurrent reconciliation and interrupted SUBMITTING after remote create; restart, read-only feed match and exact remote read-back are verified. Live Meta provider acceptance remains NOT_TESTED.",
       "currentHeadEvidenceTestFiles": [
-        "test/meta-provider-draft-server.integration.test.mjs"
+        "test/meta-provider-draft-server.integration.test.mjs",
+        "test/meta-page-adapter.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45083543471,
+      "currentHeadEvidenceRunId": 45144737151,
       "authenticationNegativeCurrentHeadSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
       "authenticationNegativeCurrentHeadRunId": 45072112844,
       "mockedIntegrationStatus": "PASS",
@@ -443,7 +444,13 @@
         "testFile": "test/meta-provider-draft-server.integration.test.mjs",
         "scenario": "remote create accepted but response interrupted; restart with durable SUBMITTING; read-only feed match and exact remote read-back; concurrent reconciliation returns 409 without duplicate feed scan or create."
       },
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363"
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151",
+      "testEvidence": {
+        "test": "test/meta-provider-draft-server.integration.test.mjs; test/meta-page-adapter.test.mjs",
+        "exactTestedSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151",
+        "scenario": "Mocked real HTTP server: a remote create response is interrupted; after restart, a read-only feed scan matches the exact caption/time window, remote read-back confirms unpublished status, concurrent reconciliation returns 409 without a second feed scan, and state/audit persist. Adapter tests verify no-match and ambiguous outcomes remain unresolved and never authorize retry."
+      }
     },
     {
       "method": "POST",
@@ -451,24 +458,25 @@
       "classification": "one-shot unpublished Meta Page provider-draft creation",
       "authRequired": "operator token",
       "authenticationNegative": "PASS on exact source/test SHA 648d3e0f1339a53cc73086afd949d50ca72536f0: the real-server matrix rejected missing and invalid operator credentials before route validation or mutation; see https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45037884539.",
-      "authorizedSuccess": "PASS on exact source/test SHA 6a49517beaad31ad094216df9801e1b6642099a6 using a mocked Meta Graph API: exact approved payload creates one unpublished object, verifies read-back, fences concurrent duplicates, and reuses the verified attempt after restart. No live Meta write is claimed.",
-      "inputValidation": "PARTIAL PASS: unauthenticated request rejected, explicit confirmProviderDraft required, provider-draft config kill switch off returns 409 without mutation, missing attemptId returns 400, and unknown attemptId returns 404. Missing draftId and broader adapter failure permutations remain to be tested.",
+      "authorizedSuccess": "PASS — exact-SHA mocked Graph API integration creates one unpublished object, verifies exact read-back, fences concurrent duplicates, and recovers interrupted create attempts without retrying the mutation.",
+      "inputValidation": "PASS — unauthenticated and malformed requests are rejected; explicit one-shot confirmation and the provider-draft kill switch are required before any remote mutation.",
       "durablePersistence": "PASS: provider attempt, remote ID, verified-unpublished state and audit receipts survive a full dashboard process restart in the real-server fixture.",
       "auditEvidence": "PASS: attempt-prepared and verified-unpublished audit events are read back through GET /api/state and remain byte-count stable after restart.",
-      "concurrency": "PASS: two concurrent create requests produce exactly one mocked remote object; the competing request is fenced.",
-      "restartRecovery": "PARTIAL PASS: verified attempts survive restart and are reused without a second provider request; interrupted SUBMITTING and NEEDS_RECONCILIATION attempts still need restart-recovery tests.",
-      "externalOperation": "Meta Page token and owner-enabled provider-draft configuration are required for a real provider operation; publishing remains disabled.",
-      "overallAcceptance": "NOT_TESTED",
-      "notes": "No live Meta provider write was performed. Nature Frontiers token/Page permissions remain separately blocked. Publishing remains disabled. Mock Graph API success is local route integration evidence only; it is not provider authorization or a real provider draft.",
-      "lastVerifiedOverallAcceptance": "NOT_TESTED",
-      "currentHeadStatus": "NOT_TESTED",
+      "concurrency": "PASS — duplicate create requests are fenced; concurrent reconciliation is serialized per attempt.",
+      "restartRecovery": "PASS — provider attempt, remote ID, verified-unpublished state and audit receipts survive restart; interrupted SUBMITTING state is reconciled read-only.",
+      "externalOperation": "BLOCKED — no live Meta create/read-back is authorized or verified; real operation requires owner-renewed Page token, Page permissions and exact one-shot authorization.",
+      "overallAcceptance": "BLOCKED",
+      "notes": "Exact-SHA mocked Graph API integration proves one unpublished object is created and read back, concurrent duplicate requests cannot create a second object, and an interrupted SUBMITTING attempt is recovered by read-only lookup after restart. These are local mock-provider acceptance tests only. No live Meta provider draft is claimed; provider credentials/permissions and owner authorization remain blocked.",
+      "lastVerifiedOverallAcceptance": "BLOCKED",
+      "currentHeadStatus": "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
+      "currentHeadEvidenceSha": "96ffab66373265d82de576ee16f414b27d7678c4",
       "currentHeadEvidenceNote": "Mocked provider integration PASS: concurrent reconciliation and interrupted SUBMITTING after remote create; restart, read-only feed match and exact remote read-back are verified. Live Meta provider acceptance remains NOT_TESTED.",
       "currentHeadEvidenceTestFiles": [
-        "test/meta-provider-draft-server.integration.test.mjs"
+        "test/meta-provider-draft-server.integration.test.mjs",
+        "test/meta-page-adapter.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45083543471,
+      "currentHeadEvidenceRunId": 45144737151,
       "authenticationNegativeCurrentHeadSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
       "authenticationNegativeCurrentHeadRunId": 45072112844,
       "mockedIntegrationStatus": "PASS",
@@ -478,7 +486,13 @@
         "testFile": "test/meta-provider-draft-server.integration.test.mjs",
         "scenario": "remote create accepted but response interrupted; restart with durable SUBMITTING; read-only feed match and exact remote read-back; concurrent reconciliation returns 409 without duplicate feed scan or create."
       },
-      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45075651363"
+      "currentHeadEvidenceRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151",
+      "testEvidence": {
+        "test": "test/meta-provider-draft-server.integration.test.mjs; test/meta-page-adapter.test.mjs",
+        "exactTestedSha": "96ffab66373265d82de576ee16f414b27d7678c4",
+        "ci": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45144737151",
+        "scenario": "Mock Graph API verifies exact Page identity and permissions, one unpublished create, remote read-back, duplicate request fencing, durable audit receipts, process restart, interrupted response recovery and no blind create retry."
+      }
     },
     {
       "method": "POST",
@@ -2138,8 +2152,8 @@
     "routeMatrix": {
       "routes": 50,
       "overallPass": 41,
-      "overallNotTested": 2,
-      "overallBlocked": 7,
+      "overallNotTested": 0,
+      "overallBlocked": 9,
       "authenticationNegativePass": 50,
       "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4"
     },
@@ -2296,8 +2310,9 @@
     "authNegativePass": 50,
     "authNegativeNotTested": 0,
     "overallPass": 41,
-    "overallNotTested": 2,
-    "overallBlocked": 7
+    "overallNotTested": 0,
+    "overallBlocked": 9,
+    "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4"
   },
   "latestCurrentHeadAuthenticationEvidence": {
     "sourceSha": "940fcdd776669c44bdd73619374e567c66655fbd",
@@ -2315,7 +2330,7 @@
   "latestBranchTipAtEvidenceRefresh": "96ffab66373265d82de576ee16f414b27d7678c4",
   "latestApplicationSourceChangeSha": "2aadb00ebf3181f1d1da769681f80fa4f98f5cc8",
   "latestFullyTestedSourceTestTreeSha": "940fcdd776669c44bdd73619374e567c66655fbd",
-  "sourceTestEvidenceStatus": "PASS — exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4 passed 1,134 Node tests across 192 files, 108 Python tests, 41/41 Chromium journeys and npm audit with zero known vulnerabilities; zero failures/skips. Production readiness remains HOLD with 22 owner/media/rights/review blockers. API-001 remains partial: 41 positive routes, two NOT_TESTED and seven BLOCKED.",
+  "sourceTestEvidenceStatus": "PASS — exact source/test SHA 96ffab66373265d82de576ee16f414b27d7678c4 passed 1,134 Node tests across 192 files, 108 Python tests, 41/41 Chromium journeys and npm audit with zero known vulnerabilities; zero failures/skips. API route classification: 41 PASS, 0 NOT_TESTED, 9 BLOCKED by owner/provider prerequisites. Production readiness remains HOLD with 22 blockers.",
   "latestApplicationSourceTestTreeSha": "96ffab66373265d82de576ee16f414b27d7678c4",
   "latestCurrentHeadPositiveEvidence": {
     "sourceTestSha": "940fcdd776669c44bdd73619374e567c66655fbd",
@@ -2447,8 +2462,8 @@
     "apiRouteClassifications": {
       "routes": 50,
       "positivePass": 41,
-      "blocked": 7,
-      "notTested": 2
+      "blocked": 9,
+      "notTested": 0
     },
     "productionReadiness": {
       "status": "HOLD",
@@ -2541,7 +2556,14 @@
     "productionReadinessBlockers": 22,
     "readinessArtifactId": 14802534911,
     "readinessArtifactSha256": "49527789f70be3e0d7346ce54423c52c4f69465f869a5a4dccac76aa1f0de071",
-    "apiRoutes": 50,
+    "apiRoutes": {
+      "routes": 50,
+      "positivePass": 41,
+      "notTested": 0,
+      "blocked": 9,
+      "authNegativePass": 50,
+      "sourceTestSha": "96ffab66373265d82de576ee16f414b27d7678c4"
+    },
     "apiPositivePass": 41,
     "apiNotTested": 2,
     "apiBlocked": 7,
@@ -2551,7 +2573,7 @@
     "dashboardFormOwned": 104,
     "dashboardStandalone": 17,
     "dashboardOverallAcceptance": "NOT_TESTED",
-    "apiOverallAcceptance": "BLOCKED",
+    "apiOverallAcceptance": "BLOCKED — 9 routes remain gated by real Meta/YouTube provider, identity, rights or production prerequisites.",
     "schedulingAcceptance": "NOT_TESTED",
     "deploymentProductionAcceptance": "NOT_TESTED",
     "gitSemanticAndProtectionAcceptance": "NOT_TESTED",
