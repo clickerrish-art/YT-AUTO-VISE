@@ -24,6 +24,8 @@ test("committed SonicVhibez queue identity matches both live queues and the owne
   ]);
   assert.equal(detailedQueue.items.find(item => item.id === "long-001-wildlife-video-planning").publicationCyclePosition, 1);
   assert.equal(detailedQueue.items.find(item => item.id === "long-002-faceless-wildlife-workflow").publicationCyclePosition, 2);
+  assert.equal(detailedQueue.items.find(item => item.id === "long-001-wildlife-video-planning").status, "SCRIPT_DRAFT_NOT_PRODUCTION_APPROVED");
+  assert.equal(detailedQueue.items.find(item => item.id === "long-002-faceless-wildlife-workflow").status, "SCRIPT_DRAFT_NOT_PRODUCTION_APPROVED");
   assert.equal(operationalQueue.publishingEnabled, false);
   assert.equal(detailedQueue.publishingEnabled, false);
 });
