@@ -30,7 +30,7 @@
     "Owner selected Speechma Andrew (English, United States, male standard voice) on 2026-11-22 for a zero-cost browser audition only. No audio has been generated, no final audio hash exists, and no production approval or publication authorization exists. Speechma's Terms grant commercial output rights subject to the Terms and third-party rights; the actual output and all inputs still require review."
   ],
   "containsAIWildlifeVisuals": true,
-  "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+  "wildlifeVisualSourcePolicy": "AI_GENERATED_RECONSTRUCTION_REQUIRED",
   "mediaProvenanceStatus": "AI_GENERATION_PENDING",
   "narrationRightsDeterminationEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
   "sourceScriptBlobSha": "a44823bcfbe915b51fcdf9a911066d6dd659f310",
