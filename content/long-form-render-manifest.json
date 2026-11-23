@@ -9,11 +9,11 @@
     "max": 600
   },
   "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
-  "footagePath": "../artifacts/long-form-001/rights-cleared-footage.mp4",
+  "footagePath": "../artifacts/long-form-001/ai-generated-wildlife.mp4",
   "narrationPath": "../artifacts/long-form-001/production-narration.wav",
   "captionsPath": "long-form-001-captions.srt",
   "qualityEvidencePath": "long-form-001-quality-evidence.json",
-  "footageLicenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+  "footageLicenseEvidence": "content/ai-generation-evidence/long-form-001.json",
   "narrationLicenseEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
   "rightsConfirmed": false,
   "complianceReviewed": false,
@@ -22,10 +22,10 @@
   "sourceScriptPath": "drafts/long-form-001-two-eyes-above-water.md",
   "priorNarrationEvidencePath": "long-form-narration-review-evidence.json",
   "priorNarrationStatus": "LEGACY_UNAPPROVED_NARRATION_DO_NOT_USE",
-  "notes": "Six Pexels crocodile source MP4s were acquired for review in workflow run 44978618279 (artifact 14736582634): 151.819967 seconds total, six technical probes and six full FFmpeg decode passes. The first five owner-shared clips have per-file SHA-256 values in the source register. Supplemental 20443910 was also downloaded in that run; its per-file SHA-256 is recorded in the artifact acquisition-manifest.json but has not yet been extracted into the source register. It remains supplemental and not selected. The original five-file artifact 14735172901 is retained as acquisition history. All six remain review-only, not release-cleared. Complete human playback, third-party-rights review and scene-to-claim selection remain pending. Keep South Africa, Kenya and Zambia footage geographically distinct. The 6–10 minute final video still needs commercially eligible approved narration, synchronized captions, final rendering, exact-hash human review and owner release approval.",
-  "containsAIWildlifeVisuals": false,
+  "notes": "MANDATORY POLICY: production visuals must be ultra-realistic AI-generated wildlife reconstructions. Existing Pexels material is review-only and is not a production visual source. No AI video has yet been generated. Six Pexels crocodile source MP4s were acquired for review in workflow run 44978618279 (artifact 14736582634): 151.819967 seconds total, six technical probes and six full FFmpeg decode passes. The first five owner-shared clips have per-file SHA-256 values in the source register. Supplemental 20443910 was also downloaded in that run; its per-file SHA-256 is recorded in the artifact acquisition-manifest.json but has not yet been extracted into the source register. It remains supplemental and not selected. The original five-file artifact 14735172901 is retained as acquisition history. All six remain review-only, not release-cleared. Complete human playback, third-party-rights review and scene-to-claim selection remain pending. Keep South Africa, Kenya and Zambia footage geographically distinct. The 6–10 minute final video still needs commercially eligible approved narration, synchronized captions, final rendering, exact-hash human review and owner release approval.",
+  "containsAIWildlifeVisuals": true,
   "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
-  "mediaProvenanceStatus": "UNVERIFIED",
+  "mediaProvenanceStatus": "AI_GENERATION_PENDING",
   "narrationRightsDeterminationEvidence": "speechma-andrew-voice-selection-2026-11-22.json",
   "sourceScriptBlobSha": "db8fef2623bb9eeacc9e797984f65a21adeb8a07",
   "sourceScriptHashType": "GIT_BLOB_SHA",
@@ -65,11 +65,11 @@
     "outputFormat": "MP3",
     "paidApiAuthorized": false
   },
-  "originalCreatorCapturedMediaRequired": true,
+  "originalCreatorCapturedMediaRequired": false,
   "stockMediaAllowed": false,
   "pexelsAllowed": false,
   "pixabayAllowed": false,
-  "aiGeneratedWildlifeVisualsAllowed": false,
+  "aiGeneratedWildlifeVisualsAllowed": true,
   "footageCandidates": [
     {
       "assetId": "pexels-video-30026544",
@@ -197,7 +197,7 @@
       "releaseEligible": false
     }
   ],
-  "footageOrigin": "licensed_pexels_stock",
+  "footageOrigin": "ai_generated_reconstruction",
   "creatorCapturedOriginal": false,
   "footageCreator": "Multiple Pexels contributors; see asset-level source manifest",
   "footageSourceUrls": [
@@ -252,5 +252,10 @@
   ],
   "footageActualSourceSeconds": 151.819967,
   "footageThirdPartyRightsReviewed": false,
-  "footageHumanReviewStatus": "PENDING_FULL_PLAYBACK"
+  "footageHumanReviewStatus": "PENDING_FULL_PLAYBACK",
+  "aiGenerationEvidencePath": "content/ai-generation-evidence/long-form-001.json",
+  "aiGenerationStatus": "NOT_GENERATED",
+  "syntheticMediaDisclosureRequired": true,
+  "syntheticMediaDisclosureText": "AI-generated wildlife reconstruction. This is an illustrative recreation, not authentic documentary footage.",
+  "footageEligibilityStatus": "BLOCKED_AI_GENERATION_PENDING"
 }
