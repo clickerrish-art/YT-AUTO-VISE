@@ -132,7 +132,8 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.equal(shortManifest.aiGeneratedWildlifeVisualsAllowed, true);
   assert.match(result.stdout, /AI-generated wildlife generation is pending/);
   assert.ok(Array.isArray(shortManifest.footageSourceUrls) && shortManifest.footageSourceUrls.length >= 3);
-  assert.ok(shortManifest.aiGenerationEvidencePath);\n  assert.equal(shortManifest.syntheticMediaDisclosureRequired, true);
+  assert.ok(shortManifest.aiGenerationEvidencePath);
+  assert.equal(shortManifest.syntheticMediaDisclosureRequired, true);
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
   assert.doesNotMatch(result.stdout, /Metadata needs the verified SonicVhibez YouTube channel ID/);
   assert.match(result.stdout, /SONICVHIBEZ_CHANNEL_ID/);
