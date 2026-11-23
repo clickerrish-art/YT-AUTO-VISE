@@ -27,11 +27,11 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
   assert.equal(refresh.rowsRefreshed, 89);
   assert.equal(refresh.fullRequirementReevaluation, false);
   assert.equal(refresh.externalAcceptancePromoted, 0);
-  assert.deepEqual(refresh.currentHeadStatusCounts, { PASS: 67, NOT_TESTED: 9, PASS_STAGING: 1, BLOCKED: 12 });
+  assert.deepEqual(refresh.currentHeadStatusCounts, { PASS: 68, NOT_TESTED: 8, PASS_STAGING: 1, BLOCKED: 12 });
   assert.ok(rows.every(row => row.currentHeadEvidenceSha === exactSha));
   assert.ok(rows.every(row => row.sourceTestEvidenceRefresh?.sourceSha === exactSha));
-  assert.equal(byId("CI-002").currentHeadStatus, "NOT_TESTED");
-  assert.match(byId("CI-002").currentHeadEvidenceNote, /combined isolated main\/candidate baseline rerun is still required/i);
+  assert.equal(byId("CI-002").currentHeadStatus, "PASS");
+  assert.match(byId("CI-002").currentHeadEvidenceNote, /combined isolated main\/candidate baseline run 45160299756 passed/i);
   assert.ok(register.currentHeadOpenDependencies.some(item => item.id === "ORIGINAL-WILDLIFE-FOOTAGE" && item.status === "BLOCKED"));
 });
 
@@ -58,7 +58,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(api.currentHeadEvidenceNote, /interrupted SUBMITTING.*concurrent reconciliation fencing/i);
   assert.match(api.nextAction, /owner-renewed Meta Page token.*exact one-shot authorization/i);
   assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, exactSha);
-  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1135);
+  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1136);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
   assert.equal(register.latestExactCiCheckpoint.nodeTests.skipped, 0);
   assert.equal(register.latestExactCiCheckpoint.browserE2EStatus, "PASS");
@@ -141,5 +141,5 @@ test("FFmpeg and zero-skip requirements have exact current CI evidence", () => {
   assert.match(ffmpeg.currentHeadEvidenceNote, /N-129000-g64f6bcffaf-20261117/);
   const skips = byId("CI-TEST-SKIPS-001");
   assert.equal(skips.currentHeadStatus, "PASS");
-  assert.match(skips.currentHeadEvidenceNote, /1,135 Node tests across 192 files, zero failures and zero skips/i);
+  assert.match(skips.currentHeadEvidenceNote, /1,136 Node tests across 192 files, zero failures and zero skips/i);
 });
