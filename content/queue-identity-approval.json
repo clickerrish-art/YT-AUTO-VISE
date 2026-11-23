@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "status": "OWNER_APPROVED",
+  "ownerApproved": true,
+  "approvedBy": "Repository owner — explicit mapping confirmation in this ChatGPT conversation; account identity not independently attested",
+  "approvedAt": "2026-11-23T12:42:31.048Z",
+  "approvalReference": "Owner confirmation in ChatGPT conversation on 2026-11-23: approved operational queue identities and positions 1 and 2 for mapping only; explicitly not publication authorization.",
+  "operationalQueueSha256": "a67dc46740d5da1f1b8dce5a5b08c00ff45a14c68de32ec2af51dc307d32fe7c",
+  "detailedQueueSha256": "c2f9273a66bd8117104aec19cd68f0f9242651112cf183e62cdf059a6a14ce77",
+  "mappings": [
+    {
+      "operationalItemId": "long-form-plan-wildlife-video",
+      "detailedItemId": "long-001-wildlife-video-planning",
+      "cyclePosition": 1
+    },
+    {
+      "operationalItemId": "long-form-faceless-wildlife-workflow",
+      "detailedItemId": "long-002-faceless-wildlife-workflow",
+      "cyclePosition": 2
+    }
+  ]
+}
