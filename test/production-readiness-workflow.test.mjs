@@ -64,12 +64,10 @@ test("readiness report gives actionable queue, narration and upload-attempt owne
   });
   assert.equal(result.status, 2, result.stderr);
   const report = JSON.parse(result.stdout);
-  const queue = report.blockers.find(item => item.message.startsWith("QUEUE IDENTITY RECONCILIATION REQUIRED"));
-  assert.ok(queue, "queue identity owner blocker must be present until the owner approves the exact mapping");
-  assert.equal(queue.evidence.path, "content/queue-identity-approval.json");
-  assert.match(queue.resolution, /queue-identity-approval\.template\.json/);
-  assert.match(queue.resolution, /OWNER_APPROVED/);
-  assert.match(queue.resolution, /keep publishing and dispatch disabled/);
+  const queueBlockers = report.blockers.filter(item => item.message.startsWith("QUEUE IDENTITY RECONCILIATION REQUIRED"));
+  assert.equal(queueBlockers.length, 0, "the exact queue identity mapping was owner-confirmed and must not remain a blocker");
+  assert.ok(report.notes.some(note => /Queue identity reconciliation: 2 owner-approved long-form mappings verified/.test(note)),
+    "the accepted mapping must remain visible as evidence, without implying production approval");
   const narration = report.blockers.find(item => item.message.includes("narration rights are not cleared"));
   assert.ok(narration);
   assert.match(narration.resolution, /Speechma Andrew/);
