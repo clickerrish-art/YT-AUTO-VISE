@@ -67,6 +67,24 @@ const videoPath = "media/next-short.mp4";
 const youtubeVerificationPath = "content/youtube-channel-verification-status.json";
 const historyReconciliationPath = "content/youtube-history-reconciliation.json";
 const schedulePath = "config/weekly-content-plan.json";
+const mediaProductionPolicyPath = "config/media-production-policy.json";
+let mediaProductionPolicy;
+if (!exists(mediaProductionPolicyPath)) {
+  blockers.push("Mandatory config/media-production-policy.json is missing.");
+} else {
+  try {
+    mediaProductionPolicy = JSON.parse(fs.readFileSync(path.resolve(root, mediaProductionPolicyPath), "utf8"));
+    if (mediaProductionPolicy?.status !== "MANDATORY" ||
+        mediaProductionPolicy?.productionVisualMode !== "AI_GENERATED_RECONSTRUCTION_REQUIRED" ||
+        mediaProductionPolicy?.userVideoUploadRequired !== false ||
+        mediaProductionPolicy?.syntheticMediaDisclosureRequired !== true ||
+        mediaProductionPolicy?.zeroCostDefault !== true) {
+      blockers.push("config/media-production-policy.json does not match the mandatory AI-generated, no-upload, disclosed, zero-cost-default production policy.");
+    }
+  } catch {
+    blockers.push("config/media-production-policy.json is not valid JSON.");
+  }
+}
 const productsPath = "config/products.json";
 const approvedProductUrl = "https://selar.com/0u19v8u99l";
 let approvedProduct;
@@ -225,26 +243,64 @@ if (!exists(mediaInventoryPath)) {
 }
 
 function validateWildlifeFootage(manifest, label) {
-  const origin = manifest.footageOrigin;
-  if (manifest.aiGeneratedWildlifeVisualsAllowed !== false) {
-    blockers.push(`${label}: AI-generated wildlife visuals must remain prohibited.`);
+  if (mediaProductionPolicy?.productionVisualMode !== "AI_GENERATED_RECONSTRUCTION_REQUIRED" ||
+      mediaProductionPolicy?.userVideoUploadRequired !== false ||
+      mediaProductionPolicy?.syntheticMediaDisclosureRequired !== true) {
+    blockers.push("config/media-production-policy.json must enforce AI-generated wildlife reconstruction, no user video-upload dependency and synthetic-media disclosure.");
   }
-  if (typeof manifest.footageCreator !== "string" || !manifest.footageCreator.trim()) {
-    blockers.push(`${label}: footageCreator must identify the original camera operator.`);
+  if (manifest.aiGeneratedWildlifeVisualsAllowed !== true) {
+    blockers.push(`${label}: AI-generated wildlife reconstructions must be explicitly enabled by the production manifest.`);
   }
-  if (origin === "creator_captured_original") {
-    const captureEvidencePath = manifest.captureEvidencePath;
-    if (typeof captureEvidencePath !== "string" || !captureEvidencePath.trim() ||
-        path.isAbsolute(captureEvidencePath) || !exists(captureEvidencePath)) {
-      blockers.push(`${label}: captureEvidencePath must reference an existing, relative original-capture provenance record.`);
+  if (manifest.footageOrigin !== "ai_generated_reconstruction") {
+    blockers.push(`${label}: AI-generated wildlife reconstructions are required for production; stock and other source footage remain review-only.`);
+    return;
+  }
+  if (manifest.syntheticMediaDisclosureRequired !== true ||
+      typeof manifest.syntheticMediaDisclosureText !== "string" ||
+      !/AI-generated/i.test(manifest.syntheticMediaDisclosureText)) {
+    blockers.push(`${label}: an explicit, viewer-facing AI-generated wildlife reconstruction disclosure is required.`);
+  }
+  const evidencePath = manifest.aiGenerationEvidencePath;
+  if (typeof evidencePath !== "string" || !evidencePath.trim() ||
+      path.isAbsolute(evidencePath) || !exists(evidencePath)) {
+    blockers.push(`${label}: AI generation receipt is missing; retain provider, model, generation ID, prompt hash, output hash and review evidence.`);
+    return;
+  }
+  let evidence;
+  try {
+    evidence = JSON.parse(fs.readFileSync(path.resolve(root, evidencePath), "utf8"));
+  } catch {
+    blockers.push(`${label}: AI generation receipt is not valid JSON.`);
+    return;
+  }
+  if (evidence.status !== "COMPLETED") {
+    blockers.push(`${label}: AI-generated wildlife generation is pending; no completed generation receipt is recorded.`);
+  }
+  for (const key of ["provider", "model", "generationId"]) {
+    if (typeof evidence[key] !== "string" || !evidence[key].trim()) {
+      blockers.push(`${label}: AI generation receipt must record ${key}.`);
     }
-    return;
   }
-  if (origin === "licensed_pexels_stock" || origin === "licensed_pixabay_stock") {
-    blockers.push(`${label}: licensed Pexels/Pixabay stock is not authorized as a substitute; only original creator-captured wildlife footage is eligible for production. Stock candidates may remain in a separate review-only inventory.`);
-    return;
+  for (const key of ["promptSha256", "outputSha256"]) {
+    if (typeof evidence[key] !== "string" || !/^[a-f0-9]{64}$/i.test(evidence[key])) {
+      blockers.push(`${label}: AI generation receipt must contain a valid ${key}.`);
+    }
   }
-  blockers.push(`${label}: footageOrigin must be creator_captured_original; AI-generated, licensed-stock and unverified wildlife footage are not production eligible.`);
+  if (evidence.syntheticMediaDisclosureRequired !== true) {
+    blockers.push(`${label}: AI generation receipt must preserve the synthetic-media disclosure requirement.`);
+  }
+  if (evidence.technicalValidationStatus !== "PASS" ||
+      evidence.rightsReviewStatus !== "PASS" ||
+      evidence.humanVisualReview !== "PASS") {
+    blockers.push(`${label}: AI output requires technical validation, provider-rights review and human visual quality review before production.`);
+  }
+  const footagePath = typeof manifest.footagePath === "string" ? path.join("content", manifest.footagePath) : "";
+  if (footagePath && exists(footagePath) && /^[a-f0-9]{64}$/i.test(evidence.outputSha256 ?? "")) {
+    const actualSha = createHash("sha256").update(fs.readFileSync(path.resolve(root, footagePath))).digest("hex");
+    if (actualSha !== evidence.outputSha256.toLowerCase()) {
+      blockers.push(`${label}: AI generation output SHA-256 does not match the retained final video file.`);
+    }
+  }
 }
 
 if (!exists(manifestPath)) {
@@ -491,7 +547,7 @@ function resolutionFor(blocker) {
   if (/QUEUE IDENTITY RECONCILIATION REQUIRED|queue identity approval|queue identity mappings/i.test(blocker)) return "Review content/queue-identity-approval.template.json against the exact current content/queue.json and content/long-form-queue.json. Confirm the topic identity for each operational long_form item, select one unique detailed item per operational item, and align each detailed item's publicationCyclePosition with the rolling long_form → long_form → short cycle. Then create content/queue-identity-approval.json with the exact queue hashes, status OWNER_APPROVED, ownerApproved=true, the approving owner, a timezone-qualified approvedAt timestamp and a non-empty approvalReference. Do not infer or record owner approval on the owner's behalf; keep publishing and dispatch disabled until the signed mapping is present.";
   if (/narration rights are not cleared/i.test(blocker)) return "Do not use HeyGen Free-plan Roderic/Wade or local Piper/Edge TTS for public branded production. Follow the recorded owner selection of Speechma Andrew for a manual, zero-cost browser audition only; do not automate the free site or use its paid API. Download and retain the actual MP3, verify the script/input rights and applicable Terms, calculate its SHA-256, then obtain human listening and exact-hash production approval before use. Keep publishing disabled; no paid plan or API is authorized.";
   if (/local, workflow and owner-attested upload-attempt reconciliation/i.test(blocker)) return "Refresh the owner attestation for the period after its recorded valid-through date: confirm whether any manual, local or third-party YouTube upload attempts occurred. If none occurred, record a new dated owner confirmation bound to the current complete read-only inventory and automated ledger scan. If any occurred, reconcile each attempt to its remote video ID, visibility, actual publication timestamp and final status. Never retry an uncertain upload; keep public/unattended publishing disabled.";
-  if (/imported wildlife asset/i.test(blocker)) return "For each selected asset, require original creator-captured wildlife footage. Retain the original camera operator's identity, capture date/location, capture-provenance evidence, original MP4, matching SHA-256, full technical decode, rights/permission evidence, a separate third-party rights review covering people, property, trademarks, music and other third-party material, and human visual review. Pexels/Pixabay stock is not eligible as a production substitute even when its platform licence is verified. Do not use AI-generated wildlife visuals or stock footage.";
+  if (/imported wildlife asset/i.test(blocker)) return "Do not ask the owner to upload video. Restructure and repurpose existing project material, then use an ultra-realistic AI-generated wildlife reconstruction for production. Preserve the provider/model/generation ID, prompt and output SHA-256 hashes, provider-rights review, technical decode, species and behavior accuracy checks, synthetic-media disclosure and human visual quality review. Stock remains review-only.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_grant/i.test(blocker)) return "Google rejected the YouTube OAuth refresh token (invalid_grant). Reauthorize the existing OAuth client for the same Google account with the YouTube read-only and upload scopes (https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload), request offline access with explicit consent, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, update only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun the read-only verification workflow. Never paste token values into chat or create a second OAuth client.";
   if (/latest read-only YouTube OAuth attempt.*invalid_grant/i.test(blocker)) return "Google rejected the latest YouTube refresh-token grant (invalid_grant). Reauthorize the existing OAuth client for the same Google account with https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload and offline access, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, replace only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun read-only verification. Never paste token values into chat or create a second OAuth client.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_client/i.test(blocker)) return "Google rejected the existing OAuth client ID/secret pair. Verify the matching values for the existing single client in GitHub Actions secrets; do not create another client or share secret values. Rerun the read-only verification workflow after correcting the pair.";
