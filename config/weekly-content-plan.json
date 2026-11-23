@@ -54,7 +54,7 @@
     "Authoritative publication policy is publicationCycle; schedule entries are draft-preparation triggers only.",
     "Owner-approved cadence recorded 2026-11-17: rolling long_form → long_form → short → repeat, without a weekly target; minimum 72 elapsed hours and no same Johannesburg calendar day.",
     "Global anti-spam policy prohibits automated audience engagement and manipulation; automation is limited to approved content operations, scheduling, publishing after release gates, and read-only analytics.",
-    "Production media policy updated 2026-11-21: only genuine original creator-captured wildlife media is eligible; stock/archive footage and AI-generated wildlife visuals are prohibited as substitutes. Roderic Free-plan commercial-use exception was denied by HeyGen; no alternative narrator or paid upgrade is authorized. All slots remain draft-preparation only."
+    "SonicVhibez production media policy: disclosed AI-generated wildlife reconstructions are required; stock/archive footage is excluded. Generation remains disabled until a zero-cost backend and exact model/checkpoint/VAE rights are verified. Narration requires a separately approved commercially usable voice. All slots remain draft-preparation only."
   ],
   "requestedWeeklyCadence": {
     "longFormPerWeek": 2,
@@ -131,9 +131,9 @@
     "note": "No bot-driven likes, comments, replies, follows, DMs, engagement exchanges, artificial views/clicks, or unsolicited outreach. Human-initiated genuine interaction is outside automation and must comply with platform rules."
   },
   "productionPolicy": {
-    "originalCreatorCapturedMediaRequired": true,
+    "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": false,
-    "aiGeneratedWildlifeVisualsAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": true,
     "requiredMediaProvenance": "CREATOR_IDENTITY_CHAIN_OF_CUSTODY_ORIGINAL_BYTES_SHA256",
     "narrationVoice": "Roderic — Authoritative & Refined",
     "narrationCommercialRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION",
@@ -143,10 +143,10 @@
     "privateUploadRequiresExactOneShotOwnerAuthorization": true,
     "pexelsAllowed": false,
     "pixabayAllowed": false,
-    "mediaPolicyEvidence": "content/owner-media-policy-override-2026-11-22.json",
+    "mediaPolicyEvidence": "config/media-production-policy.json",
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
     "stockVideoFootageAllowed": false,
     "stockPhotographsAllowed": false,
-    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY; PEXELS_PIXABAY_EXCLUDED"
+    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY"
   }
 }

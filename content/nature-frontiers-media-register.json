@@ -5909,5 +5909,16 @@
         "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
       }
     }
-  ]
+  ],
+  "policyScope": {
+    "brand": "Nature Frontiers",
+    "platforms": [
+      "facebook",
+      "instagram"
+    ],
+    "mediaMode": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+    "notApplicableTo": [
+      "SonicVhibez"
+    ]
+  }
 }

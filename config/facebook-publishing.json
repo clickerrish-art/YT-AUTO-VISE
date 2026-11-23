@@ -107,5 +107,6 @@
     },
     "note": "No bot-driven likes, comments, replies, follows, DMs, engagement exchanges, artificial views/clicks, or unsolicited outreach. Human-initiated genuine interaction is outside automation and must comply with platform rules."
   },
-  "providerDraftsEnabled": false
+  "providerDraftsEnabled": false,
+  "brand": "Nature Frontiers"
 }

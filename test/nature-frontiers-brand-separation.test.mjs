@@ -6,6 +6,8 @@ const read = path => JSON.parse(fs.readFileSync(new URL(path, import.meta.url), 
 const facebook = read("../config/facebook-publishing.json");
 const instagram = read("../config/instagram-publishing.json");
 const links = read("../config/nature-frontiers-post-links.json");
+const sonicMediaPolicy = read("../config/media-production-policy.json");
+const natureMediaRegister = read("../content/nature-frontiers-media-register.json");
 
 function isYouTubeUrl(value) {
   try { return /(^|\.)youtube\.com$/i.test(new URL(value).hostname); }
@@ -39,4 +41,33 @@ test("SonicVhibez YouTube channel is not embedded in Nature Frontiers publishing
   const serialized = JSON.stringify({ facebook, instagram, links });
   assert.equal(serialized.includes("UCSlkuPfHH78oGC1o418HV4w"), false);
   assert.equal(serialized.includes("NatureFrontiers-life"), false);
+});
+
+
+test("Nature Frontiers and SonicVhibez have explicit, non-overlapping media policy scopes", () => {
+  assert.deepEqual(sonicMediaPolicy.policyScope, {
+    brand: "SonicVhibez",
+    platforms: ["youtube"],
+    mediaMode: "AI_GENERATED_RECONSTRUCTION_REQUIRED",
+    notApplicableTo: ["Nature Frontiers"]
+  });
+  assert.deepEqual(natureMediaRegister.policyScope, {
+    brand: "Nature Frontiers",
+    platforms: ["facebook", "instagram"],
+    mediaMode: "ORIGINAL_CREATOR_CAPTURED_ONLY",
+    notApplicableTo: ["SonicVhibez"]
+  });
+  assert.equal(sonicMediaPolicy.policyScope.brand, "SonicVhibez");
+  assert.equal(sonicMediaPolicy.productionVisualMode, "AI_GENERATED_RECONSTRUCTION_REQUIRED");
+  assert.equal(natureMediaRegister.policy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(natureMediaRegister.policy.stockMediaAllowed, false);
+  assert.equal(natureMediaRegister.policy.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.ok(natureMediaRegister.assets.every(asset => asset.productionEligibility?.eligible === false));
+  assert.equal(facebook.brand, "Nature Frontiers");
+  assert.equal(instagram.brand, "Nature Frontiers");
+  assert.equal(facebook.publishingEnabled, false);
+  assert.equal(facebook.dryRun, true);
+  assert.equal(instagram.publishingEnabled, false);
+  assert.equal(instagram.dryRun, true);
+  assert.equal(instagram.emergencyStop, true);
 });

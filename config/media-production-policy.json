@@ -18,5 +18,15 @@
   "syntheticMediaDisclosureText": "AI-generated wildlife reconstruction. This is an illustrative recreation, not authentic documentary footage.",
   "humanVisualReviewRequired": true,
   "zeroCostDefault": true,
-  "paidGenerationRequiresExplicitOwnerApproval": true
+  "paidGenerationRequiresExplicitOwnerApproval": true,
+  "policyScope": {
+    "brand": "SonicVhibez",
+    "platforms": [
+      "youtube"
+    ],
+    "mediaMode": "AI_GENERATED_RECONSTRUCTION_REQUIRED",
+    "notApplicableTo": [
+      "Nature Frontiers"
+    ]
+  }
 }
