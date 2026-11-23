@@ -178,8 +178,8 @@ test("queue manifests distinguish the Speechma audition candidate from the prohi
     assert.equal(candidate.productionApproved, false);
     assert.equal(candidate.publicationAuthorized, false);
   }
-  assert.match(longFormQueue.items[0].narrationVoice, /Roderic/);
-  assert.match(longFormQueue.items[0].narrationVoice, /internal-only.*not commercially cleared/i);
-  assert.equal(longFormQueue.items[0].narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
-  assert.match(longFormQueue.items[0].productionNotes, /Speechma Andrew.*manual zero-cost browser audition only/);
+  assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationVoice, /Roderic/);
+  assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationVoice, /internal-only.*not commercially cleared/i);
+  assert.equal(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
+  assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").productionNotes, /Speechma Andrew.*manual zero-cost browser audition only/);
 });
