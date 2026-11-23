@@ -146,7 +146,7 @@
     "enabled": false,
     "productionEligible": false,
     "policy": "AI_GENERATED_RECONSTRUCTION_REQUIRED; GENERATION_DISABLED_PENDING_ZERO_COST_BACKEND_AND_MODEL_RIGHTS",
-    "reason": "The owner permits qualifying licensed Pexels/Pixabay stock footage but has not authorized AI-generated wildlife visuals. This WanGP configuration remains a historical technical record only.",
+    "reason": "The current SonicVhibez policy requires disclosed AI-generated wildlife reconstructions and prohibits stock/reference assets as production visuals. This generation backend remains disabled because zero-cost GPU availability and exact checkpoint/VAE provenance and rights are not verified.",
     "noGenerationAuthorized": true
   }
 }

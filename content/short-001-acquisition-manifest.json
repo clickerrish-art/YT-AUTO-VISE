@@ -263,8 +263,8 @@
       "stockVideoFootageAllowed": false,
       "mediaPolicyEvidence": "config/media-production-policy.json"
     },
-    "reason": "The existing Pexels clips are retained only as historical review material. The user explicitly excludes Pexels/Pixabay links from production; original creator-captured wildlife media is required.",
-    "nextRequiredAction": "Obtain the user's original three-minute creator-captured wildlife MP4 (re-upload if unavailable in the accessible Library), verify provenance, SHA-256, technical integrity, rights and full human playback, then complete approved narration, captions, final render and owner review."
+    "reason": "The existing Pexels clips are retained only as historical review material. Current SonicVhibez production requires disclosed AI-generated wildlife reconstructions; these clips are not production assets.",
+    "nextRequiredAction": "Do not request or upload user footage. Verify a zero-cost generation backend and exact model/checkpoint/VAE provenance and rights, then generate the AI wildlife reconstruction and complete technical, factual, rights and human review."
   },
   "notes": [
     "Existing Pexels/Pixabay source clips are review-only historical material and are not authorized for production. Original creator-captured wildlife footage is required.",

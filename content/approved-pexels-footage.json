@@ -584,7 +584,7 @@
     "finalOwnerApprovalRequired": true,
     "publicPublishingEnabled": false,
     "policyEvidence": "config/media-production-policy.json",
-    "note": "Pexels/Pixabay platform licensing does not override the user's original creator-captured-only production requirement.",
+    "note": "Pexels/Pixabay assets remain review-only reference material; the current production policy requires disclosed AI-generated wildlife reconstructions and does not permit stock footage as a production substitute.",
     "mediaPolicyEvidence": "config/media-production-policy.json"
   },
   "productionDisposition": {
@@ -602,8 +602,8 @@
       "mediaPolicyEvidence": "config/media-production-policy.json",
       "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY"
     },
-    "reason": "Current owner production policy requires original creator-captured wildlife media. Prior stock-source acquisition/review activity does not authorize stock footage as a production substitute.",
-    "nextRequiredAction": "Do not select these stock candidates for production. Obtain genuine original creator-captured footage with provenance, exact source files and hashes, third-party-rights review and human approval."
+    "reason": "Current owner policy requires disclosed AI-generated wildlife reconstructions; these Pexels/Pixabay records remain review-only references and are not eligible production visuals.",
+    "nextRequiredAction": "Do not select these stock candidates for production. Verify a zero-cost generation backend and exact model/checkpoint/VAE provenance and rights, then generate disclosed AI wildlife reconstructions and complete technical, factual and human review."
   },
   "notes": [
     "The Pexels source records below are retained for provenance research and review history only. No Pexels/Pixabay stock footage is authorized as a production substitute for original creator-captured wildlife media. All listed assets remain excluded from production and release; general platform licensing is not owner production authorization."
