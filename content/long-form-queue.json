@@ -151,9 +151,9 @@
     "weeklyTarget": null
   },
   "productionPolicy": {
-    "originalCreatorCapturedMediaRequired": true,
+    "originalCreatorCapturedMediaRequired": false,
     "stockMediaAllowed": false,
-    "aiGeneratedWildlifeVisualsAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": true,
     "narrator": "No production narrator approved; Speechma Andrew is selected for a manual zero-cost audition only.",
     "narrationCommercialRightsStatus": "NO_PRODUCTION_NARRATOR_APPROVED; EXISTING_HEYGEN_RODERIC_WAV_INTERNAL_ONLY; SPEECHMA_OUTPUT_LICENSE_SUBJECT_TO_THIRD_PARTY_RIGHTS; NO_AUDIO_GENERATED_OR_APPROVED",
     "alternativeNarratorAuthorized": false,
@@ -189,7 +189,7 @@
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
     "stockVideoFootageAllowed": false,
     "stockPhotographsAllowed": false,
-    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY; PEXELS_PIXABAY_EXCLUDED"
+    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY"
   },
   "notes": [
     "HeyGen denied zero-cost commercial-use rights for the existing Roderic Free-plan output, which remains internal-only. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited by Speechma Terms; the paid API is not authorized. No paid upgrade or paid credits are authorized. All queue items remain planning/draft-only until original media, narration, rights, review and release gates pass."
