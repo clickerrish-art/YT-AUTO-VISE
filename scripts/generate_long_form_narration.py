@@ -29,7 +29,7 @@ except ImportError:
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
-SOURCE = REPO_ROOT / "content" / "long-form-scripts.md"
+SOURCE = REPO_ROOT / "content" / "long-form-queue.json"
 OUT = REPO_ROOT / "media" / "long-form-drafts"
 PRODUCTS = REPO_ROOT / "config" / "products.json"
 APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l"
@@ -143,25 +143,43 @@ def clean_script(text: str, include_paid_product: bool = False) -> str:
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
-def extract_episodes(markdown: str):
-    matches = list(re.finditer(r"(?m)^## Episode (\d+) — (.+)$", markdown))
+def extract_episodes(queue_text: str):
+    """Load the two owner-confirmed cycle scripts from their canonical standalone files."""
+    try:
+        queue = json.loads(queue_text)
+    except (TypeError, ValueError) as error:
+        raise ValueError("Long-form queue must be valid JSON") from error
+    items = [
+        item for item in queue.get("items", [])
+        if item.get("publicationFormat") == "long_form"
+        and item.get("publicationCyclePosition") in (1, 2)
+    ]
+    items.sort(key=lambda item: item["publicationCyclePosition"])
+    if [item.get("publicationCyclePosition") for item in items] != [1, 2]:
+        raise ValueError("Expected exactly the two owner-confirmed long-form cycle positions")
     episodes = []
-    for i, match in enumerate(matches):
-        end = matches[i + 1].start() if i + 1 < len(matches) else len(markdown)
-        section = markdown[match.end():end]
-        narration = re.search(r"(?m)^### Narration script\s*$", section)
+    for index, item in enumerate(items, 1):
+        script_path = item.get("scriptPath")
+        if not isinstance(script_path, str) or not script_path.strip():
+            raise ValueError(f"Long-form cycle position {index} has no canonical scriptPath")
+        path = (REPO_ROOT / script_path).resolve()
+        if not path.is_relative_to(REPO_ROOT.resolve()) or not path.is_file():
+            raise ValueError(f"Long-form cycle position {index} script is missing or outside the repository")
+        source = path.read_text(encoding="utf-8")
+        narration = re.search(r"(?m)^#{2,3} (?:Spoken narration draft|Narration script)\s*$", source)
         if not narration:
-            raise ValueError(f"Episode {match.group(1)} has no Narration script section")
-        body = section[narration.end():]
-        description = re.search(r"(?m)^### Suggested description\s*$", body)
-        if description:
-            body = body[:description.start()]
-        cleaned = clean_script(body, include_paid_product=has_owner_approved_selar_disclosure())
+            raise ValueError(f"Long-form cycle position {index} has no narration section")
+        body = source[narration.end():]
+        boundary = re.search(r"(?m)^#{2,3} (?:Research and claim map|Suggested description|Sources and references)\s*$", body)
+        if boundary:
+            body = body[:boundary.start()]
+        paid_promotion = item.get("hasPaidPromotion") is True
+        if paid_promotion and not has_owner_approved_selar_disclosure():
+            raise ValueError("Paid-product narration is blocked without the exact owner-approved Selar disclosure")
+        cleaned = clean_script(body, include_paid_product=paid_promotion)
         if len(cleaned.split()) < 500:
-            raise ValueError(f"Episode {match.group(1)} script seems unexpectedly short ({len(cleaned.split())} words)")
-        episodes.append((match.group(1), match.group(2).strip(), cleaned))
-    if len(episodes) != 2:
-        raise ValueError(f"Expected 2 episodes; found {len(episodes)}")
+            raise ValueError(f"Long-form cycle position {index} script seems unexpectedly short ({len(cleaned.split())} words)")
+        episodes.append((str(index), str(item.get("title", "")).strip(), cleaned))
     return episodes
 
 def srt_time(seconds: float) -> str:
