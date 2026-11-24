@@ -1,0 +1,67 @@
+name: Cloudflare staging runner fail-closed live smoke
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - ".github/workflows/cloudflare-staging-runner-live-smoke.yml"
+      - "cloudflare/worker.js"
+      - "cloudflare/staging-snapshot/worker.js"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-staging-runner-live-smoke
+  cancel-in-progress: false
+
+jobs:
+  live-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Verify repository runner OIDC is disabled by default
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(mktemp)"
+          trap 'rm -f "$response"' EXIT
+          status="$(curl --silent --show-error --max-time 20 \
+            --output "$response" --write-out '%{http_code}' \
+            --request POST \
+            --header 'content-type: application/json' \
+            --data '{}' \
+            'https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev/api/runner/session')"
+          test "$status" = "503"
+          node -e 'const b=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8")); if(b.code!=="RUNNER_OIDC_DISABLED" || b.publishingEnabled!==false) process.exit(1)' "$response"
+          echo "Live runner gate returned 503 RUNNER_OIDC_DISABLED; no runner session was created."
+
+      - name: Verify operator-only runner status remains authenticated
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(mktemp)"
+          trap 'rm -f "$response"' EXIT
+          status="$(curl --silent --show-error --max-time 20 \
+            --output "$response" --write-out '%{http_code}' \
+            'https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev/api/runner/session/status')"
+          test "$status" = "401"
+          node -e 'const b=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8")); if(b.error!=="Unauthorized") process.exit(1)' "$response"
+          echo "Operator-only status endpoint rejects unauthenticated requests."
+
+      - name: Verify operator-only runner release remains authenticated
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(mktemp)"
+          trap 'rm -f "$response"' EXIT
+          status="$(curl --silent --show-error --max-time 20 \
+            --output "$response" --write-out '%{http_code}' \
+            --request POST \
+            --header 'content-type: application/json' \
+            --data '{}' \
+            'https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev/api/runner/session/release')"
+          test "$status" = "401"
+          node -e 'const b=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8")); if(b.error!=="Unauthorized") process.exit(1)' "$response"
+          echo "Operator-only release endpoint rejects unauthenticated requests."
