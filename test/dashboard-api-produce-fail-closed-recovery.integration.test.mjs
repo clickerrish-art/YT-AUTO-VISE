@@ -98,7 +98,7 @@ test("legacy worker production remains fail-closed after approved queue identity
   const concurrent = await Promise.all([produce(), produce()]);
   assert.deepEqual(concurrent.map(result => result.status), [409, 409]);
   for (const result of concurrent) {
-    assert.match(result.body.error, /approved authoring pipeline/i);
+    assert.match(result.body.error, /queue identity reconciliation has passed/i);
     assert.equal(result.body.renderStarted, false);
     assert.equal(result.body.publishable, false);
     assert.equal(result.body.publishingEnabled, false);
@@ -113,7 +113,7 @@ test("legacy worker production remains fail-closed after approved queue identity
   await start();
   const afterRestart = await produce();
   assert.equal(afterRestart.status, 409);
-  assert.match(afterRestart.body.error, /approved authoring pipeline/i);
+  assert.match(afterRestart.body.error, /queue identity reconciliation has passed/i);
   assert.equal(afterRestart.body.renderStarted, false);
   assert.equal(afterRestart.body.publishable, false);
   assert.equal(afterRestart.body.publishingEnabled, false);
