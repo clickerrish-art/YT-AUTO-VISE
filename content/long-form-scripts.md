@@ -1,4 +1,7 @@
-# SonicVhibez — Long-form Script Drafts
+# SonicVhibez — Archived Combined Long-form Script Drafts
+
+> **Archive and identity note (2026-11-24):** This combined file is retained as a historical source bundle. The canonical standalone script for the owner-selected second long-form topic is `content/drafts/long-form-002-plan-wildlife-video.md`. The faceless-workflow draft is unassigned and is not long-form 002. Use standalone files and per-topic metadata/manifests for future review; this archive does not approve production or publication.
+
 
 **Status:** Draft text only — not approved for recording or publication  
 **Target channel:** SonicVhibez  
@@ -17,7 +20,7 @@
 
 ---
 
-## Episode 1 — How to Plan a Wildlife Video People Want to Watch
+## Archived source — Long-form 002: How to Plan a Wildlife Video People Want to Watch
 
 **Working title:** How to Plan a Wildlife Video People Want to Watch  
 **Audience:** Beginner wildlife and nature-video creators  
@@ -123,7 +126,7 @@ wildlife video planning, wildlife filmmaking, nature documentary, YouTube storyt
 
 ---
 
-## Episode 2 — A Beginner Workflow for Faceless Wildlife Videos
+## Unassigned legacy draft — A Beginner Workflow for Faceless Wildlife Videos
 
 **Working title:** A Beginner Workflow for Faceless Wildlife Videos  
 **Audience:** New creators making wildlife or nature videos without appearing on camera  
@@ -218,3 +221,4 @@ Review the current sales page and terms before purchasing. Check all factual cla
 ### Suggested tags
 
 faceless wildlife videos, wildlife video editing, nature documentary workflow, YouTube beginner tips, wildlife content creation, copyright safe video
+

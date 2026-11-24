@@ -21,38 +21,6 @@
   ],
   "items": [
     {
-      "id": "long-001-wildlife-video-planning",
-      "title": "How to Plan a Wildlife Video People Want to Watch",
-      "topic": "wildlife video planning and story-first production",
-      "targetMinutes": 8,
-      "status": "SCRIPT_DRAFT_NOT_PRODUCTION_APPROVED",
-      "scriptPath": "content/long-form-scripts.md",
-      "briefPath": "content/long-form-episode-briefs.json",
-      "sourceBriefId": "long-001",
-      "publicationFormat": "long_form",
-      "publicationCyclePosition": 1,
-      "scheduledAt": null,
-      "publishingEnabled": false,
-      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
-      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
-    },
-    {
-      "id": "long-002-faceless-wildlife-workflow",
-      "title": "A Beginner Workflow for Faceless Wildlife Videos",
-      "topic": "beginner faceless wildlife video production workflow",
-      "targetMinutes": 8,
-      "status": "SCRIPT_DRAFT_NOT_PRODUCTION_APPROVED",
-      "scriptPath": "content/long-form-scripts.md",
-      "briefPath": "content/long-form-episode-briefs.json",
-      "sourceBriefId": "long-002",
-      "publicationFormat": "long_form",
-      "publicationCyclePosition": 2,
-      "scheduledAt": null,
-      "publishingEnabled": false,
-      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
-      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
-    },
-    {
       "id": "long-form-001-two-eyes-above-water",
       "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
       "topic": "Nile crocodile waterline posture, sensory systems and shoreline ambush behaviour",
@@ -71,7 +39,55 @@
       "narrationStatusPath": "content/assets/long-form-001-narration-status.md",
       "scriptStatus": "RESEARCH_CORRECTED_AWAITING_OWNER_AND_QUALIFIED_ZOOLOGIST_REVIEW",
       "footageEligibilityStatus": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED; PEXELS_PIXABAY_REVIEW_ONLY",
-      "narrationRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION"
+      "narrationRightsStatus": "DENIED_ZERO_COST_COMMERCIAL_EXCEPTION",
+      "publicationCyclePosition": 1,
+      "briefPath": "content/long-form-episode-briefs.json",
+      "sourceBriefId": "long-001",
+      "metadataPath": "content/long-form-001-youtube-metadata-draft.md",
+      "renderManifestPath": "content/long-form-render-manifest.json",
+      "hasPaidPromotion": false
+    },
+    {
+      "id": "long-form-002-plan-wildlife-video",
+      "title": "How to Plan a Wildlife Video People Want to Watch",
+      "topic": "wildlife video planning and storytelling",
+      "targetMinutes": 8,
+      "status": "SCRIPT_DRAFT_NOT_PRODUCTION_APPROVED",
+      "scriptPath": "content/drafts/long-form-002-plan-wildlife-video.md",
+      "briefPath": "content/long-form-episode-briefs.json",
+      "sourceBriefId": "long-002",
+      "publicationFormat": "long_form",
+      "publicationCyclePosition": 2,
+      "publishingEnabled": false,
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized.",
+      "legacyIds": [
+        "long-001-wildlife-video-planning",
+        "long-form-plan-wildlife-video"
+      ],
+      "metadataPath": "content/long-form-002-youtube-metadata-draft.md",
+      "renderManifestPath": "content/long-form-002-render-manifest.json",
+      "hasPaidPromotion": true
+    },
+    {
+      "id": "draft-faceless-wildlife-workflow",
+      "title": "A Beginner Workflow for Faceless Wildlife Videos",
+      "topic": "beginner faceless wildlife video production workflow",
+      "targetMinutes": 8,
+      "status": "DRAFT_NOT_IN_ACTIVE_PUBLICATION_CYCLE",
+      "scriptPath": "content/drafts/faceless-wildlife-workflow-unassigned.md",
+      "briefPath": "content/long-form-episode-briefs.json",
+      "sourceBriefId": "draft-faceless-wildlife-workflow",
+      "publicationFormat": "long_form",
+      "publishingEnabled": false,
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized.",
+      "legacyIds": [
+        "long-002-faceless-wildlife-workflow",
+        "long-form-faceless-wildlife-workflow"
+      ],
+      "identityStatus": "UNASSIGNED_DRAFT_NOT_IN_ACTIVE_PUBLICATION_CYCLE",
+      "hasPaidPromotion": true
     },
     {
       "id": "long-story-wildlife-footage",
@@ -205,7 +221,7 @@
     "stockPhotographsAllowed": false,
     "status": "ORIGINAL_CREATOR_CAPTURED_ONLY_STOCK_REFERENCE_ONLY"
   },
-  "notes": "Long-form queue is planning-only. Genuine original creator-captured wildlife footage, exact source provenance, commercial rights, approved narration, captions, final technical validation and human review are required. No stock or AI-generated wildlife visuals are eligible. Publishing remains disabled.",
+  "notes": "Owner-confirmed identity order: long-form 001 is the Nile crocodile documentary; long-form 002 is How to Plan a Wildlife Video People Want to Watch. The faceless-workflow video remains an unassigned draft. Identity approval does not approve assets, rights, narration, production, scheduling or publication.",
   "originalCreatorCapturedMediaRequired": true,
   "aiGeneratedWildlifeVisualsRequired": false,
   "aiGeneratedWildlifeVisualsAllowed": false,

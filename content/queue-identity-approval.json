@@ -1,22 +1,27 @@
 {
   "schemaVersion": 1,
-  "status": "PENDING_OWNER_RECONFIRMATION",
-  "ownerApproved": false,
-  "approvedBy": "",
-  "approvedAt": "",
-  "approvalReference": "Queue hashes refreshed by the implementation. No owner reconfirmation, production approval or publication authorization has been recorded.",
-  "operationalQueueSha256": "0bebc5c5ddf719ab22bc2fb0afaebde105d5c8731694cce8719393ebc24f5604",
-  "detailedQueueSha256": "9ddd507509b151d02c0b821a5532d4ab18d333152a17e90efe27c955755f0538",
+  "status": "OWNER_APPROVED",
+  "ownerApproved": true,
+  "approvedBy": "User (explicit confirmation in this ChatGPT conversation)",
+  "approvedAt": "2026-11-24T12:42:41+02:00",
+  "approvalReference": "User confirmation on 2026-11-24: selected long-form-plan-wildlife-video as the second long-form topic after the Nile crocodile documentary and explicitly requested canonical identity mapping and reference reconciliation.",
+  "operationalQueueSha256": "1b8f5630d87e6152e5c6e44612bc6e31b519dcef838c41fe4e75df2d8be420f3",
+  "detailedQueueSha256": "08419890b137a4423b798fc724dcb2fb07f093f1be60aaa63c2abde85b052afc",
   "mappings": [
     {
-      "operationalItemId": "long-form-plan-wildlife-video",
-      "detailedItemId": "long-001-wildlife-video-planning",
+      "operationalItemId": "long-form-001-two-eyes-above-water",
+      "detailedItemId": "long-form-001-two-eyes-above-water",
       "cyclePosition": 1
     },
     {
-      "operationalItemId": "long-form-faceless-wildlife-workflow",
-      "detailedItemId": "long-002-faceless-wildlife-workflow",
+      "operationalItemId": "long-form-plan-wildlife-video",
+      "detailedItemId": "long-form-002-plan-wildlife-video",
       "cyclePosition": 2
     }
-  ]
+  ],
+  "approvalScope": "CONTENT_IDENTITY_AND_ROLLING_CYCLE_POSITION_ONLY",
+  "productionApproval": false,
+  "rightsApproval": false,
+  "uploadAuthorization": false,
+  "publicationAuthorization": false
 }

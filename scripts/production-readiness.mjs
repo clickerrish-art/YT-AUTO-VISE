@@ -160,8 +160,14 @@ if (!queueExists) {
       if (items.some(item => !item || typeof item !== "object" || typeof item.id !== "string" || !item.id.trim())) {
         blockers.push("Every queued item must be an object with a non-empty id.");
       }
-      if (items.some(item => item.productUrl !== "https://selar.com/0u19v8u99l")) {
-        blockers.push("Every queued item must use the sole approved Selar product URL.");
+      if (items.some(item => typeof item.hasPaidPromotion !== "boolean")) {
+        blockers.push("Every queued item must declare hasPaidPromotion as an explicit boolean.");
+      }
+      if (items.some(item => item.hasPaidPromotion === true && item.productUrl !== "https://selar.com/0u19v8u99l")) {
+        blockers.push("Promotional queue items must use the sole approved Selar product URL.");
+      }
+      if (items.some(item => item.hasPaidPromotion === false && item.productUrl)) {
+        blockers.push("Non-commercial queue items must not carry a product URL or promotional CTA.");
       }
       if (new Set(items.map(item => item.id)).size !== items.length) {
         blockers.push("Queue contains duplicate item IDs; remove duplicates before relying on cadence tracking.");

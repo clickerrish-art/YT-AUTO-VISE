@@ -1,4 +1,7 @@
-# SonicVhibez Long-Form Video 002 — Production Script
+# SonicVhibez — Unassigned Creator-Education Long-Form Draft
+
+**Cycle assignment:** NOT ASSIGNED. This script is not the owner-selected second long-form topic. The second topic is “How to Plan a Wildlife Video People Want to Watch”.
+
 
 **Working title:** How to Film Wildlife Without Disturbing Animals  
 **Channel:** SonicVhibez  

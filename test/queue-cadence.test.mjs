@@ -52,9 +52,17 @@ test("queue has exactly one draft-only preparation item per fallback slot", () =
   assert.equal(scheduled.filter(item => item.scheduledDay === "Saturday" && item.contentType === "short").length, 1);
   for (const item of scheduled) assert.equal(item.contentType, plan.schedule.find(slot=>slot.day===item.scheduledDay).format);
 });
-test("queue IDs are unique and every item uses only the approved Selar URL", () => {
+test("queue IDs are unique and product links follow each item's explicit promotion decision", () => {
   const ids=queue.items.map(item => item.id); assert.equal(new Set(ids).size,ids.length);
-  for (const item of queue.items) assert.equal(item.productUrl,"https://selar.com/0u19v8u99l",item.id);
+  for (const item of queue.items) {
+    assert.equal(typeof item.hasPaidPromotion, "boolean", item.id);
+    if (item.hasPaidPromotion) assert.equal(item.productUrl, "https://selar.com/0u19v8u99l", item.id);
+    else assert.equal(item.productUrl, undefined, item.id);
+  }
+  const crocodile = queue.items.find(item => item.id === "long-form-001-two-eyes-above-water");
+  assert.equal(crocodile.hasPaidPromotion, false);
+  assert.equal(crocodile.productUrl, undefined);
+  assert.equal(queue.items.find(item => item.id === "long-form-plan-wildlife-video").hasPaidPromotion, true);
 });
 test("automation workflow queue validation enforces the hard 72-hour publication minimum", () => {
   const automationWorkflow = fs.readFileSync(".github/workflows/validate-automation.yml", "utf8");

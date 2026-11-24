@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-24T12:42:41+02:00",
+  "repository": "clickerrish-art/YT-AUTO-VISE",
+  "branch": "codex/marketing-machine-audit-fixes",
+  "ownerDecision": "User explicitly selected long-form-plan-wildlife-video as the second long-form topic after the Nile crocodile documentary.",
+  "canonicalOrder": [
+    {
+      "cyclePosition": 1,
+      "id": "long-form-001-two-eyes-above-water",
+      "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
+      "hasPaidPromotion": false
+    },
+    {
+      "cyclePosition": 2,
+      "id": "long-form-002-plan-wildlife-video",
+      "title": "How to Plan a Wildlife Video People Want to Watch",
+      "hasPaidPromotion": true
+    }
+  ],
+  "retainedUnassignedDrafts": [
+    {
+      "id": "draft-faceless-wildlife-workflow",
+      "title": "A Beginner Workflow for Faceless Wildlife Videos",
+      "reason": "Not selected as the second long-form topic; no active cycle position assigned."
+    },
+    {
+      "id": "long-story-wildlife-footage",
+      "title": "How to Turn Wildlife Footage Into a Documentary Story",
+      "reason": "Legacy creator-education script; no active cycle position assigned."
+    },
+    {
+      "id": "long-ethical-filming",
+      "title": "How to Film Wildlife Without Disturbing Animals",
+      "reason": "Separate unassigned draft; no active cycle position assigned."
+    }
+  ],
+  "legacyReferencesRetained": true,
+  "identityApprovalScopeOnly": true,
+  "productionApproval": false,
+  "rightsApproval": false,
+  "narrationApproval": false,
+  "uploadAuthorization": false,
+  "publicationAuthorization": false,
+  "publishingEnabled": false,
+  "mediaPolicy": "Genuine original creator-captured wildlife media only; no stock/library or AI-generated wildlife substitutes.",
+  "notes": "Identity mapping does not establish production readiness. The Nile crocodile documentary remains non-commercial with no Selar CTA. Creator-education promotion is separate and uses the exact owner-approved direct-sales disclosure. All assets, rights, narration, captions, human review, exact-hash private upload authorization and publication cadence gates remain independent."
+}

@@ -147,7 +147,11 @@ jobs:
           const p = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
           if (!Array.isArray(q.items) || q.publishingEnabled !== false) throw new Error("Queue must exist and publishing must remain disabled");
           const approved = new Set(p.products.filter(x => x.status === "approved").map(x => x.url));
-          for (const item of q.items) if (!approved.has(item.productUrl)) throw new Error("Unapproved product URL in queue: " + item.id);
+          for (const item of q.items) {
+            if (typeof item.hasPaidPromotion !== "boolean") throw new Error("Explicit hasPaidPromotion boolean required: " + item.id);
+            if (item.hasPaidPromotion && !approved.has(item.productUrl)) throw new Error("Unapproved product URL in promotional queue item: " + item.id);
+            if (!item.hasPaidPromotion && item.productUrl) throw new Error("Non-commercial queue item must not carry a product URL: " + item.id);
+          }
           console.log("PASS: " + q.items.length + " queue items; all product links approved; publishing disabled.");
           '
       - name: Prepare an isolated queue proposal

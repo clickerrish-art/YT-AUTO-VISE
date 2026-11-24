@@ -6,19 +6,80 @@
   "product": {
     "name": "Complete YouTube Wildlife Creator's Vault – Premium Combo PDF",
     "url": "https://selar.com/0u19v8u99l",
-    "disclosure": "This video contains a promotional recommendation. The linked product is a paid digital product; check its current contents and terms on the sales page before buying."
+    "disclosure": "This video contains a promotional recommendation. The linked product is a paid digital product; check its current contents and terms on the sales page before buying.",
+    "appliesToBriefIds": [
+      "long-002",
+      "draft-faceless-wildlife-workflow"
+    ]
   },
   "productionRules": [
-    "Target 6–10 minutes of original narration per long-form video.",
-    "Use only original, public-domain, or properly licensed footage, music, stills and sound effects; retain evidence for each asset.",
-    "Do not claim guaranteed views, income, virality, monetization or SEO scores.",
-    "Verify every wildlife fact against reliable sources before recording.",
-    "Clearly disclose promotional links and accurately set YouTube altered/synthetic-content settings when applicable.",
-    "Do not publish automatically; render, fact-check, caption-check and review privately first."
+    "Target 6–10 minutes of original narration per long-form video; confirm final runtime against recorded audio.",
+    "Wildlife visuals must be genuine original creator-captured media only; retain creator identity, capture provenance, original source file and SHA-256, written commercial rights, third-party-rights review and human review for every asset.",
+    "Stock/library wildlife footage, Pexels/Pixabay wildlife footage and AI-generated wildlife visuals are prohibited production substitutes. Use clearly labelled diagrams or blank placeholders when qualifying original footage is unavailable.",
+    "Verify every wildlife fact against reliable sources before recording and distinguish observed behaviour from interpretation.",
+    "Keep promotional and non-commercial identities separate. The Nile crocodile documentary has hasPaidPromotion=false and no product CTA. Creator-education content uses the exact owner-approved direct-sales disclosure and approved product URL.",
+    "No automatic upload, scheduling or publication. Final render, rights, narration, captions, thumbnail, disclosures and exact-hash human approval are separate gates."
   ],
   "episodes": [
     {
       "id": "long-001",
+      "plannedDay": null,
+      "workingTitle": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
+      "targetMinutes": 8,
+      "audience": "Wildlife documentary viewers interested in African freshwater predators",
+      "viewerPromise": "Explain how the Nile crocodile's waterline posture, sensory systems and ambush behaviour work together, without exaggerating research or depicting fabricated encounters.",
+      "hook": "At first, the river seems empty. Then, just above the waterline, two eyes appear.",
+      "outline": [
+        {
+          "time": "0:00–0:40",
+          "section": "The waterline reveal",
+          "beats": [
+            "Introduce the low-profile posture",
+            "Set the documentary's central question"
+          ]
+        },
+        {
+          "time": "0:40–2:10",
+          "section": "Body design",
+          "beats": [
+            "Explain eyes, nostrils and ears near the waterline",
+            "Avoid describing concealment as magic"
+          ]
+        },
+        {
+          "time": "2:10–4:10",
+          "section": "Sensory evidence",
+          "beats": [
+            "Explain integumentary sensory organs",
+            "Distinguish experimental findings from claims about every wild hunt"
+          ]
+        },
+        {
+          "time": "4:10–6:20",
+          "section": "Shoreline ambush behaviour",
+          "beats": [
+            "Explain opportunity and surprise",
+            "Avoid implying all crocodiles behave identically"
+          ]
+        },
+        {
+          "time": "6:20–8:00",
+          "section": "Ecology and safety",
+          "beats": [
+            "Place crocodiles in freshwater ecosystems",
+            "Give conservative public-safety guidance"
+          ]
+        }
+      ],
+      "status": "OWNER_CONFIRMED_TOPIC_SCRIPT_EXISTS_PRODUCTION_HOLD",
+      "metadata": {
+        "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
+        "metadataPath": "content/long-form-001-youtube-metadata-draft.md",
+        "hasPaidPromotion": false
+      }
+    },
+    {
+      "id": "long-002",
       "plannedDay": "Tuesday",
       "workingTitle": "How to Plan a Wildlife Video People Want to Watch",
       "targetMinutes": {
@@ -88,23 +149,24 @@
           ]
         }
       ],
-      "status": "DRAFT_BRIEF_NOT_SCRIPT_OR_VIDEO",
+      "status": "DRAFT_BRIEF_AND_SCRIPT_EXISTS_PRODUCTION_HOLD",
       "metadata": {
         "title": "How to Plan a Wildlife Video People Want to Watch",
-        "description": "Learn a practical story-first workflow for planning wildlife and nature-documentary videos: choose one viewer question, build a clear narrative, verify facts, plan rights-cleared visuals, and review the final edit. This is educational guidance, not a promise of views or income.\n\nPromotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF: https://selar.com/0u19v8u99l\nThis is a paid digital product. Review the sales page before purchasing. Some content may use AI-assisted narration or visuals; any synthetic elements should be disclosed accurately.",
+        "description": "Learn a practical story-first workflow for planning wildlife and nature-documentary videos: choose one viewer question, build a clear narrative, verify facts, plan genuine original creator-captured visuals, and review the final edit. This is educational guidance, not a promise of views or income.\n\nADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nPromotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF: https://selar.com/0u19v8u99l\nThis is a paid product; review the current sales page before purchasing.",
         "tags": [
           "wildlife video planning",
           "wildlife filmmaking",
           "nature documentary",
           "YouTube storytelling",
-          "faceless YouTube channel",
           "video editing workflow"
-        ]
+        ],
+        "hasPaidPromotion": true,
+        "metadataPath": "content/long-form-002-youtube-metadata-draft.md"
       }
     },
     {
-      "id": "long-002",
-      "plannedDay": "Saturday",
+      "id": "draft-faceless-wildlife-workflow",
+      "plannedDay": null,
       "workingTitle": "A Beginner Workflow for Faceless Wildlife Videos",
       "targetMinutes": {
         "min": 6,
@@ -174,10 +236,10 @@
           ]
         }
       ],
-      "status": "DRAFT_BRIEF_NOT_SCRIPT_OR_VIDEO",
+      "status": "UNASSIGNED_DRAFT_NOT_IN_ACTIVE_PUBLICATION_CYCLE",
       "metadata": {
         "title": "A Beginner Workflow for Faceless Wildlife Videos",
-        "description": "This beginner workflow covers focused research, narration, rights-cleared visuals, editing, captions and a final policy check for faceless wildlife videos. Always verify facts and asset permissions; this workflow cannot guarantee views, revenue or YouTube monetization.\n\nPromotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF: https://selar.com/0u19v8u99l\nThis is a paid digital product. Review the sales page before purchasing. Accurately disclose promotional links and any synthetic media used.",
+        "description": "Unassigned creator-education draft. This workflow covers focused research, narration, genuine original creator-captured wildlife visuals, editing, captions and final review. It is not assigned a publication-cycle position and is not production-approved.",
         "tags": [
           "faceless wildlife videos",
           "wildlife video editing",
@@ -185,7 +247,8 @@
           "YouTube beginner tips",
           "wildlife content creation",
           "copyright safe video"
-        ]
+        ],
+        "hasPaidPromotion": true
       }
     }
   ],
