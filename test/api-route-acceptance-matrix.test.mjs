@@ -73,7 +73,7 @@ test("latest exact source/test SHA API route evidence is complete and preserves 
   assert.equal(queueIdentityApproval.ownerApproved, true);
   assert.equal(queueIdentityApproval.approvalScope, "CONTENT_IDENTITY_AND_ROLLING_CYCLE_POSITION_ONLY");
   assert.equal(queueIdentityApproval.mappings.length, 2);
-  assert.match(queueIdentityApproval.approvalReference, /identities and rolling cycle positions only/i);
+  assert.match(queueIdentityApproval.approvalReference, /canonical identity mapping and reference reconciliation/i);
 
   const positive = matrix.routes.filter(route => route.overallAcceptance === "PASS");
   const blocked = matrix.routes.filter(route => route.overallAcceptance === "BLOCKED");
