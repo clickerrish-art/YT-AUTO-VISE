@@ -17,10 +17,10 @@ This wildlife documentary explores how the Nile crocodile (*Crocodylus niloticus
 The goal is to understand the animal, not turn it into a monster story. Crocodiles are powerful wild predators. Never approach a crocodile or enter water known to contain crocodilians. Follow local wildlife authority advice and warning signs.
 
 **Visual media policy — mandatory:**  
-Use genuine original creator-captured wildlife footage only, with verified creator/capture provenance, original-file hash, written commercial rights, technical verification, third-party-rights review and human approval. Pexels/Pixabay and other stock/archive footage, AI-generated wildlife visuals and fabricated encounters are not permitted substitutes for genuine original creator-captured wildlife footage. Never present licensed stock as owner-shot or as one encounter if the source clips depict separate locations or events. If any other realistic altered or synthetic material appears in the final edit, assess YouTube's altered/synthetic-content requirements and disclose it where required. Never present altered media as a camera-recorded animal encounter.
+This documentary uses exactly seven AI-generated wildlife clips explicitly approved by the owner for this project only. They are synthetic illustrations, not genuine camera-captured wildlife footage. Do not use Pexels/Pixabay, other stock/archive footage or additional AI-generated wildlife shots. Before upload, retain the exact source filenames and SHA-256 hashes, generator/provider/model/version and generation records, verify commercial-use terms and third-party rights, complete technical QC and exact-hash human visual review, and confirm that every depicted behaviour is accurate and not misleading. Include the statement: **“This documentary contains AI-generated wildlife visuals.”** Also make the applicable altered/synthetic-content disclosure in YouTube Studio. Never present the clips as real camera-recorded animal encounters.
 
-**Footage and asset credits — mandatory before upload:**  
-[Insert exact creator, source-page URL, licence and modification notice for every asset actually used. Do not publish with this placeholder.]
+**AI visual provenance — mandatory before upload:**  
+[Record the actual provider, model/version, generation record or job ID, source filename and SHA-256 for each of the seven approved clips. Verify the provider's commercial-use terms and any third-party rights. Do not publish while any source record is missing.]
 
 **Research references:**
 - Fergusson, R.A. (2010), IUCN/SSC Crocodile Specialist Group, *Crocodylus niloticus* species account: https://iucncsg.org/wp-content/uploads/2026/10/Crocodylus-niloticus-Action-Plan-2010.pdf
