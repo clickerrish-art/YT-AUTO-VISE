@@ -825,7 +825,7 @@ test("production controls remain blocked after queue identity approval until aut
     expect(blockerBody.code).toBe("AUTHORING_PIPELINE_REQUIRED");
     expect(blockerBody.blockers).toEqual(expect.arrayContaining([
       expect.stringMatching(/Research and source evidence must be attached to the job/i),
-      expect.stringMatching(/The exact script and narration/caption stages must be reviewed and approved/i),
+      expect.stringMatching(/The exact script and narration\/caption stages must be reviewed and approved/i),
       expect.stringMatching(/A hash-bound production plan must authorize the exact render inputs/i)
     ]));
     expect(blockerBody.publishable).toBe(false);
