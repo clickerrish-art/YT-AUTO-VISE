@@ -24,10 +24,10 @@
     },
     {
       "queueId": "wildlife-vault-001",
-      "editorialStatus": "EXISTING_SCRIPT_DRAFT_TITLE_ALIGNMENT_REQUIRED",
+      "editorialStatus": "EXISTING_SCRIPT_DRAFT_TITLE_ALIGNED_TO_QUEUE",
       "scriptPath": "content/short-001-wildlife-video-storytelling.md",
       "metadataPath": "embedded_in_script",
-      "releaseStatus": "HOLD_TITLE_ALIGNMENT_MEDIA_NARRATION_CAPTIONS_HUMAN_REVIEW"
+      "releaseStatus": "HOLD_MEDIA_NARRATION_CAPTIONS_HUMAN_REVIEW"
     },
     {
       "queueId": "wildlife-vault-002",
@@ -69,6 +69,7 @@
     "This register records editorial artifacts only; it does not promote any item to production-ready or publication-ready.",
     "The queue's existing statuses remain unchanged pending the relevant acceptance gates.",
     "The seven AI-generated crocodile source clips are not present in the accessible conversation uploads or Library video inventory; do not invent filenames or hashes.",
-    "The Nile crocodile AI-visual exception is limited to long-form-001 and does not apply to other productions."
+    "The Nile crocodile AI-visual exception is limited to long-form-001 and does not apply to other productions.",
+    "Short 001 SEO title was aligned with its canonical queue topic in commit 869b900d7567046891933fdb18e470db2e446c43."
   ]
 }
