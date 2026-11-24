@@ -39,7 +39,7 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.containsAIWildlifeVisuals, false);
   assert.equal(shortTemplate.wildlifeVisualSourcePolicy, "ORIGINAL_CREATOR_CAPTURED_ONLY");
   assert.equal(shortTemplate.mediaProvenanceStatus, "NOT_SUPPLIED");
-  assert.match(shortTemplate.description, /promotional disclosure/i);
+  assert.match(shortTemplate.description, /PAID PROMOTION.*DRAFT DISCLOSURE/i);
   assert.match(shortTemplate.description, /AI NARRATION/i);
   assert.equal(shortTemplate.productUrl, "https://selar.com/0u19v8u99l");
 });

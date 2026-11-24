@@ -190,10 +190,10 @@ test("readiness JSON identifies product promotion gates as owner-controlled bloc
   assert.ok(blockers.every(item => item.controlOwner === "external_owner_or_human_reviewer"));
 });
 
-test("Short 001 keeps the required title format, approved direct-sales disclosure and media release hold", () => {
+test("Short 001 keeps the SEO title format, draft direct-sales disclosure and media release hold", () => {
   const brief = fs.readFileSync("content/short-001-wildlife-video-storytelling.md", "utf8");
-  assert.match(brief, /^## YouTube title\n\S/m);
-  assert.match(brief, /ADVERTISEMENT — OWNER-APPROVED DIRECT-SALES DISCLOSURE/i);
+  assert.match(brief, /^## SEO title\n\S/m);
+  assert.match(brief, /paid promotion — draft disclosure, seller details not re-verified in this run/i);
   assert.match(brief, /This product is sold through my own Selar business; purchases generate revenue for my business\./);
   assert.match(brief, /Release state/);
   assert.match(brief, /HOLD —/);

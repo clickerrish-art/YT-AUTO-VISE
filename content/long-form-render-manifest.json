@@ -27,7 +27,7 @@
   "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
   "mediaProvenanceStatus": "NOT_SUPPLIED",
   "narrationRightsDeterminationEvidence": "",
-  "sourceScriptBlobSha": "db8fef2623bb9eeacc9e797984f65a21adeb8a07",
+  "sourceScriptBlobSha": "19c2cf018dfbe263edeb5f82ffd514e165fb7cda",
   "sourceScriptHashType": "GIT_BLOB_SHA",
   "scientificReviewPath": "assets/long-form-001-scientific-claim-review.md",
   "scientificReviewBlobSha": "5c794a85fdec74bafb14b832d366edda12007ffb",
@@ -250,6 +250,6 @@
   "aiGenerationStatus": "DISABLED_BY_OWNER_POLICY",
   "syntheticMediaDisclosureRequired": false,
   "syntheticMediaDisclosureText": "",
-  "footageEligibilityStatus": "BLOCKED_AI_GENERATION_PENDING",
+  "footageEligibilityStatus": "BLOCKED_ORIGINAL_CREATOR_CAPTURED_FOOTAGE_REQUIRED",
   "captureEvidencePath": ""
 }

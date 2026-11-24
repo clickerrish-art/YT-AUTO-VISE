@@ -567,13 +567,13 @@
     }
   ],
   "currentProductionPolicy": {
-    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY",
-    "originalCreatorCapturedMediaRequired": false,
+    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY; STOCK_REFERENCE_ONLY",
+    "originalCreatorCapturedMediaRequired": true,
     "stockMediaAllowed": false,
     "stockPhotographsAllowed": false,
     "pexelsAllowed": false,
     "pixabayAllowed": false,
-    "aiGeneratedWildlifeVisualsAllowed": true,
+    "aiGeneratedWildlifeVisualsAllowed": false,
     "stockVideoFootageAllowed": false,
     "standaloneUnmodifiedStockRedistributionAllowed": false,
     "platformLicenseEvidenceRequired": true,
@@ -584,26 +584,26 @@
     "finalOwnerApprovalRequired": true,
     "publicPublishingEnabled": false,
     "policyEvidence": "config/media-production-policy.json",
-    "note": "Pexels/Pixabay assets remain review-only reference material; the current production policy requires disclosed AI-generated wildlife reconstructions and does not permit stock footage as a production substitute.",
+    "note": "Pexels/Pixabay assets remain review-only reference material. The active production policy requires genuine original creator-captured wildlife media; stock footage and AI-generated wildlife visuals are not eligible production substitutes.",
     "mediaPolicyEvidence": "config/media-production-policy.json"
   },
   "productionDisposition": {
-    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_AI_RECONSTRUCTION_PRODUCTION",
+    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_ORIGINAL_CREATOR_CAPTURED_PRODUCTION",
     "productionEligible": false,
     "reviewRenderEligible": false,
     "policy": {
-      "originalCreatorCapturedMediaRequired": false,
+      "originalCreatorCapturedMediaRequired": true,
       "stockMediaAllowed": false,
       "pexelsAllowed": false,
       "pixabayAllowed": false,
-      "aiGeneratedWildlifeVisualsAllowed": true,
+      "aiGeneratedWildlifeVisualsAllowed": false,
       "stockVideoFootageAllowed": false,
       "stockPhotographsAllowed": false,
       "mediaPolicyEvidence": "config/media-production-policy.json",
-      "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY"
+      "status": "ORIGINAL_CREATOR_CAPTURED_ONLY; STOCK_REFERENCE_ONLY"
     },
-    "reason": "Current owner policy requires disclosed AI-generated wildlife reconstructions; these Pexels/Pixabay records remain review-only references and are not eligible production visuals.",
-    "nextRequiredAction": "Do not select these stock candidates for production. Verify a zero-cost generation backend and exact model/checkpoint/VAE provenance and rights, then generate disclosed AI wildlife reconstructions and complete technical, factual and human review."
+    "reason": "The active owner policy requires original creator-captured wildlife media only; these Pexels/Pixabay records remain review-only references and are not eligible production visuals.",
+    "nextRequiredAction": "Keep these stock candidates excluded. Obtain genuine original creator-captured wildlife footage with verified creator/capture provenance, original file and SHA-256, written commercial rights, third-party rights review and full human visual review. Do not use AI-generated wildlife visuals."
   },
   "notes": [
     "The Pexels source records below are retained for provenance research and review history only. No Pexels/Pixabay stock footage is authorized as a production substitute for original creator-captured wildlife media. All listed assets remain excluded from production and release; general platform licensing is not owner production authorization."

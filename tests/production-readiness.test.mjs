@@ -83,7 +83,8 @@ function currentYouTubeReconciliationExpectation() {
     ledgerValidation.previousLedgerRunId === "NONE" &&
     attempts.evidence?.nextPrivateUploadPreviousLedgerRunId === "NONE";
   const attemptsFresh = isFresh(attempts?.inspectedAt);
-  return { historyMatches, historyFresh, attemptsReconciled, attemptsFresh };
+  const scopeFresh = isFresh(verification.oauth?.checkedAt ?? verification.uploadScopeCheckedAt);
+  return { historyMatches, historyFresh, attemptsReconciled, attemptsFresh, scopeFresh };
 }
 
 test("readiness report identifies blockers, preserves safety defaults, and reports history evidence according to its actual age", () => {
@@ -98,8 +99,11 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   const historyCurrent = reconciliation.historyMatches && reconciliation.historyFresh;
   if (historyCurrent) assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete owner-reviewed public\/private\/unlisted SonicVhibez history evidence is missing, stale, or inconsistent/);
   else assert.match(result.stdout, /LIVE BLOCKER: complete owner-reviewed public\/private\/unlisted SonicVhibez history evidence is missing, stale, or inconsistent/);
-  assert.doesNotMatch(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/,
-    "the 21 November read-only scope verification is fresh; the separate history gate remains stale");
+  if (reconciliation.scopeFresh) {
+    assert.doesNotMatch(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/);
+  } else {
+    assert.match(result.stdout, /LIVE BLOCKER: YouTube OAuth upload scope is not independently verified/);
+  }
   assert.doesNotMatch(result.stdout, /latest read-only YouTube OAuth attempt is BLOCKED \(OAuth error invalid_grant\)/);
   assert.doesNotMatch(result.stdout, /LIVE BLOCKER: complete SonicVhibez public, private and unlisted history/);
   assert.match(result.stdout, /LIVE BLOCKER: local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete/);
@@ -119,21 +123,26 @@ test("readiness report identifies blockers, preserves safety defaults, and repor
   assert.match(result.stdout, /do not run local Piper\/Edge TTS/);
   assert.doesNotMatch(result.stdout, /Owner-authorized zero-cost alternative auditions are permitted/);
   const shortManifest = JSON.parse(fs.readFileSync("content/render-manifest.json", "utf8"));
-  assert.equal(shortManifest.footageOrigin, "ai_generated_reconstruction", "the production manifest must target AI-generated wildlife visuals");
+  assert.equal(shortManifest.footageOrigin, "creator_captured_original", "the production manifest must require original creator-captured wildlife footage");
   assert.equal(shortManifest.reviewPreviewFootageOrigin, "licensed_pexels_stock", "the legacy preview remains accurately labelled as stock review material");
-  assert.equal(shortManifest.aiGenerationStatus, "NOT_GENERATED");
+  assert.equal(shortManifest.aiGenerationStatus, "DISABLED_BY_OWNER_POLICY");
+  assert.equal(shortManifest.footageEligibilityStatus, "BLOCKED_ORIGINAL_CREATOR_CAPTURED_FOOTAGE_REQUIRED");
   assert.equal(shortManifest.creatorCapturedOriginal, false);
-  assert.equal(shortManifest.originalCreatorCapturedMediaRequired, false);
+  assert.equal(shortManifest.originalCreatorCapturedMediaRequired, true);
   assert.equal(shortManifest.stockMediaAllowed, false);
   assert.equal(shortManifest.pexelsAllowed, false);
   assert.equal(shortManifest.pixabayAllowed, false);
   assert.equal(shortManifest.stockVideoFootageAllowed, false);
   assert.equal(shortManifest.stockPhotographsAllowed, false);
-  assert.equal(shortManifest.aiGeneratedWildlifeVisualsAllowed, true);
-  assert.match(result.stdout, /AI-generated wildlife generation is pending/);
-  assert.ok(Array.isArray(shortManifest.footageSourceUrls) && shortManifest.footageSourceUrls.length >= 3);
-  assert.ok(shortManifest.aiGenerationEvidencePath);
-  assert.equal(shortManifest.syntheticMediaDisclosureRequired, true);
+  assert.equal(shortManifest.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(shortManifest.containsAIWildlifeVisuals, false);
+  assert.equal(shortManifest.containsSyntheticMedia, false);
+  assert.equal(shortManifest.mediaProvenanceStatus, "NOT_SUPPLIED");
+  assert.deepEqual(shortManifest.footageSourceUrls, []);
+  assert.equal(shortManifest.footageLicenseEvidence, "");
+  assert.equal(shortManifest.aiGenerationEvidencePath, null);
+  assert.equal(shortManifest.syntheticMediaDisclosureRequired, false);
+  assert.match(result.stdout, /creatorCapturedOriginal must be true only after original-file provenance is verified/);
   assert.match(result.stdout, /Metadata complianceReviewed must be true/);
   assert.doesNotMatch(result.stdout, /Metadata needs the verified SonicVhibez YouTube channel ID/);
   assert.match(result.stdout, /SONICVHIBEZ_CHANNEL_ID/);
@@ -444,7 +453,7 @@ test("review-eligible Pexels candidates do not become selected production inputs
   assert.equal(inventory.releaseAuthorized, false);
   assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction === false).length, 0);
   assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true).length, 10);
-  assert.equal(inventory.status, "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW");
+  assert.equal(inventory.status, "REVIEW_ONLY_LEGACY_STOCK_REFERENCES_NOT_PRODUCTION_MEDIA");
   assert.ok(inventory.assets.every(asset => asset.selectedForProduction === false));
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
     cwd: process.cwd(), encoding: "utf8"

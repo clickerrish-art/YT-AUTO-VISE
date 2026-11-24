@@ -25,7 +25,7 @@ test("example render manifest defaults to a blocked state", () => {
   assert.equal(manifest.channel, "SonicVhibez");
   assert.equal(manifest.rightsConfirmed, false);
   assert.equal(manifest.complianceReviewed, false);
-  assert.equal(manifest.targetSeconds, 60);
+  assert.equal(manifest.targetSeconds, 55);
 });
 
 

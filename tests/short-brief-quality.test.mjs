@@ -14,16 +14,16 @@ function narrationFrom(markdown) {
   return heading[1].replace(/^\s*|\s*$/g, "").replace(/[“”"]/g, "");
 }
 
-test("each Shorts brief has usable metadata, approved CTA, and rights safeguards", () => {
+test("each Shorts brief has script-only metadata, a draft CTA, and rights safeguards", () => {
   for (const file of briefs) {
     const markdown = fs.readFileSync(file, "utf8");
-    assert.match(markdown, /^\*\*Status:\*\* SCRIPT DRAFT/m, file + " must not imply a finished video");
-    assert.match(markdown, /^## YouTube title\n\S/m, file + " needs a title");
+    assert.match(markdown, /^\*\*Status:\*\* SCRIPT(?:-ONLY)? DRAFT/m, file + " must not imply a finished video");
+    assert.match(markdown, /^## (?:SEO title|YouTube title)\n\S/m, file + " needs a title");
     assert.ok(markdown.includes(approvedUrl), file + " must use the only approved product URL");
     assert.match(markdown, /only music you have permission to use|music and sound effects only when you have the rights|clips\/music element is owned, licensed, or otherwise cleared/i, file + " must retain rights guidance");
     assert.match(markdown, /never bait, chase, or disturb wildlife|avoid claims the footage cannot support|false claim/i, file + " must retain ethical or factual safeguards");
     assert.match(markdown, /never Nature Frontiers/i, file + " must explicitly protect the existing channel");
-    assert.match(markdown, /no SEO score, ranking, reach, or sales outcome is guaranteed/i, file + " must not promise performance");
+    assert.match(markdown, /no (?:SEO score, )?ranking, reach, sales or income outcome is promised/i, file + " must not promise performance");
   }
 });
 

@@ -89,7 +89,7 @@ test("Short 001 remains explicitly held with its unverified disclosure before th
   assertDisclosurePrecedesEveryProductMention(metadata.description, "Short 001 description");
   assert.ok(metadata.description.indexOf("DISCLOSURE HOLD") < metadata.description.indexOf(PRODUCT));
   assert.ok(metadata.description.indexOf("ADVERTISEMENT — DRAFT ONLY") < metadata.description.indexOf(PRODUCT));
-  assert.ok(metadata.description.includes("not yet approved for this draft"));
+  assert.ok(/not yet owner-verified/i.test(metadata.description));
 });
 
 test("Short 002 retains its approved direct-sales promotion with disclosure before CTA but stays private and unreviewed", () => {
@@ -113,11 +113,11 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   const metadata = readText("content/long-form-001-youtube-metadata-draft.md");
   const script = readText("content/drafts/long-form-001-two-eyes-above-water.md");
   assert.equal(manifest.hasPaidPromotion, false);
-  assert.equal(manifest.narrationRightsStatus, "NOT_GENERATED_PENDING_AUDITION");
+  assert.equal(manifest.narrationRightsStatus, "NOT_GENERATED_PENDING_OWNER_APPROVED_COMMERCIAL_VOICE");
   assert.equal(manifest.narrationPublicBrandedDistributionAllowed, false);
   assert.equal(manifest.narrationCommercialUseAllowed, false);
   assert.equal(manifest.narrationProductionUseAllowed, false);
-  assert.ok(manifest.narrationRestrictionSummary.includes("prohibited for public branded or commercial use"));
+  assert.ok(manifest.narrationRestrictionSummary.includes("No production narration file or commercial-use approval is recorded"));
   assert.equal(manifest.selectedNarratorForReview.name, "Andrew");
   assert.equal(manifest.selectedNarratorForReview.ownerSelectionStatus, "SELECTED_FOR_ZERO_COST_MANUAL_BROWSER_AUDITION_ONLY");
   assert.equal(manifest.selectedNarratorForReview.commercialUseAllowed, true);
@@ -127,12 +127,12 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.ok(!metadata.includes("ADVERTISEMENT"));
   assert.ok(metadata.includes("hasPaidPromotion=false"));
   assert.ok(metadata.includes("no product CTA"));
-  assert.ok(metadata.includes("qualifying Pexels/Pixabay licensed stock"));
+  assert.ok(metadata.includes("original creator-captured wildlife footage only"));
   assert.ok(metadata.includes("AI-generated wildlife visuals"));
   assert.ok(metadata.includes("not permitted substitutes"));
   assert.ok(script.includes("hasPaidPromotion=false"));
   assert.ok(script.includes("No product CTA, Selar URL"));
-  assert.ok(script.includes("qualifying Pexels/Pixabay licensed video footage"));
+  assert.ok(script.includes("original creator-captured wildlife footage only"));
   assert.ok(script.includes("AI-generated wildlife visuals") && script.includes("prohibited"));
   assert.ok(script.includes("stock/archive footage"));
   assert.ok(script.includes("commercially prohibited by the provider's written determination"));

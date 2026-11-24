@@ -17,7 +17,7 @@ This wildlife documentary explores how the Nile crocodile (*Crocodylus niloticus
 The goal is to understand the animal, not turn it into a monster story. Crocodiles are powerful wild predators. Never approach a crocodile or enter water known to contain crocodilians. Follow local wildlife authority advice and warning signs.
 
 **Visual media policy — mandatory:**  
-Use genuine original creator-captured wildlife footage or qualifying Pexels/Pixabay licensed stock with exact source-page provenance, applicable licence evidence, original file hash, technical verification, third-party-rights review and human approval. Other stock/archive sources and AI-generated wildlife visuals are not permitted substitutes. Never present licensed stock as owner-shot or as one encounter if the source clips depict separate locations or events. If any other realistic altered or synthetic material appears in the final edit, assess YouTube's altered/synthetic-content requirements and disclose it where required. Never present altered media as a camera-recorded animal encounter.
+Use genuine original creator-captured wildlife footage only, with verified creator/capture provenance, original-file hash, written commercial rights, technical verification, third-party-rights review and human approval. Pexels/Pixabay and other stock/archive footage, AI-generated wildlife visuals and fabricated encounters are not eligible production substitutes. Never present licensed stock as owner-shot or as one encounter if the source clips depict separate locations or events. If any other realistic altered or synthetic material appears in the final edit, assess YouTube's altered/synthetic-content requirements and disclose it where required. Never present altered media as a camera-recorded animal encounter.
 
 **Footage and asset credits — mandatory before upload:**  
 [Insert exact creator, source-page URL, licence and modification notice for every asset actually used. Do not publish with this placeholder.]
@@ -43,7 +43,7 @@ Nile crocodile, Crocodylus niloticus, crocodile hunting, crocodile ambush, croco
 - Eye and head on the right; open dark negative space on the left.
 - Exact thumbnail words: **TOO BIG?**
 - No blood, prey victim, gore, fabricated attack or unsafe human interaction.
-- Use a genuine rights-cleared crocodile image from the approved original or qualifying Pexels/Pixabay footage. Do not use AI-generated wildlife imagery, unreviewed stock/archive imagery or a fabricated encounter. Ensure the thumbnail accurately represents the final video.
+- Use a genuine rights-cleared frame from original creator-captured crocodile footage only. Do not use Pexels/Pixabay or other stock/archive imagery. Do not use AI-generated wildlife imagery, unreviewed stock/archive imagery or a fabricated encounter. Ensure the thumbnail accurately represents the final video.
 
 ## Upload metadata gates
 

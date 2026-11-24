@@ -48,7 +48,7 @@ test("Nature Frontiers and SonicVhibez have explicit, non-overlapping media poli
   assert.deepEqual(sonicMediaPolicy.policyScope, {
     brand: "SonicVhibez",
     platforms: ["youtube"],
-    mediaMode: "AI_GENERATED_RECONSTRUCTION_REQUIRED",
+    mediaMode: "ORIGINAL_CREATOR_CAPTURED_ONLY",
     notApplicableTo: ["Nature Frontiers"]
   });
   assert.deepEqual(natureMediaRegister.policyScope, {
@@ -58,7 +58,7 @@ test("Nature Frontiers and SonicVhibez have explicit, non-overlapping media poli
     notApplicableTo: ["SonicVhibez"]
   });
   assert.equal(sonicMediaPolicy.policyScope.brand, "SonicVhibez");
-  assert.equal(sonicMediaPolicy.productionVisualMode, "AI_GENERATED_RECONSTRUCTION_REQUIRED");
+  assert.equal(sonicMediaPolicy.productionVisualMode, "ORIGINAL_CREATOR_CAPTURED_ONLY");
   assert.equal(natureMediaRegister.policy.originalCreatorCapturedMediaRequired, true);
   assert.equal(natureMediaRegister.policy.stockMediaAllowed, false);
   assert.equal(natureMediaRegister.policy.aiGeneratedWildlifeVisualsAllowed, false);

@@ -20,20 +20,24 @@ const exists = (p) => isSafeRegularFileWithinRoot(root, p);
 
 function validateNarrationRights(manifest, manifestPath) {
   const evidenceName = manifest.narrationRightsDeterminationEvidence;
+  const block = reason => blockers.push(
+    manifestPath + ": narration rights are not cleared for public branded/production use. " + reason +
+    " The owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. No audition audio has been generated, no final audio hash exists, and no owner listening or production approval exists. Speechma's published Terms grant a perpetual, royalty-free commercial output license subject to its Terms, Acceptable Use Policy and third-party rights; this does not approve an ungenerated audio file or clear the submitted script/input rights. The free-site Terms prohibit scripts, bots and automated CAPTCHA solving; only the official API is permitted for automation, and that API is paid. Under the zero-cost constraint the audition must be a manual browser action using the per-generation security code. The browser stores history locally, so download the MP3 for durable project retention. Do not use HeyGen Free-plan Roderic or Wade audio, do not run local Piper/Edge TTS, and do not automate Speechma's free site. The selected browser audition is not production-approved; no paid service or credit is authorized. Production use requires review of the actual output and owner approval bound to its exact final audio SHA-256."
+  );
   if (typeof evidenceName !== "string" || !evidenceName.trim()) {
-    blockers.push(manifestPath + ": narration rights evidence path is missing or invalid.");
+    block("No narration rights determination evidence path is recorded.");
     return;
   }
   const evidencePath = path.join("content", evidenceName);
   if (!exists(evidencePath)) {
-    blockers.push(manifestPath + ": narration rights evidence file " + evidencePath + " is missing.");
+    block("The recorded narration rights evidence file " + evidencePath + " is missing.");
     return;
   }
   let evidence;
   try {
     evidence = JSON.parse(fs.readFileSync(path.resolve(root, evidencePath), "utf8"));
   } catch {
-    blockers.push(manifestPath + ": narration rights evidence file " + evidencePath + " is not valid JSON.");
+    block("The recorded narration rights evidence file " + evidencePath + " is not valid JSON.");
     return;
   }
   const provider = evidence.providerDetermination ?? {};
@@ -53,7 +57,7 @@ function validateNarrationRights(manifest, manifestPath) {
     provider.publicBrandedDistributionAllowed === false ||
     provider.commercialUseAllowed === false;
   if (!manifestApproved || !(ownerApproved || providerApproved) || providerDenied) {
-    blockers.push(manifestPath + ": narration rights are not cleared for public branded/production use. The owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. No audition audio has been generated, no final audio hash exists, and no owner listening or production approval exists. Speechma's published Terms grant a perpetual, royalty-free commercial output license subject to its Terms, Acceptable Use Policy and third-party rights; this does not approve an ungenerated audio file or clear the submitted script/input rights. The free-site Terms prohibit scripts, bots and automated CAPTCHA solving; only the official API is permitted for automation, and that API is paid. Under the zero-cost constraint the audition must be a manual browser action using the per-generation security code. The browser stores history locally, so download the MP3 for durable project retention. Do not use HeyGen Free-plan Roderic or Wade audio, do not run local Piper/Edge TTS, and do not automate Speechma's free site. The selected browser audition is not production-approved; no paid service or credit is authorized. Production use requires review of the actual output and owner approval bound to its exact final audio SHA-256.");
+    block("The recorded owner/provider evidence does not authorize this exact narration output.");
   }
 }
 const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
@@ -220,8 +224,11 @@ if (!exists(mediaInventoryPath)) {
         asset?.humanVisualReview !== "PASS"
       );
       if (selectedAssets.length > 0 && (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0)) {
-        const ids = unresolvedAssets.map(asset => asset?.canvaAssetId).filter(Boolean);
-        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} imported stock/reference wildlife asset(s) are selected as production visuals (${ids.join(", ") || "selected inventory not cleared"}); production requires genuine original creator-captured footage with verified provenance and rights. Stock and AI-generated wildlife visuals are prohibited substitutes.`);
+        const ids = unresolvedAssets.map(asset => asset?.canvaAssetId ?? asset?.id ?? asset?.assetId).filter(Boolean);
+        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported wildlife asset(s) are unresolved for production (${ids.join(", ") || "selected inventory not cleared"}); only genuine original creator-captured footage with verified provenance and rights is eligible. Pexels/Pixabay stock and AI-generated wildlife visuals are prohibited substitutes.`);
+      }
+      if (selectedAssets.some(asset => asset?.thirdPartyRightsReviewed !== true)) {
+        blockers.push("LIVE BLOCKER: thirdPartyRightsReviewed must be true only after checking people, property, trademarks, music and other third-party rights for every selected imported wildlife asset.");
       }
       notes.push(`Imported wildlife media inventory: ${inventory.assets.length} assets; ${reviewCandidates.length} review-only candidates; ${excludedAssets.length} excluded from production; ${selectedAssets.length} selected for production; ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
     }
@@ -393,14 +400,21 @@ if (!exists(youtubeVerificationPath)) {
           : "not-passing";
         blockers.push(`LIVE BLOCKER: latest read-only YouTube OAuth attempt is ${verification.latestAttempt.status} (OAuth error ${latestError}); reauthorize and verify the refresh token before any upload.`);
       }
-      if (verification.uploadScopeVerified !== true ||
-          !isFreshHistoryEvidence(verification.uploadScopeCheckedAt) ||
-          ![
-            "https://www.googleapis.com/auth/youtube.upload",
-            "https://www.googleapis.com/auth/youtube",
-            "https://www.googleapis.com/auth/youtube.force-ssl",
-            "https://www.googleapis.com/auth/youtubepartner"
-          ].includes(verification.acceptedUploadScope)) {
+      const oauth = verification.oauth ?? verification;
+      const uploadScopeVerified = oauth.uploadScopeVerified ?? verification.uploadScopeVerified;
+      const uploadScopeCheckedAt = oauth.uploadScopeCheckedAt ?? oauth.checkedAt ?? verification.uploadScopeCheckedAt;
+      const acceptedUploadScopes = [
+        "https://www.googleapis.com/auth/youtube.upload",
+        "https://www.googleapis.com/auth/youtube",
+        "https://www.googleapis.com/auth/youtube.force-ssl",
+        "https://www.googleapis.com/auth/youtubepartner"
+      ];
+      const grantedScopes = Array.isArray(oauth.grantedScopes) ? oauth.grantedScopes : [];
+      const acceptedUploadScope = grantedScopes.some(scope => acceptedUploadScopes.includes(scope)) ||
+        acceptedUploadScopes.includes(oauth.acceptedUploadScope ?? verification.acceptedUploadScope);
+      if (uploadScopeVerified !== true ||
+          !isFreshHistoryEvidence(uploadScopeCheckedAt) ||
+          !acceptedUploadScope) {
         blockers.push("LIVE BLOCKER: YouTube OAuth upload scope is not independently verified with a current scope accepted by videos.insert; require youtube.upload (preferred) or another documented upload-capable scope before private upload.");
       }
       if (!exists(historyReconciliationPath)) {
@@ -495,7 +509,7 @@ function resolutionFor(blocker) {
   if (/QUEUE IDENTITY RECONCILIATION REQUIRED|queue identity approval|queue identity mappings/i.test(blocker)) return "Review content/queue-identity-approval.template.json against the exact current content/queue.json and content/long-form-queue.json. Confirm the topic identity for each operational long_form item, select one unique detailed item per operational item, and align each detailed item's publicationCyclePosition with the rolling long_form → long_form → short cycle. Then create content/queue-identity-approval.json with the exact queue hashes, status OWNER_APPROVED, ownerApproved=true, the approving owner, a timezone-qualified approvedAt timestamp and a non-empty approvalReference. Do not infer or record owner approval on the owner's behalf; keep publishing and dispatch disabled until the signed mapping is present.";
   if (/narration rights are not cleared/i.test(blocker)) return "Do not use HeyGen Free-plan Roderic/Wade or local Piper/Edge TTS for public branded production. Follow the recorded owner selection of Speechma Andrew for a manual, zero-cost browser audition only; do not automate the free site or use its paid API. Download and retain the actual MP3, verify the script/input rights and applicable Terms, calculate its SHA-256, then obtain human listening and exact-hash production approval before use. Keep publishing disabled; no paid plan or API is authorized.";
   if (/local, workflow and owner-attested upload-attempt reconciliation/i.test(blocker)) return "Refresh the owner attestation for the period after its recorded valid-through date: confirm whether any manual, local or third-party YouTube upload attempts occurred. If none occurred, record a new dated owner confirmation bound to the current complete read-only inventory and automated ledger scan. If any occurred, reconcile each attempt to its remote video ID, visibility, actual publication timestamp and final status. Never retry an uncertain upload; keep public/unattended publishing disabled.";
-  if (/imported wildlife asset/i.test(blocker)) return "Do not ask the owner to upload video. Restructure and repurpose existing project material, then use an ultra-realistic AI-generated wildlife reconstruction for production. Preserve the provider/model/generation ID, prompt and output SHA-256 hashes, provider-rights review, technical decode, species and behavior accuracy checks, synthetic-media disclosure and human visual quality review. Stock remains review-only.";
+  if (/imported wildlife asset/i.test(blocker)) return "Keep every Pexels/Pixabay/Canva/archive asset review-only and excluded from production. Do not generate or use AI wildlife visuals. Obtain genuine original creator-captured footage from the original camera operator, preserve the original MP4 and capture-provenance record, compute SHA-256, verify written commercial rights and third-party rights, then complete full decode and human visual review. Pexels/Pixabay stock is not eligible for production. Keep publishing disabled.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_grant/i.test(blocker)) return "Google rejected the YouTube OAuth refresh token (invalid_grant). Reauthorize the existing OAuth client for the same Google account with the YouTube read-only and upload scopes (https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload), request offline access with explicit consent, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, update only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun the read-only verification workflow. Never paste token values into chat or create a second OAuth client.";
   if (/latest read-only YouTube OAuth attempt.*invalid_grant/i.test(blocker)) return "Google rejected the latest YouTube refresh-token grant (invalid_grant). Reauthorize the existing OAuth client for the same Google account with https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload and offline access, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, replace only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun read-only verification. Never paste token values into chat or create a second OAuth client.";
   if (/read-only YouTube identity and uploads inventory verification.*invalid_client/i.test(blocker)) return "Google rejected the existing OAuth client ID/secret pair. Verify the matching values for the existing single client in GitHub Actions secrets; do not create another client or share secret values. Rerun the read-only verification workflow after correcting the pair.";

@@ -16,7 +16,7 @@
   "visibility": "private",
   "targetSeconds": 55,
   "hasPaidPromotion": true,
-  "containsSyntheticMedia": true,
+  "containsSyntheticMedia": false,
   "rightsConfirmed": false,
   "complianceReviewed": false,
   "notes": "Draft metadata only; not publish-ready. The exact direct-sales disclosure is owner-approved and precedes the product name. Pexels/Pixabay and other stock footage are not authorized production substitutes; stock candidates remain provenance/review-only and must not be selected for production. AI-generated wildlife visuals remain prohibited. Speechma Andrew is selected for a manual zero-cost browser audition only; no Andrew audio or production approval exists. HeyGen Roderic Free-plan output is internal-only and cannot be used commercially. Existing narration/caption artifacts are historical and must not be treated as release assets. Fresh authenticated YouTube OAuth and complete upload-history reconciliation are required before any upload; the prior refresh-token grant returned invalid_grant. Keep status HOLD_FOR_MEDIA_AND_HUMAN_REVIEW, rightsConfirmed=false, complianceReviewed=false, publishing disabled and visibility private.",
@@ -29,9 +29,9 @@
   },
   "contentType": "short",
   "productionPolicy": {
-    "originalCreatorCapturedMediaRequired": false,
+    "originalCreatorCapturedMediaRequired": true,
     "stockMediaAllowed": false,
-    "aiGeneratedWildlifeVisualsAllowed": true,
+    "aiGeneratedWildlifeVisualsAllowed": false,
     "narrationRightsStatus": "SPEECHMA_ANDREW_MANUAL_BROWSER_AUDITION_PENDING_NO_AUDIO_OR_PRODUCTION_APPROVAL",
     "narrator": "Speechma Andrew (English, United States, male standard voice) — audition only",
     "alternativeNarratorAuthorized": false,
@@ -46,6 +46,16 @@
     "stockPhotographsAllowed": false,
     "auditionVoice": "Andrew",
     "auditionOnly": true,
-    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY"
-  }
+    "status": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED; PLANNING_ONLY"
+  },
+  "containsAIWildlifeVisuals": false,
+  "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+  "mediaProvenanceStatus": "NOT_SUPPLIED",
+  "originalCreatorCapturedMediaRequired": true,
+  "stockMediaAllowed": false,
+  "stockVideoFootageAllowed": false,
+  "stockPhotographsAllowed": false,
+  "aiGeneratedWildlifeVisualsAllowed": false,
+  "pexelsAllowed": false,
+  "pixabayAllowed": false
 }

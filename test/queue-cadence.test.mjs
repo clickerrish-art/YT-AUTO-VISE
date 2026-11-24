@@ -135,7 +135,7 @@ test("the requested weekly target remains planning metadata while the owner-appr
   assert.equal(longFormQueue.cadence.weeklyTarget, null);
   assert.equal("postsPerWeek" in longFormQueue.cadence, false);
   assert.deepEqual(longFormQueue.cadence.draftPreparationDays, ["Tuesday", "Saturday"]);
-  assert.equal(longFormQueue.status, "AI_GENERATED_RECONSTRUCTION_REQUIRED; PLANNING_ONLY");
+  assert.equal(longFormQueue.status, "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED; PLANNING_ONLY");
   assert.equal(longFormQueue.publishingEnabled, false);
   assert.equal(plan.requestedWeeklyCadence.longFormPerWeek, 2);
   assert.equal(plan.requestedWeeklyCadence.shortsPerWeek, 1);
@@ -181,5 +181,5 @@ test("queue manifests distinguish the Speechma audition candidate from the prohi
   assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationVoice, /Roderic/);
   assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationVoice, /internal-only.*not commercially cleared/i);
   assert.equal(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").narrationStatus, "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE");
-  assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").productionNotes, /Speechma Andrew.*manual zero-cost browser audition only/);
+  assert.match(longFormQueue.items.find(item => item.id === "long-form-001-two-eyes-above-water").productionNotes, /commercially cleared narration/);
 });

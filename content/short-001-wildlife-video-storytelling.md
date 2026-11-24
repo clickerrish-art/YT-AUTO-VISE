@@ -9,7 +9,7 @@
 
 ## SEO title
 
-Wildlife Documentary Tips: Tell One Story With 3 Shots
+How to Film Wildlife: Tell One Story With 3 Shots
 
 ## Narration draft
 
@@ -17,7 +17,7 @@ Want stronger wildlife videos? Don't start by collecting random clips. Start wit
 
 ## Draft description — not publish-ready
 
-Wildlife documentary tips: plan one clear story with three shots—habitat, detail, and behaviour. Keep the shots from the same real encounter, use genuine original creator-captured wildlife footage only, and never bait or disturb wildlife.
+How to film wildlife: plan one clear story with three shots—habitat, detail and behaviour. Keep the shots from the same real encounter, use genuine original creator-captured wildlife footage only, and never bait or disturb wildlife.
 
 **Paid promotion — draft disclosure, seller details not re-verified in this run:** This product is sold through my own Selar business; purchases generate revenue for my business.
 
@@ -28,20 +28,22 @@ This is a draft description only. Do not publish until the product listing/selle
 
 ## Keyword phrase cluster
 
-- **Primary:** wildlife documentary tips
-- **Secondary:** beginner wildlife filmmaking; wildlife filmmaking tips; wildlife storytelling
-- **Supporting:** how to film wildlife; wildlife video planning; wildlife documentary storytelling; three-shot story structure
+- **Primary:** how to film wildlife
+- **Secondary:** wildlife filmmaking tips; beginner wildlife filmmaking; wildlife storytelling
+- **Supporting:** wildlife documentary shot sequence; how to film wildlife behaviour; wildlife video planning; establishing shot and close-up sequence
 
 ### Current search-intent evidence — checked 24 November 2026
 
-- TrendReport's YouTube topic scan for **Wildlife Documentary Tips** (week of 22 November 2026) lists 89 ranking videos across 73 channels and approximately 439,347 on-topic views per day across those videos; 31% of ranking videos are Shorts and 35% were uploaded in the last 30 days. This is *on-topic views/day across ranking videos*, not search volume. The topic is broad and the spike may be driven by a few large videos, so use it as demand/competition context, not a keyword-volume claim.
-- TrendReport's **Beginner Wildlife Filmmaking** scan (week of 19 November 2026) lists 61 ranking videos across 47 channels and approximately 4,221 on-topic views per day, up 39% from 29 days earlier. 21% are Shorts; the ranking set is older, so this is a more specific but slower-moving beginner-intent cluster.
-- Current ranking examples include “How to Get Started in Wildlife Filmmaking”, “How to Tell a Great Story in a Wildlife Documentary”, “How to Film Creative Nature Shots”, and beginner wildlife videography tutorials. These support an instructional angle around story structure and practical filming choices.
-- No independently measured global search-volume figure was available in this check. Do not present views/day as monthly searches and do not claim a third-party SEO score.
+- TrendReport's YouTube topic page **How to Film Wildlife** lists 62 ranking videos from 49 channels and approximately 7,614 on-topic views per day for the week of 14 November 2026. It also reports this figure down 82% from 20 days earlier. This is aggregate views on videos ranking for the topic, not search volume or unique searchers; use it only as qualitative demand/competition context.
+- YouTube search results include **Introduction to Wildlife Filmmaking** by UK Wildlife (published 2 November 2025; search snapshot 4,936 views and 263 likes). Its description covers cameras, lenses, settings and practical filming techniques, supporting beginner instructional intent for “how to film wildlife”.
+- MPB's wildlife-filmmaking guide recommends thinking in sequences and combining establishing/wide and close-up shots to tell a story. That directly supports this Short's three-shot teaching point.
+- Sussex Wildlife Trust's **Wildlife Stories: Tips on how to make a video** also supports the storytelling angle, though it is an older result from 2021.
+- No measured global keyword search-volume figure or trend index was available in this check. The 7,614 figure is on-topic views/day across ranking videos, not searches. No third-party SEO score or ranking outcome is claimed.
+- Sources: https://trendreport.com/topic/how-to-film-wildlife/ ; https://www.youtube.com/watch?v=Zr7HqTM5saE ; https://www.mpb.com/content/tips-and-techniques/guide-10-steps-to-become-a-wildlife-filmmaker ; https://www.youtube.com/watch?v=psSzeky1ED0
 
 ## Hashtags
 
-#WildlifeDocumentary #WildlifeFilmmaking #WildlifeStorytelling #YouTubeShorts #NatureEducation
+#HowToFilmWildlife #WildlifeFilmmaking #WildlifeStorytelling #YouTubeShorts #NatureEducation
 
 ## Thumbnail direction
 
