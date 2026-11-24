@@ -110,3 +110,5 @@ jobs:
 
 # Quality-enforcement implementation: refresh exact-commit source bundle and verification evidence.
 # 2026-11-22: trigger a fresh exact-ref source recovery export so full engineering tests can run against this branch.
+
+# 2026-11-24: trigger a zero-cost full-history recovery export from the verified implementation branch head.
