@@ -18,7 +18,7 @@ test("Long-form manifest pins current script and scientific review and remains b
   const review = readText("../content/assets/long-form-001-scientific-claim-review.md");
   assert.equal(manifest.sourceScriptBlobSha, gitBlobSha(script));
   assert.equal(manifest.scientificReviewBlobSha, gitBlobSha(review));
-  assert.equal(manifest.status, "BLOCKED_ORIGINAL_CREATOR_CAPTURED_FOOTAGE_REQUIRED");
+  assert.equal(manifest.status, "BLOCKED_AI_SOURCE_PROVENANCE_AND_RIGHTS_EVIDENCE_REQUIRED");
   assert.equal(manifest.footageAcquisitionStatus, "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED");
   assert.equal(manifest.footageAcquisitionArtifact.assetCount, 6);
   assert.equal(manifest.footageAcquisitionArtifact.fullDecodePasses, 6);
@@ -37,7 +37,7 @@ test("Long-form manifest pins current script and scientific review and remains b
   assert.equal(manifest.footageOrigin, "ai_generated");
   assert.equal(manifest.creatorCapturedOriginal, false);
   assert.equal(manifest.stockVideoFootageAllowed, false);
-  assert.equal(manifest.originalCreatorCapturedMediaRequired, true);
+  assert.equal(manifest.originalCreatorCapturedMediaRequired, false);
   assert.equal(manifest.stockMediaAllowed, false);
   assert.equal(manifest.stockPhotographsAllowed, false);
   assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, true);
