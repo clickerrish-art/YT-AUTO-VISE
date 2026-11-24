@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 
 test("Short 001 legacy captions remain non-final until approved narration and captions are supplied", () => {
-  const script = fs.readFileSync("content/short-001-wildlife-video-storytelling.md", "utf8").toLowerCase();
+  const script = fs.readFileSync("content/short-001-wildlife-video-storytelling.md", "utf8");
   const srt = fs.readFileSync("content/short-001-wildlife-video-storytelling.srt", "utf8").toLowerCase();
   const manifest = JSON.parse(fs.readFileSync("content/render-manifest.json", "utf8"));
   assert.ok(script.includes("plan three shots from the same real encounter"));

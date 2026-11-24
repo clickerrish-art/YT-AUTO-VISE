@@ -8,7 +8,6 @@
 **Product:** Complete YouTube Wildlife Creator's Vault — https://selar.com/0u19v8u99l
 
 ## SEO title
-
 How to Film Wildlife: Tell One Story With 3 Shots
 
 ## Narration draft
@@ -16,6 +15,8 @@ How to Film Wildlife: Tell One Story With 3 Shots
 Want stronger wildlife videos? Don't start by collecting random clips. Start with one question: what behaviour should the viewer understand? Plan three shots from the same real encounter. First, a wide frame that shows the habitat. Second, a meaningful detail that gives context, if it is genuinely present. Third, the behaviour itself, filmed from a safe distance. Keep the sequence honest. Never combine separate animals or locations to imply one event. Don't bait, chase, or disturb wildlife. Hold your frame, record a few seconds before and after the behaviour, and capture clean natural sound when safe. In the edit, remove only dead time, keep captions readable, and verify every factual claim. For more structured wildlife creator planning, see the Complete YouTube Wildlife Creator's Vault. Paid promotion: this product is sold through my own Selar business; purchases generate revenue for my business.
 
 ## Draft description — not publish-ready
+
+**Production continuity rule:** plan three shots from the same real encounter; do not imply one continuous encounter by combining separate animals, locations or events.
 
 How to film wildlife: plan one clear story with three shots—habitat, detail and behaviour. Keep the shots from the same real encounter, use genuine original creator-captured wildlife footage only, and never bait or disturb wildlife.
 
@@ -70,6 +71,8 @@ If no single original encounter contains all three shot roles, do not splice unr
 - [ ] Verify written commercial-use rights and all third-party rights; complete technical probe/full decode and human visual review.
 - [ ] Obtain commercially cleared narration and owner approval bound to the exact audio hash; do not use the disallowed HeyGen Free-plan sample.
 - [ ] Generate captions against the approved final narration and validate synchronization.
+- [ ] Use only music you have permission to use; otherwise retain verified natural sound only.
+- [ ] Never bait, chase, or disturb wildlife; do not imply a single encounter from separate locations or animals.
 - [ ] Render and inspect the actual 1080×1920 MP4; create a thumbnail from the same rights-cleared original encounter.
 - [ ] Verify SonicVhibez/Sonic Fire as a distinct YouTube destination; never use Nature Frontiers.
 - [ ] Inspect complete published and scheduled timestamp history before any calendar decision; require at least 72 elapsed hours in Africa/Johannesburg. No schedule is proposed in this draft.

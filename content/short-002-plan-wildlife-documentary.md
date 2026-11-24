@@ -94,7 +94,7 @@ Use one genuine, rights-cleared animal image in its actual habitat, with natural
 
 **Destination guard:** SonicVhibez only; never Nature Frontiers.
 
-**SEO safety:** No SEO score, ranking, reach, or sales outcome is guaranteed.
+**SEO safety:** No SEO score is guaranteed; no ranking, reach, sales or income outcome is promised.
 
 **Release state:** HOLD — Selar direct-sales relationship, SonicVhibez promotion authorization and the exact product-specific viewer-facing disclosure are owner-approved. Final metadata must still pass the product-promotion gate. Genuine original media, commercially eligible Roderic narration, final assets, destination/history verification and human review remain outstanding. No video has been rendered or published.
 

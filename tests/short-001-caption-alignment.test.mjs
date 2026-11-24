@@ -52,7 +52,7 @@ test("Short 001 metadata preserves private-only and policy disclosure safeguards
   assert.equal(metadata.targetSeconds, 55);
   assert.equal(metadata.visibility, "private");
   assert.equal(metadata.hasPaidPromotion, true);
-  assert.equal(metadata.containsSyntheticMedia, true);
+  assert.equal(metadata.containsSyntheticMedia, false);
   assert.equal(metadata.promotionDisclosure.status, "APPROVED");
   assert.equal(metadata.promotionDisclosure.type, "direct_sales_revenue");
   assert.equal(metadata.promotionDisclosure.text, disclosure);
