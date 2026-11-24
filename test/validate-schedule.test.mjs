@@ -136,3 +136,21 @@ test("validator rejects a scheduled queue item without an exact job-bound qualit
  assert.notEqual(result.status, 0);
  assert.match(result.stderr, /lacks a human-approved quality record and exact export\/metadata paths/);
 });
+
+test("validator applies the approved product destination only to explicitly promotional queue items", () => {
+ const wrongPromoUrl = runWithPlanMutation((plan, queue) => {
+  queue.items[1].productUrl = "https://example.invalid/unapproved";
+ });
+ assert.notEqual(wrongPromoUrl.status, 0);
+ assert.match(wrongPromoUrl.stderr, /promotional queue item long-form-plan-wildlife-video must use the exact approved Selar product URL/);
+ const nonCommercialPromo = runWithPlanMutation((plan, queue) => {
+  queue.items[0].productUrl = "https://selar.com/0u19v8u99l";
+ });
+ assert.notEqual(nonCommercialPromo.status, 0);
+ assert.match(nonCommercialPromo.stderr, /non-commercial queue item long-form-001-two-eyes-above-water must not carry a product URL or promotional CTA/);
+ const missingPromotionFlag = runWithPlanMutation((plan, queue) => {
+  delete queue.items[0].hasPaidPromotion;
+ });
+ assert.notEqual(missingPromotionFlag.status, 0);
+ assert.match(missingPromotionFlag.stderr, /must explicitly declare hasPaidPromotion/);
+});
