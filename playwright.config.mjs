@@ -19,9 +19,9 @@ export default defineConfig({
     browserName: "chromium",
     headless: true,
     viewport: { width: 1280, height: 900 },
-    trace: "off",
-    screenshot: "off",
-    video: "off"
+    trace: "retain-on-failure",
+    screenshot: "only-on-failure",
+    video: "retain-on-failure"
   },
   webServer: {
     command: "npm run dashboard",
