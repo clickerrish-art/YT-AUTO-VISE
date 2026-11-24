@@ -44,8 +44,8 @@ class CheckedInReleaseMetadataTests(unittest.TestCase):
                     "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
                     "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
                     "DRAFT_REVIEW_REQUIRED",
+                    "SCRIPT_READY_PRODUCTION_HOLD_ORIGINAL_MEDIA_NARRATION_RIGHTS_AND_HUMAN_REVIEW_REQUIRED",
                 })
-
 
     def test_short_001_visual_review_preview_cannot_be_mistaken_for_release_evidence(self):
         preview = json.loads((ROOT / "content" / "short-001-visual-review-evidence.json").read_text(encoding="utf-8"))
@@ -73,6 +73,7 @@ class CheckedInReleaseMetadataTests(unittest.TestCase):
         self.assertTrue(preview["licenseEvidence"]["reviewed"])
         self.assertFalse(acquisition["release"]["rightsConfirmed"])
         self.assertFalse(acquisition["release"]["releaseEligible"])
+
 
 if __name__ == "__main__":
     unittest.main()
