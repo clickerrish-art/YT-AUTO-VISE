@@ -54,7 +54,21 @@
       "wildlife-short-description-seo"
     ],
     "editorialStatus": "SCRIPT_STORYBOARD_METADATA_AND_CAPTION_TRANSCRIPT_DRAFT_CREATED",
-    "releaseStatus": "HOLD_FINAL_AUDIO_TIME_CODED_SRT_MEDIA_RIGHTS_HUMAN_REVIEW_FINAL_RENDER"
+    "releaseStatus": "HOLD_FINAL_AUDIO_TIME_CODED_SRT_MEDIA_RIGHTS_HUMAN_REVIEW_FINAL_RENDER",
+    "individualScriptPaths": [
+      "content/drafts/wildlife-short-story-structure.md",
+      "content/drafts/wildlife-short-footage-rights.md",
+      "content/drafts/wildlife-short-documentary-plan.md",
+      "content/drafts/wildlife-short-natural-behavior.md",
+      "content/drafts/wildlife-short-hook-without-clickbait.md",
+      "content/drafts/wildlife-short-caption-readability.md",
+      "content/drafts/wildlife-short-natural-sound.md",
+      "content/drafts/wildlife-short-fact-checking.md",
+      "content/drafts/wildlife-short-thumbnail-truth.md",
+      "content/drafts/wildlife-short-editing-pacing.md",
+      "content/drafts/wildlife-short-research-before-shoot.md",
+      "content/drafts/wildlife-short-description-seo.md"
+    ]
   },
   "commonReleaseRequirements": [
     "Actual final media files and technical validation",
@@ -70,6 +84,7 @@
     "The queue's existing statuses remain unchanged pending the relevant acceptance gates.",
     "The seven AI-generated crocodile source clips are not present in the accessible conversation uploads or Library video inventory; do not invent filenames or hashes.",
     "The Nile crocodile AI-visual exception is limited to long-form-001 and does not apply to other productions.",
-    "Short 001 SEO title was aligned with its canonical queue topic in commit 869b900d7567046891933fdb18e470db2e446c43."
+    "Short 001 SEO title was aligned with its canonical queue topic in commit 869b900d7567046891933fdb18e470db2e446c43.",
+    "Individual Markdown files for each Short 005–016 were committed together in 0e1bb000fc797bfa1e7c5c310f5534a90acfd239."
   ]
 }
