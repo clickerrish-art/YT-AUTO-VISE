@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-24T18:00:00+02:00",
+  "repository": "clickerrish-art/YT-AUTO-VISE",
+  "branch": "codex/marketing-machine-audit-fixes",
+  "sourceQueue": "content/queue.json",
+  "editorialSupplement": "content/drafts/wildlife-shorts-005-016-production-packages-2026-11-24.md",
+  "editorialOnly": true,
+  "publishingEnabled": false,
+  "items": [
+    {
+      "queueId": "long-form-001-two-eyes-above-water",
+      "editorialStatus": "EXISTING_SCRIPT_AND_METADATA_DRAFT",
+      "scriptPath": "content/drafts/long-form-001-two-eyes-above-water.md",
+      "metadataPath": "content/long-form-001-youtube-metadata-draft.md",
+      "releaseStatus": "HOLD_AI_SOURCE_FILES_AND_GENERATION_RECEIPTS_NARRATION_AUDIO_RIGHTS_HUMAN_REVIEW_FINAL_RENDER"
+    },
+    {
+      "queueId": "long-form-plan-wildlife-video",
+      "editorialStatus": "EXISTING_SCRIPT_DRAFT",
+      "scriptPath": "content/drafts/long-form-002-plan-wildlife-video.md",
+      "metadataPath": "content/long-form-002-youtube-metadata-draft.md",
+      "releaseStatus": "HOLD_MEDIA_NARRATION_RIGHTS_CAPTIONS_HUMAN_REVIEW_FINAL_RENDER"
+    },
+    {
+      "queueId": "wildlife-vault-001",
+      "editorialStatus": "EXISTING_SCRIPT_DRAFT_TITLE_ALIGNMENT_REQUIRED",
+      "scriptPath": "content/short-001-wildlife-video-storytelling.md",
+      "metadataPath": "embedded_in_script",
+      "releaseStatus": "HOLD_TITLE_ALIGNMENT_MEDIA_NARRATION_CAPTIONS_HUMAN_REVIEW"
+    },
+    {
+      "queueId": "wildlife-vault-002",
+      "editorialStatus": "EXISTING_SCRIPT_AND_METADATA_DRAFT",
+      "scriptPath": "content/short-002-plan-wildlife-documentary.md",
+      "metadataPath": "embedded_in_script",
+      "releaseStatus": "HOLD_MEDIA_NARRATION_CAPTIONS_HUMAN_REVIEW"
+    }
+  ],
+  "newShorts005To016": {
+    "scriptPath": "content/drafts/wildlife-shorts-005-016-production-packages-2026-11-24.md",
+    "items": [
+      "wildlife-short-story-structure",
+      "wildlife-short-footage-rights",
+      "wildlife-short-documentary-plan",
+      "wildlife-short-natural-behavior",
+      "wildlife-short-hook-without-clickbait",
+      "wildlife-short-caption-readability",
+      "wildlife-short-natural-sound",
+      "wildlife-short-fact-checking",
+      "wildlife-short-thumbnail-truth",
+      "wildlife-short-editing-pacing",
+      "wildlife-short-research-before-shoot",
+      "wildlife-short-description-seo"
+    ],
+    "editorialStatus": "SCRIPT_STORYBOARD_METADATA_AND_CAPTION_TRANSCRIPT_DRAFT_CREATED",
+    "releaseStatus": "HOLD_FINAL_AUDIO_TIME_CODED_SRT_MEDIA_RIGHTS_HUMAN_REVIEW_FINAL_RENDER"
+  },
+  "commonReleaseRequirements": [
+    "Actual final media files and technical validation",
+    "Asset-level rights/provenance evidence",
+    "Final narration recording and applicable voice rights",
+    "Time-coded captions checked against final audio",
+    "Final thumbnail and metadata review",
+    "Human review and exact-hash owner approval",
+    "Explicit private-upload authorization where applicable"
+  ],
+  "notes": [
+    "This register records editorial artifacts only; it does not promote any item to production-ready or publication-ready.",
+    "The queue's existing statuses remain unchanged pending the relevant acceptance gates.",
+    "The seven AI-generated crocodile source clips are not present in the accessible conversation uploads or Library video inventory; do not invent filenames or hashes.",
+    "The Nile crocodile AI-visual exception is limited to long-form-001 and does not apply to other productions."
+  ]
+}
