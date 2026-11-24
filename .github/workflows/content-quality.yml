@@ -82,14 +82,14 @@ jobs:
               if script_path.is_absolute() or ".." in script_path.parts or not script_path.is_file():
                   raise SystemExit(f"Episode {index} canonical script path is missing or unsafe: {script_path}")
               source = script_path.read_text(encoding="utf-8")
-              heading = re.search(r"(?m)^#{2,3} (?:Spoken narration draft|Narration script)\\s*$", source)
+              heading = re.search(r"(?m)^#{2,3} (?:Spoken narration draft|Narration script)\s*$", source)
               if not heading:
                   raise SystemExit(f"Episode {index} has no canonical narration section")
               section = source[heading.end():]
-              boundary = re.search(r"(?m)^#{2,3} (?:Research and claim map|Suggested description|Sources and references)\\s*$", section)
+              boundary = re.search(r"(?m)^#{2,3} (?:Research and claim map|Suggested description|Sources and references)\s*$", section)
               if boundary:
                   section = section[:boundary.start()]
-              words = re.findall(r"\\b[\\w’'-]+\\b", section)
+              words = re.findall(r"\b[\w’'-]+\b", section)
               print(f"Episode {index} ({item['title']}): {len(words)} draft words")
               if len(words) < 900:
                   raise SystemExit(f"Episode {index} is below the 900-word draft floor")
