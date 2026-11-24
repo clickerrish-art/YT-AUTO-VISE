@@ -45,7 +45,7 @@ const formJourneys = {
   productionplanreviewform: "production-plan submission and hash-bound review persist through the real dashboard",
   canceljobform: "production job management cancels an unstarted job and preserves its audit history",
   retryjobform: "operator retry form authorizes reviewed failures and one dead-letter override through the real dashboard",
-  produceform: "production controls disable safely when owner queue identity approval is missing",
+  produceform: "production controls fail closed when queue identity approval is missing",
   parentrelationshipform: "Short-parent dashboard submits the explicit relationship payload and surfaces backend blockers",
   validationform: "validation task control runs an allowlisted check and displays its durable result",
   rightsform: "rights asset builder requires explicit per-asset YouTube permission and only edits local JSON",

@@ -140,12 +140,13 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   expect(readinessBody.ready).toBe(false);
   expect(readinessBody.publishingEnabled).toBe(false);
   expect(readinessBody.blockers).toEqual(expect.arrayContaining([
-    expect.stringMatching(/thirdPartyRightsReviewed must be true only after checking people, property, trademarks, music and other third-party rights/),
-    expect.stringMatching(/narration rights are not cleared for public branded\/production use/),
-    expect.stringMatching(/Manifest asset footagePath is missing/)
+    expect.stringMatching(/QUEUE IDENTITY RECONCILIATION REQUIRED/),
+    expect.stringMatching(/creatorCapturedOriginal must be true only after original-file provenance is verified/),
+    expect.stringMatching(/captureEvidencePath must reference a real, retained original-capture provenance record/),
+    expect.stringMatching(/narration rights are not cleared for public branded\/production use/)
   ]));
   expect(readinessBody.blockers).not.toEqual(expect.arrayContaining([
-    expect.stringMatching(/footageOrigin must be creator_captured_original/)
+    expect.stringMatching(/AI-generated wildlife visuals are permitted production substitutes/)
   ]));
 
   await page.setViewportSize({ width: 375, height: 812 });
@@ -790,7 +791,7 @@ test("rights asset builder requires explicit per-asset YouTube permission and on
   expect(after.publishingEnabled).toBe(false);
 });
 
-test("production controls disable safely when a queued job lacks the approved authoring pipeline", async ({ page, request }) => {
+test("production controls fail closed when queue identity approval is missing", async ({ page, request }) => {
   const headers = { "x-operator-token": operatorToken };
   await page.goto("/");
   await page.locator("#token").fill(operatorToken);
@@ -820,13 +821,12 @@ test("production controls disable safely when a queued job lacks the approved au
     const blockedRender = await request.post("/api/jobs/produce", { headers, data: { jobId: job.id } });
     expect(blockedRender.status()).toBe(409);
     const blockerBody = await blockedRender.json();
-    expect(blockerBody.error).toMatch(/approved authoring pipeline/i);
-    expect(blockerBody.code).toBe("AUTHORING_PIPELINE_REQUIRED");
+    expect(blockerBody.error).toMatch(/queue identity reconciliation is not owner-approved/i);
+    expect(blockerBody.code).toBe("QUEUE_IDENTITY_APPROVAL_REQUIRED");
     expect(blockerBody.blockers).toEqual(expect.arrayContaining([
-      expect.stringMatching(/Research and source evidence must be attached/i),
-      expect.stringMatching(/exact script and narration\/caption stages must be reviewed/i),
-      expect.stringMatching(/Scene plan, rights\/provenance, quality and compliance evidence must be current/i),
-      expect.stringMatching(/hash-bound production plan must authorize the exact render inputs/i)
+      expect.stringMatching(/Queue identity approval must be explicitly OWNER_APPROVED by the owner/i),
+      expect.stringMatching(/must identify the approving owner/i),
+      expect.stringMatching(/valid, non-future timezone-qualified approvedAt timestamp/i)
     ]));
     expect(blockerBody.publishable).toBe(false);
     expect(blockerBody.jobState).toBe("BLOCKED");
@@ -1801,16 +1801,17 @@ test("production-plan submission and hash-bound review persist through the real 
         narrationCue: "Align with approved narration section " + index,
         assetPath,
         assetSha256: hash(assetBytes),
-        sourceType: "GENERATED_ORIGINAL",
+        // Test-only simulated original-capture fixture. It is never used as production media.
+        sourceType: "CREATOR_CAPTURED_ORIGINAL",
         startSeconds: index * 60,
         endSeconds: (index + 1) * 60,
         provenance: {
-          sourceOrGeneration: "test fixture generated scene " + index,
+          sourceOrGeneration: "TEST_FIXTURE_ONLY simulated capture record " + index,
           rightsEvidencePath,
           rightsEvidenceSha256: hash(rightsBytes),
           permittedUse: "COMMERCIAL_DERIVATIVE",
           attribution: "Test fixture attribution record",
-          editorialNotes: "Synthetic test fixture only; not production rights evidence"
+          editorialNotes: "Test-only simulated capture fixture; not real footage or production rights evidence"
         }
       };
     });
@@ -1821,7 +1822,7 @@ test("production-plan submission and hash-bound review persist through the real 
       scriptSha256,
       title: "An evidence-led wildlife documentary",
       editorialPremise: "Explain a specific wildlife question using source-backed context, careful uncertainty and scene-level narration alignment.",
-      syntheticDisclosure: "Generated scenes must be disclosed in metadata where applicable.",
+      syntheticDisclosure: "Test-only fixture bytes; not real wildlife footage and not eligible for production rendering or publication.",
       scenes,
       publishingEnabled: false,
       humanReviewRequired: true
