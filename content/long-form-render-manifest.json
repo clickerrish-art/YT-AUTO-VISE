@@ -252,5 +252,7 @@
   "syntheticMediaDisclosureText": "This documentary contains AI-generated wildlife visuals.",
   "footageEligibilityStatus": "BLOCKED_AI_SOURCE_PROVENANCE_AND_RIGHTS_EVIDENCE_REQUIRED",
   "captureEvidencePath": "",
-  "projectPolicyExceptionId": "SONICVHIBEZ_NILE_CROCODILE_AI_VISUALS_2026_11"
+  "projectPolicyExceptionId": "SONICVHIBEZ_NILE_CROCODILE_AI_VISUALS_2026_11",
+  "ownerApprovalEvidencePath": "content/ai-generation-evidence/long-form-001.json",
+  "ownerApprovalEvidenceType": "OWNER_ATTESTATION_ONLY"
 }
