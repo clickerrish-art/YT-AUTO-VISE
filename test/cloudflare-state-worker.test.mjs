@@ -150,3 +150,34 @@ test("restore refuses tampered backup bytes",async()=>{
   assert.equal(r.status,409);assert.match((await json(r)).error,/integrity check failed/);
   assert.equal(db.row.revision,1);
 });
+
+
+import { handleRequest as handleRunnerGateRequest } from "../cloudflare/worker.js";
+
+test("repository runner endpoints fail closed unless OIDC is explicitly enabled",async()=>{
+  const denied=await handleRunnerGateRequest(
+    req("/api/runner/session","POST",{}),
+    env()
+  );
+  assert.equal(denied.status,503);
+  assert.equal((await json(denied)).code,"RUNNER_OIDC_DISABLED");
+});
+
+test("enabling the runner gate still requires a valid GitHub OIDC bearer token",async()=>{
+  const e={...env(),RUNNER_OIDC_ENABLED:"true"};
+  const denied=await handleRunnerGateRequest(
+    req("/api/runner/session","POST",{}),
+    e
+  );
+  assert.equal(denied.status,401);
+  assert.equal((await json(denied)).code,"WORKER_OIDC_UNAUTHORIZED");
+});
+
+test("operator-only runner status remains outside the OIDC gate but requires operator authentication",async()=>{
+  const response=await handleRunnerGateRequest(
+    new Request("https://worker.test/api/runner/session/status"),
+    env()
+  );
+  assert.equal(response.status,401);
+  assert.notEqual((await json(response)).code,"RUNNER_OIDC_DISABLED");
+});
