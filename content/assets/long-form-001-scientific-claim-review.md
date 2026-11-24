@@ -2,7 +2,7 @@
 
 **Documentary:** Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile  
 **Script:** `content/drafts/long-form-001-two-eyes-above-water.md`  
-**Script blob SHA reviewed:** `b5540171405a0cc230838cd65e3072da421a0bc1`  
+**Script blob SHA reviewed:** `cbd74b95506194d537fc43d35fb6c007fcf29234`  
 **Review date:** 2026-11-20  
 **Review scope:** Desk review of the script's sensory-system and stimulus-integration claims against primary research. This is not a zoologist's independent sign-off, footage review, or final editorial approval.
 
@@ -82,3 +82,8 @@ The sensory-integration wording in the documentary script was checked against th
 
 **Disposition:** The revised script's restricted description of young Nile crocodiles combining sound and water-wave information under controlled conditions is supported. The claim remains contextual and must not be illustrated as documentary footage of a wild hunt. Independent qualified zoological review of the complete narration and final scene mapping remains outstanding.
 
+
+
+## Exact-script reconciliation — 2026-11-24
+
+The canonical script was reconciled to blob `cbd74b95506194d537fc43d35fb6c007fcf29234`. The spoken narration was compared with the previously reviewed script blob `b5540171405a0cc230838cd65e3072da421a0bc1`: one paragraph changed, replacing a general statement about signal integration with the specific 2025 controlled-study result for young Nile crocodiles. The claim review below already addresses that result and its limits: controlled stimuli and young animals do not prove a universal wild-hunt sequence or adult behaviour. The remaining spoken narration is unchanged. Production notes were also updated to reflect the owner-approved AI-visual exception; this desk review does not approve the seven visual files, provider rights, scene mapping or final edit. Independent qualified zoological review remains outstanding.
