@@ -10,17 +10,19 @@
   "items": [
     {
       "queueId": "long-form-001-two-eyes-above-water",
-      "editorialStatus": "EXISTING_SCRIPT_AND_METADATA_DRAFT",
+      "editorialStatus": "SCRIPT_METADATA_SOURCE-TO-CLAIM_LEDGER_AND_STORYBOARD_DRAFT",
       "scriptPath": "content/drafts/long-form-001-two-eyes-above-water.md",
       "metadataPath": "content/long-form-001-youtube-metadata-draft.md",
-      "releaseStatus": "HOLD_AI_SOURCE_FILES_AND_GENERATION_RECEIPTS_NARRATION_AUDIO_RIGHTS_HUMAN_REVIEW_FINAL_RENDER"
+      "releaseStatus": "HOLD_AI_SOURCE_FILES_AND_GENERATION_RECEIPTS_NARRATION_AUDIO_RIGHTS_HUMAN_REVIEW_FINAL_RENDER",
+      "storyboardPath": "content/drafts/long-form-001-two-eyes-above-water-storyboard.md"
     },
     {
       "queueId": "long-form-plan-wildlife-video",
-      "editorialStatus": "EXISTING_SCRIPT_DRAFT",
+      "editorialStatus": "SCRIPT_METADATA_AND_STORYBOARD_DRAFT",
       "scriptPath": "content/drafts/long-form-002-plan-wildlife-video.md",
       "metadataPath": "content/long-form-002-youtube-metadata-draft.md",
-      "releaseStatus": "HOLD_MEDIA_NARRATION_RIGHTS_CAPTIONS_HUMAN_REVIEW_FINAL_RENDER"
+      "releaseStatus": "HOLD_MEDIA_NARRATION_RIGHTS_CAPTIONS_HUMAN_REVIEW_FINAL_RENDER",
+      "storyboardPath": "content/drafts/long-form-002-plan-wildlife-video-storyboard.md"
     },
     {
       "queueId": "wildlife-vault-001",
@@ -85,6 +87,7 @@
     "The seven AI-generated crocodile source clips are not present in the accessible conversation uploads or Library video inventory; do not invent filenames or hashes.",
     "The Nile crocodile AI-visual exception is limited to long-form-001 and does not apply to other productions.",
     "Short 001 SEO title was aligned with its canonical queue topic in commit 869b900d7567046891933fdb18e470db2e446c43.",
-    "Individual Markdown files for each Short 005–016 were committed together in 0e1bb000fc797bfa1e7c5c310f5534a90acfd239."
+    "Individual Markdown files for each Short 005–016 were committed together in 0e1bb000fc797bfa1e7c5c310f5534a90acfd239.",
+    "Scene-by-scene storyboard drafts were added for long-form-001 and long-form-002; both remain production HOLD pending actual assets/audio/rights/review."
   ]
 }
