@@ -23,7 +23,7 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
 
     def test_source_and_output_paths_are_anchored_to_repository_not_caller_working_directory(self):
         expected_root = MODULE_PATH.resolve().parents[1]
-        self.assertEqual(MODULE.SOURCE, expected_root / "content" / "long-form-scripts.md")
+        self.assertEqual(MODULE.SOURCE, expected_root / "content" / "long-form-queue.json")
         self.assertEqual(MODULE.OUT, expected_root / "media" / "long-form-drafts")
         self.assertTrue(MODULE.SOURCE.is_absolute())
         self.assertTrue(MODULE.OUT.is_absolute())
@@ -198,25 +198,28 @@ class LongFormNarrationCleaningTests(unittest.TestCase):
         }}]}
         self.assertFalse(MODULE.has_owner_approved_selar_disclosure(invalid))
 
-    def test_current_episodes_include_paid_cta_only_with_owner_approved_disclosure(self):
+    def test_current_episodes_apply_paid_cta_only_to_the_owner_approved_second_topic(self):
         episodes = MODULE.extract_episodes(MODULE.SOURCE.read_text(encoding="utf-8"))
         self.assertEqual(len(episodes), 2)
-        for _, _, narration in episodes:
-            self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, narration)
-            self.assertIn("Advertisement.", narration)
+        self.assertNotIn(MODULE.APPROVED_DISCLOSURE_TEXT, episodes[0][2])
+        self.assertNotIn("Advertisement.", episodes[0][2])
+        self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, episodes[1][2])
+        self.assertIn("Advertisement.", episodes[1][2])
 
-    def test_both_long_form_descriptions_identify_the_commercial_segment(self):
-        source = MODULE.SOURCE.read_text(encoding="utf-8")
-        self.assertEqual(source.count("ADVERTISEMENT\n\nThis product is sold through my own Selar business"), 2)
-        self.assertNotIn("ADVERTISEMENT — Promotional resource:", source)
-        self.assertNotIn("ADVERTISEMENT — ADVERTISEMENT", source)
-        episodes = MODULE.extract_episodes(source)
-        self.assertEqual(len(episodes), 2)
-        for _, _, narration in episodes:
-            self.assertIn("Advertisement.", narration)
-            self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, narration)
-            self.assertLess(narration.index(MODULE.APPROVED_DISCLOSURE_TEXT),
-                            narration.index("Complete YouTube Wildlife Creator"))
+    def test_canonical_cycle_scripts_keep_noncommercial_and_promotional_identity_separate(self):
+        queue = __import__("json").loads(MODULE.SOURCE.read_text(encoding="utf-8"))
+        first = next(item for item in queue["items"] if item.get("publicationCyclePosition") == 1)
+        second = next(item for item in queue["items"] if item.get("publicationCyclePosition") == 2)
+        first_source = (MODULE.REPO_ROOT / first["scriptPath"]).read_text(encoding="utf-8")
+        second_source = (MODULE.REPO_ROOT / second["scriptPath"]).read_text(encoding="utf-8")
+        self.assertIs(first["hasPaidPromotion"], False)
+        self.assertIs(second["hasPaidPromotion"], True)
+        self.assertNotIn(MODULE.APPROVED_SELLAR_URL, first_source)
+        self.assertNotIn("ADVERTISEMENT", first_source.upper())
+        self.assertIn(MODULE.APPROVED_DISCLOSURE_TEXT, second_source)
+        self.assertIn(MODULE.APPROVED_SELLAR_URL, second_source)
+        self.assertLess(second_source.index(MODULE.APPROVED_DISCLOSURE_TEXT),
+                        second_source.index("Complete YouTube Wildlife Creator"))
 
     def test_owner_gate_is_defined_once_and_requires_all_evidence_references(self):
         source = MODULE_PATH.read_text(encoding="utf-8")
