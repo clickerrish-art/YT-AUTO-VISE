@@ -63,19 +63,28 @@ test("separate creator-education long-form script has compliant disclosure order
   assert.equal(Object.hasOwn(draft, "publicationCyclePosition"), false);
 });
 
-test("Episode 001 and 002 metadata drafts disclose direct sales before the product CTA and exclude NOAA stock claims", () => {
-  for (const path of [
-    "content/episode-001-upload-metadata-draft.md",
-    "content/episode-002-upload-metadata-draft.md"
+test("canonical long-form metadata keeps the crocodile documentary non-commercial and creator-education disclosure separate", () => {
+  const crocodile = readText("content/long-form-001-youtube-metadata-draft.md");
+  const creatorEducation = readText("content/long-form-002-youtube-metadata-draft.md");
+  assert.ok(!crocodile.includes(SELAR_URL));
+  assert.ok(!crocodile.includes("ADVERTISEMENT"));
+  assert.ok(crocodile.includes("hasPaidPromotion=false"));
+  assert.ok(crocodile.includes("no product CTA"));
+  assertDisclosurePrecedesEveryProductMention(creatorEducation, "canonical long-form 002 metadata");
+  assert.ok(creatorEducation.includes("ADVERTISEMENT"));
+  assert.ok(creatorEducation.includes(SELAR_URL));
+  assert.ok(creatorEducation.includes("hasPaidPromotion=true"));
+  assert.ok(creatorEducation.includes("original creator-captured wildlife footage only"));
+  assert.ok(!creatorEducation.includes("Qualifying Pexels/Pixabay video footage may be used"));
+  for (const [path, canonicalPath] of [
+    ["content/episode-001-upload-metadata-draft.md", "content/long-form-002-youtube-metadata-draft.md"],
+    ["content/episode-002-upload-metadata-draft.md", "content/drafts/faceless-wildlife-workflow-metadata-draft.md"]
   ]) {
-    const draft = readText(path);
-    assertDisclosurePrecedesEveryProductMention(draft, path);
-    assert.ok(draft.includes("ADVERTISEMENT"));
-    assert.ok(draft.includes(SELAR_URL));
-    assert.ok(draft.includes("Qualifying Pexels/Pixabay video footage may be used"));
-    assert.ok(draft.includes("cannot be publicly redistributed for branded projects"));
-    assert.ok(!draft.includes("uses illustrative marine B-roll"));
-    assert.ok(!draft.includes("NOAA Fisheries"));
+    const legacy = readText(path);
+    assert.ok(legacy.includes("superseded") || legacy.includes("unassigned"));
+    assert.ok(legacy.includes(canonicalPath));
+    assert.ok(!legacy.includes(SELAR_URL), path + " must remain a historical pointer, not a second active metadata source");
+    assert.ok(!legacy.includes("ADVERTISEMENT"));
   }
 });
 
