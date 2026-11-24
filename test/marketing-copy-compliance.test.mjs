@@ -117,8 +117,9 @@ test("Short 002 retains its approved direct-sales promotion with disclosure befo
   assert.equal(metadata.channelId, "UCSlkuPfHH78oGC1o418HV4w");
 });
 
-test("Nile crocodile documentary is non-commercial and prohibits unapproved wildlife visuals", () => {
+test("Nile crocodile documentary is non-commercial and limits AI visuals to seven owner-approved clips", () => {
   const manifest = JSON.parse(readText("content/long-form-render-manifest.json"));
+  const aiEvidence = JSON.parse(readText("content/ai-generation-evidence/long-form-001.json"));
   const metadata = readText("content/long-form-001-youtube-metadata-draft.md");
   const script = readText("content/drafts/long-form-001-two-eyes-above-water.md");
   assert.equal(manifest.hasPaidPromotion, false);
@@ -132,18 +133,29 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.equal(manifest.selectedNarratorForReview.commercialUseAllowed, true);
   assert.equal(manifest.selectedNarratorForReview.productionApproved, false);
   assert.equal(manifest.selectedNarratorForReview.publicationAuthorized, false);
+  assert.equal(manifest.ownerApprovalEvidencePath, "content/ai-generation-evidence/long-form-001.json");
+  assert.equal(manifest.ownerApprovalEvidenceType, "OWNER_ATTESTATION_ONLY");
+  assert.equal(aiEvidence.status, "OWNER_ATTESTED_GENERATED_CLIPS_PENDING_INGEST");
+  assert.equal(aiEvidence.ownerApproval.clipCount, 7);
+  assert.equal(aiEvidence.ownerApproval.sourceFilesAccessibleInCurrentWorkspace, false);
+  assert.equal(aiEvidence.technicalValidationStatus, "NOT_DONE");
+  assert.equal(aiEvidence.rightsReviewStatus, "PENDING");
+  assert.equal(aiEvidence.humanVisualReview, "NOT_DONE");
   assert.ok(!metadata.includes(SELAR_URL));
   assert.ok(!metadata.includes("ADVERTISEMENT"));
   assert.ok(metadata.includes("hasPaidPromotion=false"));
   assert.ok(metadata.includes("no product CTA"));
-  assert.ok(metadata.includes("original creator-captured wildlife footage only"));
-  assert.ok(metadata.includes("AI-generated wildlife visuals"));
-  assert.ok(metadata.includes("not permitted substitutes"));
+  assert.ok(metadata.includes("exactly seven AI-generated wildlife clips explicitly approved by the owner"));
+  assert.ok(metadata.includes("synthetic illustrations, not genuine camera-captured wildlife footage"));
+  assert.ok(metadata.includes("This documentary contains AI-generated wildlife visuals."));
+  assert.ok(metadata.includes("Do not use Pexels/Pixabay, other stock/archive footage or additional AI-generated wildlife shots."));
   assert.ok(script.includes("hasPaidPromotion=false"));
   assert.ok(script.includes("No product CTA, Selar URL"));
-  assert.ok(script.includes("original creator-captured wildlife footage only"));
-  assert.ok(script.includes("AI-generated wildlife visuals") && script.includes("prohibited"));
-  assert.ok(script.includes("stock/archive footage"));
+  assert.ok(script.includes("seven owner-approved AI-generated source clips are the sole permitted wildlife-visual exception"));
+  assert.ok(script.includes("source MP4s are not yet ingested into the current workspace"));
+  assert.ok(script.includes("Do not describe them as genuine wildlife footage"));
+  assert.ok(script.includes("Clearly disclose AI-generated wildlife visuals"));
+  assert.ok(script.includes("No stock/archive footage"));
   assert.ok(script.includes("commercially prohibited by the provider's written determination"));
   assert.ok(script.toLowerCase().includes("cannot be publicly redistributed for branded projects"));
   assert.ok(script.includes("selected Speechma Andrew"));
@@ -164,7 +176,6 @@ test("Nile crocodile documentary is non-commercial and prohibits unapproved wild
   assert.equal(voiceConfig.ownerDecision.selectionStatus, "OWNER_SELECTED_SPEECHMA_ANDREW_BROWSER_AUDITION_PENDING");
   assert.ok(!/AI reconstruction if synthetic|labelled reconstruction|real footage or labelled reconstruction/i.test(script));
 });
-
 test("approved Selar campaign is bound to exact owner-approved wording and remains draft-only", () => {
   const config = JSON.parse(readText("config/campaigns.json"));
   const campaign = config.campaigns.find(item => item.id === "selar-wildlife-vault");
