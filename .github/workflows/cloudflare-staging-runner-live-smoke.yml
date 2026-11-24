@@ -21,23 +21,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     env:
-      DASHBOARD_STATE_ACCESS_CLIENT_ID: ${{ secrets.DASHBOARD_STATE_ACCESS_CLIENT_ID }}
-      DASHBOARD_STATE_ACCESS_CLIENT_SECRET: ${{ secrets.DASHBOARD_STATE_ACCESS_CLIENT_SECRET }}
+      CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_ID }}
+      CLOUDFLARE_ACCESS_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_SECRET }}
     steps:
       - name: Verify repository runner OIDC is disabled by default
         shell: bash
         run: |
           set -euo pipefail
-          : "${DASHBOARD_STATE_ACCESS_CLIENT_ID:?Cloudflare Access client ID secret is required}"
-          : "${DASHBOARD_STATE_ACCESS_CLIENT_SECRET:?Cloudflare Access client secret is required}"
+          : "${CLOUDFLARE_ACCESS_CLIENT_ID:?Cloudflare Access client ID secret is required}"
+          : "${CLOUDFLARE_ACCESS_CLIENT_SECRET:?Cloudflare Access client secret is required}"
           response="$(mktemp)"
           headers="$(mktemp)"
           trap 'rm -f "$response" "$headers"' EXIT
           status="$(curl --silent --show-error --max-time 20 \
             --dump-header "$headers" --output "$response" --write-out '%{http_code}' \
             --request POST \
-            --header "CF-Access-Client-Id: ${DASHBOARD_STATE_ACCESS_CLIENT_ID}" \
-            --header "CF-Access-Client-Secret: ${DASHBOARD_STATE_ACCESS_CLIENT_SECRET}" \
+            --header "CF-Access-Client-Id: ${CLOUDFLARE_ACCESS_CLIENT_ID}" \
+            --header "CF-Access-Client-Secret: ${CLOUDFLARE_ACCESS_CLIENT_SECRET}" \
             --header 'content-type: application/json' \
             --data '{}' \
             'https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev/api/runner/session')"
@@ -56,8 +56,8 @@ jobs:
           trap 'rm -f "$response"' EXIT
           status="$(curl --silent --show-error --max-time 20 \
             --output "$response" --write-out '%{http_code}' \
-            --header "CF-Access-Client-Id: ${DASHBOARD_STATE_ACCESS_CLIENT_ID}" \
-            --header "CF-Access-Client-Secret: ${DASHBOARD_STATE_ACCESS_CLIENT_SECRET}" \
+            --header "CF-Access-Client-Id: ${CLOUDFLARE_ACCESS_CLIENT_ID}" \
+            --header "CF-Access-Client-Secret: ${CLOUDFLARE_ACCESS_CLIENT_SECRET}" \
             'https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev/api/runner/session/status')"
           echo "Operator status endpoint HTTP status: $status"
           cat "$response"
@@ -74,8 +74,8 @@ jobs:
           status="$(curl --silent --show-error --max-time 20 \
             --output "$response" --write-out '%{http_code}' \
             --request POST \
-            --header "CF-Access-Client-Id: ${DASHBOARD_STATE_ACCESS_CLIENT_ID}" \
-            --header "CF-Access-Client-Secret: ${DASHBOARD_STATE_ACCESS_CLIENT_SECRET}" \
+            --header "CF-Access-Client-Id: ${CLOUDFLARE_ACCESS_CLIENT_ID}" \
+            --header "CF-Access-Client-Secret: ${CLOUDFLARE_ACCESS_CLIENT_SECRET}" \
             --header 'content-type: application/json' \
             --data '{}' \
             'https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev/api/runner/session/release')"
