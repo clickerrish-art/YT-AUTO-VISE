@@ -325,9 +325,9 @@
   ],
   "version": 2,
   "productionPolicy": {
-    "originalCreatorCapturedMediaRequired": false,
+    "originalCreatorCapturedMediaRequired": true,
     "stockMediaAllowed": false,
-    "aiGeneratedWildlifeVisualsAllowed": true,
+    "aiGeneratedWildlifeVisualsAllowed": false,
     "narrator": "No production narrator approved; Speechma Andrew is selected for a manual zero-cost audition only.",
     "narrationCommercialRightsStatus": "NO_PRODUCTION_NARRATOR_APPROVED; EXISTING_HEYGEN_RODERIC_WAV_INTERNAL_ONLY; SPEECHMA_OUTPUT_LICENSE_SUBJECT_TO_THIRD_PARTY_RIGHTS; NO_AUDIO_GENERATED_OR_APPROVED",
     "alternativeNarratorAuthorized": false,
@@ -363,12 +363,12 @@
     "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
     "stockVideoFootageAllowed": false,
     "stockPhotographsAllowed": false,
-    "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY"
+    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY_STOCK_REFERENCE_ONLY"
   },
-  "notes": "All queue items remain planning/draft-only until AI-generated wildlife visuals, narration, provider rights, disclosure, technical validation, human review and release gates pass. Never request video uploads. Keep publishing disabled; paid generation requires explicit owner approval.",
-  "originalCreatorCapturedMediaRequired": false,
-  "aiGeneratedWildlifeVisualsRequired": true,
-  "aiGeneratedWildlifeVisualsAllowed": true,
+  "notes": "SonicVhibez production uses genuine original creator-captured wildlife media only. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. All queue items remain draft-only and publishingEnabled=false.",
+  "originalCreatorCapturedMediaRequired": true,
+  "aiGeneratedWildlifeVisualsRequired": false,
+  "aiGeneratedWildlifeVisualsAllowed": false,
   "userVideoUploadRequired": false,
   "stockMediaAllowed": false,
   "mediaProductionPolicyStatus": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REVIEW_ONLY"
