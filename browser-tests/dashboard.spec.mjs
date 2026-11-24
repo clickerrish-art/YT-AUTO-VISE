@@ -140,7 +140,7 @@ test("operator dashboard loads the authoritative schedule and persists a draft t
   expect(readinessBody.ready).toBe(false);
   expect(readinessBody.publishingEnabled).toBe(false);
   expect(readinessBody.blockers).toEqual(expect.arrayContaining([
-    expect.stringMatching(/QUEUE IDENTITY RECONCILIATION REQUIRED/),
+    expect.stringMatching(/complete SonicVhibez public\/private\/unlisted history is reconciled against YouTube/),
     expect.stringMatching(/creatorCapturedOriginal must be true only after original-file provenance is verified/),
     expect.stringMatching(/captureEvidencePath must reference a real, retained original-capture provenance record/),
     expect.stringMatching(/narration rights are not cleared for public branded\/production use/)
