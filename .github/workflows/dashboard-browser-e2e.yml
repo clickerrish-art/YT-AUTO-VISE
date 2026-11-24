@@ -60,3 +60,13 @@ jobs:
           ffprobe -version
       - name: Run browser acceptance against the real local dashboard/backend
         run: npm run test:browser
+      - name: Upload Playwright traces and failure context
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: dashboard-browser-failure-evidence
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: warn
+          retention-days: 7
