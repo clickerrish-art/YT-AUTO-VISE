@@ -114,3 +114,5 @@ jobs:
 # 2026-11-24: trigger a zero-cost full-history recovery export from the verified implementation branch head.
 
 # 2026-11-24: refresh the zero-cost full-history recovery artifact after the implementation branch advanced.
+
+# 2026-11-24: zero-cost push-event dispatch because GitHub manual dispatch is unavailable for non-default-branch workflows.
