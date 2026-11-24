@@ -8,7 +8,7 @@
 **Product:** Complete YouTube Wildlife Creator's Vault — https://selar.com/0u19v8u99l
 
 ## SEO title
-How to Film Wildlife: Tell One Story With 3 Shots
+How to Make Better Wildlife Videos: Tell One Story With 3 Shots
 
 ## Narration draft
 
