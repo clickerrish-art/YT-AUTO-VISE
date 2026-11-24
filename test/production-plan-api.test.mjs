@@ -99,7 +99,7 @@ test("production-plan API binds the approved script, checks real file hashes, an
     return {
       sceneId: "scene-" + index, editorialPurpose: "Advance a specific documentary point " + index,
       narrationCue: "Align with narration section " + index, assetPath, assetSha256: sha256(assetBytes),
-      sourceType: "GENERATED_ORIGINAL", startSeconds: index * 60, endSeconds: (index + 1) * 60,
+      sourceType: "CREATOR_CAPTURED_ORIGINAL", startSeconds: index * 60, endSeconds: (index + 1) * 60,
       provenance: { sourceOrGeneration: "test fixture generated scene " + index, rightsEvidencePath: rightsPath, rightsEvidenceSha256: sha256(rightsBytes), permittedUse: "COMMERCIAL_DERIVATIVE", attribution: "Fixture attribution record", editorialNotes: "Test fixture only; not production rights evidence" }
     };
   });

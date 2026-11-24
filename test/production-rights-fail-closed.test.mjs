@@ -116,8 +116,8 @@ test("Nature Frontiers remains original-capture-only while SonicVhibez uses its 
   assert.equal(sonicPolicy.policyScope.brand, "SonicVhibez");
   assert.equal(sonicPolicy.policyScope.platforms.includes("youtube"), true);
   assert.equal(sonicPolicy.policyScope.notApplicableTo.includes("Nature Frontiers"), true);
-  assert.equal(short.productionDisposition.policy.aiGeneratedWildlifeVisualsAllowed, true);
-  assert.equal(short.productionDisposition.policy.originalCreatorCapturedMediaRequired, false);
+  assert.equal(short.productionDisposition.policy.aiGeneratedWildlifeVisualsAllowed, false);
+  assert.equal(short.productionDisposition.policy.originalCreatorCapturedMediaRequired, true);
   assert.equal(short.productionDisposition.productionEligible, false);
   assert.equal(short.productionDisposition.reviewRenderEligible, true);
   assert.equal(short.assets.filter(asset => asset.productionEligibility === "REVIEW_ONLY_EXCLUDED_FROM_PRODUCTION_ORIGINAL_CAPTURE_REQUIRED").length, 3);
@@ -196,10 +196,10 @@ test("NOAA, Wikimedia and Pexels stock remain excluded from production while ref
   assert.ok(candidates.assets.every(asset => asset.releaseEligible === false && asset.rightsVerified === false && asset.humanReviewed === false));
   const pexelsRegistry = readJson("../content/approved-pexels-footage.json");
   assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, false);
-  assert.equal(pexelsRegistry.currentProductionPolicy.originalCreatorCapturedMediaRequired, false);
+  assert.equal(pexelsRegistry.currentProductionPolicy.originalCreatorCapturedMediaRequired, true);
   assert.equal(pexelsRegistry.currentProductionPolicy.pexelsAllowed, false);
   assert.equal(pexelsRegistry.currentProductionPolicy.pixabayAllowed, false);
-  assert.equal(pexelsRegistry.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
   assert.equal(pexelsRegistry.currentProductionPolicy.stockVideoFootageAllowed, false);
   assert.equal(pexelsRegistry.currentProductionPolicy.stockPhotographsAllowed, false);
   const thumbnailScript = readText("../scripts/create-noaa-lobster-thumbnail-review.py");

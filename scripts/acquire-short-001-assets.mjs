@@ -110,7 +110,7 @@ async function main() {
       || policy.stockVideoFootageAllowed !== true
       || policy.stockPhotographsAllowed !== false
       || policy.aiGeneratedWildlifeVisualsAllowed !== false
-      || policy.originalCreatorCapturedMediaRequired !== false) {
+      || policy.originalCreatorCapturedMediaRequired !== true) {
     console.error("BLOCKED: Pexels/Pixabay stock acquisition is not authorized by the current owner media policy; original creator-captured footage is required for production.");
     return 2;
   }

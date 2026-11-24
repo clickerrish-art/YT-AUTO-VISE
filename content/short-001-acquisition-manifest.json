@@ -249,22 +249,22 @@
     "note": "Pexels/Pixabay stock is excluded from production by the current original creator-captured-only policy. This silent preview is historical review material, not a production or release master. Rights, original media, narration, captions, final owner review and publication remain blocked."
   },
   "productionDisposition": {
-    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_AI_RECONSTRUCTION_PRODUCTION",
+    "status": "REVIEW_ONLY_STOCK_EXCLUDED_FROM_PRODUCTION",
     "productionEligible": false,
     "reviewRenderEligible": true,
     "policy": {
-      "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REFERENCE_ONLY",
-      "originalCreatorCapturedMediaRequired": false,
+      "status": "ORIGINAL_CREATOR_CAPTURED_REQUIRED; STOCK_REFERENCE_ONLY",
+      "originalCreatorCapturedMediaRequired": true,
       "stockMediaAllowed": false,
       "stockPhotographsAllowed": false,
       "pexelsAllowed": false,
       "pixabayAllowed": false,
-      "aiGeneratedWildlifeVisualsAllowed": true,
+      "aiGeneratedWildlifeVisualsAllowed": false,
       "stockVideoFootageAllowed": false,
       "mediaPolicyEvidence": "config/media-production-policy.json"
     },
-    "reason": "The existing Pexels clips are retained only as historical review material. Current SonicVhibez production requires disclosed AI-generated wildlife reconstructions; these clips are not production assets.",
-    "nextRequiredAction": "Do not request or upload user footage. Verify a zero-cost generation backend and exact model/checkpoint/VAE provenance and rights, then generate the AI wildlife reconstruction and complete technical, factual, rights and human review."
+    "reason": "Existing Pexels/Pixabay source clips are review-only historical material and are not authorized for production. Original creator-captured wildlife footage is required; AI-generated wildlife visuals and stock are prohibited production substitutes.",
+    "nextRequiredAction": "Search already-connected source stores and existing project artifacts for genuine original creator-captured wildlife media with provenance and written commercial rights. Keep stock candidates excluded; if no qualifying original media is accessible, retain the production HOLD."
   },
   "notes": [
     "Existing Pexels/Pixabay source clips are review-only historical material and are not authorized for production. Original creator-captured wildlife footage is required.",

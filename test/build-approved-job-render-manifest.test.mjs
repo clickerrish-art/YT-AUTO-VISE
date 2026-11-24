@@ -59,7 +59,7 @@ function fixture() {
     scenes.push({
       sceneId: "scene-" + i, editorialPurpose: "Explain one distinct part of the documentary story",
       narrationCue: "Narration section " + i + " begins here", assetPath: asset.path, assetSha256: asset.sha256,
-      sourceType: "GENERATED_ORIGINAL", startSeconds: 0, endSeconds: 2,
+      sourceType: "CREATOR_CAPTURED_ORIGINAL", startSeconds: 0, endSeconds: 2,
       provenance: {
         sourceOrGeneration: "Original generated wildlife scene " + i, rightsEvidencePath: rights.path,
         rightsEvidenceSha256: rights.sha256, permittedUse: "COMMERCIAL_DERIVATIVE",

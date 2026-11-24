@@ -49,7 +49,7 @@ export function validateProductionPlan(plan, { jobId, contentType, scriptSha256 
       if (typeof scene.narrationCue !== "string" || scene.narrationCue.trim().length < 8) errors.push(prefix + "narration alignment cue is required");
       if (typeof scene.assetPath !== "string" || !scene.assetPath.trim() || scene.assetPath.startsWith("/") || scene.assetPath.includes("\\") || scene.assetPath.split("/").includes("..")) errors.push(prefix + "repository-relative assetPath is required");
       if (!SHA256.test(scene.assetSha256 ?? "")) errors.push(prefix + "asset SHA-256 is required");
-      if (!["GENERATED_ORIGINAL", "LICENSED_FOOTAGE", "LICENSED_STILL"].includes(scene.sourceType)) errors.push(prefix + "sourceType must identify original generated or licensed source media");
+      if (scene.sourceType !== "CREATOR_CAPTURED_ORIGINAL") errors.push(prefix + "sourceType must be CREATOR_CAPTURED_ORIGINAL; generated and stock/library media are prohibited production substitutes");
       if (!scene.provenance || typeof scene.provenance !== "object" || Array.isArray(scene.provenance) ||
           typeof scene.provenance.sourceOrGeneration !== "string" || scene.provenance.sourceOrGeneration.trim().length < 8 ||
           typeof scene.provenance.rightsEvidencePath !== "string" || !scene.provenance.rightsEvidencePath.trim() ||

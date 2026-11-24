@@ -186,7 +186,7 @@ test("readiness JSON exposes stable blocker IDs, severity, evidence and age-awar
   assert.equal(report.blockers.some(blocker => /complete owner-reviewed public\/private\/unlisted SonicVhibez history/.test(blocker.message)), !(reconciliation.historyMatches && reconciliation.historyFresh));
   assert.equal(report.notes.some(note => /YouTube history: verified 1 upload/.test(note)), reconciliation.historyMatches && reconciliation.historyFresh && reconciliation.attemptsReconciled && reconciliation.attemptsFresh);
   const staleScopeBlocker = report.blockers.find(blocker => /YouTube OAuth upload scope is not independently verified/.test(blocker.message));
-  assert.equal(staleScopeBlocker, undefined, "fresh 21 November scope evidence must satisfy only the OAuth-scope gate");
+  assert.equal(Boolean(staleScopeBlocker), !reconciliation.scopeFresh, "OAuth-scope readiness must follow the current nested, 24-hour-fresh scope evidence");
   assert.equal(report.blockers.some(blocker => /latest read-only YouTube OAuth attempt is BLOCKED \\(OAuth error invalid_grant\\)/.test(blocker.message)), false);
   assert.equal(report.blockers.some(blocker => /OAuth error invalid_client/.test(blocker.message) && blocker.evidence.path === "content/youtube-channel-verification-status.json"), false, "the verified read-only OAuth inventory must not remain incorrectly marked as invalid_client");
   const invalidGrantBlocker = report.blockers.find(blocker => /invalid_grant/i.test(blocker.message));

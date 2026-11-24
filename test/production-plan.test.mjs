@@ -10,7 +10,7 @@ function makePlan(contentType = "short") {
     narrationCue: "Align to narration section " + (i + 1),
     assetPath: "media/original/scene-" + (i + 1) + ".mp4",
     assetSha256: hash,
-    sourceType: "GENERATED_ORIGINAL",
+    sourceType: "CREATOR_CAPTURED_ORIGINAL",
     startSeconds: i * 4,
     endSeconds: (i + 1) * 4,
     provenance: {
@@ -55,6 +55,15 @@ test("production plan hash is stable across object key ordering", () => {
 test("valid Short plan binds exact job/script, rights evidence and verified parent", () => {
   const plan = makePlan("short");
   assert.deepEqual(validateProductionPlan(plan, { jobId: "short-job-01", contentType: "short", scriptSha256: hash }), []);
+});
+
+test("rejects generated and stock/library footage as production sources", () => {
+  for (const sourceType of ["GENERATED_ORIGINAL", "AI_GENERATED", "LICENSED_FOOTAGE", "LICENSED_STILL", "PEXELS_LICENSED_STOCK"]) {
+    const plan = makePlan("short");
+    plan.scenes[0].sourceType = sourceType;
+    const errors = validateProductionPlan(plan, { jobId: "short-job-01", contentType: "short", scriptSha256: hash });
+    assert.ok(errors.some(error => /CREATOR_CAPTURED_ORIGINAL/.test(error)), sourceType);
+  }
 });
 
 test("rejects missing rights evidence, path traversal, duplicate scene IDs and parent URL mismatch", () => {

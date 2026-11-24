@@ -35,6 +35,8 @@ def generation_authorization_errors(policy: dict) -> list[str]:
         errors.append("generation policy channel must be SonicVhibez")
     if policy.get("safety", {}).get("aiGeneratedWildlifeVisualsAllowed") is not True:
         errors.append("AI wildlife reconstruction is not permitted by the SonicVhibez policy")
+    if policy.get("safety", {}).get("originalCreatorCapturedMediaRequired") is not False:
+        errors.append("original creator-captured-only policy blocks AI wildlife reconstruction imports")
     if policy.get("generation", {}).get("enabled") is not True:
         errors.append("generation.enabled must be true")
     if policy.get("productionDisposition", {}).get("enabled") is not True:
@@ -112,7 +114,8 @@ def inspect_video(video: Path) -> dict:
     return {"ffprobe": data, "durationSeconds": duration, "fullDecodePassed": True}
 
 def main() -> int:
-    raise SystemExit("AI-generated wildlife media is disabled by the current owner media policy; original creator-captured wildlife media is required.")
+    print("BLOCKED: AI-generated wildlife media is disabled by the current owner media policy; original creator-captured wildlife media is required.", file=sys.stderr)
+    return 2
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--video", required=True, help="wildlife-test.mp4 from the Kaggle ZIP")
     parser.add_argument("--manifest", required=True, help="generation-manifest.json from the same ZIP")

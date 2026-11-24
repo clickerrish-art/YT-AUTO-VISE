@@ -61,14 +61,14 @@ class WanGPKaggleImportTests(unittest.TestCase):
                       module.validate_manifest(self.manifest, self.video))
 
 
-    def test_ai_is_permitted_but_generation_stays_blocked_until_backend_and_rights_are_verified(self):
+    def test_ai_import_is_blocked_by_owner_original_only_media_policy(self):
         root = Path(self.temp.name) / "repo"
         config = root / "config" / "video-generation.json"
         config.parent.mkdir(parents=True)
         config.write_text(json.dumps({
             "channel": "SonicVhibez",
             "productionDisposition": {"enabled": False, "noGenerationAuthorized": True},
-            "safety": {"aiGeneratedWildlifeVisualsAllowed": True},
+            "safety": {"aiGeneratedWildlifeVisualsAllowed": False, "originalCreatorCapturedMediaRequired": True},
             "generation": {"enabled": False, "modelRightsVerification": {"verified": False}},
             "runtime": {"zeroCostBackendVerification": {"verified": False}},
             "licensing": {
@@ -85,15 +85,12 @@ class WanGPKaggleImportTests(unittest.TestCase):
         with patch.object(sys, "argv", args), patch("sys.stderr", new_callable=__import__("io").StringIO) as stderr:
             self.assertEqual(module.main(), 2)
         message = stderr.getvalue()
-        self.assertIn("generation.enabled must be true", message)
-        self.assertIn("zero-cost GPU backend must be independently verified", message)
-        self.assertIn("exact checkpoint and VAE rights/provenance must be verified", message)
-        self.assertNotIn("AI wildlife reconstruction is not permitted", message)
+        self.assertIn("AI-generated wildlife media is disabled by the current owner media policy", message)
 
     def _authorized_policy(self):
         return {
             "channel": "SonicVhibez",
-            "safety": {"aiGeneratedWildlifeVisualsAllowed": True},
+            "safety": {"aiGeneratedWildlifeVisualsAllowed": True, "originalCreatorCapturedMediaRequired": True},
             "generation": {
                 "enabled": True,
                 "modelRightsVerification": {"verified": True}
@@ -109,7 +106,7 @@ class WanGPKaggleImportTests(unittest.TestCase):
             }
         }
 
-    def test_policy_allows_ai_but_default_generation_is_not_authorized(self):
+    def test_policy_rejects_ai_when_original_media_is_required(self):
         policy = {
             "channel": "SonicVhibez",
             "safety": {"aiGeneratedWildlifeVisualsAllowed": True},
@@ -122,6 +119,7 @@ class WanGPKaggleImportTests(unittest.TestCase):
             }
         }
         errors = module.generation_authorization_errors(policy)
+        self.assertTrue(any("original creator-captured-only policy blocks AI wildlife reconstruction imports" in item for item in errors))
         self.assertTrue(any("generation.enabled" in item for item in errors))
         self.assertTrue(any("zero-cost GPU backend" in item for item in errors))
         self.assertTrue(any("exact checkpoint and VAE" in item for item in errors))
@@ -129,7 +127,7 @@ class WanGPKaggleImportTests(unittest.TestCase):
 
     def test_generation_authorization_requires_both_backend_and_model_rights(self):
         policy = self._authorized_policy()
-        self.assertEqual(module.generation_authorization_errors(policy), [])
+        self.assertTrue(any("original creator-captured-only policy blocks AI wildlife reconstruction imports" in item for item in module.generation_authorization_errors(policy)))
         policy["runtime"]["zeroCostBackendVerification"]["verified"] = False
         self.assertTrue(any("zero-cost GPU backend" in item for item in module.generation_authorization_errors(policy)))
         policy = self._authorized_policy()
