@@ -4,7 +4,7 @@
 **Updated:** 2026-11-20  
 **Status:** SOURCING LEADS ONLY — no source file downloaded, decoded, visually reviewed, or approved for the final edit.
 
-**OWNER MEDIA POLICY UPDATE — 2026-11-22:** The owner explicitly superseded the 21 November original-creator-captured-only restriction and now permits qualifying Pexels/Pixabay licensed video footage. This does not permit other stock/archive sources, stock photographs, AI-generated wildlife visuals, standalone unmodified redistribution or fabricated encounters. Each permitted clip still requires exact source-page provenance, platform-licence evidence, original MP4 bytes and SHA-256, technical probe/full decode, third-party-rights review and human visual/editorial approval. The five acquired crocodile clips are review-only; use the current JSON source register for their actual SHA-256 values and per-asset status. The Wikimedia Commons candidate below is excluded by the current source policy.
+**OWNER MEDIA POLICY UPDATE — 2026-11-24:** The owner has approved exactly seven AI-generated visual clips for this named Nile crocodile documentary only. These are synthetic visual reconstructions, not genuine camera-captured wildlife footage. This project-specific exception supersedes the prior Pexels/Pixabay permission and the earlier original-only restriction for this documentary. Do not use Pexels/Pixabay, other stock/archive footage, or additional AI-generated wildlife shots. The seven owner-supplied MP4s are not currently ingested into this workspace; record each filename, exact SHA-256, provider/model/version, prompt/generation evidence and commercial-use terms, then run full decode/probe, third-party-rights review and exact-hash human visual approval. Existing Pexels/Wikimedia candidates in this register remain review-only and are excluded from production.
 
 ## Zero-cost candidates
 
@@ -90,5 +90,5 @@ These are new source leads, not acquired or approved assets. Their Commons file 
 - PEX-001 through PEX-005: REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY.
 - WMC-001 through WMC-003: REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY.
 - No source bytes from these library leads are accepted for the current production.
-- No AI-generated wildlife insert or reconstruction is authorized as a substitute.
-- Next eligible intake is an original creator-captured file delivered by the creator/rights holder, with provenance and commercial-use permission. Record the untouched file SHA-256 before editing.
+- No additional AI-generated wildlife insert beyond the seven owner-approved clips is authorized. Pexels/Pixabay and Wikimedia candidates remain excluded from this documentary.
+- Next eligible intake for this documentary is the seven owner-supplied AI-generated source MP4s, which must be re-ingested into the current workspace and validated before editing. This exception does not extend to other productions, which retain their original-media requirements.
