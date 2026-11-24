@@ -927,8 +927,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
   assert.equal(authorRenderBypass.status, 409, "a generated script must not bypass missing narration/caption/scene integration");
   assert.equal(authorRenderBypassBody.publishable, false);
   assert.match(authorRenderBypassBody.error, /(render preflight|queue identity reconciliation is not owner-approved)/i);
-  assert.equal(authorRenderBypassBody.jobState, "BLOCKED");
-  assert.equal(authorRenderBypassBody.requiresOperatorRetry, false);
+  assert.equal(authorRenderBypassBody.jobState, "FAILED");
+  assert.equal(authorRenderBypassBody.requiresOperatorRetry, true);
   const restoredAuthorState = JSON.parse(fs.readFileSync(dueDispatchStatePath, "utf8"));
   const restoredAuthorJob = restoredAuthorState.jobs.find(job => job.id === authorJob.id);
   restoredAuthorJob.scheduledSlot = originalAuthorScheduledSlot;
@@ -936,8 +936,8 @@ test("dashboard API authenticates operators, persists real drafts, and cannot gr
 
   const authorState = JSON.parse(fs.readFileSync(path.join(stateDir, "dashboard-state.json"), "utf8"));
   const preflightFailedJob = authorState.jobs.find(job => job.id === authorJob.id);
-  assert.equal(preflightFailedJob.state, "QUEUED", "a deterministic render preflight failure must leave the dispatchable queue");
-  assert.equal(authorState.audit.filter(event => event.action === "CONTENT_RENDER_PREFLIGHT_FAILED" && event.jobId === authorJob.id).length, 0);
+  assert.equal(preflightFailedJob.state, "FAILED", "a deterministic render preflight failure must leave automatic dispatch and require operator remediation");
+  assert.equal(authorState.audit.filter(event => event.action === "CONTENT_RENDER_PREFLIGHT_FAILED" && event.jobId === authorJob.id).length, 1);
   assert.equal(preflightFailedJob.authoring.result.script.narration, narration);
   assert.deepEqual(authorState.jobs.find(job => job.id === authorJob.id).authoring.researchBrief, authorBrief, "the exact supplied research brief and evidence locators must remain auditable");
   assert.ok(authorState.audit.some(event => event.action === "SCRIPT_AUTHORING_COMPLETED_REVIEW_REQUIRED" && event.jobId === authorJob.id));
