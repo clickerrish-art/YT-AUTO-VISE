@@ -26,3 +26,23 @@ test("content-quality inline Python declares its imports and keeps narration par
     "word counter regex must use Python word boundaries",
   );
 });
+
+const automationWorkflow = fs.readFileSync(
+  new URL("../.github/workflows/validate-automation.yml", import.meta.url),
+  "utf8",
+);
+
+test("automation queue validator applies the approved Selar destination only to promotional items", () => {
+  assert.ok(automationWorkflow.includes('if item.get("hasPaidPromotion") is True:'));
+  assert.ok(automationWorkflow.includes("assert product_url == promotional_url"));
+  assert.ok(automationWorkflow.includes("assert product_url is None"));
+  assert.ok(automationWorkflow.includes("assert product_url in approved"));
+  assert.ok(
+    automationWorkflow.includes('"SCRIPT_READY_PRODUCTION_HOLD_ORIGINAL_MEDIA_NARRATION_RIGHTS_AND_HUMAN_REVIEW_REQUIRED"'),
+  );
+  assert.ok(automationWorkflow.includes('assert q.get("publishingEnabled") is False'));
+  assert.ok(
+    !automationWorkflow.includes('assert all(i.get("productUrl") == "https://selar.com/0u19v8u99l" for i in items)'),
+    "non-promotional topics must not be forced to carry a product URL",
+  );
+});
