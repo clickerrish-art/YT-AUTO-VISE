@@ -31,7 +31,13 @@ class CheckedInReleaseMetadataTests(unittest.TestCase):
         self.assertEqual(len({item.get("id") for item in items}), len(items))
         for item in items:
             with self.subTest(queue_item=item.get("id")):
-                self.assertEqual(item.get("productUrl"), APPROVED_URL)
+                if item.get("hasPaidPromotion") is True:
+                    self.assertEqual(item.get("productUrl"), APPROVED_URL)
+                else:
+                    self.assertIsNone(item.get("productUrl"))
+                if item.get("productUrl"):
+                    self.assertIs(item.get("hasPaidPromotion"), True)
+                    self.assertEqual(item.get("productUrl"), APPROVED_URL)
                 self.assertIn(item.get("status"), {
                     "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
                     "script_and_captions_ready_needs_media_and_review",
