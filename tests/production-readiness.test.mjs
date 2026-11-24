@@ -541,7 +541,7 @@ test("short and long-form manifest templates require original creator-captured f
   }
 });
 
-test("production readiness remains HOLD while queue identity approval awaits owner reconfirmation", () => {
+test("production readiness remains HOLD after owner-approved queue identity reconciliation", () => {
   const env = { ...process.env };
   delete env.QUEUE_PATH;
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
@@ -550,8 +550,8 @@ test("production readiness remains HOLD while queue identity approval awaits own
   assert.equal(result.status, 2, "production readiness must remain on HOLD");
   const report = JSON.parse(result.stdout);
   assert.equal(report.status, "blocked");
-  assert.equal(report.blockers.some(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/.test(item.message)), true);
-  assert.equal(report.notes.some(note => /2 owner-approved long-form mappings verified/.test(note)), false);
+  assert.equal(report.blockers.some(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/.test(item.message)), false);
+  assert.equal(report.notes.some(note => /2 owner-approved long-form mappings verified/.test(note)), true);
   assert.ok(report.blockerCount > 0, "media, narration, human-review and history gates must remain blocking");
 });
 
@@ -598,8 +598,8 @@ test("queue identity approval template is non-approving and pinned to canonical 
   assert.equal(template.operationalQueueSha256, canonicalHash(operationalQueue));
   assert.equal(template.detailedQueueSha256, canonicalHash(detailedQueue));
   assert.deepEqual(template.mappings, [
-    { operationalItemId: "long-form-plan-wildlife-video", detailedItemId: "", cyclePosition: 1 },
-    { operationalItemId: "long-form-faceless-wildlife-workflow", detailedItemId: "", cyclePosition: 2 }
+    { operationalItemId: "long-form-001-two-eyes-above-water", detailedItemId: "", cyclePosition: 1 },
+    { operationalItemId: "long-form-plan-wildlife-video", detailedItemId: "", cyclePosition: 2 }
   ]);
 });
 
