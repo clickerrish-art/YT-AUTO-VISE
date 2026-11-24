@@ -821,7 +821,7 @@ test("production controls remain blocked after queue identity approval until aut
     const blockedRender = await request.post("/api/jobs/produce", { headers, data: { jobId: job.id } });
     expect(blockedRender.status()).toBe(409);
     const blockerBody = await blockedRender.json();
-    expect(blockerBody.error).toMatch(/approved authoring pipeline/i);
+    expect(blockerBody.error).toMatch(/queue identity reconciliation has passed/i);
     expect(blockerBody.code).toBe("AUTHORING_PIPELINE_REQUIRED");
     expect(blockerBody.blockers).toEqual(expect.arrayContaining([
       expect.stringMatching(/Research and source evidence must be attached to the job/i),
