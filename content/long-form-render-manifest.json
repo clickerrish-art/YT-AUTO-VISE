@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "BLOCKED_ORIGINAL_CREATOR_CAPTURED_FOOTAGE_REQUIRED",
+  "status": "BLOCKED_AI_SOURCE_PROVENANCE_AND_RIGHTS_EVIDENCE_REQUIRED",
   "channel": "SonicVhibez",
   "contentType": "long_form",
   "targetAspectRatio": "16:9",
@@ -17,14 +17,14 @@
   "narrationLicenseEvidence": "",
   "rightsConfirmed": false,
   "complianceReviewed": false,
-  "containsSyntheticMedia": false,
+  "containsSyntheticMedia": true,
   "hasPaidPromotion": false,
   "sourceScriptPath": "drafts/long-form-001-two-eyes-above-water.md",
   "priorNarrationEvidencePath": "long-form-narration-review-evidence.json",
   "priorNarrationStatus": "LEGACY_UNAPPROVED_NARRATION_DO_NOT_USE",
-  "notes": "Long-form production is on HOLD. Only genuine original creator-captured wildlife footage is eligible. No qualifying original footage, capture record, rights file, final narration or synchronized captions is currently supplied. Pexels/Pixabay/library references and AI-generated wildlife visuals are not production substitutes.",
-  "containsAIWildlifeVisuals": false,
-  "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+  "notes": "This one named SonicVhibez Nile crocodile documentary has explicit owner permission to use AI-generated visuals. This does not represent original camera footage. All seven source files, exact SHA-256 hashes, generation provenance, provider commercial-use terms, third-party rights, disclosure, technical QC and exact-hash human review remain required; no such approvals are inferred.",
+  "containsAIWildlifeVisuals": true,
+  "wildlifeVisualSourcePolicy": "OWNER_APPROVED_AI_GENERATED_FOR_THIS_PROJECT_ONLY",
   "mediaProvenanceStatus": "NOT_SUPPLIED",
   "narrationRightsDeterminationEvidence": "",
   "sourceScriptBlobSha": "19c2cf018dfbe263edeb5f82ffd514e165fb7cda",
@@ -65,11 +65,11 @@
     "outputFormat": "MP3",
     "paidApiAuthorized": false
   },
-  "originalCreatorCapturedMediaRequired": true,
+  "originalCreatorCapturedMediaRequired": false,
   "stockMediaAllowed": false,
   "pexelsAllowed": false,
   "pixabayAllowed": false,
-  "aiGeneratedWildlifeVisualsAllowed": false,
+  "aiGeneratedWildlifeVisualsAllowed": true,
   "footageCandidates": [
     {
       "assetId": "pexels-video-30026544",
@@ -197,7 +197,7 @@
       "releaseEligible": false
     }
   ],
-  "footageOrigin": "creator_captured_original",
+  "footageOrigin": "ai_generated",
   "creatorCapturedOriginal": false,
   "footageCreator": "",
   "footageSourceUrls": [],
@@ -246,10 +246,11 @@
   "footageActualSourceSeconds": 151.819967,
   "footageThirdPartyRightsReviewed": false,
   "footageHumanReviewStatus": "PENDING_FULL_PLAYBACK",
-  "aiGenerationEvidencePath": null,
-  "aiGenerationStatus": "DISABLED_BY_OWNER_POLICY",
-  "syntheticMediaDisclosureRequired": false,
-  "syntheticMediaDisclosureText": "",
-  "footageEligibilityStatus": "BLOCKED_ORIGINAL_CREATOR_CAPTURED_FOOTAGE_REQUIRED",
-  "captureEvidencePath": ""
+  "aiGenerationEvidencePath": "",
+  "aiGenerationStatus": "OWNER_APPROVED_PROJECT_EXCEPTION_PENDING_SOURCE_EVIDENCE",
+  "syntheticMediaDisclosureRequired": true,
+  "syntheticMediaDisclosureText": "This documentary contains AI-generated wildlife visuals.",
+  "footageEligibilityStatus": "BLOCKED_AI_SOURCE_PROVENANCE_AND_RIGHTS_EVIDENCE_REQUIRED",
+  "captureEvidencePath": "",
+  "projectPolicyExceptionId": "SONICVHIBEZ_NILE_CROCODILE_AI_VISUALS_2026_11"
 }

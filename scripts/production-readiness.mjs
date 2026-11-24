@@ -249,13 +249,42 @@ function validateWildlifeFootage(manifest, label) {
     mediaProductionPolicy?.originalCreatorCapturedMediaRequired === true &&
     mediaProductionPolicy?.aiGeneratedWildlifeVisualsAllowed === false &&
     mediaProductionPolicy?.stockAndThirdPartyVideoProductionAllowed === false;
-  if (!policyIsOriginalOnly) {
-    blockers.push("config/media-production-policy.json must enforce original creator-captured wildlife footage only; AI-generated wildlife and stock footage are prohibited.");
+  if (!policyIsOriginalOnly) blockers.push("config/media-production-policy.json must retain original creator-captured media as the global default; project exceptions must be explicitly scoped.");
+  const exception = Array.isArray(mediaProductionPolicy?.projectExceptions)
+    ? mediaProductionPolicy.projectExceptions.find(item =>
+        item?.exceptionId === manifest.projectPolicyExceptionId &&
+        item?.exceptionId === "SONICVHIBEZ_NILE_CROCODILE_AI_VISUALS_2026_11" &&
+        item?.projectTitle === "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile" &&
+        item?.contentType === "long_form" &&
+        item?.ownerAuthorization === "EXPLICIT_USER_APPROVAL_IN_CHAT" &&
+        item?.aiGeneratedWildlifeVisualsAllowed === true && item?.stockMediaAllowed === false)
+    : undefined;
+  if (manifest.footageOrigin === "ai_generated" && exception) {
+    if (manifest.creatorCapturedOriginal !== false) blockers.push(`${label}: AI-generated visuals must not be represented as creator-captured original footage.`);
+    if (manifest.originalCreatorCapturedMediaRequired !== false) blockers.push(`${label}: explicitly distinguish AI-generated visuals from original camera footage.`);
+    if (manifest.aiGeneratedWildlifeVisualsAllowed !== true || manifest.containsAIWildlifeVisuals !== true || manifest.containsSyntheticMedia !== true) blockers.push(`${label}: approved AI project exception must explicitly disclose AI-generated/synthetic wildlife visuals.`);
+    if (manifest.syntheticMediaDisclosureRequired !== true || typeof manifest.syntheticMediaDisclosureText !== "string" || manifest.syntheticMediaDisclosureText.trim().length < 12) blockers.push(`${label}: a clear synthetic-media disclosure is required.`);
+    const evidencePath = manifest.aiGenerationEvidencePath;
+    if (typeof evidencePath !== "string" || !evidencePath.trim() || path.isAbsolute(evidencePath) || !exists(evidencePath)) {
+      blockers.push(`${label}: AI generation provenance evidence is missing; require exact source filenames and SHA-256 hashes for all seven approved clips, generator/model details and generation records.`);
+    } else {
+      try {
+        const evidence = JSON.parse(fs.readFileSync(path.resolve(root, evidencePath), "utf8"));
+        const assets = Array.isArray(evidence?.assets) ? evidence.assets : [];
+        if (evidence?.projectExceptionId !== exception.exceptionId || assets.length !== 7 || assets.some(asset => typeof asset?.fileName !== "string" || !asset.fileName.trim() || !/^[a-f0-9]{64}$/i.test(asset?.sha256 ?? ""))) blockers.push(`${label}: AI provenance evidence must identify exactly seven source clips with exact SHA-256 hashes and match the approved project exception.`);
+        if (evidence?.generationProvenanceVerified !== true || evidence?.providerUsageRightsVerified !== true || typeof evidence?.providerUsageRightsEvidencePath !== "string" || !exists(evidence.providerUsageRightsEvidencePath)) blockers.push(`${label}: generator provenance and provider commercial-use rights evidence are not verified.`);
+      } catch { blockers.push(`${label}: AI generation provenance evidence is not valid JSON.`); }
+    }
+    if (manifest.mediaProvenanceStatus !== "VERIFIED") blockers.push(`${label}: AI source provenance is not VERIFIED.`);
+    if (manifest.footageHumanReviewStatus !== "PASS" || typeof manifest.humanReviewEvidencePath !== "string" || !exists(manifest.humanReviewEvidencePath)) blockers.push(`${label}: exact-hash human visual review is missing; AI approval does not imply review approval.`);
+    if (!manifest.footageLicenseEvidence || manifest.thirdPartyRightsReviewed !== true) blockers.push(`${label}: media usage and third-party rights review remain required.`);
+    return;
   }
-  if (manifest.footageOrigin !== "creator_captured_original") blockers.push(`${label}: footageOrigin must be creator_captured_original; AI-generated and stock wildlife visuals are not eligible.`);
+  if (manifest.projectPolicyExceptionId) blockers.push(`${label}: project policy exception is unknown, mismatched, or outside its approved scope.`);
+  if (manifest.footageOrigin !== "creator_captured_original") blockers.push(`${label}: footageOrigin must be creator_captured_original unless the exact named project exception is valid; AI-generated and stock visuals are otherwise ineligible.`);
   if (manifest.creatorCapturedOriginal !== true) blockers.push(`${label}: creatorCapturedOriginal must be true only after original-file provenance is verified.`);
-  if (manifest.originalCreatorCapturedMediaRequired !== true) blockers.push(`${label}: originalCreatorCapturedMediaRequired must be true.`);
-  if (manifest.aiGeneratedWildlifeVisualsAllowed !== false || manifest.containsAIWildlifeVisuals === true) blockers.push(`${label}: AI-generated wildlife visuals are prohibited for SonicVhibez production.`);
+  if (manifest.originalCreatorCapturedMediaRequired !== true) blockers.push(`${label}: originalCreatorCapturedMediaRequired must be true outside the named AI exception.`);
+  if (manifest.aiGeneratedWildlifeVisualsAllowed !== false || manifest.containsAIWildlifeVisuals === true) blockers.push(`${label}: AI-generated wildlife visuals are prohibited outside the named documentary exception.`);
   if (manifest.stockVideoFootageAllowed !== false || manifest.stockPhotographsAllowed !== false || manifest.stockMediaAllowed !== false || manifest.pexelsAllowed !== false || manifest.pixabayAllowed !== false) blockers.push(`${label}: stock/library wildlife footage and photographs are prohibited production substitutes.`);
   if (typeof manifest.footageCreator !== "string" || !manifest.footageCreator.trim() || /replace_with|placeholder|unknown|tbd/i.test(manifest.footageCreator)) blockers.push(`${label}: verified original footage creator/operator identity is missing.`);
   for (const key of ["captureEvidencePath", "footageSourceManifest"]) {
