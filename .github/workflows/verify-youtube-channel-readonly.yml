@@ -57,7 +57,16 @@ jobs:
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           SONICVHIBEZ_CHANNEL_ID: ${{ secrets.SONICVHIBEZ_CHANNEL_ID }}
           YOUTUBE_HISTORY_INVENTORY_PATH: readiness-report/youtube-history-inventory.json
-        run: node scripts/verify-youtube-channel.mjs
+        run: |
+          mkdir -p readiness-report
+          node scripts/verify-youtube-channel.mjs --json > readiness-report/youtube-verification-summary.json
+      - name: Upload structured read-only verification summary
+        if: always() && hashFiles('readiness-report/youtube-verification-summary.json') != ''
+        uses: actions/upload-artifact@v6
+        with:
+          name: sonicvhibez-youtube-verification-summary-${{ github.run_id }}
+          path: readiness-report/youtube-verification-summary.json
+          retention-days: 30
       - name: Evaluate whether inventory can be shared as public-only evidence
         id: prepare
         env:

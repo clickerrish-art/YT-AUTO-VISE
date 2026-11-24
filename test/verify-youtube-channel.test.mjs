@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import {
+  createVerificationSummary,
   isApprovedSonicVhibezChannel,
   verifySonicVhibezChannel
 } from "../scripts/verify-youtube-channel.mjs";
@@ -191,4 +192,38 @@ test("read-only inventory rejects unsupported remote visibility instead of silen
     verifySonicVhibezChannel({ env, oauthFactory: testOAuthFactory, youtubeFactory: () => youtube }),
     /missing or unsupported visibility/
   );
+});
+
+
+test("machine-readable verification summary exposes only aggregate read-only evidence", () => {
+  const summary = createVerificationSummary({
+    status: "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
+    channelId: CHANNEL_ID,
+    channelTitle: "SonicVibes",
+    channelHandle: "@sonicvhibez",
+    uploadsPlaylistPages: 2,
+    totalUploads: 51,
+    visibilityCounts: { public: 1, private: 49, unlisted: 1 },
+    oauthScopesVerified: true,
+    oauthScopesCheckedAt: "2026-11-24T17:00:00.000Z",
+    requiredOAuthScopes: [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly"
+    ],
+    grantedYouTubeScopes: [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly"
+    ]
+  });
+  assert.equal(summary.status, "PASS_READ_ONLY_IDENTITY_AND_INVENTORY");
+  assert.equal(summary.channelIdentityVerified, true);
+  assert.equal(summary.uploadsInventoryComplete, true);
+  assert.equal(summary.oauth.uploadScopeVerified, true);
+  assert.equal(summary.oauth.readOnlyScopeVerified, true);
+  assert.equal(summary.totalUploads, 51);
+  assert.deepEqual(summary.visibilityCounts, { public: 1, private: 49, unlisted: 1 });
+  assert.equal(summary.publishingEnabled, false);
+  assert.equal(summary.uploadAttempted, false);
+  assert.equal(summary.metadataWriteAttempted, false);
+  assert.equal(JSON.stringify(summary).includes("private-video"), false);
 });

@@ -224,8 +224,49 @@ export async function verifySonicVhibezChannel({ env = process.env, youtubeFacto
   });
 }
 
+export function createVerificationSummary(result) {
+  const grantedScopes = Array.isArray(result?.grantedYouTubeScopes)
+    ? [...new Set(result.grantedYouTubeScopes.filter(scope => typeof scope === "string" && scope.trim()))]
+    : [];
+  const uploadScope = "https://www.googleapis.com/auth/youtube.upload";
+  const readOnlyScope = "https://www.googleapis.com/auth/youtube.readonly";
+  const verified = result?.status === "PASS_READ_ONLY_IDENTITY_AND_INVENTORY" &&
+    result?.oauthScopesVerified === true &&
+    grantedScopes.includes(uploadScope) && grantedScopes.includes(readOnlyScope);
+  return Object.freeze({
+    schemaVersion: 1,
+    status: result?.status ?? "BLOCKED",
+    checkedAt: result?.oauthScopesCheckedAt ?? null,
+    channel: Object.freeze({
+      id: result?.channelId ?? null,
+      title: result?.channelTitle ?? null,
+      handle: result?.channelHandle ?? null
+    }),
+    channelIdentityVerified: result?.status === "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
+    uploadsInventoryComplete: result?.status === "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
+    uploadsPlaylistPages: result?.uploadsPlaylistPages ?? 0,
+    totalUploads: result?.totalUploads ?? 0,
+    visibilityCounts: Object.freeze({ ...(result?.visibilityCounts ?? {}) }),
+    oauth: Object.freeze({
+      status: verified ? "PASS" : "BLOCKED",
+      uploadScopeVerified: grantedScopes.includes(uploadScope),
+      readOnlyScopeVerified: grantedScopes.includes(readOnlyScope),
+      checkedAt: result?.oauthScopesCheckedAt ?? null,
+      requiredScopes: Object.freeze([...(result?.requiredOAuthScopes ?? [])]),
+      grantedScopes: Object.freeze(grantedScopes)
+    }),
+    publishingEnabled: false,
+    uploadAttempted: false,
+    metadataWriteAttempted: false
+  });
+}
+
 async function main() {
   const result = await verifySonicVhibezChannel();
+  if (process.argv.includes("--json")) {
+    process.stdout.write(JSON.stringify(createVerificationSummary(result), null, 2) + "\n");
+    return;
+  }
   process.stdout.write([
     "PASS: authenticated YouTube account matches the owner-supplied SonicVhibez channel.",
     "Channel ID: " + result.channelId,
