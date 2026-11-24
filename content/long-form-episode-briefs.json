@@ -248,7 +248,8 @@
           "wildlife content creation",
           "copyright safe video"
         ],
-        "hasPaidPromotion": true
+        "hasPaidPromotion": true,
+        "metadataPath": "content/drafts/faceless-wildlife-workflow-metadata-draft.md"
       }
     }
   ],

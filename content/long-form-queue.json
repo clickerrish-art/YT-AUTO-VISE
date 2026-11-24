@@ -87,7 +87,8 @@
         "long-form-faceless-wildlife-workflow"
       ],
       "identityStatus": "UNASSIGNED_DRAFT_NOT_IN_ACTIVE_PUBLICATION_CYCLE",
-      "hasPaidPromotion": true
+      "hasPaidPromotion": true,
+      "metadataPath": "content/drafts/faceless-wildlife-workflow-metadata-draft.md"
     },
     {
       "id": "long-story-wildlife-footage",
