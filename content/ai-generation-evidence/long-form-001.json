@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "assetId": "long-form-001",
-  "status": "NOT_GENERATED",
+  "status": "OWNER_ATTESTED_GENERATED_CLIPS_PENDING_INGEST",
   "provider": null,
   "model": null,
   "generationId": null,
@@ -11,5 +11,16 @@
   "technicalValidationStatus": "NOT_DONE",
   "rightsReviewStatus": "PENDING",
   "humanVisualReview": "NOT_DONE",
-  "note": "Template only. No generation has occurred. Populate only from a real completed generation receipt and the exact retained output file; never fabricate IDs, hashes or review results."
+  "note": "This record captures only the owner's project-specific permission and report that seven AI-generated clips were supplied in a prior conversation. The source files are not accessible in the current workspace. This is not generator provenance, provider/model/version evidence, generation IDs, source-file hashes, commercial-use permission, technical validation or human visual approval. Populate those fields only from the actual files and genuine generation receipts.",
+  "evidenceType": "OWNER_ATTESTATION_ONLY",
+  "ownerApproval": {
+    "approved": true,
+    "scope": "SonicVhibez long-form-001 Nile crocodile documentary only",
+    "clipCount": 7,
+    "mediaType": "AI-generated wildlife visuals",
+    "approvalDate": "2026-11-24",
+    "approvalSource": "Owner confirmation in prior ChatGPT conversation",
+    "sourceFilesAccessibleInCurrentWorkspace": false
+  },
+  "sourceFiles": []
 }
