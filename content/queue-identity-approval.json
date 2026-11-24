@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "status": "STALE_REQUIRES_OWNER_RECONFIRMATION",
+  "status": "PENDING_OWNER_RECONFIRMATION",
   "ownerApproved": false,
-  "approvedBy": "Repository owner — explicit mapping confirmation in this ChatGPT conversation; account identity not independently attested",
-  "approvedAt": "2026-11-23T12:42:31.048Z",
-  "approvalReference": "Previous owner mapping decision remains recorded, but the operational and detailed queue files changed after that approval. Exact queue hashes no longer match; reconfirmation is required before the mapping can pass the dispatch gate. This is not publication authorization.",
-  "operationalQueueSha256": "ab24efa412e08578e1a9f2a09de11d19791dfb65cf414afbe65e70df3526bf31",
-  "detailedQueueSha256": "33d97a52f4be7bc10720a93b600172bb7072a6691d5c93ea9955b6473f9c4e38",
+  "approvedBy": "",
+  "approvedAt": "",
+  "approvalReference": "Queue hashes refreshed by the implementation. No owner reconfirmation, production approval or publication authorization has been recorded.",
+  "operationalQueueSha256": "0bebc5c5ddf719ab22bc2fb0afaebde105d5c8731694cce8719393ebc24f5604",
+  "detailedQueueSha256": "921db727a708882a4545019e9877eda5f007d756914eb9d60309285590f8cf6d",
   "mappings": [
     {
       "operationalItemId": "long-form-plan-wildlife-video",

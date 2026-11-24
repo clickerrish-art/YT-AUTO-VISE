@@ -532,7 +532,7 @@ test("short and long-form manifest templates require original creator-captured f
   }
 });
 
-test("production readiness remains HOLD while queue identity approval is stale", () => {
+test("production readiness remains HOLD while queue identity approval awaits owner reconfirmation", () => {
   const env = { ...process.env };
   delete env.QUEUE_PATH;
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
@@ -592,4 +592,17 @@ test("queue identity approval template is non-approving and pinned to canonical 
     { operationalItemId: "long-form-plan-wildlife-video", detailedItemId: "", cyclePosition: 1 },
     { operationalItemId: "long-form-faceless-wildlife-workflow", detailedItemId: "", cyclePosition: 2 }
   ]);
+});
+
+
+test("queue hash refresh does not manufacture owner approval", () => {
+  const approval = JSON.parse(fs.readFileSync("content/queue-identity-approval.json", "utf8"));
+  const template = JSON.parse(fs.readFileSync("content/queue-identity-approval.template.json", "utf8"));
+  assert.equal(approval.operationalQueueSha256, template.operationalQueueSha256);
+  assert.equal(approval.detailedQueueSha256, template.detailedQueueSha256);
+  assert.equal(approval.status, "PENDING_OWNER_RECONFIRMATION");
+  assert.equal(approval.ownerApproved, false);
+  assert.equal(approval.approvedBy, "");
+  assert.equal(approval.approvedAt, "");
+  assert.match(approval.approvalReference, /No owner reconfirmation/i);
 });
