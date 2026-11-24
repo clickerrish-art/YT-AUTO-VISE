@@ -57,8 +57,11 @@ test("API acceptance matrix covers the complete source-derived protected route i
 });
 
 
-test("current-head API route evidence is exact-SHA, complete, and preserves provider blockers", () => {
+test("latest exact source/test SHA API route evidence is complete and preserves provider blockers", () => {
   const currentSha = matrix.currentHeadReconciliation?.observedImplementationHeadSha;
+  const queueIdentityApproval = JSON.parse(fs.readFileSync(
+    path.join(root, "content", "queue-identity-approval.json"), "utf8"
+  ));
   assert.match(currentSha || "", /^[a-f0-9]{40}$/,
     "API positive-route evidence must identify an exact tested source/test SHA");
   assert.equal(matrix.currentHeadReconciliation?.status, "PARTIAL");
@@ -67,6 +70,10 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
   assert.equal(matrix.currentHeadReconciliation?.ownerGatedRoutes, 2);
   assert.equal(matrix.currentHeadReconciliation?.notTestedRoutesPreserved, 0);
   assert.equal(matrix.latestCurrentHeadPositiveEvidence?.sourceTestSha, currentSha);
+  assert.equal(queueIdentityApproval.ownerApproved, true);
+  assert.equal(queueIdentityApproval.approvalScope, "CONTENT_IDENTITY_AND_ROLLING_CYCLE_POSITION_ONLY");
+  assert.equal(queueIdentityApproval.mappings.length, 2);
+  assert.match(queueIdentityApproval.approvalReference, /identities and rolling cycle positions only/i);
 
   const positive = matrix.routes.filter(route => route.overallAcceptance === "PASS");
   const blocked = matrix.routes.filter(route => route.overallAcceptance === "BLOCKED");
@@ -90,7 +97,7 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
         (route.method === "POST" && route.path === "/api/jobs/produce")) {
       assert.equal(route.currentHeadStatus, "NOT_TESTED");
       assert.equal(route.currentHeadEvidenceSha, null);
-      assert.match(route.currentHeadEvidenceNote, /owner-approved content\/queue-identity-approval\.json is absent/i);
+      assert.match(route.currentHeadEvidenceNote, /owner-approved queue identity\/cycle mapping exists.*does not authorize production dispatch/i);
     } else if (route.path.includes("/drafts/provider")) {
       assert.equal(route.currentHeadStatus, "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES");
       assert.equal(route.currentHeadEvidenceSha, currentSha);
@@ -126,9 +133,9 @@ test("current-head API route evidence is exact-SHA, complete, and preserves prov
   assert.deepEqual(blocked.map(routeKey).sort(), expectedBlocked.sort());
 
   assert.equal(matrix.latestExactHeadRegression?.sourceTestSha, currentSha);
-  assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1136);
-  assert.equal(matrix.latestExactHeadRegression?.nodeTestFiles, 192);
-  assert.equal(matrix.latestExactHeadRegression?.pythonPassed, 108);
+  assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1150);
+  assert.equal(matrix.latestExactHeadRegression?.nodeTestFiles, 194);
+  assert.equal(matrix.latestExactHeadRegression?.pythonPassed, 113);
   assert.equal(matrix.latestExactHeadRegression?.npmAuditVulnerabilities, 0);
   assert.equal(matrix.latestExactHeadRegression?.npmAuditSourceSha, currentSha);
   assert.equal(matrix.latestExactHeadRegression?.browserJourneys?.passed, 41);
