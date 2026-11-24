@@ -26,14 +26,16 @@ jobs:
         run: |
           set -euo pipefail
           response="$(mktemp)"
-          trap 'rm -f "$response"' EXIT
+          headers="$(mktemp)"
+          trap 'rm -f "$response" "$headers"' EXIT
           status="$(curl --silent --show-error --max-time 20 \
-            --output "$response" --write-out '%{http_code}' \
+            --dump-header "$headers" --output "$response" --write-out '%{http_code}' \
             --request POST \
             --header 'content-type: application/json' \
             --data '{}' \
             'https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev/api/runner/session')"
           echo "Runner endpoint HTTP status: $status"
+          cat "$headers"
           cat "$response"
           test "$status" = "503"
           node -e 'const b=JSON.parse(require("node:fs").readFileSync(process.argv[1],"utf8")); if(b.code!=="RUNNER_OIDC_DISABLED" || b.publishingEnabled!==false) process.exit(1)' "$response"
