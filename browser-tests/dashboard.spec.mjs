@@ -820,10 +820,14 @@ test("production controls disable safely when a queued job lacks the approved au
     const blockedRender = await request.post("/api/jobs/produce", { headers, data: { jobId: job.id } });
     expect(blockedRender.status()).toBe(409);
     const blockerBody = await blockedRender.json();
-    expect(blockerBody.error).toMatch(/queue identity reconciliation/i);
-    expect(blockerBody.code).toBe("QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
-    expect(blockerBody.blockers.length).toBeGreaterThan(0);
-    expect(blockerBody.blockers.join(" ")).toMatch(/ownerApproved|queue identity|queue hash/i);
+    expect(blockerBody.error).toMatch(/approved authoring pipeline/i);
+    expect(blockerBody.code).toBe("AUTHORING_PIPELINE_REQUIRED");
+    expect(blockerBody.blockers).toEqual(expect.arrayContaining([
+      expect.stringMatching(/Research and source evidence must be attached/i),
+      expect.stringMatching(/exact script and narration\/caption stages must be reviewed/i),
+      expect.stringMatching(/Scene plan, rights\/provenance, quality and compliance evidence must be current/i),
+      expect.stringMatching(/hash-bound production plan must authorize the exact render inputs/i)
+    ]));
     expect(blockerBody.publishable).toBe(false);
     expect(blockerBody.jobState).toBe("BLOCKED");
     expect(blockerBody.renderStarted).toBe(false);
