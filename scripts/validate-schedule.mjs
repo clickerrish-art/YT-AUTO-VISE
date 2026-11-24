@@ -77,7 +77,13 @@ for (const item of items) {
    if (!quality.valid) errors.push("publication-eligible queue item " + item.id + " failed the production quality gate: " + quality.errors.join("; "));
   }
  }
- if (item.productUrl !== "https://selar.com/0u19v8u99l") errors.push("queue item " + (item.id ?? "(unknown)") + " uses an unapproved destination");
+ if (typeof item.hasPaidPromotion !== "boolean") {
+  errors.push("queue item " + (item.id ?? "(unknown)") + " must explicitly declare hasPaidPromotion");
+ } else if (item.hasPaidPromotion === true) {
+  if (item.productUrl !== "https://selar.com/0u19v8u99l") errors.push("promotional queue item " + (item.id ?? "(unknown)") + " must use the exact approved Selar product URL");
+ } else if (item.productUrl !== undefined && item.productUrl !== null && item.productUrl !== "") {
+  errors.push("non-commercial queue item " + (item.id ?? "(unknown)") + " must not carry a product URL or promotional CTA");
+ }
  if (item.scheduledDay) {
   const slot = expected.find(s => s.day === item.scheduledDay);
   if (!slot) errors.push("queue item " + item.id + " has unsupported draftPreparationDay " + item.scheduledDay);
@@ -109,6 +115,6 @@ if (/(upload-private|youtube[.]upload|render:short|render:long|generate-narratio
 }
 if (errors.length) { for (const error of errors) console.error("FAIL: " + error); process.exitCode = 1; }
 else {
- console.log("PASS: rolling long_form, long_form, short cycle; 72 elapsed-hour minimum; 216-hour minimum cycle; unique queue IDs; approved Selar destination; draft-only preparation triggers; publishing disabled.");
+ console.log("PASS: rolling long_form, long_form, short cycle; 72 elapsed-hour minimum; 216-hour minimum cycle; unique queue IDs; promotion destination validation (promotional items only); draft-only preparation triggers; publishing disabled.");
  console.log("NOTE: This local validator does not query YouTube. The separate production-readiness gate must verify fresh public/private/unlisted/scheduled history and reconcile uncertain attempts before any upload.");
 }
