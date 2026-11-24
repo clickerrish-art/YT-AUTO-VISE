@@ -822,7 +822,7 @@ test("production controls fail closed when queue identity approval is missing", 
     expect(blockedRender.status()).toBe(409);
     const blockerBody = await blockedRender.json();
     expect(blockerBody.error).toMatch(/queue identity reconciliation is not owner-approved/i);
-    expect(blockerBody.code).toBe("QUEUE_IDENTITY_APPROVAL_REQUIRED");
+    expect(blockerBody.code).toBe("QUEUE_IDENTITY_RECONCILIATION_REQUIRED");
     expect(blockerBody.blockers).toEqual(expect.arrayContaining([
       expect.stringMatching(/Queue identity approval must be explicitly OWNER_APPROVED by the owner/i),
       expect.stringMatching(/must identify the approving owner/i),
