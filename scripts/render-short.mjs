@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Render one reviewed 50–60 second vertical Short from licensed footage,
+ * Render one reviewed 50–60 second vertical Short from original creator-captured wildlife footage,
  * a narration file and SRT captions. Requires FFmpeg with libass support.
  * This script never downloads assets, uploads, schedules, or publishes.
  */
@@ -31,11 +31,15 @@ catch {
   process.exit(1);
 }
 
-const required = ["footagePath", "narrationPath", "captionsPath", "footageLicenseEvidence", "narrationLicenseEvidence", "qualityEvidencePath"];
+const required = ["footagePath", "narrationPath", "captionsPath", "footageLicenseEvidence", "narrationLicenseEvidence", "qualityEvidencePath", "footageCreator", "captureEvidencePath", "footageSourceManifest"];
 const missing = required.filter(k => typeof m[k] !== "string" || !m[k].trim());
 const errors = [];
 if (missing.length) errors.push("missing required fields: " + missing.join(", "));
 if (m.channel !== "SonicVhibez") errors.push("channel must be exactly SonicVhibez");
+if (m.footageOrigin !== "creator_captured_original" || m.creatorCapturedOriginal !== true || m.originalCreatorCapturedMediaRequired !== true) errors.push("genuine original creator-captured wildlife footage with verified provenance is required");
+if (m.aiGeneratedWildlifeVisualsAllowed !== false || m.containsAIWildlifeVisuals !== false) errors.push("AI-generated wildlife visuals are prohibited");
+if (m.stockVideoFootageAllowed !== false || m.stockPhotographsAllowed !== false || m.stockMediaAllowed !== false || m.pexelsAllowed !== false || m.pixabayAllowed !== false) errors.push("stock/library wildlife media is not eligible for production");
+if (typeof m.footageCreator !== "string" || !m.footageCreator.trim() || /replace_with|placeholder|unknown|tbd/i.test(m.footageCreator)) errors.push("footageCreator must identify the verified original camera operator");
 if (m.rightsConfirmed !== true) errors.push("rightsConfirmed must be true after human review");
 if (m.complianceReviewed !== true) errors.push("complianceReviewed must be true after human review");
 if (!Number.isInteger(m.targetSeconds) || m.targetSeconds < 50 || m.targetSeconds > 60) errors.push("targetSeconds must be an integer from 50 to 60");
@@ -46,6 +50,12 @@ for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
   }
 }
 const resolvedInputs = {};
+for (const key of ["captureEvidencePath", "footageSourceManifest", "footageLicenseEvidence"]) {
+  if (typeof m[key] === "string" && m[key].trim()) {
+    try { resolvedInputs[key] = resolveRegularFileNoSymlinks(m[key], process.cwd(), key); }
+    catch { errors.push(key + " is missing, unsafe, or contains a symbolic link"); }
+  }
+}
 for (const key of ["footagePath", "narrationPath", "captionsPath", "qualityEvidencePath"]) {
   if (typeof m[key] === "string" && m[key].trim()) {
     try {

@@ -3,7 +3,7 @@
   "channel": "SonicVhibez",
   "provider": "wangp_kaggle",
   "primary": false,
-  "status": "DISABLED_ZERO_COST_BACKEND_AND_MODEL_RIGHTS_NOT_VERIFIED",
+  "status": "DISABLED_BY_OWNER_ORIGINAL_WILDLIFE_MEDIA_POLICY",
   "source": {
     "application": "WanGP",
     "repository": "https://github.com/deepbeepmeep/WanGP",
@@ -57,8 +57,8 @@
     "seedMustBeRecorded": true,
     "enabled": false,
     "productionEligible": false,
-    "visualSourcePolicy": "DISCLOSED_AI_RECONSTRUCTION_ALLOWED_WHEN_PROVIDER_LICENSE_AND_ZERO_COST_BACKEND_ARE_VERIFIED",
-    "note": "Owner permits high-quality, photorealistic AI wildlife reconstructions only when synthetic media is clearly disclosed. This workflow remains disabled: no zero-cost unattended GPU backend is verified and the pinned mirror checkpoint/VAE provenance remains unresolved. Do not run, spend credits, or import output until both conditions are independently verified.",
+    "visualSourcePolicy": "PROHIBITED_FOR_SONICVHIBEZ_WILDLIFE_PRODUCTION",
+    "note": "Disabled by the original-wildlife-media policy. SonicVhibez production requires genuine creator-captured wildlife media; AI-generated wildlife visuals and generic stock are prohibited substitutes. Do not run a GPU, spend credits, or import generated output.",
     "modelRightsVerification": {
       "status": "HOLD_UNVERIFIED_MIRROR_DERIVATIVE_PROVENANCE",
       "verified": false,
@@ -123,12 +123,12 @@
   "safety": {
     "humanFullPlaybackReviewRequired": true,
     "factualReviewRequired": true,
-    "syntheticMediaDisclosureReviewRequired": true,
+    "syntheticMediaDisclosureReviewRequired": false,
     "publishingEnabled": false,
     "youtubeChannel": "SonicVhibez",
     "neverTargetNatureFrontiers": true,
-    "aiGeneratedWildlifeVisualsAllowed": true,
-    "originalCreatorCapturedMediaRequired": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "originalCreatorCapturedMediaRequired": true,
     "stockMediaAllowed": false,
     "pexelsAllowed": false,
     "pixabayAllowed": false,
@@ -156,8 +156,8 @@
   "productionDisposition": {
     "enabled": false,
     "productionEligible": false,
-    "policy": "AI_GENERATED_RECONSTRUCTION_ALLOWED; GENERATION_DISABLED_PENDING_VERIFIED_ZERO_COST_BACKEND_AND_MODEL_RIGHTS",
-    "reason": "SonicVhibez permits clearly disclosed, photorealistic AI wildlife reconstructions. Generation remains disabled until a zero-cost GPU backend is independently verified and the exact pinned checkpoint and VAE provenance/licensing are cleared.",
+    "policy": "ORIGINAL_CREATOR_CAPTURED_REQUIRED; AI_AND_STOCK_EXCLUDED",
+    "reason": "No AI wildlife generation is authorized. Production requires genuine original creator-captured wildlife media with verified provenance and rights.",
     "noGenerationAuthorized": true
   }
 }

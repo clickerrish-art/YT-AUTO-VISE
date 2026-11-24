@@ -6,7 +6,7 @@
     "max": 10
   },
   "publishingEnabled": false,
-  "status": "AI_GENERATED_RECONSTRUCTION_REQUIRED; PLANNING_ONLY",
+  "status": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED; PLANNING_ONLY",
   "productUrl": "https://selar.com/0u19v8u99l",
   "releaseGates": [
     "original script and research complete",
@@ -16,7 +16,7 @@
     "16:9 MP4 rendered and validated",
     "thumbnail matches actual video",
     "captions synchronized to final narration",
-    "AI/synthetic and paid-promotion disclosures checked",
+    "original-media provenance, rights and paid-promotion disclosures checked",
     "human compliance review approved"
   ],
   "items": [
@@ -33,8 +33,8 @@
       "publicationCyclePosition": 1,
       "scheduledAt": null,
       "publishingEnabled": false,
-      "releaseStatus": "HOLD_FOR_AI_GENERATED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
-      "productionNotes": "Mapped from the owner-confirmed episode brief. The shared narration draft contains the Episode 1 section. A corresponding narration script draft exists in the shared script file; this is not a production-approved script, rendered video, media clearance, schedule, upload or publication authorization."
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-002-faceless-wildlife-workflow",
@@ -49,8 +49,8 @@
       "publicationCyclePosition": 2,
       "scheduledAt": null,
       "publishingEnabled": false,
-      "releaseStatus": "HOLD_FOR_AI_GENERATED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
-      "productionNotes": "Mapped from the owner-confirmed episode brief. The shared narration draft contains the Episode 2 section. A corresponding narration script draft exists in the shared script file; this is not a production-approved script, rendered video, media clearance, schedule, upload or publication authorization."
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-form-001-two-eyes-above-water",
@@ -60,11 +60,11 @@
       "status": "PRODUCTION_HOLD_AI_GENERATION_NARRATION_RIGHTS_CAPTIONS_AND_HUMAN_REVIEW",
       "scriptPath": "content/drafts/long-form-001-two-eyes-above-water.md",
       "footageRegisterPath": "content/assets/long-form-001-footage-sourcing.md",
-      "releaseStatus": "HOLD_FOR_AI_GENERATED_WILDLIFE_VISUALS_ACQUISITION_ASSET_LEVEL_RIGHTS_COMMERCIAL_NARRATION_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
       "publicationFormat": "long_form",
       "scheduledAt": null,
       "publishingEnabled": false,
-      "productionNotes": "The current script revision has corrected source attribution and a constrained primary-study claim; the revised script and scene map still require owner and qualified zoological review. Pexels/Pixabay candidates were acquired and technically decoded for review only; the mandatory AI_GENERATED_RECONSTRUCTION_REQUIRED policy keeps them review-only. No AI-generated crocodile video has yet been generated; do not request a user video upload. Three Pexels clips for Short 001 remain a silent review-only preview and are not production assets. Wikimedia leads remain excluded unless separately approved. No crocodile footage is release-cleared. HeyGen Support denied zero-cost commercial-use permission for existing and future Roderic Free-plan outputs; the existing 398.083-second WAV is internal-only and must not be used in public/commercial production. The owner selected Speechma Andrew for a manual zero-cost browser audition only; no Andrew audio or production approval exists. Free-site automation is prohibited; the paid API, local Piper/Edge TTS and paid upgrades are not authorized. No final captions, render, thumbnail, exact-hash approval or publication schedule exists. Keep publishing disabled.",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized.",
       "narrationStatus": "INTERNAL_EVALUATION_ONLY_PROVIDER_DENIED_COMMERCIAL_USE",
       "narrationDurationSeconds": 398.08299319727894,
       "narrationVoice": "Existing HeyGen Roderic Free-plan audio is internal-only and not commercially cleared; no production narrator is approved. Speechma Andrew is selected for a manual zero-cost browser audition only.",
@@ -80,14 +80,17 @@
       "targetMinutes": 8,
       "status": "SCRIPT_DRAFT",
       "scriptPath": "content/long-form-001-wildlife-story-script.md",
-      "releaseStatus": "HOLD_FOR_ASSETS_AND_REVIEW"
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-plan-wildlife-short",
       "title": "Plan a Wildlife Short Before You Start Editing",
       "topic": "wildlife video pre-production",
       "targetMinutes": 7,
-      "status": "IDEA_ONLY"
+      "status": "IDEA_ONLY",
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-ethical-filming",
@@ -96,42 +99,53 @@
       "targetMinutes": 8,
       "status": "SCRIPT_DRAFT",
       "scriptPath": "content/long-form-002-ethical-wildlife-filming-script.md",
-      "releaseStatus": "HOLD_FOR_RESEARCH_ASSETS_AND_REVIEW"
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-editing-workflow",
       "title": "A Practical Wildlife Editing Workflow for Beginners",
       "topic": "wildlife video editing",
       "targetMinutes": 9,
-      "status": "IDEA_ONLY"
+      "status": "IDEA_ONLY",
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-sound-narration",
       "title": "Natural Sound, Narration and Music in Nature Videos",
       "topic": "wildlife documentary audio",
       "targetMinutes": 7,
-      "status": "IDEA_ONLY"
+      "status": "IDEA_ONLY",
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-fact-checking",
       "title": "How to Fact-Check Animal Behaviour in Wildlife Videos",
       "topic": "wildlife research and fact-checking",
       "targetMinutes": 8,
-      "status": "IDEA_ONLY"
+      "status": "IDEA_ONLY",
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-thumbnail-truth",
       "title": "Wildlife Thumbnails and Titles That Match the Footage",
       "topic": "wildlife YouTube thumbnails and titles",
       "targetMinutes": 7,
-      "status": "IDEA_ONLY"
+      "status": "IDEA_ONLY",
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     },
     {
       "id": "long-zero-budget-workflow",
       "title": "A Low-Cost Wildlife Video Workflow From Script to Export",
       "topic": "wildlife video production workflow",
       "targetMinutes": 9,
-      "status": "IDEA_ONLY"
+      "status": "IDEA_ONLY",
+      "releaseStatus": "HOLD_FOR_ORIGINAL_CREATOR_CAPTURED_WILDLIFE_VISUALS_NARRATION_RIGHTS_CAPTIONS_FINAL_REVIEW_AND_PRIVATE_UPLOAD_AUTHORIZATION",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage, verified creator and capture provenance, matching source hash, written rights, commercially cleared narration, synchronized captions, final technical review and exact-hash human approval. No stock or AI-generated wildlife visuals are eligible. No upload or publication is authorized."
     }
   ],
   "cadence": {

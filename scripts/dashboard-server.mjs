@@ -3595,7 +3595,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === "POST" && url.pathname === "/api/jobs/produce") {
       const queueIdentity = readQueueIdentityGate();
-      if (!queueIdentity.valid) return json(res, 409, { error: "Approved authoring pipeline is blocked until queue identity reconciliation is owner-approved; production dispatch is blocked.", code: "QUEUE_IDENTITY_RECONCILIATION_REQUIRED", blockers: queueIdentity.errors, publishingEnabled: false, publishable: false, renderStarted: false, jobState: "BLOCKED", requiresOperatorRetry: false });
+      if (!queueIdentity.valid) return json(res, 409, { error: "Queue identity reconciliation is not owner-approved; production dispatch is blocked.", code: "QUEUE_IDENTITY_RECONCILIATION_REQUIRED", blockers: queueIdentity.errors, publishingEnabled: false, publishable: false, renderStarted: false, jobState: "BLOCKED", requiresOperatorRetry: false });
       const body = await readBody(req);
       if (typeof body.jobId !== "string") return json(res, 400, { error: "jobId is required" });
       const release = await acquireStateLock();

@@ -75,13 +75,14 @@ if (!exists(mediaProductionPolicyPath)) {
   try {
     mediaProductionPolicy = JSON.parse(fs.readFileSync(path.resolve(root, mediaProductionPolicyPath), "utf8"));
     if (mediaProductionPolicy?.status !== "MANDATORY" ||
-        mediaProductionPolicy?.productionVisualMode !== "AI_GENERATED_RECONSTRUCTION_REQUIRED" ||
-        mediaProductionPolicy?.userVideoUploadRequired !== false ||
-        mediaProductionPolicy?.syntheticMediaDisclosureRequired !== true ||
+        mediaProductionPolicy?.productionVisualMode !== "ORIGINAL_CREATOR_CAPTURED_ONLY" ||
+        mediaProductionPolicy?.originalCreatorCapturedMediaRequired !== true ||
+        mediaProductionPolicy?.aiGeneratedWildlifeVisualsAllowed !== false ||
+        mediaProductionPolicy?.stockAndThirdPartyVideoProductionAllowed !== false ||
+        mediaProductionPolicy?.syntheticMediaDisclosureRequired !== false ||
         mediaProductionPolicy?.zeroCostDefault !== true ||
-        mediaProductionPolicy?.qualityProfile !== "ULTRA_REALISTIC_NO_SLOP" ||
         mediaProductionPolicy?.humanVisualReviewRequired !== true) {
-      blockers.push("config/media-production-policy.json does not match the mandatory AI-generated, no-upload, disclosed, zero-cost, ultra-realistic, human-reviewed production policy.");
+      blockers.push("config/media-production-policy.json must require original creator-captured wildlife media and exclude AI-generated wildlife and generic stock footage.");
     }
   } catch {
     blockers.push("config/media-production-policy.json is not valid JSON.");
@@ -203,24 +204,26 @@ if (!exists(mediaInventoryPath)) {
       );
       // Review-eligible candidates are not automatically production selections.
       // Only assets explicitly selected for this release enter the fail-closed media gate.
-      const reviewCandidates = inventory.assets.filter(asset =>
-        asset?.reviewRenderEligible === true && asset?.excludedFromProduction !== true
-      );
+      const reviewCandidates = inventory.assets.filter(asset => asset?.reviewRenderEligible === true);
       const selectedAssets = inventory.assets.filter(asset =>
         asset?.selectedForProduction === true &&
         asset?.excludedFromProduction !== true &&
         asset?.status !== "EXCLUDED_NOT_USED"
       );
-      const unresolvedAssets = selectedAssets.filter(asset => {
-        // This Canva import inventory is reference-only. Production visuals must come from the separately
-        // evidenced AI-generation pipeline, never from imported stock or uploaded source footage.
-        return true;
-      });
+      const unresolvedAssets = selectedAssets.filter(asset =>
+        asset?.creatorCapturedOriginal !== true ||
+        asset?.sourceMethod !== "CREATOR_CAPTURED_ORIGINAL" ||
+        asset?.productionEligible !== true ||
+        asset?.releaseEligible !== true ||
+        asset?.rightsConfirmed !== true ||
+        asset?.thirdPartyRightsReviewed !== true ||
+        asset?.humanVisualReview !== "PASS"
+      );
       if (selectedAssets.length > 0 && (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0)) {
         const ids = unresolvedAssets.map(asset => asset?.canvaAssetId).filter(Boolean);
-        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} imported Canva/reference wildlife asset(s) are selected as production visuals (${ids.join(", ") || "selected inventory not cleared"}); project policy requires disclosed AI-generated wildlife reconstructions. Imported stock/source footage remains reference-only and cannot satisfy the production visual gate.`);
+        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} imported stock/reference wildlife asset(s) are selected as production visuals (${ids.join(", ") || "selected inventory not cleared"}); production requires genuine original creator-captured footage with verified provenance and rights. Stock and AI-generated wildlife visuals are prohibited substitutes.`);
       }
-      notes.push(`Imported Canva wildlife media inventory: ${inventory.assets.length} assets; ${reviewCandidates.length} review candidates; ${excludedAssets.length} excluded from production; ${selectedAssets.length} selected for production; ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
+      notes.push(`Imported wildlife media inventory: ${inventory.assets.length} assets; ${reviewCandidates.length} review-only candidates; ${excludedAssets.length} excluded from production; ${selectedAssets.length} selected for production; ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
     }
   } catch {
     blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is not valid JSON.");
@@ -228,66 +231,26 @@ if (!exists(mediaInventoryPath)) {
 }
 
 function validateWildlifeFootage(manifest, label) {
-  if (mediaProductionPolicy?.productionVisualMode !== "AI_GENERATED_RECONSTRUCTION_REQUIRED" ||
-      mediaProductionPolicy?.userVideoUploadRequired !== false ||
-      mediaProductionPolicy?.syntheticMediaDisclosureRequired !== true) {
-    blockers.push("config/media-production-policy.json must enforce AI-generated wildlife reconstruction, no user video-upload dependency and synthetic-media disclosure.");
+  const policyIsOriginalOnly =
+    mediaProductionPolicy?.productionVisualMode === "ORIGINAL_CREATOR_CAPTURED_ONLY" &&
+    mediaProductionPolicy?.originalCreatorCapturedMediaRequired === true &&
+    mediaProductionPolicy?.aiGeneratedWildlifeVisualsAllowed === false &&
+    mediaProductionPolicy?.stockAndThirdPartyVideoProductionAllowed === false;
+  if (!policyIsOriginalOnly) {
+    blockers.push("config/media-production-policy.json must enforce original creator-captured wildlife footage only; AI-generated wildlife and stock footage are prohibited.");
   }
-  if (manifest.aiGeneratedWildlifeVisualsAllowed !== true) {
-    blockers.push(`${label}: AI-generated wildlife reconstructions must be explicitly enabled by the production manifest.`);
+  if (manifest.footageOrigin !== "creator_captured_original") blockers.push(`${label}: footageOrigin must be creator_captured_original; AI-generated and stock wildlife visuals are not eligible.`);
+  if (manifest.creatorCapturedOriginal !== true) blockers.push(`${label}: creatorCapturedOriginal must be true only after original-file provenance is verified.`);
+  if (manifest.originalCreatorCapturedMediaRequired !== true) blockers.push(`${label}: originalCreatorCapturedMediaRequired must be true.`);
+  if (manifest.aiGeneratedWildlifeVisualsAllowed !== false || manifest.containsAIWildlifeVisuals === true) blockers.push(`${label}: AI-generated wildlife visuals are prohibited for SonicVhibez production.`);
+  if (manifest.stockVideoFootageAllowed !== false || manifest.stockPhotographsAllowed !== false || manifest.stockMediaAllowed !== false || manifest.pexelsAllowed !== false || manifest.pixabayAllowed !== false) blockers.push(`${label}: stock/library wildlife footage and photographs are prohibited production substitutes.`);
+  if (typeof manifest.footageCreator !== "string" || !manifest.footageCreator.trim() || /replace_with|placeholder|unknown|tbd/i.test(manifest.footageCreator)) blockers.push(`${label}: verified original footage creator/operator identity is missing.`);
+  for (const key of ["captureEvidencePath", "footageSourceManifest"]) {
+    const value = manifest[key];
+    if (typeof value !== "string" || !value.trim() || path.isAbsolute(value) || /replace_with|placeholder|todo|unknown|tbd/i.test(value) || !exists(value)) blockers.push(`${label}: ${key} must reference a real, retained original-capture provenance record.`);
   }
-  if (manifest.footageOrigin !== "ai_generated_reconstruction") {
-    blockers.push(`${label}: AI-generated wildlife reconstructions are required for production; stock and other source footage remain review-only.`);
-    return;
-  }
-  if (manifest.syntheticMediaDisclosureRequired !== true ||
-      typeof manifest.syntheticMediaDisclosureText !== "string" ||
-      !/AI-generated/i.test(manifest.syntheticMediaDisclosureText)) {
-    blockers.push(`${label}: an explicit, viewer-facing AI-generated wildlife reconstruction disclosure is required.`);
-  }
-  const evidencePath = manifest.aiGenerationEvidencePath;
-  if (typeof evidencePath !== "string" || !evidencePath.trim() ||
-      path.isAbsolute(evidencePath) || !exists(evidencePath)) {
-    blockers.push(`${label}: AI generation receipt is missing; retain provider, model, generation ID, prompt hash, output hash and review evidence.`);
-    return;
-  }
-  let evidence;
-  try {
-    evidence = JSON.parse(fs.readFileSync(path.resolve(root, evidencePath), "utf8"));
-  } catch {
-    blockers.push(`${label}: AI generation receipt is not valid JSON.`);
-    return;
-  }
-  if (evidence.status !== "COMPLETED") {
-    blockers.push(`${label}: AI-generated wildlife generation is pending; no completed generation receipt is recorded.`);
-  }
-  for (const key of ["provider", "model", "generationId"]) {
-    if (typeof evidence[key] !== "string" || !evidence[key].trim()) {
-      blockers.push(`${label}: AI generation receipt must record ${key}.`);
-    }
-  }
-  for (const key of ["promptSha256", "outputSha256"]) {
-    if (typeof evidence[key] !== "string" || !/^[a-f0-9]{64}$/i.test(evidence[key])) {
-      blockers.push(`${label}: AI generation receipt must contain a valid ${key}.`);
-    }
-  }
-  if (evidence.syntheticMediaDisclosureRequired !== true) {
-    blockers.push(`${label}: AI generation receipt must preserve the synthetic-media disclosure requirement.`);
-  }
-  if (evidence.technicalValidationStatus !== "PASS" ||
-      evidence.rightsReviewStatus !== "PASS" ||
-      evidence.humanVisualReview !== "PASS") {
-    blockers.push(`${label}: AI output requires technical validation, provider-rights review and human visual quality review before production.`);
-  }
-  const footagePath = typeof manifest.footagePath === "string" ? path.join("content", manifest.footagePath) : "";
-  if (footagePath && exists(footagePath) && /^[a-f0-9]{64}$/i.test(evidence.outputSha256 ?? "")) {
-    const actualSha = createHash("sha256").update(fs.readFileSync(path.resolve(root, footagePath))).digest("hex");
-    if (actualSha !== evidence.outputSha256.toLowerCase()) {
-      blockers.push(`${label}: AI generation output SHA-256 does not match the retained final video file.`);
-    }
-  }
+  if (manifest.mediaProvenanceStatus !== "VERIFIED") blockers.push(`${label}: original media provenance is not VERIFIED.`);
 }
-
 if (!exists(manifestPath)) {
   blockers.push("Create content/render-manifest.json from the example and fill it only after verifying asset rights.");
 } else {

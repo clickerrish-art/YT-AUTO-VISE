@@ -442,8 +442,8 @@ test("readiness blocks selected licensed wildlife assets until source, local MP4
 test("review-eligible Pexels candidates do not become selected production inputs implicitly", () => {
   const inventory = JSON.parse(fs.readFileSync("content/sonicvhibez-imported-media-inventory.json", "utf8"));
   assert.equal(inventory.releaseAuthorized, false);
-  assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction === false).length, 8);
-  assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true).length, 2);
+  assert.equal(inventory.assets.filter(asset => asset.reviewRenderEligible === true && asset.excludedFromProduction === false).length, 0);
+  assert.equal(inventory.assets.filter(asset => asset.excludedFromProduction === true).length, 10);
   assert.equal(inventory.status, "CANDIDATES_HELD_PENDING_LOCAL_ORIGINAL_MEDIA_AND_RIGHTS_REVIEW");
   assert.ok(inventory.assets.every(asset => asset.selectedForProduction === false));
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
@@ -532,7 +532,7 @@ test("short and long-form manifest templates require original creator-captured f
   }
 });
 
-test("production readiness accepts the exact owner-confirmed queue mapping but remains HOLD for separate production gates", () => {
+test("production readiness remains HOLD while queue identity approval is stale", () => {
   const env = { ...process.env };
   delete env.QUEUE_PATH;
   const result = spawnSync(process.execPath, ["scripts/production-readiness.mjs", "--json"], {
@@ -541,8 +541,8 @@ test("production readiness accepts the exact owner-confirmed queue mapping but r
   assert.equal(result.status, 2, "production readiness must remain on HOLD");
   const report = JSON.parse(result.stdout);
   assert.equal(report.status, "blocked");
-  assert.equal(report.blockers.some(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/.test(item.message)), false);
-  assert.ok(report.notes.some(note => /Queue identity reconciliation: 2 owner-approved long-form mappings verified/.test(note)));
+  assert.equal(report.blockers.some(item => /QUEUE IDENTITY RECONCILIATION REQUIRED/.test(item.message)), true);
+  assert.equal(report.notes.some(note => /2 owner-approved long-form mappings verified/.test(note)), false);
   assert.ok(report.blockerCount > 0, "media, narration, human-review and history gates must remain blocking");
 });
 

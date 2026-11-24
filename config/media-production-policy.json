@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "status": "MANDATORY",
-  "productionVisualMode": "AI_GENERATED_RECONSTRUCTION_REQUIRED",
+  "productionVisualMode": "ORIGINAL_CREATOR_CAPTURED_ONLY",
   "userVideoUploadRequired": false,
-  "allowRepurposingExistingProjectMaterial": true,
+  "allowRepurposingExistingProjectMaterial": false,
   "stockAndThirdPartyVideoProductionAllowed": false,
-  "qualityProfile": "ULTRA_REALISTIC_NO_SLOP",
+  "qualityProfile": "ORIGINAL_WILDLIFE_DOCUMENTARY_NO_SLOP",
   "requiredQualityChecks": [
     "species and animal anatomy accuracy",
     "natural, physically plausible animal movement",
@@ -14,8 +14,8 @@
     "no repeated filler shots or misleading behavior",
     "clean editorial pacing, sound and captions"
   ],
-  "syntheticMediaDisclosureRequired": true,
-  "syntheticMediaDisclosureText": "AI-generated wildlife reconstruction. This is an illustrative recreation, not authentic documentary footage.",
+  "syntheticMediaDisclosureRequired": false,
+  "syntheticMediaDisclosureText": "",
   "humanVisualReviewRequired": true,
   "zeroCostDefault": true,
   "paidGenerationRequiresExplicitOwnerApproval": true,
@@ -24,9 +24,17 @@
     "platforms": [
       "youtube"
     ],
-    "mediaMode": "AI_GENERATED_RECONSTRUCTION_REQUIRED",
+    "mediaMode": "ORIGINAL_CREATOR_CAPTURED_ONLY",
     "notApplicableTo": [
       "Nature Frontiers"
     ]
-  }
+  },
+  "originalCreatorCapturedMediaRequired": true,
+  "aiGeneratedWildlifeVisualsAllowed": false,
+  "stockMediaAllowed": false,
+  "stockVideoFootageAllowed": false,
+  "stockPhotographsAllowed": false,
+  "pexelsAllowed": false,
+  "pixabayAllowed": false,
+  "notes": "Production wildlife visuals must be genuine original creator-captured footage or photographs with creator identity, capture provenance, matching source-file SHA-256, written commercial-use rights, third-party-rights review and human visual approval. Generic stock/library footage and AI-generated wildlife visuals are prohibited substitutes. No qualifying original media package is currently recorded."
 }

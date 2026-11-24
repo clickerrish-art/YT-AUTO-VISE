@@ -130,12 +130,12 @@ test("AI wildlife generation and Pexels acquisition remain disabled under origin
   const notebook = readJson("../notebooks/sonicvhibez_wangp_kaggle.ipynb");
   const acquisitionScript = readText("../scripts/acquire-short-001-assets.mjs");
   const importer = readText("../scripts/import_wangp_kaggle_output.py");
-  assert.equal(generation.status, "DISABLED_ZERO_COST_BACKEND_AND_MODEL_RIGHTS_NOT_VERIFIED");
+  assert.equal(generation.status, "DISABLED_BY_OWNER_ORIGINAL_WILDLIFE_MEDIA_POLICY");
   assert.equal(generation.primary, false);
   assert.equal(generation.generation.enabled, false);
-  assert.equal(generation.safety.aiGeneratedWildlifeVisualsAllowed, true);
+  assert.equal(generation.safety.aiGeneratedWildlifeVisualsAllowed, false);
   assert.equal(generation.safety.stockVideoFootageAllowed, false);
-  assert.equal(generation.safety.originalCreatorCapturedMediaRequired, false);
+  assert.equal(generation.safety.originalCreatorCapturedMediaRequired, true);
   assert.equal(generation.safety.stockMediaAllowed, false);
   assert.equal(generation.safety.pexelsAllowed, false);
   assert.equal(generation.safety.pixabayAllowed, false);
@@ -143,7 +143,7 @@ test("AI wildlife generation and Pexels acquisition remain disabled under origin
   const codeCells = notebook.cells.filter(cell => cell.cell_type === "code");
   assert.ok(codeCells.length > 0);
   assert.ok(codeCells.every(cell => (Array.isArray(cell.source) ? cell.source.join("") : cell.source)
-    .startsWith('raise RuntimeError("DISABLED_BY_OWNER_AI_WILDLIFE_VISUAL_POLICY')));
+    .startsWith('raise RuntimeError("DISABLED_BY_OWNER_ORIGINAL_MEDIA_POLICY')));
   assert.ok(acquisitionScript.includes("OWNER_POLICY_PATH"));
   assert.ok(acquisitionScript.includes("owner.status !== \"ACTIVE_WITH_ASSET_LEVEL_REVIEW_GATES\""));
   assert.ok(acquisitionScript.includes("owner.mediaRules?.pexelsLicensedStockAllowed !== true"));

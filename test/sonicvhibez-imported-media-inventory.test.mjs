@@ -58,15 +58,15 @@ test("stock Pexels source matches remain review-only and cannot enter production
     assert.equal(asset.licenseEvidencePath, "content/media/pexels-license-evidence-2026-11-22.md");
   }
 
-  assert.equal(inventory.currentProductionPolicy.status, "AI_GENERATED_RECONSTRUCTION_REQUIRED_STOCK_EXCLUDED");
-  assert.equal(inventory.currentProductionPolicy.originalCreatorCapturedMediaRequired, false);
+  assert.equal(inventory.currentProductionPolicy.status, "ORIGINAL_CREATOR_CAPTURED_ONLY_STOCK_REFERENCE_ONLY");
+  assert.equal(inventory.currentProductionPolicy.originalCreatorCapturedMediaRequired, true);
   assert.equal(inventory.currentProductionPolicy.stockMediaAllowed, false);
   assert.equal(inventory.currentProductionPolicy.stockVideoFootageAllowed, false);
   assert.equal(inventory.currentProductionPolicy.stockPhotographsAllowed, false);
   assert.equal(inventory.currentProductionPolicy.pexelsAllowed, false);
   assert.equal(inventory.currentProductionPolicy.pixabayAllowed, false);
   assert.equal(inventory.assets.every(asset => asset.selectedForProduction === false && asset.productionEligible === false && asset.releaseEligible === false), true);
-  assert.equal(inventory.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, true);
+  assert.equal(inventory.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
 });
 
 test("duration-mismatch and unresolved-source Canva assets remain excluded", () => {
@@ -85,7 +85,7 @@ test("duration-mismatch and unresolved-source Canva assets remain excluded", () 
 test("general Pexels licence evidence is not treated as asset-specific rights clearance", () => {
   assert.equal(inventory.policyReference.reviewStatus, "POLICY_REVIEWED_AS_GENERAL_POLICY_ONLY");
   assert.match(inventory.notes, /Legacy Canva\/Pexels\/NOAA media remains reference-only/);
-  assert.equal(inventory.currentProductionPolicy.ownerPolicyEvidence, "content/owner-media-policy-override-2026-11-22.json");
+  assert.equal(inventory.currentProductionPolicy.ownerPolicyEvidence, "config/media-production-policy.json");
   assert.ok(inventory.assets.every(asset => asset.productionEligible === false && asset.releaseEligible === false && asset.selectedForProduction === false));
   assert.ok(inventory.blockingEvidence.some(item => /No imported Canva candidate is rights-cleared/i.test(item)));
 });

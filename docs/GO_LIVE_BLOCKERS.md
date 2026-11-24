@@ -45,7 +45,7 @@
 
 ## Current production blockers (22)
 
-1. Short footage file `media/next-short-footage.mp4` is missing from the canonical production media directory. Four original Pexels clips now exist in the review artifact; they have not been promoted into the production manifest path.
+1. Short footage file `media/next-short-footage.mp4` is missing from the canonical production media directory. Four Pexels stock clips exist only in a review artifact; they are not original creator-captured media and must never be promoted into the production manifest.
 2. Short narration file `media/next-short-narration.mp3` is missing.
 3. Short footage rights evidence is not real and human-verified.
 4. Short narration rights evidence is not real and human-verified.
@@ -101,7 +101,7 @@
 
 ## Media and narration constraints
 
-- The Pexels register contains 17 sources: four primary clips explicitly approved by the owner and 13 supplemental clips approved in principle. All four primary MP4s were acquired in artifact [14531991114](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527616852), independently re-probed and SHA-256 rechecked; total duration is 53.0337 seconds. Hashes are stored in `content/short-001-acquisition-manifest.json`. They remain review-only and are not copied into the canonical production media directory. The fourth clip shows a visible chain-link barrier/enclosure in sampled frames; do not portray it as wild free-ranging wildlife. Owner/editor review must decide whether to exclude it or explicitly contextualize it. Pexels licence metadata is not a substitute for third-party-rights checks and final human review.
+- The Pexels register contains 17 historical stock/reference sources. None is approved for production under the original creator-captured-only policy. All four primary MP4s were acquired in artifact [14531991114](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44527616852), independently re-probed and SHA-256 rechecked; total duration is 53.0337 seconds. Hashes are stored in `content/short-001-acquisition-manifest.json`. They remain review-only and are not copied into the canonical production media directory. The fourth clip shows a visible chain-link barrier/enclosure in sampled frames; do not portray it as wild free-ranging wildlife. Owner/editor review must decide whether to exclude it or explicitly contextualize it. Pexels licence metadata is not a substitute for third-party-rights checks and final human review.
 - The Roderic HeyGen Free-plan sample (55.722 seconds) is an internal audition only and is not licensed for commercial/monetized production. Do not use it in the final Short or Long-form video.
 - Historical Long-form Edge TTS narration was generated from the wrong script using an unapproved voice and is quarantined. No commercially cleared narration or final long-form captions are available.
 - No final Short or Long-form export, final thumbnail, exact-hash human review, rights confirmation or private-upload authorization exists.
@@ -113,7 +113,7 @@
 
 1. Reauthorize the existing Google OAuth client for the same SonicVhibez account with offline access and an upload-capable `youtube.upload` scope; update only the GitHub Actions `YOUTUBE_REFRESH_TOKEN` secret. Never paste credentials into chat or source files.
 2. Provide commercially cleared narration or explicitly approve a zero-cost alternative voice with verified commercial rights. Do not silently substitute Roderic or another voice.
-3. Review the four acquired Pexels clips, decide whether to exclude or contextualize the enclosure shot, verify all third-party rights, and authorize copying approved files into the canonical production media directory.
+3. Keep all acquired Pexels clips in the reference-only archive. Obtain genuine original creator-captured footage with exact provenance and rights evidence; do not copy stock clips into the production media directory.
 4. Provide the Metricool/Meta historical export or read-only history access needed to reconcile the eight Nature Frontiers records.
 5. An owner must independently inspect the final rendered videos, captions, thumbnails, metadata and claims, then approve the exact final artifact hashes.
 6. An owner must verify GitHub branch-protection settings in repository settings; the connected GitHub protection endpoint returned HTTP 403, so protection remains UNVERIFIED.

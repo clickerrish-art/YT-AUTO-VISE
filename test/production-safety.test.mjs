@@ -35,10 +35,10 @@ test("Short metadata template contains required disclosures and stays gated", ()
   assert.equal(shortTemplate.rightsConfirmed, false);
   assert.equal(shortTemplate.complianceReviewed, false);
   assert.equal(shortTemplate.hasPaidPromotion, true);
-  assert.equal(shortTemplate.containsSyntheticMedia, true);
+  assert.equal(shortTemplate.containsSyntheticMedia, false);
   assert.equal(shortTemplate.containsAIWildlifeVisuals, false);
-  assert.equal(shortTemplate.wildlifeVisualSourcePolicy, "ORIGINAL_OR_LICENSED_PEXELS_PIXABAY_WITH_ASSET_LEVEL_REVIEW");
-  assert.equal(shortTemplate.mediaProvenanceStatus, "UNVERIFIED");
+  assert.equal(shortTemplate.wildlifeVisualSourcePolicy, "ORIGINAL_CREATOR_CAPTURED_ONLY");
+  assert.equal(shortTemplate.mediaProvenanceStatus, "NOT_SUPPLIED");
   assert.match(shortTemplate.description, /promotional disclosure/i);
   assert.match(shortTemplate.description, /AI NARRATION/i);
   assert.equal(shortTemplate.productUrl, "https://selar.com/0u19v8u99l");
@@ -80,16 +80,16 @@ test("local narration generation remains disabled while Speechma Andrew browser 
 test("non-commercial audio and unverified wildlife media cannot enter the generic renderer", () => {
   assert.match(queuedRenderer, /validate_render_authorization/);
   assert.match(queuedRenderer, /commercialUseAllowed/);
-  assert.match(queuedRenderer, /AI_GENERATED_RECONSTRUCTION/);
+  assert.match(queuedRenderer, /ORIGINAL_CREATOR_CAPTURED/);
   assert.match(queuedRenderer, /BLOCKED: the generic text-only draft renderer is disabled/);
 });
 
-test("Pexels stock thumbnail and footage acquisition stay disabled while disclosed AI reconstructions remain eligible", () => {
+test("Pexels stock and AI wildlife visuals remain excluded under original-only policy", () => {
   assert.match(photoThumbnailGenerator, /BLOCKED: Pexels stock-thumbnail generation is disabled/);
   assert.doesNotMatch(photoThumbnailGenerator, /images\.pexels\.com|pexels\.com\/photo/i);
   assert.equal(pexelsRegistry.currentProductionPolicy.stockMediaAllowed, false);
-  assert.equal(pexelsRegistry.currentProductionPolicy.originalCreatorCapturedMediaRequired, false);
-  assert.equal(pexelsRegistry.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.originalCreatorCapturedMediaRequired, true);
+  assert.equal(pexelsRegistry.currentProductionPolicy.aiGeneratedWildlifeVisualsAllowed, false);
   assert.equal(pexelsRegistry.currentProductionPolicy.stockVideoFootageAllowed, false);
   assert.equal(pexelsRegistry.currentProductionPolicy.pexelsAllowed, false);
   assert.equal(pexelsRegistry.currentProductionPolicy.pixabayAllowed, false);

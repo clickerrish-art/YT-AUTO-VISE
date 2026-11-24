@@ -112,6 +112,7 @@ def inspect_video(video: Path) -> dict:
     return {"ffprobe": data, "durationSeconds": duration, "fullDecodePassed": True}
 
 def main() -> int:
+    raise SystemExit("AI-generated wildlife media is disabled by the current owner media policy; original creator-captured wildlife media is required.")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--video", required=True, help="wildlife-test.mp4 from the Kaggle ZIP")
     parser.add_argument("--manifest", required=True, help="generation-manifest.json from the same ZIP")

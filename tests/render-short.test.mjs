@@ -51,3 +51,25 @@ test("renderer rejects placeholder license evidence", () => {
   assert.match(manifest.footageLicenseEvidence, /REPLACE_WITH/);
   assert.equal(manifest.rightsConfirmed, false);
 });
+
+
+test("Short and long-form renderers require original creator-captured wildlife provenance", () => {
+  for (const path of ["scripts/render-short.mjs", "scripts/render-long-form.mjs"]) {
+    const source = fs.readFileSync(path, "utf8");
+    assert.match(source, /footageOrigin !== "creator_captured_original"/);
+    assert.match(source, /creatorCapturedOriginal !== true/);
+    assert.match(source, /originalCreatorCapturedMediaRequired !== true/);
+    assert.match(source, /containsAIWildlifeVisuals !== false/);
+    assert.match(source, /footageSourceManifest/);
+    assert.match(source, /captureEvidencePath/);
+  }
+  const short = JSON.parse(fs.readFileSync("content/render-manifest.example.json", "utf8"));
+  const long = JSON.parse(fs.readFileSync("content/long-form-render-manifest.example.json", "utf8"));
+  for (const manifest of [short, long]) {
+    assert.equal(manifest.footageOrigin, "creator_captured_original");
+    assert.equal(manifest.originalCreatorCapturedMediaRequired, true);
+    assert.equal(manifest.aiGeneratedWildlifeVisualsAllowed, false);
+    assert.equal(manifest.containsAIWildlifeVisuals, false);
+    assert.equal(manifest.rightsConfirmed, false);
+  }
+});
