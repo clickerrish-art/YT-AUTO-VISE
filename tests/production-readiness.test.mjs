@@ -6,6 +6,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { validateQueueIdentity } from "../scripts/queue-identity-policy.mjs";
 import { createTestDashboardProject } from "../test/helpers/queue-identity-fixture.mjs";
 
 function currentYouTubeReconciliationExpectation() {
@@ -604,14 +605,16 @@ test("queue identity approval template is non-approving and pinned to canonical 
 });
 
 
-test("queue hash refresh does not manufacture owner approval", () => {
+test("queue edits invalidate exact-hash approval without changing owner approval metadata", () => {
   const approval = JSON.parse(fs.readFileSync("content/queue-identity-approval.json", "utf8"));
-  const template = JSON.parse(fs.readFileSync("content/queue-identity-approval.template.json", "utf8"));
-  assert.equal(approval.operationalQueueSha256, template.operationalQueueSha256);
-  assert.equal(approval.detailedQueueSha256, template.detailedQueueSha256);
-  assert.equal(approval.status, "PENDING_OWNER_RECONFIRMATION");
-  assert.equal(approval.ownerApproved, false);
-  assert.equal(approval.approvedBy, "");
-  assert.equal(approval.approvedAt, "");
-  assert.match(approval.approvalReference, /No owner reconfirmation/i);
+  const operationalQueue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
+  const detailedQueue = JSON.parse(fs.readFileSync("content/long-form-queue.json", "utf8"));
+  const originalApproval = structuredClone(approval);
+  operationalQueue.items[0].title += " changed after owner approval";
+  const result = validateQueueIdentity({ operationalQueue, detailedQueue, approval });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => /operationalQueueSha256 does not match/.test(error)));
+  assert.equal(approval.status, "OWNER_APPROVED");
+  assert.equal(approval.ownerApproved, true);
+  assert.deepEqual(approval, originalApproval);
 });
