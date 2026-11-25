@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-23T11:15:00Z",
+  "generatedAt": "2026-11-25T09:21:57Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
@@ -18,7 +18,7 @@
     "branchAheadBy": 5664,
     "branchBehindBy": 0,
     "changedFiles": 552,
-    "branchProtectionEnabled": null,
+    "branchProtectionEnabled": false,
     "branchProtectionStatus": "UNVERIFIED — GitHub branch-protection endpoint returns HTTP 403; owner-side settings are not independently visible.",
     "comparisonSourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
@@ -220,8 +220,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/campaign-management-api.integration.test.mjs"
@@ -257,8 +257,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs"
@@ -294,8 +294,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-draft-update-concurrency.integration.test.mjs",
@@ -332,8 +332,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
@@ -366,8 +366,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: local fail-closed route tests passed in the 1,150-test regression. Live provider credentials/permissions and explicit owner authorization remain prerequisites; no provider write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
@@ -403,8 +403,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
@@ -431,13 +431,13 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: local fail-closed route tests passed in the 1,150-test regression. Live provider credentials/permissions and explicit owner authorization remain prerequisites; no provider write or publication was attempted. Interrupted SUBMITTING records require concurrent reconciliation; live Meta Page credentials/permissions and owner authorization are absent.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs",
         "test/meta-page-adapter.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceRunId": 45582470326,
       "authenticationNegativeCurrentHeadSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
       "authenticationNegativeCurrentHeadRunId": 45441149361,
       "mockedIntegrationStatus": "PASS",
@@ -473,13 +473,13 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED_BY_LIVE_META_PROVIDER_PREREQUISITES",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: local fail-closed route tests passed in the 1,150-test regression. Live provider credentials/permissions and explicit owner authorization remain prerequisites; no provider write or publication was attempted. Interrupted SUBMITTING records require concurrent reconciliation; live Meta Page credentials/permissions and owner authorization are absent.",
       "currentHeadEvidenceTestFiles": [
         "test/meta-provider-draft-server.integration.test.mjs",
         "test/meta-page-adapter.test.mjs"
       ],
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceRunId": 45582470326,
       "authenticationNegativeCurrentHeadSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
       "authenticationNegativeCurrentHeadRunId": 45441149361,
       "mockedIntegrationStatus": "PASS",
@@ -524,8 +524,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-dashboard.test.mjs"
@@ -561,8 +561,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
@@ -589,8 +589,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: local fail-closed route tests passed in the 1,150-test regression. Live provider credentials/permissions and explicit owner authorization remain prerequisites; no provider write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
@@ -626,8 +626,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly-concurrency.integration.test.mjs"
@@ -654,8 +654,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: local fail-closed route tests passed in the 1,150-test regression. Live provider credentials/permissions and explicit owner authorization remain prerequisites; no provider write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/facebook-page-verification-api.integration.test.mjs"
@@ -688,8 +688,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: local fail-closed route tests passed in the 1,150-test regression. Live provider credentials/permissions and explicit owner authorization remain prerequisites; no provider write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/instagram-approval-route-fail-closed.integration.test.mjs"
@@ -722,8 +722,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
@@ -760,8 +760,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
@@ -798,8 +798,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs"
@@ -873,8 +873,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
@@ -912,8 +912,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-completion.integration.test.mjs"
@@ -949,8 +949,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
@@ -986,8 +986,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs"
@@ -1023,8 +1023,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
@@ -1069,8 +1069,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -1106,8 +1106,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -1143,8 +1143,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-narration-reconciliation-recovery.integration.test.mjs"
@@ -1180,8 +1180,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-server.test.mjs",
@@ -1218,8 +1218,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-parent-relationship.integration.test.mjs"
@@ -1292,8 +1292,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
@@ -1329,8 +1329,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/production-plan-api.test.mjs"
@@ -1366,8 +1366,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-queue-diagnostics.integration.test.mjs"
@@ -1403,8 +1403,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-render-recovery-reconcile.integration.test.mjs"
@@ -1440,8 +1440,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-retry.integration.test.mjs"
@@ -1477,8 +1477,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
@@ -1515,8 +1515,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs",
@@ -1552,8 +1552,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-review-approval.integration.test.mjs"
@@ -1590,8 +1590,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-rights-verification.integration.test.mjs"
@@ -1641,8 +1641,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-job-cancellation.integration.test.mjs"
@@ -1680,8 +1680,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-validation-idempotency.integration.test.mjs"
@@ -1717,8 +1717,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-worker-lease-lifecycle.integration.test.mjs",
@@ -1752,8 +1752,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/nature-frontiers-media-register-api.test.mjs"
@@ -1786,8 +1786,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
@@ -1821,8 +1821,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
@@ -1856,8 +1856,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-cloudflare-state.integration.test.mjs"
@@ -1893,8 +1893,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs",
@@ -1932,8 +1932,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-task-runner.test.mjs"
@@ -1969,8 +1969,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/dashboard-api-readonly.integration.test.mjs"
@@ -2003,8 +2003,8 @@
       "lastVerifiedOverallAcceptance": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: local fail-closed route tests passed in the 1,150-test regression. Live provider credentials/permissions and explicit owner authorization remain prerequisites; no provider write or publication was attempted.",
       "currentHeadEvidenceTestFiles": [
         "test/upload-reconcile-fail-closed.integration.test.mjs",
@@ -2041,8 +2041,8 @@
       "lastVerifiedOverallAcceptance": "PASS",
       "currentHeadStatus": "PASS",
       "authenticationNegativeCurrentHead": "PASS",
-      "currentHeadEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "currentHeadEvidenceRunId": 45441149361,
+      "currentHeadEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "currentHeadEvidenceRunId": 45582470326,
       "currentHeadEvidenceNote": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication.",
       "currentHeadEvidenceTestFiles": [
         "test/worker-quarantine-release.test.mjs"
@@ -2365,7 +2365,7 @@
     "overallPass": 41,
     "overallNotTested": 0,
     "overallBlocked": 9,
-    "sourceTestSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81"
+    "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d"
   },
   "latestCurrentHeadAuthenticationEvidence": {
     "sourceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
@@ -2376,25 +2376,25 @@
     "failed": 0,
     "skipped": 0
   },
-  "latestBranchTipAtEvidenceRefresh": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+  "latestBranchTipAtEvidenceRefresh": "e941a32e36e2fe07c81814b6a1da34127efb202d",
   "latestApplicationSourceChangeSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
   "latestFullyTestedSourceTestTreeSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
   "sourceTestEvidenceStatus": "PASS_WITH_PRODUCTION_HOLD",
   "latestApplicationSourceTestTreeSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
   "latestCurrentHeadPositiveEvidence": {
-    "sourceTestSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-    "runId": 45441149361,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149361",
+    "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "runId": 45582470326,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470326",
     "positiveRouteCount": 41,
     "blockedRouteCount": 9,
     "notTestedRouteCount": 0,
     "nodeTestFilesPassed": 194,
-    "nodePassed": 1150,
+    "nodePassed": 1154,
     "nodeFailed": 0,
     "nodeSkipped": 0,
-    "browserRunId": 45441149801,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149801",
-    "browserEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+    "browserRunId": 45582470207,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470207",
+    "browserEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
     "browserTestsPassed": 41,
     "browserTestsFailed": 0,
     "browserTestsSkipped": 0,
@@ -2402,23 +2402,23 @@
     "pythonFailed": 0,
     "pythonSkipped": 0,
     "npmAuditVulnerabilities": 0,
-    "npmAuditSourceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81"
+    "npmAuditSourceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d"
   },
   "currentHeadReconciliation": {
     "status": "PARTIAL",
-    "observedImplementationHeadSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149361",
-    "regressionRunId": 45441149361,
+    "observedImplementationHeadSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "regressionRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470326",
+    "regressionRunId": 45582470326,
     "regressionRunResults": {
-      "nodePassed": 1136,
+      "nodePassed": 1154,
       "nodeFailed": 0,
       "nodeSkipped": 0,
-      "nodeTestFilesPassed": 192,
+      "nodeTestFilesPassed": 194,
       "browserPassed": 41,
       "browserFailed": 0,
       "browserSkipped": 0,
-      "browserRunId": 45162303495,
-      "pythonPassed": 108,
+      "browserRunId": 45582470207,
+      "pythonPassed": 113,
       "pythonFailed": 0,
       "pythonSkipped": 0,
       "npmAuditVulnerabilities": 0
@@ -2428,34 +2428,31 @@
     "notTestedRoutesPreserved": 0,
     "blockedRoutesPreserved": 9,
     "ownerGatedRoutes": 2,
-    "explanation": "Latest fully tested source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81 passes 1,150 Node tests across 194 files, 113 Python tests, 50/50 protected-route auth-negative checks and 41/41 Chromium dashboard journeys; npm audit reports zero vulnerabilities. 41 local positive route classifications remain accepted; nine routes remain BLOCKED by live provider or production-owner prerequisites. Two job routes remain NOT_TESTED for positive dispatch/production: the owner-approved queue identity file now exists, but its scope is identity and rolling-cycle position only and does not authorize production, upload or publication. Production readiness remains HOLD with 35 blockers. No live provider writes or publications.",
-    "latestExactHeadWorkflowRunId": 45162303476,
-    "latestExactHeadWorkflowRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
+    "explanation": "Exact current implementation/test SHA e941a32e36e2fe07c81814b6a1da34127efb202d passed 1,154 Node tests across 194 files, 113 Python tests, 50/50 protected-route authentication-negative checks, 41/41 Chromium dashboard journeys and npm audit with zero vulnerabilities. The matrix retains 41 local positive route classifications and nine BLOCKED routes; two job routes remain NOT_TESTED for positive dispatch/production because the owner-approved identity mapping does not authorize production dispatch, upload or publication. Production readiness remains HOLD with 35 blockers. No live provider writes or publications were performed.",
+    "latestExactHeadWorkflowRunId": 45582470326,
+    "latestExactHeadWorkflowRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470326",
     "latestExactHeadTests": {
-      "nodePassed": 1136,
+      "nodePassed": 1154,
       "nodeFailed": 0,
       "nodeSkipped": 0,
-      "nodeTestFilesPassed": 192,
-      "pythonPassed": 108,
+      "nodeTestFilesPassed": 194,
+      "pythonPassed": 113,
       "pythonFailed": 0,
       "pythonSkipped": 0,
       "browserPassed": 41,
       "browserFailed": 0,
       "browserSkipped": 0,
-      "browserRunId": 45160299988,
+      "browserRunId": 45582470207,
       "npmAuditVulnerabilities": 0,
-      "npmAuditLastVerifiedSha": "b7a8084279b188fc150de82a5b8e935e77d74c49"
+      "npmAuditLastVerifiedSha": "e941a32e36e2fe07c81814b6a1da34127efb202d"
     },
     "readiness": {
       "status": "HOLD",
-      "runId": 45162303536,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303536",
-      "head": "a7e8cb38c39444632bd22d603811217fea1527e0",
-      "blockerCount": 22,
-      "artifactId": 14812105244,
-      "artifactSha256": "sha256:bbbbbf22d93283282804e719c78b2ad14f2740e3a60a44b08cb0243e138ff1d1",
+      "runId": 45582470403,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470403",
+      "head": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "blockerCount": 35,
       "publishingEnabled": false,
-      "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303536",
       "exitCode": 2,
       "reportUploaded": true
     },
@@ -2508,11 +2505,11 @@
     "note": "Historical exact-SHA result only; superseded for GET /api/jobs/dispatchable and POST /api/jobs/produce by the newer owner-approval gate."
   },
   "latestExactHeadRegression": {
-    "sourceTestSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-    "automationRunId": 45441149361,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149361",
+    "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "automationRunId": 45582470326,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470326",
     "nodeTestFiles": 194,
-    "nodePassed": 1150,
+    "nodePassed": 1154,
     "nodeFailed": 0,
     "nodeSkipped": 0,
     "pythonPassed": 113,
@@ -2523,9 +2520,9 @@
       "passed": 50,
       "total": 50
     },
-    "browserRunId": 45441149801,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149801",
-    "browserEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+    "browserRunId": 45582470207,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470207",
+    "browserEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
     "browserJourneys": {
       "passed": 41,
       "total": 41,
@@ -2540,17 +2537,15 @@
     },
     "productionReadiness": {
       "status": "HOLD",
-      "runId": 45441149562,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149562",
-      "head": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-      "blockers": 35,
-      "artifactId": 14944665086,
-      "artifactSha256": "sha256:8ae52e821a96e02fd6325905b9d5d64fb46c9309f138b9885acc27b622cd73f9"
+      "runId": 45582470403,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470403",
+      "head": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "blockers": 35
     },
-    "queueReadinessRunId": 45441149398,
-    "queueReadiness": "PASS — two owner-approved queue identity mappings are hash-bound; approval scope is identity and rolling-cycle positions only; production dispatch, upload and publication remain unauthorized.",
-    "deploymentRecoveryRunId": 45441149710,
-    "runnerBridgeSafetyRunId": 45441149593,
+    "queueReadinessRunId": 45582470334,
+    "queueReadiness": "PASS_FAIL_CLOSED",
+    "deploymentRecoveryRunId": 45582470408,
+    "runnerBridgeSafetyRunId": 45582470459,
     "cloudflareStagingSmoke": "PASS_READ_ONLY",
     "contentQualityRunId": 45441149542,
     "metadataRunId": 45441150044,
@@ -2560,13 +2555,16 @@
     "branchInventoryHead": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
     "branchInventoryArtifactId": 14943058127,
     "branchInventoryArtifactSha256": "sha256:c2214bf8b55ee7c8d8c5e9d3e0f12eb9e9c52219929d1508a631f90dc2fe2a48",
-    "branchAheadBy": 5811,
+    "branchAheadBy": 5822,
     "branchBehindBy": 0,
     "changedFiles": 586,
-    "branchProtection": "UNVERIFIED_HTTP_403",
-    "npmAuditSourceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+    "branchProtection": "DISABLED_ON_MAIN_AND_IMPLEMENTATION_BRANCH",
+    "npmAuditSourceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
     "queueReadinessArtifactId": 14944420483,
-    "queueReadinessArtifactSha256": "sha256:88f1769fea34f54d836d16a0b8bb21d1902ebbbd8f4834d690acbc052c1dd10f"
+    "queueReadinessArtifactSha256": "sha256:88f1769fea34f54d836d16a0b8bb21d1902ebbbd8f4834d690acbc052c1dd10f",
+    "branchHead": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+    "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0"
   },
   "cloudflareProductionState": {
     "sourceSha": "234b61306997f702bd62af2d87d27bbabce60a4c",
@@ -2590,28 +2588,28 @@
     "publishingEnabled": false,
     "productionApproval": "NOT_GRANTED"
   },
-  "latestExactHead": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+  "latestExactHead": "e941a32e36e2fe07c81814b6a1da34127efb202d",
   "latestExactHeadEvidence": {
-    "recordedAt": "2026-11-24",
-    "sourceTestSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-    "automationRunId": 45441149361,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149361",
+    "recordedAt": "2026-11-25",
+    "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "automationRunId": 45582470326,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470326",
     "nodeTestFiles": 194,
-    "nodeTests": 1150,
+    "nodeTests": 1154,
     "nodeFailed": 0,
     "nodeSkipped": 0,
     "pythonTests": 113,
     "pythonFailed": 0,
     "pythonSkipped": 0,
     "npmAuditVulnerabilities": 0,
-    "browserRunId": 45441149801,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149801",
-    "browserEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+    "browserRunId": 45582470207,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470207",
+    "browserEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
     "browserJourneys": 41,
     "browserPassed": 41,
     "browserFailed": 0,
     "browserSkipped": 0,
-    "productionReadinessRunId": 45441149562,
+    "productionReadinessRunId": 45582470403,
     "productionReadinessStatus": "HOLD",
     "productionReadinessBlockers": 35,
     "readinessArtifactId": 14944665086,
@@ -2622,7 +2620,7 @@
       "notTested": 0,
       "blocked": 9,
       "authNegativePass": 50,
-      "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0"
+      "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d"
     },
     "baselineComparison": {
       "status": "PASS",
@@ -2697,6 +2695,117 @@
     "releaseDecision": "HOLD",
     "branchInventoryRunId": 45441149946,
     "branchInventoryArtifactId": 14943058127,
-    "branchInventoryArtifactSha256": "sha256:c2214bf8b55ee7c8d8c5e9d3e0f12eb9e9c52219929d1508a631f90dc2fe2a48"
+    "branchInventoryArtifactSha256": "sha256:c2214bf8b55ee7c8d8c5e9d3e0f12eb9e9c52219929d1508a631f90dc2fe2a48",
+    "branch": {
+      "head": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+      "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+      "aheadBy": 5822,
+      "behindBy": 0,
+      "changedFiles": 586
+    },
+    "branchProtection": "DISABLED_ON_MAIN_AND_IMPLEMENTATION_BRANCH"
+  },
+  "branchProtectionEvidence": {
+    "observedAt": "2026-11-25T09:21:57Z",
+    "source": "GitHub branches API (read-only)",
+    "main": {
+      "protected": false,
+      "requiredStatusChecks": {
+        "enforcementLevel": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "implementationBranch": {
+      "protected": false,
+      "requiredStatusChecks": {
+        "enforcementLevel": "off",
+        "contexts": [],
+        "checks": []
+      }
+    },
+    "note": "Observed only. No branch-protection settings were changed."
+  },
+  "currentBranchTip": {
+    "head": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "aheadBy": 5822,
+    "behindBy": 0,
+    "changedFiles": 586
+  },
+  "dailyLiveRefresh": {
+    "recordedAt": "2026-11-25T09:21:57Z",
+    "branchHead": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+    "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+    "aheadBy": 5822,
+    "behindBy": 0,
+    "changedFiles": 586,
+    "pr1": {
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": true,
+      "headSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "changedFiles": 586
+    },
+    "pr7": {
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "mergeable": false,
+      "headSha": "7449c1b61dcd26811ee6e6d416a02180a7f1c1ec",
+      "baseRef": "codex/meta-direct-page-discovery-20261114",
+      "aheadBy": 140,
+      "behindBy": 6,
+      "changedFiles": 19,
+      "exactHeadActionsRuns": 0
+    },
+    "branchProtection": {
+      "observedAt": "2026-11-25T09:21:57Z",
+      "source": "GitHub branches API (read-only)",
+      "main": {
+        "protected": false,
+        "requiredStatusChecks": {
+          "enforcementLevel": "off",
+          "contexts": [],
+          "checks": []
+        }
+      },
+      "implementationBranch": {
+        "protected": false,
+        "requiredStatusChecks": {
+          "enforcementLevel": "off",
+          "contexts": [],
+          "checks": []
+        }
+      },
+      "note": "Observed only. No branch-protection settings were changed."
+    },
+    "ci": {
+      "automation": {
+        "runId": 45582470326,
+        "status": "success",
+        "nodeTests": 1154,
+        "nodeTestFiles": 194,
+        "pythonTests": 113,
+        "failures": 0,
+        "skips": 0,
+        "npmAuditVulnerabilities": 0
+      },
+      "dashboard": {
+        "runId": 45582470207,
+        "status": "success",
+        "journeys": 41,
+        "passed": 41
+      },
+      "productionReadiness": {
+        "runId": 45582470403,
+        "status": "HOLD",
+        "blockers": 35,
+        "publishingEnabled": false
+      }
+    },
+    "note": "No acceptance status was promoted solely because CI passed."
   }
 }

@@ -673,46 +673,46 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T10:48:26.540+02:00",
-            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 21 November 2026 search results surfaced current reporting and fact-check guidance about fabricated or AI-altered animal videos, including the risk of false species, behaviour and location claims. This supports the exact viewer problem in the Short—checking what a wildlife clip actually proves before writing a caption or narration—but does not establish keyword volume or ranking opportunity.",
+            "researchedAt": "2026-11-25T11:21:57+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 25 November 2026 searches for “how to fact-check wildlife videos” and related queries surfaced current reporting and public-agency guidance about fabricated or AI-altered animal footage, false species/location/behaviour claims, and the need to trace source provenance. This supports the actual viewer problem—checking what a clip proves before writing a caption or narration—but does not establish query volume or ranking opportunity.",
             "sources": [
               {
                 "title": "Fabricated AI animal videos are distorting how we see wildlife, researchers warn",
                 "url": "https://www.euronews.com/2026/07/21/fabricated-ai-animal-videos-are-distorting-how-we-see-wildlife-researchers-warn",
-                "whyRelevant": "Current 2026 reporting summarizes conservation researchers' warnings that fabricated animal footage can misrepresent behaviour, species and locations, directly matching the fact-check lesson."
+                "whyRelevant": "2026 reporting connects fabricated animal footage with misrepresented species, behaviour and locations, directly supporting the verification lesson."
               },
               {
-                "title": "Faktencheck - Tiervideos im Internet: herzig, aber oft fake – drei Beispiele",
-                "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
-                "whyRelevant": "A fact-checking newsroom gives practical checks for implausible animal behaviour, visual continuity and tracing the original publisher of an animal video."
-              },
-              {
-                "title": "People could get hurt: Conservationists decry AI wildlife visuals",
+                "title": "'People could get hurt': Conservationists decry AI wildlife visuals",
                 "url": "https://factcheck.afp.com/doc.afp.com.C4TR6KG",
-                "whyRelevant": "AFP fact-check coverage links misleading AI wildlife visuals to conservation and safety risks, reinforcing why creators should verify footage claims and disclose uncertainty."
+                "whyRelevant": "AFP fact-check reporting documents false wildlife visuals and expert concerns about unsafe assumptions, reinforcing the need to verify source and context."
+              },
+              {
+                "title": "Is That Real? A Guide to Identifying Fake Wildlife Videos Created with Generative AI",
+                "url": "https://news.maryland.gov/dnr/2026/04/27/is-that-real-a-guide-to-identifying-fake-wildlife-videos-created-with-generative-ai/",
+                "whyRelevant": "A state wildlife agency offers practical guidance for identifying manipulated wildlife video, matching the audience problem of checking claims before publication."
               }
             ]
           },
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T10:48:26.540+02:00",
-            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 21 November 2026 search results surfaced current reporting and fact-check guidance about fabricated or AI-altered animal videos, including the risk of false species, behaviour and location claims. This supports the exact viewer problem in the Short—checking what a wildlife clip actually proves before writing a caption or narration—but does not establish keyword volume or ranking opportunity.",
+            "researchedAt": "2026-11-25T11:21:57+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 25 November 2026 searches for “how to fact-check wildlife videos” and related queries surfaced current reporting and public-agency guidance about fabricated or AI-altered animal footage, false species/location/behaviour claims, and the need to trace source provenance. This supports the actual viewer problem—checking what a clip proves before writing a caption or narration—but does not establish query volume or ranking opportunity.",
             "sources": [
               {
                 "title": "Fabricated AI animal videos are distorting how we see wildlife, researchers warn",
                 "url": "https://www.euronews.com/2026/07/21/fabricated-ai-animal-videos-are-distorting-how-we-see-wildlife-researchers-warn",
-                "whyRelevant": "Current 2026 reporting summarizes conservation researchers' warnings that fabricated animal footage can misrepresent behaviour, species and locations, directly matching the fact-check lesson."
+                "whyRelevant": "2026 reporting connects fabricated animal footage with misrepresented species, behaviour and locations, directly supporting the verification lesson."
               },
               {
-                "title": "Faktencheck - Tiervideos im Internet: herzig, aber oft fake – drei Beispiele",
-                "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
-                "whyRelevant": "A fact-checking newsroom gives practical checks for implausible animal behaviour, visual continuity and tracing the original publisher of an animal video."
-              },
-              {
-                "title": "People could get hurt: Conservationists decry AI wildlife visuals",
+                "title": "'People could get hurt': Conservationists decry AI wildlife visuals",
                 "url": "https://factcheck.afp.com/doc.afp.com.C4TR6KG",
-                "whyRelevant": "AFP fact-check coverage links misleading AI wildlife visuals to conservation and safety risks, reinforcing why creators should verify footage claims and disclose uncertainty."
+                "whyRelevant": "AFP fact-check reporting documents false wildlife visuals and expert concerns about unsafe assumptions, reinforcing the need to verify source and context."
+              },
+              {
+                "title": "Is That Real? A Guide to Identifying Fake Wildlife Videos Created with Generative AI",
+                "url": "https://news.maryland.gov/dnr/2026/04/27/is-that-real-a-guide-to-identifying-fake-wildlife-videos-created-with-generative-ai/",
+                "whyRelevant": "A state wildlife agency offers practical guidance for identifying manipulated wildlife video, matching the audience problem of checking claims before publication."
               }
             ]
           },
@@ -800,46 +800,46 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T10:48:26.540+02:00",
-            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 21 November 2026 research found creator guidance emphasizing storyboarding and pre-production before filming, alongside wildlife-documentary production guidance on using longer focal lengths to capture natural behaviour without disturbing animals. These sources support the practical shot-planning problem; the exact long-tail phrase is retained as an intent-led keyword, not a measured-volume claim.",
+            "researchedAt": "2026-11-25T11:21:57+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 25 November 2026 searches for “wildlife documentary shot list” and related wildlife-video shot-planning queries surfaced practical guidance on establishing views, shot-size variation, coherent sequences and ethical long-lens filming. This supports the creator problem of planning a usable sequence before filming, but does not establish search volume or ranking opportunity.",
             "sources": [
               {
-                "title": "How-To Guide: Get Your Nonprofits on Youtube",
-                "url": "https://help.youtube.com/nonprofits/resources/how-to-guide/get-your-nonprofit-on-youtube/",
-                "whyRelevant": "YouTube's own production guidance recommends storyboarding and deciding what to film before recording, supporting the shot-list planning lesson."
+                "title": "Audubon's Guide to Ethical Bird Photography and Videography",
+                "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
+                "whyRelevant": "Audubon recommends maintaining distance with telephoto lenses, avoiding disturbance and letting animal welfare take priority—important constraints for the proposed wildlife shot list."
               },
               {
-                "title": "Filmed on Canon: National Geographic's Latest Documentary",
-                "url": "https://www.canon.com.au/get-inspired/behind-the-scenes-save-this-rhino-documentary",
-                "whyRelevant": "A wildlife-documentary production account explains how long telephoto reach helps crews capture natural animal behaviour without disturbing subjects, matching the responsible-distance guidance."
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "The wildlife-video guide discusses varying shot size and angle to build a coherent sequence, supporting the wide/context/detail structure in the Short."
               },
               {
-                "title": "To the Ends of the Earth | The Natural World - Pushing Boundaries",
-                "url": "https://www.pbs.org/video/the-natural-world-pushing-boundaries-SAZzpZ/",
-                "whyRelevant": "A wildlife-filmmaking programme describes framing and long-lens choices across habitats, providing relevant production context for planning wide, context and detail shots."
+                "title": "Safari Content Creator's Guide to Kenya | Gear and Ethics",
+                "url": "https://www.nlssafaris.com/safari-content-creators-guide/",
+                "whyRelevant": "Recent practical guidance emphasizes wide establishing shots, stable clips with clear beginnings and endings, environmental sound and ethical filming distance."
               }
             ]
           },
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-21T10:48:26.540+02:00",
-            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 21 November 2026 research found creator guidance emphasizing storyboarding and pre-production before filming, alongside wildlife-documentary production guidance on using longer focal lengths to capture natural behaviour without disturbing animals. These sources support the practical shot-planning problem; the exact long-tail phrase is retained as an intent-led keyword, not a measured-volume claim.",
+            "researchedAt": "2026-11-25T11:21:57+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 25 November 2026 searches for “wildlife documentary shot list” and related wildlife-video shot-planning queries surfaced practical guidance on establishing views, shot-size variation, coherent sequences and ethical long-lens filming. This supports the creator problem of planning a usable sequence before filming, but does not establish search volume or ranking opportunity.",
             "sources": [
               {
-                "title": "How-To Guide: Get Your Nonprofits on Youtube",
-                "url": "https://help.youtube.com/nonprofits/resources/how-to-guide/get-your-nonprofit-on-youtube/",
-                "whyRelevant": "YouTube's own production guidance recommends storyboarding and deciding what to film before recording, supporting the shot-list planning lesson."
+                "title": "Audubon's Guide to Ethical Bird Photography and Videography",
+                "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
+                "whyRelevant": "Audubon recommends maintaining distance with telephoto lenses, avoiding disturbance and letting animal welfare take priority—important constraints for the proposed wildlife shot list."
               },
               {
-                "title": "Filmed on Canon: National Geographic's Latest Documentary",
-                "url": "https://www.canon.com.au/get-inspired/behind-the-scenes-save-this-rhino-documentary",
-                "whyRelevant": "A wildlife-documentary production account explains how long telephoto reach helps crews capture natural animal behaviour without disturbing subjects, matching the responsible-distance guidance."
+                "title": "Types of shots in wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "The wildlife-video guide discusses varying shot size and angle to build a coherent sequence, supporting the wide/context/detail structure in the Short."
               },
               {
-                "title": "To the Ends of the Earth | The Natural World - Pushing Boundaries",
-                "url": "https://www.pbs.org/video/the-natural-world-pushing-boundaries-SAZzpZ/",
-                "whyRelevant": "A wildlife-filmmaking programme describes framing and long-lens choices across habitats, providing relevant production context for planning wide, context and detail shots."
+                "title": "Safari Content Creator's Guide to Kenya | Gear and Ethics",
+                "url": "https://www.nlssafaris.com/safari-content-creators-guide/",
+                "whyRelevant": "Recent practical guidance emphasizes wide establishing shots, stable clips with clear beginnings and endings, environmental sound and ethical filming distance."
               }
             ]
           },

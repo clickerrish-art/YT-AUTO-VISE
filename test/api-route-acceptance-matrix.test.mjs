@@ -52,8 +52,10 @@ test("API acceptance matrix covers the complete source-derived protected route i
   assert.ok(matrix.routes.every(route =>
     ["PASS", "BLOCKED", "NOT_TESTED"].includes(route.overallAcceptance)
   ), "route acceptance must use an explicit, honest status");
-  assert.equal(matrix.inventory.branchProtectionEnabled, null,
-    "unknown branch protection must not be represented as enabled or disabled");
+  assert.equal(matrix.inventory.branchProtectionEnabled, false,
+    "the current read-only GitHub branch API observation must be recorded as disabled");
+  assert.equal(matrix.branchProtectionEvidence?.main?.protected, false);
+  assert.equal(matrix.branchProtectionEvidence?.implementationBranch?.protected, false);
 });
 
 
@@ -133,7 +135,9 @@ test("latest exact source/test SHA API route evidence is complete and preserves 
   assert.deepEqual(blocked.map(routeKey).sort(), expectedBlocked.sort());
 
   assert.equal(matrix.latestExactHeadRegression?.sourceTestSha, currentSha);
-  assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1150);
+  assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1154);
+  assert.equal(matrix.latestExactHeadRegression?.automationRunId, 45582470326);
+  assert.equal(matrix.latestExactHeadRegression?.productionReadiness?.blockers, 35);
   assert.equal(matrix.latestExactHeadRegression?.nodeTestFiles, 194);
   assert.equal(matrix.latestExactHeadRegression?.pythonPassed, 113);
   assert.equal(matrix.latestExactHeadRegression?.npmAuditVulnerabilities, 0);
