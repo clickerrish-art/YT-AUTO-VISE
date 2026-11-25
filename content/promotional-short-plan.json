@@ -1904,6 +1904,29 @@
             "requiredBeforeRelease": true,
             "approvedAt": "2026-11-10T07:00:36+02:00",
             "approvalReference": "Owner supplied this exact viewer-facing disclosure in a user-authored ChatGPT message on 2026-11-10 at 07:00:36+02:00: “This product is sold through my own Selar business; purchases generate revenue for my business.” The owner followed on 2026-11-10 at 07:23:41+02:00 with an instruction to proceed to completion while guarding against policy violations. This wording applies only to the Complete YouTube Wildlife Creator's Vault promotion."
+          },
+          "currentIntentEvidence": {
+            "provider": "web_search",
+            "type": "qualitative_search_intent",
+            "researchedAt": "2026-11-25T09:53:10+02:00",
+            "note": "Qualitative intent evidence only. The indexed YouTube Creators lesson addresses recording good sound for creator videos, while a wildlife-specific tutorial is explicitly about sound design for wildlife videos and describes sourcing, layering and synchronizing sound. A specialist editing guide supports the practical audio-mixing problem. This does not establish measured global search volume, YouTube autocomplete frequency, competition or trend growth.",
+            "sources": [
+              {
+                "title": "Capturing Good Sound Effects (ft. Mystery Guitar Man) — YouTube Creators",
+                "url": "https://www.youtube.com/watch?v=-r19ABilevg",
+                "whyRelevant": "Official YouTube Creators tutorial addresses practical sound recording and sound choices for clearer creator videos. It supports the broad creator-education intent, not a search-volume claim."
+              },
+              {
+                "title": "SOUND DESIGN for your WIlDLIFE videos — Anders Aastrup",
+                "url": "https://www.youtube.com/watch?v=n__fvDGaxks",
+                "whyRelevant": "A directly relevant wildlife-video tutorial covers sourcing sounds, layering them into a soundscape and synchronizing audio to the scene. The indexed result confirms a specific tutorial intent for this phrase."
+              },
+              {
+                "title": "Step-By-Step Guide to Editing Animal Sound Effects for Wildlife Documentaries — Audio Scene",
+                "url": "https://audioscene.org/article/step-by-step-guide-to-editing-animal-sound-effects-for-wildlife-documentaries/",
+                "whyRelevant": "The guide discusses editing and arranging wildlife sound clips, syncing effects to visible action and balancing animal sounds with narration, music and ambience."
+              }
+            ]
           }
         }
       ]
