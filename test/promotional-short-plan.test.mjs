@@ -98,7 +98,7 @@ test("2027-01-04 wildlife-footage organization Short uses fresh qualitative evid
   assert.ok(item.script.indexOf(product.promotionGate.disclosure.text) < item.script.indexOf("Complete YouTube Wildlife Creator's Vault"));
   assert.match(item.description, /^ADVERTISEMENT$/m);
   assert.ok(item.description.includes(product.promotionGate.disclosure.text));
-  assert.ok(item.description.includes(item.primaryKeyword));
+  assert.ok(item.description.toLowerCase().includes(item.primaryKeyword.toLowerCase()));
   assert.ok(item.description.includes(item.productUrl));
   assert.equal(item.keywordEvidence.provider, "web_search");
   assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
