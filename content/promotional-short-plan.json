@@ -1936,8 +1936,8 @@
           "targetSeconds": 55,
           "title": "How to Organize Wildlife Footage for Editing: 3 Steps",
           "primaryKeyword": "how to organize wildlife footage for editing",
-          "script": "Advertisement. undefined\n\nHow to organize wildlife footage for editing: use three steps. First, copy each camera card to two separate drives and verify both copies before clearing the card. Keep the original files untouched. Second, name each clip consistently and log its date, camera, and a short note about the visible action. Record location only when it is safe to share, and identify a species only when confirmed. Third, group selected clips by story role: wide habitat, behaviour, close detail, and transitions. This makes gaps easier to spot before you start the timeline. Keep a separate record of the original source, rights, and any replacement audio. The Complete YouTube Wildlife Creator's Vault is a resource to review at the link below.",
-          "description": "ADVERTISEMENT\nundefined\n\nHow to organize wildlife footage for editing: make two verified backups, keep source files untouched, and log each clip with its date, camera, observable action and story role.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nhttps://selar.com/0u19v8u99l\n\nKeep sensitive species locations private. Confirm species identification and usage rights before publication.",
+          "script": "Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business.\n\nHow to organize wildlife footage for editing: use three steps. First, copy each camera card to two separate drives and verify both copies before clearing the card. Keep the original files untouched. Second, name each clip consistently and log its date, camera, and a short note about the visible action. Record location only when it is safe to share, and identify a species only when confirmed. Third, group selected clips by story role: wide habitat, behaviour, close detail, and transitions. This makes gaps easier to spot before you start the timeline. Keep a separate record of the original source, rights, and any replacement audio. The Complete YouTube Wildlife Creator's Vault is a resource to review at the link below.",
+          "description": "ADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nHow to organize wildlife footage for editing: make two verified backups, keep source files untouched, and log each clip with its date, camera, observable action and story role.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault\nhttps://selar.com/0u19v8u99l\n\nKeep sensitive species locations private. Confirm species identification and usage rights before publication.",
           "productUrl": "https://selar.com/0u19v8u99l",
           "productId": "wildlife-creators-vault",
           "visibility": "private",
@@ -2011,23 +2011,18 @@
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-25T09:53:10+02:00",
-            "note": "Qualitative intent evidence only. The indexed YouTube Creators lesson addresses recording good sound for creator videos, while a wildlife-specific tutorial is explicitly about sound design for wildlife videos and describes sourcing, layering and synchronizing sound. A specialist editing guide supports the practical audio-mixing problem. This does not establish measured global search volume, YouTube autocomplete frequency, competition or trend growth.",
+            "researchedAt": "2026-11-25T10:48:15+02:00",
+            "note": "Qualitative search-intent evidence only: current results surface practical wildlife-video metadata guidance and natural-history crew footage-logging workflows. No measured global search volume, competition score or trend metric was available; no paid keyword credits were used.",
             "sources": [
               {
-                "title": "Capturing Good Sound Effects (ft. Mystery Guitar Man) — YouTube Creators",
-                "url": "https://www.youtube.com/watch?v=-r19ABilevg",
-                "whyRelevant": "Official YouTube Creators tutorial addresses practical sound recording and sound choices for clearer creator videos. It supports the broad creator-education intent, not a search-volume claim."
+                "title": "Macaulay Library/eBird video recording and uploading guide",
+                "url": "https://support.ebird.org/en/support/solutions/articles/48001064314-video-recording-and-uploading-guide",
+                "whyRelevant": "The guide calls for accurate date/time/location metadata and notes about observed behaviour, supporting a practical wildlife-footage logging query."
               },
               {
-                "title": "SOUND DESIGN for your WIlDLIFE videos — Anders Aastrup",
-                "url": "https://www.youtube.com/watch?v=n__fvDGaxks",
-                "whyRelevant": "A directly relevant wildlife-video tutorial covers sourcing sounds, layering them into a soundscape and synchronizing audio to the scene. The indexed result confirms a specific tutorial intent for this phrase."
-              },
-              {
-                "title": "Step-By-Step Guide to Editing Animal Sound Effects for Wildlife Documentaries — Audio Scene",
-                "url": "https://audioscene.org/article/step-by-step-guide-to-editing-animal-sound-effects-for-wildlife-documentaries/",
-                "whyRelevant": "The guide discusses editing and arranging wildlife sound clips, syncing effects to visible action and balancing animal sounds with narration, music and ambience."
+                "title": "For wildlife and natural-history crews",
+                "url": "https://shotlore.app/for/natural-history",
+                "whyRelevant": "The natural-history crew workflow describes verified multi-drive copies, clip logs and grouping material by sequence, directly matching the footage-organization problem."
               }
             ]
           }
