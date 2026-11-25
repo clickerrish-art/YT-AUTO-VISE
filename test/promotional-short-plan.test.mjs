@@ -7,7 +7,7 @@ const checkedInPlan = JSON.parse(fs.readFileSync("content/promotional-short-plan
 const products = JSON.parse(fs.readFileSync("config/products.json", "utf8")).products;
 const clone = value => structuredClone(value);
 const validatePlan = (plan, productRows = products, options = {}) => validatePromotionalShortPlan(plan, productRows, {
-  now: new Date("2026-11-23T09:53:00+02:00"),
+  now: new Date("2026-11-25T09:53:10+02:00"),
   ...options
 });
 
@@ -40,6 +40,41 @@ test("current-week wildlife video Short uses fresh measured intent and a matchin
   assert.equal(item.productUrl, "https://selar.com/0u19v8u99l");
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.targetSeconds, 55);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
+});
+
+test("2027-01-04 wildlife sound-design Short is a fresh, disclosed, private draft with no publication slot", () => {
+  const week = checkedInPlan.weeks.find(candidate => candidate.weekOf === "2027-01-04");
+  assert.ok(week);
+  assert.equal(week.items.length, 1);
+  const item = week.items.find(candidate => candidate.id === "sonicvhibez-short-019-wildlife-sound-design");
+  const product = products.find(candidate => candidate.id === "wildlife-creators-vault");
+  assert.equal(item.targetSeconds, 55);
+  assert.equal(item.primaryKeyword, "wildlife video sound design");
+  assert.ok(item.title.toLowerCase().startsWith(item.primaryKeyword));
+  assert.equal(item.status, "DRAFT_ONLY");
+  assert.equal(item.visibility, "private");
+  assert.equal(item.productUrl, "https://selar.com/0u19v8u99l");
+  assert.equal(item.disclosure.status, "APPROVED");
+  assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
+  assert.ok(item.script.startsWith("Advertisement."));
+  assert.ok(item.script.includes(product.promotionGate.disclosure.text));
+  assert.ok(item.script.indexOf(product.promotionGate.disclosure.text) < item.script.indexOf("Complete YouTube Wildlife Creator's Vault"));
+  assert.match(item.description, /^ADVERTISEMENT$/m);
+  assert.ok(item.description.includes(product.promotionGate.disclosure.text));
+  assert.ok(item.description.includes(item.productUrl));
+  assert.equal(item.keywordEvidence.provider, "web_search");
+  assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
+  assert.match(item.keywordEvidence.note, /no measured global search volume/i);
+  assert.equal(item.keywordEvidence.estimatedMonthlySearches, undefined);
+  assert.ok(item.currentIntentEvidence.sources.some(source => source.url.includes("youtube.com/watch")));
+  assert.ok(item.keywordPhrases.length >= 3);
+  assert.ok(item.keywordPhrases.some(row => row.phrase === item.primaryKeyword));
+  assert.ok(item.hashtags.length >= 3);
+  assert.equal(item.publicationAt, undefined);
+  assert.equal(item.publishedAt, undefined);
+  assert.equal(item.scheduledAt, undefined);
+  assert.equal(item.autoPublish, undefined);
   assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
 
