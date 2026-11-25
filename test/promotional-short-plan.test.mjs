@@ -7,7 +7,7 @@ const checkedInPlan = JSON.parse(fs.readFileSync("content/promotional-short-plan
 const products = JSON.parse(fs.readFileSync("config/products.json", "utf8")).products;
 const clone = value => structuredClone(value);
 const validatePlan = (plan, productRows = products, options = {}) => validatePromotionalShortPlan(plan, productRows, {
-  now: new Date("2026-11-25T09:53:10+02:00"),
+  now: new Date("2026-11-25T10:00:00+02:00"),
   ...options
 });
 
@@ -643,7 +643,7 @@ test("November 23 ethical-wildlife and outline Shorts use fresh provider-specifi
   const outline = week.items.find(row => row.id === "sonicvhibez-short-008-youtube-video-outline");
   const vault = products.find(row => row.id === "wildlife-creators-vault");
   const promptPack = products.find(row => row.id === "video-creation-prompt-pack-premium");
-  const referenceNow = new Date("2026-11-23T10:00:00+02:00");
+  const referenceNow = new Date("2026-11-25T10:00:00+02:00");
   assert.ok(ethical && outline && vault && promptPack);
 
   for (const item of [ethical, outline]) {
@@ -747,7 +747,7 @@ test("keyword phrase clusters are concise, unique and cannot be padded with keyw
 
 
 test("current search-intent evidence is mandatory, dated, sourced and fresh for current/future drafts", () => {
-  const now = new Date("2026-11-23T10:00:00+02:00");
+  const now = new Date("2026-11-25T10:00:00+02:00");
   const valid = clone(checkedInPlan);
   assert.deepEqual(validatePlan(valid, products, { now }), []);
 
@@ -760,7 +760,7 @@ test("current search-intent evidence is mandatory, dated, sourced and fresh for 
   assert.ok(validatePlan(stale, products, { now }).some(error => /current search-intent evidence must be no more than 14 days old/.test(error)));
 
   const future = clone(valid);
-  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-23T10:06:00+02:00";
+  future.weeks.find(week => week.weekOf === "2026-11-23").items[0].currentIntentEvidence.researchedAt = "2026-11-25T10:06:00+02:00";
   assert.ok(validatePlan(future, products, { now }).some(error => /current search-intent evidence cannot be more than 5 minutes in the future/.test(error)));
 
   const insecure = clone(valid);
