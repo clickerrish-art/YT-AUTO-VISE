@@ -4,6 +4,9 @@ import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 import { validateProductPromotionGate } from "../scripts/product-promotion-gate.mjs";
 
+const TEST_NOW = new Date("2026-11-25T10:55:00+02:00");
+const validate = (product, metadata, options = {}) => validateProductPromotionGate(product, metadata, { now: TEST_NOW, ...options });
+
 const url = "https://example-affiliate-store.test/product";
 const affiliateDisclosure = "Affiliate disclosure: I may earn a commission if you purchase through this link.";
 
@@ -17,7 +20,7 @@ function verifiedFixture(type = "affiliate") {
     url,
     status: "approved",
     promotionGate: {
-      seller: { status: "VERIFIED", name: "Verified listing seller", sourceUrl: url, verifiedAt: "2026-11-06T08:00:00Z", evidenceReference: "selar-listing-check-2026-11-06" },
+      seller: { status: "VERIFIED", name: "Verified listing seller", sourceUrl: url, verifiedAt: "2026-11-21T08:00:00Z", evidenceReference: "selar-listing-check-2026-11-21" },
       brandAuthorization: { status: "OWNER_CONFIRMED", brand: "SonicVhibez", confirmedAt: "2026-11-06T08:01:00Z", approvalReference: "owner-promotion-approval-2026-11-06" },
       compensation: { status: "VERIFIED", type, verifiedAt: "2026-11-06T08:02:00Z", evidenceReference: "compensation-relationship-check-2026-11-06" },
       disclosure: { status: "OWNER_APPROVED", text: disclosureText, approvedAt: "2026-11-06T08:03:00Z", approvalReference: "approved-disclosure-2026-11-06" }
@@ -47,31 +50,31 @@ test("checked-in Wildlife Vault registry records verified seller, SonicVhibez au
     description: "Advertisement. " + text,
     promotionDisclosure: { status: "APPROVED", type: "direct_sales_revenue", text }
   };
-  assert.deepEqual(validateProductPromotionGate(product, metadata), []);
+  assert.deepEqual(validate(product, metadata), []);
 });
 
 test("checked-in uppercase DIRECT_SALES_REVENUE and approved disclosure pass; paid flag must match", () => {
   const config = JSON.parse(fs.readFileSync("config/products.json", "utf8"));
   const product = config.products.find(item => item.id === "wildlife-creators-vault");
-  const errors = validateProductPromotionGate(product, undefined, { requireMetadataDisclosure: false });
+  const errors = validate(product, undefined, { requireMetadataDisclosure: false });
   assert.deepEqual(errors, []);
   const metadata = { hasPaidPromotion: false };
-  assert.ok(validateProductPromotionGate(product, metadata, { requireMetadataDisclosure: false })
+  assert.ok(validate(product, metadata, { requireMetadataDisclosure: false })
     .some(error => /hasPaidPromotion must match/i.test(error)));
   metadata.hasPaidPromotion = true;
-  assert.deepEqual(validateProductPromotionGate(product, metadata, { requireMetadataDisclosure: false }), []);
+  assert.deepEqual(validate(product, metadata, { requireMetadataDisclosure: false }), []);
 });
 
 test("verified seller, SonicVhibez authorization, compensation and exact disclosure pass", () => {
   const fixture = verifiedFixture("affiliate");
-  assert.deepEqual(validateProductPromotionGate(fixture.product, fixture.metadata), []);
+  assert.deepEqual(validate(fixture.product, fixture.metadata), []);
 });
 
 test("metadata cannot substitute a different or partial disclosure", () => {
   const fixture = verifiedFixture("affiliate");
   fixture.metadata.promotionDisclosure.text = "I may earn money.";
   fixture.metadata.description = "Creator lesson. I may earn money. Product: " + url;
-  const errors = validateProductPromotionGate(fixture.product, fixture.metadata);
+  const errors = validate(fixture.product, fixture.metadata);
   assert.ok(errors.some(error => /must exactly match the owner-approved disclosure/i.test(error)));
   assert.ok(errors.some(error => /must contain the exact owner-approved viewer-facing disclosure/i.test(error)));
 });
@@ -79,10 +82,10 @@ test("metadata cannot substitute a different or partial disclosure", () => {
 test("no-material-connection cannot bypass the owner-confirmed URL relationship rule", () => {
   const fixture = verifiedFixture("none");
   assert.equal(fixture.metadata.hasPaidPromotion, false);
-  assert.ok(validateProductPromotionGate(fixture.product, fixture.metadata)
+  assert.ok(validate(fixture.product, fixture.metadata)
     .some(error => /non-Selar products must be classified as affiliate promotions/i.test(error)));
   fixture.metadata.hasPaidPromotion = true;
-  assert.ok(validateProductPromotionGate(fixture.product, fixture.metadata)
+  assert.ok(validate(fixture.product, fixture.metadata)
     .some(error => /hasPaidPromotion must match/i.test(error)));
 });
 
@@ -98,23 +101,23 @@ test("Selar is direct business revenue and non-Selar product links are affiliate
   selar.metadata.hasPaidPromotion = true;
   selar.metadata.description = "Creator lesson. " + selar.product.promotionGate.disclosure.text;
   selar.metadata.promotionDisclosure = { status: "APPROVED", type: "direct_sales_revenue", text: selar.product.promotionGate.disclosure.text };
-  assert.deepEqual(validateProductPromotionGate(selar.product, selar.metadata), []);
+  assert.deepEqual(validate(selar.product, selar.metadata), []);
 
   const external = verifiedFixture("affiliate");
   external.product.url = "https://example-affiliate-store.test/product";
   external.product.promotionGate.seller.sourceUrl = external.product.url;
-  assert.deepEqual(validateProductPromotionGate(external.product, external.metadata), []);
+  assert.deepEqual(validate(external.product, external.metadata), []);
 
   const misclassifiedSelar = verifiedFixture("affiliate");
   misclassifiedSelar.product.url = "https://selar.com/0u19v8u99l";
   misclassifiedSelar.product.promotionGate.seller.sourceUrl = misclassifiedSelar.product.url;
-  assert.ok(validateProductPromotionGate(misclassifiedSelar.product, misclassifiedSelar.metadata)
+  assert.ok(validate(misclassifiedSelar.product, misclassifiedSelar.metadata)
     .some(error => /Selar products must be classified as direct_sales_revenue/i.test(error)));
 
   const misclassifiedExternal = verifiedFixture("none");
   misclassifiedExternal.product.url = "https://serengeti.example/product";
   misclassifiedExternal.product.promotionGate.seller.sourceUrl = misclassifiedExternal.product.url;
-  assert.ok(validateProductPromotionGate(misclassifiedExternal.product, misclassifiedExternal.metadata)
+  assert.ok(validate(misclassifiedExternal.product, misclassifiedExternal.metadata)
     .some(error => /non-Selar products must be classified as affiliate promotions/i.test(error)));
 });
 
@@ -122,7 +125,7 @@ test("Selar host matching rejects deceptive suffixes and accepts genuine Selar s
   const deceptive = verifiedFixture("affiliate");
   deceptive.product.url = "https://selar.com.attacker.example/product";
   deceptive.product.promotionGate.seller.sourceUrl = deceptive.product.url;
-  assert.equal(validateProductPromotionGate(deceptive.product, deceptive.metadata).length, 0);
+  assert.equal(validate(deceptive.product, deceptive.metadata).length, 0);
 
   const genuineSubdomain = verifiedFixture("direct_sales_revenue");
   genuineSubdomain.product.url = "https://shop.selar.com/product";
@@ -139,20 +142,20 @@ test("Selar host matching rejects deceptive suffixes and accepts genuine Selar s
     type: "direct_sales_revenue",
     text: genuineSubdomain.product.promotionGate.disclosure.text
   };
-  assert.deepEqual(validateProductPromotionGate(genuineSubdomain.product, genuineSubdomain.metadata), []);
+  assert.deepEqual(validate(genuineSubdomain.product, genuineSubdomain.metadata), []);
 });
 
 test("product promotion gate rejects insecure or credential-bearing product URLs", () => {
   const insecure = verifiedFixture("affiliate");
   insecure.product.url = "http://example-affiliate-store.test/product";
   insecure.product.promotionGate.seller.sourceUrl = insecure.product.url;
-  assert.ok(validateProductPromotionGate(insecure.product, insecure.metadata)
+  assert.ok(validate(insecure.product, insecure.metadata)
     .some(error => /valid HTTPS URL without embedded credentials/.test(error)));
 
   const credentialed = verifiedFixture("affiliate");
   credentialed.product.url = "https://seller:password@example-affiliate-store.test/product";
   credentialed.product.promotionGate.seller.sourceUrl = credentialed.product.url;
-  assert.ok(validateProductPromotionGate(credentialed.product, credentialed.metadata)
+  assert.ok(validate(credentialed.product, credentialed.metadata)
     .some(error => /valid HTTPS URL without embedded credentials/.test(error)));
 });
 
@@ -160,9 +163,25 @@ test("promotion evidence rejects timezone-free or invalid verification timestamp
   const fixture = verifiedFixture("paid");
   fixture.product.promotionGate.seller.verifiedAt = "2026-11-06T08:00:00";
   fixture.product.promotionGate.brandAuthorization.confirmedAt = "2026-02-31T08:00:00Z";
-  const errors = validateProductPromotionGate(fixture.product, fixture.metadata);
+  const errors = validate(fixture.product, fixture.metadata);
   assert.ok(errors.some(error => /seller verification needs a calendar-valid timezone-qualified timestamp/i.test(error)));
   assert.ok(errors.some(error => /brand authorization needs a calendar-valid timezone-qualified timestamp/i.test(error)));
+});
+
+
+test("seller listing evidence expires after 14 days and rejects timestamps over five minutes in the future", () => {
+  const stale = verifiedFixture("affiliate");
+  stale.product.promotionGate.seller.verifiedAt = "2026-11-10T08:00:00Z";
+  assert.ok(validate(stale.product, stale.metadata)
+    .some(error => /seller verification evidence must be no more than 14 days old/i.test(error)));
+
+  const future = verifiedFixture("affiliate");
+  future.product.promotionGate.seller.verifiedAt = "2026-11-25T11:01:00+02:00";
+  assert.ok(validate(future.product, future.metadata)
+    .some(error => /cannot be more than 5 minutes in the future/i.test(error)));
+
+  const fresh = verifiedFixture("affiliate");
+  assert.deepEqual(validate(fresh.product, fresh.metadata), []);
 });
 
 test("content checker surfaces the product gate before any private-upload readiness claim", () => {
@@ -208,7 +227,7 @@ test("new supplied Selar products have owner-confirmed brand authorization but r
   for (const product of candidates) {
     assert.equal(product.promotionGate.seller.status, "VERIFIED");
     assert.equal(product.promotionGate.seller.name, "Click 47");
-    const errors = validateProductPromotionGate(product, undefined, { requireMetadataDisclosure: false });
+    const errors = validate(product, undefined, { requireMetadataDisclosure: false });
     assert.ok(!errors.some(error => /seller details must be reverified/i.test(error)));
     assert.ok(errors.some(error => /product must remain approved/i.test(error)));
     assert.equal(errors.some(error => /brand authorization must be owner-confirmed/i.test(error)), false);
@@ -226,11 +245,11 @@ test("YouTube channel monetization is not evidence of Selar compensation", () =>
 
   const fixture = verifiedFixture("affiliate");
   fixture.product.promotionGate.compensation.type = "youtube_monetization";
-  const invalidTypeErrors = validateProductPromotionGate(fixture.product, fixture.metadata);
+  const invalidTypeErrors = validate(fixture.product, fixture.metadata);
   assert.ok(invalidTypeErrors.some(error => /compensation type must be affiliate, paid, direct_sales_revenue, or none/i.test(error)));
 
   fixture.product.promotionGate.compensation.type = "none";
-  const mismatchErrors = validateProductPromotionGate(fixture.product, fixture.metadata);
+  const mismatchErrors = validate(fixture.product, fixture.metadata);
   assert.ok(mismatchErrors.some(error => /hasPaidPromotion must match/i.test(error)));
 });
 

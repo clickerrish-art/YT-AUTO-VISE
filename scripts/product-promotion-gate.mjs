@@ -1,6 +1,8 @@
 import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
 
 const COMPENSATION_TYPES = new Set(["affiliate", "paid", "none", "direct_sales_revenue"]);
+const SELLER_EVIDENCE_MAX_AGE_MS = 14 * 24 * 60 * 60 * 1000;
+const SELLER_EVIDENCE_FUTURE_SKEW_MS = 5 * 60 * 1000;
 const isValidOwnerConfirmationDate = value => {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const [year, month, day] = value.split("-").map(Number);
@@ -30,6 +32,7 @@ const getProductHost = value => {
  */
 export function validateProductPromotionGate(product, metadata, options = {}) {
   const requireMetadataDisclosure = options.requireMetadataDisclosure !== false;
+  const referenceNow = options.now instanceof Date && Number.isFinite(options.now.getTime()) ? options.now : new Date();
   const errors = [];
 
   if (!product || typeof product !== "object" || Array.isArray(product)) return ["approved product record is missing"];
@@ -50,7 +53,14 @@ export function validateProductPromotionGate(product, metadata, options = {}) {
   if (seller.status !== "VERIFIED") errors.push("seller details must be reverified from the exact product listing");
   if (!hasText(seller.name)) errors.push("verified seller name must be recorded");
   if (seller.sourceUrl !== product.url) errors.push("seller evidence URL must match the exact approved product URL");
-  if (!isValidZonedIsoTimestamp(seller.verifiedAt)) errors.push("seller verification needs a calendar-valid timezone-qualified timestamp");
+  if (!isValidZonedIsoTimestamp(seller.verifiedAt)) {
+    errors.push("seller verification needs a calendar-valid timezone-qualified timestamp");
+  } else {
+    const sellerEvidenceAgeMs = referenceNow.getTime() - Date.parse(seller.verifiedAt);
+    if (sellerEvidenceAgeMs > SELLER_EVIDENCE_MAX_AGE_MS || sellerEvidenceAgeMs < -SELLER_EVIDENCE_FUTURE_SKEW_MS) {
+      errors.push("seller verification evidence must be no more than 14 days old and cannot be more than 5 minutes in the future");
+    }
+  }
   if (!hasText(seller.evidenceReference)) errors.push("seller verification needs a non-empty evidence reference");
 
   const authorization = gate.brandAuthorization ?? {};
