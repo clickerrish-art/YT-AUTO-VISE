@@ -136,7 +136,7 @@ test("latest exact source/test SHA API route evidence is complete and preserves 
 
   assert.equal(matrix.latestExactHeadRegression?.sourceTestSha, currentSha);
   assert.equal(matrix.latestExactHeadRegression?.nodePassed, 1154);
-  assert.equal(matrix.latestExactHeadRegression?.automationRunId, 45582470326);
+  assert.equal(matrix.latestExactHeadRegression?.automationRunId, 45781400262);
   assert.equal(matrix.latestExactHeadRegression?.productionReadiness?.blockers, 35);
   assert.equal(matrix.latestExactHeadRegression?.nodeTestFiles, 194);
   assert.equal(matrix.latestExactHeadRegression?.pythonPassed, 113);

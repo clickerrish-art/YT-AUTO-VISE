@@ -3,7 +3,7 @@
   "generatedAt": "2026-11-23T10:57:22Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "sourceHead": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+  "sourceHead": "f547cecf9c330791a1dfe677da072cdfb50058e2",
   "sourceBlobs": {
     "dashboardHtml": "aa9ad10df1489e00869045a4997e98c33dfd093f",
     "dashboardInventoryScript": "ba28f86acf755ada2ea922b192b9b120355ce201"
@@ -19610,10 +19610,10 @@
   "overallAcceptance": "NOT_TESTED",
   "statusMeaning": "PASS means the listed control evidence and matrix consistency checks passed. It does not mean every applicable control success, authorization, persistence, concurrency, error-feedback and accessibility path has been fully accepted.",
   "currentHeadRefresh": {
-    "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
-    "updatedAt": "2026-11-25T09:21:57Z",
-    "automationRunId": 45582470326,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470326",
+    "sourceTestSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+    "updatedAt": "2026-11-26T08:16:44Z",
+    "automationRunId": 45781400262,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400262",
     "nodeTestFiles": 194,
     "nodeTests": 1154,
     "nodeFailed": 0,
@@ -19623,33 +19623,33 @@
     "pythonSkipped": 0,
     "npmAuditVulnerabilities": 0,
     "browserE2EStatus": "PASS",
-    "lastBrowserEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
-    "lastBrowserRunId": 45582470207,
-    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470207",
+    "lastBrowserEvidenceSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+    "lastBrowserRunId": 45781400241,
+    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400241",
     "controls": 121,
     "forms": 17,
     "crossCuttingDimensions": 15,
     "overallAcceptance": "NOT_TESTED",
-    "note": "Exact source/test SHA e941a32e36e2fe07c81814b6a1da34127efb202d: 194/194 Node test files (1,154 tests), 113 Python tests, zero failures/skips and npm audit zero. Browser E2E 41/41 at the same SHA. DASH-001 remains NOT_TESTED until per-control acceptance is complete.",
-    "npmAuditLastVerifiedSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "note": "Exact source/test SHA f547cecf9c330791a1dfe677da072cdfb50058e2: 194/194 Node test files (1,154 tests), 113 Python tests, zero failures/skips and npm audit zero. Browser E2E 41/41 at the same SHA. DASH-001 remains NOT_TESTED until per-control business acceptance is complete.",
+    "npmAuditLastVerifiedSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
     "browserJourneys": 41,
     "formOwnedControls": 104,
     "standaloneControls": 17
   },
-  "refreshedAt": "2026-11-25T09:21:57Z",
+  "refreshedAt": "2026-11-26T08:16:44Z",
   "latestHeadVerification": {
-    "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
-    "browserRunId": 45582470207,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470207",
-    "browserEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "sourceTestSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+    "browserRunId": 45781400241,
+    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400241",
+    "browserEvidenceSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
     "browserJourneys": {
       "passed": 41,
       "total": 41,
       "failed": 0,
       "skipped": 0
     },
-    "automationRunId": 45582470326,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470326",
+    "automationRunId": 45781400262,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400262",
     "nodeTestFiles": 194,
     "nodeTests": 1154,
     "nodeFailed": 0,
@@ -19660,32 +19660,20 @@
     "npmAuditVulnerabilities": 0,
     "productionReadiness": {
       "status": "HOLD",
-      "runId": 45582470403,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470403",
-      "head": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+      "runId": 45781400178,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400178",
+      "head": "f547cecf9c330791a1dfe677da072cdfb50058e2",
       "blockerCount": 35
     },
     "overallAcceptance": "NOT_TESTED",
-    "note": "Dashboard E2E 41/41 and full regression pass on exact SHA e941a32e36e2fe07c81814b6a1da34127efb202d; DASH-001 remains NOT_TESTED because per-control acceptance coverage is incomplete.",
-    "npmAuditLastVerifiedSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "note": "Dashboard E2E 41/41 and full regression pass on exact SHA f547cecf9c330791a1dfe677da072cdfb50058e2; DASH-001 remains NOT_TESTED because per-control business acceptance is incomplete.",
+    "npmAuditLastVerifiedSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
     "baselineComparison": {
       "status": "PASS",
-      "runId": 45162303617,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303617",
-      "artifactId": 14811083832,
-      "artifactSha256": "sha256:9d96077232e25ad88b8d55e2f6de83c800e86e10288fd74de4f48bdbaa1fc1db",
+      "runId": 45781400353,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400353",
       "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-      "mainNodeTests": 54,
-      "mainPythonTests": 8,
-      "mainNpmAuditModerateVulnerabilities": 4,
-      "candidateSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
-      "candidateNodeTests": 1136,
-      "candidateNodeFiles": 192,
-      "candidatePythonTests": 108,
-      "candidateNpmAuditVulnerabilities": 0,
-      "mainBaseline": "PASS",
-      "candidateCurrentHead": "PASS",
-      "combinedRerun": "PASS"
+      "candidateSha": "f547cecf9c330791a1dfe677da072cdfb50058e2"
     },
     "branchInventory": {
       "runId": 45162303393,
@@ -19701,7 +19689,7 @@
       "patchEquivalentCommits": 0
     }
   },
-  "latestBranchTipAtEvidenceRefresh": "a7e8cb38c39444632bd22d603811217fea1527e0",
+  "latestBranchTipAtEvidenceRefresh": "f547cecf9c330791a1dfe677da072cdfb50058e2",
   "latestBranchInventory": {
     "runId": 45162303393,
     "artifactId": 14810998321,
@@ -19720,68 +19708,28 @@
     "currentBranchBehindBy": 0
   },
   "latestExactHeadBrowserVerification": {
-    "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
-    "browserEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
-    "browserRunId": 45582470207,
-    "browserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470207",
-    "journeysPassed": 41,
-    "journeysFailed": 0,
-    "journeysSkipped": 0,
-    "controls": 121,
-    "forms": 17,
-    "crossCuttingDimensions": 15,
-    "overallAcceptance": "NOT_TESTED",
-    "note": "Browser suite passed 41/41 Chromium journeys on exact source/test SHA e941a32e36e2fe07c81814b6a1da34127efb202d. Per-control authorization, persistence/restart, concurrency, actionable-error and accessibility acceptance remains incomplete."
+    "sourceTestSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+    "runId": 45781400241,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400241",
+    "journeys": 41,
+    "passed": 41,
+    "failed": 0,
+    "skipped": 0
   },
   "dailyLiveRefresh": {
-    "recordedAt": "2026-11-25T09:21:57Z",
-    "branchHead": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "recordedAt": "2026-11-26T08:16:44Z",
+    "sourceTestSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+    "branchHead": "f547cecf9c330791a1dfe677da072cdfb50058e2",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5822,
+    "aheadBy": 5829,
     "behindBy": 0,
-    "changedFiles": 586,
-    "pr1": {
-      "state": "open",
-      "draft": true,
-      "merged": false,
-      "mergeable": true,
-      "changedFiles": 586
-    },
-    "pr7": {
-      "state": "open",
-      "draft": true,
-      "merged": false,
-      "mergeable": false,
-      "changedFiles": 19,
-      "aheadBy": 140,
-      "behindBy": 6
-    },
-    "ci": {
-      "automation": {
-        "runId": 45582470326,
-        "nodeTests": 1154,
-        "nodeFiles": 194,
-        "pythonTests": 113,
-        "failures": 0,
-        "skips": 0
-      },
-      "dashboard": {
-        "runId": 45582470207,
-        "journeys": 41,
-        "passed": 41
-      },
-      "productionReadiness": {
-        "runId": 45582470403,
-        "status": "HOLD",
-        "blockers": 35
-      }
-    },
-    "branchProtection": {
-      "main": false,
-      "implementationBranch": false
-    },
-    "overallAcceptance": "NOT_TESTED",
-    "note": "Browser pass is not a per-control acceptance pass; no DASH-001 status promotion."
+    "changedFiles": 589,
+    "automationRunId": 45781400262,
+    "browserRunId": 45781400241,
+    "productionReadinessRunId": 45781400178,
+    "productionReadinessStatus": "HOLD",
+    "productionReadinessBlockers": 35,
+    "overallAcceptance": "NOT_TESTED"
   }
 }

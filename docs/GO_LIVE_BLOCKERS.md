@@ -1,3 +1,66 @@
+# Current verified checkpoint — 26 November 2026
+
+**Overall decision: HOLD — no upload, schedule, publication or public automation is authorized.** This checkpoint supersedes the historical 21 November and 19 November snapshots below.
+
+## Exact implementation and Git state
+
+- Implementation branch `codex/marketing-machine-audit-fixes`, tested source/test SHA `f547cecf9c330791a1dfe677da072cdfb50058e2`.
+- `main` SHA and merge base: `3795519ccbf58fd02d74458624b58dd2e44a88c0` (main was not modified).
+- Live comparison: **5,829 ahead / 0 behind**, 589 changed files. The exact-head branch-inventory workflow independently recorded 5,829 branch-only commits, zero base-only commits and 589 final-tree changes.
+- PR #1: **OPEN / DRAFT / UNMERGED / mergeable=true**, 589 changed files. It remains a draft and was not merged or made ready.
+- PR #7: **OPEN / DRAFT / UNMERGED / mergeable=false**, 19 changed files; its exact head has no Actions runs or combined status returned.
+- GitHub reports branch protection disabled on both main and the implementation branch. No branch-protection setting was changed.
+
+## Exact-SHA CI — `f547cecf9c330791a1dfe677da072cdfb50058e2`
+
+- Automation/security: **1,154 Node tests / 194 files, 113 Python tests; zero failures and zero skips; npm audit 0 vulnerabilities** — [run 45781400262](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400262).
+- Dashboard Chromium E2E: **41/41 passed** — [run 45781400241](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400241).
+- Isolated main/candidate baseline comparison: **PASS** — [run 45781400353](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400353).
+- Content quality: PASS — [run 45781400025](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400025).
+- SonicVhibez metadata validation: PASS — [run 45781400303](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400303).
+- Queue readiness: PASS, fail-closed — [run 45781400108](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400108); no production dispatch was authorized.
+- Deployment recovery: PASS — [run 45781400056](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400056).
+- Runner-bridge safety: PASS — [run 45781400046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400046).
+- Cloudflare durable-state unit checks: PASS — [run 45781400284](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400284).
+- Cloudflare durable-state PR checks: PASS — [run 45781400333](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400333).
+- Cloudflare staging runner fail-closed smoke: PASS — [run 45781400230](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400230).
+- Production readiness: **HOLD — 35 blockers**, expected fail-closed result — [run 45781400178](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400178). This is not a production pass.
+
+The combined-status endpoint returned no legacy status contexts; the exact-SHA Actions runs above are the available CI evidence.
+
+## Acceptance matrices — current files, conservative statuses
+
+- Requirements register: **89 rows**. Stored requirement status totals remain **71 PASS / 0 FAIL / 8 NOT_TESTED / 10 BLOCKED**. The separate current-head evidence classification remains **68 PASS / 8 NOT_TESTED / 1 PASS_STAGING / 12 BLOCKED**. The 26 November regression refreshes source/test evidence only; it does not re-evaluate all 89 requirements and promotes no external or owner-controlled acceptance.
+- API matrix: **50 routes; 41 PASS / 0 NOT_TESTED / 9 BLOCKED; 50/50 authentication-negative checks PASS**. API-001 remains BLOCKED overall because live Meta/provider, YouTube and owner-gated routes remain unresolved.
+- Dashboard matrix: **121 controls, 17 forms, 104 form-owned controls, 17 standalone controls, 15 cross-cutting dimensions; 41/41 browser journeys passed**. DASH-001 remains NOT_TESTED overall because exhaustive per-control business acceptance is incomplete.
+
+## SonicVhibez YouTube history and the 72-hour rule
+
+The latest complete read-only YouTube inventory is dated **23 November 2026**, not today. It confirms channel `@sonicvhibez` / `UCSlkuPfHH78oGC1o418HV4w`, one public video (`LjePS02hA1o`) published at **2026-10-22 17:05:56 Africa/Johannesburg**, and zero private or unlisted videos. No scheduled publication timestamp was present in that inventory.
+
+From that last verified publication to **26 November 2026 10:06:33 Africa/Johannesburg**, **34 days 17 hours 0 minutes 37 seconds** elapsed. That historical gap exceeds 72 hours, but it does not prove that no schedule or manual/out-of-band publication changed after the 23 November inventory. The owner attestation for manual, local and third-party upload attempts is stale after **18 November 2026**. The complete destination queue cannot currently be inspected. **The next-publication spacing check is therefore UNVERIFIED; do not schedule or publish.**
+
+The separate approved rolling cycle remains `long_form → long_form → short`, minimum 72 elapsed hours, no same Johannesburg calendar day. Its publication-cycle reconciliation is still blocked because the sole known Short predates cycle approval and no post-cycle long-form publication exists.
+
+## Promotional Shorts — draft preparation only
+
+- `content/promotional-short-plan.json` retains a maximum of **two Shorts per week**, `publicationEnabled=false`, `schedulingEnabled=false`, and `DRAFT_PREPARATION_ONLY_NO_PUBLICATION_DATES`.
+- The two existing drafts for the week of **30 November 2026** were refined in the preceding content commit. Both remain private `DRAFT_ONLY`, target 55 seconds and use only the owner-approved direct-sales disclosure for the Complete YouTube Wildlife Creator's Vault. No third item was added.
+- The current search evidence is qualitative intent only; no measured global search volume, competition score or trend metric is available.
+- No final MP4, voice track, caption file or thumbnail asset was rendered or verified. HeyGen was not used and no quota was bypassed.
+- Selar's last live listing recheck in the repository is **21 November 2026**, seller **Click 47**. The three Selar pages could not be fetched through the current web session on 26 November, so seller/listing details have not been reverified today. The Vault's direct-sales disclosure approval applies only to that product; the Prompt Pack and 90-Day Blueprint remain disclosure/compliance-held. Safari affiliate campaign remains INACTIVE.
+
+## Metricool and Nature Frontiers separation
+
+The current Metricool brand list exposes only **Nature Frontiers SA (brandId 8094526)** with Facebook and Instagram destinations; it does not expose a distinct SonicVhibez/Sonic Fire YouTube destination. The scheduled-post query for 26 November 2026 through 15 January 2027 returned zero scheduled posts. Draft inventory and provider auto-publish settings are not exposed by this read, so existing drafts cannot be independently verified. Repository Facebook and Instagram configs remain `publishingEnabled=false`, `dryRun=true`, `emergencyStop=true`. No account was reconnected and no provider post was changed.
+
+## Remaining release blockers
+
+Genuine creator-captured footage with provenance and rights, owner-approved narration/audio and exact file hashes, time-coded captions, final MP4/thumbnail, factual and rights review, exact-hash human approval, fresh YouTube OAuth/history and manual/local/third-party attempt attestation, complete destination queue inspection, and destination-safe end-to-end verification remain outstanding. Public publishing and unattended scheduling remain disabled.
+
+
+---
+
 > **Authoritative project-scope update — 21 November 2026:** SonicVhibez YouTube remains part of the Marketing Machine regardless of its name and must be managed through the direct YouTube API integration, not Metricool. Nature Frontiers remains a separate Facebook/Instagram brand. Do not reconnect YouTube to Metricool without explicit owner instruction. The latest Metricool read-only response includes the SonicVhibez channel ID in `networksData.youtubeData`; the connector cannot prove whether this is an active connection or retained association data. No posts were scheduled in the checked 21 November–1 January window. Do not use Metricool for YouTube.
 
 > **Current code/verification status:** the latest exact branch SHA, branch divergence, queue identity guard, API route counts, isolated tests and CI status are maintained in [MASTER EXECUTION TRACKER](MASTER-EXECUTION-TRACKER-2026-11-21.md). The current branch has no Actions runs or combined status checks; historical test passes below do not certify the latest head. Queue identity approval is now hash-bound to both queue files and remains absent; production dispatch stays blocked.
@@ -6,7 +69,7 @@
 
 > Checkpoint sections below the 21 November update are retained as historical evidence. The current update supersedes earlier media, voice, branch, workflow and blocker statements. Historical CI passes do not certify the current head.
 
-# Current verified checkpoint — 21 November 2026
+# Historical checkpoint — 21 November 2026
 
 **Overall status: HOLD — NOT MASTER COMPLETE.** No production media is cleared, no final render exists, and no upload, schedule or publication is authorized.
 

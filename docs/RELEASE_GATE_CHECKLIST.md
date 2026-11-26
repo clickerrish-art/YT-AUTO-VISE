@@ -1,5 +1,49 @@
-# 19 November 2026 — current exact-source release gate
+# Current release gate — 26 November 2026
 
+**Decision: HOLD.** No SonicVhibez upload, schedule, publication or public automation is authorized.
+
+**Tested source/test SHA:** `f547cecf9c330791a1dfe677da072cdfb50058e2`  
+**Implementation branch:** `codex/marketing-machine-audit-fixes`  
+**Main / merge base:** `3795519ccbf58fd02d74458624b58dd2e44a88c0` (untouched)  
+**Divergence:** 5,829 ahead / 0 behind; 589 changed files.  
+**PR #1:** OPEN / DRAFT / UNMERGED / mergeable=true; 589 files.  
+**PR #7:** OPEN / DRAFT / UNMERGED / mergeable=false; 19 files; no exact-head Actions runs returned.  
+**Branch protection:** GitHub branches API reports disabled on main and implementation branch.
+
+## Exact-SHA evidence
+
+- Automation/security: 1,154 Node tests across 194 files; 113 Python tests; zero failures/skips; npm audit zero — [45781400262](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400262).
+- Dashboard E2E: 41/41 — [45781400241](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400241).
+- Main/candidate isolated baseline: PASS — [45781400353](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400353).
+- Content quality PASS — [45781400025](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400025).
+- Metadata PASS — [45781400303](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400303).
+- Queue readiness PASS_FAIL_CLOSED — [45781400108](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400108); dispatch remains unauthorized.
+- Deployment recovery PASS — [45781400056](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400056).
+- Runner-bridge safety PASS — [45781400046](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400046).
+- Durable-state unit and PR checks PASS — [45781400284](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400284), [45781400333](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400333).
+- Production readiness: **HOLD — 35 blockers** — [45781400178](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45781400178). This expected fail-closed result is not a release pass.
+
+The combined-status endpoint returned no legacy status contexts; the Actions runs above are the exact-SHA evidence.
+
+## Acceptance snapshot
+
+- Requirements: 89 total; stored status **71 PASS / 8 NOT_TESTED / 10 BLOCKED / 0 FAIL**; current-head evidence classification **68 PASS / 8 NOT_TESTED / 1 PASS_STAGING / 12 BLOCKED**. The 26 November refresh updates source/test evidence only; no full 89-row requirement re-evaluation or external acceptance promotion occurred.
+- API: 50 routes; **41 PASS / 0 NOT_TESTED / 9 BLOCKED**, 50/50 authentication-negative checks PASS. API-001 remains BLOCKED overall.
+- Dashboard: 121 controls / 17 forms / 104 form-owned / 17 standalone; 41/41 browser journeys PASS. DASH-001 remains NOT_TESTED overall.
+
+## Publication and channel safety
+
+The latest complete read-only SonicVhibez inventory is 23 November 2026: one public legacy Short `LjePS02hA1o`, published 22 October 2026 at 17:05:56 Africa/Johannesburg; zero private/unlisted videos and no scheduled timestamp. The last owner attestation for manual/local/third-party attempts expired 18 November. Since a current destination queue and post-23-November history cannot be inspected, the promotional 72-hour spacing check is **UNVERIFIED**. Do not schedule.
+
+Metricool currently exposes only Nature Frontiers SA (brandId 8094526), not SonicVhibez/Sonic Fire YouTube. Its scheduled-post query returned zero posts for 26 November–15 January; draft inventory is not exposed. Nature Frontiers Facebook/Instagram configs remain disabled, dry-run and emergency-stopped. No Nature Frontiers post was changed.
+
+The promotional plan remains capped at two drafts per week with publication and scheduling disabled. The two 30 November drafts were refined; no additional item, media render or thumbnail asset was created. The Vault's direct-sales disclosure is approved for that product only. The Prompt Pack and 90-Day Blueprint remain disclosure/compliance-held. Safari affiliate remains inactive.
+
+**Release remains blocked** by original creator-captured footage and rights evidence, owner-approved narration/audio, final MP4/captions/thumbnail, exact-hash human review, fresh YouTube OAuth/history and attempt attestation, complete destination queue inspection, and a destination-safe end-to-end test. Do not merge PR #1, alter main, enable publishing or bypass any gate.
+
+---
+
+# Historical release gate — 19 November 2026
 **Tested source/test SHA:** `3912a7c8af6d0e72950a2b18566a3267e789cc5f`  
 **Implementation branch:** `codex/marketing-machine-audit-fixes`  
 **Main:** `2cd6f223b6b673c030974c7f27c5ddf6f41e8b38` (untouched)  
