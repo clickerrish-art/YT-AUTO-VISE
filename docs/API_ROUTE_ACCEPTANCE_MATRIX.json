@@ -3,7 +3,7 @@
   "generatedAt": "2026-11-25T09:21:57Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
-  "testedSourceTestSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+  "testedSourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
   "liveMainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
   "inventory": {
@@ -2316,25 +2316,25 @@
     "branchProtection": "UNVERIFIED_HTTP_403"
   },
   "currentHeadEvidence": {
-    "sourceTestSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-    "automationRunId": 45441149361,
-    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149361",
+    "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "automationRunId": 45582470326,
+    "automationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470326",
     "nodeTestFiles": 194,
-    "nodeTests": 1150,
+    "nodeTests": 1154,
     "pythonTests": 113,
-    "pythonEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+    "pythonEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
     "skipped": 0,
     "npmAuditVulnerabilities": 0,
-    "npmAuditEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+    "npmAuditEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
     "authNegativePass": 50,
     "overallPass": 41,
     "overallNotTested": 0,
     "overallBlocked": 9,
     "browserE2EStatus": "PASS",
-    "lastBrowserEvidenceSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-    "lastBrowserRunId": 45441149801,
-    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45441149801",
-    "note": "Exact source/test SHA 34be9880d71b487b7aa8a7db99dbd6e0162a5b81: endpoint-specific local route tests are included in the full 1,150-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication."
+    "lastBrowserEvidenceSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
+    "lastBrowserRunId": 45582470207,
+    "lastBrowserRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45582470207",
+    "note": "Exact source/test SHA e941a32e36e2fe07c81814b6a1da34127efb202d: endpoint-specific local route tests are included in the full 1,154-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication."
   },
   "latestRegressionEvidence": {
     "recordedAt": "2026-11-20T16:57:46Z",
@@ -2378,9 +2378,9 @@
   },
   "latestBranchTipAtEvidenceRefresh": "e941a32e36e2fe07c81814b6a1da34127efb202d",
   "latestApplicationSourceChangeSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
-  "latestFullyTestedSourceTestTreeSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+  "latestFullyTestedSourceTestTreeSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
   "sourceTestEvidenceStatus": "PASS_WITH_PRODUCTION_HOLD",
-  "latestApplicationSourceTestTreeSha": "34be9880d71b487b7aa8a7db99dbd6e0162a5b81",
+  "latestApplicationSourceTestTreeSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
   "latestCurrentHeadPositiveEvidence": {
     "sourceTestSha": "e941a32e36e2fe07c81814b6a1da34127efb202d",
     "runId": 45582470326,
@@ -2808,5 +2808,5 @@
     },
     "note": "No acceptance status was promoted solely because CI passed."
   },
-  "currentHeadEvidenceNote": "Exact source/test SHA undefined: endpoint-specific local route tests are included in the full 1,154-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication."
+  "currentHeadEvidenceNote": "Exact source/test SHA e941a32e36e2fe07c81814b6a1da34127efb202d: endpoint-specific local route tests are included in the full 1,154-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication."
 }
