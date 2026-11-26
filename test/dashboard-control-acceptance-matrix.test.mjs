@@ -49,7 +49,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(matrix.forms.length, 17);
   assert.ok(matrix.controls.every(control => Number.isInteger(control.line) && control.line > 0), "every control acceptance row must retain its current source line");
   assert.ok(matrix.forms.every(form => Number.isInteger(form.line) && form.line > 0), "every form acceptance row must retain its current source line");
-  assert.equal(matrix.sourceHead, automationEvidenceSha);
+  assert.equal(matrix.sourceHead, automationEvidenceSha, "matrix.sourceHead must match the latest exact source/test evidence");
   assert.equal(matrix.status, "PASS");
   assert.equal(matrix.evidenceStatus, "PASS");
   assert.equal(matrix.overallAcceptance, "NOT_TESTED");
