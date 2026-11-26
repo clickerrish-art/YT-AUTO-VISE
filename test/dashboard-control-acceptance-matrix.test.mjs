@@ -184,7 +184,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(latestHead.nodeTestFiles, 194);
   assert.equal(latestHead.nodeFailed, 0);
   assert.equal(latestHead.nodeSkipped, 0);
-  assert.equal(latestHead.pythonTests, 108);
+  assert.equal(latestHead.pythonTests, 113, "latest exact-head evidence records 113 Python tests");
   assert.equal(latestHead.npmAuditVulnerabilities, 0);
   assert.equal(latestHead.npmAuditLastVerifiedSha, automationEvidenceSha);
   assert.equal(matrix.currentHeadRefresh.npmAuditVulnerabilities, 0);
