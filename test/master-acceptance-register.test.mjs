@@ -71,7 +71,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
   assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
   assert.match(dashboard.currentHeadEvidenceNote, /(?:41\/41 Chromium journeys|browser E2E 41\/41 PASS)/i);
-  assert.match(dashboard.currentHeadEvidenceNote, /overallAcceptance is NOT_TESTED/);
+  assert.match(dashboard.currentHeadEvidenceNote, /(?:overallAcceptance is NOT_TESTED|Overall DASH-001 remains NOT_TESTED)/i);
 
   const state = byId("STATE-001");
   assert.equal(state.status, "PASS");
