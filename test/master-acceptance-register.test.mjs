@@ -31,7 +31,7 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
   assert.ok(rows.every(row => row.currentHeadEvidenceSha === exactSha));
   assert.ok(rows.every(row => row.sourceTestEvidenceRefresh?.sourceSha === exactSha));
   assert.equal(byId("CI-002").currentHeadStatus, "PASS");
-  assert.match(byId("CI-002").currentHeadEvidenceNote, /(?:combined|exact) isolated main\\/candidate baseline run 45781400353 passed/i);
+  assert.match(byId("CI-002").currentHeadEvidenceNote, /(?:combined|exact) isolated main\/candidate baseline run 45781400353 passed/i);
   assert.ok(register.currentHeadOpenDependencies.some(item => item.id === "ORIGINAL-WILDLIFE-FOOTAGE" && item.status === "BLOCKED"));
 });
 
@@ -70,7 +70,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(dashboard.currentHeadEvidenceNote, /121\/121 controls/);
   assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
   assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
-  assert.match(dashboard.currentHeadEvidenceNote, /(?:41\\/41 Chromium journeys|browser E2E 41\\/41 PASS)/i);
+  assert.match(dashboard.currentHeadEvidenceNote, /(?:41\/41 Chromium journeys|browser E2E 41\/41 PASS)/i);
   assert.match(dashboard.currentHeadEvidenceNote, /overallAcceptance is NOT_TESTED/);
 
   const state = byId("STATE-001");
