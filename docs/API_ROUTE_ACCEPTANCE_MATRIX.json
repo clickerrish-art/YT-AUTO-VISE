@@ -2807,5 +2807,6 @@
       }
     },
     "note": "No acceptance status was promoted solely because CI passed."
-  }
+  },
+  "currentHeadEvidenceNote": "Exact source/test SHA undefined: endpoint-specific local route tests are included in the full 1,154-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication."
 }

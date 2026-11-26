@@ -652,7 +652,7 @@
           "targetSeconds": 55,
           "title": "How to Fact-Check Wildlife Videos Before You Publish",
           "primaryKeyword": "how to fact-check wildlife videos",
-          "script": "Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. That viral wildlife clip might be real—but the caption can still be wrong. Before you build a YouTube story around it, run three checks. First, separate what you can actually see from what the caption claims: species, location, behaviour and date. Second, trace the claim to an original source, such as a wildlife agency, museum, university or peer-reviewed study—not just another repost. Third, compare an independent source and keep any uncertainty in your narration. If the footage doesn't prove the claim, change the script, not the evidence. That's how wildlife creators protect accuracy and audience trust. Advertisement. The Complete YouTube Wildlife Creator's Vault is a resource to explore for wildlife-content planning.",
+          "script": "Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. That viral wildlife clip might be real—but the caption can still be wrong. Before you build a YouTube story around it, run three checks. First, separate what you can actually see from what the caption claims: species, location, behaviour and date. Second, trace the claim to an original source, such as a wildlife agency, museum, university or peer-reviewed study—not just another repost. Third, compare an independent source and keep any uncertainty in your narration. If the footage doesn't prove the claim, change the script, not the evidence. That's how wildlife creators protect accuracy and audience trust. The Complete YouTube Wildlife Creator's Vault is a resource to explore for wildlife-content planning.",
           "productId": "wildlife-creators-vault",
           "productUrl": "https://selar.com/0u19v8u99l",
           "description": "ADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nHow to fact-check wildlife videos before you turn a clip into a YouTube story: separate visible evidence from caption claims, trace each claim to a reliable original source, and keep uncertainty in the narration.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF\nReview the exact Selar listing for current contents and price:\nhttps://selar.com/0u19v8u99l\n\nFurther reading:\nhttps://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele\nhttps://www.documentarytube.com/blog/how-to-handle-misinformation-about-wildlife-and-conservation/\n\nA resource does not replace independent fact-checking or footage-rights clearance.",
@@ -673,46 +673,46 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-25T11:21:57+02:00",
-            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 25 November 2026 searches for “how to fact-check wildlife videos” and related queries surfaced current reporting and public-agency guidance about fabricated or AI-altered animal footage, false species/location/behaviour claims, and the need to trace source provenance. This supports the actual viewer problem—checking what a clip proves before writing a caption or narration—but does not establish query volume or ranking opportunity.",
+            "researchedAt": "2026-11-26T09:38:38+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or trend metric was available. On 26 November 2026, exact-phrase and related web searches surfaced current fact-check guidance about animal-video plausibility, visual continuity, source provenance, species consistency and reverse-image search. These sources support the viewer problem of verifying what a wildlife clip proves before writing a title, caption or narration; they do not establish query volume or ranking opportunity.",
             "sources": [
               {
-                "title": "Fabricated AI animal videos are distorting how we see wildlife, researchers warn",
-                "url": "https://www.euronews.com/2026/07/21/fabricated-ai-animal-videos-are-distorting-how-we-see-wildlife-researchers-warn",
-                "whyRelevant": "2026 reporting connects fabricated animal footage with misrepresented species, behaviour and locations, directly supporting the verification lesson."
-              },
-              {
-                "title": "'People could get hurt': Conservationists decry AI wildlife visuals",
-                "url": "https://factcheck.afp.com/doc.afp.com.C4TR6KG",
-                "whyRelevant": "AFP fact-check reporting documents false wildlife visuals and expert concerns about unsafe assumptions, reinforcing the need to verify source and context."
+                "title": "Fact-check — animal videos online: cute but often fake",
+                "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
+                "whyRelevant": "SRF's 30 January 2026 fact-check gives practical checks for plausible behaviour, visual continuity, consistent species and the first publisher."
               },
               {
                 "title": "Is That Real? A Guide to Identifying Fake Wildlife Videos Created with Generative AI",
                 "url": "https://news.maryland.gov/dnr/2026/04/27/is-that-real-a-guide-to-identifying-fake-wildlife-videos-created-with-generative-ai/",
-                "whyRelevant": "A state wildlife agency offers practical guidance for identifying manipulated wildlife video, matching the audience problem of checking claims before publication."
+                "whyRelevant": "Maryland DNR's 27 April 2026 guide recommends checking the source, visual continuity, date, reverse-image-search results and trusted wildlife experts."
+              },
+              {
+                "title": "The viewer doesn't always seem to care—response to fake animal rescues on YouTube and implications for social media self-policing policies",
+                "url": "https://besjournals.onlinelibrary.wiley.com/doi/10.1002/pan3.10416",
+                "whyRelevant": "Open-access 2023 research examined 241 apparently staged fake animal-rescue video posts and found mixed viewer recognition, supporting careful verification before repeating claims."
               }
             ]
           },
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-25T11:21:57+02:00",
-            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 25 November 2026 searches for “how to fact-check wildlife videos” and related queries surfaced current reporting and public-agency guidance about fabricated or AI-altered animal footage, false species/location/behaviour claims, and the need to trace source provenance. This supports the actual viewer problem—checking what a clip proves before writing a caption or narration—but does not establish query volume or ranking opportunity.",
+            "researchedAt": "2026-11-26T09:38:38+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or trend metric was available. On 26 November 2026, exact-phrase and related web searches surfaced current fact-check guidance about animal-video plausibility, visual continuity, source provenance, species consistency and reverse-image search. These sources support the viewer problem of verifying what a wildlife clip proves before writing a title, caption or narration; they do not establish query volume or ranking opportunity.",
             "sources": [
               {
-                "title": "Fabricated AI animal videos are distorting how we see wildlife, researchers warn",
-                "url": "https://www.euronews.com/2026/07/21/fabricated-ai-animal-videos-are-distorting-how-we-see-wildlife-researchers-warn",
-                "whyRelevant": "2026 reporting connects fabricated animal footage with misrepresented species, behaviour and locations, directly supporting the verification lesson."
-              },
-              {
-                "title": "'People could get hurt': Conservationists decry AI wildlife visuals",
-                "url": "https://factcheck.afp.com/doc.afp.com.C4TR6KG",
-                "whyRelevant": "AFP fact-check reporting documents false wildlife visuals and expert concerns about unsafe assumptions, reinforcing the need to verify source and context."
+                "title": "Fact-check — animal videos online: cute but often fake",
+                "url": "https://www.srf.ch/news/srf-faktenchecks/faktencheck-tiervideos-im-internet-herzig-aber-oft-fake-drei-beispiele",
+                "whyRelevant": "SRF's 30 January 2026 fact-check gives practical checks for plausible behaviour, visual continuity, consistent species and the first publisher."
               },
               {
                 "title": "Is That Real? A Guide to Identifying Fake Wildlife Videos Created with Generative AI",
                 "url": "https://news.maryland.gov/dnr/2026/04/27/is-that-real-a-guide-to-identifying-fake-wildlife-videos-created-with-generative-ai/",
-                "whyRelevant": "A state wildlife agency offers practical guidance for identifying manipulated wildlife video, matching the audience problem of checking claims before publication."
+                "whyRelevant": "Maryland DNR's 27 April 2026 guide recommends checking the source, visual continuity, date, reverse-image-search results and trusted wildlife experts."
+              },
+              {
+                "title": "The viewer doesn't always seem to care—response to fake animal rescues on YouTube and implications for social media self-policing policies",
+                "url": "https://besjournals.onlinelibrary.wiley.com/doi/10.1002/pan3.10416",
+                "whyRelevant": "Open-access 2023 research examined 241 apparently staged fake animal-rescue video posts and found mixed viewer recognition, supporting careful verification before repeating claims."
               }
             ]
           },
@@ -776,7 +776,7 @@
           "targetSeconds": 55,
           "title": "Wildlife Documentary Shot List: 3 Shots to Plan",
           "primaryKeyword": "wildlife documentary shot list",
-          "script": "Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. A wildlife documentary shot list starts with a story, not a pile of pretty clips. Plan three shots. First, an establishing view that shows the habitat. Second, a closer observation of one visible behaviour, such as feeding or moving through cover. Third, a change that completes the sequence without inventing animal motives. Note lens, camera position, sound and time of day, but never disturb an animal to get the shot. Leave space for natural sound and a safe cutaway. Check local rules and permissions before filming. The Complete YouTube Wildlife Creator's Vault is linked below as a planning resource. Film only what you can observe and document.",
+          "script": "Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. A wildlife documentary shot list starts with a story, not a pile of pretty clips. Plan three shots. First, an establishing view that shows the habitat. Second, a closer observation of one visible behaviour, such as feeding or moving through cover, filmed from a respectful distance. Third, a change that completes the sequence without inventing animal motives. Note lens, camera position, sound and time of day, but never disturb an animal to get the shot. Leave space for natural sound and a safe cutaway. Check local rules and permissions before filming. The Complete YouTube Wildlife Creator's Vault is linked below as a planning resource. Film only what you can observe and document.",
           "productId": "wildlife-creators-vault",
           "productUrl": "https://selar.com/0u19v8u99l",
           "description": "ADVERTISEMENT\nThis product is sold through my own Selar business; purchases generate revenue for my business.\n\nWildlife documentary shot list: plan a habitat wide shot, an animal-in-context shot and a genuine detail shot before editing. Let the animal's natural behaviour set the pace; never chase, bait or stage a scene.\n\nCreator resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF\nReview the exact Selar listing for current contents and price:\nhttps://selar.com/0u19v8u99l\n\nA resource does not replace animal-welfare guidance, factual review or footage-rights clearance.",
@@ -800,46 +800,46 @@
           "keywordEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-25T11:21:57+02:00",
-            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 25 November 2026 searches for “wildlife documentary shot list” and related wildlife-video shot-planning queries surfaced practical guidance on establishing views, shot-size variation, coherent sequences and ethical long-lens filming. This supports the creator problem of planning a usable sequence before filming, but does not establish search volume or ranking opportunity.",
+            "researchedAt": "2026-11-26T09:38:38+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or trend metric was available. On 26 November 2026, exact-phrase and related web searches surfaced practical wildlife-documentary planning guidance on establishing, medium and detail shots, story sequencing, natural sound and ethical filming distance. This supports the creator problem of planning usable coverage before filming; it does not establish query volume or ranking opportunity.",
             "sources": [
+              {
+                "title": "How To Film A Wildlife Documentary On Your Safari",
+                "url": "https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/",
+                "whyRelevant": "The guide recommends defining the story and shot list in advance, using establishing and close-up shots, and maintaining distance with long lenses."
+              },
+              {
+                "title": "Close-up, medium shot and wide shot: how to use them in a wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "The 4 May 2025 guide explains the narrative roles of wide, medium and close-up/detail shots in a coherent wildlife sequence."
+              },
               {
                 "title": "Audubon's Guide to Ethical Bird Photography and Videography",
                 "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
-                "whyRelevant": "Audubon recommends maintaining distance with telephoto lenses, avoiding disturbance and letting animal welfare take priority—important constraints for the proposed wildlife shot list."
-              },
-              {
-                "title": "Types of shots in wildlife video",
-                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
-                "whyRelevant": "The wildlife-video guide discusses varying shot size and angle to build a coherent sequence, supporting the wide/context/detail structure in the Short."
-              },
-              {
-                "title": "Safari Content Creator's Guide to Kenya | Gear and Ethics",
-                "url": "https://www.nlssafaris.com/safari-content-creators-guide/",
-                "whyRelevant": "Recent practical guidance emphasizes wide establishing shots, stable clips with clear beginnings and endings, environmental sound and ethical filming distance."
+                "whyRelevant": "Audubon prioritizes animal welfare, telephoto distance and avoiding disturbance; this supports the respectful-distance instruction."
               }
             ]
           },
           "currentIntentEvidence": {
             "provider": "web_search",
             "type": "qualitative_search_intent",
-            "researchedAt": "2026-11-25T11:21:57+02:00",
-            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or growth metric was available. Fresh 25 November 2026 searches for “wildlife documentary shot list” and related wildlife-video shot-planning queries surfaced practical guidance on establishing views, shot-size variation, coherent sequences and ethical long-lens filming. This supports the creator problem of planning a usable sequence before filming, but does not establish search volume or ranking opportunity.",
+            "researchedAt": "2026-11-26T09:38:38+02:00",
+            "note": "Qualitative search-intent evidence only; no measured global search volume, competition score or trend metric was available. On 26 November 2026, exact-phrase and related web searches surfaced practical wildlife-documentary planning guidance on establishing, medium and detail shots, story sequencing, natural sound and ethical filming distance. This supports the creator problem of planning usable coverage before filming; it does not establish query volume or ranking opportunity.",
             "sources": [
+              {
+                "title": "How To Film A Wildlife Documentary On Your Safari",
+                "url": "https://serengetiafricantours.com/how-to-film-a-wildlife-documentary-on-your-safari/",
+                "whyRelevant": "The guide recommends defining the story and shot list in advance, using establishing and close-up shots, and maintaining distance with long lenses."
+              },
+              {
+                "title": "Close-up, medium shot and wide shot: how to use them in a wildlife video",
+                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
+                "whyRelevant": "The 4 May 2025 guide explains the narrative roles of wide, medium and close-up/detail shots in a coherent wildlife sequence."
+              },
               {
                 "title": "Audubon's Guide to Ethical Bird Photography and Videography",
                 "url": "https://www.audubon.org/photography/awards/audubons-guide-ethical-bird-photography-and-videography",
-                "whyRelevant": "Audubon recommends maintaining distance with telephoto lenses, avoiding disturbance and letting animal welfare take priority—important constraints for the proposed wildlife shot list."
-              },
-              {
-                "title": "Types of shots in wildlife video",
-                "url": "https://www.concolormedia.com/en/blog/types-of-shots-wildlife-video/",
-                "whyRelevant": "The wildlife-video guide discusses varying shot size and angle to build a coherent sequence, supporting the wide/context/detail structure in the Short."
-              },
-              {
-                "title": "Safari Content Creator's Guide to Kenya | Gear and Ethics",
-                "url": "https://www.nlssafaris.com/safari-content-creators-guide/",
-                "whyRelevant": "Recent practical guidance emphasizes wide establishing shots, stable clips with clear beginnings and endings, environmental sound and ethical filming distance."
+                "whyRelevant": "Audubon prioritizes animal welfare, telephoto distance and avoiding disturbance; this supports the respectful-distance instruction."
               }
             ]
           },
