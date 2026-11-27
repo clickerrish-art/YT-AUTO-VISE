@@ -4,11 +4,13 @@ import fs from "node:fs";
 import crypto from "node:crypto";
 import os from "node:os";
 import path from "node:path";
-import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, validateHistoryReconciliationSnapshot, assertNextPublicationAllowed, fetchCompleteYoutubeHistorySnapshot, readRegularFileNoFollow } from "../scripts/youtube-history-gate.mjs";
+import { assertNoUnresolvedUploadAttempts, validateHistoryReconciliation, validateHistoryReconciliationSnapshot, assertNextPublicationAllowed as assertNextPublicationAllowedImpl, fetchCompleteYoutubeHistorySnapshot, readRegularFileNoFollow } from "../scripts/youtube-history-gate.mjs";
 import { evaluateNextPublication as evaluateNextPublicationImpl } from "../scripts/schedule-policy.mjs";
 
 const TEST_NOW = Date.parse("2026-10-01T00:00:00.000Z");
+const ASSERT_TEST_NOW = Date.parse("2026-10-25T00:00:00.000Z");
 const evaluateNextPublication = options => evaluateNextPublicationImpl({ now: TEST_NOW, ...options });
+const assertNextPublicationAllowed = options => assertNextPublicationAllowedImpl({ now: ASSERT_TEST_NOW, ...options });
 
 const evaluateWithVerifiedInventories = options => evaluateNextPublication({
   pendingAttempts: [],

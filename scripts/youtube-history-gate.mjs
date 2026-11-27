@@ -353,8 +353,11 @@ export async function fetchCompleteYoutubeHistory(youtube, channel, reconciliati
 
 export function assertNextPublicationAllowed({
   historySnapshot, expectedChannelId, pendingAttempts, pendingAttemptsVerified = false, proposedAt, jobId, format, timeZone, minSpacingHours,
-  requireQualityApproval = false, qualityApproval = null, videoPath = null, metadataPath = null, rootDir = process.cwd(), contentType = null
+  requireQualityApproval = false, qualityApproval = null, videoPath = null, metadataPath = null, rootDir = process.cwd(), contentType = null,
+  now = Date.now()
 } = {}) {
+  const nowTimestamp = now instanceof Date ? now.getTime() : Number.isFinite(now) ? now : strictIsoTimestamp(now);
+  if (!Number.isFinite(nowTimestamp)) throw new Error("publication validation time must be valid");
   const verifiedAt = strictIsoTimestamp(historySnapshot?.verifiedAt);
   if (!historySnapshot || typeof historySnapshot !== "object" || Array.isArray(historySnapshot)
       || historySnapshot.complete !== true
@@ -363,7 +366,7 @@ export function assertNextPublicationAllowed({
       || !Array.isArray(historySnapshot.scheduledItems)
       || !Array.isArray(historySnapshot.privateUploads)
       || typeof historySnapshot.verifiedBy !== "string" || historySnapshot.verifiedBy.trim().length < 2
-      || !Number.isFinite(verifiedAt) || verifiedAt > Date.now()
+      || !Number.isFinite(verifiedAt) || verifiedAt > nowTimestamp
       || !/^[a-f0-9]{64}$/.test(historySnapshot.reconciliationSha256 ?? "")) {
     throw new Error("complete owner-verified YouTube history snapshot with public/private/unlisted and scheduled inventory is required before upload");
   }
@@ -424,7 +427,8 @@ export function assertNextPublicationAllowed({
     format,
     timeZone: policy.timezone,
     minSpacingHours: configuredSpacing,
-    cycleStartAt: policy.cadenceDecision.approvedAt
+    cycleStartAt: policy.cadenceDecision.approvedAt,
+    now
   });
   if (!result.valid) throw new Error("rolling publication cycle gate blocked upload: " + result.errors.join("; "));
   return result;
