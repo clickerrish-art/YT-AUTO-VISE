@@ -1,6 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { evaluateNextPublication, validateRollingPublicationCycle } from "../scripts/schedule-policy.mjs";
+import {
+  evaluateNextPublication as evaluateNextPublicationImpl,
+  validateRollingPublicationCycle as validateRollingPublicationCycleImpl
+} from "../scripts/schedule-policy.mjs";
+
+const TEST_NOW = Date.parse("2026-10-26T10:00:00+02:00");
+const evaluateNextPublication = options => evaluateNextPublicationImpl({ now: TEST_NOW, ...options });
+const validateRollingPublicationCycle = (items, options = {}) =>
+  validateRollingPublicationCycleImpl(items, { now: TEST_NOW, ...options });
 
 const evaluateWithVerifiedInventories = options => evaluateNextPublication({
   pendingAttempts: [],
@@ -14,7 +22,7 @@ const evaluateWithVerifiedInventories = options => evaluateNextPublication({
 const approval = {
   ownerApproved: true,
   approvedBy: "project-owner",
-  approvedAt: "2026-10-27T10:00:00+02:00",
+  approvedAt: "2026-10-26T10:00:00+02:00",
   timeZone: "Africa/Johannesburg",
   minSpacingHours: 72,
   mode: "rolling",
@@ -118,7 +126,7 @@ test("accepts owner-approved rolling cycle without inventing a weekly target", (
   const policy = {
     ownerApproved: true,
     approvedBy: "project-owner",
-    approvedAt: "2026-10-27T10:00:00+02:00",
+    approvedAt: "2026-10-26T10:00:00+02:00",
     timeZone: "Africa/Johannesburg",
     minSpacingHours: 72,
     mode: "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET"
@@ -132,7 +140,7 @@ test("rejects a weekly target in the no-weekly-target policy mode", () => {
   const policy = {
     ownerApproved: true,
     approvedBy: "project-owner",
-    approvedAt: "2026-10-27T10:00:00+02:00",
+    approvedAt: "2026-10-26T10:00:00+02:00",
     timeZone: "Africa/Johannesburg",
     minSpacingHours: 72,
     mode: "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET",
