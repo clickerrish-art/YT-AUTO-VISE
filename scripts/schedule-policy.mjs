@@ -115,7 +115,8 @@ function asTimestamp(value, label) {
  */
 export function validatePublicationSlot(proposed, existingItems = [], {
   timeZone = DEFAULT_SCHEDULE_TIMEZONE,
-  minSpacingHours = DEFAULT_MIN_SPACING_HOURS
+  minSpacingHours = DEFAULT_MIN_SPACING_HOURS,
+  now = Date.now()
 } = {}) {
   if (!proposed || typeof proposed !== "object") throw new Error("proposed slot is required");
   if (!Number.isFinite(minSpacingHours) || minSpacingHours < DEFAULT_MIN_SPACING_HOURS) throw new Error(`minSpacingHours must be at least ${DEFAULT_MIN_SPACING_HOURS} elapsed hours`);
@@ -124,8 +125,11 @@ export function validatePublicationSlot(proposed, existingItems = [], {
 
   if (!Array.isArray(existingItems)) throw new Error("existingItems must be an array so publication spacing can be verified");
   const proposedAt = asTimestamp(proposed.scheduledAt, "proposed.scheduledAt");
+  const nowTimestamp = now instanceof Date ? now.getTime() : parseStrictTimestamp(now);
+  if (!Number.isFinite(nowTimestamp)) throw new Error("now must be a valid timestamp");
   const proposedId = proposed.id;
   const errors = [];
+  if (proposedAt <= nowTimestamp) errors.push("proposed.scheduledAt must be in the future");
   if (typeof proposedId !== "string" || !proposedId.trim()) {
     errors.push("proposed slot needs a stable non-empty ID");
   }
@@ -162,6 +166,9 @@ export function validatePublicationSlot(proposed, existingItems = [], {
     } catch (error) {
       errors.push(error.message);
       continue;
+    }
+    if (!actualStatuses.has(status) && timestamp <= nowTimestamp) {
+      errors.push(`active item ${id} has a past scheduledAt; reconcile it before scheduling`);
     }
     resolved.push({ item, timestamp });
   }
@@ -299,7 +306,8 @@ export function evaluateNextPublication({
   format,
   timeZone = DEFAULT_SCHEDULE_TIMEZONE,
   minSpacingHours = DEFAULT_MIN_SPACING_HOURS,
-  cycleStartAt = null
+  cycleStartAt = null,
+  now = Date.now()
 } = {}) {
   const errors = [];
   if (historyVerified !== true) errors.push("complete channel history has not been independently verified");
@@ -432,7 +440,7 @@ export function evaluateNextPublication({
       }))
   ];
   if (Number.isFinite(proposedTimestamp)) {
-    const spacing = validatePublicationSlot(candidate, existing, { timeZone, minSpacingHours });
+    const spacing = validatePublicationSlot(candidate, existing, { timeZone, minSpacingHours, now });
     errors.push(...spacing.errors);
     if (latestActual && (proposedTimestamp - latestActual.timestamp) / 3_600_000 < minSpacingHours) {
       errors.push(`proposed publication is less than ${minSpacingHours} elapsed hours after the latest actual channel publication`);
@@ -458,6 +466,8 @@ export function validateRollingPublicationCycle(items, {
   now = Date.now()
 } = {}) {
   const errors = [];
+  const nowTimestamp = now instanceof Date ? now.getTime() : parseStrictTimestamp(now);
+  if (!Number.isFinite(nowTimestamp)) errors.push("rolling-cycle validation time must be a valid timestamp");
   if (!Array.isArray(items) || items.length === 0) {
     return { valid: false, errors: ["at least one rolling-cycle item is required"], orderedItems: [], gaps: [] };
   }
@@ -489,6 +499,9 @@ export function validateRollingPublicationCycle(items, {
   for (const item of orderedItems) {
     if (seenIds.has(item.id)) errors.push("duplicate rolling-cycle item ID: " + item.id);
     seenIds.add(item.id);
+    if (Number.isFinite(nowTimestamp) && Number.isFinite(item.timestamp) && item.timestamp <= nowTimestamp) {
+      errors.push(`rolling-cycle item ${item.id} scheduledAt must be in the future`);
+    }
   }
   const gaps = [];
   for (let index = 0; index < orderedItems.length; index++) {
@@ -514,10 +527,8 @@ export function validateRollingPublicationCycle(items, {
   } else {
     if (typeof policy.approvedBy !== "string" || policy.approvedBy.trim().length < 2) errors.push("owner-approved policy must identify the approving owner");
     const policyApprovedAt = isValidZonedIsoTimestamp(policy.approvedAt) ? parseStrictTimestamp(policy.approvedAt) : NaN;
-    const nowTimestamp = now instanceof Date ? now.getTime() : parseStrictTimestamp(now);
     if (!Number.isFinite(policyApprovedAt)) errors.push("owner-approved policy must include a calendar-valid ISO approval timestamp with an explicit timezone");
-    else if (!Number.isFinite(nowTimestamp)) errors.push("rolling-cycle validation time must be a valid timestamp");
-    else if (policyApprovedAt > nowTimestamp) errors.push("owner-approved policy approval timestamp must not be in the future");
+    else if (Number.isFinite(nowTimestamp) && policyApprovedAt > nowTimestamp) errors.push("owner-approved policy approval timestamp must not be in the future");
     if (policy.timeZone !== timeZone) errors.push("owner-approved policy timezone must match the validated schedule timezone");
     if (policy.minSpacingHours !== minSpacingHours) errors.push("owner-approved policy minimum spacing must match the validated minimum");
     if (!["rolling", "ROLLING_CYCLE_WITHOUT_WEEKLY_TARGET", "OTHER_OWNER_DEFINED_FEASIBLE_POLICY"].includes(policy.mode)) errors.push("owner-approved policy mode must be a supported rolling cadence mode");

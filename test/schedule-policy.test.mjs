@@ -1,6 +1,23 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validatePublicationSlot, weeklyUtcCronGaps, localDateTimeToIso, evaluateNextPublication, isValidZonedIsoTimestamp, validateCadenceDecision, validateRollingPublicationCycle } from "../scripts/schedule-policy.mjs";
+import {
+  validatePublicationSlot as validatePublicationSlotImpl,
+  weeklyUtcCronGaps,
+  localDateTimeToIso,
+  evaluateNextPublication as evaluateNextPublicationImpl,
+  isValidZonedIsoTimestamp,
+  validateCadenceDecision,
+  validateRollingPublicationCycle as validateRollingPublicationCycleImpl
+} from "../scripts/schedule-policy.mjs";
+
+const SLOT_TEST_NOW = Date.parse("2026-10-01T00:00:00.000Z");
+const CYCLE_TEST_NOW = Date.parse("2026-10-30T16:00:00.000Z");
+const validatePublicationSlot = (proposed, existing = [], options = {}) =>
+  validatePublicationSlotImpl(proposed, existing, { now: SLOT_TEST_NOW, ...options });
+const evaluateNextPublication = options =>
+  evaluateNextPublicationImpl({ now: SLOT_TEST_NOW, ...options });
+const validateRollingPublicationCycle = (items, options = {}) =>
+  validateRollingPublicationCycleImpl(items, { now: CYCLE_TEST_NOW, ...options });
 
 const evaluateWithVerifiedInventories = options => evaluateNextPublication({
   pendingAttempts: [],
@@ -34,6 +51,23 @@ test("next publication fails closed unless history, destination schedule and upl
   assert.equal(verified.valid, true, verified.errors.join("; "));
 });
 
+test("next-publication gate rejects a past proposed slot even when the 72-hour gap is sufficient", () => {
+  const result = evaluateNextPublication({
+    history: [{ id: "last", status: "private", actualPublishedAt: "2026-09-20T15:00:00Z", format: "long_form" }],
+    historyVerified: true,
+    pendingAttempts: [],
+    pendingAttemptsVerified: true,
+    scheduledItems: [],
+    scheduledItemsVerified: true,
+    proposedAt: "2026-09-25T15:00:00Z",
+    jobId: "past-next",
+    format: "long_form",
+    now: Date.parse("2026-10-01T00:00:00Z")
+  });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("proposed.scheduledAt must be in the future")));
+});
+
 test("strict timestamp validator requires timezone and rejects normalized invalid dates", () => {
   assert.equal(isValidZonedIsoTimestamp("2026-10-25T12:00:00+02:00"), true);
   assert.equal(isValidZonedIsoTimestamp("2026-10-25T10:00:00Z"), true);
@@ -56,6 +90,29 @@ test("publication slot compares actual instants and rejects same-local-date and 
   assert.ok(tooClose.errors.some(error => error.includes("48 hours is below the 72-hour minimum")));
   const enoughGap = validatePublicationSlot({ id: "new", scheduledAt: "2026-10-26T15:00:00.000Z" }, existing);
   assert.equal(enoughGap.valid, true);
+});
+
+test("publication slots reject past or current proposed times and stale active reservations", () => {
+  const now = Date.parse("2026-10-01T00:00:00.000Z");
+  for (const scheduledAt of ["2026-09-30T23:59:59.999Z", "2026-10-01T00:00:00.000Z"]) {
+    const result = validatePublicationSlot({ id: "not-future", scheduledAt }, [], { now });
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.includes("proposed.scheduledAt must be in the future"));
+  }
+
+  const staleReservation = validatePublicationSlot(
+    { id: "next", scheduledAt: "2026-10-20T15:00:00Z" },
+    [{ id: "missed-slot", status: "scheduled", scheduledAt: "2026-09-30T23:59:59Z" }],
+    { now }
+  );
+  assert.equal(staleReservation.valid, false);
+  assert.ok(staleReservation.errors.some(error => error.includes("missed-slot has a past scheduledAt")));
+
+  assert.equal(validatePublicationSlot(
+    { id: "future", scheduledAt: "2026-10-01T00:00:00.001Z" },
+    [],
+    { now }
+  ).valid, true);
 });
 
 test("published items use actual publication timestamps rather than their old planned slot", () => {
@@ -690,6 +747,27 @@ test("rolling-cycle owner approval requires a calendar-valid timezone-qualified 
   }
 });
 
+
+test("rolling-cycle validator rejects past scheduled items despite valid spacing and owner approval", () => {
+  const now = Date.parse("2026-10-30T16:00:00.000Z");
+  const items = [
+    { id: "cycle-1", contentType: "long_form", scheduledAt: "2026-10-30T15:59:59.999Z" },
+    { id: "cycle-2", contentType: "long_form", scheduledAt: "2026-11-02T15:59:59.999Z" },
+    { id: "cycle-3", contentType: "short", scheduledAt: "2026-11-05T15:59:59.999Z" }
+  ];
+  const ownerApprovedPolicy = {
+    ownerApproved: true,
+    approvedBy: "project-owner",
+    approvedAt: "2026-10-30T18:00:00+02:00",
+    timeZone: "Africa/Johannesburg",
+    minSpacingHours: 72,
+    mode: "rolling",
+    weeklyPublicationTarget: 1
+  };
+  const result = validateRollingPublicationCycle(items, { ownerApprovedPolicy, now });
+  assert.equal(result.valid, false);
+  assert.ok(result.errors.some(error => error.includes("cycle-1 scheduledAt must be in the future")));
+});
 
 test("rolling-cycle validator returns a structured error for an invalid timezone", () => {
   const items = [
