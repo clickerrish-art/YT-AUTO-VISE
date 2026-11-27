@@ -893,3 +893,39 @@ test("2027-01-11 wildlife documentary research Short stays evidence-led, private
   assert.doesNotMatch(JSON.stringify(week), /"(?:scheduledAt|publishedAt|publicationAt|actualPublishedAt)"\\s*:/i);
   assert.deepEqual(validatePlan(checkedInPlan, products), []);
 });
+
+test("2026-12-07 B-roll and editing Shorts have fresh qualitative SEO evidence and original-media production checks", () => {
+  const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-07");
+  const vault = products.find(row => row.id === "wildlife-creators-vault");
+  assert.ok(week && vault);
+  assert.equal(week.status, "DRAFT_ONLY");
+  assert.equal(week.items.length, 2);
+  for (const item of week.items) {
+    assert.equal(item.targetSeconds, 55);
+    assert.equal(item.status, "DRAFT_ONLY");
+    assert.equal(item.visibility, "private");
+    assert.equal(item.productUrl, vault.url);
+    assert.equal(item.disclosure.status, "APPROVED");
+    assert.equal(item.keywordEvidence.provider, "web_search");
+    assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
+    assert.equal(item.currentIntentEvidence.provider, "web_search");
+    assert.equal(item.currentIntentEvidence.type, "qualitative_search_intent");
+    assert.equal(item.keywordEvidence.researchedAt, item.currentIntentEvidence.researchedAt);
+    assert.match(item.keywordEvidence.note, /no measured global search volume/i);
+    assert.ok(item.keywordEvidence.sources.length >= 3);
+    assert.ok(item.currentIntentEvidence.sources.length >= 3);
+    assert.ok(item.keywordPhrases.length >= 3);
+    assert.ok(item.keywordPhrases.every(row =>
+      !["estimatedMonthlySearches", "volume", "volumeScore", "competition", "growthPct"].some(key => Object.hasOwn(row, key))
+    ));
+    assert.ok(item.productionChecklist.some(check => /original creator-captured wildlife footage/i.test(check)));
+    assert.ok(item.productionChecklist.some(check => /72 full hours/i.test(check)));
+    assert.ok(item.description.includes(vault.url));
+    assert.equal(item.publicationAt, undefined);
+    assert.equal(item.publishedAt, undefined);
+    assert.equal(item.scheduledAt, undefined);
+  }
+  assert.equal(checkedInPlan.publicationEnabled, false);
+  assert.equal(checkedInPlan.schedulingEnabled, false);
+  assert.deepEqual(validatePlan(checkedInPlan, products), []);
+});

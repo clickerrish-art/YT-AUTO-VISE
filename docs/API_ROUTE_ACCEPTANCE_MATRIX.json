@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-25T09:21:57Z",
+  "generatedAt": "2026-11-27T08:23:52Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
@@ -2707,18 +2707,18 @@
     "note": "Observed only. No branch-protection settings were changed."
   },
   "currentBranchTip": {
-    "head": "e941a32e36e2fe07c81814b6a1da34127efb202d",
-    "aheadBy": 5822,
+    "head": "31047745439194d6435f2ab8928ed0986d427648",
+    "aheadBy": 5842,
     "behindBy": 0,
-    "changedFiles": 586
+    "changedFiles": 589
   },
   "dailyLiveRefresh": {
-    "recordedAt": "2026-11-26T08:16:44Z",
-    "sourceTestSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
-    "branchHead": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+    "recordedAt": "2026-11-27T08:23:52Z",
+    "sourceTestSha": "31047745439194d6435f2ab8928ed0986d427648",
+    "branchHead": "31047745439194d6435f2ab8928ed0986d427648",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5829,
+    "aheadBy": 5842,
     "behindBy": 0,
     "changedFiles": 589,
     "pr1": {
@@ -2726,7 +2726,7 @@
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+      "headSha": "31047745439194d6435f2ab8928ed0986d427648",
       "changedFiles": 589
     },
     "pr7": {
@@ -2738,38 +2738,34 @@
       "changedFiles": 19,
       "exactHeadActionsRuns": 0
     },
-    "branchProtection": {
-      "main": false,
-      "implementationBranch": false
+    "exactHeadAutomation": {
+      "runId": 45963048286,
+      "conclusion": "failure_after_node_tests",
+      "nodeTestFiles": 194,
+      "nodeTests": 1158,
+      "failed": 0,
+      "skipped": 0,
+      "blocker": "promotional Shorts SEO evidence stale"
     },
-    "ci": {
-      "automation": {
-        "status": "PASS",
-        "runId": 45781400262,
-        "nodeTests": 1154,
-        "nodeTestFiles": 194,
-        "pythonTests": 113,
-        "failures": 0,
-        "skips": 0,
-        "npmAuditVulnerabilities": 0
-      },
-      "dashboard": {
-        "status": "PASS",
-        "runId": 45781400241,
-        "journeys": 41,
-        "passed": 41
-      },
-      "baselineComparison": {
-        "status": "PASS",
-        "runId": 45781400353
-      },
-      "productionReadiness": {
-        "status": "HOLD",
-        "runId": 45781400178,
-        "blockers": 35,
-        "publishingEnabled": false
-      }
+    "exactHeadDashboard": {
+      "runId": 45963048330,
+      "conclusion": "success",
+      "journeys": 41,
+      "passed": 41
+    },
+    "exactHeadReadiness": {
+      "runId": 45963048260,
+      "status": "HOLD",
+      "blockers": 35
+    },
+    "routeAcceptance": {
+      "status": "NOT_REEVALUATED",
+      "lastRouteSpecificEvidenceSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+      "routes": 50,
+      "lastRecordedPass": 41,
+      "lastRecordedBlocked": 9,
+      "lastRecordedAuthenticationNegativePass": 50
     }
   },
-  "currentHeadEvidenceNote": "Exact source/test SHA e941a32e36e2fe07c81814b6a1da34127efb202d: endpoint-specific local route tests are included in the full 1,154-test Node regression across 194 files; 113 Python tests, 50/50 protected-route authentication-negative checks and 41/41 Chromium dashboard journeys passed; npm audit reports zero vulnerabilities. This is local application/deterministic-fixture evidence only, not live provider acceptance, production deployment or remote publication."
+  "currentHeadEvidenceNote": "Exact branch head 31047745439194d6435f2ab8928ed0986d427648 has a 1,158-test Node regression pass (194 files, zero failures/skips) and 41/41 dashboard browser journeys. The automation workflow then failed at the promotional Shorts freshness validator. This is not a new route-specific positive acceptance run: retain the last route matrix snapshot at f547cecf9c330791a1dfe677da072cdfb50058e2 (50 routes; 41 PASS, 9 BLOCKED; 50/50 authentication-negative checks) and do not promote API-001. Current-head positive route acceptance remains NOT_REEVALUATED; API-001 remains BLOCKED. No live provider or production acceptance is inferred."
 }
