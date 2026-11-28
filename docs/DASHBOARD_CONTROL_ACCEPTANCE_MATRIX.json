@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-28T07:31:56.872Z",
+  "generatedAt": "2026-11-28T09:38:59+02:00",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "sourceHead": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
@@ -19638,7 +19638,7 @@
     "overallAcceptance": "NOT_TESTED",
     "note": "Exact SHA 5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef: Node 1,159/1,159 across 194 files; Python 113/113; npm audit 0; browser E2E 41/41. DASH-001 remains NOT_TESTED because exhaustive per-control business acceptance is incomplete."
   },
-  "refreshedAt": "2026-11-27T08:23:52Z",
+  "refreshedAt": "2026-11-28T09:38:59+02:00",
   "latestHeadVerification": {
     "sourceTestSha": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
     "browserRunId": 46120971312,
@@ -19694,21 +19694,21 @@
     "currentBranchBehindBy": 0
   },
   "latestExactHeadBrowserVerification": {
-    "sourceTestSha": "31047745439194d6435f2ab8928ed0986d427648",
-    "runId": 45963048330,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45963048330",
+    "sourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "runId": 46121693023,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693023",
     "journeys": 41,
     "passed": 41,
     "failed": 0,
     "skipped": 0
   },
   "dailyLiveRefresh": {
-    "recordedAt": "2026-11-28T07:31:56.872Z",
+    "recordedAt": "2026-11-28T09:38:59+02:00",
     "implementationBranch": "codex/marketing-machine-audit-fixes",
-    "branchHead": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
+    "branchHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5849,
+    "aheadBy": 5851,
     "behindBy": 0,
     "changedFiles": 591,
     "pr1": {
@@ -19716,7 +19716,7 @@
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
+      "headSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
       "changedFiles": 591,
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
     },
@@ -19727,186 +19727,36 @@
       "mergeable": false,
       "headSha": "7449c1b61dcd26811ee6e6d416a02180a7f1c1ec",
       "changedFiles": 19,
-      "exactHeadActionsRuns": 1,
-      "lastRunId": 43734414241,
-      "lastRunConclusion": "success",
-      "lastRunDate": "2026-11-15",
+      "exactHeadActionsRuns": 0,
+      "combinedStatusContexts": 0,
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/7"
     },
-    "ci": {
-      "exactHead": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
-      "totalRuns": 25,
-      "completedSuccess": 23,
-      "completedFailure": 2,
-      "active": 0,
-      "combinedStatusContexts": 0,
-      "automation": {
-        "runId": 46120971383,
-        "status": "PASS",
-        "nodeTestFiles": 194,
-        "nodeTests": 1159,
-        "nodeFailed": 0,
-        "nodeSkipped": 0,
-        "pythonTests": 113,
-        "pythonFailed": 0,
-        "pythonSkipped": 0,
-        "npmAuditVulnerabilities": 0,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971383"
-      },
-      "contentQuality": {
-        "runId": 46120971413,
-        "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971413"
-      },
-      "metadata": {
-        "runId": 46120971428,
-        "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971428"
-      },
-      "baselineComparison": {
-        "runId": 46120971281,
-        "status": "PASS",
-        "mainNodeTests": 54,
-        "mainPythonTests": 8,
-        "candidateNodeTests": 1159,
-        "candidatePythonTests": 113,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971281"
-      },
-      "dashboard": {
-        "runId": 46120971312,
-        "status": "PASS",
-        "browserJourneys": 41,
-        "passed": 41,
-        "failed": 0,
-        "skipped": 0,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971312"
-      },
-      "queueReadiness": {
-        "runId": 46120971337,
-        "status": "PASS",
-        "dispatchAllowed": false,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971337"
-      },
-      "productionReadiness": {
-        "runId": 46120971257,
-        "status": "HOLD",
-        "blockers": 35,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971257"
-      },
-      "deploymentRecovery": {
-        "runId": 46120971248,
-        "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971248"
-      },
-      "runnerBridge": {
-        "runId": 46120971327,
-        "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971327"
-      },
-      "durableState": {
-        "runId": 46120971350,
-        "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971350"
-      },
-      "durableStatePrValidation": {
-        "runId": 46120971277,
-        "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971277"
-      },
-      "failClosedSmoke": {
-        "runId": 46120971346,
-        "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971346"
-      },
-      "branchInventory": {
-        "runId": 46120971382,
-        "status": "PASS",
-        "aheadBy": 5849,
-        "behindBy": 0,
-        "changedFiles": 591,
-        "artifactId": 15253981798,
-        "artifactSha256": "sha256:0a73ee2bfff74285388df3f1e801d06ef0d3a5032d13a8757a0f83f82a27579b",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971382"
-      }
+    "currentHeadCi": {
+      "automationRunId": 46121693024,
+      "automationStatus": "FAIL",
+      "nodeTests": 1159,
+      "nodePassed": 1158,
+      "nodeFailed": 1,
+      "nodeSkipped": 0,
+      "npmAuditVulnerabilities": 0,
+      "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE"
     },
-    "acceptance": {
-      "requirementRows": 89,
-      "storedRequirementStatusCounts": {
-        "total": 89,
-        "PASS": 71,
-        "FAIL": 0,
-        "NOT_TESTED": 8,
-        "BLOCKED": 10
-      },
-      "storedCurrentHeadStatusCounts": {
-        "PASS": 68,
-        "NOT_TESTED": 8,
-        "PASS_STAGING": 1,
-        "BLOCKED": 12
-      },
-      "requirementRowsReevaluated": false,
-      "api": {
-        "routes": 50,
-        "lastRecordedPass": 41,
-        "lastRecordedBlocked": 9,
-        "lastRecordedAuthenticationNegativePass": 50,
-        "lastEvidenceSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
-        "currentHeadPositiveAcceptance": "NOT_REEVALUATED"
-      },
-      "dashboard": {
-        "controls": 121,
-        "forms": 17,
-        "formOwnedControls": 104,
-        "standaloneControls": 17,
-        "currentHeadBrowserJourneys": 41,
-        "currentHeadBrowserPassed": 41,
-        "overallAcceptance": "NOT_TESTED"
-      },
-      "statusHandling": "Stored row-level statuses retained; current branch/CI evidence refreshed without promoting unverified route, provider, deployment or production acceptance."
+    "browserE2E": {
+      "runId": 46121693023,
+      "status": "PASS",
+      "journeys": 41,
+      "passed": 41,
+      "failed": 0,
+      "skipped": 0
     },
-    "youtube": {
-      "channelHistoryLastVerifiedAt": "2026-11-23",
-      "lastKnownPublishedAtSast": "2026-10-22T17:05:56+02:00",
-      "ownerUploadAttemptAttestationStaleAfter": "2026-11-18",
-      "currentDestinationScheduleVisible": false,
-      "completePublishedHistoryVisible": false,
-      "spacingCheck": "UNVERIFIED",
-      "noPublicationOrScheduleCreated": true
+    "inventory": {
+      "controls": 121,
+      "forms": 17,
+      "formOwned": 104,
+      "standalone": 17,
+      "crossCuttingDimensions": 15
     },
-    "metricool": {
-      "exposedBrands": [
-        "Nature Frontiers SA (brandId 8094526)"
-      ],
-      "sonicVhibezYouTubeVisible": false,
-      "scheduledPostsFoundInCheckedRange": 0,
-      "checkedRange": "2026-11-28 through 2027-02-28",
-      "draftInventoryVisible": false,
-      "providerAutoPublishSettingVisible": false,
-      "previousBrandId7545638": "not accessible (HTTP 403)"
-    },
-    "content": {
-      "weekOf": "2026-11-30",
-      "preparedShorts": 2,
-      "maximumPerWeek": 2,
-      "publicationTimestamps": [],
-      "status": "DRAFT_ONLY",
-      "searchEvidenceDate": "2026-11-28",
-      "searchEvidenceType": "qualitative web search only; no measured volume",
-      "finishedMp4OrThumbnailVerified": false
-    },
-    "safety": {
-      "publishingDisabled": true,
-      "autoPublishingEnabled": false,
-      "noUploads": true,
-      "noScheduling": true,
-      "noAccountReconnection": true,
-      "noPaidSpend": true,
-      "natureFrontiersRepoFlags": {
-        "publishingEnabled": false,
-        "dryRun": true,
-        "emergencyStop": true
-      },
-      "providerDraftAndAutoPublishState": "UNVERIFIED"
-    }
+    "overallAcceptance": "NOT_TESTED",
+    "note": "The current exact-head browser journeys pass, but the dashboard's exhaustive per-control business acceptance remains NOT_TESTED. The older full Node/Python source snapshot remains separately recorded in currentHeadRefresh."
   }
 }

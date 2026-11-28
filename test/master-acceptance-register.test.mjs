@@ -10,7 +10,8 @@ const register = JSON.parse(fs.readFileSync(
 ));
 const rows = register.requirements;
 const byId = id => rows.find(row => row.id === id);
-const exactSha = register.currentExactHeadExecution.sourceTestSha;
+const exactSha = register.currentHeadSourceTestRefresh.sourceSha;
+const liveHeadSha = register.dailyLiveRefresh.branchHead;
 
 test("master acceptance register totals reconcile to all 89 requirements", () => {
   assert.equal(rows.length, 89);
@@ -28,10 +29,31 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
   assert.equal(refresh.fullRequirementReevaluation, false);
   assert.equal(refresh.externalAcceptancePromoted, 0);
   assert.deepEqual(refresh.currentHeadStatusCounts, { PASS: 68, NOT_TESTED: 8, PASS_STAGING: 1, BLOCKED: 12 });
-  assert.ok(rows.every(row => row.currentHeadEvidenceSha === exactSha));
-  assert.ok(rows.every(row => row.sourceTestEvidenceRefresh?.sourceSha === exactSha));
-  assert.equal(byId("CI-002").currentHeadStatus, "PASS");
-  assert.match(byId("CI-002").currentHeadEvidenceNote, /(?:combined|exact) isolated main\/candidate baseline run 45781400353 passed/i);
+  assert.ok(rows.every(row => /^[a-f0-9]{40}$/.test(row.currentHeadEvidenceSha ?? "")));
+  assert.ok(rows.every(row => row.sourceTestEvidenceRefresh?.sourceSha === row.currentHeadEvidenceSha));
+  const currentHeadStatusCounts = rows.reduce((result, row) => {
+    result[row.currentHeadStatus] = (result[row.currentHeadStatus] || 0) + 1;
+    return result;
+  }, {});
+  assert.deepEqual(currentHeadStatusCounts, register.currentHeadStatusCounts);
+  assert.deepEqual(register.currentHeadStatusCounts, { PASS: 67, FAIL: 1, NOT_TESTED: 8, PASS_STAGING: 1, BLOCKED: 12 });
+  assert.equal(byId("CI-002").currentHeadStatus, "FAIL");
+  assert.equal(byId("CI-002").currentHeadEvidenceSha, liveHeadSha);
+  assert.match(byId("CI-002").currentHeadEvidenceNote, /1,158 of 1,159 Node tests passed.*1 failed.*0 skipped/i);
+  assert.equal(register.latestCurrentHeadCiObservation.exactHead, liveHeadSha);
+  assert.equal(register.latestExactCiCheckpoint.branchHead, liveHeadSha);
+  assert.equal(register.currentExactHeadExecution.sourceTestSha, liveHeadSha);
+  assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeTests, 1159);
+  assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeFailed, 1);
+  assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeSkipped, 0);
+  assert.equal(register.latestExactCiCheckpoint.ci.automation.npmAuditVulnerabilities, 0);
+  assert.equal(register.latestExactCiCheckpoint.ci.dashboard.status, "PASS");
+  assert.equal(register.latestExactCiCheckpoint.ci.dashboard.passed, 41);
+  assert.equal(register.latestExactCiCheckpoint.ci.productionReadiness.status, "HOLD");
+  assert.equal(register.latestExactCiCheckpoint.ci.productionReadiness.blockers, 35);
+  assert.equal(register.latestFullPassingCiCheckpoint.ci.automation.nodeTests, 1159);
+  assert.equal(register.latestFullPassingCiCheckpoint.ci.automation.nodeFailed, 0);
+  assert.equal(register.latestFullPassingCiCheckpoint.ci.automation.nodeSkipped, 0);
   assert.ok(register.currentHeadOpenDependencies.some(item => item.id === "ORIGINAL-WILDLIFE-FOOTAGE" && item.status === "BLOCKED"));
 });
 
@@ -57,16 +79,18 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.equal(api.liveProviderAcceptance, "NOT_TESTED");
   assert.match(api.currentHeadEvidenceNote, /interrupted SUBMITTING.*concurrent reconciliation fencing/i);
   assert.match(api.nextAction, /owner-renewed Meta Page token.*exact one-shot authorization/i);
-  assert.equal(register.latestExactCiCheckpoint.exactSourceTestSha, exactSha);
-  assert.equal(register.latestExactCiCheckpoint.nodeTests.passed, 1154);
-  assert.equal(register.latestExactCiCheckpoint.nodeTests.failed, 0);
-  assert.equal(register.latestExactCiCheckpoint.nodeTests.skipped, 0);
-  assert.equal(register.latestExactCiCheckpoint.browserE2EStatus, "PASS");
+  assert.equal(register.latestExactCiCheckpoint.branchHead, liveHeadSha);
+  assert.equal(register.latestExactCiCheckpoint.ci.automation.status, "FAIL");
+  assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeFailed, 1);
+  assert.equal(register.latestExactCiCheckpoint.ci.dashboard.status, "PASS");
+  assert.equal(register.latestFullPassingCiCheckpoint.ci.automation.nodeTests, 1159);
+  assert.equal(register.latestFullPassingCiCheckpoint.ci.automation.nodeFailed, 0);
+  assert.equal(register.latestFullPassingCiCheckpoint.ci.automation.nodeSkipped, 0);
 
   const dashboard = byId("DASH-001");
   assert.equal(dashboard.status, "NOT_TESTED");
   assert.equal(dashboard.currentHeadStatus, "NOT_TESTED");
-  assert.equal(dashboard.currentHeadEvidenceSha, exactSha);
+  assert.equal(dashboard.currentHeadEvidenceSha, liveHeadSha);
   assert.match(dashboard.currentHeadEvidenceNote, /121\/121 controls/);
   assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
   assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
@@ -75,26 +99,26 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
 
   const state = byId("STATE-001");
   assert.equal(state.status, "PASS");
-  assert.equal(state.currentHeadEvidenceSha, exactSha);
+  assert.equal(state.currentHeadEvidenceSha, liveHeadSha);
   assert.match(state.currentHeadEvidenceNote, /deployment recovery smoke/i);
   assert.match(state.currentHeadEvidenceNote, /runner-bridge safety/);
 
   const worker = byId("SCHED-WORKER-DISPATCH-001");
   assert.equal(worker.status, "NOT_TESTED");
-  assert.equal(worker.currentHeadEvidenceSha, exactSha);
+  assert.equal(worker.currentHeadEvidenceSha, liveHeadSha);
   assert.match(worker.currentHeadEvidenceNote, /all 38 test\/worker-runner\.test\.mjs cases/);
   assert.match(worker.currentHeadEvidenceNote, /retained process lock when cooldown persistence fails/);
   assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
 
   const scheduler = byId("SCHED-001");
   assert.equal(scheduler.status, "NOT_TESTED");
-  assert.equal(scheduler.currentHeadEvidenceSha, exactSha);
+  assert.equal(scheduler.currentHeadEvidenceSha, liveHeadSha);
   assert.match(scheduler.currentHeadEvidenceNote, /manual\/local\/third-party attempt attestation/i);
   assert.match(scheduler.nextAction, /fresh owner attestation/);
 
   const deployment = byId("DEPLOY-001");
   assert.equal(deployment.status, "NOT_TESTED");
-  assert.equal(deployment.currentHeadEvidenceSha, exactSha);
+  assert.equal(deployment.currentHeadEvidenceSha, liveHeadSha);
   assert.match(deployment.currentHeadEvidenceNote, /No SonicVhibez production render\/publisher Worker/i);
 });
 
@@ -112,7 +136,7 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
   const worker = byId("SCHED-WORKER-DISPATCH-001");
   assert.equal(worker.status, "NOT_TESTED");
   assert.equal(worker.currentHeadStatus, "NOT_TESTED");
-  assert.equal(worker.currentHeadEvidenceSha, exactSha);
+  assert.equal(worker.currentHeadEvidenceSha, liveHeadSha);
   assert.match(worker.currentHeadEvidenceNote, /persisted HTTP 409 preflight cooldown across restart/);
   assert.match(worker.currentHeadEvidenceNote, /fail-stop with retained process lock when cooldown persistence fails/);
   assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
@@ -137,9 +161,11 @@ test("master completion register mirrors the acceptance totals and release hold"
 test("FFmpeg and zero-skip requirements have exact current CI evidence", () => {
   const ffmpeg = byId("CI-FFMPEG-001");
   assert.equal(ffmpeg.currentHeadStatus, "PASS");
+  assert.equal(ffmpeg.currentHeadEvidenceSha, liveHeadSha);
   assert.match(ffmpeg.currentHeadEvidenceNote, /ffmpeg and ffprobe before Node tests/i);
   assert.match(ffmpeg.currentHeadEvidenceNote, /N-129000-g64f6bcffaf-20261117/);
   const skips = byId("CI-TEST-SKIPS-001");
   assert.equal(skips.currentHeadStatus, "PASS");
-  assert.match(skips.currentHeadEvidenceNote, /1,154 Node tests across 194 files, .*zero failures and zero skips/i);
+  assert.equal(skips.currentHeadEvidenceSha, liveHeadSha);
+  assert.match(skips.currentHeadEvidenceNote, /1,159 Node tests across 194 files, 1,158 passed, 1 failed and zero skips/i);
 });

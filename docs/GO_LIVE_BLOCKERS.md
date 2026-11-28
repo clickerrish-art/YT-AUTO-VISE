@@ -1,4 +1,65 @@
-# Current verified checkpoint — 26 November 2026
+# Current verified checkpoint — 28 November 2026
+
+**Overall decision: HOLD — no upload, schedule, publication or public automation is authorized.**
+
+## Exact Git state
+
+- Repository: [clickerrish-art/YT-AUTO-VISE](https://github.com/clickerrish-art/YT-AUTO-VISE)
+- Implementation branch `codex/marketing-machine-audit-fixes`, observed HEAD `ee1dae17fb242d7427c0edd0d9d5113a7d32b584`.
+- `main` and merge base: `3795519ccbf58fd02d74458624b58dd2e44a88c0` (main untouched).
+- Divergence: **5,851 ahead / 0 behind**, **591 changed files**.
+- [PR #1](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1): **OPEN / DRAFT / UNMERGED / mergeable=true**, 591 files.
+- [PR #7](https://github.com/clickerrish-art/YT-AUTO-VISE/pull/7): **OPEN / DRAFT / UNMERGED / mergeable=false**, head `7449c1b61dcd26811ee6e6d416a02180a7f1c1ec`, 19 files; no Actions runs or combined status for that exact head.
+- No main write, merge, close, ready-for-review change, rebase, reset, force-push or history rewrite occurred. Branch protection remains disabled on main and the implementation branch.
+
+## Exact-HEAD Actions — `ee1dae17fb242d7427c0edd0d9d5113a7d32b584`
+
+The commit query returned **17 Actions runs: 11 successful, 6 failed, 0 active**. The combined-status endpoint returned **zero legacy contexts**.
+
+- Automation/security [run 46121693024](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693024): **1,158/1,159 Node tests passed across 194 files; 1 failed; 0 skipped**. The failure is one stale assertion in `test/master-acceptance-register.test.mjs:60`: it expects `latestExactCiCheckpoint.exactSourceTestSha` and `nodeTests.passed`, while the checked-in register uses `branchHead` and `ci.automation`. Locked dependency audit passed with **0 vulnerabilities**. Python tests were not reached because the Node step failed.
+- Dashboard Chromium E2E [run 46121693023](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693023): **41/41 passed**.
+- The content-quality [46121693017](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693017), metadata [46121693148](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693148), queue-readiness [46121693042](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693042) and baseline [46121693021](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693021) workflows also failed at the same Node regression assertion; no queue dispatch occurred.
+- Deployment recovery [46121693215](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693215), runner-bridge safety [46121693221](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693221), durable-state unit [46121693190](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693190), durable-state PR validation [46121693124](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693124), fail-closed staging smoke [46121693025](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693025) and branch inventory [46121693213](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693213) passed.
+- Production readiness [run 46121693155](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693155): **HOLD — 35 blockers**, expected fail-closed result, not a production pass.
+
+## Acceptance status — exact and conservative
+
+- Stored 89-row requirement statuses remain **71 PASS / 0 FAIL / 8 NOT_TESTED / 10 BLOCKED**; the full 89-row requirement review is not complete.
+- Current-head classification is **67 PASS / 1 FAIL / 8 NOT_TESTED / 1 PASS_STAGING / 12 BLOCKED**. CI-002 is FAIL on this exact head because of the stale test assertion; it is not being marked PASS.
+- API matrix: **50 routes; last route-specific evidence 41 PASS / 0 NOT_TESTED / 9 BLOCKED; 50/50 authentication-negative checks**. No new positive route acceptance is promoted on this head; API-001 remains BLOCKED.
+- Dashboard matrix: **121 controls, 17 forms, 104 form-owned, 17 standalone, 15 cross-cutting dimensions**. Browser E2E is 41/41 on this exact head, but DASH-001 remains NOT_TESTED pending exhaustive per-control business acceptance.
+
+## SonicVhibez YouTube history and spacing
+
+- The connected YouTube channel identity listing exposes SonicVibes `@sonicvhibez` / `UCSlkuPfHH78oGC1o418HV4w` separately from Nature Frontiers. This verifies identity only; no paid video-history lookup was used.
+- The latest complete authenticated history remains **23 November 2026**: one public legacy Short `LjePS02hA1o`, zero private/unlisted items and no scheduled timestamp in that inventory. Last known actual publication: **22 October 2026, 17:05:56 Africa/Johannesburg**.
+- From that last-known timestamp to the observation time **28 November 2026, 09:38:59 Africa/Johannesburg**, the elapsed gap is **36 days, 16 hours, 33 minutes, 03 seconds**. This historical gap is not a live clearance: the inventory is stale, the manual/local/third-party upload-attempt attestation is stale after 18 November, and the complete SonicVhibez destination schedule is not visible.
+- **72-hour spacing: UNVERIFIED.** No publication slot was assigned; do not schedule or publish.
+
+## Promotional Shorts — drafts only
+
+The checked-in plan remains capped at two Shorts per week, with `publicationEnabled=false` and `schedulingEnabled=false`. The week of **30 November 2026** already contains exactly two private `DRAFT_ONLY` items:
+
+1. **How to Fact-Check Wildlife Videos Before You Publish** — primary phrase `how to fact-check wildlife videos`.
+2. **Wildlife Documentary Shot List: 3 Shots to Plan** — primary phrase `wildlife documentary shot list`.
+
+Both link only to [Complete YouTube Wildlife Creator's Vault](https://selar.com/0u19v8u99l) and carry the owner-approved `ADVERTISEMENT` plus direct-sales disclosure. The 28 November search note is qualitative intent evidence from UK Parliament, SRF, Maryland DNR, NSW Department of Education, Audubon and Concolor Media; **no measured global volume, competition or trend metric is available**. No third Short was added because the weekly cap is full. The seller registry identifies Click 47, last live-verified 21 November; the listing could not be re-fetched on 28 November. No final MP4, narration, captions or thumbnail was verified.
+
+## Metricool and Nature Frontiers separation
+
+- Metricool exposes only **Nature Frontiers SA (brandId 8094526)**, not a distinct SonicVhibez/Sonic Fire YouTube destination. The scheduled-post query for **28 November 2026–28 February 2027** returned **zero scheduled posts**. Legacy brand **7545638** returns **403 Forbidden**.
+- Metricool does not expose the unscheduled draft inventory or provider autoPublish flags. Existing Nature Frontiers draft status and provider auto-publish state therefore remain **UNVERIFIED**.
+- Local Nature Frontiers Facebook configuration remains `publishingEnabled=false`, `dryRun=true`, `emergencyStop=true`, `providerDraftsEnabled=false`; Instagram remains `publishingEnabled=false`, `dryRun=true`, `emergencyStop=true`. No provider post was changed.
+
+## Safety and next action
+
+Public publishing, live scheduling, uploads, account reconnection, paid spend and auto-publishing remain disabled. HeyGen was not used; no render is claimed. Safari affiliate remains inactive. Original creator-captured footage, rights, owner-approved narration, final media assets, exact-hash human review, fresh YouTube history/attempt attestation, complete destination schedule and a destination-safe end-to-end test remain release blockers.
+
+**Next action:** fix the stale acceptance-register test assertion against the actual JSON schema, then rerun the exact-head regression and dependent CI workflows. Keep PR #1 open and draft.
+
+---
+
+# Historical checkpoint — 26 November 2026
 
 **Overall decision: HOLD — no upload, schedule, publication or public automation is authorized.** This checkpoint supersedes the historical 21 November and 19 November snapshots below.
 
