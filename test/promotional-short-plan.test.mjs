@@ -596,7 +596,7 @@ test("November 30 wildlife shot-list Short uses current qualitative intent and t
 });
 
 
-test("December 7 wildlife video-editing Short uses fresh vidIQ estimates and the exact approved Vault disclosure", () => {
+test("December 7 wildlife video-editing Short uses fresh qualitative search intent and the exact approved Vault disclosure", () => {
   const week = checkedInPlan.weeks.find(row => row.weekOf === "2026-12-07");
   const item = week?.items.find(row => row.id === "sonicvhibez-short-012-wildlife-video-editing");
   const product = products.find(row => row.id === "wildlife-creators-vault");
@@ -610,11 +610,15 @@ test("December 7 wildlife video-editing Short uses fresh vidIQ estimates and the
   assert.equal(item.title, "Wildlife Video Editing: 3 Passes for a Clearer Story");
   assert.equal(item.primaryKeyword, "wildlife video editing");
   assert.equal(item.productUrl, product.url);
-  assert.equal(item.keywordEvidence.provider, "vidIQ");
-  assert.equal(item.keywordEvidence.type, "estimated_monthly_searches");
-  assert.equal(item.keywordPhrases[0].estimatedMonthlySearches, 8456);
-  assert.equal(item.keywordPhrases[0].competition, 18);
-  assert.match(item.keywordEvidence.note, /provider estimates, not independently audited/i);
+  assert.equal(item.keywordEvidence.provider, "web_search");
+  assert.equal(item.keywordEvidence.type, "qualitative_search_intent");
+  assert.match(item.keywordEvidence.note, /no measured global search volume/i);
+  assert.equal(item.keywordEvidence.estimatedMonthlySearches, undefined);
+  assert.ok(item.keywordEvidence.sources.length >= 3);
+  assert.equal(item.keywordEvidence.researchedAt, item.currentIntentEvidence.researchedAt);
+  assert.ok(item.keywordPhrases.every(row =>
+    !["estimatedMonthlySearches", "volume", "volumeScore", "competition", "growthPct"].some(key => Object.hasOwn(row, key))
+  ));
   assert.equal(item.disclosure.status, "APPROVED");
   assert.equal(item.disclosure.approvalReference, product.promotionGate.disclosure.approvalReference);
   assert.ok(item.script.indexOf("Advertisement.") < item.script.indexOf(product.promotionGate.disclosure.text));
