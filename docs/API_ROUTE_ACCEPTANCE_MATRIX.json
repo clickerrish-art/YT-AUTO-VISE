@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-27T08:23:52Z",
+  "generatedAt": "2026-11-28T07:31:56.872Z",
   "repository": "clickerrish-art/YT-AUTO-VISE",
   "branch": "codex/marketing-machine-audit-fixes",
   "testedSourceTestSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
@@ -15,32 +15,32 @@
       "GET /readyz",
       "GET /operational-readyz"
     ],
-    "branchAheadBy": 5664,
+    "branchAheadBy": 5849,
     "branchBehindBy": 0,
-    "changedFiles": 552,
+    "changedFiles": 591,
     "branchProtectionEnabled": false,
     "branchProtectionStatus": "UNVERIFIED — GitHub branch-protection endpoint returns HTTP 403; owner-side settings are not independently visible.",
-    "comparisonSourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+    "comparisonSourceSha": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303393",
+    "latestInventoryRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971382",
     "latestCompareEvidence": {
-      "sourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
-      "aheadBy": 5664,
+      "sourceSha": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
+      "aheadBy": 5849,
       "behindBy": 0,
-      "changedFilesInPullRequest": 552,
-      "inventoryArtifactRunId": 45162303393,
-      "inventoryArtifactId": 14810998321,
-      "inventoryArtifactSha256": "sha256:845319ce728874137e9c712ee27c1e82e56061c4aed3549eccda657347858348"
+      "changedFilesInPullRequest": 591,
+      "inventoryArtifactRunId": 46120971382,
+      "inventoryArtifactId": 15253981798,
+      "inventoryArtifactSha256": "sha256:0a73ee2bfff74285388df3f1e801d06ef0d3a5032d13a8757a0f83f82a27579b"
     },
     "latestAutomationRun": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
-    "latestInventoryArtifactId": 14810998321,
-    "latestInventoryArtifactSha256": "sha256:845319ce728874137e9c712ee27c1e82e56061c4aed3549eccda657347858348",
+    "latestInventoryArtifactId": 15253981798,
+    "latestInventoryArtifactSha256": "sha256:0a73ee2bfff74285388df3f1e801d06ef0d3a5032d13a8757a0f83f82a27579b",
     "latestAutomationRunSourceSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
-    "inventoryHeadSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
-    "latestInventorySourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
-    "latestInventoryRunId": 45162303393,
-    "branchTipAtEvidenceRefresh": "a7e8cb38c39444632bd22d603811217fea1527e0",
-    "branchTipAheadBy": 5664,
+    "inventoryHeadSha": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
+    "latestInventorySourceTestSha": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
+    "latestInventoryRunId": 46120971382,
+    "branchTipAtEvidenceRefresh": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
+    "branchTipAheadBy": 5849,
     "branchTipBehindBy": 0
   },
   "counts": {
@@ -2713,21 +2713,22 @@
     "changedFiles": 589
   },
   "dailyLiveRefresh": {
-    "recordedAt": "2026-11-27T08:23:52Z",
-    "sourceTestSha": "31047745439194d6435f2ab8928ed0986d427648",
-    "branchHead": "31047745439194d6435f2ab8928ed0986d427648",
+    "recordedAt": "2026-11-28T07:31:56.872Z",
+    "implementationBranch": "codex/marketing-machine-audit-fixes",
+    "branchHead": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5842,
+    "aheadBy": 5849,
     "behindBy": 0,
-    "changedFiles": 589,
+    "changedFiles": 591,
     "pr1": {
       "state": "open",
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "31047745439194d6435f2ab8928ed0986d427648",
-      "changedFiles": 589
+      "headSha": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
+      "changedFiles": 591,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
     },
     "pr7": {
       "state": "open",
@@ -2736,36 +2737,187 @@
       "mergeable": false,
       "headSha": "7449c1b61dcd26811ee6e6d416a02180a7f1c1ec",
       "changedFiles": 19,
-      "exactHeadActionsRuns": 0
+      "exactHeadActionsRuns": 1,
+      "lastRunId": 43734414241,
+      "lastRunConclusion": "success",
+      "lastRunDate": "2026-11-15",
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/7"
     },
-    "exactHeadAutomation": {
-      "runId": 45963048286,
-      "conclusion": "failure_after_node_tests",
-      "nodeTestFiles": 194,
-      "nodeTests": 1158,
-      "failed": 0,
-      "skipped": 0,
-      "blocker": "promotional Shorts SEO evidence stale"
+    "ci": {
+      "exactHead": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
+      "totalRuns": 25,
+      "completedSuccess": 23,
+      "completedFailure": 2,
+      "active": 0,
+      "combinedStatusContexts": 0,
+      "automation": {
+        "runId": 46120971383,
+        "status": "PASS",
+        "nodeTestFiles": 194,
+        "nodeTests": 1159,
+        "nodeFailed": 0,
+        "nodeSkipped": 0,
+        "pythonTests": 113,
+        "pythonFailed": 0,
+        "pythonSkipped": 0,
+        "npmAuditVulnerabilities": 0,
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971383"
+      },
+      "contentQuality": {
+        "runId": 46120971413,
+        "status": "PASS",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971413"
+      },
+      "metadata": {
+        "runId": 46120971428,
+        "status": "PASS",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971428"
+      },
+      "baselineComparison": {
+        "runId": 46120971281,
+        "status": "PASS",
+        "mainNodeTests": 54,
+        "mainPythonTests": 8,
+        "candidateNodeTests": 1159,
+        "candidatePythonTests": 113,
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971281"
+      },
+      "dashboard": {
+        "runId": 46120971312,
+        "status": "PASS",
+        "browserJourneys": 41,
+        "passed": 41,
+        "failed": 0,
+        "skipped": 0,
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971312"
+      },
+      "queueReadiness": {
+        "runId": 46120971337,
+        "status": "PASS",
+        "dispatchAllowed": false,
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971337"
+      },
+      "productionReadiness": {
+        "runId": 46120971257,
+        "status": "HOLD",
+        "blockers": 35,
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971257"
+      },
+      "deploymentRecovery": {
+        "runId": 46120971248,
+        "status": "PASS",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971248"
+      },
+      "runnerBridge": {
+        "runId": 46120971327,
+        "status": "PASS",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971327"
+      },
+      "durableState": {
+        "runId": 46120971350,
+        "status": "PASS",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971350"
+      },
+      "durableStatePrValidation": {
+        "runId": 46120971277,
+        "status": "PASS",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971277"
+      },
+      "failClosedSmoke": {
+        "runId": 46120971346,
+        "status": "PASS",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971346"
+      },
+      "branchInventory": {
+        "runId": 46120971382,
+        "status": "PASS",
+        "aheadBy": 5849,
+        "behindBy": 0,
+        "changedFiles": 591,
+        "artifactId": 15253981798,
+        "artifactSha256": "sha256:0a73ee2bfff74285388df3f1e801d06ef0d3a5032d13a8757a0f83f82a27579b",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46120971382"
+      }
     },
-    "exactHeadDashboard": {
-      "runId": 45963048330,
-      "conclusion": "success",
-      "journeys": 41,
-      "passed": 41
+    "acceptance": {
+      "requirementRows": 89,
+      "storedRequirementStatusCounts": {
+        "total": 89,
+        "PASS": 71,
+        "FAIL": 0,
+        "NOT_TESTED": 8,
+        "BLOCKED": 10
+      },
+      "storedCurrentHeadStatusCounts": {
+        "PASS": 68,
+        "NOT_TESTED": 8,
+        "PASS_STAGING": 1,
+        "BLOCKED": 12
+      },
+      "requirementRowsReevaluated": false,
+      "api": {
+        "routes": 50,
+        "lastRecordedPass": 41,
+        "lastRecordedBlocked": 9,
+        "lastRecordedAuthenticationNegativePass": 50,
+        "lastEvidenceSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
+        "currentHeadPositiveAcceptance": "NOT_REEVALUATED"
+      },
+      "dashboard": {
+        "controls": 121,
+        "forms": 17,
+        "formOwnedControls": 104,
+        "standaloneControls": 17,
+        "currentHeadBrowserJourneys": 41,
+        "currentHeadBrowserPassed": 41,
+        "overallAcceptance": "NOT_TESTED"
+      },
+      "statusHandling": "Stored row-level statuses retained; current branch/CI evidence refreshed without promoting unverified route, provider, deployment or production acceptance."
     },
-    "exactHeadReadiness": {
-      "runId": 45963048260,
-      "status": "HOLD",
-      "blockers": 35
+    "youtube": {
+      "channelHistoryLastVerifiedAt": "2026-11-23",
+      "lastKnownPublishedAtSast": "2026-10-22T17:05:56+02:00",
+      "ownerUploadAttemptAttestationStaleAfter": "2026-11-18",
+      "currentDestinationScheduleVisible": false,
+      "completePublishedHistoryVisible": false,
+      "spacingCheck": "UNVERIFIED",
+      "noPublicationOrScheduleCreated": true
     },
-    "routeAcceptance": {
-      "status": "NOT_REEVALUATED",
-      "lastRouteSpecificEvidenceSha": "f547cecf9c330791a1dfe677da072cdfb50058e2",
-      "routes": 50,
-      "lastRecordedPass": 41,
-      "lastRecordedBlocked": 9,
-      "lastRecordedAuthenticationNegativePass": 50
+    "metricool": {
+      "exposedBrands": [
+        "Nature Frontiers SA (brandId 8094526)"
+      ],
+      "sonicVhibezYouTubeVisible": false,
+      "scheduledPostsFoundInCheckedRange": 0,
+      "checkedRange": "2026-11-28 through 2027-02-28",
+      "draftInventoryVisible": false,
+      "providerAutoPublishSettingVisible": false,
+      "previousBrandId7545638": "not accessible (HTTP 403)"
+    },
+    "content": {
+      "weekOf": "2026-11-30",
+      "preparedShorts": 2,
+      "maximumPerWeek": 2,
+      "publicationTimestamps": [],
+      "status": "DRAFT_ONLY",
+      "searchEvidenceDate": "2026-11-28",
+      "searchEvidenceType": "qualitative web search only; no measured volume",
+      "finishedMp4OrThumbnailVerified": false
+    },
+    "safety": {
+      "publishingDisabled": true,
+      "autoPublishingEnabled": false,
+      "noUploads": true,
+      "noScheduling": true,
+      "noAccountReconnection": true,
+      "noPaidSpend": true,
+      "natureFrontiersRepoFlags": {
+        "publishingEnabled": false,
+        "dryRun": true,
+        "emergencyStop": true
+      },
+      "providerDraftAndAutoPublishState": "UNVERIFIED"
     }
   },
-  "currentHeadEvidenceNote": "Exact branch head 31047745439194d6435f2ab8928ed0986d427648 has a 1,158-test Node regression pass (194 files, zero failures/skips) and 41/41 dashboard browser journeys. The automation workflow then failed at the promotional Shorts freshness validator. This is not a new route-specific positive acceptance run: retain the last route matrix snapshot at f547cecf9c330791a1dfe677da072cdfb50058e2 (50 routes; 41 PASS, 9 BLOCKED; 50/50 authentication-negative checks) and do not promote API-001. Current-head positive route acceptance remains NOT_REEVALUATED; API-001 remains BLOCKED. No live provider or production acceptance is inferred."
+  "currentHeadEvidenceNote": "Exact current branch SHA 5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef: 1,159 Node tests across 194 files and 113 Python tests passed with zero failures/skips; npm audit 0; dashboard browser E2E 41/41. Production readiness remains HOLD with 35 owner/live prerequisites. This is not a new route-specific positive API acceptance run: retain last route evidence at f547cecf9c330791a1dfe677da072cdfb50058e2 (50 routes; 41 PASS, 9 BLOCKED; 50/50 authentication-negative). Current-head positive route acceptance remains NOT_REEVALUATED."
 }
