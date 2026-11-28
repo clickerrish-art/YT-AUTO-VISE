@@ -95,7 +95,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(dashboard.currentHeadEvidenceNote, /121\/121 controls/);
   assert.match(dashboard.currentHeadEvidenceNote, /17\/17 forms/);
   assert.match(dashboard.currentHeadEvidenceNote, /15\/15 cross-cutting dimensions/);
-  assert.match(dashboard.currentHeadEvidenceNote, /(?:41\/41 Chromium journeys|browser E2E 41\/41 PASS)/i);
+  assert.match(dashboard.currentHeadEvidenceNote, /(?:41\/41 Chromium journeys|browser E2E 41\/41 PASS|passed 41\/41 journeys)/i);
   assert.match(dashboard.currentHeadEvidenceNote, /(?:overallAcceptance is NOT_TESTED|Overall DASH-001 remains NOT_TESTED)/i);
 
   const state = byId("STATE-001");
@@ -109,7 +109,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.equal(worker.currentHeadEvidenceSha, liveHeadSha);
   assert.match(worker.currentHeadEvidenceNote, /all 38 test\/worker-runner\.test\.mjs cases/);
   assert.match(worker.currentHeadEvidenceNote, /retained process lock when cooldown persistence fails/);
-  assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
+  assert.match(worker.currentHeadEvidenceNote, /Live production Worker dispatch remains NOT_TESTED/i);
 
   const scheduler = byId("SCHED-001");
   assert.equal(scheduler.status, "NOT_TESTED");
@@ -140,7 +140,7 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
   assert.equal(worker.currentHeadEvidenceSha, liveHeadSha);
   assert.match(worker.currentHeadEvidenceNote, /persisted HTTP 409 preflight cooldown across restart/);
   assert.match(worker.currentHeadEvidenceNote, /fail-stop behaviour on persistence failure/i);
-  assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
+  assert.match(worker.currentHeadEvidenceNote, /Live production Worker dispatch remains NOT_TESTED/i);
 
   const scheduler = byId("SCHED-001");
   assert.equal(scheduler.status, "NOT_TESTED");
