@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez Marketing Machine",
+  "checkedAt": "2026-11-21",
+  "status": "PARTIAL_STAGING_INFRASTRUCTURE_ONLY_PRODUCTION_BLOCKED",
+  "mode": "READ_ONLY_CLOUDFLARE_ACCOUNT_AND_RESOURCE_RECONCILIATION",
+  "source": "Live Cloudflare API inspection",
+  "accountSecurity": {
+    "enforceTwofactor": false,
+    "interpretation": "Account-wide two-factor enforcement is disabled. Do not change it through automation; account owner must enable and verify it without locking out existing operators."
+  },
+  "workers": {
+    "scripts": [
+      {
+        "name": "hello-world",
+        "role": "unrelated-default-test-worker"
+      },
+      {
+        "name": "nature-frontiers-browser-qc",
+        "role": "Nature Frontiers browser QA"
+      },
+      {
+        "name": "nature-frontiers-publisher",
+        "role": "Separate Nature Frontiers publisher"
+      },
+      {
+        "name": "sonicvhibez-durable-state-staging",
+        "role": "SonicVhibez staging state/dashboard Worker"
+      }
+    ],
+    "sonicvhibezProductionPublisherPresent": false,
+    "staging": {
+      "name": "sonicvhibez-durable-state-staging",
+      "lastModified": "2026-11-14T19:06:41.127025Z",
+      "latestDeployment": "9a9bfd4c-208c-4dd8-93b0-5f84cdf3356c",
+      "deploymentCount": 7,
+      "cronSchedules": 0,
+      "bindings": [
+        {
+          "name": "STATE_DB",
+          "type": "d1",
+          "database": "sonicvhibez-state-staging"
+        },
+        {
+          "name": "ARTIFACTS",
+          "type": "r2_bucket",
+          "bucket": "sonicvhibez-artifacts-staging"
+        },
+        {
+          "name": "DASHBOARD_OPERATOR_ID",
+          "type": "secret_text"
+        },
+        {
+          "name": "DASHBOARD_OPERATOR_TOKEN",
+          "type": "secret_text"
+        }
+      ]
+    }
+  },
+  "d1": {
+    "database": "sonicvhibez-state-staging",
+    "databaseId": "f018ee20-2d7f-41ec-9744-ee058bce80f8",
+    "region": "ENAM",
+    "readReplication": "disabled",
+    "tableCount": 6,
+    "rowCounts": {
+      "dashboard_state": 1,
+      "dashboard_backups": 5,
+      "runner_state": 0,
+      "runner_control": 0,
+      "runner_artifacts": 0,
+      "runner_artifact_parts": 0
+    },
+    "verification": "Read-only sqlite_master schema query and individual COUNT(*) queries; zero rows written",
+    "listEndpointDiscrepancy": "The D1 list endpoint returned num_tables=0 while the direct database detail endpoint and sqlite_master query confirm six tables. Direct detail/schema evidence is used.",
+    "dashboardState": {
+      "present": true,
+      "revision": 3,
+      "updatedAt": "2026-11-15T09:52:22.168Z",
+      "schemaVersion": 1,
+      "publishingEnabled": false,
+      "publicPublishingEnabled": false,
+      "unattendedPublishingEnabled": false,
+      "arrayCounts": {
+        "queueItems": 16,
+        "audit": 4,
+        "jobs": 0,
+        "uploads": 0,
+        "campaigns": 3,
+        "facebookDrafts": 0,
+        "facebookPosts": 0,
+        "facebookAttempts": 0
+      },
+      "utf8Bytes": 11011
+    },
+    "backupIntegrity": {
+      "checkedAt": "2026-11-21",
+      "count": 5,
+      "checksumAndSchemaVerified": 5,
+      "total": 5,
+      "latestCreatedAt": "2026-11-15T09:52:22.168Z",
+      "latestSourceRevision": 2,
+      "note": "Each retained dashboard_backups.state_json SHA-256 was recomputed read-only using Web Crypto and matched the stored checksum; each JSON payload parsed as schema version 1. This verifies stored backup bytes, not independent restore."
+    },
+    "restoreStatus": "NOT_TESTED_INDEPENDENT_RESTORE_REQUIRED",
+    "runnerOperationalState": {
+      "jobs": 0,
+      "uploads": 0,
+      "runnerStateRows": 0,
+      "runnerControlRows": 0,
+      "runnerArtifactsRows": 0,
+      "runnerArtifactPartsRows": 0,
+      "interpretation": "Staging dashboard snapshot exists, but no production job execution or durable runner/artifact lifecycle has been recorded in D1."
+    }
+  },
+  "r2": {
+    "bucketBindingConfigured": true,
+    "bucketName": "sonicvhibez-artifacts-staging",
+    "accountBucketListStatus": "BLOCKED",
+    "errorCode": 10042,
+    "errorMessage": "Please enable R2 through the Cloudflare Dashboard.",
+    "bucketObjectsAndArchiveVerified": false,
+    "interpretation": "The Worker binding declaration does not prove R2 activation, bucket accessibility, object durability or restore capability. Owner activation is required; no billing or bucket changes were attempted."
+  },
+  "safety": {
+    "providerMutationsPerformed": false,
+    "workersCreatedOrUpdated": false,
+    "deploymentsCreated": false,
+    "cronSchedulesChanged": false,
+    "databasesChanged": false,
+    "r2Activated": false,
+    "bucketsCreated": false,
+    "billingOrPaidResourcesAuthorized": false
+  },
+  "blockers": [
+    "No SonicVhibez production publisher Worker.",
+    "R2 is not activated for account API listing; staging archive and restore cannot be verified.",
+    "Staging runner state, control and artifact tables contain zero records.",
+    "No staging cron schedules are configured.",
+    "Account-wide two-factor enforcement is disabled.",
+    "Production backup, independent restore, monitoring, deployment provenance and rollback remain unverified."
+  ],
+  "requiredNextActions": [
+    "Owner enables R2 in Cloudflare Dashboard only after confirming the account remains within the zero-cost requirement; then re-run bucket/object/restore verification.",
+    "Owner enables account-wide two-factor enforcement and confirms all operators retain access.",
+    "Resolve and test the staging Worker's legacy OIDC trust before any runner dispatch.",
+    "Implement or deploy a separate SonicVhibez production Worker only after production storage, secrets, least-privilege OIDC, monitoring and rollback are verified.",
+    "Populate runner state/control/artifact records through an approved non-publishing staging lifecycle test, then verify restart and independent restore."
+  ],
+  "oidcTrust": {
+    "deployedWorker": "sonicvhibez-durable-state-staging",
+    "deployedWorkerContentReadOnlyInspection": true,
+    "trustedRepository": "clickerrish-art/YT-AUTO-VISE",
+    "trustedRef": "refs/heads/codex/cloudflare-adapter-integration-20261108",
+    "trustedWorkflow": "clickerrish-art/YT-AUTO-VISE/.github/workflows/repository-runner.yml@refs/heads/codex/cloudflare-adapter-integration-20261108",
+    "requiredEvent": "workflow_dispatch",
+    "currentTrustedBranchHead": "d07abb7079d2a7870b1649d7c74e1abd841e7751",
+    "sourceWorkflowInspection": {
+      "workflowPath": ".github/workflows/repository-runner.yml",
+      "workflowJobsCondition": "if: ${{ false }}",
+      "idTokenWritePermissionPresent": false,
+      "repositoryRunnerInputDefault": false,
+      "stagingSmokeInputDefault": false,
+      "state": "SOURCE_FAIL_CLOSED"
+    },
+    "risk": "The deployed staging Worker still accepts OIDC claims pinned to the legacy branch. The corresponding repository-runner workflow is currently source-disabled and has no id-token: write permission, which prevents the normal workflow path from minting the expected token. The stale trust remains in the deployed Worker and must be retired or migrated only after replacement trust is verified.",
+    "dispatchPermitted": false,
+    "deploymentMutationPerformed": false
+  }
+}

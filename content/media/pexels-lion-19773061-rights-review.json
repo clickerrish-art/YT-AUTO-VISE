@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "assetId": "pexels-video-19773061",
+  "project": "SonicVhibez",
+  "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+  "source": {
+    "platform": "Pexels",
+    "pageUrl": "https://www.pexels.com/video/roar-of-majesty-captivating-moments-with-the-kings-of-the-savanna-19773061/",
+    "creator": "Agung Dewa",
+    "pageTitle": "Roar of Majesty: Captivating Moments with the Kings of the Savanna",
+    "description": "Close-up of a powerful male lion resting on grassy savannah.",
+    "pageMetadata": {
+      "durationSeconds": 8,
+      "width": 3840,
+      "height": 2160,
+      "aspectRatio": "16:9",
+      "frameRate": 59.94,
+      "licenseLabel": "Free to use"
+    },
+    "metadataCheckedAt": "2026-11-22"
+  },
+  "licenseReview": {
+    "source": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/legal-pages/license/",
+    "termsUrl": "https://www.pexels.com/terms-of-service/",
+    "checkedAt": "2026-11-22",
+    "platformCommercialUse": "PERMITTED_SUBJECT_TO_LICENSE_AND_TERMS",
+    "attributionRequired": false,
+    "modificationPermitted": true,
+    "restrictions": [
+      "Do not redistribute or sell the clip on a stock or wallpaper platform.",
+      "Do not imply endorsement by any depicted person or brand.",
+      "Do not use the content as a trademark, design mark, trade name, business name or service mark.",
+      "Do not sell or distribute the clip as a standalone unmodified asset.",
+      "Check separately for third-party intellectual-property, privacy, property, publicity and other rights."
+    ],
+    "officialEvidence": [
+      "https://help.pexels.com/hc/en-us/articles/360042295214-Can-I-use-the-photos-and-videos-for-a-commercial-project",
+      "https://help.pexels.com/hc/en-us/articles/360042295174-What-is-the-license-of-the-photos-and-videos-on-Pexels"
+    ],
+    "platformLicenseIsNotProofOfThirdPartyReleases": true
+  },
+  "acquisition": {
+    "attempted": true,
+    "completed": true,
+    "source": "User-provided chat upload",
+    "uploadedFilename": "19773061-uhd_3840_2160_60fps.mp4",
+    "fileSizeBytes": 14199596,
+    "sha256": "3dfddd23c90673eb1fcf240dc3a74c72fadc68c18ca9705c9512c686002e9aac",
+    "repositoryMediaCopyCommitted": false,
+    "notes": "The exact user-provided file was hashed locally. It is not committed into the repository; preserve the original upload and use the hash to identify this copy."
+  },
+  "inspection": {
+    "playable": true,
+    "ffprobe": {
+      "videoCodec": "h264",
+      "width": 2560,
+      "height": 1440,
+      "frameRate": "60000/1001",
+      "durationSeconds": 8.063333,
+      "audioCodec": "aac",
+      "audioSampleRateHz": 48000,
+      "audioChannels": 2,
+      "creationTimeUtc": "2024-01-06T23:30:31Z"
+    },
+    "sourceVsLocalDiscrepancy": "Pexels listing reports 3840x2160; user-provided copy is 2560x1440. It is not the full-resolution source download.",
+    "representativeFramesReviewed": true,
+    "fullClipReviewed": true,
+    "embeddedAudioReviewed": false,
+    "visiblePeopleLogosTrademarksReviewed": true,
+    "speciesIndependentlyConfirmed": false,
+    "behaviourConfirmed": "Resting lion visible; source page description identifies a male lion."
+  },
+  "approvals": {
+    "ownerRightsDeclaration": "USER_CONFIRMED_COPYRIGHT_FREE_AND_PROVIDED_EXACT_PEXELS_SOURCE",
+    "platformCommercialRights": "PERMITTED_SUBJECT_TO_PEXELS_LICENSE",
+    "humanRightsReview": "PLATFORM_LICENSE_REVIEWED_THIRD_PARTY_RIGHTS_NOT_INDEPENDENTLY_ASSESSED",
+    "scientificEditorialApproval": "NOT_RECEIVED",
+    "finalProductionApproved": false
+  },
+  "releaseDecision": "DO NOT USE IN CURRENT PRODUCTION — REFERENCE ONLY; ORIGINAL CREATOR-CAPTURED MEDIA REQUIRED",
+  "currentProductionDisposition": {
+    "status": "EXCLUDED_REFERENCE_ONLY",
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "reason": "This Pexels stock-library source is not eligible under the current owner policy. Genuine original creator-captured wildlife media is required; stock footage cannot substitute, regardless of the platform licence."
+  },
+  "historicalStatus": "CANDIDATE_ALLOWED_FOR_REVIEW_UNDER_OWNER_POLICY_2026-11-22"
+}

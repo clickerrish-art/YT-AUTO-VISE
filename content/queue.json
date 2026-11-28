@@ -1,20 +1,43 @@
 {
   "cadence": {
-    "postsPerWeek": 3,
-    "days": [
-      "Tuesday",
-      "Thursday",
-      "Saturday"
+    "publicationCycleId": "sonicvhibez-rolling-cycle-v1",
+    "formats": [
+      "long_form",
+      "long_form",
+      "short"
     ],
+    "minimumHoursBetweenConsecutivePublications": 72,
+    "minimumCycleHours": 216,
     "timezone": "Africa/Johannesburg",
-    "breakdown": {
-      "longForm": 2,
-      "short": 1
+    "draftPreparationFallback": {
+      "days": [
+        "Tuesday",
+        "Saturday"
+      ],
+      "breakdown": {
+        "longForm": 1,
+        "short": 1
+      },
+      "status": "DRAFT_ONLY",
+      "notPublicationCadence": true
     },
-    "note": "Target cadence only. This queue does not itself schedule or publish. Public publishing remains disabled until each item passes rights, content, media, metadata, and channel-identity checks."
+    "note": "Draft preparation only. Actual publication is governed by the rolling three-publication cycle and verified remote history; no weekly publication count is promised."
   },
   "publishingEnabled": false,
   "items": [
+    {
+      "id": "long-form-001-two-eyes-above-water",
+      "contentType": "long_form",
+      "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
+      "topic": "Nile crocodile waterline posture, sensory systems and shoreline ambush behaviour",
+      "targetMinutes": {
+        "min": 6,
+        "max": 10
+      },
+      "status": "SCRIPT_READY_PRODUCTION_HOLD_ORIGINAL_MEDIA_NARRATION_RIGHTS_AND_HUMAN_REVIEW_REQUIRED",
+      "hasPaidPromotion": false,
+      "productionNotes": "Owner-confirmed first long-form topic. Non-commercial educational documentary; no Selar URL, product CTA or paid promotion. Production requires genuine original creator-captured wildlife footage, verified creator/capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled."
+    },
     {
       "id": "long-form-plan-wildlife-video",
       "contentType": "long_form",
@@ -27,21 +50,8 @@
         "max": 10
       },
       "status": "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
-      "productionNotes": "Use content/long-form-scripts.md. Narration/audio/caption artifact must be generated and reviewed; add verified rights-cleared visuals and complete content/long-form-render-manifest.json before rendering."
-    },
-    {
-      "id": "long-form-faceless-wildlife-workflow",
-      "contentType": "long_form",
-      "title": "A Beginner Workflow for Faceless Wildlife Videos",
-      "topic": "faceless wildlife video production workflow",
-      "productUrl": "https://selar.com/0u19v8u99l",
-      "scheduledDay": "Saturday",
-      "targetMinutes": {
-        "min": 6,
-        "max": 10
-      },
-      "status": "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
-      "productionNotes": "Use content/long-form-scripts.md. Narration/audio/caption artifact must be generated and reviewed; add verified rights-cleared visuals and complete content/long-form-render-manifest.json before rendering."
+      "productionNotes": "Owner-confirmed second long-form topic after the Nile crocodile documentary. Creator-education content with the exact owner-approved direct-sales disclosure. Production requires genuine original creator-captured wildlife footage, verified creator/capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-vault-001",
@@ -49,15 +59,19 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "status": "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
       "contentType": "short",
-      "scheduledDay": "Thursday",
-      "targetSeconds": 55
+      "scheduledDay": "Saturday",
+      "targetSeconds": 55,
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-vault-002",
       "topic": "Three Ways to Plan a Wildlife Documentary Short",
       "productUrl": "https://selar.com/0u19v8u99l",
       "status": "script_and_captions_ready_needs_media_and_review",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-story-structure",
@@ -77,7 +91,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-footage-rights",
@@ -97,7 +113,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-documentary-plan",
@@ -117,7 +135,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-natural-behavior",
@@ -137,7 +157,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-hook-without-clickbait",
@@ -157,7 +179,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-caption-readability",
@@ -177,7 +201,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-natural-sound",
@@ -197,7 +223,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-fact-checking",
@@ -217,7 +245,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-thumbnail-truth",
@@ -237,7 +267,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-editing-pacing",
@@ -257,7 +289,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-research-before-shoot",
@@ -277,7 +311,9 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     },
     {
       "id": "wildlife-short-description-seo",
@@ -297,7 +333,58 @@
       "productUrl": "https://selar.com/0u19v8u99l",
       "targetSeconds": 55,
       "status": "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
-      "contentType": "short"
+      "contentType": "short",
+      "productionNotes": "Planning/script evidence only. Production requires genuine original creator-captured wildlife footage with verified creator, capture provenance, matching source-file SHA-256, written commercial rights, approved narration, synchronized captions, technical validation and human review. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. Keep publishing disabled.",
+      "hasPaidPromotion": true
     }
-  ]
+  ],
+  "version": 2,
+  "productionPolicy": {
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "narrator": "No production narrator approved; Speechma Andrew is selected for a manual zero-cost audition only.",
+    "narrationCommercialRightsStatus": "NO_PRODUCTION_NARRATOR_APPROVED; EXISTING_HEYGEN_RODERIC_WAV_INTERNAL_ONLY; SPEECHMA_OUTPUT_LICENSE_SUBJECT_TO_THIRD_PARTY_RIGHTS; NO_AUDIO_GENERATED_OR_APPROVED",
+    "alternativeNarratorAuthorized": false,
+    "paidUpgradeAuthorized": false,
+    "publishingEnabled": false,
+    "releaseRequiresExactHashRightsAndHumanApproval": true,
+    "selectedNarrationAuditionCandidate": {
+      "provider": "Speechma",
+      "name": "Andrew",
+      "voiceId": null,
+      "voiceIdStatus": "NOT_INDEPENDENTLY_VERIFIED",
+      "voiceType": "Standard",
+      "language": "English",
+      "accent": "United States",
+      "ownerSelectionStatus": "SELECTED_FOR_ZERO_COST_MANUAL_BROWSER_AUDITION_ONLY",
+      "auditionStatus": "NOT_GENERATED",
+      "manualBrowserOnly": true,
+      "automationAllowed": false,
+      "securityCodeRequiredPerGeneration": true,
+      "maximumCharactersPerStandardConversion": 2000,
+      "browserHistoryLocalOnly": true,
+      "outputFormat": "MP3",
+      "commercialUseStatus": "SPEECHMA_TERMS_LICENSE_LAWFUL_OUTPUTS_SUBJECT_TO_THIRD_PARTY_RIGHTS",
+      "commercialUseAllowed": true,
+      "productionApproved": false,
+      "publicationAuthorized": false,
+      "paidApiAuthorized": false,
+      "note": "No output file, exact hash, human listening approval or production approval exists. Download and retain the MP3 after manual browser generation."
+    },
+    "pexelsAllowed": false,
+    "pixabayAllowed": false,
+    "mediaPolicyEvidence": "config/media-production-policy.json",
+    "licenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+    "stockVideoFootageAllowed": false,
+    "stockPhotographsAllowed": false,
+    "status": "ORIGINAL_CREATOR_CAPTURED_ONLY_STOCK_REFERENCE_ONLY"
+  },
+  "notes": "SonicVhibez production uses genuine original creator-captured wildlife media only. Stock/library footage and AI-generated wildlife visuals are prohibited substitutes. All queue items remain draft-only and publishingEnabled=false.",
+  "originalCreatorCapturedMediaRequired": true,
+  "aiGeneratedWildlifeVisualsRequired": false,
+  "aiGeneratedWildlifeVisualsAllowed": false,
+  "userVideoUploadRequired": false,
+  "stockMediaAllowed": false,
+  "mediaProductionPolicyStatus": "AI_GENERATED_RECONSTRUCTION_REQUIRED; STOCK_REVIEW_ONLY"
 }

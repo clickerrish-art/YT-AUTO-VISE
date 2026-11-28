@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "contentId": "short-001-wildlife-video-storytelling",
+  "createdAt": "2026-11-22T01:46:00Z",
+  "output": {
+    "filename": "SonicVhibez_Short001_Visual_Review_ONLY.mp4",
+    "sha256": "c90491f31fc8de1dd7095eeec78f9e9642cf7e3ae7944417b1415c7f5d158844",
+    "durationSeconds": 55.033333,
+    "width": 720,
+    "height": 1280,
+    "frameRate": 30,
+    "sizeBytes": 35350995,
+    "videoCodec": "h264",
+    "pixelFormat": "yuv420p",
+    "fullDecode": "PASS",
+    "audio": "NONE"
+  },
+  "status": "REVIEW_ONLY_NOT_RELEASE_CLEARED",
+  "assetsUsed": [
+    {
+      "assetId": "pexels-11528208",
+      "creator": "lifeofhicham",
+      "sourceUrl": "https://www.pexels.com/video/a-lion-walkin-in-a-field-11528208/",
+      "sha256": "ace119137620bbdf6b372504f8e1dbae9bdd7ee9febe86a667d597ac6d46bada",
+      "durationSeconds": 6.868333,
+      "usage": "Separate illustrative example; not presented as one encounter"
+    },
+    {
+      "assetId": "pexels-11760785",
+      "creator": "ROMAN ODINTSOV",
+      "sourceUrl": "https://www.pexels.com/video/an-african-elephant-mother-and-her-baby-in-a-grassland-11760785/",
+      "sha256": "3417c7da10506e28124faece24b908e842a58b3e99d340d013f62c375d8c4e57",
+      "durationSeconds": 18.623333,
+      "usage": "Separate illustrative example; not the same location/story as lion clips"
+    },
+    {
+      "assetId": "pexels-29765785",
+      "creator": "Lorenzo Boldorini",
+      "sourceUrl": "https://www.pexels.com/video/resting-lions-in-african-safari-habitat-29765785/",
+      "sha256": "f01daff991cb07920e63f1a5914e3f4bc94cb32ec56cb676a5951c38aba256a6",
+      "durationSeconds": 12.16,
+      "usage": "Resting-lion example; visible dark collar/strap noted on screen; context unverified"
+    }
+  ],
+  "excludedAssets": [
+    {
+      "assetId": "pexels-31702128",
+      "creator": "MC G'Zay",
+      "reason": "Visible chain-link enclosure and partial foreground person; excluded from this edit."
+    }
+  ],
+  "outstanding": [
+    "Commercially usable narration not yet generated and approved",
+    "Full human playback and third-party-rights review",
+    "Resolve resting-lion collar/strap context",
+    "Final 1080x1920 export",
+    "Final captions synchronized to actual narration",
+    "Thumbnail and metadata approval",
+    "Owner approval bound to exact final hashes",
+    "Private upload authorization and remote verification"
+  ],
+  "publication": {
+    "uploaded": false,
+    "scheduled": false,
+    "published": false,
+    "rightsConfirmed": false,
+    "complianceReviewed": false,
+    "releaseEligible": false
+  }
+}

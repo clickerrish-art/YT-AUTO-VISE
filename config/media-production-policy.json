@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "status": "MANDATORY",
+  "productionVisualMode": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+  "userVideoUploadRequired": false,
+  "allowRepurposingExistingProjectMaterial": false,
+  "stockAndThirdPartyVideoProductionAllowed": false,
+  "qualityProfile": "ORIGINAL_WILDLIFE_DOCUMENTARY_NO_SLOP",
+  "requiredQualityChecks": [
+    "species and animal anatomy accuracy",
+    "natural, physically plausible animal movement",
+    "coherent habitat, lighting and scene continuity",
+    "no morphing, extra limbs, duplicate animals or visual artifacts",
+    "no repeated filler shots or misleading behavior",
+    "clean editorial pacing, sound and captions"
+  ],
+  "syntheticMediaDisclosureRequired": false,
+  "syntheticMediaDisclosureText": "",
+  "humanVisualReviewRequired": true,
+  "zeroCostDefault": true,
+  "paidGenerationRequiresExplicitOwnerApproval": true,
+  "policyScope": {
+    "brand": "SonicVhibez",
+    "platforms": [
+      "youtube"
+    ],
+    "mediaMode": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+    "notApplicableTo": [
+      "Nature Frontiers"
+    ]
+  },
+  "originalCreatorCapturedMediaRequired": true,
+  "aiGeneratedWildlifeVisualsAllowed": false,
+  "stockMediaAllowed": false,
+  "stockVideoFootageAllowed": false,
+  "stockPhotographsAllowed": false,
+  "pexelsAllowed": false,
+  "pixabayAllowed": false,
+  "notes": "Production wildlife visuals must be genuine original creator-captured footage or photographs with creator identity, capture provenance, matching source-file SHA-256, written commercial-use rights, third-party-rights review and human visual approval. Generic stock/library footage and AI-generated wildlife visuals are prohibited substitutes. No qualifying original media package is currently recorded. A narrowly scoped owner-approved AI-visual exception exists only for the named Nile crocodile long-form documentary; source hashes, generation provenance, provider usage rights, disclosure and exact-hash human review remain mandatory. Global and all other production policies remain original-capture-only.",
+  "projectExceptions": [
+    {
+      "exceptionId": "SONICVHIBEZ_NILE_CROCODILE_AI_VISUALS_2026_11",
+      "projectTitle": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
+      "contentType": "long_form",
+      "ownerAuthorization": "EXPLICIT_USER_APPROVAL_IN_CHAT",
+      "approvedAt": "2026-11-24",
+      "aiGeneratedWildlifeVisualsAllowed": true,
+      "stockMediaAllowed": false,
+      "requireSourceFileSha256": true,
+      "requireGenerationProvenance": true,
+      "requireProviderUsageRightsEvidence": true,
+      "requireSyntheticMediaDisclosure": true,
+      "requireHumanVisualReview": true,
+      "scope": "This documentary only; no other SonicVhibez or Nature Frontiers production."
+    }
+  ]
+}

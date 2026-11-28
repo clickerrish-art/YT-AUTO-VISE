@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "asset": "nile-crocodile-documentary-001",
+  "sourceScript": {
+    "path": "content/nile-crocodile-documentary-001-draft.md",
+    "blobSha256": "58080f8d690274acb3feefd512108003bfbb98cd",
+    "version": "Production script v1 — Research draft, not approved for narration"
+  },
+  "reviewType": "DESK_RESEARCH_CROSS_CHECK_NOT_INDEPENDENT_SIGNOFF",
+  "reviewedAt": "2026-11-20",
+  "findings": [
+    {
+      "claim": "Eyes, ears and nostrils are positioned high on the head; nostrils can close underwater.",
+      "result": "SUPPORTED",
+      "source": "San Diego Zoo Wildlife Alliance Nile Crocodile Fact Sheet — Physical Characteristics",
+      "url": "https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/characteristics",
+      "editorialNote": "Use accurate close-up footage; do not suggest that the crocodile is fully invisible."
+    },
+    {
+      "claim": "The tail provides the main forward thrust when swimming.",
+      "result": "SUPPORTED",
+      "source": "San Diego Zoo Wildlife Alliance Nile Crocodile Fact Sheet — Behavior & Ecology",
+      "url": "https://ielc.libguides.com/sdzg/factsheets/nile_crocodile/behavior",
+      "editorialNote": "Describe swimming footage only when the footage actually shows swimming."
+    },
+    {
+      "claim": "Diet changes with age; juveniles eat insects and small fish, while adults take a broad range of prey and carrion.",
+      "result": "SUPPORTED",
+      "source": "IUCN Crocodile Specialist Group — Crocodylus niloticus species account",
+      "url": "https://iucncsg.org/crocodylians/crocodylus-niloticus/",
+      "editorialNote": "Avoid implying that every individual eats every listed prey type."
+    },
+    {
+      "claim": "Females nest in sandy soil on elevated riverbank sites; nesting and parental care are part of the species' reproductive biology.",
+      "result": "SUPPORTED",
+      "source": "IUCN Crocodile Specialist Group — Crocodylus niloticus species account",
+      "url": "https://iucncsg.org/crocodylians/crocodylus-niloticus/",
+      "editorialNote": "Do not simulate nesting, hatching or maternal behaviour if authentic footage is unavailable."
+    },
+    {
+      "claim": "Incubation temperature influences hatchling sex.",
+      "result": "SUPPORTED",
+      "source": "USGS Nonindigenous Aquatic Species — Nile Crocodile Species Profile",
+      "url": "https://nas.er.usgs.gov/queries/FactSheet.aspx?SpeciesID=2273",
+      "editorialNote": "The draft's general wording is acceptable; avoid oversimplifying temperature ranges or suggesting one universal threshold."
+    },
+    {
+      "claim": "The species is globally Least Concern, while the South African regional assessment is Vulnerable.",
+      "result": "SUPPORTED_WITH_DATE_AND_SCOPE",
+      "sources": [
+        {
+          "name": "IUCN Crocodile Specialist Group — species account",
+          "url": "https://iucncsg.org/crocodylians/crocodylus-niloticus/",
+          "note": "Global Least Concern assessment; CSG page identifies the global assessment as Least Concern."
+        },
+        {
+          "name": "SANBI, 2023 SURICATA 10 regional assessment",
+          "url": "https://www.sanbi.org/wp-content/uploads/2024/06/2023_Suricata10.pdf",
+          "note": "South African regional Vulnerable A2ac; the assessment rationale cites a decline exceeding 30% over three generations."
+        }
+      ],
+      "editorialNote": "Keep global and South African regional categories explicitly separate, as the draft currently does."
+    },
+    {
+      "claim": "Nile crocodiles occupy rivers, lakes, wetlands and other suitable aquatic habitats across much of sub-Saharan Africa.",
+      "result": "SUPPORTED",
+      "source": "IUCN Crocodile Specialist Group — Crocodylus niloticus species account",
+      "url": "https://iucncsg.org/crocodylians/crocodylus-niloticus/",
+      "editorialNote": "Location-specific statements still require provenance for the actual footage."
+    }
+  ],
+  "editorialCorrectionsRecommended": [
+    {
+      "priority": "LOW",
+      "location": "Opening",
+      "currentWording": "one of Africa's most powerful predators",
+      "recommendation": "Consider 'one of Africa's largest aquatic predators' to avoid an imprecise superlative."
+    },
+    {
+      "priority": "HIGH",
+      "location": "All scene descriptions",
+      "recommendation": "Do not describe the Pexels candidate as underwater, hunting, attacking, swimming or showing a particular behaviour until its original MP4 has been inspected. Its source-page description says it depicts a crocodile basking on a riverbank."
+    }
+  ],
+  "reviewLimitations": [
+    "This is a source-based desk review, not a qualified independent scientific/editorial review.",
+    "The original footage has not been acquired, so species, location, date, behaviour and narration-to-picture accuracy cannot yet be confirmed.",
+    "No final narration, captions, edit or export exists for review.",
+    "No independent reviewer identity, qualifications or written sign-off has been received."
+  ],
+  "acceptance": {
+    "factualDeskCheck": "PARTIAL_PASS",
+    "scriptOwnerApproval": "NOT_RECEIVED",
+    "qualifiedIndependentReview": "NOT_RECEIVED",
+    "footageMatchReview": "NOT_TESTED",
+    "narrationAndCaptionReview": "NOT_TESTED",
+    "finalEditorialApproval": "NOT_APPROVED"
+  }
+}

@@ -1,42 +1,43 @@
-# Reviewed wildlife-footage renderer
+# Original creator-captured wildlife-footage renderer
 
-A separate renderer now exists at `scripts/render-reviewed-wildlife-footage.py`. It does not change the scheduled draft workflow or upload anything. It is an opt-in production path for when you have actual footage files and have checked each clip's rights.
+The renderer at `scripts/render-reviewed-wildlife-footage.py` accepts only genuine original creator-captured wildlife recordings. Pexels, Pixabay, other stock footage and AI-generated wildlife visuals are rejected as production substitutes. Stock candidate inventories may be retained for provenance research, but they cannot be passed to this renderer.
 
-## Prepare the footage folder
+The renderer is a review-draft component only. It never marks output ready to publish, uploads, schedules or publishes.
 
-Create `media/approved-footage/` locally, put your permitted video files in that folder, and create `media/approved-footage/manifest.json` in this format:
+## Prepare original footage
+
+Create `media/approved-footage/` locally and place original camera files inside it. Create `media/approved-footage/manifest.json` with exact file hashes and capture provenance:
 
 ```json
 {
   "clips": [
     {
+      "sourceMethod": "ORIGINAL_RECORDING",
+      "creatorCapturedOriginal": true,
+      "creatorIdentity": "Actual camera operator / creator",
+      "captureProvenance": "How and when the original camera recording was captured",
       "file": "clip-01.mp4",
-      "sourceUrl": "https://official-source.example/asset-page",
-      "licenseBasis": "Specific license or written permission reviewed; note any attribution/usage conditions",
-      "attribution": "Required creator/agency credit, or 'No attribution required' only if the terms confirm it",
-      "rightsReviewed": true
-    },
-    {
-      "file": "clip-02.mp4",
-      "sourceUrl": "https://official-source.example/another-asset",
-      "licenseBasis": "Specific license or written permission reviewed",
-      "attribution": "Required credit",
-      "rightsReviewed": true
+      "sourceUrl": "Owner-controlled source record or original capture reference",
+      "licenseBasis": "Creator-owned original recording; any depicted third-party permissions documented separately",
+      "attribution": "Accurate creator credit",
+      "originalSha256": "64-character SHA-256 of the exact original MP4",
+      "rightsReviewed": false,
+      "reviewOnly": true
     }
   ]
 }
 ```
 
-Replace every example value with the real asset information. The `rightsReviewed` flag is a human attestation, not a license check performed by code. Do not set it to true until you have read the exact asset's terms, checked third-party material, and recorded attribution requirements. Keep source/license evidence alongside your project records.
+Replace every example with true source data. Never use placeholders as evidence. The capture-provenance and creator-identity fields must be supported by the original file and creator record. A SHA-256 proves file identity, not ownership or permissions. Third-party rights, location, people, property, trademarks, music, factual accuracy and human visual review remain separate checks.
 
 ## Render and verify
 
-After the queue-generation workflow has created exactly one current narration package, run:
+After a current narration package has been created and independently reviewed, run:
 
 ```bash
 python scripts/render-reviewed-wildlife-footage.py
 ```
 
-Requires FFmpeg and Mutagen (already installed in the GitHub generation workflow environment). The output is `media/rendered-drafts/*-FOOTAGE-REVIEW.mp4`, with a separate evidence JSON. Each clip is placed into an equal segment of the narration. The script deliberately leaves metadata on HOLD, with `rightsConfirmed=false` and `complianceReviewed=false`. Captions still need timing correction and the complete video needs a human review.
+The output is written under `media/rendered-drafts/` with a separate evidence JSON. The renderer requires exactly one queued metadata JSON, a 50–60 second narration MP3, captions, original footage files and matching SHA-256 values. Incomplete rights or human review keeps the result on HOLD. It does not grant publication authorization.
 
-This is a rendering component, not a fully unattended stock-footage sourcing service. It does not download arbitrary footage, infer licenses, confirm factual claims, upload to YouTube, or enable public posting.
+Pexels/Pixabay source inventories and platform-license research are not substitutes for original camera-captured wildlife footage and cannot be selected in this renderer.

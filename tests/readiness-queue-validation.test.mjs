@@ -14,7 +14,7 @@ test("readiness report safely diagnoses malformed queue JSON without crashing", 
       encoding: "utf8",
       env: { ...process.env, QUEUE_PATH: queuePath }
     });
-    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.status, 2, result.stderr);
     assert.match(result.stdout, /content\/queue\.json is not valid JSON/);
     assert.doesNotMatch(result.stderr, /SyntaxError/);
   } finally {
@@ -38,7 +38,7 @@ test("readiness report flags duplicate queue IDs", () => {
       encoding: "utf8",
       env: { ...process.env, QUEUE_PATH: queuePath }
     });
-    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.status, 2, result.stderr);
     assert.match(result.stdout, /Queue contains duplicate item IDs/);
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });

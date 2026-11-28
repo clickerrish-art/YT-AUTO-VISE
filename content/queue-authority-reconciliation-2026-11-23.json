@@ -1,0 +1,218 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-23T11:15:00Z",
+  "repository": "clickerrish-art/YT-AUTO-VISE",
+  "branch": "codex/marketing-machine-audit-fixes",
+  "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+  "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+  "status": "ENGINEERING_GUARD_IMPLEMENTED_OWNER_APPROVAL_PENDING",
+  "sourceEvidence": {
+    "automation": {
+      "status": "PASS",
+      "runId": 45162303476,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303476",
+      "nodeTestFiles": 192,
+      "nodeTests": 1136,
+      "nodeFailed": 0,
+      "nodeSkipped": 0,
+      "pythonTests": 108,
+      "pythonFailed": 0,
+      "pythonSkipped": 0,
+      "npmAuditVulnerabilities": 0
+    },
+    "branchInventory": {
+      "runId": 45162303393,
+      "artifactId": 14810998321,
+      "artifactSha256": "sha256:845319ce728874137e9c712ee27c1e82e56061c4aed3549eccda657347858348",
+      "head": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "aheadBy": 5664,
+      "behindBy": 0,
+      "changedFiles": 552,
+      "deletions": 0,
+      "criticalModules": 17,
+      "workingTreeClean": true,
+      "patchEquivalentCommits": 0
+    },
+    "productionReadiness": {
+      "status": "HOLD",
+      "runId": 45162303536,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303536",
+      "head": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "blockerCount": 22,
+      "artifactId": 14812105244,
+      "artifactSha256": "sha256:bbbbbf22d93283282804e719c78b2ad14f2740e3a60a44b08cb0243e138ff1d1",
+      "publishingEnabled": false
+    },
+    "queueReadiness": {
+      "status": "PASS_FAIL_CLOSED",
+      "runId": 45162303581,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303581",
+      "artifactId": 14813085678,
+      "artifactSha256": "sha256:8f2651703e7fb666609b8aadcc6ff66883e10ab319fd7d30e493fd636dad76c5",
+      "ownerQueueIdentityApproval": "BLOCKED_ABSENT",
+      "dispatchAllowed": false
+    },
+    "baselineComparison": {
+      "status": "PASS",
+      "runId": 45162303617,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45162303617",
+      "artifactId": 14811083832,
+      "artifactSha256": "sha256:9d96077232e25ad88b8d55e2f6de83c800e86e10288fd74de4f48bdbaa1fc1db",
+      "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
+      "mainNodeTests": 54,
+      "mainPythonTests": 8,
+      "mainNpmAuditModerateVulnerabilities": 4,
+      "candidateSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
+      "candidateNodeTests": 1136,
+      "candidateNodeFiles": 192,
+      "candidatePythonTests": 108,
+      "candidateNpmAuditVulnerabilities": 0,
+      "mainBaseline": "PASS",
+      "candidateCurrentHead": "PASS",
+      "combinedRerun": "PASS"
+    },
+    "sourceBundle": {
+      "status": "BEHIND_CURRENT_BRANCH_BY_2_COMMITS",
+      "runId": 45160289555,
+      "artifactId": 14809444411,
+      "artifactSha256": "sha256:b71a5a909f4613e5ef6d8aad4ab9483014115f15ec078c729647699384c54b92",
+      "sourceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+      "commitsBehind": 2
+    },
+    "youtubeInventory": {
+      "status": "PASS_READ_ONLY",
+      "runId": 45160289448,
+      "artifactId": 14810127143,
+      "artifactSha256": "sha256:2484a419b156967339d08b5f75fdf28585af39970bda0a1631125a28e7ceeb6e",
+      "sourceSha": "b7a8084279b188fc150de82a5b8e935e77d74c49",
+      "publicItems": 1,
+      "privateItems": 0,
+      "unlistedItems": 0,
+      "channelHandle": "@sonicvhibez",
+      "videoId": "LjePS02hA1o",
+      "format": "prior owner-reviewed legacy Short",
+      "ownerAttemptAttestationValidThrough": "2026-11-18"
+    }
+  },
+  "queueIdentity": {
+    "operationalQueuePath": "content/queue.json",
+    "operationalQueueBlobSha": "e66293d1ceb7a0a6b911cb88316ce97b9c49b7fb",
+    "operationalQueueSha256": "ab24efa412e08578e1a9f2a09de11d19791dfb65cf414afbe65e70df3526bf31",
+    "detailedQueuePath": "content/long-form-queue.json",
+    "detailedQueueBlobSha": "368c1bd6262960e1602f73a5a9c0ff2d706a4fe3",
+    "detailedQueueSha256": "9c1b7b3f02da3fc7704c0c650b8b4e29b504e1cbc12bc308e694a5705abb43ea",
+    "approvalPath": "content/queue-identity-approval.json",
+    "approvalFileExists": false,
+    "approvalTemplatePath": "content/queue-identity-approval.template.json",
+    "approvalTemplateBlobSha": "d739bf9b785673a9a0639fd2b9480603eba0dc1a",
+    "approvalTemplate": {
+      "status": "PENDING_OWNER_APPROVAL",
+      "ownerApproved": false,
+      "approvedBy": "",
+      "approvedAt": "",
+      "approvalReference": "",
+      "mappings": [
+        {
+          "operationalItemId": "long-form-plan-wildlife-video",
+          "detailedItemId": "",
+          "cyclePosition": 1
+        },
+        {
+          "operationalItemId": "long-form-faceless-wildlife-workflow",
+          "detailedItemId": "",
+          "cyclePosition": 2
+        }
+      ]
+    },
+    "operationalLongFormItems": [
+      {
+        "id": "long-form-plan-wildlife-video",
+        "title": "How to Plan a Wildlife Video People Want to Watch"
+      },
+      {
+        "id": "long-form-faceless-wildlife-workflow",
+        "title": "A Beginner Workflow for Faceless Wildlife Videos"
+      }
+    ],
+    "detailedPositionOneItem": {
+      "id": "long-form-001-two-eyes-above-water",
+      "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile"
+    },
+    "detailedPositionTwoItems": [],
+    "ownerDecisionRequired": true
+  },
+  "engineeringGuard": {
+    "status": "IMPLEMENTED_AND_TESTED",
+    "readinessValidator": {
+      "path": "scripts/production-readiness.mjs",
+      "blobSha": "786628f8dd8822e5f50b0bf9cf5b60ec564e32f7",
+      "behavior": "Calls validateQueueIdentity and blocks readiness when queue files or exact-hash owner approval are absent/invalid."
+    },
+    "identityPolicy": {
+      "path": "scripts/queue-identity-policy.mjs",
+      "blobSha": "82f0a16c14e730de9eff377f20e470abf8f0c697",
+      "behavior": [
+        "Requires OWNER_APPROVED and ownerApproved=true, nonblank approvedBy, timezone-bearing approvedAt, and approvalReference.",
+        "Binds approval to SHA-256 of both operational and detailed queue files.",
+        "Requires every operational long-form item to map exactly once to one detailed long-form item and a unique rolling cycle position.",
+        "Enforces long_form → long_form → short positions; position one must match the detailed queue item designated position one.",
+        "Rejects duplicate/missing mappings, stale hashes, Short mappings and detailed publication-position mismatches."
+      ]
+    },
+    "dispatch": {
+      "serverPath": "scripts/dashboard-server.mjs",
+      "serverBlobSha": "c66f36efaef1e636c116a7c15503da810b36085f",
+      "routes": [
+        "GET /api/jobs/dispatchable",
+        "POST /api/jobs/produce"
+      ],
+      "behavior": "Missing or invalid approval returns non-retryable HTTP 409 before request body processing, state mutation, lock acquisition or render dispatch.",
+      "workerPath": "scripts/worker-runner.mjs",
+      "workerBlobSha": "b529a88b4db8195421dba2d5a71339c1b55dcde1",
+      "workerBehavior": "Treats queue identity HTTP 409 as non-retryable and stops before dispatch POST; no polling/retry bypass."
+    },
+    "templateGenerator": {
+      "path": "scripts/prepare-queue-identity-approval.mjs",
+      "blobSha": "abac6f53457f9073fcd77516797e9115562b871d",
+      "behavior": "Generates a pending template only; never fabricates owner approval."
+    },
+    "testFiles": [
+      {
+        "path": "test/queue-identity-policy.test.mjs",
+        "blobSha": "27eb8bebcf37c498f84a165d861d3b1b280bfa54"
+      },
+      {
+        "path": "test/worker-runner.test.mjs",
+        "blobSha": "102cbd16bcde1f88d82967a763573475c37e0842"
+      },
+      {
+        "path": "test/dashboard-api-worker-dispatch-order.integration.test.mjs",
+        "blobSha": "6eaa280cc71495fcb21f772539a30772213335c9"
+      }
+    ],
+    "fullRegression": {
+      "runId": 45162303476,
+      "nodeTests": 1136,
+      "nodeTestFiles": 192,
+      "pythonTests": 108,
+      "failures": 0,
+      "skips": 0
+    }
+  },
+  "ownerDecisionsRequired": [
+    "Confirm whether the detailed queue's only current cycle-position-one item, long-form-001-two-eyes-above-water (Nile crocodile), is intended to be the first long-form publication item; it does not match the operational queue's generic planning title.",
+    "Choose the detailed item for operational long-form-plan-wildlife-video at cycle position 1, or update the detailed queue with the owner-approved item.",
+    "Choose and assign a detailed item for operational long-form-faceless-wildlife-workflow at cycle position 2; no detailed queue item is currently assigned position 2.",
+    "Complete and approve the exact-hash approval file with status=OWNER_APPROVED, ownerApproved=true, approvedBy, approvedAt with timezone, approvalReference, both queue hashes, and one mapping per operational long-form item."
+  ],
+  "safety": {
+    "ownerApprovalFabricated": false,
+    "queueFilesMutated": false,
+    "dispatchAllowed": false,
+    "publishingEnabled": false,
+    "productionDispatchPerformed": false,
+    "releaseDecision": "HOLD"
+  },
+  "supersedes": "content/queue-authority-reconciliation-2026-11-21.json",
+  "note": "The prior 2026-11-21 reconciliation's engineering work item is complete: readiness and dispatch entrypoints enforce the cross-queue identity gate, and the worker stops on non-retryable 409. Only owner mapping/approval remains for this gate; the wider production readiness HOLD still has 22 blockers."
+}

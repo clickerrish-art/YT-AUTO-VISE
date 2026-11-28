@@ -5,72 +5,378 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
+import { validateCadenceDecision } from "./schedule-policy.mjs";
+import { validateProductPromotionGate } from "./product-promotion-gate.mjs";
+import { isSafeRegularFileWithinRoot } from "./safe-project-file.mjs";
+import { validateProductionQualityApprovalFile } from "./production-quality-approval.mjs";
+import { validateQueueIdentity } from "./queue-identity-policy.mjs";
+import { isFreshHistoryEvidence } from "./history-evidence-freshness.mjs";
 
 const root = process.cwd();
 const blockers = [];
 const notes = [];
-const exists = (p) => fs.existsSync(path.resolve(root, p));
+const exists = (p) => isSafeRegularFileWithinRoot(root, p);
+
+function validateNarrationRights(manifest, manifestPath) {
+  const evidenceName = manifest.narrationRightsDeterminationEvidence;
+  const block = reason => blockers.push(
+    manifestPath + ": narration rights are not cleared for public branded/production use. " + reason +
+    " The owner selected Speechma Andrew (English, United States, male standard voice) for a zero-cost browser audition. No audition audio has been generated, no final audio hash exists, and no owner listening or production approval exists. Speechma's published Terms grant a perpetual, royalty-free commercial output license subject to its Terms, Acceptable Use Policy and third-party rights; this does not approve an ungenerated audio file or clear the submitted script/input rights. The free-site Terms prohibit scripts, bots and automated CAPTCHA solving; only the official API is permitted for automation, and that API is paid. Under the zero-cost constraint the audition must be a manual browser action using the per-generation security code. The browser stores history locally, so download the MP3 for durable project retention. Do not use HeyGen Free-plan Roderic or Wade audio, do not run local Piper/Edge TTS, and do not automate Speechma's free site. The selected browser audition is not production-approved; no paid service or credit is authorized. Production use requires review of the actual output and owner approval bound to its exact final audio SHA-256."
+  );
+  if (typeof evidenceName !== "string" || !evidenceName.trim()) {
+    block("No narration rights determination evidence path is recorded.");
+    return;
+  }
+  const evidencePath = path.join("content", evidenceName);
+  if (!exists(evidencePath)) {
+    block("The recorded narration rights evidence file " + evidencePath + " is missing.");
+    return;
+  }
+  let evidence;
+  try {
+    evidence = JSON.parse(fs.readFileSync(path.resolve(root, evidencePath), "utf8"));
+  } catch {
+    block("The recorded narration rights evidence file " + evidencePath + " is not valid JSON.");
+    return;
+  }
+  const provider = evidence.providerDetermination ?? {};
+  const manifestApproved = ["OWNER_LICENSED", "PROVIDER_APPROVED"].includes(manifest.narrationRightsStatus) &&
+    manifest.narrationPublicBrandedDistributionAllowed === true &&
+    manifest.narrationCommercialUseAllowed === true &&
+    manifest.narrationProductionUseAllowed === true;
+  const ownerApproved = evidence.rightsOwnerConfirmed === true &&
+    evidence.publicBrandedDistributionAllowed === true &&
+    evidence.commercialUseAllowed === true &&
+    evidence.productionUseAllowed === true;
+  const providerApproved = provider.status === "APPROVED" &&
+    provider.publicBrandedDistributionAllowed === true &&
+    provider.commercialUseAllowed === true &&
+    provider.productionUseAllowed === true;
+  const providerDenied = provider.status === "DENIED" ||
+    provider.publicBrandedDistributionAllowed === false ||
+    provider.commercialUseAllowed === false;
+  if (!manifestApproved || !(ownerApproved || providerApproved) || providerDenied) {
+    block("The recorded owner/provider evidence does not authorize this exact narration output.");
+  }
+}
 const queuePath = process.env.QUEUE_PATH ?? "content/queue.json";
+const queueAbsolutePath = path.resolve(root, queuePath);
+const queueExists = process.env.QUEUE_PATH
+  ? isSafeRegularFileWithinRoot(path.dirname(queueAbsolutePath), path.basename(queueAbsolutePath))
+  : exists(queuePath);
 const manifestPath = "content/render-manifest.json";
 const metadataPath = "content/next-short.json";
 const videoPath = "media/next-short.mp4";
+const youtubeVerificationPath = "content/youtube-channel-verification-status.json";
+const historyReconciliationPath = "content/youtube-history-reconciliation.json";
+const schedulePath = "config/weekly-content-plan.json";
+const mediaProductionPolicyPath = "config/media-production-policy.json";
+let mediaProductionPolicy;
+if (!exists(mediaProductionPolicyPath)) {
+  blockers.push("Mandatory config/media-production-policy.json is missing.");
+} else {
+  try {
+    mediaProductionPolicy = JSON.parse(fs.readFileSync(path.resolve(root, mediaProductionPolicyPath), "utf8"));
+    if (mediaProductionPolicy?.status !== "MANDATORY" ||
+        mediaProductionPolicy?.productionVisualMode !== "ORIGINAL_CREATOR_CAPTURED_ONLY" ||
+        mediaProductionPolicy?.originalCreatorCapturedMediaRequired !== true ||
+        mediaProductionPolicy?.aiGeneratedWildlifeVisualsAllowed !== false ||
+        mediaProductionPolicy?.stockAndThirdPartyVideoProductionAllowed !== false ||
+        mediaProductionPolicy?.syntheticMediaDisclosureRequired !== false ||
+        mediaProductionPolicy?.zeroCostDefault !== true ||
+        mediaProductionPolicy?.humanVisualReviewRequired !== true) {
+      blockers.push("config/media-production-policy.json must require original creator-captured wildlife media and exclude AI-generated wildlife and generic stock footage.");
+    }
+  } catch {
+    blockers.push("config/media-production-policy.json is not valid JSON.");
+  }
+}
+const productsPath = "config/products.json";
+const approvedProductUrl = "https://selar.com/0u19v8u99l";
+let approvedProduct;
+if (!exists(productsPath)) {
+  blockers.push("Approved product registry config/products.json is missing.");
+} else {
+  try {
+    const productConfig = JSON.parse(fs.readFileSync(path.resolve(root, productsPath), "utf8"));
+    if (!productConfig || typeof productConfig !== "object" || Array.isArray(productConfig) || !Array.isArray(productConfig.products)) {
+      blockers.push("config/products.json must contain a products array.");
+    } else {
+      approvedProduct = productConfig.products.find(product => product?.url === approvedProductUrl && product?.status === "approved");
+      if (!approvedProduct) blockers.push("config/products.json must retain the exact approved Selar product URL as an approved product.");
+    }
+  } catch {
+    blockers.push("config/products.json is not valid JSON; product promotion authorization cannot be verified.");
+  }
+}
+let minimumSpacingHours = NaN;
+let cycleFormats = [];
+let operationalQueueForIdentity;
+if (!exists(schedulePath)) {
+  blockers.push("Authoritative publication-cycle policy is missing.");
+} else {
+  try {
+    const schedule = JSON.parse(fs.readFileSync(path.resolve(root, schedulePath), "utf8"));
+    if (schedule.timezone !== "Africa/Johannesburg") blockers.push("Schedule timezone must be Africa/Johannesburg.");
+    minimumSpacingHours = schedule.minimumPublicationSpacingHours;
+    cycleFormats = schedule.publicationCycle?.formats ?? [];
+    if (!Number.isFinite(minimumSpacingHours) || minimumSpacingHours < 72 || minimumSpacingHours > 8760) blockers.push("Schedule minimumPublicationSpacingHours must be at least 72 elapsed hours and no greater than 8760 hours.");
+    if (schedule.spacingPolicy?.minimumHoursBetweenPosts !== minimumSpacingHours) blockers.push("Schedule spacingPolicy must match minimumPublicationSpacingHours.");
+    if (JSON.stringify(schedule.publicationCycle?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Publication cycle must be long-form, long-form, Short.");
+    if (schedule.publicationCycle?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || schedule.publicationCycle?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || schedule.spacingPolicy?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0)) blockers.push("Publication cycle and spacingPolicy must use the configured minimum gap and its derived cycle duration.");
+    if (schedule.publicationCycle?.publicationRequiresVerifiedHistory !== true) blockers.push("Publication cycle must require independently verified public/private/unlisted history and reconciliation of uncertain attempts.");
+    const cadenceDecisionCheck = validateCadenceDecision(schedule.cadenceDecision, minimumSpacingHours);
+    if (!cadenceDecisionCheck.valid) {
+      blockers.push("CADENCE DECISION REQUIRED: a feasible owner-approved cadence mode, explicit timezone-aware approval timestamp and non-empty approval reference are required before publication.");
+    }
+    if (["targetCadence", "requestedTargetCadence", "cadenceDecisionRequired", "interimDraftCadence"].some(key => key in schedule)) blockers.push("Stale weekly cadence fields must be removed.");
 
-if (!exists(queuePath)) {
+  } catch {
+    blockers.push("Authoritative weekly schedule is not valid JSON; cadence and spacing cannot be verified.");
+  }
+}
+
+if (!queueExists) {
   blockers.push("content/queue.json is missing.");
 } else {
   let queue;
   try {
     queue = JSON.parse(fs.readFileSync(path.resolve(root, queuePath), "utf8"));
+    if (!queue || typeof queue !== "object" || Array.isArray(queue)) {
+      blockers.push("Queue must be a JSON object with an items array.");
+      queue = undefined;
+    }
   } catch {
     blockers.push("content/queue.json is not valid JSON; queue checks cannot be trusted.");
   }
   if (queue) {
-    if (!queue || typeof queue !== "object" || Array.isArray(queue)) {
-      blockers.push("Queue must be a JSON object with an items array.");
-    } else {
+      operationalQueueForIdentity = queue;
       if (queue.publishingEnabled !== false) blockers.push("Queue must keep publishingEnabled=false until private upload and human review are verified.");
+      if (queue.cadence?.minimumHoursBetweenConsecutivePublications !== minimumSpacingHours || queue.cadence?.minimumCycleHours !== minimumSpacingHours * (Array.isArray(cycleFormats) ? cycleFormats.length : 0) || JSON.stringify(queue.cadence?.formats) !== JSON.stringify(["long_form", "long_form", "short"])) blockers.push("Queue cadence must match the configured rolling publication cycle policy.");
+      if (queue.cadence?.draftPreparationFallback?.notPublicationCadence !== true) blockers.push("Tuesday/Saturday fallback must be marked draft preparation only, not publication cadence.");
       if (!Array.isArray(queue.items) || queue.items.length < 2) blockers.push("Queue needs at least two draft items.");
       const items = Array.isArray(queue.items) ? queue.items : [];
       if (items.some(item => !item || typeof item !== "object" || typeof item.id !== "string" || !item.id.trim())) {
         blockers.push("Every queued item must be an object with a non-empty id.");
       }
-      if (items.some(item => item.productUrl !== "https://selar.com/0u19v8u99l")) {
-        blockers.push("Every queued item must use the sole approved Selar product URL.");
+      if (items.some(item => typeof item.hasPaidPromotion !== "boolean")) {
+        blockers.push("Every queued item must declare hasPaidPromotion as an explicit boolean.");
+      }
+      if (items.some(item => item.hasPaidPromotion === true && item.productUrl !== "https://selar.com/0u19v8u99l")) {
+        blockers.push("Promotional queue items must use the sole approved Selar product URL.");
+      }
+      if (items.some(item => item.hasPaidPromotion === false && item.productUrl)) {
+        blockers.push("Non-commercial queue items must not carry a product URL or promotional CTA.");
       }
       if (new Set(items.map(item => item.id)).size !== items.length) {
         blockers.push("Queue contains duplicate item IDs; remove duplicates before relying on cadence tracking.");
       }
       notes.push(`Queue: ${items.length} items; public publishing ${queue.publishingEnabled === false ? "disabled" : "not safely disabled"}.`);
-    }
   }
+}
+
+const detailedQueuePath = "content/long-form-queue.json";
+const queueIdentityApprovalPath = "content/queue-identity-approval.json";
+let detailedQueue;
+let queueIdentityApproval;
+try {
+  if (exists(detailedQueuePath)) detailedQueue = JSON.parse(fs.readFileSync(path.resolve(root, detailedQueuePath), "utf8"));
+  else blockers.push("Detailed content/long-form-queue.json is missing; queue identity cannot be reconciled.");
+} catch {
+  blockers.push("Detailed content/long-form-queue.json is invalid JSON; queue identity cannot be reconciled.");
+}
+try {
+  if (exists(queueIdentityApprovalPath)) queueIdentityApproval = JSON.parse(fs.readFileSync(path.resolve(root, queueIdentityApprovalPath), "utf8"));
+} catch {
+  blockers.push("content/queue-identity-approval.json is invalid JSON; owner queue identity approval cannot be trusted.");
+}
+{
+  const identity = validateQueueIdentity({ operationalQueue: operationalQueueForIdentity, detailedQueue, approval: queueIdentityApproval });
+  if (!identity.valid) {
+    blockers.push("QUEUE IDENTITY RECONCILIATION REQUIRED: " + identity.errors.join(" "));
+  } else {
+    notes.push("Queue identity reconciliation: " + identity.mappingCount + " owner-approved long-form mappings verified.");
+  }
+}
+
+const mediaInventoryPath = process.env.SONICVHIBEZ_IMPORTED_MEDIA_INVENTORY_PATH?.trim() || "content/sonicvhibez-imported-media-inventory.json";
+if (!exists(mediaInventoryPath)) {
+  blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is missing.");
+} else {
+  try {
+    const inventory = JSON.parse(fs.readFileSync(path.resolve(root, mediaInventoryPath), "utf8"));
+    if (!inventory || typeof inventory !== "object" || Array.isArray(inventory) || !Array.isArray(inventory.assets) || inventory.assets.length === 0) {
+      blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory must contain a non-empty assets array.");
+    } else {
+      const excludedAssets = inventory.assets.filter(asset =>
+        asset?.excludedFromProduction === true || asset?.status === "EXCLUDED_NOT_USED"
+      );
+      // Review-eligible candidates are not automatically production selections.
+      // Only assets explicitly selected for this release enter the fail-closed media gate.
+      const reviewCandidates = inventory.assets.filter(asset => asset?.reviewRenderEligible === true);
+      const selectedAssets = inventory.assets.filter(asset =>
+        asset?.selectedForProduction === true &&
+        asset?.excludedFromProduction !== true &&
+        asset?.status !== "EXCLUDED_NOT_USED"
+      );
+      const unresolvedAssets = selectedAssets.filter(asset =>
+        asset?.creatorCapturedOriginal !== true ||
+        asset?.sourceMethod !== "CREATOR_CAPTURED_ORIGINAL" ||
+        asset?.productionEligible !== true ||
+        asset?.releaseEligible !== true ||
+        asset?.rightsConfirmed !== true ||
+        asset?.thirdPartyRightsReviewed !== true ||
+        asset?.humanVisualReview !== "PASS"
+      );
+      if (selectedAssets.length > 0 && (inventory.releaseAuthorized !== true || inventory.status !== "CLEARED" || unresolvedAssets.length > 0)) {
+        const ids = unresolvedAssets.map(asset => asset?.canvaAssetId ?? asset?.id ?? asset?.assetId).filter(Boolean);
+        blockers.push(`LIVE BLOCKER: ${unresolvedAssets.length} selected imported wildlife asset(s) are unresolved for production (${ids.join(", ") || "selected inventory not cleared"}); only genuine original creator-captured footage with verified provenance and rights is eligible. Pexels/Pixabay stock and AI-generated wildlife visuals are prohibited substitutes.`);
+      }
+      if (selectedAssets.some(asset => asset?.thirdPartyRightsReviewed !== true)) {
+        blockers.push("LIVE BLOCKER: thirdPartyRightsReviewed must be true only after checking people, property, trademarks, music and other third-party rights for every selected imported wildlife asset.");
+      }
+      notes.push(`Imported wildlife media inventory: ${inventory.assets.length} assets; ${reviewCandidates.length} review-only candidates; ${excludedAssets.length} excluded from production; ${selectedAssets.length} selected for production; ${unresolvedAssets.length} selected/unresolved; release ${inventory.releaseAuthorized === true ? "authorized" : "not authorized"}.`);
+    }
+  } catch {
+    blockers.push("Imported SonicVhibez Canva wildlife media provenance inventory is not valid JSON.");
+  }
+}
+
+function validateWildlifeFootage(manifest, label) {
+  const policyIsOriginalOnly =
+    mediaProductionPolicy?.productionVisualMode === "ORIGINAL_CREATOR_CAPTURED_ONLY" &&
+    mediaProductionPolicy?.originalCreatorCapturedMediaRequired === true &&
+    mediaProductionPolicy?.aiGeneratedWildlifeVisualsAllowed === false &&
+    mediaProductionPolicy?.stockAndThirdPartyVideoProductionAllowed === false;
+  if (!policyIsOriginalOnly) blockers.push("config/media-production-policy.json must retain original creator-captured media as the global default; project exceptions must be explicitly scoped.");
+  const exception = Array.isArray(mediaProductionPolicy?.projectExceptions)
+    ? mediaProductionPolicy.projectExceptions.find(item =>
+        item?.exceptionId === manifest.projectPolicyExceptionId &&
+        item?.exceptionId === "SONICVHIBEZ_NILE_CROCODILE_AI_VISUALS_2026_11" &&
+        item?.projectTitle === "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile" &&
+        item?.contentType === "long_form" &&
+        item?.ownerAuthorization === "EXPLICIT_USER_APPROVAL_IN_CHAT" &&
+        item?.aiGeneratedWildlifeVisualsAllowed === true && item?.stockMediaAllowed === false)
+    : undefined;
+  if (manifest.footageOrigin === "ai_generated" && exception) {
+    if (manifest.creatorCapturedOriginal !== false) blockers.push(`${label}: AI-generated visuals must not be represented as creator-captured original footage.`);
+    if (manifest.originalCreatorCapturedMediaRequired !== false) blockers.push(`${label}: explicitly distinguish AI-generated visuals from original camera footage.`);
+    if (manifest.aiGeneratedWildlifeVisualsAllowed !== true || manifest.containsAIWildlifeVisuals !== true || manifest.containsSyntheticMedia !== true) blockers.push(`${label}: approved AI project exception must explicitly disclose AI-generated/synthetic wildlife visuals.`);
+    if (manifest.syntheticMediaDisclosureRequired !== true || typeof manifest.syntheticMediaDisclosureText !== "string" || manifest.syntheticMediaDisclosureText.trim().length < 12) blockers.push(`${label}: a clear synthetic-media disclosure is required.`);
+    const evidencePath = manifest.aiGenerationEvidencePath;
+    if (typeof evidencePath !== "string" || !evidencePath.trim() || path.isAbsolute(evidencePath) || !exists(evidencePath)) {
+      blockers.push(`${label}: AI generation provenance evidence is missing; require exact source filenames and SHA-256 hashes for all seven approved clips, generator/model details and generation records.`);
+    } else {
+      try {
+        const evidence = JSON.parse(fs.readFileSync(path.resolve(root, evidencePath), "utf8"));
+        const assets = Array.isArray(evidence?.assets) ? evidence.assets : [];
+        if (evidence?.projectExceptionId !== exception.exceptionId || assets.length !== 7 || assets.some(asset => typeof asset?.fileName !== "string" || !asset.fileName.trim() || !/^[a-f0-9]{64}$/i.test(asset?.sha256 ?? ""))) blockers.push(`${label}: AI provenance evidence must identify exactly seven source clips with exact SHA-256 hashes and match the approved project exception.`);
+        if (evidence?.generationProvenanceVerified !== true || evidence?.providerUsageRightsVerified !== true || typeof evidence?.providerUsageRightsEvidencePath !== "string" || !exists(evidence.providerUsageRightsEvidencePath)) blockers.push(`${label}: generator provenance and provider commercial-use rights evidence are not verified.`);
+      } catch { blockers.push(`${label}: AI generation provenance evidence is not valid JSON.`); }
+    }
+    if (manifest.mediaProvenanceStatus !== "VERIFIED") blockers.push(`${label}: AI source provenance is not VERIFIED.`);
+    if (manifest.footageHumanReviewStatus !== "PASS" || typeof manifest.humanReviewEvidencePath !== "string" || !exists(manifest.humanReviewEvidencePath)) blockers.push(`${label}: exact-hash human visual review is missing; AI approval does not imply review approval.`);
+    if (!manifest.footageLicenseEvidence || manifest.thirdPartyRightsReviewed !== true) blockers.push(`${label}: media usage and third-party rights review remain required.`);
+    return;
+  }
+  if (manifest.projectPolicyExceptionId) blockers.push(`${label}: project policy exception is unknown, mismatched, or outside its approved scope.`);
+  if (manifest.footageOrigin !== "creator_captured_original") blockers.push(`${label}: footageOrigin must be creator_captured_original unless the exact named project exception is valid; AI-generated and stock visuals are otherwise ineligible.`);
+  if (manifest.creatorCapturedOriginal !== true) blockers.push(`${label}: creatorCapturedOriginal must be true only after original-file provenance is verified.`);
+  if (manifest.originalCreatorCapturedMediaRequired !== true) blockers.push(`${label}: originalCreatorCapturedMediaRequired must be true outside the named AI exception.`);
+  if (manifest.aiGeneratedWildlifeVisualsAllowed !== false || manifest.containsAIWildlifeVisuals === true) blockers.push(`${label}: AI-generated wildlife visuals are prohibited outside the named documentary exception.`);
+  if (manifest.stockVideoFootageAllowed !== false || manifest.stockPhotographsAllowed !== false || manifest.stockMediaAllowed !== false || manifest.pexelsAllowed !== false || manifest.pixabayAllowed !== false) blockers.push(`${label}: stock/library wildlife footage and photographs are prohibited production substitutes.`);
+  if (typeof manifest.footageCreator !== "string" || !manifest.footageCreator.trim() || /replace_with|placeholder|unknown|tbd/i.test(manifest.footageCreator)) blockers.push(`${label}: verified original footage creator/operator identity is missing.`);
+  for (const key of ["captureEvidencePath", "footageSourceManifest"]) {
+    const value = manifest[key];
+    if (typeof value !== "string" || !value.trim() || path.isAbsolute(value) || /replace_with|placeholder|todo|unknown|tbd/i.test(value) || !exists(value)) blockers.push(`${label}: ${key} must reference a real, retained original-capture provenance record.`);
+  }
+  if (manifest.mediaProvenanceStatus !== "VERIFIED") blockers.push(`${label}: original media provenance is not VERIFIED.`);
 }
 if (!exists(manifestPath)) {
   blockers.push("Create content/render-manifest.json from the example and fill it only after verifying asset rights.");
 } else {
   let manifest;
-  try { manifest = JSON.parse(fs.readFileSync(path.resolve(root, manifestPath), "utf8")); }
-  catch { blockers.push("content/render-manifest.json is not valid JSON."); }
+  try {
+    manifest = JSON.parse(fs.readFileSync(path.resolve(root, manifestPath), "utf8"));
+    if (!manifest || typeof manifest !== "object" || Array.isArray(manifest)) {
+      blockers.push("content/render-manifest.json must contain a JSON object.");
+      manifest = undefined;
+    }
+  } catch { blockers.push("content/render-manifest.json is not valid JSON."); }
   if (manifest) {
     if (manifest.channel !== "SonicVhibez") blockers.push("Render manifest target must be exactly SonicVhibez.");
+    validateWildlifeFootage(manifest, "content/render-manifest.json");
+  validateNarrationRights(manifest, "content/render-manifest.json");
     for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
-      if (!manifest[key] || !exists(path.join("content", manifest[key]))) blockers.push(`Manifest asset ${key} is missing: ${manifest[key] ?? "(unset)"}.`);
+      const assetPath = manifest[key];
+      if (typeof assetPath !== "string" || !assetPath.trim()) {
+        blockers.push(`content/render-manifest.json: Manifest asset ${key} must be a non-empty relative path string.`);
+      } else if (!exists(path.join("content", assetPath))) {
+        blockers.push(`content/render-manifest.json: Manifest asset ${key} is missing: ${assetPath}.`);
+      }
     }
     for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
       if (typeof manifest[key] !== "string" || manifest[key].trim().length < 12 || /replace_with|placeholder|todo|unknown|tbd/i.test(manifest[key])) {
-        blockers.push(`Manifest ${key} must reference real, human-verified rights evidence.`);
+        blockers.push(`content/render-manifest.json: Manifest ${key} must reference real, human-verified rights evidence.`);
       }
     }
-    if (manifest.rightsConfirmed !== true) blockers.push("Set rightsConfirmed=true only after checking all media licenses and permissions.");
-    if (manifest.complianceReviewed !== true) blockers.push("Set complianceReviewed=true only after human content/compliance review.");
+    if (manifest.rightsConfirmed !== true) blockers.push("content/render-manifest.json: Set rightsConfirmed=true only after checking all media licenses and permissions.");
+    if (manifest.thirdPartyRightsReviewed !== true) blockers.push("content/render-manifest.json: thirdPartyRightsReviewed must be true only after checking people, property, trademarks, music and other third-party rights.");
+    if (manifest.complianceReviewed !== true) blockers.push("content/render-manifest.json: Set complianceReviewed=true only after human content/compliance review.");
   }
 }
+const longFormManifestPath = "content/long-form-render-manifest.json";
+if (!exists(longFormManifestPath)) {
+  blockers.push("Create content/long-form-render-manifest.json from the example only after verifying real long-form assets and rights.");
+} else {
+  let longManifest;
+  try {
+    longManifest = JSON.parse(fs.readFileSync(path.resolve(root, longFormManifestPath), "utf8"));
+    if (!longManifest || typeof longManifest !== "object" || Array.isArray(longManifest)) {
+      blockers.push("content/long-form-render-manifest.json must contain a JSON object.");
+      longManifest = undefined;
+    }
+  } catch { blockers.push("content/long-form-render-manifest.json is not valid JSON."); }
+  if (longManifest) {
+    if (longManifest.channel !== "SonicVhibez") blockers.push("Long-form render manifest target must be exactly SonicVhibez.");
+    validateWildlifeFootage(longManifest, "content/long-form-render-manifest.json");
+    validateNarrationRights(longManifest, "content/long-form-render-manifest.json");
+    if (longManifest.targetAspectRatio !== "16:9") blockers.push("Long-form render manifest must specify targetAspectRatio 16:9.");
+    for (const key of ["footagePath", "narrationPath", "captionsPath"]) {
+      if (typeof longManifest[key] !== "string" || !longManifest[key].trim() || !exists(path.join("content", longManifest[key]))) {
+        blockers.push(`Long-form render manifest (content/long-form-render-manifest.json): asset ${key} is missing: ${longManifest[key] ?? "(unset)"}.`);
+      }
+    }
+    for (const key of ["footageLicenseEvidence", "narrationLicenseEvidence"]) {
+      if (typeof longManifest[key] !== "string" || longManifest[key].trim().length < 12 || /replace_with|placeholder|todo|unknown|tbd/i.test(longManifest[key])) {
+        blockers.push(`Long-form render manifest (content/long-form-render-manifest.json): ${key} must reference real, human-verified rights evidence.`);
+      }
+    }
+    if (typeof longManifest.title !== "string" || longManifest.title.trim().length < 10 || /replace_with|placeholder|todo|tbd/i.test(longManifest.title)) {
+      blockers.push("Long-form render manifest (content/long-form-render-manifest.json): title must be a real, reviewed title.");
+    }
+    if (longManifest.rightsConfirmed !== true) blockers.push("Long-form render manifest (content/long-form-render-manifest.json): rightsConfirmed must be true only after checking all media licenses and permissions.");
+    if (longManifest.thirdPartyRightsReviewed !== true) blockers.push("Long-form render manifest (content/long-form-render-manifest.json): thirdPartyRightsReviewed must be true only after checking people, property, trademarks, music and other third-party rights.");
+    if (longManifest.complianceReviewed !== true) blockers.push("Long-form render manifest (content/long-form-render-manifest.json): complianceReviewed must be true only after human content/compliance review.");
+    if (typeof longManifest.containsSyntheticMedia !== "boolean") blockers.push("Long-form render manifest (content/long-form-render-manifest.json): must explicitly record containsSyntheticMedia as true or false.");
+    if (typeof longManifest.hasPaidPromotion !== "boolean") blockers.push("Long-form render manifest (content/long-form-render-manifest.json): must explicitly record hasPaidPromotion as true or false.");
+  }
+}
+let reviewedMetadata;
 if (!exists(metadataPath)) {
   blockers.push("Reviewed metadata file content/next-short.json is missing.");
 } else {
   let metadata;
-  try { metadata = JSON.parse(fs.readFileSync(path.resolve(root, metadataPath), "utf8")); }
-  catch { blockers.push("content/next-short.json is not valid JSON."); }
+  try {
+    metadata = JSON.parse(fs.readFileSync(path.resolve(root, metadataPath), "utf8"));
+    if (!metadata || typeof metadata !== "object" || Array.isArray(metadata)) {
+      blockers.push("content/next-short.json must contain a JSON object.");
+      metadata = undefined;
+    }
+  } catch { blockers.push("content/next-short.json is not valid JSON."); }
   if (metadata) {
+    reviewedMetadata = metadata;
     if (metadata.channel !== "SonicVhibez") blockers.push("Metadata target must be exactly SonicVhibez.");
     if (metadata.status !== "READY_FOR_PRIVATE_UPLOAD") blockers.push("Metadata must be human-reviewed and explicitly marked READY_FOR_PRIVATE_UPLOAD before upload.");
     if (!metadata.channelId || !/^UC[a-zA-Z0-9_-]{22}$/.test(metadata.channelId)) blockers.push("Metadata needs the verified SonicVhibez YouTube channel ID.");
@@ -84,6 +390,28 @@ if (!exists(metadataPath)) {
     if (metadata.productUrl !== "https://selar.com/0u19v8u99l") blockers.push("Metadata must use the sole approved Selar product URL.");
   }
 }
+if (approvedProduct) {
+  const promotionGateErrors = validateProductPromotionGate(approvedProduct, reviewedMetadata, {
+    requireMetadataDisclosure: Boolean(reviewedMetadata)
+  });
+  promotionGateErrors.forEach(message => blockers.push("Product promotion gate: " + message));
+}
+const qualityApprovalPath = process.env.UPLOAD_APPROVAL_PATH?.trim();
+if (!qualityApprovalPath) {
+  blockers.push("Exact-hash-bound human production quality approval is missing; configure UPLOAD_APPROVAL_PATH before private-upload readiness can pass.");
+} else {
+  const qualityApproval = validateProductionQualityApprovalFile({
+    approvalPath: qualityApprovalPath,
+    videoPath,
+    metadataPath,
+    rootDir: root
+  });
+  if (!qualityApproval.valid) {
+    blockers.push("Production quality approval gate: " + qualityApproval.errors.join("; "));
+  } else {
+    notes.push("Exact-hash-bound production quality approval, full-playback review, technical receipt and rights evidence passed structural verification.");
+  }
+}
 if (!exists(videoPath)) blockers.push("Rendered MP4 media/next-short.mp4 is missing.");
 for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN", "SONICVHIBEZ_CHANNEL_ID"]) {
   if (!process.env[key]?.trim()) blockers.push(`Required YouTube environment variable ${key} is not configured in this execution environment.`);
@@ -91,14 +419,259 @@ for (const key of ["YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRES
 if (process.env.SONICVHIBEZ_CHANNEL_ID && !/^UC[a-zA-Z0-9_-]{22}$/.test(process.env.SONICVHIBEZ_CHANNEL_ID)) {
   blockers.push("SONICVHIBEZ_CHANNEL_ID does not match the expected YouTube channel-ID format; verify it manually.");
 }
-console.log("SonicVhibez production readiness (read-only)");
-for (const note of notes) console.log("INFO: " + note);
-if (blockers.length) {
-  console.log(`HOLD: ${blockers.length} blocker(s) remain before a private upload can be attempted:`);
-  for (const blocker of blockers) console.log("- " + blocker);
-  console.log("This report never uploads, schedules, or publishes.");
-  console.log("This report does not verify account ownership, license authenticity, factual accuracy, or visual quality.");
-  process.exit(0);
+
+if (!exists(youtubeVerificationPath)) {
+  blockers.push("LIVE BLOCKER: read-only YouTube identity and uploads inventory verification evidence is missing.");
+} else {
+  try {
+    const verification = JSON.parse(fs.readFileSync(path.join(root, youtubeVerificationPath), "utf8"));
+    if (verification.status !== "PASS_READ_ONLY_IDENTITY_AND_INVENTORY") {
+      const code = typeof verification.oauth?.errorCode === "string" ? verification.oauth.errorCode : "not-passing";
+      blockers.push(`LIVE BLOCKER: read-only YouTube identity and uploads inventory verification is ${verification.status ?? "unknown"}; OAuth error ${code}.`);
+    } else {
+      if (verification.latestAttempt && verification.latestAttempt.status !== "PASS") {
+        const latestError = typeof verification.latestAttempt.errorCode === "string"
+          ? verification.latestAttempt.errorCode
+          : "not-passing";
+        blockers.push(`LIVE BLOCKER: latest read-only YouTube OAuth attempt is ${verification.latestAttempt.status} (OAuth error ${latestError}); reauthorize and verify the refresh token before any upload.`);
+      }
+      const oauth = verification.oauth ?? verification;
+      const uploadScopeVerified = oauth.uploadScopeVerified ?? verification.uploadScopeVerified;
+      const uploadScopeCheckedAt = oauth.uploadScopeCheckedAt ?? oauth.checkedAt ?? verification.uploadScopeCheckedAt;
+      const acceptedUploadScopes = [
+        "https://www.googleapis.com/auth/youtube.upload",
+        "https://www.googleapis.com/auth/youtube",
+        "https://www.googleapis.com/auth/youtube.force-ssl",
+        "https://www.googleapis.com/auth/youtubepartner"
+      ];
+      const grantedScopes = Array.isArray(oauth.grantedScopes) ? oauth.grantedScopes : [];
+      const acceptedUploadScope = grantedScopes.some(scope => acceptedUploadScopes.includes(scope)) ||
+        acceptedUploadScopes.includes(oauth.acceptedUploadScope ?? verification.acceptedUploadScope);
+      if (uploadScopeVerified !== true ||
+          !isFreshHistoryEvidence(uploadScopeCheckedAt) ||
+          !acceptedUploadScope) {
+        blockers.push("LIVE BLOCKER: YouTube OAuth upload scope is not independently verified with a current scope accepted by videos.insert; require youtube.upload (preferred) or another documented upload-capable scope before private upload.");
+      }
+      if (!exists(historyReconciliationPath)) {
+        blockers.push("LIVE BLOCKER: owner-reviewed YouTube history reconciliation evidence is missing.");
+      } else {
+      const reconciliation = JSON.parse(fs.readFileSync(path.join(root, historyReconciliationPath), "utf8"));
+      const publication = verification.publicationHistoryReconciliation;
+      const attempts = reconciliation.uploadAttemptReconciliation;
+      const verificationAttempts = verification.uploadAttemptReconciliation;
+      const ledgerValidation = attempts?.evidence?.automatedLedgerValidation;
+      const channel = verification.channel;
+      const inventoryArtifact = verification.inventoryArtifact;
+      const expectedChannelId = process.env.SONICVHIBEZ_CHANNEL_ID;
+      const priorOwnerReview = verification.previousSuccessfulVerification?.publicationHistoryReconciliation;
+      const priorOwnerVideo = verification.previousSuccessfulVerification?.videos?.find(video =>
+        video?.id === reconciliation.videos?.[0]?.id
+      );
+      const reconciledVideo = reconciliation.videos?.[0];
+      const priorOwnerReviewMatchesFreshRecord =
+        priorOwnerReview?.status === "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY" &&
+        priorOwnerReview?.verifiedBy === "clickerrish-art" &&
+        priorOwnerVideo?.ownerConfirmed === true &&
+        priorOwnerVideo?.format === reconciledVideo?.format &&
+        priorOwnerVideo?.visibility === reconciledVideo?.visibility &&
+        priorOwnerVideo?.youtubePublishedAt === reconciledVideo?.actualPublishedAt &&
+        priorOwnerVideo?.duration === reconciledVideo?.latestInventoryMatch?.duration &&
+        priorOwnerVideo?.ownerReview?.format === reconciledVideo?.format &&
+        priorOwnerVideo?.ownerReview?.studioPublicationDateConfirmed === true &&
+        reconciledVideo?.priorOwnerReview?.reaffirmedAt === "2026-11-18" &&
+        reconciledVideo?.priorOwnerReview?.ownerConfirmed === true &&
+        reconciledVideo?.priorOwnerReview?.verifiedBy === "clickerrish-art" &&
+        verification.videos?.length === 1 &&
+        verification.videos[0]?.id === reconciledVideo?.id &&
+        verification.videos[0]?.visibility === reconciledVideo?.visibility &&
+        verification.videos[0]?.youtubePublishedAt === reconciledVideo?.actualPublishedAt &&
+        verification.videos[0]?.duration === reconciledVideo?.latestInventoryMatch?.duration;
+      const publicationReviewAccepted =
+        publication?.status === "OWNER_REVIEWED_REMOTE_HISTORY_MATCHES_FRESH_INVENTORY" ||
+        (publication?.status === "PRIOR_OWNER_REVIEW_MATCHES_FRESH_INVENTORY" && priorOwnerReviewMatchesFreshRecord);
+      const historyMatches = verification.channelIdentityVerified === true &&
+        verification.uploadsInventoryComplete === true &&
+        typeof channel?.id === "string" &&
+        (!expectedChannelId || channel.id === expectedChannelId) &&
+        ["SonicVhibez", "SonicVibes"].includes(channel.title) &&
+        channel.handle === "@sonicvhibez" &&
+        publicationReviewAccepted &&
+        publication.freshInventoryRunId === verification.workflowRunId &&
+        publication.freshInventoryArtifactSha256 === inventoryArtifact?.sha256 &&
+        reconciliation.complete === true &&
+        reconciliation.channelId === channel.id &&
+        reconciliation.verifiedAt === verification.checkedAt &&
+        reconciliation.latestInventoryEvidence?.verifiedAt === reconciliation.verifiedAt &&
+        reconciliation.latestInventoryEvidence?.complete === true &&
+        reconciliation.latestInventoryEvidence?.workflowRunId === verification.workflowRunId &&
+        reconciliation.latestInventoryEvidence?.artifactSha256 === inventoryArtifact?.sha256 &&
+        reconciliation.latestInventoryEvidence?.totalUploads === verification.totalUploads;
+      const historyFresh = isFreshHistoryEvidence(verification.checkedAt) &&
+        isFreshHistoryEvidence(reconciliation.verifiedAt) &&
+        Date.parse(inventoryArtifact?.expiresAt ?? "") > Date.now();
+      if (!historyMatches || !historyFresh) {
+        blockers.push("LIVE BLOCKER: complete owner-reviewed public/private/unlisted SonicVhibez history evidence is missing, stale, or inconsistent with the authenticated channel and fresh inventory.");
+      }
+      const attemptsReconciled = attempts?.status === "VERIFIED_NO_PRIOR_PRIVATE_UPLOAD_JOBS" &&
+        reconciliation.uploadAttemptReconciliation?.status === attempts.status &&
+        reconciliation.uploadAttemptReconciliation?.inspectedAt === attempts.inspectedAt &&
+        verificationAttempts?.status === attempts.status &&
+        verificationAttempts?.inspectedAt === attempts.inspectedAt &&
+        verificationAttempts?.evidence?.automatedLedgerValidation?.runId === ledgerValidation?.runId &&
+        verificationAttempts?.ownerAttestation?.status === "CONFIRMED" &&
+        attempts.ownerAttestation?.status === "CONFIRMED" &&
+        attempts.ownerAttestation.confirmedAt === attempts.inspectedAt?.slice(0, 10) &&
+        attempts.evidence?.executedPrivateUploadJobs === 0 &&
+        attempts.evidence?.uploadArtifactPrivatelyWorkflowRunsFound === 0 &&
+        ledgerValidation?.conclusion === "success" &&
+        ledgerValidation.executedPrivateUploadRuns === 0 &&
+        ledgerValidation.previousLedgerRunId === "NONE" &&
+        attempts.evidence?.nextPrivateUploadPreviousLedgerRunId === "NONE";
+      const attemptsFresh = isFreshHistoryEvidence(attempts?.inspectedAt);
+      if (!attemptsReconciled || !attemptsFresh) {
+        blockers.push("LIVE BLOCKER: local, workflow and owner-attested upload-attempt reconciliation is missing, stale, or incomplete; do not retry an uncertain upload.");
+      }
+      if (historyMatches && historyFresh && attemptsReconciled && attemptsFresh) {
+        notes.push(`YouTube history: verified ${verification.totalUploads} upload(s) for ${channel.handle}; public=${verification.visibilityCounts?.public ?? 0}, private=${verification.visibilityCounts?.private ?? 0}, unlisted=${verification.visibilityCounts?.unlisted ?? 0}; prior upload-attempt reconciliation passed.`);
+      }
+    }
+    }
+  } catch {
+    blockers.push("YouTube channel verification or owner-reviewed history reconciliation evidence is not valid JSON.");
+  }
 }
-console.log("PREREQUISITES PRESENT: run the content checker and media preflight, then manually inspect the result before any private upload.");
-console.log("This report never uploads, schedules, or publishes.");
+function resolutionFor(blocker) {
+  if (/QUEUE IDENTITY RECONCILIATION REQUIRED|queue identity approval|queue identity mappings/i.test(blocker)) return "Review content/queue-identity-approval.template.json against the exact current content/queue.json and content/long-form-queue.json. Confirm the topic identity for each operational long_form item, select one unique detailed item per operational item, and align each detailed item's publicationCyclePosition with the rolling long_form → long_form → short cycle. Then create content/queue-identity-approval.json with the exact queue hashes, status OWNER_APPROVED, ownerApproved=true, the approving owner, a timezone-qualified approvedAt timestamp and a non-empty approvalReference. Do not infer or record owner approval on the owner's behalf; keep publishing and dispatch disabled until the signed mapping is present.";
+  if (/narration rights are not cleared/i.test(blocker)) return "Do not use HeyGen Free-plan Roderic/Wade or local Piper/Edge TTS for public branded production. Follow the recorded owner selection of Speechma Andrew for a manual, zero-cost browser audition only; do not automate the free site or use its paid API. Download and retain the actual MP3, verify the script/input rights and applicable Terms, calculate its SHA-256, then obtain human listening and exact-hash production approval before use. Keep publishing disabled; no paid plan or API is authorized.";
+  if (/local, workflow and owner-attested upload-attempt reconciliation/i.test(blocker)) return "Refresh the owner attestation for the period after its recorded valid-through date: confirm whether any manual, local or third-party YouTube upload attempts occurred. If none occurred, record a new dated owner confirmation bound to the current complete read-only inventory and automated ledger scan. If any occurred, reconcile each attempt to its remote video ID, visibility, actual publication timestamp and final status. Never retry an uncertain upload; keep public/unattended publishing disabled.";
+  if (/imported wildlife asset/i.test(blocker)) return "Search already-connected source stores and existing project artifacts for genuine original creator-captured wildlife media. Verify the original camera operator and capture-provenance record, exact original MP4 and SHA-256, written commercial rights, technical full decode, third-party rights and human visual review. Pexels/Pixabay stock is not eligible for production; keep Canva/archive assets and AI-generated wildlife visuals excluded too. If no qualifying original media is accessible, retain the production HOLD and report the precise source-access blocker; do not ask the owner to upload media or substitute another media type.";
+  if (/read-only YouTube identity and uploads inventory verification.*invalid_grant/i.test(blocker)) return "Google rejected the YouTube OAuth refresh token (invalid_grant). Reauthorize the existing OAuth client for the same Google account with the YouTube read-only and upload scopes (https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload), request offline access with explicit consent, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, update only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun the read-only verification workflow. Never paste token values into chat or create a second OAuth client.";
+  if (/latest read-only YouTube OAuth attempt.*invalid_grant/i.test(blocker)) return "Google rejected the latest YouTube refresh-token grant (invalid_grant). Reauthorize the existing OAuth client for the same Google account with https://www.googleapis.com/auth/youtube.readonly and https://www.googleapis.com/auth/youtube.upload and offline access, confirm the new refresh token belongs to the configured YOUTUBE_CLIENT_ID and YOUTUBE_CLIENT_SECRET pair, replace only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun read-only verification. Never paste token values into chat or create a second OAuth client.";
+  if (/read-only YouTube identity and uploads inventory verification.*invalid_client/i.test(blocker)) return "Google rejected the existing OAuth client ID/secret pair. Verify the matching values for the existing single client in GitHub Actions secrets; do not create another client or share secret values. Rerun the read-only verification workflow after correcting the pair.";
+  if (/read-only YouTube identity and uploads inventory verification evidence is missing/i.test(blocker)) return "Run the read-only YouTube identity and uploads inventory workflow and retain its status report. Do not upload or publish while the check is missing or blocked.";
+  if (/YouTube OAuth upload scope is not independently verified/i.test(blocker)) return "Run the read-only SonicVhibez verification workflow and inspect its upload-scope result. If no videos.insert-capable scope is granted, reauthorize the existing Google OAuth client with https://www.googleapis.com/auth/youtube.upload (preferred), request offline access, update only YOUTUBE_REFRESH_TOKEN in GitHub Actions secrets, then rerun the read-only verification. Never paste tokens into chat or source files.";
+  if (/product promotion gate/i.test(blocker)) return "Use the existing owner-approved direct-sales disclosure verbatim in the video description, spoken narration, captions and readable on-screen text beside the product CTA; place a clear ADVERTISEMENT identifier before the promotion. Preserve the approved timestamp and reference in config/products.json and use the exact Selar URL https://selar.com/0u19v8u99l. Do not describe this own-business sale as an affiliate relationship. If the wording or commercial relationship changes, obtain new owner approval before publication. Keep publishing disabled until all other gates are verified.";
+  if (/CADENCE DECISION REQUIRED/i.test(blocker)) return "Choose a feasible owner-approved cadence that preserves the 72-hour minimum spacing and long_form → long_form → short cycle; record the approval with an explicit timezone-aware timestamp and non-empty reference in config/weekly-content-plan.json. Keep publication disabled until the decision is recorded.";
+  if (/history|uncertain upload|remote/i.test(blocker)) return "Authenticate to the approved SonicVhibez channel, retrieve public/private/unlisted history, reconcile every pending or uncertain attempt, and retain the reviewed reconciliation ledger.";
+  if (/license|licen[cs]e|rights evidence|rightsConfirmed/i.test(blocker)) return "Supply genuine source and licence/permission evidence for every asset, verify the permitted uses and restrictions, and retain evidence files plus SHA-256 hashes. Do not use placeholder strings.";
+  if (/human|review|approval|compliance/i.test(blocker)) return "Have the authorized human reviewer inspect the final media, captions, thumbnail, metadata, claims and disclosures; record the decision against exact final artifact hashes.";
+  if (/YOUTUBE_|channel ID|channelId|channel identity|SonicVhibez/i.test(blocker)) return "Configure credentials only in the approved secret store, authenticate with YouTube, and verify the API-returned channel ID equals the independently confirmed SonicVhibez channel ID.";
+  if (/manifest|MP4|media|footage|narration|captions|thumbnail/i.test(blocker)) return "Provide the genuine playable export and complete manifest; validate streams, duration, dimensions, captions, metadata and exact SHA-256 hashes.";
+  if (/Selar|product URL|destination/i.test(blocker)) return "Use only the approved product destination https://selar.com/0u19v8u99l and ensure reviewed metadata and CTA agree with the actual content.";
+  if (/schedule|spacing|cycle|queue|cadence/i.test(blocker)) return "Correct the authoritative schedule and queue so the rolling long_form → long_form → short cycle, Africa/Johannesburg timezone and minimum elapsed spacing agree; keep publication disabled.";
+  return "Inspect the named prerequisite, provide verifiable evidence in the expected configuration or artifact, then rerun production readiness. Do not bypass or weaken this gate.";
+}
+
+function controlOwnerFor(message) {
+  if (/product promotion gate/i.test(message)) return "external_owner_or_human_reviewer";
+  if (/LIVE BLOCKER|CADENCE DECISION REQUIRED|YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID|verified SonicVhibez YouTube channel ID|narration rights|narrationRights|rightsConfirmed|complianceReviewed|human-reviewed|human review|owner-approved/i.test(message)) {
+    return "external_owner_or_human_reviewer";
+  }
+  if (/render-manifest|long-form-render-manifest|final rendered|media\/next-short\.mp4|footageLicenseEvidence|narrationLicenseEvidence/i.test(message)) {
+    return "shared_code_and_owner";
+  }
+  return "maintainer_code_or_configuration";
+}
+
+function evidenceInspectedFor(message) {
+  if (/QUEUE IDENTITY RECONCILIATION REQUIRED|queue identity approval|queue identity mappings/i.test(message)) {
+    return { kind: "repository-path-check", path: queueIdentityApprovalPath, observed: message };
+  }
+  if (/local, workflow and owner-attested upload-attempt reconciliation/i.test(message)) {
+    let reconciliation;
+    try {
+      if (exists(historyReconciliationPath)) reconciliation = JSON.parse(fs.readFileSync(path.resolve(root, historyReconciliationPath), "utf8"));
+    } catch { /* Keep the evidence description explicitly unavailable below. */ }
+    const inventoryVerifiedAt = reconciliation?.latestInventoryEvidence?.verifiedAt ?? reconciliation?.verifiedAt ?? "unavailable";
+    const attestation = reconciliation?.uploadAttemptReconciliation?.ownerAttestation;
+    const validThrough = attestation?.validThrough ?? "unavailable";
+    const attestationStatus = attestation?.freshnessStatus ?? attestation?.status ?? "unavailable";
+    return {
+      kind: "external-reconciliation-required",
+      path: historyReconciliationPath,
+      observed: `Read-only remote inventory verified at ${inventoryVerifiedAt}; owner upload-attempt attestation is ${attestationStatus} and valid through ${validThrough}. GitHub workflow history cannot inspect manual, local or third-party attempts after that date.`
+    };
+  }
+  if (/imported wildlife asset/i.test(message)) return {
+    kind: "repository-path-check",
+    path: mediaInventoryPath,
+    observed: message
+  };
+  if (/YouTube OAuth upload scope/i.test(message)) return {
+    kind: "external-reconciliation-required",
+    path: youtubeVerificationPath,
+    observed: "The checked-in OAuth scope result is stale or otherwise outside the 24-hour freshness window; a fresh read-only remote scope verification is required before this gate can pass."
+  };
+  if (/read-only YouTube identity|OAuth error/i.test(message)) return {
+    kind: "repository-path-check",
+    path: youtubeVerificationPath,
+    observed: message
+  };
+  if (/product promotion gate/i.test(message)) return { kind: "repository-path-check", path: productsPath, observed: message };
+  if (/YOUTUBE_CLIENT_ID|YOUTUBE_CLIENT_SECRET|YOUTUBE_REFRESH_TOKEN|SONICVHIBEZ_CHANNEL_ID/.test(message)) {
+    return {
+      kind: "environment-presence-check",
+      observed: "The required variable is absent from this readiness process environment; secret values are never included in this report."
+    };
+  }
+  if (/LIVE BLOCKER/.test(message)) {
+    return {
+      kind: "external-reconciliation-required",
+      observed: "This read-only readiness check does not independently fetch remote YouTube history; remote public/private/unlisted history and local uncertain attempts remain unverified here."
+    };
+  }
+  const pathMatch = message.match(/(?:content|config|media)\/[A-Za-z0-9._/-]+\.json|media\/next-short\.mp4/);
+  const inferredPath = /queue/i.test(message) && path.isAbsolute(queuePath)
+    ? "configured QUEUE_PATH (absolute path withheld)"
+    : (pathMatch?.[0] ??
+      (/cadence|schedule|publication cycle|spacing|weekly/i.test(message) ? schedulePath :
+        (/metadata/i.test(message) ? metadataPath :
+          (/queue/i.test(message) ? queuePath : ""))));
+  return {
+    kind: inferredPath ? "repository-path-check" : "readiness-check-finding",
+    ...(inferredPath ? { path: inferredPath } : {}),
+    observed: message
+  };
+}
+
+const structuredBlockers = blockers.map((message) => {
+  const digest = createHash("sha256").update(message).digest("hex").slice(0, 12).toUpperCase();
+  const critical = /LIVE BLOCKER|uncertain|OAuth|YOUTUBE_|channel ID|rights|licen[cs]e|human|approval|upload|private|seller|brand authorization|compensation|disclosure/i.test(message);
+  return {
+    id: `RDY-${digest}`,
+    severity: critical ? "critical" : "high",
+    message,
+    evidence: evidenceInspectedFor(message),
+    controlOwner: controlOwnerFor(message),
+    resolution: resolutionFor(message)
+  };
+});
+
+if (process.argv.includes("--json")) {
+  console.log(JSON.stringify({
+    application: "SonicVhibez Marketing Machine",
+    mode: "read-only",
+    status: blockers.length ? "blocked" : "prerequisites-present",
+    blockerCount: structuredBlockers.length,
+    blockers: structuredBlockers,
+    notes,
+    limitations: [
+      "This report never uploads, schedules, or publishes.",
+      "This report does not verify account ownership, licence authenticity, factual accuracy, or visual quality."
+    ]
+  }, null, 2));
+  if (blockers.length) process.exitCode = 2;
+} else {
+  console.log("SonicVhibez production readiness (read-only)");
+  for (const note of notes) console.log("INFO: " + note);
+  if (blockers.length) {
+    console.log(`HOLD: ${blockers.length} blocker(s) remain before a private upload can be attempted:`);
+    for (const blocker of blockers) console.log("- " + blocker);
+    console.log("This report never uploads, schedules, or publishes.");
+    console.log("This report does not verify account ownership, license authenticity, factual accuracy, or visual quality.");
+    process.exitCode = 2;
+  } else {
+    console.log("PREREQUISITES PRESENT: run the content checker and media preflight, then manually inspect the result before any private upload.");
+    console.log("This report never uploads, schedules, or publishes.");
+  }
+}

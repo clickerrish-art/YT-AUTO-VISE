@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "channel": "SonicVhibez",
+  "assetId": "NOAA-SPINY-LOBSTERS-CA-2026-11",
+  "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+  "productionApproved": false,
+  "rightsConfirmed": false,
+  "rightsEvidenceReviewed": false,
+  "humanApproved": false,
+  "complianceReviewed": false,
+  "source": {
+    "title": "B-Roll: Spiny Lobsters in California's Channel Islands",
+    "publisher": "NOAA's Office of National Marine Sanctuaries",
+    "sourceUrl": "https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california",
+    "acquiredFilename": "noaa-spiny-lobsters-california.download",
+    "sha256": "1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb",
+    "container": "GitHub Actions artifact sonicvhibez-noaa-broll-candidates",
+    "workflowRunId": 42594716333,
+    "artifactId": 13662524700,
+    "artifactUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/42594716333/artifacts/13662524700",
+    "technical": {
+      "container": "MP4",
+      "videoCodec": "H.264",
+      "audioCodec": "AAC",
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 380.81,
+      "bytes": 100223664
+    }
+  },
+  "ownerAuthorization": {
+    "status": "APPROVED_WITH_CONDITIONS",
+    "recordedDate": "2026-11-10",
+    "scope": "This specific NOAA Spiny Lobsters in California package only",
+    "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
+    "sourceAudio": "REMOVE_COMPLETELY",
+    "noEndorsement": "Do not use NOAA seals/logos as SonicVhibez branding or imply NOAA endorses SonicVhibez or any promoted product.",
+    "authorizationReference": "Owner explicitly approved use of this specific package in the ChatGPT conversation on 2026-11-10, conditioned on exact NOAA credit and complete removal of the source audio.",
+    "currentStatus": "SUPERSEDED_BY_2026-11-21_ORIGINAL_MEDIA_POLICY",
+    "historicalStatus": "APPROVED_WITH_CONDITIONS_ON_2026-11-10"
+  },
+  "termsAndReview": {
+    "publicDomainStatement": "NOAA's official B-roll library states B-roll packages may be downloaded and used with NOAA credit; package-specific opening slate supplies exact attribution.",
+    "observedOpeningSlateCredit": "Please credit “NOAA’s Office of National Marine Sanctuaries”.",
+    "visualReview": "Selected source ranges 160–175s, 245–257s, 320–335s and 360–373s were inspected with 2 fps contact sheets. The selected frames show California spiny lobster and reef habitat; no people, handling, baiting, staged interaction, graphic animal harm, watermark or additional credit card was observed in the selected ranges. This is selected-range sampling only, not full source playback.",
+    "reviewLimitations": [
+      "One-second sampling is not frame-by-frame or sub-second review.",
+      "Individual selected shots, transitions, embedded content and source terms still require human review.",
+      "The source AAC audio is not cleared and must not appear in any derivative.",
+      "This candidate is not entered into the approved production asset register.",
+      "The 55-second silent vertical visual-review cut has been generated and full-file decoded; it remains a review-only derivative with persistent warning and exact NOAA attribution."
+    ],
+    "nextClearanceSteps": [
+      "Verify the source package and exact SHA-256 before editing.",
+      "Select and inspect each intended in/out range and adjacent transitions.",
+      "Remove the entire source audio stream and verify the final file has no source audio.",
+      "Display the exact required NOAA credit legibly in the final edit.",
+      "Check the final edit for factual accuracy, third-party content, endorsement implications and all other applicable disclosures.",
+      "Complete separate human final-video and compliance approval before setting production flags."
+    ]
+  },
+  "publication": {
+    "allowed": false,
+    "note": "Historical conditional source-use authorization is superseded. The source remains reference-only and must not be used in production under the current original-capture policy."
+  },
+  "reviewCut": {
+    "filename": "NOAA-spiny-lobster-review-cut.mp4",
+    "localOutput": "/mnt/data/noaa-review/NOAA-spiny-lobster-review-cut.mp4",
+    "durationSeconds": 64,
+    "dimensions": "1280x720",
+    "videoCodec": "H.264",
+    "audioStreams": 0,
+    "sourceAudioRemoved": true,
+    "sourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        260
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        375
+      ]
+    ],
+    "sha256": "74fe43b1beae68574d2f75fd7b95737bde87be1ebad48451d4b50b94645b9181",
+    "purpose": "Silent source-review assembly only; contains a persistent review-only warning, exact NOAA attribution, and a not-approved-for-publication end slate.",
+    "productionApproved": false,
+    "notes": "This is not the final Short, has no narration, and has not completed full human/compliance review."
+  },
+  "visualReviewCut": {
+    "filename": "NOAA-california-spiny-lobster-visual-review-1080x1920.mp4",
+    "delivery": "Conversation review attachment; not committed as a production media file",
+    "sha256": "4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261",
+    "durationSeconds": 55,
+    "width": 1080,
+    "height": 1920,
+    "frameRate": 30,
+    "videoCodec": "H.264",
+    "audioStreams": 0,
+    "sourceAudioRemoved": true,
+    "sourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        257
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        373
+      ]
+    ],
+    "persistentReviewWarning": "REVIEW ONLY - NOT APPROVED FOR PUBLICATION",
+    "requiredAttribution": "Footage courtesy of NOAA’s Office of National Marine Sanctuaries",
+    "fullFileDecode": "PASS",
+    "purpose": "Silent vertical visual-review cut only. Preserves selected genuine NOAA footage, displays persistent review-only warning and exact required credit; no narration or captions.",
+    "productionApproved": false,
+    "uploadAllowed": false,
+    "scheduleAllowed": false,
+    "reviewLimitations": [
+      "Selected ranges were visually sampled at 2 frames per second and the final cut was checked via a six-frame contact sheet; this is not full continuous human playback.",
+      "The source package contains AAC audio, which was completely excluded from this cut; source audio rights remain uncleared.",
+      "The final edit, shot-to-narration alignment, captions, factual claims, attribution legibility on device, rights and compliance still require human review.",
+      "This review cut is not the production master and must not be renamed or substituted for media/next-short.mp4."
+    ]
+  },
+  "currentProductionDisposition": {
+    "status": "EXCLUDED_REFERENCE_ONLY",
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "reason": "The earlier conditional source-use authorization from 2026-11-10 is superseded by the owner's 2026-11-21 policy requiring original creator-captured wildlife media. NOAA B-roll is an archive/stock package and is not eligible as a substitute."
+  }
+}

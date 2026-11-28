@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "checkedAt": "2026-11-21T16:42:51.082Z",
+  "status": "PARTIAL_OWNER_CLASSIFICATION_AND_ATTEMPT_ATTESTATION_PENDING",
+  "mode": "READ_ONLY_YOUTUBE_IDENTITY_SCOPE_AND_COMPLETE_UPLOADS_INVENTORY",
+  "source": {
+    "workflowRun": 44890253420,
+    "workflowUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44890253420",
+    "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
+    "workflowRunId": 44926048755,
+    "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44926048755",
+    "workflowRunAttempt": 1,
+    "jobId": 136912253740,
+    "artifactId": 14715925931,
+    "artifactSha256": "cb15c6243be4de0be9e1de4f9640be1b7efee75b3ed799cfb877798a7376ca40",
+    "inventoryJsonSha256": "115b95e257cfdae19cc3bee1a4a9c6c7f57f1a1b89c8628b9d7d69c6f999226a"
+  },
+  "channel": {
+    "id": "UCSlkuPfHH78oGC1o418HV4w",
+    "title": "SonicVibes",
+    "handle": "@sonicvhibez",
+    "authenticatedIdentityMatchesOwnerSuppliedChannel": true
+  },
+  "oauth": {
+    "status": "PASS",
+    "checkedAt": "2026-11-21T16:42:50.819Z",
+    "requiredScopes": [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly"
+    ],
+    "grantedScopes": [
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/youtube.upload"
+    ],
+    "bothRequiredScopesGranted": true
+  },
+  "inventory": {
+    "paginationAndVideoDetailsComplete": true,
+    "visibilityCounts": {
+      "public": 1,
+      "private": 0,
+      "unlisted": 0
+    },
+    "formatClassification": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
+    "ownerReaffirmationRequired": true,
+    "publicationCycleReconciliation": "PENDING",
+    "complete": true,
+    "uploadsPlaylistPages": 1,
+    "totalUploads": 1,
+    "artifact": {
+      "id": 14715925931,
+      "name": "sonicvhibez-youtube-history-inventory",
+      "sha256": "cb15c6243be4de0be9e1de4f9640be1b7efee75b3ed799cfb877798a7376ca40",
+      "inventoryJsonSha256": "115b95e257cfdae19cc3bee1a4a9c6c7f57f1a1b89c8628b9d7d69c6f999226a",
+      "createdAt": "2026-11-21T16:42:51Z",
+      "expiresAt": "2026-11-28T16:42:51Z"
+    },
+    "videos": [
+      {
+        "id": "LjePS02hA1o",
+        "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+        "title": "First Draft of the Story of a Wildlife Documentary",
+        "visibility": "public",
+        "youtubePublishedAt": "2026-10-22T15:05:56Z",
+        "scheduledPublishAt": null,
+        "duration": "PT20S",
+        "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
+        "ownerConfirmed": false,
+        "publicationCycleReconciled": false,
+        "ownerReview": {
+          "verifiedBy": "clickerrish-art",
+          "verifiedAt": "2026-11-10T04:35:06Z",
+          "format": "short",
+          "studioPublicationDateConfirmed": true,
+          "studioVideoUrl": "https://studio.youtube.com/video/LjePS02hA1o/edit",
+          "reaffirmedAt": "2026-11-18",
+          "reaffirmationRequired": true
+        }
+      }
+    ]
+  },
+  "uploadAttemptReconciliation": {
+    "workflowRun": 44926048762,
+    "workflowUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44926048762",
+    "jobId": 136912254452,
+    "sourceCommit": "ca3c6d696dec5784a76789d377231615bc8f65f6",
+    "inspectedAt": "2026-11-21T16:42:47.153Z",
+    "previousPrivateUploadWorkflowExecutions": 0,
+    "previousLedgerRunId": null,
+    "workflowConclusion": "PASS_NO_PRIOR_PRIVATE_UPLOAD_JOB_EXECUTED",
+    "manualLocalThirdPartyAttemptAttestation": "STALE_AFTER_2026-11-18",
+    "ownerAttestationRequired": true
+  },
+  "safety": {
+    "publishingEnabled": false,
+    "uploadAttempted": false,
+    "metadataWriteAttempted": false,
+    "publicationStateChanged": false
+  },
+  "nextRequiredActions": [
+    "Owner must reaffirm that LjePS02hA1o remains classified as a Short and confirm the Studio publication date against this exact fresh inventory artifact.",
+    "Owner must attest whether any manual, local or third-party YouTube upload attempts occurred after 2026-11-18; if any occurred, provide their exact video IDs, timestamps and visibility.",
+    "Keep all dispatch and publication disabled until owner-reviewed history, upload-attempt reconciliation, queue identity approval, rights and production gates are complete."
+  ]
+}

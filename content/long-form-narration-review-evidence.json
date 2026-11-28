@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "channel": "SonicVhibez",
+  "status": "SUPERSEDED_WRONG_SCRIPT_AND_UNAPPROVED_VOICE",
+  "generatedAt": "2026-11-09T08:59:34Z",
+  "workflowRunId": 42589947310,
+  "workflowArtifactId": 13660413544,
+  "sourceCommit": "c4e4fef39e69d9d85220e0bd022cb6e3c4745bb8",
+  "sourceScriptPath": "content/long-form-scripts.md",
+  "sourceScriptBlobSha": "390dfdcf15f896b135238237f9753f5cfddf710e",
+  "generator": "scripts/generate_long_form_narration.py",
+  "voice": "en-US-GuyNeural",
+  "items": [
+    {
+      "id": "long-001",
+      "audioPath": "media/long-form-drafts/long-001-narration-draft.mp3",
+      "audioSha256": "d4932bcecb3666d6b09ddb25b7dcc8a126ef471fd861651aee3d964e35ed9873",
+      "durationSeconds": 366.24,
+      "wordCount": 963,
+      "captionPath": "media/long-form-drafts/long-001-captions-draft.srt",
+      "captionSha256": "afbc6e3f4b7aed7161c350adb919361ff049be68ff618aec587bcdb8fa261648",
+      "captionCueCount": 151,
+      "captionEndSeconds": 365.35,
+      "captionsCoverAudio": true
+    },
+    {
+      "id": "long-002",
+      "audioPath": "media/long-form-drafts/long-002-narration-draft.mp3",
+      "audioSha256": "b171da4793d93c41b697b5377fad3850cb47ada07fe53f6240930b51b557edb2",
+      "durationSeconds": 382.13,
+      "wordCount": 984,
+      "captionPath": "media/long-form-drafts/long-002-captions-draft.srt",
+      "captionSha256": "44f2e04dee12c797fa1901e75a0e192d4939d9247fdd87b9b5d5aa2f6224420f",
+      "captionCueCount": 157,
+      "captionEndSeconds": 381.24,
+      "captionsCoverAudio": true
+    }
+  ],
+  "rightsStatus": "NOT_VERIFIED",
+  "humanReviewRequired": true,
+  "publishingEnabled": false,
+  "limitations": [
+    "These are narration and caption drafts only; no rendered long-form MP4 is represented by this report.",
+    "Voice-use and commercial-use permissions are not verified by the generation workflow.",
+    "Captions are generated from TTS word boundaries and still require human timing, punctuation and readability review.",
+    "All factual claims, final edit, thumbnail, rights, compliance and any promotional disclosure require human review.",
+    "The recorded sourceScriptBlobSha does not match the current source script blob. This artifact is historical draft evidence only and must not be used as production narration approval.",
+    "Regenerate narration from the exact current script, verify commercial-use voice rights, synchronize captions to final audio, and complete human playback/compliance review before release."
+  ],
+  "currentSourceScriptBlobSha": "d1b60f7bc0487ceba7efba56b65aa1d9ec760030",
+  "recordedSourceScriptBlobSha": "390dfdcf15f896b135238237f9753f5cfddf710e",
+  "disclosureStatus": "NOT_VERIFIED_IN_FINAL_AUDIO",
+  "productionUseAllowed": false,
+  "ownerApprovedVoice": false,
+  "commercialUseRightsVerified": false,
+  "voicePolicy": {
+    "selectedVoiceInHistoricalArtifact": "en-US-GuyNeural",
+    "ownerPreferredVoice": "Roderic — Authoritative & Refined",
+    "historicalVoiceApproved": false,
+    "currentHeyGenFreeSampleCommercialUseAllowed": false,
+    "currentHeyGenFreeSampleStatus": "INTERNAL_AUDITION_ONLY",
+    "productionNarrationStatus": "BLOCKED",
+    "note": "Historical Edge TTS audio is not an approved voice and must not be used in SonicVhibez production. The current Roderic HeyGen Free-plan sample is also non-commercial and may only be used for internal evaluation. No narrator substitution is authorized without explicit owner approval."
+  },
+  "notes": [
+    "Historical audio/captions are superseded: they were generated from an older script SHA and the unapproved en-US-GuyNeural voice. Do not use them for production or release. The canonical Long-form 001 script is content/long-form-001-wildlife-story-script.md; generate new narration only after owner approval of a commercially licensed voice path.",
+    "Current canonical script SHA is d1b60f7bc0487ceba7efba56b65aa1d9ec760030. This evidence is historical only: it was generated from a different source script using unapproved en-US-GuyNeural, not the preferred Roderic voice. Do not use the old audio or captions in production."
+  ]
+}

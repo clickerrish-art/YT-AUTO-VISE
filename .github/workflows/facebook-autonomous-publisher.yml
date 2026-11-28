@@ -1,0 +1,118 @@
+name: Autonomous Nature Frontiers Facebook publisher
+
+on:
+  schedule:
+    # 07:30 Africa/Johannesburg (UTC+2): prepare the 08:00 local scheduled post.
+    - cron: "30 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nature-frontiers-facebook-autonomous-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    # A persistent, owner-controlled runner is required for durable history and locks.
+    runs-on: [self-hosted, linux, facebook-publisher]
+    timeout-minutes: 10
+    env:
+      FACEBOOK_AUTONOMOUS_QUEUE_PATH: ${{ vars.FACEBOOK_AUTONOMOUS_QUEUE_PATH }}
+      NATURE_FRONTIERS_FACEBOOK_PAGE_ID: ${{ vars.NATURE_FRONTIERS_FACEBOOK_PAGE_ID }}
+      # Fail-closed at workflow level; live publishing needs a separate reviewed change and authorization.
+      FACEBOOK_PUBLISH_ENABLED: 'NO'
+      META_USER_ACCESS_TOKEN: ${{ secrets.META_USER_ACCESS_TOKEN }}
+      FACEBOOK_APPROVAL_HMAC_SECRET: ${{ secrets.FACEBOOK_APPROVAL_HMAC_SECRET }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Initialize persistent, private Facebook state directory
+        env:
+          FACEBOOK_STATE_DIR_OVERRIDE: ${{ vars.FACEBOOK_STATE_DIR }}
+        run: |
+          state_dir="${FACEBOOK_STATE_DIR_OVERRIDE:-$HOME/.local/state/nature-frontiers-facebook}"
+          case "$state_dir" in
+            /*) ;;
+            *) echo "FACEBOOK_STATE_DIR must be an absolute path"; exit 1 ;;
+          esac
+          mkdir -p "$state_dir"
+          chmod 700 "$state_dir"
+          if [ -L "$state_dir" ] || [ ! -d "$state_dir" ]; then
+            echo "Facebook state directory must be a real directory, not a symlink."
+            exit 1
+          fi
+          printf 'FACEBOOK_STATE_DIR=%s\n' "$state_dir" >> "$GITHUB_ENV"
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Validate and enqueue evidence-complete candidates
+        run: npm run facebook:intake:autonomous
+      - name: Run autonomous Facebook publisher
+        run: npm run facebook:publish:autonomous
+      - name: Snapshot recovery state (30-day recovery window)
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          snapshot_dir="$RUNNER_TEMP/nature-frontiers-facebook-recovery"
+          mkdir -p "$snapshot_dir"
+          manifest="$snapshot_dir/recovery-manifest.json"
+          node --input-type=module -e 'import fs from "node:fs"; fs.writeFileSync(process.argv[1], JSON.stringify({createdAt:new Date().toISOString(),repository:process.env.GITHUB_REPOSITORY,runId:process.env.GITHUB_RUN_ID,commit:process.env.GITHUB_SHA,retentionDays:30,stateAvailable:Boolean(process.env.FACEBOOK_STATE_DIR && fs.existsSync(process.env.FACEBOOK_STATE_DIR))},null,2)+"\\n",{mode:0o600});' "$manifest"
+          if [ -n "${FACEBOOK_STATE_DIR:-}" ] && [ -d "$FACEBOOK_STATE_DIR" ] && [ ! -L "$FACEBOOK_STATE_DIR" ]; then
+            shopt -s nullglob
+            state_files=( "$FACEBOOK_STATE_DIR"/facebook-*.json )
+            for name in facebook-publishing.lock meta-rate-limit-state.json; do
+              candidate="$FACEBOOK_STATE_DIR/$name"
+              if [ -f "$candidate" ] && [ ! -L "$candidate" ]; then state_files+=( "$candidate" ); fi
+            done
+            if (("${#state_files[@]}")); then
+              basenames=()
+              for candidate in "${state_files[@]}"; do
+                if [ -f "$candidate" ] && [ ! -L "$candidate" ]; then basenames+=( "${candidate##*/}" ); fi
+              done
+              if (("${#basenames[@]}")); then
+                tar -czf "$snapshot_dir/facebook-state.tar.gz" -C "$FACEBOOK_STATE_DIR" "${basenames[@]}"
+                chmod 600 "$snapshot_dir/facebook-state.tar.gz"
+              fi
+            fi
+            if [ ! -f "$snapshot_dir/facebook-state.tar.gz" ]; then
+              echo "No allowlisted publisher state files were available to snapshot." > "$snapshot_dir/RECOVERY_BLOCKED.txt"
+            fi
+          else
+            echo "Durable state directory was unavailable; no state archive was created." > "$snapshot_dir/RECOVERY_BLOCKED.txt"
+          fi
+          echo "### Nature Frontiers recovery snapshot" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Retention: 30 days" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Contains publisher JSON ledgers, queue and Meta rate-limit cooldown state only; no access tokens." >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain recovery snapshot for 30 days
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nature-frontiers-facebook-recovery-${{ github.run_id }}
+          path: ${{ runner.temp }}/nature-frontiers-facebook-recovery/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Send failure alert
+        if: failure()
+        shell: bash
+        env:
+          FAILURE_WEBHOOK_URL: ${{ secrets.FACEBOOK_FAILURE_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          RUN_NAME: ${{ github.workflow }}
+        run: |
+          set -euo pipefail
+          if [ -z "${FAILURE_WEBHOOK_URL:-}" ]; then
+            echo "::warning::FACEBOOK_FAILURE_WEBHOOK_URL is not configured; GitHub Actions failure notifications remain the fallback."
+            echo "- Failure alert webhook: not configured (GitHub Actions notifications are the fallback)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          payload="$(node -e 'const text=process.env.RUN_NAME+" failed. Inspect the sanitized run logs: "+process.env.RUN_URL; process.stdout.write(JSON.stringify({text,content:text}));')"
+          if ! curl --fail --silent --max-time 10 -H "Content-Type: application/json" --data "$payload" "$FAILURE_WEBHOOK_URL"; then
+            echo "::error::Failure alert delivery failed; webhook URL withheld from logs."
+            exit 1
+          fi
+          echo "- Failure alert: webhook delivery accepted." >> "$GITHUB_STEP_SUMMARY"

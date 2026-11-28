@@ -10,6 +10,10 @@ import asyncio
 import re
 import sys
 import edge_tts
+try:
+    from scripts.narration_policy import require_owner_authorized_alternative_voice
+except ImportError:
+    from narration_policy import require_owner_authorized_alternative_voice
 
 SOURCE = Path("content/long-form-scripts.md")
 OUT = Path("artifacts/narration")
@@ -40,6 +44,7 @@ def extract_episodes(markdown: str):
     return episodes
 
 async def main():
+    require_owner_authorized_alternative_voice()
     if not SOURCE.exists():
         raise FileNotFoundError(f"Missing source script: {SOURCE}")
     OUT.mkdir(parents=True, exist_ok=True)

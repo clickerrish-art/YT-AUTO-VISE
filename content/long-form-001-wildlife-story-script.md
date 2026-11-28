@@ -1,9 +1,12 @@
-# SonicVhibez Long-Form Video 001 — Production Script
+# SonicVhibez Creator-Education Long-Form Draft — Queue ID: `long-story-wildlife-footage`
+
+**Cycle assignment:** NOT ASSIGNED. This is a separate creator-education draft, not the Nile crocodile documentary and not the owner-selected second long-form item in the rolling publication cycle. The Nile crocodile documentary retains the canonical long-form 001 topic identity. This legacy file path is retained to avoid breaking existing references; do not infer its cycle position from the filename.
 
 **Working title:** How to Turn Wildlife Footage Into a Documentary Story  
 **Channel:** SonicVhibez  
 **Format:** 16:9 long-form, target 7–8 minutes  
-**Status:** SCRIPT DRAFT — research/source review, media rights, narration, captions, thumbnail and human approval still required  
+**Status:** SCRIPT DRAFT — research/source review, media rights, commercially licensed narration, captions, thumbnail and human approval still required  
+**Narration rights:** HeyGen Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially; the existing WAV is internal-evaluation-only. The owner selected Speechma Andrew (English, United States, male standard voice) for a manual zero-cost browser audition only. No Andrew MP3, final audio hash, full listening review or owner production approval exists. Do not automate the Speechma browser, use paid upgrades or substitute another voice. Verify the exact Speechma terms and third-party input rights, then obtain owner approval bound to the exact final audio SHA-256 before production.  
 **Audience:** Beginner wildlife filmmakers and faceless YouTube creators  
 **Core promise:** A repeatable editing method for turning a collection of animal clips into a clear, honest mini-story.
 
@@ -17,10 +20,16 @@
 
 A strong wildlife video is more than a sequence of beautiful animal clips. In this practical guide, learn how to build a beginning, middle and ending from footage you actually have, use natural sound, write narration that adds context, and avoid misleading edits.
 
-This is a creator-education video. Always verify animal-behaviour claims with reliable sources and respect wildlife, local rules and the rights attached to every clip.
+This is a creator-education video. Always verify animal-behaviour claims with reliable sources and respect wildlife, local rules and the rights attached to every clip. Production media may be original creator-captured wildlife footage or qualifying Pexels/Pixabay licensed stock, with exact source-page provenance, applicable licence evidence, original file hash, technical verification, third-party-rights review and human approval. Do not use other stock sources or AI-generated wildlife visuals. Until qualifying footage is acquired and reviewed, use clearly labelled diagrams or blank edit placeholders only.
 
-If you want a structured wildlife-video planning resource, see the Complete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l  
-(Disclosure: this is a promotional/affiliate-style link; confirm the exact commercial relationship before publishing and enable YouTube's paid-promotion disclosure if applicable.)
+ADVERTISEMENT.
+
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+For a structured resource to support wildlife-video planning, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
+https://selar.com/0u19v8u99l
+
+HeyGen Support confirmed that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. The existing sample is internal-evaluation-only; do not use it in any public branded release. Speechma Andrew (English, United States, male standard voice) is selected for a manual zero-cost browser audition only. No Andrew MP3, licence verification, final audio hash or owner production approval exists. Do not automate the browser, use paid upgrades or substitute another voice. Production use requires review of the exact voice terms and third-party input rights, full listening review and owner approval bound to the final audio SHA-256. AI-generated wildlife visuals are prohibited. If any other realistic altered or synthetic content appears in the final edit, assess and apply YouTube's disclosure setting where required. Review the current sales page and terms before purchasing.
 
 #WildlifeFilmmaking #DocumentaryStorytelling #VideoEditing
 
@@ -29,7 +38,7 @@ If you want a structured wildlife-video planning resource, see the Complete YouT
 ### 0:00–0:25 — Hook
 
 **Voice-over:**  
-You can have stunning wildlife footage and still end up with a video that feels forgettable. The missing piece is often not a better camera or a more dramatic animal. It is a story. In this video, we’ll turn a folder of clips into a clear mini-documentary using a simple three-part structure: set up a question, show what the footage actually reveals, and finish with a meaningful payoff.
+Beautiful footage isn't a story. Give it a question, a middle, and a payoff. That is how you turn a folder of wildlife clips into a mini-documentary—without inventing an encounter or forcing an animal to perform. Let's build one, step by step.
 
 **Visuals:**  
 Open on three distinct, rights-cleared shots: a wide habitat view, an animal behaving naturally, and a detail shot. Cut to a blank three-part timeline. Avoid fabricated animal encounters.
@@ -42,7 +51,7 @@ Open on three distinct, rights-cleared shots: a wide habitat view, an animal beh
 Before you edit, watch every clip and write down what is genuinely visible. Is the animal searching, resting, moving through its habitat, feeding, grooming, or responding to something in the environment? Do not begin with a sensational headline and force the footage to fit it. Start with a question the material can answer. For example: “How does this animal use its surroundings?” or “What changes over the course of this sequence?” If the clips do not show the answer, choose a narrower question.
 
 **Visuals:**  
-Show a simple clip log with columns for filename, visible action, location if known, usable duration, audio, and source/licence. Use placeholder footage only in the edit mock-up until licensed media is selected.
+Show a simple clip log with columns for filename, visible action, location if known, usable duration, audio, and source/licence. Use original creator-captured footage or qualifying licensed Pexels/Pixabay footage after source provenance and rights are verified. If rights are incomplete, use clearly labelled blank or diagram placeholders; do not substitute other stock or AI-generated wildlife visuals.
 
 **On-screen text:** “Let the footage set the limits.”
 
@@ -101,7 +110,7 @@ Show a simple thumbnail mock-up beside the opening shot. Add a checklist: “Acc
 **Voice-over:**  
 Before you publish, check the full video on a phone and a larger screen. Listen with headphones for clipped narration, abrupt music changes and distracting background noise. Check captions against the final voice track, not an earlier draft. Verify the spelling of species names and every factual statement. Keep a record of where each clip, image, sound effect and music track came from and what its licence permits.
 
-If you use AI-generated or altered material, make sure it does not mislead viewers about real animal behaviour. Review YouTube’s current disclosure requirements and select the appropriate settings. If you promote a product or use a commercial relationship, disclose it clearly and use the platform’s paid-promotion setting when required.
+Do not use AI-generated wildlife visuals. If any other realistic altered or synthetic material appears, make sure it does not mislead viewers about real animal behaviour and apply YouTube’s disclosure requirements where applicable. If you promote a product or use a commercial relationship, disclose it clearly and use the platform’s paid-promotion setting when required.
 
 **Visuals:**  
 Show a pre-publication checklist and a folder containing licence records, source notes, final captions and export.
@@ -111,22 +120,22 @@ Show a pre-publication checklist and a folder containing licence records, source
 **Voice-over:**  
 Here is the method: choose a question the footage can answer, arrange the best shots into a beginning, middle and end, edit for meaning, preserve useful natural sound, verify the narration, and make the packaging match the actual story. You do not need to make every video louder or more dramatic. You need to make each shot earn its place.
 
-If this helped, subscribe to SonicVhibez for practical creator workflows. And if you want a planning resource for wildlife video creation, the Wildlife Creator’s Vault link is in the description. Check the product details before purchasing. Thanks for watching.
+If this helped, subscribe to SonicVhibez for practical creator workflows. Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. If you want a structured resource for planning wildlife videos, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF using the link in the description. Check the current sales page and terms before deciding whether it suits you. No product can guarantee views, growth or monetization. Thanks for watching SonicVhibez.
 
 **Visuals:**  
-Return to the three-part timeline, then a restrained end screen with subscribe prompt and one relevant video placeholder. Only display the product link if its details and promotional disclosures have been verified.
+Return to the three-part timeline. Display a clear ADVERTISEMENT identifier, then show the exact approved direct-sales disclosure in readable, high-contrast on-screen text before the product name or link appears. Hold long enough to read while the disclosure is spoken. Only then show the product CTA and link, followed by a restrained end screen with a subscribe prompt and one relevant video placeholder.
 
 ## Editorial and compliance checklist
 
 - [ ] Confirm all footage is licensed for the intended YouTube/commercial use; save licence evidence and source URLs.
 - [ ] Confirm that clips are not edited to imply an event or reaction that did not happen.
 - [ ] Research and cite any factual animal-behaviour claims in the production notes; remove unsupported claims.
-- [ ] Confirm the product link opens the intended product and verify whether a paid/affiliate relationship applies.
+- [ ] Confirm the approved Selar product URL is correct; include the exact owner-approved direct-sales disclosure in the description, spoken narration and readable on-screen text beside the CTA, with a clear ADVERTISEMENT identifier before the promotion.
 - [ ] Confirm the video is original, adds educational value, and is not repetitive or mass-produced.
 - [ ] Generate final narration; target 7–8 minutes, but do not stretch with filler to hit duration.
 - [ ] Create captions from the final narration and check timing.
 - [ ] Render and inspect the actual 16:9 MP4; verify audio, picture, title, thumbnail and end screen.
-- [ ] Apply relevant YouTube altered/synthetic-content and paid-promotion settings.
+- [ ] Enable YouTube's paid-promotion declaration and applicable altered/synthetic-media settings; retain evidence of the final settings.
 - [ ] Human review and approval required before upload or scheduling.
 
 ## Production status

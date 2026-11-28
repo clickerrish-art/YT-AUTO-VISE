@@ -1,0 +1,5924 @@
+{
+  "schemaVersion": "1.0.0",
+  "registerId": "nature-frontiers-media",
+  "brand": "Nature Frontiers",
+  "timezone": "Africa/Johannesburg",
+  "policy": {
+    "defaultPublicationState": "held",
+    "requireHumanApproval": true,
+    "allowAutomaticPublication": false,
+    "sourceOfTruth": "versioned-local-json",
+    "notes": [
+      "This register is provider-neutral and must remain usable without a stock-provider API.",
+      "A source listing or platform licence claim is not proof of species, filming location, additional permissions, or final publication clearance.",
+      "Stock footage must not be described as footage captured or owned by Nature Frontiers.",
+      "Do not publish until the exact media file, rights evidence, complete visual inspection, and human approval are recorded.",
+      "Current owner production policy requires genuine original creator-captured wildlife media. All Pexels/Pixabay stock listings in this register are reference-only and excluded from production; a platform licence or source listing does not satisfy the original-capture requirement.",
+      "Do not use AI-generated wildlife visuals or generic stock footage as substitutes for genuine original wildlife media. Only original creator-captured media with verified creator/source provenance, exact file hash, commercial rights and full human inspection can be considered for production."
+    ],
+    "originalCreatorCapturedMediaRequired": true,
+    "stockMediaAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "productionEligibilityRequiresExactOriginalSource": true
+  },
+  "assets": [
+    {
+      "id": "nf-pex-giraffe-5220275",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220275",
+        "url": "https://www.pexels.com/video/giraffe-standing-on-the-grass-field-5220275/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "Giraffe standing in a grass field; listing describes an African savanna setting.",
+        "listingTags": [
+          "South Africa"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/giraffe-standing-on-the-grass-field-5220275/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "giraffe",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "South Africa",
+          "status": "unverified"
+        },
+        {
+          "type": "behaviour",
+          "value": "standing",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "A listing-level free-use claim is not final rights clearance; assess third-party rights and intended use."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Encounters",
+        "proposedStory": "Giraffe browsing behaviour"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-5220276",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220276",
+        "url": "https://www.pexels.com/video/giraffe-walking-on-the-wild-5220276/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "Giraffe walking across grassland; listing describes an African setting.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/giraffe-walking-on-the-wild-5220276/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "giraffe",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Africa",
+          "status": "unverified"
+        },
+        {
+          "type": "behaviour",
+          "value": "walking",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "A listing-level free-use claim is not final rights clearance."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Encounters",
+        "proposedStory": "Giraffe browsing behaviour"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-5220297",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5220297",
+        "url": "https://www.pexels.com/video/a-giraffe-eating-5220297/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "Giraffe feeding; listing describes an African savanna setting.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/a-giraffe-eating-5220297/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "giraffe",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Africa",
+          "status": "unverified"
+        },
+        {
+          "type": "behaviour",
+          "value": "feeding",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "A listing-level free-use claim is not final rights clearance."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Encounters",
+        "proposedStory": "Giraffe browsing behaviour"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-zebra-28858838",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "28858838",
+        "url": "https://www.pexels.com/video/zebra-herd-grazing-in-african-savanna-28858838/",
+        "contributor": "Magda Ehlers",
+        "listingStatus": "verified",
+        "listingDescription": "Zebra herd grazing in an African savanna.",
+        "listingTags": [
+          "Kruger National Park"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/zebra-herd-grazing-in-african-savanna-28858838/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 29,
+        "width": 3840,
+        "height": 2160,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "zebra",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Kruger National Park",
+          "status": "unverified"
+        },
+        {
+          "type": "behaviour",
+          "value": "grazing",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Listing tags are not proof of exact filming location; verify the actual clip and provenance."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Science",
+        "proposedStory": "Mixed-herd vigilance and feeding ecology"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-zebra-wildebeest-30025799",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "30025799",
+        "url": "https://www.pexels.com/video/wildlife-harmony-zebras-and-wildebeests-in-kruger-30025799/",
+        "contributor": "Johnny Tilly",
+        "listingStatus": "verified",
+        "listingDescription": "Zebras and wildebeest on savanna; title references Kruger.",
+        "listingTags": [
+          "Kruger National Park"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/wildlife-harmony-zebras-and-wildebeests-in-kruger-30025799/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 25,
+        "width": 1920,
+        "height": 1080,
+        "frameRate": 25
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "zebra and wildebeest",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Kruger National Park",
+          "status": "unverified"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Title and tags are leads, not independent filming-location evidence."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wild Science",
+        "proposedStory": "Zebra and wildebeest mixed-herd ecology"
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-braunbar-15387783",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "15387783",
+        "url": "https://www.pexels.com/video/braunbar-15387783/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-asian-nature-18368171",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "18368171",
+        "url": "https://www.pexels.com/video/asian-nature-10-19-18368171/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-buffalo-herd-34650034",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34650034",
+        "url": "https://www.pexels.com/video/aerial-view-of-buffalo-herd-grazing-in-open-field-34650034/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-giraffes-zoo-35750705",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "35750705",
+        "url": "https://www.pexels.com/video/giraffes-in-natural-habitat-at-a-zoo-35750705/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-grassland-37711934",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37711934",
+        "url": "https://www.pexels.com/video/giraffe-strolling-in-scenic-open-grassland-37711934/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-giraffes-savannah-37175433",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37175433",
+        "url": "https://www.pexels.com/video/giraffes-grazing-on-a-sunny-savannah-37175433/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-giraffes-tree-14908997",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "14908997",
+        "url": "https://www.pexels.com/video/a-group-of-giraffes-eating-leaves-from-the-trees-14908997/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-savannah-39746519",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39746519",
+        "url": "https://www.pexels.com/video/giraffe-strolling-in-african-savannah-landscape-39746519/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-small-brown-animal-9557830",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "9557830",
+        "url": "https://www.pexels.com/video/a-small-brown-animal-is-standing-on-top-of-a-rock-9557830/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pix-mongoose-339753",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pixabay",
+        "assetId": "339753",
+        "url": "https://pixabay.com/videos/mongoose-animal-wildlife-mammal-339753/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-cobra-feeding-30175165",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "30175165",
+        "url": "https://www.pexels.com/video/king-cobra-eating-another-snake-in-the-wild-30175165/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lizard-4106826",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "4106826",
+        "url": "https://www.pexels.com/video/nature-animal-lizard-reptile-4106826/",
+        "contributor": "Muhammadrizwan Saeed",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels listing describes a close-up of a slow worm (Anguis fragilis) moving through grass and leaves outdoors. Listing metadata: 1920×1080, 17 seconds, 29.97 fps. The page slug says lizard, but the description identifies a slow worm.",
+        "listingTags": [
+          "Snake",
+          "Reptiles",
+          "Lizard",
+          "Snakes",
+          "Slow Motion Nature"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/nature-animal-lizard-reptile-4106826/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "slow worm (Anguis fragilis)",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "moving through grass and leaves",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/nature-animal-lizard-reptile-4106826/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pix-lion-111414",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pixabay",
+        "assetId": "111414",
+        "url": "https://pixabay.com/videos/lion-predator-masculine-mane-zoo-111414/",
+        "contributor": "NickyPe",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing title identifies a lion; listing metadata: 3840×2160, 25 fps, published 22 March 2022. No specific filming location or behaviour is established by the listing.",
+        "listingTags": [
+          "Lion",
+          "Predator",
+          "Masculine",
+          "Mane",
+          "Zoo",
+          "Wildlife"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/lion-predator-masculine-mane-zoo-111414/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "lion",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/lion-predator-masculine-mane-zoo-111414/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-badger-egg-10041504",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "10041504",
+        "url": "https://www.pexels.com/video/a-badger-eating-an-egg-10041504/",
+        "contributor": "Los Muertos Crew",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels page slug says badger, but the actual listing description identifies a coati eating an egg on a rustic brick floor outdoors in Mexico. Listing metadata: 1920×1080, 21 seconds, 23.98 fps. Do not use or caption this as a badger.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/a-badger-eating-an-egg-10041504/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "coati",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "eating an egg",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "Mexico",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/a-badger-eating-an-egg-10041504/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour. The page title slug says badger but its description says coati; exclude from badger narratives."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-coati-36059453",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "36059453",
+        "url": "https://www.pexels.com/video/coati-wandering-in-rocky-mountain-landscape-36059453/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-meerkat-40320170",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "40320170",
+        "url": "https://www.pexels.com/video/playful-meerkat-in-natural-habitat-40320170/",
+        "contributor": "Bil Hinton",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels listing describes a meerkat playfully exploring its natural habitat. Listing metadata: 3840×2160, 22 seconds, 25 fps. No filming location is established by the listing.",
+        "listingTags": [
+          "Meerkat",
+          "Animal Videos",
+          "Animals Video",
+          "Animals Videos"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/playful-meerkat-in-natural-habitat-40320170/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "meerkat",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "exploring",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/playful-meerkat-in-natural-habitat-40320170/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pix-cobra-173139",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pixabay",
+        "assetId": "173139",
+        "url": "https://pixabay.com/videos/snake-cobra-serpent-snake-tongue-173139/",
+        "contributor": "FestiMania",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing title and tags identify a snake/cobra. Listing metadata: 3840×2160, 30 fps, published 26 July 2023. Species and behaviour still require full clip inspection.",
+        "listingTags": [
+          "Snake",
+          "Cobra",
+          "Serpent",
+          "Snake Tongue",
+          "Reptile",
+          "Animal"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/snake-cobra-serpent-snake-tongue-173139/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "cobra (listing claim only)",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/snake-cobra-serpent-snake-tongue-173139/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-warthog-14564347",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "14564347",
+        "url": "https://www.pexels.com/video/a-curious-warthog-in-a-field-14564347/",
+        "contributor": "Magda Ehlers",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels listing describes a warthog wandering freely in its natural habitat. Listing metadata: 3840×2160, 28 seconds, 25 fps. Kruger National Park appears among related tags only and is not proof of filming location.",
+        "listingTags": [
+          "Kruger National Park",
+          "Animals Videos",
+          "Wild Boar",
+          "African Wildlife"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/a-curious-warthog-in-a-field-14564347/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "warthog",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "wandering",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/a-curious-warthog-in-a-field-14564347/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-prairie-dog-34705357",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34705357",
+        "url": "https://www.pexels.com/video/charming-black-tailed-prairie-dog-in-natural-habitat-34705357/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pix-lion-263732",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pixabay",
+        "assetId": "263732",
+        "url": "https://pixabay.com/videos/lion-big-cat-wildlife-predator-263732/",
+        "contributor": "MikoEP",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing describes a lion walking toward the camera. Listing metadata: 1080×1920, 30 fps, published 10 March 2025. No specific filming location is established.",
+        "listingTags": [
+          "Lion",
+          "Big Cat",
+          "Wildlife",
+          "Predator",
+          "Walking",
+          "Savannah",
+          "Nature"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/lion-big-cat-wildlife-predator-263732/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "lion",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "walking toward the camera",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/lion-big-cat-wildlife-predator-263732/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pix-lion-323312",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pixabay",
+        "assetId": "323312",
+        "url": "https://pixabay.com/videos/lion-male-lion-king-mane-face-323312/",
+        "contributor": "Solarselle77",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing title identifies a male lion in a close-up/profile portrait. Listing metadata: 3328×1856, 24 fps, published 20 December 2025. No specific filming location is established.",
+        "listingTags": [
+          "Lion",
+          "Male Lion",
+          "King",
+          "Mane",
+          "Face",
+          "Head",
+          "Profile",
+          "Close Up",
+          "Portrait",
+          "Wildlife",
+          "Africa",
+          "Safari",
+          "Savanna"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/lion-male-lion-king-mane-face-323312/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "lion",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/lion-male-lion-king-mane-face-323312/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pix-baboon-127476",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pixabay",
+        "assetId": "127476",
+        "url": "https://pixabay.com/videos/monkey-baboon-ape-primate-animals-127476/",
+        "contributor": "Eaktas06",
+        "listingStatus": "verified",
+        "listingDescription": "Pixabay listing title identifies a monkey/baboon/primate. Listing metadata: 1920×1080, 29 fps, published 26 August 2022. Species must be confirmed by inspecting the complete video.",
+        "listingTags": [
+          "Monkey",
+          "Baboon",
+          "Ape",
+          "Primate",
+          "Animals"
+        ],
+        "listingEvidence": [
+          "https://pixabay.com/videos/monkey-baboon-ape-primate-animals-127476/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "baboon (listing claim only)",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pixabay Content License",
+        "licenseEvidence": [
+          "https://pixabay.com/videos/monkey-baboon-ape-primate-animals-127476/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pix-baboon-family-216696",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pixabay",
+        "assetId": "216696",
+        "url": "https://pixabay.com/videos/baboons-apes-cub-family-tree-trunk-216696/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-zebra-waterhole-39120738",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39120738",
+        "url": "https://www.pexels.com/video/zebras-at-watering-hole-in-african-safari-39120738/",
+        "contributor": "Magda Ehlers",
+        "listingStatus": "verified",
+        "listingDescription": "Pexels listing describes zebras grazing beside a watering hole in an African savannah. Listing metadata: 3840×2160, 26 seconds, 25 fps. No named reserve or filming location is established.",
+        "listingTags": [
+          "Animals Video",
+          "Animal Videos",
+          "Animals Videos"
+        ],
+        "listingEvidence": [
+          "https://www.pexels.com/video/zebras-at-watering-hole-in-african-safari-39120738/"
+        ]
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "zebra",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "grazing beside a watering hole",
+          "status": "listing_only"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License",
+        "licenseEvidence": [
+          "https://www.pexels.com/video/zebras-at-watering-hole-in-african-safari-39120738/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed. Listing metadata was checked against the source page, but the original MP4 has not been acquired, hashed, visually inspected, or rights-cleared. Listing metadata is not proof of exact species, location, or depicted behaviour."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-antelope-36589216",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "36589216",
+        "url": "https://www.pexels.com/video/intimate-moment-between-two-wild-antelopes-36589216/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-blackbuck-34375829",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34375829",
+        "url": "https://www.pexels.com/video/blackbucks-grazing-in-open-grassland-habitat-34375829/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-nyala-34360735",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34360735",
+        "url": "https://www.pexels.com/video/nyala-antelopes-at-waterhole-in-twilight-34360735/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-impala-12939735",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "12939735",
+        "url": "https://www.pexels.com/video/impalas-on-grassland-12939735/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-hyenas-wildebeest-30024912",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "30024912",
+        "url": "https://www.pexels.com/video/hyenas-feeding-on-wildebeest-in-kruger-park-30024912/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-wild-dogs-39157074",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39157074",
+        "url": "https://www.pexels.com/video/african-wild-dogs-in-natural-habitat-39157074/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-wild-dogs-feeding-39157076",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39157076",
+        "url": "https://www.pexels.com/video/african-wild-dogs-feeding-in-natural-habitat-39157076/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lions-feeding-30025149",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "30025149",
+        "url": "https://www.pexels.com/video/lions-feeding-on-prey-in-african-savannah-30025149/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-ostriches-39159270",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39159270",
+        "url": "https://www.pexels.com/video/group-of-ostriches-grazing-in-dry-grassland-39159270/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-warthogs-32418597",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "32418597",
+        "url": "https://www.pexels.com/video/group-of-warthogs-foraging-in-african-wilderness-32418597/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-cheetah-34743200",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34743200",
+        "url": "https://www.pexels.com/video/relaxing-cheetah-in-natural-habitat-34743200/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-aerial-33660354",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "33660354",
+        "url": "https://www.pexels.com/video/aerial-view-of-elephant-in-safari-landscape-33660354/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-leopard-cub-18955955",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "18955955",
+        "url": "https://www.pexels.com/video/leopard_jungtier-18955955/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-leopard-fence-27683634",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "27683634",
+        "url": "https://www.pexels.com/video/a-leopard-sitting-in-the-grass-behind-a-fence-27683634/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-leopard-resting-37156659",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37156659",
+        "url": "https://www.pexels.com/video/majestic-leopard-resting-in-natural-habitat-37156659/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-cheetah-grassland-32414261",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "32414261",
+        "url": "https://www.pexels.com/video/resting-cheetah-in-the-wild-grassland-32414261/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-cheetah-19078996",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "19078996",
+        "url": "https://www.pexels.com/video/gepard-19078996/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lions-resting-37251748",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37251748",
+        "url": "https://www.pexels.com/video/serene-lions-resting-in-natural-habitat-37251748/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lioness-cub-37732383",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37732383",
+        "url": "https://www.pexels.com/video/majestic-lioness-with-cub-in-natural-habitat-37732383/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lions-savanna-37687552",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37687552",
+        "url": "https://www.pexels.com/video/lions-resting-in-the-african-savanna-37687552/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lioness-cubs-37498333",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37498333",
+        "url": "https://www.pexels.com/video/lioness-and-cubs-in-natural-habitat-37498333/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lions-wild-853900",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "853900",
+        "url": "https://www.pexels.com/video/lions-at-the-wild-853900/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lion-cubs-37358932",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37358932",
+        "url": "https://www.pexels.com/video/playful-lion-cubs-in-natural-habitat-37358932/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lioness-walking-cubs-37971499",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37971499",
+        "url": "https://www.pexels.com/video/lioness-walking-with-cubs-in-natural-habitat-37971499/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lion-buffalo-34279082",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "34279082",
+        "url": "https://www.pexels.com/video/lion-feeding-on-buffalo-in-african-savannah-34279082/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lioness-feeding-31702137",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "31702137",
+        "url": "https://www.pexels.com/video/serengeti-lioness-feeding-in-natural-habitat-31702137/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-cheetah-moving-37399013",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37399013",
+        "url": "https://www.pexels.com/video/cheetah-stealthily-moving-through-grassland-37399013/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-lions-resting-37687660",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37687660",
+        "url": "https://www.pexels.com/video/relaxed-lions-resting-in-natural-habitat-37687660/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-circling-20600433",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "20600433",
+        "url": "https://www.pexels.com/video/circling-around-a-saltwater-crocodile-20600433/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-feeding-35076399",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "35076399",
+        "url": "https://www.pexels.com/video/crocodiles-feeding-frenzy-in-wild-habitat-35076399/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-alligator-walking-6423032",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "6423032",
+        "url": "https://www.pexels.com/video/alligator-walking-on-the-ground-6423032/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-closeup-6423036",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "6423036",
+        "url": "https://www.pexels.com/video/close-up-video-of-a-crocodile-6423036/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-walking-24964228",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "24964228",
+        "url": "https://www.pexels.com/video/a-large-crocodile-is-walking-on-the-ground-24964228/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-river-safari-18197395",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "18197395",
+        "url": "https://www.pexels.com/video/river-safari-18197395/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-alligator-costa-rica-20173092",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "20173092",
+        "url": "https://www.pexels.com/video/alligator-in-costa-rica-guanacaste-province-20173092/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-closeup-4996609",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "4996609",
+        "url": "https://www.pexels.com/video/close-up-footage-of-a-crocodile-4996609/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-swimming-39018603",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "39018603",
+        "url": "https://www.pexels.com/video/crocodile-swimming-in-murky-water-close-up-39018603/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-alligator-water-855862",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "855862",
+        "url": "https://www.pexels.com/video/alligator-in-water-855862/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-alligator-head-19323491",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "19323491",
+        "url": "https://www.pexels.com/video/close-up-of-the-alligator-s-head-19323491/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-feeding-16515988",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "16515988",
+        "url": "https://www.pexels.com/video/comida-de-cocodilos-16515988/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-basking-20443910",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "20443910",
+        "url": "https://www.pexels.com/video/basking-crocodile-20443910/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-river-40627960",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "40627960",
+        "url": "https://www.pexels.com/video/serene-river-scene-with-crocodile-swim-40627960/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodile-riverbank-35232256",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "35232256",
+        "url": "https://www.pexels.com/video/wild-crocodile-resting-on-jungle-riverbank-35232256/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-hippo-swimming-38742717",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "38742717",
+        "url": "https://www.pexels.com/video/relaxing-hippo-swimming-in-tranquil-water-38742717/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-crocodiles-zoo-2885406",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "2885406",
+        "url": "https://www.pexels.com/video/crocodiles-stay-motionless-in-a-water-pond-of-the-zoo-2885406/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-hippo-zambezi-32861840",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "32861840",
+        "url": "https://www.pexels.com/video/hippo-wading-in-lower-zambezi-national-park-32861840/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-hippo-mud-37954197",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37954197",
+        "url": "https://www.pexels.com/video/hippopotamus-enjoying-muddy-water-outdoors-37954197/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-hippo-porpoising-27385907",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "27385907",
+        "url": "https://www.pexels.com/video/porpoising-hippo-27385907/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-thailand-17842225",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "17842225",
+        "url": "https://www.pexels.com/video/elephant-of-thailand-17842225/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-hippo-underwater-7723445",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "7723445",
+        "url": "https://www.pexels.com/video/a-hippopotamus-underwater-7723445/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-closeup-3842815",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "3842815",
+        "url": "https://www.pexels.com/video/close-up-shot-of-elephants-3842815/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-aerial-africa-33660365",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "33660365",
+        "url": "https://www.pexels.com/video/aerial-view-of-elephant-in-the-african-savannah-33660365/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-family-2835528",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "2835528",
+        "url": "https://www.pexels.com/video/a-family-of-elephant-roaming-at-a-grassland-2835528/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-jungle-36167571",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "36167571",
+        "url": "https://www.pexels.com/video/wild-elephant-in-lush-green-jungle-habitat-36167571/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-grassland-7499056",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "7499056",
+        "url": "https://www.pexels.com/video/a-grassland-with-elephants-7499056/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-wildlife-water-11760750",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "11760750",
+        "url": "https://www.pexels.com/video/wild-animals-gathering-by-a-body-of-water-in-the-african-savannah-11760750/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-african-elephants-37402113",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37402113",
+        "url": "https://www.pexels.com/video/african-elephants-in-natural-habitat-37402113/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-hill-16320007",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "16320007",
+        "url": "https://www.pexels.com/video/an-elephant-is-walking-through-the-grass-on-a-hill-16320007/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephants-savannah-12419429",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "12419429",
+        "url": "https://www.pexels.com/video/elephants-on-savannah-12419429/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephants-grass-4430140",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "4430140",
+        "url": "https://www.pexels.com/video/elephants-on-grass-field-4430140/",
+        "contributor": null,
+        "listingStatus": "unverified",
+        "listingDescription": "User-supplied source link; exact listing metadata not yet checked.",
+        "listingTags": [],
+        "listingEvidence": []
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": null,
+        "width": null,
+        "height": null,
+        "frameRate": null
+      },
+      "claims": [],
+      "rights": {
+        "listingLicenseClaim": null,
+        "licenseEvidence": [],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "No rights assessment has been performed."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "unreviewed",
+        "proposedSeries": null,
+        "proposedStory": null
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-elephant-37394148",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "37394148",
+        "url": "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/",
+        "contributor": "Magda Ehlers",
+        "listingStatus": "verified",
+        "listingDescription": "Close-up of an African elephant grazing in a lush, green habitat.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/majestic-african-elephant-in-natural-habitat-37394148/"
+        ],
+        "canvaAssetId": "VAHbNVGS8LM",
+        "canvaImportVerified": true
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 14,
+        "width": 3840,
+        "height": 2160,
+        "frameRate": 25
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "African elephant",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "grazing",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "filming location unspecified",
+          "status": "unverified"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License (listing-level claim only)",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Imported into Canva and source listing metadata checked. Exact original MP4 bytes, SHA-256, full visual inspection and intended-use rights review are not yet available; remain held."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wildlife Science",
+        "proposedStory": "Elephant feeding ecology and seasonal diet; footage is illustrative stock, not a Nature Frontiers field recording.",
+        "notes": "Licensed third-party stock. Never represent as Nature Frontiers original-camera footage."
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-zebra-wildebeest-5146578",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5146578",
+        "url": "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "Zebras and wildebeests grazing together on a sunny African savanna day.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/zebras-and-wildebeests-grazing-in-the-meadows-5146578/"
+        ],
+        "canvaAssetId": "VAHbNQdZTYc",
+        "canvaImportVerified": true
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 25,
+        "width": 1920,
+        "height": 1080,
+        "frameRate": 25
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "zebras and wildebeests",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "grazing together",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "filming location unspecified",
+          "status": "unverified"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License (listing-level claim only)",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Imported into Canva and source listing metadata checked. Exact original MP4 bytes, SHA-256, full visual inspection and intended-use rights review are not yet available; remain held."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wildlife Science",
+        "proposedStory": "Comparative grazing ecology; do not imply footage was filmed at Maputo Special Reserve.",
+        "notes": "Licensed third-party stock. Never represent as Nature Frontiers original-camera footage."
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    },
+    {
+      "id": "nf-pex-giraffe-5214258",
+      "mediaType": "video",
+      "source": {
+        "provider": "Pexels",
+        "assetId": "5214258",
+        "url": "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/",
+        "contributor": "Taryn Elliott",
+        "listingStatus": "verified",
+        "listingDescription": "A serene scene of a giraffe strolling through the African savanna under a clear sky.",
+        "listingTags": [],
+        "listingEvidence": [
+          "https://www.pexels.com/video/giraffe-in-the-open-fields-5214258/"
+        ],
+        "canvaAssetId": "VAHbNT-7Jx4",
+        "canvaImportVerified": true
+      },
+      "localFile": null,
+      "media": {
+        "sha256": null,
+        "durationSeconds": 21,
+        "width": 1920,
+        "height": 1080,
+        "frameRate": 25
+      },
+      "claims": [
+        {
+          "type": "species",
+          "value": "giraffe",
+          "status": "listing_only"
+        },
+        {
+          "type": "behaviour",
+          "value": "walking",
+          "status": "listing_only"
+        },
+        {
+          "type": "location",
+          "value": "filming location unspecified",
+          "status": "unverified"
+        }
+      ],
+      "rights": {
+        "listingLicenseClaim": "Pexels License (listing-level claim only)",
+        "licenseEvidence": [
+          "https://www.pexels.com/license/"
+        ],
+        "reviewStatus": "not_assessed",
+        "additionalPermissionsStatus": "not_assessed",
+        "reviewedBy": null,
+        "reviewedAt": null,
+        "notes": "Imported into Canva and source listing metadata checked. Exact original MP4 bytes, SHA-256, full visual inspection and intended-use rights review are not yet available; remain held."
+      },
+      "inspection": {
+        "status": "not_inspected",
+        "inspectedBy": null,
+        "inspectedAt": null,
+        "visualNotes": ""
+      },
+      "editorial": {
+        "status": "candidate",
+        "proposedSeries": "Wildlife Science",
+        "proposedStory": "Giraffe browsing ecology; source clip shows walking, not a verified feeding action.",
+        "notes": "Licensed third-party stock. Never represent as Nature Frontiers original-camera footage."
+      },
+      "approval": {
+        "status": "pending",
+        "approvedBy": null,
+        "approvedAt": null,
+        "approvedFileSha256": null,
+        "approvedUsage": []
+      },
+      "usage": {
+        "scheduled": false,
+        "published": false,
+        "platformPostIds": []
+      },
+      "productionEligibility": {
+        "status": "REFERENCE_ONLY_EXCLUDED_BY_ORIGINAL_CAPTURE_POLICY",
+        "eligible": false,
+        "reason": "This Pexels/Pixabay stock listing is reference-only. Current owner policy requires genuine original creator-captured wildlife media and prohibits stock or AI-generated wildlife visuals as substitutes."
+      }
+    }
+  ],
+  "policyScope": {
+    "brand": "Nature Frontiers",
+    "platforms": [
+      "facebook",
+      "instagram"
+    ],
+    "mediaMode": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+    "notApplicableTo": [
+      "SonicVhibez"
+    ]
+  }
+}

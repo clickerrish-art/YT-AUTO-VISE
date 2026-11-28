@@ -3,9 +3,18 @@
 This script only creates local draft files. It never uploads or publishes.
 """
 from pathlib import Path
+import argparse
+from datetime import datetime
+import json
+import math
 import asyncio
 import re
 import sys
+
+try:
+    from scripts.narration_policy import require_owner_authorized_alternative_voice
+except ImportError:
+    from narration_policy import require_owner_authorized_alternative_voice
 
 try:
     from mutagen.mp3 import MP3
@@ -18,19 +27,115 @@ except ImportError:
     print("ERROR: Install edge-tts first: python -m pip install edge-tts", file=sys.stderr)
     raise SystemExit(2)
 
-SOURCE = Path("content/long-form-scripts.md")
-OUT = Path("media/long-form-drafts")
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = SCRIPT_DIR.parent
+SOURCE = REPO_ROOT / "content" / "long-form-queue.json"
+OUT = REPO_ROOT / "media" / "long-form-drafts"
+PRODUCTS = REPO_ROOT / "config" / "products.json"
+APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l"
+APPROVED_DISCLOSURE_TEXT = "This product is sold through my own Selar business; purchases generate revenue for my business."
 VOICE = "en-US-GuyNeural"
+NONCOMMERCIAL_AUDITION_NOTICE = (
+    "Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+    "It is restricted to explicitly acknowledged internal evaluation and must never be used in monetized YouTube, advertising or Selar promotion."
+)
+
+
+def require_noncommercial_audition(acknowledged: bool) -> bool:
+    require_owner_authorized_alternative_voice()
+    if acknowledged is not True:
+        raise SystemExit(
+            "BLOCKED: Edge TTS is not the approved Roderic voice and is not commercially cleared. "
+            "Pass --allow-noncommercial-audition only for internal evaluation."
+        )
+    return True
 CAPTION_MAX_WORDS = 7
 CAPTION_MAX_CHARS = 42
 
-def clean_script(text: str) -> str:
+def _has_timezone(value: str) -> bool:
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return parsed.tzinfo is not None and parsed.utcoffset() is not None
+    except (TypeError, ValueError, AttributeError):
+        return False
+
+
+def _valid_owner_date(value: str) -> bool:
+    try:
+        return datetime.strptime(value, "%Y-%m-%d").strftime("%Y-%m-%d") == value
+    except (TypeError, ValueError):
+        return False
+
+
+def has_owner_approved_selar_disclosure(product_config=None) -> bool:
+    """Fail closed unless the exact Selar product, relationship and disclosure are owner-approved."""
+    try:
+        if product_config is None:
+            product_config = json.loads(PRODUCTS.read_text(encoding="utf-8"))
+        products = product_config.get("products", [])
+        product = next((item for item in products if item.get("url") == APPROVED_SELLAR_URL), None)
+        if not product or product.get("status") != "approved":
+            return False
+        gate = product.get("promotionGate", {})
+        seller = gate.get("seller", {})
+        brand = gate.get("brandAuthorization", {})
+        compensation = gate.get("compensation", {})
+        disclosure = gate.get("disclosure", {})
+        return (
+            seller.get("status") == "VERIFIED"
+            and seller.get("sourceUrl") == APPROVED_SELLAR_URL
+            and bool(str(seller.get("name", "")).strip())
+            and _has_timezone(seller.get("verifiedAt", ""))
+            and bool(str(seller.get("evidenceReference", "")).strip())
+            and brand.get("status") == "OWNER_CONFIRMED"
+            and brand.get("brand") == "SonicVhibez"
+            and _has_timezone(brand.get("confirmedAt", ""))
+            and bool(str(brand.get("approvalReference", "")).strip())
+            and compensation.get("status") == "OWNER_CONFIRMED"
+            and compensation.get("type") == "DIRECT_SALES_REVENUE"
+            and _valid_owner_date(compensation.get("verifiedAt", ""))
+            and bool(str(compensation.get("evidenceReference", "")).strip())
+            and disclosure.get("status") == "OWNER_APPROVED"
+            and disclosure.get("text") == APPROVED_DISCLOSURE_TEXT
+            and _has_timezone(disclosure.get("approvedAt", ""))
+            and bool(str(disclosure.get("approvalReference", "")).strip())
+        )
+    except (OSError, ValueError, TypeError, AttributeError):
+        return False
+
+def clean_script(text: str, include_paid_product: bool = False) -> str:
     text = re.sub(r"(?m)^#{1,6} .*\n", "", text)
     text = re.sub(r"(?m)^\*\*[^\n]*\*\*\s*$", "", text)
     text = re.sub(r"(?m)^\*\*\[.*?\]\*\*.*$", "", text)
     text = re.sub(r"(?m)^### Suggested (description|tags).*$", "", text)
+    paragraphs = text.split("\n\n")
+    paid_paragraphs = [
+        paragraph for paragraph in paragraphs
+        if re.search(r"\bIf you want a paid resource\b", paragraph)
+        or APPROVED_SELLAR_URL in paragraph
+        or "Complete YouTube Wildlife Creator" in paragraph
+    ]
+    if include_paid_product:
+        for paragraph in paid_paragraphs:
+            if APPROVED_DISCLOSURE_TEXT not in paragraph:
+                raise ValueError("Paid-product narration must contain the exact owner-approved Selar disclosure")
+            product_index = paragraph.find("Complete YouTube Wildlife Creator")
+            url_index = paragraph.find(APPROVED_SELLAR_URL)
+            if product_index >= 0 or url_index >= 0:
+                advertisement_index = paragraph.find("Advertisement.")
+                disclosure_index = paragraph.find(APPROVED_DISCLOSURE_TEXT)
+                if not (
+                    advertisement_index >= 0
+                    and advertisement_index < disclosure_index < product_index < url_index
+                ):
+                    raise ValueError(
+                        "Paid-product narration must place Advertisement, the exact disclosure, "
+                        "the product name and the approved URL in that order"
+                    )
+    else:
+        text = "\n\n".join(paragraph for paragraph in paragraphs if paragraph not in paid_paragraphs)
     text = re.sub(r"(?m)^Promotional resource:.*$", "", text)
-    text = re.sub(r"https://selar\.com/0u19v8u99l", "the approved creator resource linked in the video description", text)
+    text = re.sub(r"https://selar\.com/0u19v8u99l", "", text)
     text = re.sub(r"\[[^\]]*\]", " ", text)
     text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)
     text = re.sub(r"(?m)^[-*]\s+", "", text)
@@ -38,25 +143,43 @@ def clean_script(text: str) -> str:
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
-def extract_episodes(markdown: str):
-    matches = list(re.finditer(r"(?m)^## Episode (\d+) — (.+)$", markdown))
+def extract_episodes(queue_text: str):
+    """Load the two owner-confirmed cycle scripts from their canonical standalone files."""
+    try:
+        queue = json.loads(queue_text)
+    except (TypeError, ValueError) as error:
+        raise ValueError("Long-form queue must be valid JSON") from error
+    items = [
+        item for item in queue.get("items", [])
+        if item.get("publicationFormat") == "long_form"
+        and item.get("publicationCyclePosition") in (1, 2)
+    ]
+    items.sort(key=lambda item: item["publicationCyclePosition"])
+    if [item.get("publicationCyclePosition") for item in items] != [1, 2]:
+        raise ValueError("Expected exactly the two owner-confirmed long-form cycle positions")
     episodes = []
-    for i, match in enumerate(matches):
-        end = matches[i + 1].start() if i + 1 < len(matches) else len(markdown)
-        section = markdown[match.end():end]
-        narration = re.search(r"(?m)^### Narration script\s*$", section)
+    for index, item in enumerate(items, 1):
+        script_path = item.get("scriptPath")
+        if not isinstance(script_path, str) or not script_path.strip():
+            raise ValueError(f"Long-form cycle position {index} has no canonical scriptPath")
+        path = (REPO_ROOT / script_path).resolve()
+        if not path.is_relative_to(REPO_ROOT.resolve()) or not path.is_file():
+            raise ValueError(f"Long-form cycle position {index} script is missing or outside the repository")
+        source = path.read_text(encoding="utf-8")
+        narration = re.search(r"(?m)^#{2,3} (?:Spoken narration draft|Narration script)\s*$", source)
         if not narration:
-            raise ValueError(f"Episode {match.group(1)} has no Narration script section")
-        body = section[narration.end():]
-        description = re.search(r"(?m)^### Suggested description\s*$", body)
-        if description:
-            body = body[:description.start()]
-        cleaned = clean_script(body)
+            raise ValueError(f"Long-form cycle position {index} has no narration section")
+        body = source[narration.end():]
+        boundary = re.search(r"(?m)^#{2,3} (?:Research and claim map|Suggested description|Sources and references)\s*$", body)
+        if boundary:
+            body = body[:boundary.start()]
+        paid_promotion = item.get("hasPaidPromotion") is True
+        if paid_promotion and not has_owner_approved_selar_disclosure():
+            raise ValueError("Paid-product narration is blocked without the exact owner-approved Selar disclosure")
+        cleaned = clean_script(body, include_paid_product=paid_promotion)
         if len(cleaned.split()) < 500:
-            raise ValueError(f"Episode {match.group(1)} script seems unexpectedly short ({len(cleaned.split())} words)")
-        episodes.append((match.group(1), match.group(2).strip(), cleaned))
-    if len(episodes) != 2:
-        raise ValueError(f"Expected 2 episodes; found {len(episodes)}")
+            raise ValueError(f"Long-form cycle position {index} script seems unexpectedly short ({len(cleaned.split())} words)")
+        episodes.append((str(index), str(item.get("title", "")).strip(), cleaned))
     return episodes
 
 def srt_time(seconds: float) -> str:
@@ -69,12 +192,22 @@ def srt_time(seconds: float) -> str:
 def captions_from_boundaries(boundaries):
     """Group actual TTS word-boundary events into readable draft caption cues."""
     cues, group = [], []
+    previous_start = -1.0
     for item in boundaries:
         word = str(item.get("text", "")).strip()
         if not word:
             continue
-        start = max(0.0, float(item.get("offset", 0)) / 10_000_000)
-        end = max(start + 0.15, (float(item.get("offset", 0)) + float(item.get("duration", 0))) / 10_000_000)
+        if len(word) > CAPTION_MAX_CHARS:
+            raise ValueError("A TTS word exceeds the maximum caption character count; manual caption editing is required")
+        offset = float(item.get("offset", 0))
+        duration = float(item.get("duration", 0))
+        if not math.isfinite(offset) or not math.isfinite(duration) or offset < 0 or duration < 0:
+            raise ValueError("TTS word-boundary offsets and durations must be finite and non-negative")
+        start = offset / 10_000_000
+        if start < previous_start:
+            raise ValueError("TTS word-boundary events are out of order; refusing to generate misleading captions")
+        previous_start = start
+        end = max(start + 0.15, (offset + duration) / 10_000_000)
         if group and (len(group) >= CAPTION_MAX_WORDS or len(" ".join(x["text"] for x in group)) + len(word) + 1 > CAPTION_MAX_CHARS):
             cues.append(group)
             group = []
@@ -84,24 +217,41 @@ def captions_from_boundaries(boundaries):
             group = []
     if group:
         cues.append(group)
+    # Distinct caption groups can begin less than 50 ms apart. They cannot
+    # both have a positive-duration, non-overlapping SRT interval, so merge
+    # those groups before assigning cue times (readability limits are advisory
+    # in this rare TTS-boundary edge case).
+    normalized_cues = []
+    for cue in cues:
+        if normalized_cues and cue[0]["start"] < normalized_cues[-1][0]["start"] + 0.05:
+            normalized_cues[-1].extend(cue)
+        else:
+            normalized_cues.append(cue)
+
     lines = []
-    for index, cue in enumerate(cues, 1):
+    for index, cue in enumerate(normalized_cues, 1):
         start = cue[0]["start"]
         end = max(start + 0.05, cue[-1]["end"])
-        # TTS word-boundary durations can overlap slightly across adjacent words.
-        # End each cue at the next cue's start so SRT blocks never overlap.
-        if index < len(cues):
-            next_start = cues[index][0]["start"]
-            if end > next_start:
-                end = max(start + 0.05, next_start)
+        # TTS word-boundary durations can overlap across adjacent words.
+        # Clip the earlier cue at the next start; the merge above guarantees
+        # that this still leaves the minimum 50 ms cue duration.
+        if index < len(normalized_cues):
+            next_start = normalized_cues[index][0]["start"]
+            end = min(end, next_start)
         lines.extend([str(index), f"{srt_time(start)} --> {srt_time(end)}", " ".join(x["text"] for x in cue), ""])
     return "\n".join(lines).rstrip() + "\n"
 
 def captions_from_text_estimate(text: str, duration: float) -> str:
     """Build explicitly approximate draft caption timings when TTS word events are absent."""
+    if not math.isfinite(duration) or duration <= 0:
+        raise ValueError("Estimated caption duration must be finite and positive")
     words = text.split()
+    if not words:
+        raise ValueError("Cannot generate estimated captions from empty narration text")
     groups, group = [], []
     for word in words:
+        if len(word) > CAPTION_MAX_CHARS:
+            raise ValueError("A narration word exceeds the maximum caption character count; manual caption editing is required")
         candidate = " ".join(group + [word])
         if group and (len(group) >= CAPTION_MAX_WORDS or len(candidate) > CAPTION_MAX_CHARS):
             groups.append(group)
@@ -112,12 +262,18 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
             group = []
     if group:
         groups.append(group)
+    # Reserve at least 100 ms per cue, then distribute the remaining
+    # duration by text length. This prevents tiny groups rounding to zero.
+    minimum_cue_seconds = 0.1
+    if duration < len(groups) * minimum_cue_seconds:
+        raise ValueError("Narration is too short to assign a positive 100 ms interval to every estimated caption cue")
     total_chars = sum(len(" ".join(g)) for g in groups) or 1
+    distributable_duration = duration - len(groups) * minimum_cue_seconds
     cursor = 0.0
     lines = []
     for index, words_group in enumerate(groups, 1):
         caption = " ".join(words_group)
-        share = duration * len(caption) / total_chars
+        share = minimum_cue_seconds + distributable_duration * len(caption) / total_chars
         start = cursor
         end = duration if index == len(groups) else min(duration, cursor + share)
         if end <= start:
@@ -126,18 +282,22 @@ def captions_from_text_estimate(text: str, duration: float) -> str:
         cursor = end
     return "\n".join(lines).rstrip() + "\n"
 
-async def main():
+async def main(allow_noncommercial_audition: bool = False, voice: str | None = None):
+    require_noncommercial_audition(allow_noncommercial_audition)
+    if not isinstance(voice, str) or not voice.strip():
+        raise SystemExit("BLOCKED: supply --voice explicitly for a non-commercial internal audition.")
     if not SOURCE.exists():
         raise SystemExit(f"ERROR: Missing source file: {SOURCE}")
     OUT.mkdir(parents=True, exist_ok=True)
     episodes = extract_episodes(SOURCE.read_text(encoding="utf-8"))
+    generated_files = []
     for number, title, text in episodes:
         stem = f"long-{int(number):03d}-narration-draft"
         target = OUT / f"{stem}.mp3"
         text_target = OUT / f"{stem}.txt"
         srt_target = OUT / f"long-{int(number):03d}-captions-draft.srt"
         text_target.write_text(text + "\n", encoding="utf-8")
-        communicate = edge_tts.Communicate(text, VOICE, boundary="WordBoundary")
+        communicate = edge_tts.Communicate(text, voice.strip(), boundary="WordBoundary")
         boundaries = []
         with target.open("wb") as audio_file:
             async for chunk in communicate.stream():
@@ -160,10 +320,27 @@ async def main():
             caption_mode = "approximate text-distributed timings; human timing review required"
             print(f"WARNING: Episode {number} had no TTS word-boundary data; using approximate caption timings.")
         srt_target.write_text(caption_text, encoding="utf-8")
+        generated_files.append({"audio": target.name, "text": text_target.name, "captions": srt_target.name})
         print(f"CREATED draft narration: {target} | {title} | {len(text.split())} words")
         print(f"CREATED narration text: {text_target}")
         print(f"CREATED draft captions: {srt_target} | {caption_mode}")
-    print("DRAFT ONLY: review pronunciation, factual accuracy, caption punctuation/timing, voice quality, and total runtime. No upload or publishing occurred.")
+    manifest = {
+        "status": "INTERNAL_AUDITION_ONLY",
+        "voice": voice.strip(),
+        "voiceApprovalStatus": "NOT_OWNER_APPROVED",
+        "licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+        "commercialUseAllowed": False,
+        "productionUseAllowed": False,
+        "publishingEnabled": False,
+        "notice": NONCOMMERCIAL_AUDITION_NOTICE,
+        "files": generated_files
+    }
+    (OUT / "narration-audition-manifest.json").write_text(json.dumps(manifest, indent=2) + "\\n", encoding="utf-8")
+    print("INTERNAL AUDITION ONLY: review pronunciation and captions. This unapproved Edge TTS voice is not commercially cleared. No video render, upload or publishing occurred.")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(description=NONCOMMERCIAL_AUDITION_NOTICE)
+    parser.add_argument("--voice", default=None, help="Voice to audition; must be explicitly supplied.")
+    parser.add_argument("--allow-noncommercial-audition", action="store_true", help="Acknowledge internal evaluation only; no commercial or production use.")
+    args = parser.parse_args()
+    asyncio.run(main(args.allow_noncommercial_audition, args.voice))

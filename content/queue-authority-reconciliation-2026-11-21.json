@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-21",
+  "status": "BLOCKED_OWNER_AUTHORITY_AND_ENGINEERING_GUARD_REQUIRED",
+  "channel": "SonicVhibez",
+  "publicationEnabled": false,
+  "authoritativeCycle": {
+    "formats": [
+      "long_form",
+      "long_form",
+      "short"
+    ],
+    "timezone": "Africa/Johannesburg",
+    "minimumElapsedHoursBetweenActualPublications": 72,
+    "noSameJohannesburgCalendarDay": true,
+    "weeklyTarget": null
+  },
+  "sources": [
+    {
+      "path": "content/queue.json",
+      "blobSha": "90bbb9b1fd3e1e266ea18c6e290772b979bf183c",
+      "role": "queue currently consumed by production-readiness script",
+      "firstItems": [
+        {
+          "id": "long-form-plan-wildlife-video",
+          "contentType": "long_form",
+          "title": "How to Plan a Wildlife Video People Want to Watch"
+        },
+        {
+          "id": "long-form-faceless-wildlife-workflow",
+          "contentType": "long_form",
+          "title": "A Beginner Workflow for Faceless Wildlife Videos"
+        }
+      ]
+    },
+    {
+      "path": "content/long-form-queue.json",
+      "blobSha": "a6221a68b2d56559c7a7780a9933ec5b377b3e88",
+      "role": "detailed long-form planning queue",
+      "firstItems": [
+        {
+          "id": "long-form-001-two-eyes-above-water",
+          "title": "Two Eyes Above the Water: The Hidden Hunting System of the Nile Crocodile",
+          "publicationCyclePosition": 1,
+          "scriptPath": "content/drafts/long-form-001-two-eyes-above-water.md"
+        },
+        {
+          "id": "long-story-wildlife-footage",
+          "title": "How to Turn Wildlife Footage Into a Documentary Story",
+          "status": "SCRIPT_DRAFT",
+          "cycleAssignment": "NOT_ASSIGNED"
+        }
+      ]
+    },
+    {
+      "path": "scripts/production-readiness.mjs",
+      "blobSha": "ee0161040a91a4d0402d57b1bfce4e50d7a96055",
+      "finding": "Production readiness loads QUEUE_PATH (default content/queue.json), validates its item IDs and cadence metadata, but does not load or reconcile content/long-form-queue.json."
+    }
+  ],
+  "findings": [
+    "The first two long-form topics in the operational queue do not match the detailed long-form planning queue.",
+    "The canonical owner-approved Long-form 001 Nile crocodile script is not the first item in content/queue.json.",
+    "The second item in content/long-form-queue.json explicitly has no cycle assignment.",
+    "The owner has not confirmed which queue controls the next production slot or approved the second long-form topic.",
+    "The readiness script does not currently detect this cross-queue identity mismatch, so a structurally valid operational queue could still point at the wrong content identity."
+  ],
+  "requiredSafeDisposition": {
+    "status": "HOLD_NO_QUEUE_MUTATION",
+    "publishingEnabled": false,
+    "dispatchAllowed": false,
+    "doNotPromoteEitherQueueUntilOwnerConfirms": true,
+    "requiredOwnerDecisions": [
+      "Confirm whether content/long-form-queue.json is authoritative for long-form content identity while content/queue.json remains the operational dispatch queue.",
+      "Confirm that long-form-001-two-eyes-above-water is the first long-form publication-cycle item.",
+      "Select or approve the second long-form topic and stable item ID."
+    ],
+    "requiredEngineeringWork": [
+      "Add a fail-closed cross-queue identity reconciliation gate to production readiness and dispatch entry points.",
+      "Add regression tests for mismatched IDs, missing queue, duplicate IDs and explicit owner-approved mapping.",
+      "Rerun production readiness and exact-revision tests after implementation."
+    ]
+  },
+  "noMutations": {
+    "queueFilesChanged": false,
+    "scheduleChanged": false,
+    "publishingEnabledChanged": false,
+    "providerActionsPerformed": false
+  }
+}

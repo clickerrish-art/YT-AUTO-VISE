@@ -1,15 +1,15 @@
 {
   "channel": "SonicVhibez",
   "channelId": "REPLACE_WITH_VERIFIED_SONICVHIBEZ_CHANNEL_ID",
-  "title": "How to Make Better Wildlife Videos for YouTube",
-  "description": "Learn how to structure wildlife videos with a strong opening, animal behavior, clear storytelling, and purposeful pacing. Explore the Complete YouTube Wildlife Creator's Vault — Premium Combo PDF: https://selar.com/0u19v8u99l",
+  "title": "How to Make Better Wildlife Videos: Tell One Story With 3 Shots",
+  "description": "How to film wildlife: plan one clear story with three shots—habitat, detail and behaviour. Keep the shots from the same real encounter and use genuine original creator-captured footage only.\n\nPAID PROMOTION — DRAFT DISCLOSURE, NOT YET OWNER-VERIFIED; SELLER DETAILS REQUIRE RE-VERIFICATION: This product is sold through my own Selar business; purchases generate revenue for my business.\n\nComplete YouTube Wildlife Creator's Vault: https://selar.com/0u19v8u99l\n\nDRAFT ONLY. Do not publish until original media rights, final video, thumbnail, disclosure and SonicVhibez destination are verified.",
   "tags": [
-    "wildlife videos",
-    "wildlife filmmaking",
+    "how to film wildlife",
+    "wildlife filmmaking tips",
+    "beginner wildlife filmmaking",
+    "wildlife storytelling",
     "wildlife documentary",
-    "animal behavior",
-    "nature videography",
-    "YouTube video tips"
+    "YouTube Shorts"
   ],
   "productUrl": "https://selar.com/0u19v8u99l",
   "madeForKids": false,
@@ -17,5 +17,18 @@
   "rightsConfirmed": false,
   "complianceReviewed": false,
   "mediaPath": "",
-  "scriptPath": "content/short-001-wildlife-video-storytelling.md"
+  "scriptPath": "content/short-001-wildlife-video-storytelling.md",
+  "hasPaidPromotion": true,
+  "promotionDisclosure": {
+    "status": "UNVERIFIED",
+    "type": "direct_sales_revenue",
+    "text": "This product is sold through my own Selar business; purchases generate revenue for my business."
+  },
+  "notes": "Promotion remains UNVERIFIED and held. The proposed disclosure is not yet owner-verified for this draft; seller details also require re-verification. Do not publish or schedule.",
+  "containsSyntheticMedia": false,
+  "containsAIWildlifeVisuals": false,
+  "wildlifeVisualSourcePolicy": "ORIGINAL_CREATOR_CAPTURED_ONLY",
+  "mediaProvenanceStatus": "NOT_SUPPLIED",
+  "status": "DRAFT_REVIEW_REQUIRED",
+  "targetSeconds": 55
 }

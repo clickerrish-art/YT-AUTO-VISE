@@ -1,0 +1,97 @@
+name: Build human-review proxies for acquired crocodile footage
+
+on:
+  push:
+    branches: [codex/marketing-machine-audit-fixes]
+    paths:
+      - ".github/workflows/review-crocodile-footage-proxies.yml"
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: crocodile-footage-review-proxies
+  cancel-in-progress: false
+
+jobs:
+  proxies:
+    name: Extract and create low-cost review copies
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Download the exact acquired source artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: sonicvhibez-long-form-001-pexels-crocodile-review
+          run-id: 44978618279
+          github-token: ${{ github.token }}
+          path: source
+
+      - name: Print per-asset source hashes and technical evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          manifest="$(find source -type f -name acquisition-manifest.json -print -quit)"
+          test -n "$manifest"
+          node - "$manifest" <<'NODE'
+          const fs = require("node:fs");
+          const manifest = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+          const assets = Array.isArray(manifest.assets) ? manifest.assets : [];
+          console.log(JSON.stringify({
+            assetCount: assets.length,
+            assets: assets.map(asset => ({
+              id: asset.id ?? asset.assetId ?? null,
+              sha256: asset.sha256 ?? null,
+              fileSizeBytes: asset.fileSizeBytes ?? null,
+              sourceUrl: asset.sourceUrl ?? null,
+              actual: asset.actual ?? null,
+              fullDecode: asset.fullDecode ?? null
+            }))
+          }, null, 2));
+          NODE
+
+      - name: Install pinned FFmpeg and ffprobe
+        uses: AnimMouse/setup-ffmpeg@178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3
+        with:
+          version: "9.0"
+          token: ${{ github.token }}
+
+      - name: Verify source package and create review proxies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t sources < <(find source -type f -path '*/media/*.mp4' -print | sort)
+          if [ "${#sources[@]}" -ne 6 ]; then
+            echo "::error::Expected exactly six acquired source MP4s; found ${#sources[@]}."
+            printf '%s\n' "${sources[@]}"
+            exit 1
+          fi
+          mkdir -p review-proxies preview
+          : > review-proxies/proxy-manifest.txt
+          for src in "${sources[@]}"; do
+            name="$(basename "$src" .mp4)"
+            out="review-proxies/${name}-review-proxy.mp4"
+            ffprobe -v error -show_entries stream=codec_type,codec_name,width,height,avg_frame_rate,sample_rate,channels -show_entries format=duration,size -of json "$src" > "review-proxies/${name}-source-probe.json"
+            ffmpeg -hide_banner -loglevel error -y -i "$src" -map 0:v:0 -map '0:a?' -vf "scale='min(1280,iw)':'min(1280,ih)':force_original_aspect_ratio=decrease" -c:v libx264 -preset veryfast -crf 25 -c:a aac -b:a 128k -ar 48000 -movflags +faststart "$out"
+            duration="$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$src")"
+            seek="$(awk -v d="$duration" 'BEGIN { printf "%.3f", d / 2 }')"
+            ffmpeg -hide_banner -loglevel error -y -ss "$seek" -i "$src" -frames:v 1 -vf "scale=480:270:force_original_aspect_ratio=decrease,pad=480:270:(ow-iw)/2:(oh-ih)/2" "preview/${name}.jpg"
+            printf '%s  ' "$(sha256sum "$src" | cut -d' ' -f1)" >> review-proxies/proxy-manifest.txt
+            printf '%s  ' "$(sha256sum "$out" | cut -d' ' -f1)" >> review-proxies/proxy-manifest.txt
+            printf '%s\n' "$name" >> review-proxies/proxy-manifest.txt
+          done
+          ffmpeg -hide_banner -loglevel error -y -pattern_type glob -framerate 1 -i 'preview/*.jpg' -vf 'tile=3x2:padding=12:margin=12' -frames:v 1 preview/crocodile-candidates-contact-sheet.jpg
+          cp "$(find source -type f -name acquisition-manifest.json -print -quit)" review-proxies/acquisition-manifest.json
+          echo "PASS: six source files verified and six review proxies created with source audio retained where present."
+          du -sh source review-proxies preview
+
+      - name: Upload review-only proxies and evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: crocodile-footage-human-review-proxies
+          path: |
+            review-proxies/
+            preview/crocodile-candidates-contact-sheet.jpg
+          if-no-files-found: error
+          retention-days: 7

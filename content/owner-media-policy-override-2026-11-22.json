@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "effectiveDate": "2026-11-22",
+  "status": "REVOKED_UNSUPPORTED_OWNER_ATTRIBUTION",
+  "ownerInstruction": null,
+  "revocationReason": "No user instruction authorizing Pexels/Pixabay stock as a substitute for original creator-captured wildlife media was found. This record must not be used as owner approval.",
+  "mediaRules": {
+    "originalCreatorCapturedAllowed": true,
+    "originalCreatorCapturedMediaRequired": true,
+    "pexelsLicensedStockAllowed": false,
+    "pixabayLicensedStockAllowed": false,
+    "otherStockAllowed": false,
+    "aiGeneratedWildlifeVisualsAllowed": false,
+    "standaloneUnmodifiedStockRedistributionAllowed": false,
+    "requireExactSourcePage": true,
+    "requirePlatformLicenseEvidence": true,
+    "requireOriginalFileAndSha256": true,
+    "requireTechnicalProbeAndFullDecode": true,
+    "requireAssetLevelThirdPartyRightsReview": true,
+    "requireHumanVisualEditorialReview": true,
+    "requireExactCreatorCreditInInternalLedger": true,
+    "requireNoImpliedEndorsement": true,
+    "stockVideoFootageAllowed": false,
+    "stockPhotographsAllowed": false
+  },
+  "releaseGates": {
+    "platformLicenseReviewIsNotFinalRightsClearance": true,
+    "unresolvedThirdPartyRightsBlockRelease": true,
+    "unresolvedHumanReviewBlocksRelease": true,
+    "misleadingSpeciesLocationOrBehaviorClaimsBlockRelease": true,
+    "finalEditMustNotImplySeparateClipsAreOneEncounter": true,
+    "publicOrUnattendedPublishingRemainsDisabled": true
+  },
+  "provenance": {
+    "decisionScope": "SonicVhibez wildlife productions",
+    "brandSeparation": "Nature Frontiers remains a separate brand and must not be selected as a YouTube destination.",
+    "zeroCost": "No paid footage, subscriptions, API calls, upgrades or infrastructure without explicit owner approval."
+  }
+}

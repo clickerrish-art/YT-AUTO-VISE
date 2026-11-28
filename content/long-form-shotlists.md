@@ -6,7 +6,7 @@
 
 ## Episode 1 — How to Plan a Wildlife Video People Want to Watch
 
-Narration draft currently passes the automated duration check at approximately **6:24**. Times below are editorial estimates; adjust them to the final approved narration and actual footage.
+The generated review-only narration measured **6:06.24** (366.24 seconds); final human pacing and edit timing may change. Times below are editorial estimates; adjust them to the final approved narration and actual footage.
 
 | Approx. time | Narration beat | Visual treatment to source/create | Required checks |
 |---|---|---|---|
@@ -17,12 +17,12 @@ Narration draft currently passes the automated duration check at approximately *
 | 03:05–04:05 | Shot list and permissions | Original shot-list and asset-register UI mock-up; optionally show cleared footage thumbnails | Use generic mock-up or original work; no copyrighted browser/media screenshots without permission |
 | 04:05–04:55 | Edit for clarity | Original timeline graphic showing narration, video, and captions aligned | Use real timing only after final narration/captions are approved |
 | 04:55–05:45 | Honest title and thumbnail | Demonstrate a truthful title/thumbnail layout using a cleared image or a clearly labelled mock-up | Thumbnail must represent the finished video; no fabricated wildlife encounter |
-| 05:45–06:19 | Recap and paid-resource disclosure | Checklist animation, then a quiet cleared nature shot behind the transparent paid-product mention | Keep exact approved link; do not promise results |
-| 06:19–end | End card | Original SonicVhibez end card over cleared nature footage or original graphic | Check audio fade, channel branding, and final caption timing |
+| 05:45–06:06 | Recap and closing | Checklist animation, then a quiet cleared nature shot | Keep the edit aligned to the final narration; no unapproved product promotion |
+| 06:06–end | End card | Original SonicVhibez end card over cleared nature footage or original graphic | Check audio fade, channel branding, and final caption timing |
 
 ## Episode 2 — A Beginner Workflow for Faceless Wildlife Videos
 
-Narration draft currently passes the automated duration check at approximately **6:48**. Times below are editorial estimates; adjust them to the final approved narration and actual footage.
+The generated review-only narration measured **6:22.13** (382.13 seconds); final human pacing and edit timing may change. Times below are editorial estimates; adjust them to the final approved narration and actual footage.
 
 | Approx. time | Narration beat | Visual treatment to source/create | Required checks |
 |---|---|---|---|
@@ -33,8 +33,8 @@ Narration draft currently passes the automated duration check at approximately *
 | 03:05–04:10 | Source visuals and audio responsibly | Asset-register graphic with filename, source, license, and attribution fields | No “copyright-free” label without an actual license record |
 | 04:10–05:00 | Assemble the story | Timeline graphic with narration, visual track, captions, and audio levels | Final captions must match actual approved narration |
 | 05:00–05:50 | Title, thumbnail, description, disclosures | Original thumbnail layout and metadata checklist | No misleading imagery, fake engagement claims, or guaranteed SEO score |
-| 05:50–06:35 | Final review and repeatable process | Final-review checklist, followed by a cleared nature shot | Inspect full export, black frames, audio, captions, and rights evidence |
-| 06:35–end | Paid-resource disclosure and end card | Simple paid-resource disclosure card, then SonicVhibez end card | Keep exact approved URL; no monetization or growth guarantees |
+| 05:50–06:22 | Final review and repeatable process | Final-review checklist, followed by a cleared nature shot | Inspect full export, black frames, audio, captions, and rights evidence |
+| 06:22–end | End card | Simple SonicVhibez end card | Keep any promotional wording out until the exact disclosure is owner-approved |
 
 ## Asset register — duplicate one row per asset before rendering
 

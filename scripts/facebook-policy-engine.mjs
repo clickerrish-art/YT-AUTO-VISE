@@ -1,0 +1,511 @@
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { isValidZonedIsoTimestamp } from "./schedule-policy.mjs";
+
+export const FACEBOOK_POLICY_RULE_VERSION = "nf-facebook-autonomous-policy-2026-11-v7";
+export const NATURE_FRONTIERS_KNOWN_DESTINATIONS = Object.freeze([
+  "https://www.safari.com/sabi-sand?a=GM26",
+  "https://www.safari.com/kruger-national-park?a=GM26",
+  "https://www.safari.com/destinations/serengeti?a=GM26",
+  "https://www.safari.com/singita-boulders?a=GM26",
+  "https://www.safari.com/safaris/4-day-londolozi-varty-camp-fly-in-safari?a=GM26",
+  "https://selar.com/m/kehinde-ajiboye3108854",
+  "https://selar.com/0u19v8u99l"
+]);
+export const APPROVED_SELLAR_URL = "https://selar.com/0u19v8u99l";
+const sha256 = value => crypto.createHash("sha256").update(value).digest("hex");
+const text = value => typeof value === "string" && value.trim().length > 0;
+const absolutePathWithin = (root, candidate) => {
+  const resolvedRoot = fs.realpathSync(root);
+  const resolved = fs.realpathSync(path.resolve(resolvedRoot, candidate));
+  if (resolved !== resolvedRoot && !resolved.startsWith(resolvedRoot + path.sep)) {
+    throw new Error("Path escapes configured evidence root");
+  }
+  return resolved;
+};
+const urlIsSafe = value => {
+  try {
+    const u = new URL(value);
+    return u.protocol === "https:" && !u.username && !u.password && !u.port && !u.hostname.endsWith(".") &&
+      !["localhost", "127.0.0.1", "::1"].includes(u.hostname.toLowerCase());
+  } catch { return false; }
+};
+const normalized = value => String(value ?? "").normalize("NFKC").toLocaleLowerCase("en-ZA")
+  .replace(/https?:\/\/\S+/g, " ").replace(/[^\p{L}\p{N}]+/gu, " ").trim().replace(/\s+/g, " ");
+const tokenSet = value => new Set(normalized(value).split(" ").filter(t => t.length > 2));
+export function nearDuplicateRatio(a, b) {
+  const left = tokenSet(a), right = tokenSet(b);
+  if (!left.size || !right.size) return 0;
+  let common = 0;
+  for (const item of left) if (right.has(item)) common++;
+  return common / (left.size + right.size - common);
+}
+function hostMatches(host, domains) {
+  return domains.some(domain => host === domain || host.endsWith("." + domain));
+}
+function fingerprint(payload) {
+  return sha256(JSON.stringify({
+    destination: payload?.destination ?? "",
+    destinationPageId: payload?.destinationPageId ?? "",
+    slotId: payload?.slotId ?? "",
+    scheduledAt: payload?.scheduledAt ?? "",
+    caption: String(payload?.caption ?? ""),
+    ...(Object.hasOwn(payload ?? {}, "firstCommentText") ? { firstCommentText: String(payload.firstCommentText ?? "") } : {}),
+    links: Array.isArray(payload?.links) ? payload.links.map(String).sort() : [],
+    claims: (Array.isArray(payload?.claims) ? payload.claims : []).map(claim => ({
+      text: String(claim?.text ?? ""),
+      kind: String(claim?.kind ?? ""),
+      sourceUrls: (Array.isArray(claim?.sourceUrls) ? claim.sourceUrls : []).map(String).sort(),
+      sourceExcerpt: String(claim?.sourceExcerpt ?? ""),
+      sourceSupportsClaim: claim?.sourceSupportsClaim === true,
+      verified: claim?.verified === true,
+      quoteVerified: claim?.quoteVerified === true,
+      semanticVerification: claim?.semanticVerification ? {
+        claimHash: String(claim.semanticVerification.claimHash ?? ""),
+        sourceUrlsHash: String(claim.semanticVerification.sourceUrlsHash ?? ""),
+        sourceExcerptHash: String(claim.semanticVerification.sourceExcerptHash ?? ""),
+        reviewerId: String(claim.semanticVerification.reviewerId ?? ""),
+        checkedAt: String(claim.semanticVerification.checkedAt ?? ""),
+        signature: String(claim.semanticVerification.signature ?? "")
+      } : null
+    })).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))),
+    media: Array.isArray(payload?.media) ? payload.media.map(m => ({
+      id: m?.id ?? "", path: m?.path ?? "", sha256: m?.sha256 ?? "",
+      syntheticOrAltered: m?.syntheticOrAltered ?? null,
+      representationKnown: m?.representationKnown ?? null,
+      disclosureRequired: m?.disclosureRequired ?? null,
+      disclosureApplied: m?.disclosureApplied ?? null,
+      rightsRecord: {
+        evidencePath: m?.rightsRecord?.evidencePath ?? "",
+        evidenceSha256: m?.rightsRecord?.evidenceSha256 ?? "",
+        source: m?.rightsRecord?.source ?? "",
+        license: m?.rightsRecord?.license ?? "",
+        commercialUse: m?.rightsRecord?.commercialUse === true,
+        socialMediaUse: m?.rightsRecord?.socialMediaUse === true,
+        provenanceVerified: m?.rightsRecord?.provenanceVerified === true,
+        attributionRequired: m?.rightsRecord?.attributionRequired === true,
+        attributionText: m?.rightsRecord?.attributionText ?? "",
+        expiresAt: m?.rightsRecord?.expiresAt ?? null
+      }
+    })).sort((a, b) => String(a.id).localeCompare(String(b.id))) : [],
+    qualityReview: payload?.qualityReview ?? null,
+    commercial: payload?.commercial === true,
+    campaignId: payload?.campaignId ?? null,
+    disclosure: payload?.disclosure ?? "",
+    syntheticDisclosure: payload?.syntheticDisclosure ?? ""
+  }));
+}
+
+export function facebookPayloadFingerprint(payload) {
+  return fingerprint(payload);
+}
+
+function approvalBody(approval) {
+  return {
+    decision: approval.decision,
+    reviewer: approval.reviewer,
+    reason: approval.reason,
+    reviewedAt: approval.reviewedAt,
+    contentFingerprint: approval.contentFingerprint,
+    policyRuleVersion: approval.policyRuleVersion
+  };
+}
+
+export function createFacebookAutonomousApprovalReceipt(payload, {
+  reviewer, reason, secret, now = new Date().toISOString()
+} = {}) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) throw new Error("Exact final Facebook payload is required for approval");
+  if (typeof secret !== "string" || Buffer.byteLength(secret, "utf8") < 32) throw new Error("FACEBOOK_APPROVAL_HMAC_SECRET must contain at least 32 bytes");
+  if (!text(reviewer) || reviewer.trim().length < 2 || reviewer.length > 120) throw new Error("Authenticated human reviewer identity is required");
+  if (!text(reason) || reason.trim().length < 3 || reason.length > 1000) throw new Error("Human approval reason is required");
+  if (!isValidZonedIsoTimestamp(now)) throw new Error("Approval timestamp must be a valid ISO timestamp with explicit timezone");
+  const body = {
+    decision: "APPROVE",
+    reviewer: reviewer.trim(),
+    reason: reason.trim(),
+    reviewedAt: now,
+    contentFingerprint: fingerprint(payload),
+    policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION
+  };
+  const signature = crypto.createHmac("sha256", secret).update(JSON.stringify(body)).digest("hex");
+  return Object.freeze({ ...body, signature });
+}
+
+export function verifyFacebookAutonomousApprovalReceipt(payload, {
+  secret, now = new Date().toISOString()
+} = {}) {
+  const errors = [];
+  const approval = payload?.approval;
+  if (!approval || typeof approval !== "object" || Array.isArray(approval)) {
+    return { valid: false, errors: ["A signed human approval receipt is required for autonomous publishing"], contentFingerprint: fingerprint(payload) };
+  }
+  if (approval.decision !== "APPROVE") errors.push("Human approval receipt decision must be APPROVE");
+  if (!text(approval.reviewer) || approval.reviewer.trim().length < 2 || approval.reviewer.length > 120) errors.push("Human approval receipt reviewer is missing or invalid");
+  if (!text(approval.reason) || approval.reason.trim().length < 3 || approval.reason.length > 1000) errors.push("Human approval receipt reason is missing or invalid");
+  if (!isValidZonedIsoTimestamp(approval.reviewedAt)) errors.push("Human approval receipt timestamp is invalid");
+  else if (isValidZonedIsoTimestamp(now) && Date.parse(approval.reviewedAt) > Date.parse(now) + 5 * 60_000) errors.push("Human approval receipt cannot be future-dated");
+  const currentFingerprint = fingerprint(payload);
+  if (approval.contentFingerprint !== currentFingerprint) errors.push("Human approval receipt does not bind the exact current final payload");
+  if (approval.policyRuleVersion !== FACEBOOK_POLICY_RULE_VERSION) errors.push("Human approval receipt was created for a different policy version");
+  if (typeof secret !== "string" || Buffer.byteLength(secret, "utf8") < 32) {
+    errors.push("FACEBOOK_APPROVAL_HMAC_SECRET is missing or too short");
+  } else if (typeof approval.signature !== "string" || !/^[a-f0-9]{64}$/.test(approval.signature)) {
+    errors.push("Human approval receipt signature is missing or malformed");
+  } else {
+    const expected = crypto.createHmac("sha256", secret).update(JSON.stringify(approvalBody(approval))).digest();
+    const supplied = Buffer.from(approval.signature, "hex");
+    if (supplied.length !== expected.length || !crypto.timingSafeEqual(supplied, expected)) errors.push("Human approval receipt signature is invalid");
+  }
+  return { valid: errors.length === 0, errors, contentFingerprint: currentFingerprint };
+}
+
+export function validateFacebookMediaQualityReview(payload, { now = new Date().toISOString() } = {}) {
+  const errors = [];
+  const review = payload?.qualityReview;
+  if (!review || typeof review !== "object" || Array.isArray(review)) return ["signed media quality review is required before Meta publishing"];
+  if (review.policyId !== "NF-MQS-001" || review.decision !== "APPROVED") errors.push("media quality review must approve policy NF-MQS-001");
+  if (!text(review.reviewer) || review.reviewer.trim().length < 2) errors.push("media quality reviewer identity is required");
+  if (!isValidZonedIsoTimestamp(review.reviewedAt)) errors.push("media quality review timestamp must be timezone-qualified");
+  else if (Date.parse(review.reviewedAt) > Date.parse(now) + 5 * 60_000 || Date.parse(now) - Date.parse(review.reviewedAt) > 30 * 24 * 60 * 60_000) errors.push("media quality review must be current and not future-dated");
+  const dimensions = ["visualClarity", "composition", "authenticity", "captionAccuracy", "accessibility", "brandFit"];
+  if (!review.scores || typeof review.scores !== "object" || Array.isArray(review.scores)) errors.push("all six media quality scores are required");
+  else {
+    let total = 0;
+    for (const key of dimensions) {
+      const value = review.scores[key];
+      if (!Number.isInteger(value) || value < 0 || value > 100) errors.push("media quality score " + key + " must be an integer from 0 to 100");
+      else { total += value; if (value < 80) errors.push("media quality score " + key + " is below the mandatory 80/100 floor"); }
+    }
+    if (dimensions.every(key => Number.isInteger(review.scores[key]) && review.scores[key] >= 0 && review.scores[key] <= 100) && total / dimensions.length < 85) errors.push("overall media quality score must be at least 85/100");
+  }
+  const critical = ["mediaMatchesCaption", "factualAccuracy", "animalWelfare", "rightsAndDisclosure", "brandIntegrity"];
+  if (!review.criticalGates || typeof review.criticalGates !== "object" || critical.some(key => review.criticalGates[key] !== true)) errors.push("every Meta media critical quality gate must explicitly pass");
+  const expectedHashes = (Array.isArray(payload?.media) ? payload.media : []).map(item => item?.sha256).sort();
+  const reviewedHashes = Array.isArray(review.mediaHashes) ? [...review.mediaHashes].sort() : [];
+  if (!expectedHashes.length || expectedHashes.some(hash => !/^[a-f0-9]{64}$/.test(hash ?? ""))) errors.push("final Meta media must have valid SHA-256 hashes");
+  if (reviewedHashes.length !== expectedHashes.length || reviewedHashes.some((hash, index) => hash !== expectedHashes[index])) errors.push("media quality review hashes must exactly match every final Meta media asset");
+  return [...new Set(errors)];
+}
+
+/**
+ * Fail-closed, deterministic gate for the exact final Facebook payload.
+ * Source verification is deliberately injectable; a URL alone is never treated as evidence.
+ * This engine prevents publication on unknowns but cannot guarantee Meta policy compliance.
+ */
+export async function evaluateFinalFacebookPayload(payload, {
+  expectedPageId = "",
+  expectedPageName = "Nature Frontiers",
+  allowedDomains = [],
+  allowedCampaignIds = [],
+  approvedDestinations = [],
+  campaignRegistry = [],
+  history = [],
+  evidenceRoot = process.cwd(),
+  fetchImpl = fetch,
+  now = new Date().toISOString(),
+  maxPostsPerLocalDay = 1,
+  maxReelsPerLocalDay = 2,
+  maxFeedPostsPerLocalDay = 1,
+  minimumIntervalMinutes = 60 * 20,
+  timezone = "Africa/Johannesburg",
+  sourceTimeoutMs = 8000,
+  semanticVerifier = null,
+  mediaHistoryReconciled = false,
+  approvalSecret = process.env.FACEBOOK_APPROVAL_HMAC_SECRET
+} = {}) {
+  const blockers = [], warnings = [], sourceChecks = [], rightsChecks = [], disclosureChecks = [], destinationChecks = [], qualityReviewChecks = [];
+  const add = (list, reason) => { if (!list.includes(reason)) list.push(reason); };
+  const resultBase = { eligible: false, blockers, warnings, sourceChecks, rightsChecks, disclosureChecks, destinationChecks,
+    duplicateCheck: { passed: false, matches: [] }, qualityReviewChecks, policyRuleVersion: FACEBOOK_POLICY_RULE_VERSION,
+    contentFingerprint: fingerprint(payload), mediaFingerprints: [], checkedAt: now, reason: "NOT_EVALUATED" };
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    add(blockers, "Final payload is missing or malformed");
+    return { ...resultBase, reason: blockers[0] };
+  }
+  if (!text(payload.caption) || payload.caption.length > 5000) add(blockers, "Final caption is missing or exceeds 5000 characters");
+  if (!text(payload.slotId)) add(blockers, "A durable intended slot ID is required for idempotency");
+  if (!/^\d{5,30}$/.test(String(payload.destinationPageId ?? "")) || payload.destinationPageId !== expectedPageId) add(blockers, "Exact Nature Frontiers Page ID is not verified or does not match the configured destination");
+  if (payload.destination !== "nature_frontiers_facebook") add(blockers, "Destination separation check failed");
+  if (mediaHistoryReconciled !== true) add(blockers, "Complete cross-platform media history reconciliation is not evidenced; recycled footage cannot be ruled out");
+  if (payload.requiresHumanApproval === true || payload.approvalRequired === true) add(blockers, "Payload is still marked as requiring human approval; complete review before it enters the autonomous queue");
+  const approvalCheck = verifyFacebookAutonomousApprovalReceipt(payload, { secret: approvalSecret, now });
+  for (const error of approvalCheck.errors) add(blockers, error);
+  const qualityErrors = validateFacebookMediaQualityReview(payload, { now });
+  qualityReviewChecks.push({ passed: qualityErrors.length === 0, errors: qualityErrors, policyId: payload.qualityReview?.policyId ?? null, reviewer: payload.qualityReview?.reviewer ?? null });
+  for (const error of qualityErrors) add(blockers, error);
+  if (/(like and share|share this to win|comment yes|tag \d+ friends|share to save|react now|comment below to get|share to unlock)/i.test(payload.caption ?? "")) add(blockers, "Engagement bait detected");
+  if (/(graphic injury|animal cruelty|staged animal fight|bait(?:ing)? wildlife|chase wildlife|touch wild animals|provoke wildlife|bloodied carcass)/i.test(payload.caption ?? "")) add(blockers, "Wildlife welfare or graphic-content rule triggered");
+  if (/(guaranteed earnings|guaranteed returns|miracle cure|100% proven|exclusive rescue footage|I rescued|we rescued)/i.test(payload.caption ?? "")) add(blockers, "Unsupported certainty, fabricated-experience risk, or high-impact claim detected");
+  if (/(exact GPS|coordinates|nest location|den location|breeding site location)/i.test(payload.caption ?? "") && /(endangered|vulnerable|rare|nest|den|breeding)/i.test(payload.caption ?? "")) add(blockers, "Potentially sensitive wildlife location disclosure");
+
+  const claims = Array.isArray(payload.claims) ? payload.claims : [];
+  if (claims.length === 0) add(blockers, "Wildlife education payload must declare factual claims and source evidence; source-free factual posts are blocked");
+  for (let i = 0; i < claims.length; i++) {
+    const claim = claims[i];
+    if (!text(claim?.text) || !Array.isArray(claim?.sourceUrls) || claim.sourceUrls.length === 0) {
+      add(blockers, `Claim ${i + 1} lacks claim text or source URLs`);
+      sourceChecks.push({ claimIndex: i, passed: false, reason: "MISSING_CLAIM_OR_SOURCE" });
+      continue;
+    }
+    const checks = [];
+    const sourceBodies = [];
+    const claimInCaption = normalized(payload.caption).includes(normalized(claim.text));
+    if (!claimInCaption) add(blockers, `Claim ${i + 1} is not bound to the exact final caption`);
+    for (const sourceUrl of claim.sourceUrls) {
+      if (!urlIsSafe(sourceUrl)) {
+        checks.push({ url: String(sourceUrl), passed: false, reason: "URL_NOT_SAFE_HTTPS" });
+        continue;
+      }
+      let host;
+      try { host = new URL(sourceUrl).hostname.toLowerCase(); } catch {}
+      const defaultAuthorities = ["gov", "gov.za", "sanbi.org", "iucnredlist.org", "iucn.org", "nationalgeographic.com", "si.edu", "nhm.ac.uk", "sciencedirect.com", "nature.com", "science.org", "journals.plos.org", "peerj.com", "animaldiversity.org", "wwf.org", "wwf.org.za", "birdlife.org", "birdlife.org.za"];
+      const authoritative = host && (host.endsWith(".gov") || host.endsWith(".edu") || hostMatches(host, [...defaultAuthorities, ...allowedDomains]));
+      if (!authoritative) {
+        checks.push({ url: sourceUrl, passed: false, reason: "DOMAIN_NOT_IN_AUTHORITY_ALLOWLIST" });
+        continue;
+      }
+      try {
+        const response = await fetchImpl(sourceUrl, { method: "GET", redirect: "manual", signal: AbortSignal.timeout(sourceTimeoutMs), headers: { accept: "text/html,application/xhtml+xml,text/plain;q=0.9,application/pdf;q=0.5" } });
+        const finalUrl = response.url || sourceUrl;
+        const reachable = response.ok && urlIsSafe(finalUrl) && new URL(finalUrl).hostname === new URL(sourceUrl).hostname;
+        const body = reachable && typeof response.text === "function" ? await response.text() : "";
+        if (body) sourceBodies.push({ url: sourceUrl, text: body.slice(0, 1_000_000) });
+        const excerpt = normalized(claim.sourceExcerpt);
+        const excerptFound = excerpt.length >= 25 && normalized(body).includes(excerpt);
+        const passed = reachable && excerptFound;
+        checks.push({ url: sourceUrl, passed, status: Number(response.status) || null, finalUrl, excerptFound, reason: !reachable ? "SOURCE_UNAVAILABLE_OR_REDIRECTED" : excerptFound ? "SOURCE_EXCERPT_FOUND" : "SOURCE_EXCERPT_MISSING_OR_UNVERIFIABLE" });
+      } catch {
+        checks.push({ url: sourceUrl, passed: false, reason: "SOURCE_CHECK_FAILED" });
+      }
+    }
+    let semanticResult = { verified: false, reason: "NO_TRUSTED_SEMANTIC_VERIFIER_CONFIGURED" };
+    if (typeof semanticVerifier !== "function" && checks.some(check => check.passed && check.excerptFound === true)) {
+      const attestation = claim.semanticVerification;
+      const claimHash = sha256(String(claim.text));
+      const sourceUrlsHash = sha256(JSON.stringify(claim.sourceUrls));
+      const sourceExcerptHash = sha256(String(claim.sourceExcerpt ?? ""));
+      const checkedAt = Date.parse(attestation?.checkedAt);
+      const checkedNow = Date.parse(now);
+      const reviewerId = text(attestation?.reviewerId) ? attestation.reviewerId : "";
+      const signed = claimHash + "\n" + sourceUrlsHash + "\n" + sourceExcerptHash + "\n" + reviewerId + "\n" + String(attestation?.checkedAt ?? "");
+      let signatureValid = false;
+      if (typeof approvalSecret === "string" && Buffer.byteLength(approvalSecret, "utf8") >= 32 &&
+          typeof attestation?.signature === "string" && /^[a-f0-9]{64}$/.test(attestation.signature)) {
+        const expected = crypto.createHmac("sha256", approvalSecret).update(signed).digest();
+        const supplied = Buffer.from(attestation.signature, "hex");
+        signatureValid = supplied.length === expected.length && crypto.timingSafeEqual(expected, supplied);
+      }
+      const verified = typeof approvalSecret === "string" && Buffer.byteLength(approvalSecret, "utf8") >= 32 &&
+        attestation?.claimHash === claimHash && attestation?.sourceUrlsHash === sourceUrlsHash &&
+        attestation?.sourceExcerptHash === sourceExcerptHash && reviewerId.length >= 2 && reviewerId.length <= 200 &&
+        Number.isFinite(checkedAt) && Number.isFinite(checkedNow) &&
+        checkedAt <= checkedNow + 5 * 60_000 && checkedNow - checkedAt <= 30 * 24 * 60 * 60_000 && signatureValid;
+      semanticResult = {
+        verified,
+        verifierId: verified ? reviewerId : null,
+        checkedAt: verified ? attestation.checkedAt : null,
+        reason: verified ? "SIGNED_HUMAN_FACT_CHECK_BOUND_TO_CLAIM_SOURCE_SET_AND_EXCERPT" : "SIGNED_HUMAN_FACT_CHECK_MISSING_OR_INVALID"
+      };
+    }
+    if (typeof semanticVerifier === "function" && checks.some(check => check.passed && check.excerptFound === true)) {
+      try {
+        const verification = await semanticVerifier({
+          claimText: claim.text, sourceUrls: claim.sourceUrls, sourceExcerpt: claim.sourceExcerpt,
+          sourceBodies, finalCaption: payload.caption, checkedAt: now
+        });
+        const claimHash = sha256(String(claim.text));
+        const sourceUrlsHash = sha256(JSON.stringify(claim.sourceUrls));
+        const verified = verification?.verified === true && verification.claimHash === claimHash &&
+          verification.sourceUrlsHash === sourceUrlsHash && text(verification.verifierId) &&
+          Number.isFinite(Date.parse(verification.checkedAt));
+        semanticResult = {
+          verified, verifierId: text(verification?.verifierId) ? verification.verifierId : null,
+          checkedAt: Number.isFinite(Date.parse(verification?.checkedAt)) ? verification.checkedAt : null,
+          reason: verified ? "TRUSTED_SEMANTIC_VERIFIER_CONFIRMED_CLAIM_HASH_AND_SOURCE_SET" : "SEMANTIC_VERIFICATION_FAILED_OR_UNBOUND"
+        };
+      } catch {
+        semanticResult = { verified: false, reason: "SEMANTIC_VERIFIER_FAILED" };
+      }
+    }
+    const passed = claimInCaption && checks.some(check => check.passed && check.excerptFound === true) &&
+      semanticResult.verified === true && claim.sourceSupportsClaim === true && claim.verified === true;
+    sourceChecks.push({ claimIndex: i, claim: claim.text, claimInCaption, checks, semanticVerification: semanticResult, passed,
+      reason: passed ? "SOURCE_AND_TRUSTED_SEMANTIC_CHECK_PASSED" : "SOURCE_EXCERPT_ALONE_IS_NOT_PROOF_OF_CLAIM_SUPPORT" });
+    if (!passed) add(blockers, `Claim ${i + 1} lacks a reachable source and trusted semantic verification; a URL or excerpt alone is not proof`);
+    if (claim.kind === "quote" && claim.quoteVerified !== true) add(blockers, `Claim ${i + 1} contains an unverified quotation`);
+  }
+
+  const media = Array.isArray(payload.media) ? payload.media : [];
+  if (media.length === 0) add(blockers, "At least one final media asset with a rights record is required");
+  for (let i = 0; i < media.length; i++) {
+    const asset = media[i] ?? {};
+    const record = asset.rightsRecord ?? {};
+    const check = { mediaIndex: i, passed: false, sha256: String(asset.sha256 ?? ""), reason: "" };
+    if (!/^[a-f0-9]{64}$/.test(asset.sha256 ?? "")) {
+      check.reason = "MISSING_OR_INVALID_ASSET_SHA256";
+    } else if (!text(asset.path) || !text(record.evidencePath) || !/^[a-f0-9]{64}$/.test(record.evidenceSha256 ?? "")) {
+      check.reason = "MISSING_PROVENANCE_OR_LICENSE_EVIDENCE";
+    } else {
+      try {
+        const assetPath = absolutePathWithin(evidenceRoot, asset.path);
+        const evidencePath = absolutePathWithin(evidenceRoot, record.evidencePath);
+        const actualAssetHash = sha256(fs.readFileSync(assetPath));
+        const actualEvidenceHash = sha256(fs.readFileSync(evidencePath));
+        const rightsValid = actualAssetHash === asset.sha256 && actualEvidenceHash === record.evidenceSha256 &&
+          text(record.source) && text(record.license) && record.commercialUse === true &&
+          record.socialMediaUse === true && record.provenanceVerified === true &&
+          (record.expiresAt == null || (Number.isFinite(Date.parse(record.expiresAt)) && Date.parse(record.expiresAt) > Date.parse(now))) &&
+          record.syntheticOrAlteredKnown === true &&
+          (record.attributionRequired !== true || text(record.attributionText));
+        check.passed = rightsValid;
+        check.reason = rightsValid ? "HASHES_AND_RECORDED_RIGHTS_FIELDS_VALID" : "RIGHTS_EVIDENCE_INCOMPLETE_EXPIRED_OR_HASH_MISMATCH";
+      } catch (error) {
+        check.reason = error?.message === "Path escapes configured evidence root" ? "EVIDENCE_PATH_ESCAPE" : "ASSET_OR_LICENSE_EVIDENCE_UNAVAILABLE";
+      }
+    }
+    rightsChecks.push(check);
+    if (!check.passed) add(blockers, `Media asset ${i + 1} failed rights, provenance, expiry or checksum verification`);
+    resultBase.mediaFingerprints.push({ id: String(asset.id ?? ""), sha256: String(asset.sha256 ?? ""), passed: check.passed });
+    if (typeof asset.syntheticOrAltered !== "boolean" || asset.representationKnown !== true) add(blockers, `Media asset ${i + 1} synthetic/altered origin or representation is unknown`);
+    if (asset.syntheticOrAltered === true) {
+      if (asset.disclosureRequired !== true) add(blockers, `Media asset ${i + 1} is synthetic/altered but does not require an AI disclosure`);
+      if (asset.disclosureApplied !== true) add(blockers, `Media asset ${i + 1} requires a visible synthetic/altered-media disclosure`);
+    }
+  }
+
+  const structuredLinks = Array.isArray(payload.links) ? payload.links.map(String) : [];
+  const visibleCopy = [payload.caption, payload.firstCommentText]
+    .filter(value => typeof value === "string").join("\n");
+  const visibleLinks = visibleCopy.match(/https?:\/\/[^\s)]+/gi) ?? [];
+  const links = [...new Set([...structuredLinks, ...visibleLinks])];
+  const hostOf = link => {
+    try { return new URL(link).hostname.toLowerCase(); } catch { return ""; }
+  };
+  const isSafariLink = link => /(^|\.)safari\.com$/.test(hostOf(link));
+  const isSelarLink = link => /(^|\.)selar\.com$/.test(hostOf(link));
+  const safariLinks = links.filter(isSafariLink);
+  const selarLinks = links.filter(isSelarLink);
+  const commercialLinks = [...safariLinks, ...selarLinks];
+  const visibleDisclosureCopy = [payload.caption, payload.firstCommentText]
+    .filter(value => typeof value === "string").join("\n");
+  const hasCommercialIntent = payload.commercial === true || payload.campaignId != null || commercialLinks.length > 0;
+  const genericCommercialDisclosure = /\b(affiliate link|affiliate disclosure|i may earn|may earn a commission|commission if you buy|paid partnership|sponsored|advertisement|direct sales|purchases generate revenue|selar)\b/i.test(visibleDisclosureCopy);
+  if (!hasCommercialIntent) {
+    if (payload.commercial !== false || payload.campaignId !== null || payload.disclosureRequired !== false) {
+      add(blockers, "Organic Nature Frontiers content must explicitly set campaignId=null, commercial=false and disclosureRequired=false");
+    }
+    if (payload.disclosure != null && payload.disclosure !== "") add(blockers, "Organic Nature Frontiers content must not carry an unrelated campaign disclosure");
+    if (genericCommercialDisclosure) add(blockers, "Organic Nature Frontiers content must not include an affiliate, sponsored or direct-sales disclosure");
+    disclosureChecks.push({ required: false, visibleInCaption: false, passed: true });
+  } else {
+    if (payload.commercial !== true || payload.disclosureRequired !== true || typeof payload.campaignId !== "string" || !payload.campaignId.trim()) {
+      add(blockers, "Commercial Nature Frontiers content requires an explicit campaignId, commercial=true and disclosureRequired=true");
+    }
+    if (safariLinks.length > 0 && selarLinks.length > 0) {
+      add(blockers, "A single Nature Frontiers post cannot mix Safari affiliate and Selar direct-sales campaigns");
+    }
+    const campaign = Array.isArray(campaignRegistry) ? campaignRegistry.find(item => item?.id === payload.campaignId) : null;
+    if (!campaign) {
+      add(blockers, "Commercial campaign ID is not registered in config/campaigns.json");
+      disclosureChecks.push({ required: true, visibleInCaption: false, passed: false });
+    } else {
+      const campaignActive = campaign.status === "ACTIVE_FOR_AUTONOMOUS_PUBLISHING" &&
+        campaign.ownerApproved === true && campaign.disclosureApprovalStatus === "APPROVED";
+      if (!campaignActive) add(blockers, `Campaign ${campaign.id} is not approved for autonomous publishing`);
+      if (!allowedCampaignIds.includes(campaign.id)) add(blockers, "Campaign ID is not allowlisted for autonomous publishing");
+      if (campaign.disclosureRequired !== true || payload.disclosureRequired !== true) {
+        add(blockers, "Campaign-specific viewer disclosure must be explicitly required");
+      }
+      const campaignUrls = [campaign.destinationUrl, ...(Array.isArray(campaign.destinations) ? campaign.destinations : [])].filter(Boolean);
+      if (campaign.type === "safari_affiliate" || campaign.type === "affiliate") {
+        if (safariLinks.length === 0 || selarLinks.length > 0) add(blockers, "Affiliate campaign posts must use only their own approved Safari destinations");
+        if (safariLinks.some(link => !campaignUrls.includes(link))) add(blockers, "Safari affiliate destination is not registered to this exact campaign");
+      } else if (campaign.type === "selar_digital_product") {
+        if (selarLinks.length === 0 || safariLinks.length > 0) add(blockers, "Selar direct-sales campaign posts must use only their own approved Selar destinations");
+        if (selarLinks.some(link => !campaignUrls.includes(link))) add(blockers, "Selar destination is not registered to this exact direct-sales campaign");
+        if (campaign.destinationUrl !== APPROVED_SELLAR_URL) add(blockers, "Selar campaign destination does not match the sole approved product URL");
+      } else {
+        add(blockers, "Commercial campaign type is not supported by the Nature Frontiers policy engine");
+      }
+      const disclosureText = typeof campaign.disclosureText === "string" ? campaign.disclosureText : "";
+      const disclosureVisible = disclosureText.length >= 20 && String(payload.caption ?? "").includes(disclosureText);
+      disclosureChecks.push({
+        required: true,
+        visibleInCaption: disclosureVisible,
+        passed: disclosureVisible && payload.disclosure === disclosureText,
+        compensationType: campaign.compensationType ?? campaign.type
+      });
+      if (!disclosureVisible) add(blockers, "Commercial campaign requires its exact owner-approved disclosure visibly included in the final caption");
+      if (payload.disclosure !== disclosureText) add(blockers, "Campaign disclosure metadata must exactly match the registered campaign disclosure");
+    }
+  }
+  for (const link of links) {
+    if (!urlIsSafe(link)) {
+      destinationChecks.push({ url: String(link), passed: false, reason: "HTTPS_URL_WITHOUT_CREDENTIALS_REQUIRED" });
+      add(blockers, "Outbound destination must be a valid HTTPS URL without embedded credentials or custom ports");
+      continue;
+    }
+    const parsed = new URL(link);
+    const isSelar = parsed.hostname === "selar.com" || parsed.hostname.endsWith(".selar.com");
+    const isSafari = parsed.hostname === "safari.com" || parsed.hostname.endsWith(".safari.com");
+    const allowed = approvedDestinations.includes(link) ||
+      ((!isSelar && !isSafari) && hostMatches(parsed.hostname, allowedDomains));
+    let reachable = false;
+    let finalUrl = link;
+    if (allowed) {
+      try {
+        const response = await fetchImpl(link, { method: "GET", redirect: "manual", signal: AbortSignal.timeout(sourceTimeoutMs), headers: { accept: "text/html,application/xhtml+xml,*/*;q=0.5" } });
+        finalUrl = response.url || link;
+        reachable = response.ok && urlIsSafe(finalUrl) && new URL(finalUrl).href === parsed.href;
+      } catch { reachable = false; }
+    }
+    const passed = allowed && reachable;
+    destinationChecks.push({ url: link, passed, allowlisted: allowed, reachable, finalUrl, reason: !allowed ? "DESTINATION_NOT_ALLOWLISTED" : reachable ? "ALLOWLISTED_HTTPS_DESTINATION_REACHABLE_NO_REDIRECT" : "DESTINATION_UNREACHABLE_OR_REDIRECTED" });
+    if (!allowed) add(blockers, "Outbound link is not on the exact approved destination allowlist");
+    else if (!reachable) add(blockers, "Outbound link is unreachable or redirects to a destination that is not approved");
+  }
+
+  const current = Date.parse(now);
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(current));
+  const priorContent = history.filter(item => item &&
+    ["nature_frontiers_facebook", "nature_frontiers_instagram"].includes(item.destination) &&
+    ["PUBLISHED_VERIFIED", "SCHEDULED_VERIFIED", "PUBLISHING", "UNCERTAIN"].includes(item.status));
+  const prior = priorContent.filter(item => item.destination === "nature_frontiers_facebook");
+  const candidateMediaHashes = new Set(resultBase.mediaFingerprints.map(item => item.sha256).filter(value => /^[a-f0-9]{64}$/.test(value)));
+  const priorReusesMedia = item => {
+    const records = [
+      ...(Array.isArray(item?.mediaFingerprints) ? item.mediaFingerprints : []),
+      ...(Array.isArray(item?.payload?.mediaFingerprints) ? item.payload.mediaFingerprints : []),
+      ...(Array.isArray(item?.policyDecision?.mediaFingerprints) ? item.policyDecision.mediaFingerprints : []),
+      ...(Array.isArray(item?.sourcePolicyDecision?.mediaFingerprints) ? item.sourcePolicyDecision.mediaFingerprints : []),
+      ...(Array.isArray(item?.payload?.media) ? item.payload.media : [])
+    ];
+    return records.some(record => candidateMediaHashes.has(String(record?.sha256 ?? "")));
+  };
+  const matches = priorContent.filter(item => item.slotId === payload.slotId || item.contentFingerprint === resultBase.contentFingerprint ||
+    priorReusesMedia(item) || (text(item.caption) && nearDuplicateRatio(payload.caption, item.caption) >= 0.82));
+  resultBase.duplicateCheck = { passed: matches.length === 0, matches: matches.map(item => ({ slotId: item.slotId ?? null, status: item.status, remotePostId: item.remotePostId ?? null })) };
+  if (matches.length) add(blockers, "Duplicate story, recycled media fingerprint, prior attempt or previously used slot detected");
+  const sameDay = prior.filter(item => {
+    const timestamp = Date.parse(item.publishedAt ?? item.createdAt ?? item.scheduledAt ?? "");
+    if (!Number.isFinite(timestamp)) return true;
+    return new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(timestamp)) === day;
+  });
+  if (sameDay.length >= maxPostsPerLocalDay) add(blockers, "Daily publication cap already reached; missed slots are not caught up");
+  const isReel = payload?.mediaType === "reel";
+  const reelsToday = sameDay.filter(item => item.mediaType === "reel" || item.kind === "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT").length;
+  const feedToday = sameDay.length - reelsToday;
+  if (isReel && reelsToday >= maxReelsPerLocalDay) add(blockers, "Daily Reel cap already reached; missed slots are not caught up");
+  if (!isReel && feedToday >= maxFeedPostsPerLocalDay) add(blockers, "Daily feed-post cap already reached; missed slots are not caught up");
+  const last = prior.map(item => Date.parse(item.publishedAt ?? item.createdAt ?? item.scheduledAt ?? "")).filter(Number.isFinite).sort((a,b)=>b-a)[0];
+  if (last != null && current - last < minimumIntervalMinutes * 60000) add(blockers, "Minimum interval between Facebook posts has not elapsed");
+
+  const warningsOut = [...new Set(warnings)];
+  return {
+    ...resultBase, eligible: blockers.length === 0, blockers: [...new Set(blockers)], warnings: warningsOut,
+    duplicateCheck: resultBase.duplicateCheck,
+    reason: blockers.length ? "BLOCKED_FAIL_CLOSED" : "ELIGIBLE_AUTOMATED_CHECKS_PASSED",
+    checkedAt: now
+  };
+}

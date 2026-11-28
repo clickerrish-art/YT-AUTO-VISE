@@ -8,6 +8,10 @@ This project targets SonicVhibez only. It must never publish to Nature Frontiers
   NOAA says B-roll packages are public domain and may be downloaded and used with credit. Preserve the package's opening slate and read its attribution notes carefully: individual clips may be credited to outside organizations, with permit details. Use only a B-roll package, not an ordinary narrative video whose embedded third-party clips may not be reusable.
   Suggested attribution format: `Footage: NOAA Fisheries [exact package/clip title]; see original package credits.`
 - **U.S. Fish & Wildlife Service B-roll:** https://www.fws.gov/library/collections/b-roll-videos
+- **Pexels stock footage:** https://www.pexels.com/license/ — the platform licence may be consulted for provenance research only. Pexels stock is not authorized as a production substitute for original creator-captured wildlife media. Keep source-page and licence notes for audit history, but do not select stock for a SonicVhibez production.
+- **Pixabay stock footage:** https://pixabay.com/service/license-summary/ — the platform licence may be consulted for provenance research only. Pixabay stock is not authorized as a production substitute for original creator-captured wildlife media.
+
+**Owner media-policy update — 22 November 2026:** The current policy requires original creator-captured wildlife media for SonicVhibez production. Pexels/Pixabay and other stock may remain in research/provenance records only; they are excluded from production. AI-generated wildlife visuals remain prohibited. A platform licence does not create owner production authorization or clear third-party rights.
   The agency invites reuse with credit, but warns that some finished videos contain music licensed only for distribution of the full finished production. For Shorts assembled from excerpts, do not use the embedded music unless a separate license is verified. Prefer verified silent footage or remove the source audio and use the separately generated narration.
 
 ## Required evidence per asset

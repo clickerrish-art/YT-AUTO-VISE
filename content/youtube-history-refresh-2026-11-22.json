@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "repository": "clickerrish-art/YT-AUTO-VISE",
+  "branch": "codex/marketing-machine-audit-fixes",
+  "sourceCommit": "8a23f3365648e577a1c6e22fae7f5542a232ab9e",
+  "status": "PARTIAL_OWNER_REAFFIRMATION_AND_LOCAL_ATTEMPT_ATTESTATION_PENDING",
+  "workflow": {
+    "name": "Verify SonicVhibez YouTube identity and uploads inventory (read-only)",
+    "runId": 44964788362,
+    "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44964788362",
+    "jobId": 137031236037
+  },
+  "artifact": {
+    "id": 14730044913,
+    "name": "sonicvhibez-youtube-public-only-inventory-44964788362",
+    "expiresAt": "2026-11-29T00:04:03Z",
+    "sizeBytes": 872,
+    "sha256": "7d58ea5726eeabe90394b77214b0b72e100e4d4a30af490ca0391db43047ba69",
+    "inventoryJsonSha256": "e5fc3b11bb457f129bcadf0f956a19ad8a56abd73994d02ceac601ed7b2018f8"
+  },
+  "inventory": {
+    "schemaVersion": 1,
+    "complete": true,
+    "mode": "READ_ONLY_OWNER_REVIEW_REQUIRED",
+    "oauthScopesVerified": true,
+    "oauthScopesCheckedAt": "2026-11-22T00:04:02.559Z",
+    "requiredOAuthScopes": [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly"
+    ],
+    "grantedYouTubeScopes": [
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/youtube.upload"
+    ],
+    "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+    "channelTitle": "SonicVibes",
+    "channelHandle": "@sonicvhibez",
+    "verifiedAt": "2026-11-22T00:04:03.023Z",
+    "uploadsPlaylistPages": 1,
+    "totalUploads": 1,
+    "visibilityCounts": {
+      "public": 1,
+      "private": 0,
+      "unlisted": 0
+    },
+    "videos": [
+      {
+        "id": "LjePS02hA1o",
+        "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+        "visibility": "public",
+        "youtubePublishedAt": "2026-10-22T15:05:56Z",
+        "scheduledPublishAt": null,
+        "duration": "PT20S",
+        "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW"
+      }
+    ],
+    "reviewNotes": [
+      "This is a complete read-only uploads-playlist inventory, not an owner-approved publication-history reconciliation.",
+      "The sole video's ID, channel ID, public visibility, API publishedAt and 20-second duration match the prior owner-reviewed record.",
+      "The current inventory leaves format unclassified; the owner must reaffirm the historical Short classification and Studio publication date against this exact artifact.",
+      "Reconcile every local pending or uncertain upload attempt separately; this workflow does not inspect manual, local or third-party upload attempts."
+    ]
+  },
+  "comparison": {
+    "priorOwnerReviewedVideoId": "LjePS02hA1o",
+    "videoIdMatches": true,
+    "channelIdMatches": true,
+    "visibilityMatches": true,
+    "publishedAtMatches": true,
+    "durationMatches": true,
+    "formatStatus": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW",
+    "ownerReaffirmationRequired": true
+  },
+  "uploadAttemptReconciliation": {
+    "status": "NOT_REFRESHED_BY_THIS_INVENTORY_RUN",
+    "priorOwnerAttestationValidThrough": "2026-11-18",
+    "freshOwnerAttestationRequired": true
+  },
+  "safeguards": {
+    "uploadAttempted": false,
+    "metadataWriteAttempted": false,
+    "publicationStateChanged": false,
+    "publicPublishingEnabled": false
+  },
+  "note": "The authenticated @sonicvhibez channel and complete one-upload inventory were verified read-only. The only upload remains a 20-second public video. The artifact does not classify its format or replace the owner's historical Short/Studio-date review. The prior manual/local/third-party upload-attempt attestation remains valid only through 2026-11-18."
+}

@@ -5,12 +5,18 @@ on:
     branches: [main]
     paths:
       - "content/long-form-scripts.md"
+      - "content/long-form-queue.json"
+      - "content/drafts/long-form-001-two-eyes-above-water.md"
+      - "content/drafts/long-form-002-plan-wildlife-video.md"
       - "content/queue.json"
       - "content/next-short.example.json"
       - "config/weekly-content-plan.json"
       - "test/**"
       - "scripts/check-content.mjs"
       - ".github/workflows/content-quality.yml"
+      - "README.md"
+      - "OPERATIONS.md"
+      - "docs/**"
   pull_request:
     paths:
       - "content/long-form-scripts.md"
@@ -19,6 +25,9 @@ on:
       - "test/**"
       - "scripts/check-content.mjs"
       - ".github/workflows/content-quality.yml"
+      - "README.md"
+      - "OPERATIONS.md"
+      - "docs/**"
   workflow_dispatch:
 
 permissions:
@@ -27,29 +36,61 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 30
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/checkout@v7
         with:
-          node-version: "20"
-      - name: Run repository tests
-        run: node --test
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Install FFmpeg for renderer integration tests
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            source .github/scripts/install-ffmpeg-static.sh
+          fi
+          ffmpeg -version
+          ffprobe -version
+      - name: Run repository tests and require zero skips
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
+          if ! grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/node-test.log"; then
+            echo "FAIL: Node test summary did not explicitly report zero skips."
+            exit 1
+          fi
       - name: Check long-form script minimum draft length
         run: |
           python - <<'PY'
           from pathlib import Path
+          import json
           import re
-          source = Path("content/long-form-scripts.md").read_text(encoding="utf-8")
-          episodes = re.split(r"(?m)^## Episode [0-9]+ — ", source)[1:]
-          if len(episodes) < 2:
-              raise SystemExit(f"Expected at least 2 episode scripts; found {len(episodes)}")
-          for index, episode in enumerate(episodes[:2], start=1):
-              section = re.split(r"(?m)^## ", episode, maxsplit=1)[0]
+          queue = json.loads(Path("content/long-form-queue.json").read_text(encoding="utf-8"))
+          items = sorted(
+              (item for item in queue.get("items", [])
+               if item.get("publicationFormat") == "long_form"
+               and item.get("publicationCyclePosition") in (1, 2)),
+              key=lambda item: item["publicationCyclePosition"],
+          )
+          if [item.get("publicationCyclePosition") for item in items] != [1, 2]:
+              raise SystemExit("Expected the two owner-confirmed long-form cycle scripts")
+          for index, item in enumerate(items, start=1):
+              script_path = Path(item["scriptPath"])
+              if script_path.is_absolute() or ".." in script_path.parts or not script_path.is_file():
+                  raise SystemExit(f"Episode {index} canonical script path is missing or unsafe: {script_path}")
+              source = script_path.read_text(encoding="utf-8")
+              heading = re.search(r"(?m)^#{2,3} (?:Spoken narration draft|Narration script)\s*$", source)
+              if not heading:
+                  raise SystemExit(f"Episode {index} has no canonical narration section")
+              section = source[heading.end():]
+              boundary = re.search(r"(?m)^#{2,3} (?:Research and claim map|Suggested description|Sources and references)\s*$", section)
+              if boundary:
+                  section = section[:boundary.start()]
               words = re.findall(r"\b[\w’'-]+\b", section)
-              print(f"Episode {index}: {len(words)} draft words")
+              print(f"Episode {index} ({item['title']}): {len(words)} draft words")
               if len(words) < 900:
                   raise SystemExit(f"Episode {index} is below the 900-word draft floor")
           print("Draft-length floor passed. This does not certify a 6-minute runtime.")

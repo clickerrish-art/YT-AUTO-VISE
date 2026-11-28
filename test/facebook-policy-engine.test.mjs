@@ -1,0 +1,703 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { evaluateFinalFacebookPayload, FACEBOOK_POLICY_RULE_VERSION, createFacebookAutonomousApprovalReceipt, NATURE_FRONTIERS_KNOWN_DESTINATIONS, APPROVED_SELLAR_URL } from "../scripts/facebook-policy-engine.mjs";
+
+const hash = value => crypto.createHash("sha256").update(value).digest("hex");
+const TEST_APPROVAL_SECRET = "unit-test-facebook-approval-secret-32-bytes-minimum";
+function fixture() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-policy-"));
+  const media = Buffer.from("licensed media fixture");
+  const license = Buffer.from("commercial and social media license evidence fixture");
+  fs.writeFileSync(path.join(root, "asset.bin"), media);
+  fs.writeFileSync(path.join(root, "license.txt"), license);
+  const payload = {
+    destination: "nature_frontiers_facebook",
+    destinationPageId: "123456789012345",
+    slotId: "nf-2026-10-25-0800",
+    caption: "Observe wildlife from a respectful distance and avoid disturbing animals.",
+    claims: [{
+      text: "Observe wildlife from a respectful distance and avoid disturbing animals.",
+      sourceUrls: ["https://sanbi.org/wildlife-viewing"],
+      sourceExcerpt: "Observe wildlife from a respectful distance and avoid disturbing animals.",
+      sourceSupportsClaim: true, verified: true
+    }],
+    links: [],
+    commercial: false,
+    campaignId: null,
+    disclosureRequired: false,
+    disclosure: null,
+    media: [{
+      id: "asset-1", path: "asset.bin", sha256: hash(media), syntheticOrAltered: false,
+      representationKnown: true,
+      rightsRecord: { evidencePath: "license.txt", evidenceSha256: hash(license), source: "Documented original asset",
+        license: "Commercial social media use", commercialUse: true, socialMediaUse: true,
+        provenanceVerified: true, syntheticOrAlteredKnown: true, attributionRequired: false }
+    }]
+  };
+  payload.qualityReview = {
+    policyId: "NF-MQS-001", decision: "APPROVED", reviewer: "Unit Test Reviewer",
+    reviewedAt: "2026-10-24T12:00:00.000Z",
+    scores: { visualClarity: 90, composition: 90, authenticity: 90, captionAccuracy: 90, accessibility: 90, brandFit: 90 },
+    criticalGates: { mediaMatchesCaption: true, factualAccuracy: true, animalWelfare: true, rightsAndDisclosure: true, brandIntegrity: true },
+    mediaHashes: [hash(media)]
+  };
+  payload.approval = createFacebookAutonomousApprovalReceipt(payload, {
+    reviewer: "Unit Test Reviewer",
+    reason: "Reviewed exact final caption, media, rights evidence and destination.",
+    secret: TEST_APPROVAL_SECRET,
+    now: "2026-10-24T12:00:00.000Z"
+  });
+  return { root, payload, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
+}
+const options = root => ({
+  expectedPageId: "123456789012345", expectedPageName: "Nature Frontiers", evidenceRoot: root,
+  history: [], allowedDomains: [], allowedCampaignIds: [],
+  approvedDestinations: [...NATURE_FRONTIERS_KNOWN_DESTINATIONS],
+  campaignRegistry: JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8")).campaigns,
+  mediaHistoryReconciled: true, now: "2026-10-24T12:00:00.000Z",
+  fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Wildlife viewing guidance: Observe wildlife from a respectful distance and avoid disturbing animals. Further information." }),
+  approvalSecret: TEST_APPROVAL_SECRET,
+  semanticVerifier: async ({ claimText, sourceUrls, checkedAt }) => ({
+    verified: true, claimHash: hash(claimText), sourceUrlsHash: hash(JSON.stringify(sourceUrls)),
+    verifierId: "unit-test-semantic-verifier", checkedAt
+  })
+});
+
+test("Meta publishing quality gate rejects missing, low, critical, stale and hash-changed reviews", async () => {
+  const f = fixture();
+  try {
+    const original = structuredClone(f.payload.qualityReview);
+    delete f.payload.qualityReview;
+    let result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.match(result.blockers.join(" "), /media quality review is required/i);
+
+    f.payload.qualityReview = structuredClone(original);
+    f.payload.qualityReview.scores.visualClarity = 79;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, { reviewer: "Unit Test Reviewer", reason: "Negative quality fixture", secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z" });
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.match(result.blockers.join(" "), /below the mandatory 80/i);
+
+    f.payload.qualityReview = structuredClone(original);
+    f.payload.qualityReview.criticalGates.animalWelfare = false;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, { reviewer: "Unit Test Reviewer", reason: "Negative critical gate fixture", secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z" });
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.match(result.blockers.join(" "), /critical quality gate/i);
+
+    f.payload.qualityReview = { ...structuredClone(original), reviewedAt: "2020-01-01T00:00:00.000Z" };
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, { reviewer: "Unit Test Reviewer", reason: "Negative stale fixture", secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z" });
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.match(result.blockers.join(" "), /must be current/i);
+
+    f.payload.qualityReview = structuredClone(original);
+    f.payload.qualityReview.mediaHashes = ["0".repeat(64)];
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, { reviewer: "Unit Test Reviewer", reason: "Negative changed-hash fixture", secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z" });
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.match(result.blockers.join(" "), /exactly match every final Meta media asset/i);
+  } finally { f.cleanup(); }
+});
+
+test("Nature Frontiers cadence caps two Reels and one feed post per Johannesburg day", async () => {
+  const f = fixture();
+  try {
+    const common = {
+      destination: "nature_frontiers_facebook",
+      status: "PUBLISHED_VERIFIED",
+      scheduledAt: "2026-10-24T07:00:00.000Z"
+    };
+    const twoReels = [
+      { ...common, slotId: "reel-a", kind: "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT", mediaType: "reel", scheduledAt: "2026-10-24T03:00:00.000Z" },
+      { ...common, slotId: "reel-b", kind: "FACEBOOK_PAGE_REEL_PUBLISH_ATTEMPT", mediaType: "reel" }
+    ];
+    f.payload.mediaType = "reel";
+    const reelDecision = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), history: twoReels, maxPostsPerLocalDay: 3,
+      maxReelsPerLocalDay: 2, maxFeedPostsPerLocalDay: 1, minimumIntervalMinutes: 240
+    });
+    assert.equal(reelDecision.eligible, false);
+    assert.match(reelDecision.blockers.join(" "), /Daily Reel cap/i);
+
+    f.payload.mediaType = "feed_post";
+    const feedDecision = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), history: [{ ...common, slotId: "feed-a", kind: "FACEBOOK_PUBLISH_ATTEMPT", mediaType: "feed_post" }],
+      maxPostsPerLocalDay: 3, maxReelsPerLocalDay: 2, maxFeedPostsPerLocalDay: 1,
+      minimumIntervalMinutes: 240
+    });
+    assert.equal(feedDecision.eligible, false);
+    assert.match(feedDecision.blockers.join(" "), /Daily feed-post cap/i);
+  } finally { f.cleanup(); }
+});
+
+test("publishing remains blocked until complete cross-platform media history is reconciled", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), mediaHistoryReconciled: false });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /complete cross-platform media history reconciliation/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("policy returns the required structured decision and accepts only a complete safe fixture", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    assert.equal(result.policyRuleVersion, FACEBOOK_POLICY_RULE_VERSION);
+    assert.match(result.contentFingerprint, /^[a-f0-9]{64}$/);
+    assert.equal(result.mediaFingerprints[0].passed, true);
+    assert.equal(result.duplicateCheck.passed, true);
+    for (const key of ["blockers","warnings","sourceChecks","rightsChecks","disclosureChecks","destinationChecks","duplicateCheck","qualityReviewChecks","contentFingerprint","mediaFingerprints","checkedAt","reason"]) assert.ok(key in result, key);
+  } finally { f.cleanup(); }
+});
+
+
+test("operator-released hold records do not count as remote publications or duplicate receipts", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      history: [{
+        destination: "nature_frontiers_facebook", slotId: f.payload.slotId,
+        status: "HELD_CONNECTION_BLOCKED", checkedAt: "2026-10-24T12:00:00.000Z"
+      }]
+    });
+    assert.equal(result.duplicateCheck.passed, true);
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+  } finally { f.cleanup(); }
+});
+
+test("missing rights evidence and changed media checksum fail closed", async () => {
+  const f = fixture();
+  try {
+    f.payload.media[0].rightsRecord.license = "";
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.match(result.blockers.join(" "), /rights/i);
+    f.payload.media[0].rightsRecord.license = "Commercial social media use";
+    f.payload.media[0].sha256 = "a".repeat(64);
+    const changed = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(changed.eligible, false);
+  } finally { f.cleanup(); }
+});
+
+test("unsourced factual claims and unreachable or redirected sources block", async () => {
+  const f = fixture();
+  try {
+    f.payload.caption = "Research shows this species population increased by 40 percent.";
+    f.payload.claims = [{ text: "Population increased by 40 percent", sourceUrls: ["https://example.org/report"], verified: true, sourceSupportsClaim: true }];
+    const badAuthority = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(badAuthority.eligible, false);
+    f.payload.claims[0].sourceUrls = ["https://research.gov.attacker.example/report"];
+    const deceptiveAuthority = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(deceptiveAuthority.eligible, false);
+    assert.ok(deceptiveAuthority.blockers.some(item => /authority|source/i.test(item)));
+    f.payload.claims[0].sourceUrls = ["https://sanbi.org/report"];
+    const unreachable = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), fetchImpl: async () => { throw new Error("offline"); } });
+    assert.equal(unreachable.eligible, false);
+    assert.match(unreachable.blockers.join(" "), /source/i);
+  } finally { f.cleanup(); }
+});
+
+test("engagement bait, graphic wildlife and sensitive location content block", async () => {
+  const f = fixture();
+  try {
+    for (const caption of [
+      "Like and share this to win a prize.",
+      "A graphic injury scene shows bloodied wildlife.",
+      "Exact GPS coordinates of an endangered species nest are included."
+    ]) {
+      f.payload.caption = caption;
+      const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+      assert.equal(result.eligible, false, caption);
+    }
+  } finally { f.cleanup(); }
+});
+
+test("ordinary Nature Frontiers wildlife posts are non-commercial and need no link dump or affiliate disclosure", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    assert.equal(f.payload.campaignId, null);
+    assert.equal(f.payload.commercial, false);
+    assert.equal(f.payload.disclosureRequired, false);
+    assert.deepEqual(f.payload.links, []);
+    assert.equal(result.disclosureChecks[0].required, false);
+    assert.equal(result.destinationChecks.length, 0);
+  } finally { f.cleanup(); }
+});
+
+test("Selar direct-sales content cannot borrow affiliate disclosure or draft-only approval", async () => {
+  const f = fixture();
+  try {
+    const campaign = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8")).campaigns
+      .find(item => item.id === "selar-wildlife-vault");
+    f.payload.links = [APPROVED_SELLAR_URL];
+    f.payload.caption += " Affiliate disclosure: Nature Frontiers may earn a commission if you book through these links.";
+    f.payload.commercial = true;
+    f.payload.campaignId = "selar-wildlife-vault";
+    f.payload.disclosureRequired = true;
+    f.payload.disclosure = campaign.disclosureText;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer", reason: "Reviewed the exact final direct-sales test payload.",
+      secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), allowedCampaignIds: ["selar-wildlife-vault"],
+      approvedDestinations: [APPROVED_SELLAR_URL], campaignRegistry: [campaign]
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /not approved for autonomous publishing/i.test(item)));
+    assert.ok(result.blockers.some(item => /exact owner-approved disclosure/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("Safari affiliate content remains inactive and cannot borrow Selar direct-sales approval", async () => {
+  const f = fixture();
+  try {
+    const campaign = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8")).campaigns
+      .find(item => item.id === "safari-affiliate-inactive");
+    const safariUrl = "https://www.safari.com/sabi-sand?a=GM26";
+    f.payload.links = [safariUrl];
+    f.payload.caption += " " + (campaign.disclosureText || "This is an affiliate link; we may earn a commission.");
+    f.payload.commercial = true;
+    f.payload.campaignId = campaign.id;
+    f.payload.disclosureRequired = true;
+    f.payload.disclosure = campaign.disclosureText;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer", reason: "Reviewed the exact inactive Safari campaign test payload.",
+      secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), allowedCampaignIds: [campaign.id],
+      approvedDestinations: [safariUrl], campaignRegistry: [campaign]
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /not approved for autonomous publishing/i.test(item)));
+    assert.ok(result.blockers.some(item => /not registered to this exact campaign/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("a single Nature Frontiers post cannot mix Safari affiliate and Selar direct-sales destinations", async () => {
+  const f = fixture();
+  try {
+    const campaign = JSON.parse(fs.readFileSync(path.join(process.cwd(), "config/campaigns.json"), "utf8")).campaigns
+      .find(item => item.id === "selar-wildlife-vault");
+    const safariUrl = "https://www.safari.com/sabi-sand?a=GM26";
+    f.payload.links = [APPROVED_SELLAR_URL, safariUrl];
+    f.payload.caption += " " + campaign.disclosureText;
+    f.payload.commercial = true;
+    f.payload.campaignId = campaign.id;
+    f.payload.disclosureRequired = true;
+    f.payload.disclosure = campaign.disclosureText;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer", reason: "Reviewed the exact mixed-campaign test payload.",
+      secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), allowedCampaignIds: [campaign.id],
+      approvedDestinations: [APPROVED_SELLAR_URL, safariUrl], campaignRegistry: [campaign]
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /cannot mix Safari affiliate and Selar direct-sales/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("an explicitly active test-only Selar campaign requires its own exact URL and direct-sales disclosure", async () => {
+  const f = fixture();
+  try {
+    const disclosure = "This product is sold through my own Selar business; purchases generate revenue for my business.";
+    const campaign = {
+      id: "test-selar-direct-sales",
+      type: "selar_digital_product",
+      status: "ACTIVE_FOR_AUTONOMOUS_PUBLISHING",
+      ownerApproved: true,
+      disclosureApprovalStatus: "APPROVED",
+      disclosureRequired: true,
+      disclosureText: disclosure,
+      compensationType: "direct_sales_revenue",
+      destinationUrl: APPROVED_SELLAR_URL
+    };
+    f.payload.links = [APPROVED_SELLAR_URL];
+    f.payload.caption += " " + disclosure;
+    f.payload.commercial = true;
+    f.payload.campaignId = campaign.id;
+    f.payload.disclosureRequired = true;
+    f.payload.disclosure = disclosure;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer", reason: "Test-only approved campaign fixture validates exact direct-sales disclosure.",
+      secret: TEST_APPROVAL_SECRET, now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), allowedCampaignIds: [campaign.id],
+      approvedDestinations: [APPROVED_SELLAR_URL], campaignRegistry: [campaign]
+    });
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    assert.equal(result.disclosureChecks[0].compensationType, "direct_sales_revenue");
+  } finally { f.cleanup(); }
+});
+
+test("Nature Frontiers does not accept links or disclosures moved from the caption into the public first comment", async () => {
+  const f = fixture();
+  try {
+    f.payload.caption = "Observe wildlife from a respectful distance and avoid disturbing animals.";
+    f.payload.links = [];
+    f.payload.commercial = false;
+    f.payload.campaignId = null;
+    f.payload.firstCommentText = "Product details: https://selar.com/0u19v8u99l";
+    const linkedComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(linkedComment.eligible, false);
+    assert.ok(linkedComment.blockers.some(item => /Commercial Nature Frontiers content requires an explicit campaignId/i.test(item)));
+    assert.ok(linkedComment.destinationChecks.some(check => check.url === "https://selar.com/0u19v8u99l" && check.passed === true));
+
+    const linkedFingerprint = linkedComment.contentFingerprint;
+    f.payload.firstCommentText = "Affiliate link: I may earn a commission if you purchase.";
+    const affiliateComment = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(affiliateComment.eligible, false);
+    assert.ok(affiliateComment.blockers.some(item => /Organic Nature Frontiers content must not include an affiliate/i.test(item)));
+    assert.notEqual(affiliateComment.contentFingerprint, linkedFingerprint,
+      "the public first comment must be included in the approval fingerprint");
+  } finally { f.cleanup(); }
+});
+
+test("Safari remains inactive and arbitrary or unsafe destinations are blocked", async () => {
+  const f = fixture();
+  try {
+    f.payload.commercial = true;
+    f.payload.campaignId = "safari-affiliate-inactive";
+    f.payload.links = ["https://example.com/affiliate"];
+    f.payload.caption = "Affiliate link: I may earn a commission. Consider this travel option.";
+    let result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(x => /campaign|destination/i.test(x)));
+    f.payload.links = ["https://user:password@example.com/path"];
+    result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+  } finally { f.cleanup(); }
+});
+
+test("duplicate slots, near-duplicates and daily frequency limits block", async () => {
+  const f = fixture();
+  try {
+    const history = [{ destination: "nature_frontiers_facebook", slotId: f.payload.slotId, status: "UNCERTAIN", caption: f.payload.caption, createdAt: "2026-10-24T11:00:00Z" }];
+    const result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), history });
+    assert.equal(result.eligible, false);
+    assert.equal(result.duplicateCheck.passed, false);
+  } finally { f.cleanup(); }
+});
+
+test("previously published media hashes are rejected even when the new story and slot differ", async () => {
+  const f = fixture();
+  try {
+    const history = [{
+      destination: "nature_frontiers_facebook", slotId: "different-story-slot", status: "PUBLISHED_VERIFIED",
+      policyDecision: { mediaFingerprints: [{ id: "old-asset", sha256: f.payload.media[0].sha256, passed: true }] }
+    }];
+    const result = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), history });
+    assert.equal(result.eligible, false);
+    assert.equal(result.duplicateCheck.passed, false);
+    assert.ok(result.blockers.some(item => /recycled media fingerprint/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("autonomous publishing requires a signed human approval bound to the exact final payload", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    const noSecret = await evaluateFinalFacebookPayload(f.payload, { ...options(f.root), approvalSecret: "" });
+    assert.equal(noSecret.eligible, false);
+    assert.ok(noSecret.blockers.some(x => /HMAC_SECRET is missing or too short/i.test(x)));
+    const approval = f.payload.approval;
+    delete f.payload.approval;
+    const missing = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(missing.eligible, false);
+    assert.ok(missing.blockers.some(x => /signed human approval receipt is required/i.test(x)));
+
+    f.payload.approval = { ...approval, signature: "0".repeat(64) };
+    const forged = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(forged.eligible, false);
+    assert.ok(forged.blockers.some(x => /signature is invalid/i.test(x)));
+
+    f.payload.approval = { ...approval, policyRuleVersion: "nf-facebook-autonomous-policy-2026-10-v3" };
+    const oldPolicy = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(oldPolicy.eligible, false);
+    assert.ok(oldPolicy.blockers.some(x => /different policy version/i.test(x)));
+
+    f.payload.approval = approval;
+    f.payload.caption += " Updated after review.";
+    const stale = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(stale.eligible, false);
+    assert.ok(stale.blockers.some(x => /does not bind the exact current final payload/i.test(x)));
+
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer",
+      reason: "Reviewed the updated exact final caption and evidence.",
+      secret: TEST_APPROVAL_SECRET,
+      now: "2026-10-24T12:00:00.000Z"
+    });
+    f.payload.media[0].representationKnown = false;
+    const unknown = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(unknown.eligible, false);
+    assert.ok(unknown.blockers.some(x => /origin|representation/i.test(x)));
+  } finally { f.cleanup(); }
+});
+
+test("symlinked asset evidence escaping the rights root is blocked", async () => {
+  const f = fixture();
+  const outside = fs.mkdtempSync(path.join(os.tmpdir(), "facebook-policy-outside-"));
+  try {
+    fs.writeFileSync(path.join(outside, "license.txt"), "outside license");
+    fs.symlinkSync(path.join(outside, "license.txt"), path.join(f.root, "escape.txt"));
+    f.payload.media[0].rightsRecord.evidencePath = "escape.txt";
+    f.payload.media[0].rightsRecord.evidenceSha256 = hash("outside license");
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(x => /rights/i.test(x)));
+  } finally {
+    f.cleanup();
+    fs.rmSync(outside, { recursive: true, force: true });
+  }
+});
+
+test("URLs embedded directly in the final caption are checked even when links metadata omits them", async () => {
+  const f = fixture();
+  try {
+    f.payload.caption = "Educational note. Visit https://unapproved.example/path for more.";
+    f.payload.links = [];
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.destinationChecks.some(check => check.url.includes("unapproved.example") && !check.passed));
+  } finally { f.cleanup(); }
+});
+
+test("a factual claim needs a reachable authoritative source containing the recorded excerpt", async () => {
+  const f = fixture();
+  try {
+    const excerpt = "Wetlands support biodiversity and help regulate water flows.";
+    f.payload.caption = "Wetlands support biodiversity and help regulate water flows.";
+    f.payload.claims = [{ text: "Wetlands support biodiversity and help regulate water flows", sourceUrls: ["https://sanbi.org/research"], sourceExcerpt: excerpt, sourceSupportsClaim: true, verified: true }];
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer",
+      reason: "Reviewed the exact final wetland caption, claim, source and media.",
+      secret: TEST_APPROVAL_SECRET,
+      now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      fetchImpl: async url => ({ ok: true, status: 200, url: String(url), text: async () => "Report summary. " + excerpt + " Further documented context." })
+    });
+    assert.equal(result.eligible, true, JSON.stringify(result.blockers));
+    assert.equal(result.sourceChecks[0].passed, true);
+  } finally { f.cleanup(); }
+});
+
+test("an allowlisted link that redirects to another host is blocked", async () => {
+  const f = fixture();
+  try {
+    const destination = "https://example.org/approved";
+    f.payload.links = [destination];
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), approvedDestinations: [destination],
+      fetchImpl: async url => ({ ok: true, status: 200, url: "https://redirect-elsewhere.example/path" })
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.destinationChecks.some(check => check.allowlisted && !check.passed));
+  } finally { f.cleanup(); }
+});
+
+
+test("an allowlisted URL redirecting to a different path on the same host is blocked", async () => {
+  const f = fixture();
+  try {
+    const destination = "https://example.org/approved";
+    f.payload.links = [destination];
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), approvedDestinations: [destination],
+      fetchImpl: async url => ({ ok: true, status: 200, url: "https://example.org/changed-path" })
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.destinationChecks.some(check => check.allowlisted && !check.passed));
+  } finally { f.cleanup(); }
+});
+
+
+test("source excerpt and self-declared verification cannot replace a trusted semantic verifier", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), semanticVerifier: null
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /trusted semantic verification/i.test(item)));
+    assert.equal(result.sourceChecks[0].semanticVerification.reason, "SIGNED_HUMAN_FACT_CHECK_MISSING_OR_INVALID");
+  } finally { f.cleanup(); }
+});
+
+test("every factual wildlife post needs structured claims and claims must bind to the final caption", async () => {
+  const f = fixture();
+  try {
+    f.payload.claims = [];
+    const noClaims = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(noClaims.eligible, false);
+    assert.ok(noClaims.blockers.some(item => /must declare factual claims/i.test(item)));
+    f.payload.claims = [{
+      text: "A different unsupported statement about population growth.",
+      sourceUrls: ["https://sanbi.org/wildlife-viewing"],
+      sourceExcerpt: "A different unsupported statement about population growth.",
+      sourceSupportsClaim: true, verified: true
+    }];
+    const unrelated = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(unrelated.eligible, false);
+    assert.ok(unrelated.blockers.some(item => /not bound to the exact final caption/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+
+test("semantic verifier must bind its result to the exact claim and source set", async () => {
+  const f = fixture();
+  try {
+    const mismatchedClaim = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      semanticVerifier: async ({ sourceUrls, checkedAt }) => ({
+        verified: true, claimHash: "0".repeat(64),
+        sourceUrlsHash: hash(JSON.stringify(sourceUrls)),
+        verifierId: "test-verifier", checkedAt
+      })
+    });
+    assert.equal(mismatchedClaim.eligible, false);
+    assert.equal(mismatchedClaim.sourceChecks[0].semanticVerification.reason, "SEMANTIC_VERIFICATION_FAILED_OR_UNBOUND");
+
+    const mismatchedSources = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      semanticVerifier: async ({ claimText, checkedAt }) => ({
+        verified: true, claimHash: hash(claimText),
+        sourceUrlsHash: "0".repeat(64),
+        verifierId: "test-verifier", checkedAt
+      })
+    });
+    assert.equal(mismatchedSources.eligible, false);
+    assert.equal(mismatchedSources.sourceChecks[0].semanticVerification.verified, false);
+  } finally { f.cleanup(); }
+});
+
+test("signed human source-review attestations replace an unavailable semantic verifier and bind exact claim evidence", async () => {
+  const f = fixture();
+  try {
+    const claim = f.payload.claims[0];
+    const claimHash = hash(claim.text);
+    const sourceUrlsHash = hash(JSON.stringify(claim.sourceUrls));
+    const sourceExcerptHash = hash(claim.sourceExcerpt);
+    const reviewerId = "owner-reviewed-editor";
+    const checkedAt = "2026-10-24T12:00:00.000Z";
+    const signed = claimHash + "\n" + sourceUrlsHash + "\n" + sourceExcerptHash + "\n" + reviewerId + "\n" + checkedAt;
+    claim.semanticVerification = {
+      claimHash, sourceUrlsHash, sourceExcerptHash, reviewerId, checkedAt,
+      signature: crypto.createHmac("sha256", TEST_APPROVAL_SECRET).update(signed).digest("hex")
+    };
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: reviewerId, reason: "Reviewed the exact claim and source excerpt.",
+      secret: TEST_APPROVAL_SECRET, now: checkedAt
+    });
+    const noSemanticService = options(f.root);
+    delete noSemanticService.semanticVerifier;
+    const valid = await evaluateFinalFacebookPayload(f.payload, noSemanticService);
+    assert.equal(valid.eligible, true, JSON.stringify(valid.blockers));
+    assert.equal(valid.sourceChecks[0].semanticVerification.reason,
+      "SIGNED_HUMAN_FACT_CHECK_BOUND_TO_CLAIM_SOURCE_SET_AND_EXCERPT");
+
+    claim.semanticVerification.sourceExcerptHash = "0".repeat(64);
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: reviewerId, reason: "Re-signed altered fixture to isolate claim attestation validation.",
+      secret: TEST_APPROVAL_SECRET, now: checkedAt
+    });
+    const tampered = await evaluateFinalFacebookPayload(f.payload, noSemanticService);
+    assert.equal(tampered.eligible, false);
+    assert.match(tampered.blockers.join(" "), /trusted semantic verification/i);
+  } finally { f.cleanup(); }
+});
+
+
+test("synthetic or AI-generated media cannot bypass disclosure by declaring disclosure unnecessary", async () => {
+  const f = fixture();
+  try {
+    f.payload.media[0].syntheticOrAltered = true;
+    f.payload.media[0].disclosureRequired = false;
+    f.payload.media[0].disclosureApplied = false;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer",
+      reason: "Test fixture binds the exact synthetic asset and disclosure metadata.",
+      secret: TEST_APPROVAL_SECRET,
+      now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /synthetic\/altered but does not require an AI disclosure/i.test(item)));
+    assert.ok(result.blockers.some(item => /requires a visible synthetic\/altered-media disclosure/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+test("synthetic or AI-generated media is blocked until the disclosure is actually applied", async () => {
+  const f = fixture();
+  try {
+    f.payload.media[0].syntheticOrAltered = true;
+    f.payload.media[0].disclosureRequired = true;
+    f.payload.media[0].disclosureApplied = false;
+    f.payload.approval = createFacebookAutonomousApprovalReceipt(f.payload, {
+      reviewer: "Unit Test Reviewer",
+      reason: "Test fixture binds the exact synthetic asset and required disclosure state.",
+      secret: TEST_APPROVAL_SECRET,
+      now: "2026-10-24T12:00:00.000Z"
+    });
+    const result = await evaluateFinalFacebookPayload(f.payload, options(f.root));
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /requires a visible synthetic\/altered-media disclosure/i.test(item)));
+  } finally { f.cleanup(); }
+});
+
+
+test("unreconciled Metricool history imported as UNCERTAIN blocks duplicate wildlife stories", async () => {
+  const f = fixture();
+  try {
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root),
+      history: [{
+        destination: "nature_frontiers_facebook",
+        status: "UNCERTAIN",
+        remotePostId: "metricool-import-unknown-remote-id",
+        caption: f.payload.caption,
+        publishedAt: "2026-11-13T20:01:16+02:00",
+        mediaType: "reel",
+        verifiedRemotely: false,
+        reconciliationStatus: "UNRECONCILED"
+      }]
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /Duplicate story, recycled media fingerprint, prior attempt or previously used slot detected/i.test(item)));
+    assert.equal(result.duplicateCheck.matches[0].status, "UNCERTAIN");
+  } finally { f.cleanup(); }
+});
+
+test("unreconciled Metricool UNCERTAIN posts still count against daily and format caps", async () => {
+  const f = fixture();
+  try {
+    const history = [
+      { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-reel-1", publishedAt: "2026-10-24T06:00:00Z", mediaType: "reel" },
+      { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-reel-2", publishedAt: "2026-10-24T10:00:00Z", mediaType: "reel" },
+      { destination: "nature_frontiers_facebook", status: "UNCERTAIN", slotId: "metricool-feed-1", publishedAt: "2026-10-24T11:00:00Z", mediaType: "feed_post" }
+    ];
+    f.payload.mediaType = "reel";
+    const result = await evaluateFinalFacebookPayload(f.payload, {
+      ...options(f.root), history,
+      maxPostsPerLocalDay: 3, maxReelsPerLocalDay: 2, maxFeedPostsPerLocalDay: 1,
+      minimumIntervalMinutes: 240
+    });
+    assert.equal(result.eligible, false);
+    assert.ok(result.blockers.some(item => /Daily publication cap already reached/i.test(item)));
+    assert.ok(result.blockers.some(item => /Daily Reel cap already reached/i.test(item)));
+  } finally { f.cleanup(); }
+});

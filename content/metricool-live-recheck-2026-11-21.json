@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "project": "Nature Frontiers / SonicVhibez brand separation",
+  "checkedOn": "2026-11-21",
+  "status": "PARTIAL_LEGACY_ACCESS_BLOCKED",
+  "mode": "READ_ONLY_ONLY_NO_PROVIDER_MUTATIONS",
+  "currentMetricoolBrand": {
+    "id": 8094526,
+    "label": "Nature Frontiers SA",
+    "timezone": "Africa/Johannesburg",
+    "networksReturnedByLiveBrandSettings": {
+      "facebookPageId": "1431329126735709",
+      "instagramProfessionalHandle": "naturefrontieers2026"
+    },
+    "sonicVhibezYoutubeChannelReturned": false,
+    "interpretation": "The current live brand-settings response lists Facebook and Instagram only. This is consistent with the requested separation but is not an independent confirmation that Metricool support completed the requested mapping correction."
+  },
+  "scheduledPostsCheck": {
+    "brandId": 8094526,
+    "from": "2026-11-21T00:00:00+02:00",
+    "to": "2026-12-31T23:59:59+02:00",
+    "timezone": "Africa/Johannesburg",
+    "returnedCount": 0,
+    "scope": "Scheduled posts only; this does not prove absence of drafts or historical auto-publish records."
+  },
+  "legacyBrand": {
+    "id": 7545638,
+    "readProbe": "403_FORBIDDEN_ACCESS_DENIED_TO_BLOG_7545638",
+    "probeDate": "2026-11-21",
+    "reportedHistoricalScheduledDraftPosts": 20,
+    "reportedHistoricalAutoPublishRecords": 8,
+    "reconciled": false,
+    "reason": "The connected Metricool API account cannot read this legacy brand. No current record export was available."
+  },
+  "supportRequests": {
+    "legacyReadExport": {
+      "threadId": "1a1f493a97cf5a29",
+      "messageId": "1a1f49610773c9d8",
+      "sentAt": "2026-11-19T16:13:57Z",
+      "request": "Restore read access or provide export of 20 scheduled drafts, eight historical autoPublish records, analytics history and current Facebook/Instagram IDs.",
+      "replyFoundAsOfCheck": false
+    },
+    "removeCrossBrandYoutubeMapping": {
+      "threadId": "1a1f49a91bda1c1a",
+      "messageId": "1a1f49a96f2707a9",
+      "sentAt": "2026-11-19T16:18:54Z",
+      "request": "Disconnect only SonicVhibez channel UCSlkuPfHH78oGC1o418HV4w from Nature Frontiers brand 8094526 while preserving Facebook, Instagram, scheduled posts and analytics.",
+      "replyFoundAsOfCheck": false
+    }
+  },
+  "safety": {
+    "publishingEnabled": false,
+    "dryRun": true,
+    "emergencyStop": true,
+    "campaignId": null,
+    "publishAttempted": false,
+    "scheduleMutationAttempted": false,
+    "editDeleteRecreateAttempted": false,
+    "brandMappingMutationAttempted": false
+  },
+  "completionCriteria": [
+    "Metricool confirms the YouTube mapping removal or a fresh authoritative settings read consistently verifies the intended brand connections.",
+    "Read access or a complete export for legacy brand 7545638 is restored.",
+    "All 20 previously reported scheduled drafts are reconciled by exact post ID, platform, timestamp and state.",
+    "All eight previously reported draft=false / autoPublish=true records are reconciled against remote IDs and actual platform state.",
+    "Legacy analytics and connection history are preserved and accounted for.",
+    "Only after reconciliation may the owner consider any separately authorized mapping changes; no publishing or scheduling permission is implied."
+  ],
+  "evidenceLimitations": [
+    "The current brand settings response is a live snapshot, not a support completion receipt.",
+    "A zero scheduled-post count for brand 8094526 does not cover drafts, published history, or the inaccessible legacy brand.",
+    "The 20 and eight record counts are historical reported counts, not newly retrieved records.",
+    "No provider mutation was attempted."
+  ]
+}

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-"""Render a wildlife-footage review draft from a human-reviewed local manifest.
+"""Render a review draft from hash-verified original creator-captured wildlife footage.
 
-This is deliberately separate from the default text-led renderer. Each clip must be
-placed in media/approved-footage/ and documented in manifest.json. The script fails
-closed unless every asset has a source URL, license basis, attribution, and an explicit
-human rights-review flag. It never marks a video ready to publish or uploads anything.
+Licensed stock and AI-generated wildlife visuals are not production substitutes and are
+rejected. Incomplete third-party or human rights review forces a review-only hold; this
+script never marks a video ready to publish or uploads anything.
 """
 from __future__ import annotations
-import json, subprocess
+import hashlib, json, re, subprocess
 from pathlib import Path
 from mutagen.mp3 import MP3
 
@@ -22,12 +21,32 @@ def run(args: list[str]) -> None:
     if p.returncode:
         raise SystemExit(f"FFmpeg failed (exit {p.returncode}); no publishable output was produced.")
 
+def validate_clip_source(clip: dict) -> str:
+    """Validate source class and its minimum evidence; never infer legal clearance."""
+    method = clip.get("sourceMethod")
+    if clip.get("aiGenerated") is True or method == "AI_GENERATED":
+        raise ValueError("AI-generated wildlife visuals are not permitted.")
+    common = ("creatorIdentity", "file", "sourceUrl", "licenseBasis", "attribution", "originalSha256")
+    for field in common:
+        if not str(clip.get(field, "")).strip():
+            raise ValueError(f"Missing required source field {field}.")
+    if method == "ORIGINAL_RECORDING":
+        if clip.get("creatorCapturedOriginal") is not True:
+            raise ValueError("ORIGINAL_RECORDING requires creatorCapturedOriginal=true.")
+        if not str(clip.get("captureProvenance", "")).strip():
+            raise ValueError("Original recordings require captureProvenance.")
+    else:
+        raise ValueError("Only original creator-captured wildlife recordings are permitted; licensed stock is not a production substitute.")
+    if clip.get("rightsReviewed") is not True and clip.get("reviewOnly") is not True:
+        raise ValueError("Incomplete rights review is allowed only for an explicit reviewOnly=true draft.")
+    return method
+
 def main() -> None:
     manifest_path = FOOTAGE / "manifest.json"
     if not manifest_path.is_file():
         raise SystemExit(
             "No reviewed footage manifest. Create media/approved-footage/manifest.json "
-            "and add licensed clip files; see docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md."
+            "and add original creator-captured wildlife files; see docs/WILDLIFE_MEDIA_RIGHTS_CHECKLIST.md."
         )
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     clips = manifest.get("clips", [])
@@ -37,14 +56,19 @@ def main() -> None:
     for i, clip in enumerate(clips, 1):
         if not isinstance(clip, dict):
             raise SystemExit(f"Clip {i}: expected an object.")
-        for field in ("file", "sourceUrl", "licenseBasis", "attribution"):
-            if not str(clip.get(field, "")).strip():
-                raise SystemExit(f"Clip {i}: missing required field {field}.")
-        if clip.get("rightsReviewed") is not True:
-            raise SystemExit(f"Clip {i}: rightsReviewed must be true only after human verification.")
+        try:
+            source_method = validate_clip_source(clip)
+        except ValueError as exc:
+            raise SystemExit(f"Clip {i}: {exc}") from exc
+        digest = str(clip.get("originalSha256", ""))
+        if not re.fullmatch(r"[a-f0-9]{64}", digest):
+            raise SystemExit(f"Clip {i}: originalSha256 must be the exact original-file SHA-256.")
         path = (FOOTAGE / str(clip["file"])).resolve()
         if FOOTAGE.resolve() not in path.parents or not path.is_file():
             raise SystemExit(f"Clip {i}: file must exist inside {FOOTAGE} (no external paths).")
+        actual = hashlib.sha256(path.read_bytes()).hexdigest()
+        if actual != digest:
+            raise SystemExit(f"Clip {i}: originalSha256 does not match the supplied original file bytes.")
         resolved.append((path, clip))
     metas = sorted(PACKAGE.glob("*.json"))
     if len(metas) != 1:
@@ -94,22 +118,37 @@ def main() -> None:
              "-t", f"{duration:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
              "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", str(output)]
     run(args)
+    all_rights_reviewed = all(c.get("rightsReviewed") is True for _, c in resolved)
+    review_only = any(c.get("reviewOnly") is True for _, c in resolved)
     evidence = {
         "video": output.name,
-        "clips": [{"file": p.name, "sourceUrl": c["sourceUrl"], "licenseBasis": c["licenseBasis"],
-                   "attribution": c["attribution"], "rightsReviewed": True} for p, c in resolved],
-        "humanRightsReviewRecordedInManifest": True,
+        "clips": [{
+            "file": p.name,
+            "sourceMethod": c["sourceMethod"],
+            "sourcePlatform": c.get("sourcePlatform"),
+            "creatorIdentity": c["creatorIdentity"],
+            "sourceUrl": c["sourceUrl"],
+            "licenseBasis": c["licenseBasis"],
+            "licenseEvidenceLocation": c.get("licenseEvidenceLocation"),
+            "attribution": c["attribution"],
+            "platformLicenseReviewed": c.get("platformLicenseReviewed", False),
+            "thirdPartyRightsReviewed": c.get("thirdPartyRightsReviewed", False),
+            "rightsReviewed": c.get("rightsReviewed") is True,
+            "reviewOnly": c.get("reviewOnly") is True
+        } for p, c in resolved],
+        "rightsReviewedForAllAssets": all_rights_reviewed,
         "finalEditorialReviewComplete": False,
-        "status": "HOLD_FOR_FINAL_HUMAN_REVIEW",
-        "note": "Renderer verifies supplied manifest fields but cannot independently verify a license or the factual accuracy of the edit."
+        "releaseEligible": False,
+        "status": "HOLD_FOR_RIGHTS_AND_HUMAN_REVIEW" if (review_only or not all_rights_reviewed) else "HOLD_FOR_FINAL_HUMAN_REVIEW",
+        "note": "Renderer verifies source class, local file hashes and supplied license-evidence paths. It cannot independently establish third-party rights, legal clearance, factual accuracy or owner approval."
     }
     (OUT / f"{stem}-footage-evidence.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
     meta["renderedDraft"] = str(output.relative_to(ROOT))
-    meta["status"] = "HOLD_FOR_FOOTAGE_AND_REVIEW"
+    meta["status"] = "HOLD_FOR_RIGHTS_AND_HUMAN_REVIEW" if (review_only or not all_rights_reviewed) else "HOLD_FOR_FINAL_HUMAN_REVIEW"
     meta["visibility"] = "private"
     meta["rightsConfirmed"] = False
     meta["complianceReviewed"] = False
-    meta["notes"] = "Wildlife-footage review render created from a human-reviewed manifest. Perform final clip-by-clip rights, factual, caption, audio, thumbnail, and promotional-disclosure review before private upload."
+    meta["notes"] = "Review render only. Complete any outstanding third-party rights, human visual/audio, factual, caption, thumbnail, metadata, compliance and owner-approval checks before any private upload. This renderer never authorizes publication."
     (OUT / f"{stem}-footage.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     print(f"RENDERED: {output}; status remains HOLD_FOR_FINAL_HUMAN_REVIEW.")
 

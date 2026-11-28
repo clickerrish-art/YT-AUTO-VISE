@@ -2,13 +2,24 @@ name: Validate SonicVhibez automation
 
 on:
   push:
-    branches: [main]
+    branches: [main, codex/marketing-machine-audit-fixes]
     paths:
       - "scripts/**"
+      - "cloudflare/**"
       - "tests/**"
       - "test/**"
       - "content/queue.json"
+      - "content/promotional-short-plan.json"
+      - "content/youtube-history-reconciliation.json"
+      - "content/youtube-channel-verification-status.json"
+      - "content/*.json"
+      - "content/drafts/*.md"
+      - "docs/API_ROUTE_ACCEPTANCE_MATRIX.json"
+      - "docs/REQUIREMENTS_ACCEPTANCE_REGISTER.json"
+      - "config/narration-voice-candidates.json"
       - "config/products.json"
+      - "config/weekly-content-plan.json"
+      - "config/campaigns.json"
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/**"
@@ -19,22 +30,123 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: validate-automation-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
         with:
-          node-version: 20
-      - name: Install dependencies
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - name: Install exact locked dependencies
         run: |
-          if [ -f package-lock.json ]; then npm ci --ignore-scripts; else npm install --ignore-scripts; fi
+          test -f package-lock.json
+          npm ci --ignore-scripts
+      - name: Verify normal lifecycle-script install in isolated temporary checkout
+        run: |
+          set -eu
+          install_dir="$RUNNER_TEMP/sonicvhibez-normal-install"
+          install_home="$RUNNER_TEMP/sonicvhibez-normal-install-home"
+          mkdir -p "$install_dir" "$install_home"
+          git archive "$(git rev-parse HEAD)" | tar -x -C "$install_dir"
+          cd "$install_dir"
+          env -i PATH="$PATH" HOME="$install_home" CI=1 npm_config_cache="$RUNNER_TEMP/sonicvhibez-normal-npm-cache" npm ci
+          node -e "import('googleapis').then(() => console.log('PASS: googleapis imports after normal npm ci'))"
+      - name: Audit locked npm dependencies
+        run: |
+          set +e
+          npm audit --json > "$RUNNER_TEMP/npm-audit.json"
+          audit_status=$?
+          set -e
+          node --input-type=module - "$RUNNER_TEMP/npm-audit.json" "$audit_status" <<'NODE'
+          import fs from "node:fs";
+          const report = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+          const auditStatus = Number(process.argv[3]);
+          for (const [name, item] of Object.entries(report.vulnerabilities ?? {})) {
+            const via = (item.via ?? []).map(entry => typeof entry === "string" ? entry : entry.title + " (" + entry.range + ")");
+            console.log("AUDIT:", name, "severity=" + item.severity, "range=" + item.range, "fixAvailable=" + JSON.stringify(item.fixAvailable), "via=" + via.join("; "));
+          }
+          const counts = report.metadata?.vulnerabilities;
+          const severityLevels = ["info", "low", "moderate", "high", "critical"];
+          if (!counts || severityLevels.some(level => !Number.isInteger(counts[level]) || counts[level] < 0)) {
+            console.error("FAIL: npm audit returned no complete, valid severity summary; a clean audit cannot be inferred.");
+            process.exit(1);
+          }
+          console.log("npm audit summary:", JSON.stringify(counts));
+          const total = severityLevels.reduce((sum, level) => sum + counts[level], 0);
+          if (total > 0) {
+            console.error("FAIL: dependency audit found " + total + " known vulnerability/vulnerabilities; resolve every severity before release.");
+            process.exit(1);
+          }
+          if (auditStatus !== 0) {
+            console.error("FAIL: npm audit did not complete successfully; a clean audit cannot be inferred.");
+            process.exit(1);
+          }
+          console.log("PASS: npm audit completed successfully with zero known vulnerabilities.");
+          NODE
       - name: Install Python renderer test dependency
         run: python -m pip install mutagen pillow
-      - name: Run unit tests
-        run: npm test
+      - name: Install FFmpeg for real renderer integration tests
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+            source .github/scripts/install-ffmpeg-static.sh
+          else
+            echo "FFmpeg and ffprobe are already available; skipping package installation."
+          fi
+          ffmpeg -version
+          ffprobe -version
+      - name: Run unit tests and require zero skips
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee "$RUNNER_TEMP/node-test.log"
+          if ! grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/node-test.log"; then
+            echo "FAIL: Node test summary did not explicitly report zero skips."
+            exit 1
+          fi
+      - name: Verify Speechma Andrew remains manual-audition-only and production-blocked
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          const policy = JSON.parse(fs.readFileSync("config/narration-voice-candidates.json", "utf8"));
+          const decision = policy.ownerDecision ?? {};
+          const selected = decision.selectedAlternative ?? {};
+          const execution = decision.auditionExecutionPolicy ?? {};
+          const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
+          if (decision.selectionStatus !== "OWNER_SELECTED_SPEECHMA_ANDREW_BROWSER_AUDITION_PENDING" ||
+              selected.provider !== "Speechma" ||
+              selected.name !== "Andrew" ||
+              selected.voiceId !== null ||
+              selected.manualBrowserOnly !== true ||
+              selected.automationAllowed !== false ||
+              selected.securityCodeRequiredPerGeneration !== true ||
+              selected.maximumCharactersPerStandardConversion !== 2000 ||
+              selected.browserHistoryLocalOnly !== true ||
+              selected.commercialUseAllowed !== true ||
+              selected.productionApproved !== false ||
+              selected.publicationAuthorized !== false ||
+              decision.alternativeVoicesAuthorized !== false ||
+              decision.paidUpgradeAuthorized !== false ||
+              execution.mode !== "MANUAL_BROWSER_ONLY" ||
+              execution.freeSiteAutomationAllowed !== false ||
+              execution.officialApiPaid !== true ||
+              execution.zeroCostConstraintForbidsPaidApi !== true ||
+              queue.publishingEnabled !== false) {
+            throw new Error("Narration selection or publication safeguards changed; production remains blocked.");
+          }
+          console.log("PASS: Speechma Andrew is selected for a manual zero-cost browser audition only; free-site automation is prohibited, paid API is not authorized, and production/publication remain blocked. HeyGen Roderic/Wade are not production-approved.");
+          NODE
+      - name: Validate isolated campaign destinations and disclosures
+        run: npm run validate:campaigns
+      - name: Validate promotional Shorts weekly cap and draft-only plan
+        run: npm run validate:promotional-shorts
       - name: Test review metadata safety gates
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Validate queue invariants and approved destination
@@ -43,18 +155,38 @@ jobs:
           import json
           from pathlib import Path
           q = json.loads(Path("content/queue.json").read_text(encoding="utf-8"))
+          plan = json.loads(Path("config/weekly-content-plan.json").read_text(encoding="utf-8"))
           products = json.loads(Path("config/products.json").read_text(encoding="utf-8"))["products"]
           approved = {p["url"] for p in products if p.get("status") == "approved"}
           items = q.get("items", [])
           assert q.get("publishingEnabled") is False, "Public publishing must remain disabled"
           cadence = q.get("cadence", {})
           assert cadence.get("timezone") == "Africa/Johannesburg"
-          assert cadence.get("days") == ["Tuesday", "Thursday", "Saturday"] and cadence.get("postsPerWeek") == 3
-          assert cadence.get("breakdown") == {"longForm": 2, "short": 1}
+          assert cadence.get("formats") == ["long_form", "long_form", "short"]
+          spacing = plan.get("minimumPublicationSpacingHours")
+          cycle_hours = spacing * len(plan.get("publicationCycle", {}).get("formats", [])) if isinstance(spacing, (int, float)) else None
+          assert isinstance(spacing, (int, float)) and 72 <= spacing <= 8760, "Configured publication spacing must be at least 72 elapsed hours and no greater than 8760 hours"
+          assert plan.get("publicationCycle", {}).get("minimumHoursBetweenConsecutivePublications") == spacing
+          assert plan.get("publicationCycle", {}).get("minimumCycleHours") == cycle_hours
+          assert cadence.get("minimumHoursBetweenConsecutivePublications") == spacing
+          assert cadence.get("minimumCycleHours") == cycle_hours
+          fallback = cadence.get("draftPreparationFallback", {})
+          assert fallback.get("days") == ["Tuesday", "Saturday"]
+          assert fallback.get("status") == "DRAFT_ONLY" and fallback.get("notPublicationCadence") is True
+          assert "postsPerWeek" not in cadence
           assert len(items) >= 10, "Queue needs at least ten topics"
           ids = [i.get("id") for i in items]
           assert all(ids) and len(ids) == len(set(ids)), "Queue IDs must be present and unique"
-          assert all(i.get("productUrl") == "https://selar.com/0u19v8u99l" for i in items)
+          promotional_url = "https://selar.com/0u19v8u99l"
+          for item in items:
+              assert isinstance(item.get("hasPaidPromotion"), bool), "Every queue item must explicitly declare its promotion status"
+              product_url = item.get("productUrl")
+              if item.get("hasPaidPromotion") is True:
+                  assert product_url == promotional_url, "Promotional queue items must use the exact approved Selar destination"
+              else:
+                  assert product_url is None, "Non-promotional queue items must not carry a product destination"
+              if product_url is not None:
+                  assert product_url in approved, "Only an approved product destination may be used"
           assert "https://selar.com/0u19v8u99l" in approved, "Only the approved Selar destination may be used"
           allowed_statuses = {
               "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW",
@@ -62,6 +194,7 @@ jobs:
               "SCRIPT_READY_NARRATION_DRAFT_PENDING_GENERATION_MEDIA_AND_HUMAN_REVIEW_REQUIRED",
               "SCRIPT_AND_CAPTIONS_READY_NEEDS_MEDIA_AND_HUMAN_REVIEW",
               "DRAFT_REVIEW_REQUIRED",
+              "SCRIPT_READY_PRODUCTION_HOLD_ORIGINAL_MEDIA_NARRATION_RIGHTS_AND_HUMAN_REVIEW_REQUIRED",
           }
           assert all(i.get("status") in allowed_statuses for i in items), "Every queued item must remain in a recognized held/review state"
           print(f"PASS: {len(items)} queued topics; approved destination; safe held status; public publishing disabled.")
@@ -70,4 +203,36 @@ jobs:
         run: |
           for f in scripts/*.mjs; do node --check "$f"; done
       - name: Compile Python automation scripts
-        run: python -m py_compile scripts/generate-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/render-reviewed-wildlife-footage.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py tests/test_checked_in_release_metadata.py tests/test_reviewed_footage_renderer.py
+        run: python -m py_compile scripts/generate-narration.py scripts/generate-authoring-narration.py scripts/generate-queue-package.py scripts/render-queued-draft.py scripts/render-photo-thumbnail.py scripts/render-reviewed-wildlife-footage.py scripts/prepare-review-metadata.py tests/test_prepare_review_metadata.py tests/test_checked_in_release_metadata.py tests/test_reviewed_footage_renderer.py
+
+      - name: Acquire Short 001 Pexels source footage for review
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && contains(github.event.head_commit.message, '[acquire-media]')
+        run: node scripts/acquire-short-001-assets.mjs
+      - name: Upload Short 001 Pexels source footage and evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && contains(github.event.head_commit.message, '[acquire-media]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-short-001-pexels-review-assets
+          path: artifacts/short-001/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Acquire Nile crocodile Pexels source footage for review
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && contains(github.event.head_commit.message, '[acquire-media]')
+        run: node scripts/acquire-crocodile-footage-review.mjs
+      - name: Upload Nile crocodile Pexels source footage and evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes' && contains(github.event.head_commit.message, '[acquire-media]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-long-form-001-pexels-crocodile-review
+          path: artifacts/long-form-001/pexels-candidates/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Run read-only authenticated Cloudflare staging smoke
+        if: github.event_name == 'push' && github.ref == 'refs/heads/codex/marketing-machine-audit-fixes'
+        env:
+          DASHBOARD_STAGING_API_URL: https://sonicvhibez-durable-state-staging.kajiboye44.workers.dev
+          DASHBOARD_OPERATOR_TOKEN: ${{ secrets.DASHBOARD_OPERATOR_TOKEN }}
+          CLOUDFLARE_ACCESS_CLIENT_ID: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_ID }}
+          CLOUDFLARE_ACCESS_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_ACCESS_CLIENT_SECRET }}
+        run: node scripts/cloudflare-staging-auth-smoke.mjs

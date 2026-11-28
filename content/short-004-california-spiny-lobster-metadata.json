@@ -1,0 +1,249 @@
+{
+  "status": "HOLD_EXCLUDED_NOAA_STOCK_SOURCE",
+  "channel": "SonicVhibez",
+  "contentType": "short",
+  "title": "California Spiny Lobster: The Reef's Night-Time Forager",
+  "description": "Internal hold only. This draft previously referenced NOAA B-roll, which is now excluded by the current owner policy requiring genuine original creator-captured wildlife media. Do not publish this description or use the NOAA source package. Rebuild the edit and description only after an original creator-captured California spiny lobster source package is supplied, provenance and commercial rights are verified, and all review gates pass.",
+  "tags": [
+    "California spiny lobster",
+    "Panulirus interruptus",
+    "NOAA",
+    "Channel Islands",
+    "marine wildlife",
+    "rocky reef",
+    "ocean animals",
+    "marine biology",
+    "wildlife documentary",
+    "nature Shorts"
+  ],
+  "hashtags": [
+    "#CaliforniaSpinyLobster",
+    "#MarineWildlife",
+    "#OceanDocumentary",
+    "#WildlifeShorts"
+  ],
+  "targetSeconds": 55,
+  "format": "9:16",
+  "visibility": "private",
+  "hasPaidPromotion": false,
+  "paidProductPlacementDetails": {
+    "hasPaidProductPlacement": false
+  },
+  "rightsConfirmed": false,
+  "rightsEvidenceReviewed": false,
+  "humanApproved": false,
+  "complianceReviewed": false,
+  "sourceAssetId": "NOAA-SPINY-LOBSTERS-CA-2026-11",
+  "sourceAudioPolicy": "REMOVE_COMPLETELY",
+  "requiredAttribution": "NOAA Fisheries / NOAA’s Office of National Marine Sanctuaries",
+  "scheduleStatus": "NOT_ELIGIBLE_REFERENCE_ONLY",
+  "uploadAllowed": false,
+  "notes": "HISTORICAL REVIEW CANDIDATE ONLY. The exact NOAA B-roll source hash and public-domain terms were verified previously, but this does not override the current original creator-captured-media requirement. The NOAA source is now excluded and must not be used in production. The eSpeak narration review is synthetic and unapproved; the owner-approved Roderic Free-plan voice is internal-only after HeyGen's written commercial-use denial, and no alternative narrator is authorized. Existing visual and narration review cuts remain non-production artifacts. No upload, schedule or publication is authorized.",
+  "containsSyntheticMedia": true,
+  "renderReview": {
+    "status": "REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
+    "evidencePath": "content/short-004-california-spiny-lobster-review-render.json",
+    "outputSha256": "c0735b95efa5a70fba2eba3a87cbacd2355c400288b320d97dd3190dce1cf280",
+    "narrationDisclosure": "AI-GENERATED NARRATION",
+    "requiresHumanVoiceReview": true
+  },
+  "visualReview": {
+    "status": "VISUAL_REVIEW_CUT_GENERATED_NOT_FOR_PUBLICATION",
+    "filename": "NOAA-california-spiny-lobster-visual-review-1080x1920.mp4",
+    "sha256": "4fc0b7f4a3f5d79ecf8d6a2bb148f06ba01f56c1c8d3b4db846d614f65f07261",
+    "durationSeconds": 55,
+    "format": "9:16",
+    "width": 1080,
+    "height": 1920,
+    "frameRate": 30,
+    "videoCodec": "H.264",
+    "audioStreams": 0,
+    "sourceAudioRemoved": true,
+    "sourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        257
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        373
+      ]
+    ],
+    "persistentWarning": "REVIEW ONLY - NOT APPROVED FOR PUBLICATION",
+    "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
+    "fullFileDecode": "PASS",
+    "humanFullPlaybackReview": "NOT_COMPLETED",
+    "rightsConfirmed": false,
+    "rightsEvidenceReviewed": false,
+    "humanApproved": false,
+    "complianceReviewed": false,
+    "uploadAllowed": false,
+    "scheduleAllowed": false,
+    "delivery": "Conversation review attachment; not committed as production media",
+    "notes": "Silent visual-review cut only. It is distinct from the earlier eSpeak narration review render. It is not a production master, has no approved narration/captions, and must not be substituted for media/next-short.mp4.",
+    "productionApproved": false,
+    "attributionStatus": "ADD_NOAA_FISHERIES_CREDIT_TO_FINAL_MASTER"
+  },
+  "narrationReview": {
+    "status": "SYNTHETIC_REVIEW_RENDER_ONLY_NOT_FOR_PUBLICATION",
+    "filename": "NOAA-california-spiny-lobster-narration-review-1080x1920.mp4",
+    "sha256": "aa84154b6938750f646377e9493dae81552249d9a07ba7d521d9b29addf8f1ba",
+    "durationSeconds": 55,
+    "width": 1080,
+    "height": 1920,
+    "frameRate": 30,
+    "videoCodec": "H.264",
+    "audioCodec": "AAC",
+    "audioMeanVolumeDb": -21.5,
+    "audioMaxVolumeDb": -2,
+    "audioSource": "eSpeak en-us synthetic narration at 135 WPM",
+    "sourceAudioRemoved": true,
+    "captionPath": "content/short-004-california-spiny-lobster.srt",
+    "captionCueCount": 12,
+    "captionWordCount": 108,
+    "captionMaxLineCharacters": 38,
+    "captionMaxLinesPerCue": 3,
+    "captionTimings": "Generated from exact eSpeak segment durations; provisional until human review",
+    "persistentWarning": "REVIEW ONLY - NOT APPROVED FOR PUBLICATION",
+    "aiNarrationDisclosure": "AI-GENERATED NARRATION - REVIEW ONLY",
+    "requiredAttribution": "NOAA’s Office of National Marine Sanctuaries",
+    "fullFileDecode": "PASS",
+    "humanFullPlaybackReview": "NOT_COMPLETED",
+    "humanVoiceApproval": false,
+    "rightsConfirmed": false,
+    "rightsEvidenceReviewed": false,
+    "humanApproved": false,
+    "complianceReviewed": false,
+    "uploadAllowed": false,
+    "scheduleAllowed": false,
+    "delivery": "Conversation review attachment; not committed as production media",
+    "notes": "Synthetic eSpeak narration is for editorial timing review only and must be replaced by owner-approved natural narration before publication. This render does not change any production approval flags.",
+    "sizeBytes": 24286438,
+    "audioSampleRateHz": 22050,
+    "audioChannels": 1,
+    "attributionStatus": "ADD_NOAA_FISHERIES_CREDIT_TO_FINAL_MASTER"
+  },
+  "rightsEvidence": {
+    "status": "PUBLIC_DOMAIN_SOURCE_VERIFIED",
+    "licenseType": "PUBLIC_DOMAIN_NOAA_BROLL",
+    "sourcePageUrl": "https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california?autoStart=true",
+    "sourcePageTitle": "B-Roll: Spiny Lobsters in California",
+    "publisher": "NOAA Fisheries",
+    "licenseStatement": "NOAA Fisheries states that B-roll packages are in the public domain and may be reused with NOAA Fisheries credit.",
+    "sourceSha256": "1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb",
+    "sourceDurationSeconds": 380.81,
+    "sourceVideo": "H.264 1280x720 at 60000/1001 fps; AAC source audio 48 kHz stereo",
+    "sourceWorkflowRunId": 42594716333,
+    "sourceArtifactId": 13662524700,
+    "sourceArtifactZipSha256": "4e2f68ae62032f618d20cb5cebfdcec180ba6b2617a7559cd51f238029ae8985",
+    "sourceFileHashRecomputed": true,
+    "openingSlateInspected": true,
+    "openingSlateStatement": "All footage courtesy of the National Oceanic and Atmospheric Administration, a federal agency of the U.S. Department of Commerce.",
+    "openingSlateCredit": "NOAA's Office of National Marine Sanctuaries",
+    "siteWideCredit": "NOAA Fisheries",
+    "thirdPartyCreditCardObservedInOpeningSlate": false,
+    "endingFramesInspected": true,
+    "sourceAudioIncludedInOutput": false,
+    "sourceAudioRemoved": true,
+    "requiredAttributionForFinalMaster": "NOAA Fisheries / NOAA's Office of National Marine Sanctuaries",
+    "currentReviewOverlayAttribution": "NOAA's Office of National Marine Sanctuaries",
+    "attributionStatus": "ADD_NOAA_FISHERIES_CREDIT_TO_FINAL_MASTER",
+    "selectedSourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        257
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        373
+      ]
+    ],
+    "reviewedAt": "2026-11-16",
+    "reviewTimezone": "Africa/Johannesburg",
+    "scope": "This evidence applies only to the exact NOAA B-roll source hash listed above and the selected SHORT-004 ranges.",
+    "limitations": [
+      "The source licence is verified from the official NOAA Fisheries page and the exact source opening slate; this is not legal advice.",
+      "The current review renders show the package-specific Office credit. Add the site-wide NOAA Fisheries credit to the final production master.",
+      "Human full-playback, factual/editorial review, final attribution review and hash-bound owner approval remain separate release gates."
+    ]
+  },
+  "productionApproved": false,
+  "scheduleAllowed": false,
+  "sourceRightsEvidence": {
+    "status": "SOURCE_LICENSE_VERIFIED",
+    "licenseType": "PUBLIC_DOMAIN_NOAA_BROLL",
+    "sourcePageUrl": "https://videos.fisheries.noaa.gov/detail/videos/b-roll-packages---all/video/6313425635112/b-roll%3A-spiny-lobsters-in-california?autoStart=true",
+    "sourcePageTitle": "B-Roll: Spiny Lobsters in California",
+    "publisher": "NOAA Fisheries",
+    "licenseStatement": "NOAA Fisheries states that B-roll packages are in the public domain and may be reused with NOAA Fisheries credit.",
+    "sourceSha256": "1aefd2c3aae7569aa80b89f6fe9d15ac3cf8c7b27651fde4e2fede74a35a92eb",
+    "sourceDurationSeconds": 380.81,
+    "sourceVideo": "H.264 1280x720 at 60000/1001 fps; AAC source audio 48 kHz stereo",
+    "sourceWorkflowRunId": 42594716333,
+    "sourceArtifactId": 13662524700,
+    "sourceArtifactZipSha256": "4e2f68ae62032f618d20cb5cebfdcec180ba6b2617a7559cd51f238029ae8985",
+    "sourceFileHashRecomputed": true,
+    "openingSlateInspected": true,
+    "openingSlateStatement": "All footage courtesy of the National Oceanic and Atmospheric Administration, a federal agency of the U.S. Department of Commerce.",
+    "openingSlateCredit": "NOAA's Office of National Marine Sanctuaries",
+    "siteWideCredit": "NOAA Fisheries",
+    "thirdPartyCreditCardObservedInOpeningSlate": false,
+    "endingFramesInspected": true,
+    "sourceAudioIncludedInOutput": false,
+    "sourceAudioRemoved": true,
+    "requiredAttributionForFinalMaster": "NOAA Fisheries / NOAA's Office of National Marine Sanctuaries",
+    "currentReviewOverlayAttribution": "NOAA's Office of National Marine Sanctuaries",
+    "attributionStatus": "ADD_NOAA_FISHERIES_CREDIT_TO_FINAL_MASTER",
+    "selectedSourceRangesSeconds": [
+      [
+        160,
+        175
+      ],
+      [
+        245,
+        257
+      ],
+      [
+        320,
+        335
+      ],
+      [
+        360,
+        373
+      ]
+    ],
+    "reviewedAt": "2026-11-16",
+    "reviewTimezone": "Africa/Johannesburg",
+    "scope": "This evidence applies only to the exact NOAA B-roll source hash listed above and the selected SHORT-004 ranges.",
+    "limitations": [
+      "The source licence is verified from the official NOAA Fisheries page and the exact source opening slate; this is not legal advice.",
+      "The current review renders show the package-specific Office credit. Add the site-wide NOAA Fisheries credit to the final production master.",
+      "Final-output rights confirmation remains false until the final master and its complete attribution are reviewed.",
+      "Human full-playback, factual/editorial review and hash-bound owner approval remain separate release gates."
+    ]
+  },
+  "currentProductionDisposition": {
+    "status": "EXCLUDED_REFERENCE_ONLY",
+    "productionEligible": false,
+    "policy": "ORIGINAL_CREATOR_CAPTURED_MEDIA_REQUIRED",
+    "reason": "The NOAA B-roll package is public-domain archive footage, not original creator-captured media supplied by a creator for this production. Current owner policy excludes generic stock/archive footage as a substitute."
+  },
+  "sourceRightsVerified": true,
+  "sourceRightsScope": "Historical NOAA source licence verification only; this does not establish production eligibility under the current original-capture policy."
+}

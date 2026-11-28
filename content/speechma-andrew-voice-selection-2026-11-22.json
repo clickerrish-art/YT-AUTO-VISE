@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "decisionType": "OWNER_SELECTED_NARRATION_AUDITION_CANDIDATE",
+  "decisionDate": "2026-11-22",
+  "status": "SELECTED_AUDITION_PENDING_AUDIO_GENERATION_AND_OWNER_LISTENING",
+  "selectedVoice": {
+    "provider": "Speechma",
+    "name": "Andrew",
+    "language": "English",
+    "accent": "United States",
+    "gender": "Male",
+    "voiceType": "Standard",
+    "voiceId": null,
+    "voiceIdStatus": "NOT_INDEPENDENTLY_VERIFIED"
+  },
+  "ownerConstraints": {
+    "zeroCostOnly": true,
+    "noDesktopSoftwareInstallation": true,
+    "noPaidPlanOrCredits": true,
+    "noAlternativeVoiceWithoutOwnerSelection": true
+  },
+  "providerEvidence": {
+    "officialEnglishVoiceLibrary": "https://speechma.com/voices/english",
+    "officialTerms": "https://speechma.com/terms",
+    "officialFaq": "https://speechma.com/faq",
+    "commercialOutputLicense": {
+      "status": "TERMS_STATE_PERPETUAL_ROYALTY_FREE_COMMERCIAL_OUTPUT_LICENSE",
+      "scope": "Worldwide, non-exclusive, perpetual, royalty-free license to use, copy, edit, publish, distribute and monetize lawful outputs, subject to Speechma Terms, Acceptable Use Policy and third-party rights",
+      "attributionRequired": false,
+      "limitations": [
+        "The user must own or have rights to all submitted inputs.",
+        "Third-party copyright, privacy, publicity and voice rights remain applicable.",
+        "The user is responsible for reviewing outputs and required AI/synthetic-media disclosures.",
+        "Speechma disclaims warranties for output accuracy, completeness, suitability and uninterrupted availability."
+      ]
+    },
+    "freeServiceLimits": {
+      "accountRequired": false,
+      "maximumCharactersPerStandardConversion": 2000,
+      "downloadFormat": "MP3",
+      "securityCodeRequiredPerGeneration": true
+    },
+    "automationPolicy": {
+      "freeSite": "MANUAL_BROWSER_ONLY",
+      "scriptsBotsAndAutomatedCaptchaSolving": "PROHIBITED_BY_TERMS",
+      "onlyPermittedAutomation": "OFFICIAL_SPEECHMA_API",
+      "officialApiPricing": "PAID; NOT_AUTHORIZED_UNDER_ZERO_COST_CONSTRAINT",
+      "securityCodeRequiredPerGeneration": true,
+      "maximumCharactersPerStandardConversion": 2000,
+      "browserHistoryLocalOnly": true,
+      "retentionRequirement": "Download MP3 and preserve it in a project-controlled artifact location."
+    }
+  },
+  "audition": {
+    "status": "NOT_GENERATED",
+    "audioFile": null,
+    "audioSha256": null,
+    "sourceScriptSha256": null,
+    "durationSeconds": null,
+    "humanListeningReview": "PENDING",
+    "pronunciationReview": "PENDING",
+    "pacingAndExpressivenessReview": "PENDING",
+    "productionApproved": false,
+    "publicationAuthorized": false,
+    "manualBrowserActionRequired": true,
+    "automationAllowed": false
+  },
+  "safety": {
+    "paidSpend": false,
+    "audioGenerationAttempted": false,
+    "productionNarrationCreated": false,
+    "captionsSynchronized": false,
+    "publishingEnabled": false
+  },
+  "nextRequiredAction": "Manually generate a short Andrew audition in the Speechma free browser tool, enter the displayed security code, download the MP3, preserve it in a project-controlled artifact location, verify duration and audio integrity, then obtain owner listening approval before production use. Do not automate the free site or use the paid API.",
+  "notes": [
+    "This decision supersedes the previous Wade review-only selection as the intended zero-cost audition candidate.",
+    "Andrew's English, Male, United States listing is visible in Speechma's official English voice library; a dedicated voice ID was not independently verified.",
+    "No audition has been generated or approved. Selection of a candidate is not final narrator approval.",
+    "The free-site Terms prohibit scripts, bots and automated CAPTCHA solving; only the official API is permitted for automation, and that API is paid. The zero-cost audition must be performed manually in the browser with its per-generation security code."
+  ]
+}

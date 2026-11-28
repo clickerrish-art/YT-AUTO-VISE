@@ -1,4 +1,7 @@
-# SonicVhibez — Long-form Script Drafts
+# SonicVhibez — Archived Combined Long-form Script Drafts
+
+> **Archive and identity note (2026-11-24):** This combined file is retained as a historical source bundle. The canonical standalone script for the owner-selected second long-form topic is `content/drafts/long-form-002-plan-wildlife-video.md`. The faceless-workflow draft is unassigned and is not long-form 002. Use standalone files and per-topic metadata/manifests for future review; this archive does not approve production or publication.
+
 
 **Status:** Draft text only — not approved for recording or publication  
 **Target channel:** SonicVhibez  
@@ -10,12 +13,14 @@
 - These are educational creator-workflow videos, not wildlife-science documentaries. If examples introduce species-specific claims, verify them against reputable sources and cite those sources in the published description.
 - Use original or explicitly licensed footage, stills, music, sound effects, and fonts. Retain the license or permission record for each asset.
 - Replace every bracketed visual cue with rights-cleared media. Do not use fabricated wildlife interactions or edit shots to imply an event that did not happen.
-- Keep the promotional segment transparent. The linked Vault is a paid digital product; viewers should inspect its current sales page. Do not promise views, income, viral reach, or monetization.
+- Keep the promotional segment transparent. Selar is the owner's own business and purchases generate direct sales revenue, not affiliate commission. The owner approved this exact viewer-facing disclosure on 2026-11-10: “This product is sold through my own Selar business; purchases generate revenue for my business.” Place an ADVERTISEMENT identifier first, speak and display the exact disclosure before the product name/link, then give the CTA. Keep YouTube's paid-promotion declaration enabled.
+- Production media may use genuine original creator-captured wildlife footage with verified creator identity, capture provenance, original MP4, matching SHA-256, written commercial rights, third-party-rights review and human approval. Other stock/archive sources and AI-generated wildlife visuals are not permitted substitutes; until qualifying footage is acquired and reviewed, use clearly labelled blank/diagram placeholders only.
+- HeyGen Support confirmed on 2026-11-21 that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. Keep it internal-evaluation-only; do not use it in any public branded release. The owner selected Speechma Andrew (English US male) for a manual, zero-cost browser audition only. No Andrew MP3, commercial-terms verification, full listening review or owner production approval exists. Do not automate the Speechma browser, use paid upgrades, or substitute another voice. Production use requires verification of the exact voice's licence and owner approval of the final audio.
 - Review captions, audio, factual accuracy, thumbnail accuracy, paid-promotion disclosure, and YouTube synthetic/altered-media settings before any upload.
 
 ---
 
-## Episode 1 — How to Plan a Wildlife Video People Want to Watch
+## Archived source — Long-form 002: How to Plan a Wildlife Video People Want to Watch
 
 **Working title:** How to Plan a Wildlife Video People Want to Watch  
 **Audience:** Beginner wildlife and nature-video creators  
@@ -90,9 +95,13 @@ Here is the quick checklist: one answerable question, a clear beginning and payo
 
 **[Visual: checklist ticks on screen]**
 
+Before export, check the final sequence for continuity, accurate labels, readable captions, and clear sound.
+
 Planning does not guarantee views or income. It gives you a repeatable process for making a more coherent video and for catching avoidable problems before publication.
 
-If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. It is a paid digital product, so check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
+**[Visual: display a clear ADVERTISEMENT identifier, then the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
+
+Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. If you want a paid resource to help organize your creator workflow, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** using the link in the description: https://selar.com/0u19v8u99l. Check the current sales page, contents, and terms before deciding whether it suits you. No product can guarantee channel growth or monetization.
 
 Thanks for watching SonicVhibez. Choose one question for your next video, check that you can answer it honestly, and plan the story before you open the editing timeline.
 
@@ -100,12 +109,16 @@ Thanks for watching SonicVhibez. Choose one question for your next video, check 
 
 ### Suggested description
 
-Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization.
+Learn a practical, story-first workflow for planning wildlife and nature videos: choose one viewer question, structure a clear narrative, verify facts, plan rights-cleared visuals, edit for clarity, and check captions and packaging before publishing. This is educational guidance, not a promise of views, revenue, or YouTube monetization. HeyGen Support confirmed that Roderic Free-plan output cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. The sample is internal-evaluation-only; do not use it in a public branded release. The owner selected Speechma Andrew (English US male) for a manual zero-cost browser audition only. No Andrew MP3, commercial-terms verification, full listening review or owner production approval exists. Do not automate the Speechma browser, use paid upgrades or substitute another voice. Production use requires verification of the exact voice licence and owner approval of the final audio. AI-generated wildlife visuals are prohibited. Use genuine original creator-captured wildlife footage only, with creator identity, capture provenance, exact source-file hash, written rights and asset-level third-party-rights review. If any other realistic altered or synthetic content appears, assess and apply YouTube's disclosure setting where required.
 
-Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
+ADVERTISEMENT
+
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+For a structured creator-workflow resource, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
 https://selar.com/0u19v8u99l
 
-This is a paid digital product. Review its current sales page and terms before purchasing. Verify all factual claims and media permissions before publishing your own videos.
+Review the current sales page and terms before purchasing. Verify all factual claims and media permissions before publishing your own videos.
 
 ### Suggested tags
 
@@ -113,7 +126,7 @@ wildlife video planning, wildlife filmmaking, nature documentary, YouTube storyt
 
 ---
 
-## Episode 2 — A Beginner Workflow for Faceless Wildlife Videos
+## Unassigned legacy draft — A Beginner Workflow for Faceless Wildlife Videos
 
 **Working title:** A Beginner Workflow for Faceless Wildlife Videos  
 **Audience:** New creators making wildlife or nature videos without appearing on camera  
@@ -122,7 +135,7 @@ wildlife video planning, wildlife filmmaking, nature documentary, YouTube storyt
 
 ### Narration script
 
-**[OPEN — 0:00–0:35 | Visual: editing timeline, narration waveform, and a licensed nature shot]**
+**[OPEN — 0:00–0:35 | Visual: editing timeline, narration waveform, and a rights-cleared original or licensed Pexels/Pixabay nature-footage example]**
 
 You do not need to appear on camera to make a useful wildlife video. But faceless does not mean effortless, and it does not mean that a slideshow of reused clips automatically becomes original work. A strong video still needs a clear idea, reliable research, meaningful narration, visuals you are allowed to use, and careful editing.
 
@@ -184,7 +197,9 @@ Keep a copy of the project files and evidence. If a claim, license, or disclosur
 
 The repeatable process is simple: research one focused question, write narration that adds context, use visuals you have permission to publish, edit for clarity, and review the finished video carefully. Improvement comes from learning from each upload and from real audience data—not from assuming a workflow guarantees success.
 
-If you want a paid resource for organizing your creator process, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** at the link in the description: https://selar.com/0u19v8u99l. It is a paid digital product. Read the current sales page and terms before purchasing, and decide whether it meets your needs. It does not guarantee views, revenue, or monetization.
+**[Visual: display a clear ADVERTISEMENT identifier, then the exact approved Selar direct-sales disclosure in large, high-contrast text while the narration speaks it verbatim; hold it long enough to read]**
+
+Advertisement. This product is sold through my own Selar business; purchases generate revenue for my business. If you want a paid resource for organizing your creator process, you can review the **Complete YouTube Wildlife Creator's Vault – Premium Combo PDF** at the link in the description: https://selar.com/0u19v8u99l. Read the current sales page and terms before purchasing, and decide whether it meets your needs. It does not guarantee views, revenue, or monetization.
 
 Thanks for watching SonicVhibez. Start with one focused idea, keep your sources and rights evidence organized, and make the next video a little clearer than the last.
 
@@ -192,13 +207,18 @@ Thanks for watching SonicVhibez. Start with one focused idea, keep your sources 
 
 ### Suggested description
 
-A beginner-friendly workflow for faceless wildlife videos, covering focused research, evidence-based narration, licensed visuals and audio, editing, captions, thumbnails, disclosures, and a final quality check. No workflow can guarantee views, revenue, or YouTube monetization.
+A beginner-friendly workflow for faceless wildlife videos, covering focused research, evidence-based narration, genuine original creator-captured wildlife visuals with verified commercial rights, editing, captions, thumbnails, disclosures, and a final quality check. No workflow can guarantee views, revenue, or YouTube monetization. HeyGen Support confirmed that Roderic Free-plan narration cannot be publicly redistributed for branded projects, even if unmonetized, and cannot be used commercially. Do not use it in a public branded release. The owner selected Speechma Andrew (English US male) for a manual zero-cost browser audition only. No Andrew MP3, commercial-terms verification, full listening review or owner production approval exists. Do not automate the Speechma browser, use paid upgrades or substitute another voice. Production use requires verification of the exact voice licence and owner approval of the final audio. AI-generated wildlife visuals are prohibited.
 
-Promotional resource: Complete YouTube Wildlife Creator's Vault – Premium Combo PDF  
+ADVERTISEMENT
+
+This product is sold through my own Selar business; purchases generate revenue for my business.
+
+For a structured creator-workflow resource, review the Complete YouTube Wildlife Creator's Vault – Premium Combo PDF:
 https://selar.com/0u19v8u99l
 
-This is a paid digital product. Review its current sales page and terms before purchasing. Check all factual claims, asset licenses, and relevant platform policies before publishing.
+Review the current sales page and terms before purchasing. Check all factual claims, asset licenses, and relevant platform policies before publishing.
 
 ### Suggested tags
 
 faceless wildlife videos, wildlife video editing, nature documentary workflow, YouTube beginner tips, wildlife content creation, copyright safe video
+

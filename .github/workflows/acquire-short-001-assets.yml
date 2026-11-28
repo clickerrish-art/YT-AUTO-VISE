@@ -1,0 +1,130 @@
+# Disabled: Pexels/Pixabay stock is excluded by the user's original creator-captured-only production policy.
+name: Pexels acquisition disabled by original-capture-only policy
+
+on:
+  workflow_dispatch:
+    inputs:
+      review_only:
+        description: Confirm that downloaded footage is for internal review only and is not publication approval.
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: acquire-short-001-pexels-review
+  cancel-in-progress: true
+
+jobs:
+  acquire:
+    name: Pexels acquisition disabled by owner media policy
+    if: false # Disabled: user excludes Pexels/Pixabay stock; original creator-captured footage is required.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Require review-only acknowledgement for manual runs
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          REVIEW_ONLY: ${{ inputs.review_only }}
+        run: |
+          if [ "$REVIEW_ONLY" != "true" ]; then
+            echo "::error::This workflow only acquires footage for review; it never authorizes publication."
+            exit 1
+          fi
+      - name: Check out exact source commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+      - name: Set up Node.js 24
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+          package-manager-cache: false
+      - name: Verify active owner media policy and Pexels evidence
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from "node:fs";
+          const registry = JSON.parse(fs.readFileSync("content/approved-pexels-footage.json", "utf8"));
+          const policy = registry.currentProductionPolicy || {};
+          const owner = JSON.parse(fs.readFileSync("content/owner-media-policy-override-2026-11-22.json", "utf8"));
+          if (policy.originalCreatorCapturedMediaRequired !== false ||
+              policy.stockMediaAllowed !== true ||
+              policy.pexelsAllowed !== true ||
+              policy.pixabayAllowed !== true ||
+              policy.aiGeneratedWildlifeVisualsAllowed !== false ||
+              owner.status !== "ACTIVE_WITH_ASSET_LEVEL_REVIEW_GATES" ||
+              owner.mediaRules.pexelsLicensedStockAllowed !== true ||
+              owner.mediaRules.pixabayLicensedStockAllowed !== true ||
+              owner.mediaRules.aiGeneratedWildlifeVisualsAllowed !== false) {
+            throw new Error("Owner-approved licensed-stock policy is missing or unsafe.");
+          }
+          if (!fs.existsSync("content/media/pexels-license-evidence-2026-11-22.md")) {
+            throw new Error("Saved Pexels licence evidence is missing.");
+          }
+          if (!fs.existsSync("content/media/pixabay-user-shared-candidates-2026-11-22.json")) {
+            throw new Error("Saved user-shared Pixabay candidate register is missing.");
+          }
+          console.log("PASS: Pexels and Pixabay acquisition is permitted for review only; final rights and publication gates remain closed.");
+          NODE
+      - name: Install pinned FFmpeg and ffprobe
+        uses: AnimMouse/setup-ffmpeg@178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3
+        with:
+          version: "9.0"
+          token: ${{ github.token }}
+      - name: Check acquisition script syntax
+        run: node --check scripts/acquire-short-001-assets.mjs
+      - name: Download, probe, hash and fully decode selected footage
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-short-001]')
+        run: node scripts/acquire-short-001-assets.mjs
+      - name: Upload source media and evidence for human review
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-short-001]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-short-001-pexels-review-assets
+          path: artifacts/short-001/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Check crocodile acquisition script syntax
+        run: node --check scripts/acquire-crocodile-footage-review.mjs
+      - name: Acquire, hash, probe and fully decode Pexels crocodile candidates
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-crocodile]')
+        run: node scripts/acquire-crocodile-footage-review.mjs
+      - name: Upload crocodile source media and evidence for human review
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-crocodile]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-long-form-001-pexels-crocodile-review
+          path: artifacts/long-form-001/pexels-candidates/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Check previously shared Pexels acquisition script syntax
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')
+        run: node --check scripts/acquire-previously-shared-pexels-candidates.mjs
+      - name: Acquire four previously shared Pexels sources for review
+        id: shared_pexels
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')
+        run: node scripts/acquire-previously-shared-pexels-candidates.mjs
+      - name: Upload previously shared Pexels originals and evidence
+        if: (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pexels]')) && steps.shared_pexels.outputs.new_assets == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-previously-shared-pexels-review-assets
+          path: artifacts/previously-shared-pexels-candidates/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Check previously shared Pixabay acquisition script syntax
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pixabay]')
+        run: node --check scripts/acquire-user-shared-pixabay-candidates.mjs
+      - name: Acquire six previously shared Pixabay sources for review
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pixabay]')
+        run: node scripts/acquire-user-shared-pixabay-candidates.mjs
+      - name: Upload previously shared Pixabay originals and evidence
+        if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[acquire-shared-pixabay]')
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonicvhibez-user-shared-pixabay-review-assets
+          path: artifacts/user-shared-pixabay-candidates/
+          if-no-files-found: error
+          retention-days: 14

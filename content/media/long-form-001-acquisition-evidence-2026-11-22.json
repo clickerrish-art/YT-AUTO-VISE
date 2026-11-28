@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "contentId": "long-form-001-nile-crocodile",
+  "status": "ACQUIRED_FOR_REVIEW_NOT_RELEASE_CLEARED",
+  "workflowRun": {
+    "id": 44975292889,
+    "jobId": 137063717858,
+    "sourceCommit": "5198112088d1be920eccad3544b9256a55f19159",
+    "conclusion": "success",
+    "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44975292889"
+  },
+  "artifact": {
+    "id": 14735172901,
+    "name": "sonicvhibez-long-form-001-pexels-crocodile-review",
+    "sha256": "89b008a95ad48ccdd7c518aab4f34300841b9da8fb74414339604a0e60572eed",
+    "sizeBytes": 451078011,
+    "expiresAt": "2026-12-06T02:17:11Z"
+  },
+  "acquisition": {
+    "assetCount": 5,
+    "totalActualSourceSeconds": 137.974967,
+    "fullDecodePasses": 5,
+    "expectedDurationResolutionAndFrameRateChecks": "PASS_FOR_ALL_FIVE",
+    "mp4ContainerSignatureChecks": "PASS_FOR_ALL_FIVE",
+    "ffprobe": "PASS_FOR_ALL_FIVE",
+    "fullFfmpegDecode": "PASS_FOR_ALL_FIVE"
+  },
+  "canonicalArtifactManifestPath": "artifacts/long-form-001/pexels-candidates/acquisition-manifest.json",
+  "contactSheetPath": "artifacts/long-form-001/pexels-candidates/preview/crocodile-candidates-contact-sheet.jpg",
+  "sourceAssets": "content/media/pexels-crocodile-candidates-2026-11-22.json",
+  "rights": {
+    "platformLicenseEvidence": "content/media/pexels-license-evidence-2026-11-22.md",
+    "platformLicenseReviewed": true,
+    "thirdPartyRightsReviewed": false,
+    "humanFullPlayback": false,
+    "ownerFinalApproval": false,
+    "rightsConfirmed": false
+  },
+  "production": {
+    "narrationGenerated": false,
+    "captionsFinalized": false,
+    "finalVideoRendered": false,
+    "metadataApproved": false,
+    "uploadAuthorized": false,
+    "publicPublishingEnabled": false,
+    "releaseEligible": false
+  },
+  "editorialWarnings": [
+    "Keep South Africa, Kenya and Zambia footage geographically distinct.",
+    "Do not imply that clips from different source pages show one continuous encounter.",
+    "Use only shots that match the Nile crocodile script and scientific claim register.",
+    "All footage remains review-only until third-party rights and human editorial approval are complete."
+  ],
+  "nextTasks": [
+    "Extract per-asset SHA-256 and exact ffprobe measurements from the artifact manifest into the durable register.",
+    "Review the contact sheet and watch all five clips in full.",
+    "Verify source geography, species and scene-to-claim alignment against the script.",
+    "Complete third-party-rights and owner review.",
+    "Acquire approved Andrew narration manually and generate captions from the approved audio."
+  ]
+}

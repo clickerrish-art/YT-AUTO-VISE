@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS_READ_ONLY_IDENTITY_AND_INVENTORY",
+  "workflowRunId": 45136287957,
+  "workflowRunUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/45136287957",
+  "sourceCommit": "e7d6ced2269c067b488d55a6e98743dbd58a4ae0",
+  "verifiedAt": "2026-11-23T08:09:15.089Z",
+  "jobId": 137563246158,
+  "artifactId": 14799632857,
+  "artifactName": "sonicvhibez-youtube-public-only-inventory-45136287957",
+  "artifactSha256": "828f4164bd0b4a4a1ea372d9db4dfc2039ab43ea64633c3969cec50e220f7df7",
+  "inventoryJsonSha256": "b49030ff9fdc1b96cdfb2fef08caf6981bb752b7499a7e27ad68c543e73a8e7f",
+  "inventory": {
+    "schemaVersion": 1,
+    "complete": true,
+    "mode": "READ_ONLY_OWNER_REVIEW_REQUIRED",
+    "oauthScopesVerified": true,
+    "oauthScopesCheckedAt": "2026-11-23T08:09:14.618Z",
+    "requiredOAuthScopes": [
+      "https://www.googleapis.com/auth/youtube.upload",
+      "https://www.googleapis.com/auth/youtube.readonly"
+    ],
+    "grantedYouTubeScopes": [
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/youtube.upload"
+    ],
+    "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+    "channelTitle": "SonicVibes",
+    "channelHandle": "@sonicvhibez",
+    "verifiedAt": "2026-11-23T08:09:15.089Z",
+    "uploadsPlaylistPages": 1,
+    "totalUploads": 1,
+    "visibilityCounts": {
+      "public": 1,
+      "private": 0,
+      "unlisted": 0
+    },
+    "videos": [
+      {
+        "id": "LjePS02hA1o",
+        "channelId": "UCSlkuPfHH78oGC1o418HV4w",
+        "visibility": "public",
+        "youtubePublishedAt": "2026-10-22T15:05:56Z",
+        "scheduledPublishAt": null,
+        "duration": "PT20S",
+        "format": "UNCLASSIFIED_REQUIRES_OWNER_REVIEW"
+      }
+    ],
+    "reviewNotes": [
+      "This is a complete read-only uploads-playlist inventory, not an owner-approved publication-history reconciliation.",
+      "Classify each video's format and verify actual public publication timestamps before using it for cadence decisions.",
+      "youtubePublishedAt is the YouTube API snippet timestamp; scheduledPublishAt is not an actual publication timestamp.",
+      "Reconcile every local pending or uncertain upload attempt separately."
+    ]
+  },
+  "ownerReview": {
+    "status": "PRIOR_OWNER_REVIEW_MATCHES_FRESH_INVENTORY",
+    "reviewedAt": "2026-11-18",
+    "videoId": "LjePS02hA1o",
+    "format": "short",
+    "studioPublicationDate": "2026-10-22",
+    "note": "The prior owner-reviewed Studio record matches the fresh inventory by video ID, channel, visibility, publishedAt timestamp and duration. The API format remains unclassified; prior owner review is preserved without inventing a new owner assertion."
+  },
+  "uploadAttemptReconciliation": {
+    "status": "BLOCKED_STALE_OWNER_ATTESTATION",
+    "validThrough": "2026-11-18",
+    "note": "The GitHub read-only ledger scan found no executed private-upload workflow in its inspected workflow history, but cannot inspect manual, local or third-party attempts after 18 November. This owner-controlled attestation has not been refreshed."
+  },
+  "noUploadOrPublication": true
+}

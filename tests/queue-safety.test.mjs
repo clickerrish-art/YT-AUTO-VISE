@@ -5,12 +5,16 @@ import fs from "node:fs";
 test("every queued idea remains draft-only for SonicVhibez's approved product", () => {
   const queue = JSON.parse(fs.readFileSync("content/queue.json", "utf8"));
   assert.equal(queue.publishingEnabled, false);
-  assert.equal(queue.cadence.postsPerWeek, 3);
-  assert.deepEqual(queue.cadence.days, ["Tuesday", "Thursday", "Saturday"]);
+  assert.deepEqual(queue.cadence.formats, ["long_form", "long_form", "short"]);
+  assert.equal(queue.cadence.minimumHoursBetweenConsecutivePublications, 72);
+  assert.equal(queue.cadence.minimumCycleHours, 216);
+  assert.equal(queue.cadence.draftPreparationFallback.notPublicationCadence, true);
   assert.equal(queue.cadence.timezone, "Africa/Johannesburg");
-  assert.ok(Array.isArray(queue.items) && queue.items.length >= 3);
+  assert.ok(Array.isArray(queue.items) && queue.items.length >= 2);
   for (const item of queue.items) {
-    assert.equal(item.productUrl, "https://selar.com/0u19v8u99l", `unapproved product URL in ${item.id}`);
+    assert.equal(typeof item.hasPaidPromotion, "boolean", `explicit promotion state required for ${item.id}`);
+    if (item.hasPaidPromotion) assert.equal(item.productUrl, "https://selar.com/0u19v8u99l", `unapproved product URL in ${item.id}`);
+    else assert.equal(item.productUrl, undefined, `non-commercial item must not carry a product URL: ${item.id}`);
     assert.notEqual(item.status, "PUBLISHED");
     assert.notEqual(item.status, "READY_FOR_PUBLICATION");
     assert.notEqual(item.channel, "Nature Frontiers");

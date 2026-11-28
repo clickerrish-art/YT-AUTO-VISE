@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "status": "PENDING_OWNER_APPROVAL",
+  "ownerApproved": false,
+  "approvedBy": "",
+  "approvedAt": "",
+  "approvalReference": "",
+  "operationalQueueSha256": "15849b8207cb10962376210078b4d5707dbbc5eae5808164f281c0daf4515f3e",
+  "detailedQueueSha256": "7f2c867f9dcf9b8370614d60f2352f243689bc500207dfacb1514a03e90cc47d",
+  "mappings": [
+    {
+      "operationalItemId": "long-form-001-two-eyes-above-water",
+      "detailedItemId": "",
+      "cyclePosition": 1
+    },
+    {
+      "operationalItemId": "long-form-plan-wildlife-video",
+      "detailedItemId": "",
+      "cyclePosition": 2
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { acquireDashboardStateFileLock } from "../scripts/dashboard-state-file-lock.mjs";
 import { spawnSync } from "node:child_process";
 
 test("queue replenishment is idempotent and never enables publishing", () => {
@@ -22,12 +23,19 @@ test("queue replenishment is idempotent and never enables publishing", () => {
   try {
     const run = () => spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
       encoding: "utf8",
-      env: { ...process.env, QUEUE_PATH: queuePath }
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
     });
     const first = run();
     assert.equal(first.status, 0, first.stderr);
     const afterFirst = JSON.parse(fs.readFileSync(queuePath, "utf8"));
     assert.equal(afterFirst.publishingEnabled, false);
+    assert.deepEqual(afterFirst.cadence.formats, ["long_form", "long_form", "short"]);
+    assert.equal(afterFirst.cadence.minimumHoursBetweenConsecutivePublications, 72);
+    assert.equal(afterFirst.cadence.minimumCycleHours, 216);
+    assert.deepEqual(afterFirst.cadence.draftPreparationFallback.days, ["Tuesday", "Saturday"]);
+    assert.equal(afterFirst.cadence.draftPreparationFallback.notPublicationCadence, true);
+    assert.equal("postsPerWeek" in afterFirst.cadence, false);
+    assert.equal("days" in afterFirst.cadence, false);
     assert.ok(afterFirst.items.some(item => item.id === "existing-approved-draft"));
     assert.ok(afterFirst.items.length >= 13, "preserve the existing item and seed all 12 reviewed topic briefs");
     const seeded = afterFirst.items.filter(item => item.id !== "existing-approved-draft" && item.status === "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW");
@@ -55,11 +63,176 @@ test("queue replenishment refuses a queue that has publishing enabled", () => {
   try {
     const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
       encoding: "utf8",
-      env: { ...process.env, QUEUE_PATH: queuePath }
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
     });
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /must not enable publishing/);
     assert.deepEqual(JSON.parse(fs.readFileSync(queuePath, "utf8")), original);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("a missing queue is initialized from the authoritative rolling publication policy", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-default-"));
+  const queuePath = path.join(tempDir, "new", "queue.json");
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.equal(result.status, 0, result.stderr);
+    const created = JSON.parse(fs.readFileSync(queuePath, "utf8"));
+    assert.equal(created.publishingEnabled, false);
+    assert.deepEqual(created.cadence.formats, ["long_form", "long_form", "short"]);
+    assert.equal(created.cadence.minimumHoursBetweenConsecutivePublications, 72);
+    assert.equal(created.cadence.minimumCycleHours, 216);
+    assert.deepEqual(created.cadence.draftPreparationFallback.days, ["Tuesday", "Saturday"]);
+    assert.equal(created.cadence.draftPreparationFallback.notPublicationCadence, true);
+    assert.equal("postsPerWeek" in created.cadence, false);
+    assert.equal("days" in created.cadence, false);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("queue replenishment normalizes an omitted publishing flag to explicit false", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-default-publishing-"));
+  const queuePath = path.join(tempDir, "queue.json");
+  fs.writeFileSync(queuePath, JSON.stringify({ items: [] }));
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(JSON.parse(fs.readFileSync(queuePath, "utf8")).publishingEnabled, false);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("queue replenishment refuses a publication-eligible item without an exact human quality approval", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-quality-"));
+  const queuePath = path.join(tempDir, "queue.json");
+  const original = {
+    publishingEnabled: false,
+    items: [{
+      id: "scheduled-without-review", title: "Unreviewed export", topic: "Wildlife",
+      productUrl: "https://selar.com/0u19v8u99l", contentType: "short", status: "SCHEDULED"
+    }]
+  };
+  fs.writeFileSync(queuePath, JSON.stringify(original));
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8", env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /lacks its human-approved quality record/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(queuePath, "utf8")), original,
+      "a blocked publication queue must not be rewritten or silently normalized");
+  } finally { fs.rmSync(tempDir, { recursive: true, force: true }); }
+});
+
+
+test("queue replenishment refuses concurrent writers and preserves the current queue", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-lock-"));
+  const queuePath = path.join(tempDir, "queue.json");
+  const original = { publishingEnabled: false, items: [{ id: "concurrent-preserve", status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" }] };
+  fs.writeFileSync(queuePath, JSON.stringify(original));
+  const release = acquireDashboardStateFileLock(queuePath);
+  try {
+    const result = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: queuePath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /queue is busy|state is busy|lock/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(queuePath, "utf8")), original,
+      "a concurrent queue writer must not overwrite the active transaction");
+  } finally {
+    release();
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test("queue replenishment rejects symlink and path-traversal targets", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-path-"));
+  const targetPath = path.join(tempDir, "target.json");
+  const linkPath = path.join(tempDir, "queue-link.json");
+  fs.writeFileSync(targetPath, JSON.stringify({ sentinel: "preserve" }));
+  fs.symlinkSync(targetPath, linkPath);
+  try {
+    const symlinkResult = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: linkPath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.notEqual(symlinkResult.status, 0);
+    assert.match(symlinkResult.stderr, /single-link regular file|symlink/i);
+    assert.deepEqual(JSON.parse(fs.readFileSync(targetPath, "utf8")), { sentinel: "preserve" });
+
+    const traversalPath = path.join(tempDir, "..", path.basename(tempDir) + "-outside-queue.json");
+    const traversalResult = spawnSync(process.execPath, ["scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: { ...process.env, QUEUE_PATH: traversalPath, QUEUE_TRUST_ROOT: tempDir }
+    });
+    assert.notEqual(traversalResult.status, 0);
+    assert.match(traversalResult.stderr, /contained within its explicit trust root/i);
+    assert.equal(fs.existsSync(path.resolve(traversalPath)), false);
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+
+test("queue reader rejects a hard-link swap after path validation and before open", () => {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "sonicvhibez-queue-hardlink-race-"));
+  const trustRoot = path.join(tempDir, "trusted");
+  const queuePath = path.join(trustRoot, "queue.json");
+  const outsidePath = path.join(tempDir, "outside.json");
+  const preloaderPath = path.join(tempDir, "replace-queue-before-open.mjs");
+  fs.mkdirSync(trustRoot);
+  fs.writeFileSync(queuePath, JSON.stringify({ publishingEnabled: false, items: [] }));
+  const outsideBytes = Buffer.from(JSON.stringify({
+    publishingEnabled: false,
+    items: [{ id: "outside-trust-root", status: "HOLD_FOR_MEDIA_AND_HUMAN_REVIEW" }]
+  }));
+  fs.writeFileSync(outsidePath, outsideBytes);
+  fs.writeFileSync(preloaderPath, [
+    'import fs from "node:fs";',
+    'import path from "node:path";',
+    'const queuePath = path.resolve(process.env.QUEUE_PATH);',
+    'const sourcePath = path.resolve(process.env.QUEUE_RACE_SOURCE);',
+    'const markerPath = path.resolve(process.env.QUEUE_RACE_MARKER);',
+    'const originalLstatSync = fs.lstatSync.bind(fs);',
+    'let queueChecks = 0;',
+    'fs.lstatSync = function(target, ...args) {',
+    '  const result = originalLstatSync(target, ...args);',
+    '  if (path.resolve(String(target)) === queuePath && ++queueChecks === 2) {',
+    '    fs.unlinkSync(queuePath);',
+    '    fs.linkSync(sourcePath, queuePath);',
+    '    fs.writeFileSync(markerPath, "swapped");',
+    '  }',
+    '  return result;',
+    '};'
+  ].join("\n"));
+  try {
+    const markerPath = path.join(tempDir, "race-triggered.txt");
+    const result = spawnSync(process.execPath, ["--import", preloaderPath, "scripts/replenish-queue.mjs"], {
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        QUEUE_PATH: queuePath,
+        QUEUE_TRUST_ROOT: trustRoot,
+        QUEUE_RACE_SOURCE: outsidePath,
+        QUEUE_RACE_MARKER: markerPath
+      }
+    });
+    assert.equal(fs.existsSync(markerPath), true, "the test must replace the queue after path validation");
+    assert.notEqual(result.status, 0, "the reader must reject a queue replaced with an external hard link");
+    assert.match(result.stderr, /changed while opening|unsafe link count|inconsistent/i);
+    assert.deepEqual(fs.readFileSync(outsidePath), outsideBytes, "external state must remain byte-for-byte unchanged");
+    assert.equal(fs.statSync(queuePath).nlink, 2, "the raced queue path should still be the external hard link after fail-closed rejection");
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }

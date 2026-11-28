@@ -1,136 +1,15 @@
-name: Generate long-form narration drafts
+name: Disabled — long-form narration blocked by narrator rights policy
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "content/long-form-scripts.md"
-      - "scripts/generate_long_form_narration.py"
-      - ".github/workflows/generate-long-form-narration.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: sonicvhibez-long-form-narration
-  cancel-in-progress: false
-
 jobs:
   generate:
+    if: false # Disabled: Roderic remains exclusive, but HeyGen denied zero-cost commercial use; no alternative narrator or paid upgrade is authorized.
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     steps:
-      - name: Check out source
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install narration client and media probe
-        run: |
-          python -m pip install --disable-pip-version-check edge-tts mutagen
-      - name: Generate two narration drafts
-        run: python scripts/generate_long_form_narration.py
-      - name: Set up Node for caption validation
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: Verify audio files, required text/captions, and report duration
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import json
-          from mutagen.mp3 import MP3
-          out = Path("media/long-form-drafts")
-          reports = []
-          expected = ["long-001-narration-draft.mp3", "long-002-narration-draft.mp3"]
-          for filename in expected:
-              audio = out / filename
-              if not audio.exists() or audio.stat().st_size == 0:
-                  raise SystemExit(f"Missing or empty audio file: {audio}")
-              text_file = audio.with_suffix(".txt")
-              caption_file = out / audio.name.replace("-narration-draft.mp3", "-captions-draft.srt")
-              if not text_file.exists() or not text_file.read_text(encoding="utf-8").strip():
-                  raise SystemExit(f"Missing or empty narration text: {text_file}")
-              narration_text = text_file.read_text(encoding="utf-8").strip()
-              word_count = len(narration_text.split())
-              if word_count < 500:
-                  raise SystemExit(f"Narration draft is unexpectedly short ({word_count} words): {text_file}")
-              if not caption_file.exists() or not caption_file.read_text(encoding="utf-8").strip():
-                  raise SystemExit(f"Missing or empty caption file: {caption_file}")
-              seconds = float(MP3(str(audio)).info.length)
-              if seconds <= 0:
-                  raise SystemExit(f"Invalid duration for {audio}")
-              # Confirm the final SRT cue is aligned to the narration duration.
-              import re
-              srt_text = caption_file.read_text(encoding="utf-8")
-              end_times = re.findall(r"(?m)^(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> (\d{2}):(\d{2}):(\d{2}),(\d{3})$", srt_text)
-              if not end_times:
-                  raise SystemExit(f"No valid SRT time ranges found in {caption_file}")
-              last = end_times[-1]
-              caption_end = int(last[4]) * 3600 + int(last[5]) * 60 + int(last[6]) + int(last[7]) / 1000
-              captions_cover_audio = abs(caption_end - seconds) <= 5.0
-              within_target = 360 <= seconds <= 600
-              reports.append({
-                  "file": audio.name,
-                  "durationSeconds": round(seconds, 2),
-                  "durationMinutes": round(seconds / 60, 2),
-                  "targetMinutes": {"min": 6, "max": 10},
-                  "withinTarget": within_target,
-                  "narrationWordCount": word_count,
-                  "minimumWordCount": 500,
-                  "textFileIncluded": True,
-                  "captionFile": caption_file.name,
-                  "captionFileIncluded": True,
-                  "captionEndSeconds": round(caption_end, 2),
-                  "captionsCoverAudio": captions_cover_audio,
-                  "status": "PASS" if within_target and captions_cover_audio else "REVIEW"
-              })
-              status = "PASS" if within_target and captions_cover_audio else "REVIEW"
-              print(f"{status}: {audio.name} — {seconds/60:.2f} minutes; final caption {caption_end:.2f}s; caption coverage {'PASS' if captions_cover_audio else 'REVIEW'}")
-          Path("media/long-form-drafts/duration-report.json").write_text(
-              json.dumps(reports, indent=2) + "\n", encoding="utf-8"
-          )
-          print("Audio-duration check complete. REVIEW means human editing is needed; no upload occurred.")
-          PY
-      - name: Validate generated caption structure
-        run: |
-          node scripts/check-captions.mjs media/long-form-drafts/long-001-captions-draft.srt media/long-form-drafts/long-002-captions-draft.srt
-      - name: Package draft audio, extracted text and duration report
-        uses: actions/upload-artifact@v4
-        with:
-          name: sonicvhibez-long-form-narration-drafts
-          path: |
-            media/long-form-drafts/*.mp3
-            media/long-form-drafts/*.txt
-            media/long-form-drafts/*.srt
-            media/long-form-drafts/duration-report.json
-            content/long-form-scripts.md
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Enforce 6–10 minute target after preserving draft artifact
-        if: always()
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import json
-          report = Path("media/long-form-drafts/duration-report.json")
-          if not report.exists():
-              raise SystemExit("BLOCKED: duration report is missing; cannot verify both long-form targets.")
-          items = json.loads(report.read_text(encoding="utf-8"))
-          if len(items) != 2:
-              raise SystemExit(f"BLOCKED: expected exactly two narration duration records; found {len(items)}.")
-          invalid = [item for item in items if item.get("withinTarget") is not True or item.get("captionsCoverAudio") is not True or item.get("narrationWordCount", 0) < 500]
-          if invalid:
-              details = "; ".join(
-                  f"{item.get('file', 'unknown')}: duration={item.get('durationSeconds', 'unknown')}s, "
-                  f"captionEnd={item.get('captionEndSeconds', 'unknown')}s, "
-                  f"captionCoverage={item.get('captionsCoverAudio', 'unknown')}, "
-                  f"wordCount={item.get('narrationWordCount', 'unknown')}"
-                  for item in invalid
-              )
-              raise SystemExit("BLOCKED: one or more narration drafts failed runtime or caption-coverage checks. Draft artifact was uploaded for review. " + details)
-          print("PASS: both narration drafts meet the 6–10 minute target and final captions align within five seconds. Human review and rights checks are still required.")
-          PY
+      - name: Confirm the workflow is intentionally disabled
+        run: echo "Narration generation is blocked by the current commercial-rights decision."

@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "status": "TECHNICALLY_VERIFIED_REVIEW_ONLY",
+  "candidate": {
+    "voice": "banjo",
+    "speakerId": 5,
+    "narrator": "Timothy Ferguson",
+    "ownerSelection": "2026-11-18"
+  },
+  "source": {
+    "path": "content/short-001-wildlife-video-storytelling.md",
+    "sha256": "2a4bc78951d2bb07e4e7ac6f85f8ba94e9f6ff253f8ba0c3c0bf26514309f94e",
+    "narrationSha256": "4d823613cbf10f1e3927ae6611527de215da73ff47e4c65185348ba4997157a9",
+    "wordCount": 129
+  },
+  "audio": {
+    "path": "banjo-short-001-narration-review.wav",
+    "sha256": "010c0d523f36350952fc6c32af6d6f963436300e2197268eba7ca60c862509a2",
+    "durationSeconds": 48.228,
+    "bytes": 2126892,
+    "format": "WAV PCM s16le",
+    "sampleRateHz": 22050,
+    "channels": 1,
+    "peakDbfs": -0.77,
+    "rmsDbfs": -17.96,
+    "clippedSamplesAfterRepair": 0,
+    "clippedSamplesInterpolated": 15,
+    "peakCeilingDbfs": -0.77
+  },
+  "model": {
+    "repository": "DataCraftsmanAustralia/piper-en_AU-librivox-medium",
+    "revision": "3faad046064c56f7316ffd745d5a8b14035f35df",
+    "sha256": "f34849bce64d803d0fe90087766d5d6f2a8215a12edad43e486d77072df7dd41",
+    "license": "CC-BY-4.0",
+    "engine": "OHF-Voice/piper1-gpl",
+    "engineVersion": "1.8.0",
+    "engineLicense": "GPL-3.0-or-later"
+  },
+  "attribution": {
+    "path": "ATTRIBUTION.md",
+    "repository": "DataCraftsmanAustralia/piper-en_AU",
+    "revision": "f958f96f655adb57281f31b8077ea28046aa81fa",
+    "blobSha": "dc24653fd19359580f066ac98be0f4aea4d79495",
+    "sha256": "d2a85c5cd2f8dbe779204054d9342f8fc96082b7e50cf32b9706ccbb72df5d15",
+    "validated": true,
+    "commercialUseStatus": "MODEL_CARD_PERMITS_COMMERCIAL_USE_WITH_ATTRIBUTION; OWNER_REVIEW_REQUIRED"
+  },
+  "workflow": {
+    "name": "Render Banjo Australian narration review",
+    "runId": 44246016964,
+    "runUrl": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/44246016964",
+    "commit": "61865f1537874b484903eca8ebdad10834a7a610",
+    "artifactId": 14402390162,
+    "artifactName": "sonicvhibez-banjo-narration-review",
+    "artifactSha256": "5565ff9dd7ffa98467ef55fc36128bcb6aa0a097cfd48cd54d8dfeb3935c0459",
+    "artifactExpiresAt": "2026-12-18T05:42:02Z",
+    "testsPassed": 10,
+    "renderStep": "success",
+    "artifactUpload": "success"
+  },
+  "review": {
+    "humanVoiceQuality": "PENDING_OWNER_LISTENING",
+    "commercialAttribution": "PENDING_OWNER_REVIEW",
+    "productionApproved": false,
+    "finalNarration": false,
+    "publishingEnabled": false,
+    "releaseStatus": "HOLD"
+  },
+  "knownLimitations": [
+    "Model author describes Banjo as the best overall voice in this model, but says the delivery is period-inflected and formal rather than conversational.",
+    "Human listening is required to judge naturalness, Australian accent, pronunciation, pacing and suitability.",
+    "Model attribution requires Jenny (Dioco) lineage credit where practical; the model author's interpretation is not a legal conclusion."
+  ]
+}

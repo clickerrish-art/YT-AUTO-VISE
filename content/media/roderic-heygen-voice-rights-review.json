@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "project": "SonicVhibez",
+  "assetId": "heygen-public-voice-roderic-authoritative-refined",
+  "status": "BLOCKED_COMMERCIAL_RIGHTS_NOT_GRANTED",
+  "voice": {
+    "displayName": "Roderic – Authoritative & Refined",
+    "voiceId": "b5c5b28db1ea408abc7d851202983bdb",
+    "provider": "HeyGen",
+    "planAtGeneration": "Free",
+    "userApprovedAsInterimNarrator": true,
+    "substitutionAuthorized": false
+  },
+  "governingTerms": {
+    "termsUrl": "https://www.heygen.com/terms",
+    "section": "4. License to your Content (For Users in the Free Plan)",
+    "checkedAt": "2026-11-20",
+    "operativeRestriction": "Free-plan User Output is licensed solely for personal, non-commercial and internal evaluation purposes; it may not be sold, sublicensed, redistributed, monetized, or used in connection with commercial activities, advertising, client work, revenue-generating products or services.",
+    "productionCommercialUse": "NOT_PERMITTED_UNDER_CURRENT_FREE_PLAN_TERMS",
+    "futureFreePlanNarration": "NOT_PERMITTED_FOR_COMMERCIAL_PRODUCTION"
+  },
+  "voiceSupplementalTerms": {
+    "url": "https://www.heygen.com/voice-terms",
+    "checkedAt": "2026-11-20",
+    "section": "6. Content Rights and Processing",
+    "finding": "Voice Terms do not expand Free Plan output rights; rights and commercial-use restrictions remain governed by the applicable plan and agreement."
+  },
+  "publicHelpCenterConflict": {
+    "articleUrl": "https://help.heygen.com/en/articles/9834825-how-to-download-or-export-a-video",
+    "checkedAt": "2026-11-20",
+    "articleSummary": "The Help Center article broadly says HeyGen videos may be distributed commercially.",
+    "limitation": "The article's general statement does not override the express Free Plan restrictions in the Terms or grant voice-specific commercial permission.",
+    "supportClarification": "HeyGen Support stated the Free-plan limitations apply and the account plan Terms and Conditions take precedence; Support cannot issue a legally binding licensing determination."
+  },
+  "correspondence": {
+    "supportThreadId": "1a1f831648cd14ef",
+    "supportRequestDate": "2026-11-20",
+    "supportResponseDate": "2026-11-20",
+    "supportOutcome": "REFERRED_TO_LEGAL; NO_CUSTOM_PERMISSION_GRANTED",
+    "legalThreadId": "1a1f90019e6d7961",
+    "legalRequestDate": "2026-11-20",
+    "legalRequestScope": [
+      "Existing Roderic narration generated on the Free plan",
+      "Future narration generated with the same public voice",
+      "Monetized YouTube use on SonicVhibez",
+      "Attribution and other restrictions"
+    ],
+    "legalResponseAsOf": "2026-11-21",
+    "legalOutcome": "NO_DIRECT_LEGAL_REPLY; HEYGEN_SUPPORT_WRITTEN_DENIAL_RECEIVED"
+  },
+  "existingNarration": {
+    "durationSeconds": 398.083,
+    "licenseStatus": "NON_COMMERCIAL_INTERNAL_EVALUATION_ONLY",
+    "commercialUseAllowed": false,
+    "productionUseAllowed": false,
+    "publishingAllowed": false
+  },
+  "safeguards": {
+    "noPaidUpgradeOrChargeAuthorized": true,
+    "doNotUseExistingFreePlanOutputInCommercialProduction": true,
+    "doNotGenerateFutureFreePlanNarrationForCommercialProduction": true,
+    "doNotSubstituteAnotherVoiceWithoutOwnerApproval": true,
+    "noCommercialNarrationUntilAuthoritativeWrittenPermissionOrACommerciallyPermittedPlanIsConfirmed": true
+  },
+  "decision": "KEEP_ALL_RODERIC_FREE_PLAN_NARRATION_OUT_OF_PUBLIC_OR_COMMERCIAL_PRODUCTION",
+  "evidenceNote": "HeyGen Support's written denial supersedes the earlier pending-exception state. The existing 398.083-second Roderic WAV and future Free-plan Roderic outputs are internal-only and cannot be used in public branded or commercial production. No paid upgrade is authorized and no other narrator may be substituted without explicit owner approval.",
+  "providerDenial": {
+    "status": "DENIED",
+    "provider": "HeyGen Support",
+    "checkedAt": "2026-11-21",
+    "responseDatesUtc": [
+      "2026-11-20T21:37:41Z",
+      "2026-11-21T08:33:22Z"
+    ],
+    "supportThreadIds": [
+      "1a1f90019e6d7961",
+      "1a1fd2af2bfaeebd"
+    ],
+    "zeroCostCommercialExceptionAvailable": false,
+    "existingFreePlanOutputsCommerciallyUsable": false,
+    "futureFreePlanGenerationsCommerciallyUsable": false,
+    "publicBrandedDistributionAllowed": false,
+    "monetizationAdvertisingOrRevenueGeneratingUseAllowed": false,
+    "summary": "HeyGen Support explicitly denied a zero-cost commercial-use exception for existing and future Roderic Free-plan outputs. Free-plan output remains restricted to personal, non-commercial and internal evaluation."
+  }
+}

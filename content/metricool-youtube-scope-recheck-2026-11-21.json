@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-21",
+  "source": "Metricool connected-account read-only connector",
+  "brand": {
+    "id": "8094526",
+    "label": "Nature Frontiers SA",
+    "timezone": "Africa/Johannesburg"
+  },
+  "expectedProjectScope": {
+    "sonicVhibezYouTube": "managed by the Marketing Machine's direct YouTube API integration",
+    "metricoolYouTube": "must not be used or reconnected without explicit owner instruction",
+    "natureFrontiers": "Facebook and Instagram only"
+  },
+  "observedNetworksData": {
+    "facebookData": "1431329126735709",
+    "instagramData": "naturefrontieers2026",
+    "youtubeData": "UCSlkuPfHH78oGC1o418HV4w"
+  },
+  "scheduledPostsCheck": {
+    "from": "2026-11-21T00:00:00+02:00",
+    "to": "2027-01-01T23:59:59+02:00",
+    "timezone": "Africa/Johannesburg",
+    "returnedCount": 0
+  },
+  "status": "CONNECTION_STATE_AMBIGUOUS",
+  "findings": [
+    "The current read-only Metricool brand response includes networksData.youtubeData with the SonicVhibez channel ID, despite the owner having stated that YouTube was removed from Metricool.",
+    "The connector response does not expose a definitive active/authorized connection flag, so this field may represent a retained/stale association; current active connection state cannot be proven from this response alone.",
+    "No scheduled Metricool posts were returned for the checked period.",
+    "Do not publish to YouTube through Metricool and do not reconnect or mutate network settings without explicit owner authorization."
+  ],
+  "mutationPerformed": false,
+  "publicationPerformed": false
+}

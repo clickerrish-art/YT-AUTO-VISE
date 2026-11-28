@@ -1,0 +1,55 @@
+name: Production quality enforcement
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/production-quality-scorecard.mjs"
+      - "scripts/production-quality-approval.mjs"
+      - "scripts/validate-production-quality-approval.mjs"
+      - "scripts/render-short.mjs"
+      - "scripts/render-long-form.mjs"
+      - "scripts/validate-short-export.mjs"
+      - "scripts/validate-long-form-export.mjs"
+      - "scripts/validate-content-quality.mjs"
+      - "scripts/upload-private.mjs"
+      - "scripts/dashboard-server.mjs"
+      - "scripts/run-node-tests.mjs"
+      - "public/dashboard.html"
+      - "test/**"
+      - "tests/**"
+      - ".github/workflows/production-quality-enforcement.yml"
+      - "docs/PRODUCTION-QUALITY-ENFORCEMENT.md"
+  workflow_dispatch:
+
+concurrency:
+  group: production-quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  production-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run scorecard negative and positive regression tests
+        shell: bash
+        run: |
+          set -o pipefail
+          node --test test/production-quality-scorecard.test.mjs test/production-quality-approval.test.mjs test/upload-private-quality-receipt.test.mjs 2>&1 | tee "$RUNNER_TEMP/production-quality-tests.log"
+          grep -Fq 'ℹ skipped 0' "$RUNNER_TEMP/production-quality-tests.log"
+          grep -Fq 'ℹ fail 0' "$RUNNER_TEMP/production-quality-tests.log"
+      - name: Confirm full regression gate is required
+        run: echo "The Validate SonicVhibez automation workflow runs the complete Node, Python and browser regression suites with zero Node skips on this same pull request commit."
+      - name: Audit production dependencies
+        run: npm audit --audit-level=high
