@@ -2707,21 +2707,21 @@
     "note": "Observed only. No branch-protection settings were changed."
   },
   "currentBranchTip": {
-    "head": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-    "aheadBy": 5851,
+    "head": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+    "aheadBy": 5852,
     "behindBy": 0,
     "changedFiles": 591,
-    "headSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "headSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0"
   },
   "dailyLiveRefresh": {
     "recordedAt": "2026-11-28T09:38:59+02:00",
     "implementationBranch": "codex/marketing-machine-audit-fixes",
-    "branchHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "branchHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5851,
+    "aheadBy": 5852,
     "behindBy": 0,
     "changedFiles": 591,
     "pr1": {
@@ -2729,7 +2729,7 @@
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+      "headSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
       "changedFiles": 591,
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
     },
@@ -2745,19 +2745,19 @@
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/7"
     },
     "ci": {
-      "exactHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "automationRunId": 46121693024,
+      "exactHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "automationRunId": 46123447684,
       "nodeTests": 1159,
-      "nodePassed": 1158,
-      "nodeFailed": 1,
+      "nodePassed": 1153,
+      "nodeFailed": 6,
       "nodeSkipped": 0,
       "npmAuditVulnerabilities": 0,
       "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
-      "browserRunId": 46121693023,
+      "browserRunId": 46123447748,
       "browserStatus": "PASS",
       "browserPassed": 41,
       "browserFailed": 0,
-      "productionReadinessRunId": 46121693155,
+      "productionReadinessRunId": 46123447609,
       "productionReadinessStatus": "HOLD",
       "productionReadinessBlockers": 35
     },
@@ -2770,7 +2770,7 @@
       "authNegativePass": 50,
       "currentHeadPositiveAcceptance": "NOT_REEVALUATED"
     },
-    "note": "The source-derived 50-route inventory and its last exact route evidence remain unchanged. Current branch CI is recorded separately; the one unrelated acceptance-register test failure does not promote or erase provider/owner route blockers."
+    "note": "The source-derived 50-route inventory and last exact route evidence remain unchanged. Current branch CI is recorded separately; the six acceptance-register note failures do not promote or erase provider/owner route blockers."
   },
-  "currentHeadEvidenceNote": "Last route-specific positive evidence remains exact SHA f547cecf9c330791a1dfe677da072cdfb50058e2: 50 routes, 41 PASS, 9 BLOCKED, 50/50 authentication-negative checks. The live implementation branch is now ee1dae17fb242d7427c0edd0d9d5113a7d32b584 (5,851 ahead / 0 behind, 591 changed files); the exact-head regression run has one unrelated acceptance-register assertion failure, so no new positive route acceptance is promoted. API-001 remains BLOCKED by owner/provider prerequisites."
+  "currentHeadEvidenceNote": "Last route-specific positive evidence remains exact SHA f547cecf9c330791a1dfe677da072cdfb50058e2: 50 routes, 41 PASS, 9 BLOCKED, 50/50 authentication-negative checks. The live implementation branch is now 549e025b9f48fc3874fbfe74ad101a4b12d95706 (5,852 ahead / 0 behind, 591 changed files); the exact-head regression run has six acceptance-register note assertion failures, so no new positive route acceptance is promoted. API-001 remains BLOCKED by owner/provider prerequisites."
 }

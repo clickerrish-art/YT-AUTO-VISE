@@ -3,6 +3,44 @@
 **Decision: HOLD.** No SonicVhibez upload, schedule, publication or public automation is authorized.
 
 - **Implementation branch:** `codex/marketing-machine-audit-fixes`
+- **Observed pre-fix HEAD:** `549e025b9f48fc3874fbfe74ad101a4b12d95706`
+- **Main / merge base:** `3795519ccbf58fd02d74458624b58dd2e44a88c0` (untouched)
+- **Divergence:** **5,852 ahead / 0 behind**, 591 changed files.
+- **PR #1:** OPEN / DRAFT / UNMERGED / mergeable=true; 591 files.
+- **PR #7:** OPEN / DRAFT / UNMERGED / mergeable=false; 19 files; no exact-head Actions runs or combined status returned.
+
+## Exact-HEAD verification
+
+- Actions: **18 runs; 12 success / 6 failure / 0 active**; combined status contexts: **0**.
+- Node regression [46123447684](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447684): **1,153 passed / 6 failed / 0 skipped** across 194 files. The six failures are stale acceptance-register evidence-note assertions at lines 42, 70, 94, 122, 143 and 173. npm audit: **0 vulnerabilities**. Python tests were not reached.
+- Dashboard E2E [46123447748](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447748): **41/41 passed**.
+- Deployment recovery [46123447810](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447810), runner bridge [46123447654](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447654), durable state [46123447645](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447645), durable-state PR [46123447604](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447604), staging smoke [46123447635](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447635) and branch inventory [46123447612](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447612): PASS.
+- Production readiness [46123447609](https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447609): **HOLD — 35 blockers**. Not a production pass.
+
+## Acceptance snapshot
+
+- Stored requirements: **71 PASS / 0 FAIL / 8 NOT_TESTED / 10 BLOCKED**; full row-level re-evaluation remains incomplete.
+- Current-head classification: **67 PASS / 1 FAIL / 8 NOT_TESTED / 1 PASS_STAGING / 12 BLOCKED**.
+- API: 50 routes; last route-specific evidence **41 PASS / 0 NOT_TESTED / 9 BLOCKED**, 50/50 authentication-negative; no new current-head positive route acceptance. API-001 remains BLOCKED.
+- Dashboard: 121 controls / 17 forms / 104 form-owned / 17 standalone / 15 cross-cutting; browser E2E 41/41 PASS, while DASH-001 remains NOT_TESTED.
+
+## Publication and channel safety
+
+The latest complete authenticated YouTube history is 23 November: one public 20-second legacy Short, zero private/unlisted videos and no scheduled timestamp. The last known publication was 22 October 2026 at 17:05:56 Africa/Johannesburg. The historical gap to 28 November 09:38:59 is **36 days, 16 hours, 33 minutes, 03 seconds**, but the destination schedule and post-23-November history are not visible and the owner upload-attempt attestation is stale. **The mandatory 72-hour spacing check is UNVERIFIED; do not schedule.**
+
+Metricool exposes Nature Frontiers SA only (brandId 8094526), with zero scheduled posts in the checked 28 November–28 February window. Legacy brand 7545638 is 403; draft inventory and provider autoPublish flags are not exposed. The correct SonicVhibez channel identity appears separately in the connected YouTube channel list, but it is not a Metricool destination. Nature Frontiers local Facebook/Instagram configs remain publishing-disabled, dry-run and emergency-stopped.
+
+The 30 November week already has two private DRAFT_ONLY Shorts, both linked to the Vault with its owner-approved direct-sales disclosure. Search evidence is qualitative only; no measured global volume. No new Short, final render, thumbnail, upload or schedule was created. The Prompt Pack and 90-Day Blueprint remain disclosure-held; Safari affiliate remains inactive.
+
+**Release remains HOLD** pending original creator-captured footage and rights, owner-approved narration, final MP4/captions/thumbnail, exact-hash human review, fresh YouTube history and attempt attestation, complete SonicVhibez destination schedule, positive destination verification and a destination-safe end-to-end test. Keep PR #1 open/draft/unmerged; do not alter main or enable publishing.
+
+---
+
+# Historical pre-fix release gate — 28 November 2026
+
+**Decision: HOLD.** No SonicVhibez upload, schedule, publication or public automation is authorized.
+
+- **Implementation branch:** `codex/marketing-machine-audit-fixes`
 - **Observed HEAD:** `ee1dae17fb242d7427c0edd0d9d5113a7d32b584`
 - **Main / merge base:** `3795519ccbf58fd02d74458624b58dd2e44a88c0` (untouched)
 - **Divergence:** **5,851 ahead / 0 behind**, 591 changed files.

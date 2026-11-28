@@ -238,34 +238,34 @@
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764148444",
         "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/40764633501"
       ],
-      "nextAction": "Fix the stale acceptance-register test to use the checked-in branchHead and ci.automation schema, then rerun the exact-head Node/Python, content-quality, metadata, queue and baseline workflows. Keep the PR draft and all publishing gates closed.",
+      "nextAction": "Align the six stale acceptance-register note assertions with the verified current evidence and rerun the exact-head Node/Python, content-quality, metadata, queue and baseline workflows. Keep PR #1 draft and all publishing gates closed.",
       "assessmentCommitSha": "eab2e53440fa7c2ce611c4608b67c019a59ca5c7",
       "acceptanceCriterion": "The workflow checks the actual current main branch tip and exact candidate SHA in isolated checkouts; install, Node test and applicable Python test commands all exit 0, with artifact and summary evidence.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "FAIL",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "FAIL — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: 1,158 of 1,159 Node tests passed across 194 files; one assertion failed in test/master-acceptance-register.test.mjs:60 because the test expected a nonexistent latestExactCiCheckpoint.exactSourceTestSha/nodeTests.passed shape. The register stores branchHead and ci.automation. npm audit passed with 0 vulnerabilities; Python tests were not reached. Browser E2E separately passed 41/41. Five dependent regression workflows failed on this same assertion; production readiness separately remains HOLD with 35 blockers.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "FAIL — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: 1,153 of 1,159 Node tests passed across 194 files; 6 acceptance-register subtests failed in test/master-acceptance-register.test.mjs (lines 42, 70, 94, 122, 143 and 173) because current evidence-note wording no longer matched the checked-in assertions. Node result: 6 failed, 0 skipped. npm audit passed with 0 vulnerabilities; Python tests were not reached. Dashboard E2E separately passed 41/41. Production readiness separately remains HOLD with 35 blockers.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -427,29 +427,29 @@
       "acceptanceCriterion": "Every visible dashboard control and state-changing route has a dedicated acceptance case covering authorized success, unauthorized/malformed/duplicate/failure paths and durable resulting state.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "NOT_TESTED — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: dashboard Chromium E2E run 46121693023 passed 41/41 journeys. The source inventory remains 121 controls, 17 forms, 104 form-owned, 17 standalone and 15 cross-cutting dimensions. Overall DASH-001 remains NOT_TESTED because exhaustive per-control business acceptance is incomplete.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "NOT_TESTED — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: dashboard Chromium E2E run 46123447748 passed 41/41 journeys. Source inventory: 121/121 controls, 17/17 forms, 104 form-owned controls, 17 standalone controls and 15/15 cross-cutting dimensions. Overall DASH-001 remains NOT_TESTED because exhaustive per-control business acceptance is incomplete.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -498,29 +498,29 @@
       "acceptanceCriterion": "The same 72-hour minimum, rolling long_form → long_form → short cycle, actual-history ordering and DST/timezone policy are enforced by config, queue, dashboard, workflows and tests.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "NOT_TESTED — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: the last complete authenticated YouTube inventory is still 23 November 2026 (one public legacy Short, zero private/unlisted videos, no scheduled timestamp). The owner attestation for manual/local/third-party attempts is stale after 18 November. The complete SonicVhibez destination queue and post-23-November publication history are not inspectable; spacing remains UNVERIFIED. A connected-channel identity listing is not a complete publication history.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "NOT_TESTED — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: the last complete authenticated YouTube inventory is still 23 November 2026 (one public 20-second legacy Short, zero private/unlisted videos, no scheduled timestamp). The owner attestation for manual/local/third-party attempts is stale after 18 November. The complete SonicVhibez destination queue and post-23-November publication history are not inspectable; spacing remains UNVERIFIED.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -628,29 +628,29 @@
       "acceptanceCriterion": "Isolated two-process contention, crash/failure injection, uncertain remote outcome, ledger corruption, backup/restore and restart tests preserve evidence and prevent duplicate side effects.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS_STAGING",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "PASS_STAGING — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: durable-state unit run 46121693190, durable-state PR validation 46121693124, deployment recovery 46121693215, runner-bridge safety 46121693221 and fail-closed staging smoke 46121693025 passed. Production state storage is not established.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "PASS_STAGING — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: durable-state unit run 46123447645, durable-state PR validation 46123447604, deployment recovery 46123447810, runner-bridge safety 46123447654 and fail-closed staging smoke 46123447635 passed. Production state storage is not established.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -890,8 +890,8 @@
       "acceptanceCriterion": "Review all 1,862 branch-only commits and both base-only commits/patches, inspect the restore-history test variants and all relevant cross-branch changes, then document a non-destructive reconciliation plan with explicit owner decisions. Preserve both restore-history test variants.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "NOT_TESTED — live comparison at exact branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: 5,851 ahead / 0 behind main, merge base 3795519ccbf58fd02d74458624b58dd2e44a88c0, 591 changed files. PR #1 remains open/draft/unmerged; branch protection is disabled on main and the implementation branch. Semantic review remains incomplete; no merge or history rewrite was performed.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "NOT_TESTED — live comparison at exact branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: 5,852 ahead / 0 behind main, merge base 3795519ccbf58fd02d74458624b58dd2e44a88c0, 591 changed files. PR #1 remains open/draft/unmerged; branch protection is disabled on main and the implementation branch. Semantic review remains incomplete; no merge or history rewrite was performed.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "baseOnlyReview": {
         "reviewedAt": "2026-11-22",
@@ -1026,25 +1026,25 @@
         ]
       },
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -1074,29 +1074,29 @@
       "acceptanceCriterion": "An isolated deployment run records startup, health/readiness, monitoring, backup, restore, rollback and interrupted-deployment outcomes for the exact candidate SHA.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "NOT_TESTED — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: deployment recovery run 46121693215 and runner-bridge safety run 46121693221 passed. No SonicVhibez production render/publisher Worker, production D1 or Durable Object namespace is established.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "NOT_TESTED — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: deployment recovery run 46123447810 and runner-bridge safety run 46123447654 passed. No SonicVhibez production render/publisher Worker, production D1 or Durable Object namespace is established.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -1268,29 +1268,29 @@
       "acceptanceCriterion": "Configuration records the requested weekly target and mathematical conflict; validator emits a visible blocked decision status; production readiness refuses to pass unless a valid owner-approved cadence decision is present.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "PASS — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: the passing schedule-policy and YouTube-history-gate tests enforce a hard minimum of 72 elapsed hours, no same-Africa/Johannesburg-calendar-day collisions, strict timezone-qualified timestamps and fail-closed handling when history or queue verification is missing. This is code-policy evidence only; live spacing remains UNVERIFIED under SCHED-001.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "PASS — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: schedule-policy and YouTube-history-gate tests enforce at least 72 elapsed hours, no same-Africa/Johannesburg-calendar-day collisions, strict timezone-qualified timestamps and fail-closed handling when history or queue verification is missing. The owner-approved sequence remains long_form → long_form → short, recorded 2026-11-18T16:27:44Z; this code-policy evidence does not verify a live publication slot.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -2047,29 +2047,29 @@
       "acceptanceCriterion": "Both workflows install and report FFmpeg/ffprobe before the Node suite; exact candidate ac97c8860700dcbfedfb367d4dfbc0c654164479 reports 374 tests, 374 pass, 0 failures, 0 skips, including a synthetic multi-scene FFmpeg integration test.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "PASS — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: automation run 46121693024 installed FFmpeg and ffprobe before Node tests; the install step passed and the runner reported version N-129000-g64f6bcffaf-20261117. The overall Node suite had one unrelated acceptance-register assertion failure.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "PASS — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: automation run 46123447684 installed FFmpeg and ffprobe before Node tests; the install step passed and the runner reported version N-129000-g64f6bcffaf-20261117. The Node suite had six separate acceptance-register note assertion failures; no skips were recorded.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -2103,29 +2103,29 @@
       "acceptanceCriterion": "Automation, content-quality and metadata jobs explicitly report 378 tests, 378 pass, 0 fail, 0 skipped on exact candidate b1989a764e54400cddb55158b998c5a375972321.",
       "lastVerifiedStatus": "PASS",
       "currentHeadStatus": "PASS",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "PASS — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: automation run 46121693024 executed 1,159 Node tests across 194 files, with 1,158 passed, 1 failed and zero skipped. The zero-skip invariant passed; the separate CI-002 regression failure remains open.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "PASS — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: automation run 46123447684 executed 1,159 Node tests across 194 files, with 1,153 passed, 6 failed and zero skips. The zero-skip invariant passed; CI-002 remains FAIL because six acceptance-register assertions are stale.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -3407,29 +3407,29 @@
       "nextAction": "Re-upload the original three-minute creator-captured wildlife MP4 that was previously shared, plus any additional original footage needed for the 6–10 minute long-form edit. Then verify creator/camera-operator identity, capture date/location, provenance, rights/permissions, exact SHA-256, ffprobe metadata, full decode and full human playback. Do not use Pexels, Pixabay, NOAA, Internet Archive, stock photographs or AI-generated wildlife visuals as production substitutes. Only after the original media passes review should the edit, narration, captions, thumbnail, final render and exact-hash owner approval proceed.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "BLOCKED — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: production readiness remains HOLD with 35 blockers. Genuine creator-captured wildlife media with source provenance, exact hashes and commercial rights is not established; no final production MP4 or thumbnail was verified.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "BLOCKED — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: production readiness remains HOLD with 35 blockers. Genuine creator-captured wildlife media with source provenance, exact hashes and commercial rights is not established; no final production MP4 or thumbnail was verified.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -3515,29 +3515,29 @@
       "nextAction": "Keep publishing disabled. Do not use the Nature Frontiers brand for SonicVhibez promotions or its linked YouTube channel. The owner must regain read access to legacy brand 7545638 and separately reconcile its 20 drafts/eight autoPublish flags; the incorrect YouTube mapping must be resolved only through an explicitly authorized brand-connection change.",
       "lastVerifiedStatus": "BLOCKED",
       "currentHeadStatus": "BLOCKED",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "BLOCKED — current Metricool read-only check exposes only Nature Frontiers SA (brandId 8094526); the scheduled-post query for 28 November 2026–28 February 2027 returned zero records. Legacy brand 7545638 returns 403. Draft inventory and provider autoPublish flags are not exposed, and no distinct SonicVhibez/Sonic Fire YouTube destination is available in Metricool. Repository Nature Frontiers Facebook/Instagram publishing remains disabled, dry-run and emergency-stopped.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "BLOCKED — current Metricool read-only check exposes only Nature Frontiers SA (brandId 8094526); zero future scheduled posts were returned for 28 November 2026–28 February 2027. The previous 21 November snapshot recorded five Facebook and zero Instagram scheduled items. Legacy brand 7545638 returns 403. Draft inventory and provider autoPublish flags are not exposed, and no distinct SonicVhibez/Sonic Fire YouTube destination is available in Metricool. Repository Nature Frontiers Facebook/Instagram publishing remains disabled, dry-run and emergency-stopped.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -3608,29 +3608,29 @@
       "acceptanceCriterion": "The worker uses a separate scoped token, can only list dispatchable jobs and invoke the renderer, filters unapproved render plans, applies bounded conflict backoff, preserves state for read-only listings and stops its poll wait promptly.",
       "lastVerifiedStatus": "NOT_TESTED",
       "currentHeadStatus": "NOT_TESTED",
-      "currentHeadEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "currentHeadEvidenceNote": "NOT_TESTED — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: local worker/backoff regression tests and runner-bridge safety run 46121693221 passed, including fail-stop behaviour on persistence failure. Live production Worker dispatch remains NOT_TESTED; no production dispatch occurred.",
+      "currentHeadEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "currentHeadEvidenceNote": "NOT_TESTED — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: local regression evidence retains the persisted HTTP 409 preflight cooldown across restart, and runner-bridge safety run 46123447654 passed, including fail-stop behaviour on persistence failure. Live production Worker dispatch remains NOT_TESTED; no production dispatch occurred.",
       "currentHeadEvidenceUpdatedAt": "2026-11-26T08:16:44Z",
       "sourceTestEvidenceRefresh": {
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "automationRunId": 46121693024,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "automationRunId": 46123447684,
         "nodeTests": 1159,
         "nodeTestFiles": 194,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "browserRunId": 46121693023,
-        "browserEvidenceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "browserRunId": 46123447748,
+        "browserEvidenceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "browserJourneys": 41,
         "browserPassed": 41,
         "browserFailed": 0,
         "browserSkipped": 0,
-        "failures": 1,
+        "failures": 6,
         "skips": 0,
-        "scope": "Exact current-head observation; one stale acceptance-register assertion failed. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
+        "scope": "Exact current-head observation; six acceptance-register assertions failed because note text and test expectations drifted. Python tests were not reached. No external, provider, owner or production acceptance was promoted."
       }
     },
     {
@@ -4000,10 +4000,10 @@
       }
     }
   },
-  "candidateSourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-  "latestSourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+  "candidateSourceTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+  "latestSourceTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
   "latestChangeTestStatus": "FAIL",
-  "latestChangeTestReason": "Exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584 ran 1,159 Node tests across 194 files: 1,158 passed, 1 failed, 0 skipped. The sole failure is a stale schema assertion in test/master-acceptance-register.test.mjs:60; it expects latestExactCiCheckpoint.exactSourceTestSha and nodeTests.passed, while the checked-in register stores branchHead and ci.automation. npm audit reports 0 vulnerabilities; Python tests were not reached.",
+  "latestChangeTestReason": "Exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: 1,153/1,159 Node tests passed, six acceptance-register note assertions failed (test/master-acceptance-register.test.mjs lines 42, 70, 94, 122, 143, 173), zero skipped. The assertion wording is being aligned with the verified current notes; npm audit 0 vulnerabilities; Python tests not reached.",
   "requirementCounts": {
     "total": 89,
     "PASS": 71,
@@ -4104,8 +4104,8 @@
     "passed": 41,
     "failed": 0,
     "skipped": 0,
-    "runId": 46121693023,
-    "sourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584"
+    "runId": 46123447748,
+    "sourceTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706"
   },
   "evidence": {
     "automationSecurity": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/41940205668",
@@ -4314,10 +4314,10 @@
   "latestExactCiCheckpoint": {
     "recordedAt": "2026-11-28T07:38:59Z",
     "implementationBranch": "codex/marketing-machine-audit-fixes",
-    "branchHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "branchHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5851,
+    "aheadBy": 5852,
     "behindBy": 0,
     "changedFiles": 591,
     "pr1": {
@@ -4325,7 +4325,7 @@
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+      "headSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
       "changedFiles": 591,
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
     },
@@ -4341,115 +4341,124 @@
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/7"
     },
     "ci": {
-      "exactHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "totalRuns": 17,
-      "completedSuccess": 11,
+      "exactHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "totalRuns": 18,
+      "completedSuccess": 12,
       "completedFailure": 6,
       "active": 0,
       "combinedStatusContexts": 0,
       "automation": {
-        "runId": 46121693024,
+        "runId": 46123447684,
         "status": "FAIL",
         "nodeTestFiles": 194,
         "nodeTests": 1159,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "pythonTests": null,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693024"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447684"
       },
       "contentQuality": {
-        "runId": 46121693017,
-        "status": "FAIL_SAME_NODE_TEST",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693017"
+        "runId": 46123447812,
+        "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+        "failingSubtests": 6,
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447812"
       },
       "metadata": {
-        "runId": 46121693148,
-        "status": "FAIL_SAME_NODE_TEST",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693148"
+        "runId": 46123447675,
+        "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+        "failingSubtests": 6,
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447675"
       },
       "baselineComparison": {
-        "runId": 46121693021,
-        "status": "FAIL_CANDIDATE_NODE_TEST",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693021"
+        "runId": 46123447785,
+        "status": "FAIL_CANDIDATE_ACCEPTANCE_REGISTER_ASSERTIONS",
+        "failingSubtests": 6,
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447785"
       },
       "dashboard": {
-        "runId": 46121693023,
+        "runId": 46123447748,
         "status": "PASS",
         "browserJourneys": 41,
         "passed": 41,
         "failed": 0,
         "skipped": 0,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693023"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447748"
       },
       "queueReadiness": {
-        "runId": 46121693042,
-        "status": "FAIL_SAME_NODE_TEST",
+        "runId": 46123447667,
+        "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+        "failingSubtests": 6,
         "dispatchAllowed": false,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693042"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447667"
       },
       "productionReadiness": {
-        "runId": 46121693155,
+        "runId": 46123447609,
         "status": "HOLD",
         "blockers": 35,
         "publishingEnabled": false,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693155"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447609"
       },
       "deploymentRecovery": {
-        "runId": 46121693215,
+        "runId": 46123447810,
         "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693215"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447810"
       },
       "runnerBridge": {
-        "runId": 46121693221,
+        "runId": 46123447654,
         "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693221"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447654"
       },
       "durableState": {
-        "runId": 46121693190,
+        "runId": 46123447645,
         "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693190"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447645"
       },
       "durableStatePrValidation": {
-        "runId": 46121693124,
+        "runId": 46123447604,
         "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693124"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447604"
       },
       "failClosedSmoke": {
-        "runId": 46121693025,
+        "runId": 46123447635,
         "status": "PASS_READ_ONLY",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693025"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447635"
       },
       "branchInventory": {
-        "runId": 46121693213,
+        "runId": 46123447612,
         "status": "PASS",
-        "head": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "aheadBy": 5851,
+        "head": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "aheadBy": 5852,
         "behindBy": 0,
         "changedFiles": 591,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693213"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447612"
       },
       "natureFrontiersEditorialSafety": {
-        "runId": 46121693176,
+        "runId": 46123447615,
         "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693176"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447615"
       },
       "natureFrontiersInstagramSafety": {
-        "runId": 46121693184,
+        "runId": 46123447611,
         "status": "PASS",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693184"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447611"
       },
       "natureFrontiersMetaReadOnly": {
-        "runId": 46121693035,
+        "runId": 46123447731,
         "status": "PASS_READ_ONLY",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693035"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447731"
       },
       "natureFrontiersDraftPackage": {
-        "runId": 46121693054,
+        "runId": 46123447602,
         "status": "PASS_LOCAL_ONLY_NO_PROVIDER_WRITE",
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693054"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447602"
+      },
+      "productionQualityEnforcement": {
+        "runId": 46123447688,
+        "status": "PASS",
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447688"
       }
     },
     "acceptance": {
@@ -4562,9 +4571,9 @@
     "failures": 0
   },
   "latestDashboardBrowserE2E": {
-    "sourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-    "runId": 46121693023,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693023",
+    "sourceTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+    "runId": 46123447748,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447748",
     "tests": 41,
     "passed": 41,
     "failed": 0,
@@ -4630,12 +4639,12 @@
     "branchInventoryArtifactSha256": "sha256:d8031607b068ce2d3d81ffd0ecc67b7ba68edff83935293094b3142786270e0a"
   },
   "latestExactHeadSnapshot": {
-    "sourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "sourceTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "branch": "codex/marketing-machine-audit-fixes",
-    "branchHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "branchHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5851,
+    "aheadBy": 5852,
     "behindBy": 0,
     "changedPaths": 591,
     "criticalModules": 17,
@@ -4646,7 +4655,7 @@
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+      "headSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
       "changedFiles": 591,
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
     },
@@ -4654,70 +4663,70 @@
     "ci": {
       "automationSecurity": {
         "status": "FAIL",
-        "runId": 46121693024,
+        "runId": 46123447684,
         "nodeTests": 1159,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeFiles": 194,
         "skipped": 0,
         "npmAuditVulnerabilities": 0
       },
       "dashboardE2E": {
         "status": "PASS",
-        "runId": 46121693023,
-        "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "runId": 46123447748,
+        "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "journeys": 41,
         "passed": 41
       },
       "queueReadiness": {
-        "status": "FAIL_SAME_NODE_TEST",
-        "runId": 46121693042,
+        "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+        "runId": 46123447667,
         "dispatchAllowed": false
       },
       "cloudflareStagingSmoke": {
         "status": "PASS_READ_ONLY",
-        "runId": 46121693025
+        "runId": 46123447635
       },
       "deploymentRecovery": {
         "status": "PASS",
-        "runId": 46121693215
+        "runId": 46123447810
       },
       "runnerBridgeSafety": {
         "status": "PASS",
-        "runId": 46121693221
+        "runId": 46123447654
       },
       "durableState": {
         "status": "PASS",
-        "runId": 46121693190
+        "runId": 46123447645
       },
       "durableStatePullRequest": {
         "status": "PASS",
-        "runId": 46121693124
+        "runId": 46123447604
       },
       "contentQuality": {
-        "status": "FAIL_SAME_NODE_TEST",
-        "runId": 46121693017
+        "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+        "runId": 46123447812
       },
       "metadata": {
-        "status": "FAIL_SAME_NODE_TEST",
-        "runId": 46121693148
+        "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+        "runId": 46123447675
       },
       "baselineComparison": {
-        "status": "FAIL_CANDIDATE_NODE_TEST",
-        "runId": 46121693021
+        "status": "FAIL_CANDIDATE_ACCEPTANCE_REGISTER_ASSERTIONS",
+        "runId": 46123447785
       },
       "branchInventory": {
         "status": "PASS",
-        "runId": 46121693213,
-        "head": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-        "aheadBy": 5851,
+        "runId": 46123447612,
+        "head": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+        "aheadBy": 5852,
         "behindBy": 0,
         "changedFiles": 591
       },
       "productionReadiness": {
         "status": "HOLD",
-        "runId": 46121693155,
-        "head": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+        "runId": 46123447609,
+        "head": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
         "blockerCount": 35,
         "publishingEnabled": false
       }
@@ -4757,16 +4766,16 @@
       "PASS_STAGING": 1,
       "BLOCKED": 12
     },
-    "sourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-    "CI_002": "FAIL — exact current branch head ee1dae17fb242d7427c0edd0d9d5113a7d32b584: 1,158/1,159 Node tests passed, one stale acceptance-register assertion failed, zero skipped; npm audit 0. Python tests were not reached.",
-    "DASH_001": "NOT_TESTED — exact current-head Chromium E2E 41/41 PASS; 121 controls, 17 forms, 104 form-owned, 17 standalone. Full per-control business acceptance remains incomplete.",
+    "sourceTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+    "CI_002": "FAIL — exact current branch head 549e025b9f48fc3874fbfe74ad101a4b12d95706: 1,153/1,159 Node tests passed, six acceptance-register note assertions failed, zero skipped; npm audit 0. Python tests were not reached.",
+    "DASH_001": "NOT_TESTED — exact current-head Chromium E2E 41/41 PASS; 121/121 controls, 17/17 forms, 104 form-owned, 17 standalone and 15/15 cross-cutting dimensions. Full per-control business acceptance remains incomplete.",
     "API_001": "BLOCKED — last route-specific evidence SHA f547cecf9c330791a1dfe677da072cdfb50058e2: 50 routes, 41 PASS, 9 BLOCKED, 50/50 auth-negative; no new positive route acceptance on current head.",
-    "SCHED_001": "NOT_TESTED — last complete YouTube history is 23 November; owner attempt attestation stale after 18 November; complete SonicVhibez queue unavailable; spacing UNVERIFIED.",
-    "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — local HTTP 409/backoff and runner-bridge safety checks pass; live production dispatch remains gated.",
-    "STATE_001": "PASS_STAGING — durable-state unit/PR, deployment recovery, runner-bridge and fail-closed smoke checks pass on the exact current head; production state storage is not established.",
-    "DEPLOY_001": "NOT_TESTED — deployment recovery and runner-bridge safety pass; no SonicVhibez production render/publisher Worker or production D1/Durable Object namespace is established.",
-    "GIT_002": "NOT_TESTED — exact compare at ee1dae17fb242d7427c0edd0d9d5113a7d32b584: 5,851 ahead / 0 behind, 591 changed files; branch protection disabled and semantic review incomplete.",
-    "SCHED_003": "PASS — schedule-policy tests enforce >=72 elapsed hours and no same Johannesburg calendar day; actual remote history and queue remain unverified.",
+    "SCHED_001": "NOT_TESTED — last complete YouTube history is 23 November; one public 20-second legacy Short, zero private/unlisted; owner attempt attestation stale after 18 November; complete queue unavailable; spacing UNVERIFIED.",
+    "SCHED_WORKER_DISPATCH_001": "NOT_TESTED_LIVE_WORKER — local regression retains persisted HTTP 409 preflight cooldown across restart; live production dispatch remains gated.",
+    "STATE_001": "PASS_STAGING — durable-state unit/PR, deployment recovery, runner-bridge and fail-closed smoke checks pass on exact current head; production state storage is not established.",
+    "DEPLOY_001": "NOT_TESTED — deployment recovery and runner-bridge safety pass; no SonicVhibez production render/publisher Worker or production D1/Durable Object namespace.",
+    "GIT_002": "NOT_TESTED — exact compare at 549e025b9f48fc3874fbfe74ad101a4b12d95706: 5,852 ahead / 0 behind, 591 changed files; branch protection disabled and semantic review incomplete.",
+    "SCHED_003": "PASS — exact-head schedule-policy tests enforce >=72 elapsed hours and no same Johannesburg calendar day; owner-approved sequence long_form → long_form → short recorded 2026-11-18T16:27:44Z; live queue remains unverified.",
     "API_NEG_001": "PASS — 50/50 protected routes reject missing/invalid authentication on the last exact route-evidence SHA f547cecf9c330791a1dfe677da072cdfb50058e2.",
     "DASH_CTRL_WIRING_001": "PASS_EVIDENCE — 121 controls mapped; overall DASH-001 remains NOT_TESTED.",
     "DASH_CTRL_A11Y_001": "PASS_EVIDENCE — 41/41 Chromium journeys; exhaustive per-control accessibility acceptance remains open.",
@@ -4775,9 +4784,9 @@
     "DASH_CTRL_BLOCKED_API_001": "PASS_EVIDENCE — production-blocked controls map to guarded routes; no external action authorized.",
     "DASH_CTRL_RIGHTS_USE_001": "PASS_EVIDENCE — per-asset rights attestation remains separate from overall approval.",
     "MEDIA_001": "BLOCKED — genuine original creator-captured wildlife footage with source provenance and commercial rights is not established; no final production MP4 or thumbnail was verified.",
-    "META_001": "BLOCKED — Metricool exposes Nature Frontiers SA only (brandId 8094526); zero scheduled posts in the checked range; legacy 7545638 is 403; draft inventory and provider autoPublish flags are not exposed; SonicVhibez is not exposed as a separate Metricool YouTube destination.",
+    "META_001": "BLOCKED — Metricool exposes Nature Frontiers SA only (brandId 8094526); zero future scheduled posts in the checked range; prior snapshot had five Facebook and zero Instagram scheduled items; legacy 7545638 is 403; draft inventory and provider autoPublish flags are not exposed; SonicVhibez is not a separate Metricool destination.",
     "updatedAt": "2026-11-28T07:38:59Z",
-    "note": "Selected exact-head CI, browser, staging and live-read-only evidence refreshed. Full 89-row requirement re-evaluation remains incomplete; no owner/provider/media/production acceptance was promoted."
+    "note": "Exact current-head CI, browser, staging and live-read-only evidence refreshed. Full 89-row requirement re-evaluation remains incomplete; no owner/provider/media/production acceptance was promoted."
   },
   "apiRouteStatusSnapshot": {
     "routes": 50,
@@ -5217,22 +5226,22 @@
   },
   "latestRegisterRefreshSourceHead": "31047745439194d6435f2ab8928ed0986d427648",
   "currentExactHeadExecution": {
-    "sourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "sourceTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "branch": "codex/marketing-machine-audit-fixes",
-    "branchHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "branchHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5851,
+    "aheadBy": 5852,
     "behindBy": 0,
     "changedFiles": 591,
     "automation": {
       "status": "FAIL",
-      "runId": 46121693024,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693024",
+      "runId": 46123447684,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447684",
       "nodeTestFiles": 194,
       "nodeTests": 1159,
-      "nodePassed": 1158,
-      "nodeFailed": 1,
+      "nodePassed": 1153,
+      "nodeFailed": 6,
       "nodeSkipped": 0,
       "pythonTests": null,
       "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
@@ -5240,38 +5249,36 @@
     },
     "dashboardBrowser": {
       "status": "PASS",
-      "runId": 46121693023,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693023",
-      "sourceSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+      "runId": 46123447748,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447748",
+      "sourceSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
       "journeysPassed": 41,
       "journeysFailed": 0,
       "journeysSkipped": 0
     },
     "productionReadiness": {
       "status": "HOLD",
-      "runId": 46121693155,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693155",
-      "head": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+      "runId": 46123447609,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447609",
+      "head": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
       "blockerCount": 35,
       "publishingEnabled": false
     },
     "branchInventory": {
       "status": "PASS",
-      "runId": 46121693213,
-      "head": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "aheadBy": 5851,
+      "runId": 46123447612,
+      "head": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "aheadBy": 5852,
       "behindBy": 0,
       "changedFiles": 591
     },
     "baselineComparison": {
-      "status": "FAIL_CANDIDATE_NODE_TEST",
-      "runId": 46121693021,
-      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693021",
+      "status": "FAIL_CANDIDATE_ACCEPTANCE_REGISTER_ASSERTIONS",
+      "runId": 46123447785,
+      "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447785",
       "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-      "candidateSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "mainBaseline": "NOT_SEPARATELY_RECORDED",
-      "candidateCurrentHead": "FAIL",
-      "combinedRerun": "FAIL"
+      "candidateSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "failingSubtests": 6
     },
     "youtubeInventory": {
       "status": "STALE_READ_ONLY",
@@ -5285,35 +5292,35 @@
       "ownerAttemptAttestationValidThrough": "2026-11-18"
     },
     "queueReadiness": {
-      "status": "FAIL_SAME_NODE_TEST",
-      "runId": 46121693042,
+      "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+      "runId": 46123447667,
       "dispatchAllowed": false
     },
     "requirementRowsReevaluated": false,
-    "note": "Current exact head has one failing acceptance-register test assertion. The schema correction is included in the next commit; post-fix exact-head CI must be checked before CI-002 can return to PASS.",
+    "note": "The six current-head failures are mismatched acceptance-register evidence-note assertions. This commit aligns those assertions and notes; the next exact-head Actions run must be inspected before CI-002 can return to PASS.",
     "deploymentRecovery": {
       "status": "PASS",
-      "runId": 46121693215
+      "runId": 46123447810
     },
     "runnerBridgeSafety": {
       "status": "PASS",
-      "runId": 46121693221
+      "runId": 46123447654
     },
     "durableStateUnit": {
       "status": "PASS",
-      "runId": 46121693190
+      "runId": 46123447645
     },
     "durableStatePullRequest": {
       "status": "PASS",
-      "runId": 46121693124
+      "runId": 46123447604
     },
     "contentQuality": {
-      "status": "FAIL_SAME_NODE_TEST",
-      "runId": 46121693017
+      "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+      "runId": 46123447812
     },
     "metadata": {
-      "status": "FAIL_SAME_NODE_TEST",
-      "runId": 46121693148
+      "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+      "runId": 46123447675
     }
   },
   "requirementStatusReevaluation": {
@@ -5669,7 +5676,7 @@
   },
   "branchInventoryHead": "a7e8cb38c39444632bd22d603811217fea1527e0",
   "latestFullNodeTestSha": "5cbaf3a44a617fb5fa7d8c92855ec4b18265a9ef",
-  "latestDashboardBrowserTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+  "latestDashboardBrowserTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
   "latestExactHeadRefresh": {
     "recordedAt": "2026-11-23T11:15:00Z",
     "sourceTestSha": "a7e8cb38c39444632bd22d603811217fea1527e0",
@@ -5899,7 +5906,7 @@
       "contentQualityRunId": 45781400025,
       "metadataRunId": 45781400303
     },
-    "note": "Historical full 89-row source/test refresh remains at f547cecf9c330791a1dfe677da072cdfb50058e2. Selected exact-head CI, browser, staging and live-read-only rows were separately refreshed at ee1dae17fb242d7427c0edd0d9d5113a7d32b584; full requirement re-evaluation remains false and no external acceptance was promoted."
+    "note": "Historical full 89-row source/test refresh remains at f547cecf9c330791a1dfe677da072cdfb50058e2. Selected exact-head CI, browser, staging and live-read-only rows were separately refreshed at 549e025b9f48fc3874fbfe74ad101a4b12d95706; full requirement re-evaluation remains false and no external acceptance was promoted."
   },
   "currentHeadStatusCounts": {
     "PASS": 67,
@@ -5982,10 +5989,10 @@
   "dailyLiveRefresh": {
     "recordedAt": "2026-11-28T09:38:59+02:00",
     "implementationBranch": "codex/marketing-machine-audit-fixes",
-    "branchHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "branchHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5851,
+    "aheadBy": 5852,
     "behindBy": 0,
     "changedFiles": 591,
     "pr1": {
@@ -5993,7 +6000,7 @@
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+      "headSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
       "changedFiles": 591,
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
     },
@@ -6009,52 +6016,52 @@
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/7"
     },
     "ci": {
-      "exactHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-      "totalRuns": 17,
-      "completedSuccess": 11,
+      "exactHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+      "totalRuns": 18,
+      "completedSuccess": 12,
       "completedFailure": 6,
       "active": 0,
       "combinedStatusContexts": 0,
       "automation": {
-        "runId": 46121693024,
+        "runId": 46123447684,
         "status": "FAIL",
         "nodeTests": 1159,
-        "nodePassed": 1158,
-        "nodeFailed": 1,
+        "nodePassed": 1153,
+        "nodeFailed": 6,
         "nodeSkipped": 0,
         "nodeFiles": 194,
         "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
         "npmAuditVulnerabilities": 0,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693024"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447684"
       },
       "dashboard": {
-        "runId": 46121693023,
+        "runId": 46123447748,
         "status": "PASS",
         "journeys": 41,
         "passed": 41,
         "failed": 0,
         "skipped": 0,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693023"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447748"
       },
       "dependentRegressionFailures": [
-        46121693017,
-        46121693148,
-        46121693021,
-        46121693042
+        46123447812,
+        46123447675,
+        46123447667,
+        46123447785
       ],
       "productionReadiness": {
-        "runId": 46121693155,
+        "runId": 46123447609,
         "status": "HOLD",
         "blockers": 35,
-        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693155"
+        "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447609"
       },
       "passingSafetyRuns": [
-        46121693215,
-        46121693221,
-        46121693190,
-        46121693124,
-        46121693025,
-        46121693213
+        46123447810,
+        46123447654,
+        46123447645,
+        46123447604,
+        46123447635,
+        46123447612
       ]
     },
     "acceptance": {
@@ -6163,93 +6170,97 @@
     }
   },
   "latestCurrentHeadCiObservation": {
-    "exactHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-    "totalRuns": 17,
-    "completedSuccess": 11,
+    "exactHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+    "totalRuns": 18,
+    "completedSuccess": 12,
     "completedFailure": 6,
     "active": 0,
     "combinedStatusContexts": 0,
     "automation": {
-      "runId": 46121693024,
+      "runId": 46123447684,
       "status": "FAIL",
       "nodeTestFiles": 194,
       "nodeTests": 1159,
-      "nodePassed": 1158,
-      "nodeFailed": 1,
+      "nodePassed": 1153,
+      "nodeFailed": 6,
       "nodeSkipped": 0,
       "pythonTests": null,
       "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE",
       "npmAuditVulnerabilities": 0,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693024"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447684"
     },
     "contentQuality": {
-      "runId": 46121693017,
-      "status": "FAIL_SAME_NODE_TEST",
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693017"
+      "runId": 46123447812,
+      "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+      "failingSubtests": 6,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447812"
     },
     "metadata": {
-      "runId": 46121693148,
-      "status": "FAIL_SAME_NODE_TEST",
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693148"
+      "runId": 46123447675,
+      "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+      "failingSubtests": 6,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447675"
     },
     "baselineComparison": {
-      "runId": 46121693021,
-      "status": "FAIL_CANDIDATE_NODE_TEST",
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693021"
+      "runId": 46123447785,
+      "status": "FAIL_CANDIDATE_ACCEPTANCE_REGISTER_ASSERTIONS",
+      "failingSubtests": 6,
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447785"
     },
     "dashboard": {
-      "runId": 46121693023,
+      "runId": 46123447748,
       "status": "PASS",
       "browserJourneys": 41,
       "passed": 41,
       "failed": 0,
       "skipped": 0,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693023"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447748"
     },
     "queueReadiness": {
-      "runId": 46121693042,
-      "status": "FAIL_SAME_NODE_TEST",
+      "runId": 46123447667,
+      "status": "FAIL_SAME_ACCEPTANCE_REGISTER_ASSERTIONS",
+      "failingSubtests": 6,
       "dispatchAllowed": false,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693042"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447667"
     },
     "productionReadiness": {
-      "runId": 46121693155,
+      "runId": 46123447609,
       "status": "HOLD",
       "blockers": 35,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693155"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447609"
     },
     "deploymentRecovery": {
-      "runId": 46121693215,
+      "runId": 46123447810,
       "status": "PASS",
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693215"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447810"
     },
     "runnerBridge": {
-      "runId": 46121693221,
+      "runId": 46123447654,
       "status": "PASS",
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693221"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447654"
     },
     "durableState": {
-      "runId": 46121693190,
+      "runId": 46123447645,
       "status": "PASS",
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693190"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447645"
     },
     "durableStatePrValidation": {
-      "runId": 46121693124,
+      "runId": 46123447604,
       "status": "PASS",
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693124"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447604"
     },
     "failClosedSmoke": {
-      "runId": 46121693025,
+      "runId": 46123447635,
       "status": "PASS_READ_ONLY",
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693025"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447635"
     },
     "branchInventory": {
-      "runId": 46121693213,
+      "runId": 46123447612,
       "status": "PASS",
-      "aheadBy": 5851,
+      "aheadBy": 5852,
       "behindBy": 0,
       "changedFiles": 591,
-      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693213"
+      "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447612"
     }
   },
   "latestFullPassingCiCheckpoint": {

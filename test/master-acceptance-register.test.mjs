@@ -39,12 +39,12 @@ test("master acceptance register totals reconcile to all 89 requirements", () =>
   assert.deepEqual(register.currentHeadStatusCounts, { PASS: 67, FAIL: 1, NOT_TESTED: 8, PASS_STAGING: 1, BLOCKED: 12 });
   assert.equal(byId("CI-002").currentHeadStatus, "FAIL");
   assert.equal(byId("CI-002").currentHeadEvidenceSha, liveHeadSha);
-  assert.match(byId("CI-002").currentHeadEvidenceNote, /1,158 of 1,159 Node tests passed.*1 failed.*0 skipped/i);
+  assert.match(byId("CI-002").currentHeadEvidenceNote, /1,153 of 1,159 Node tests passed.*6 failed.*0 skipped/i);
   assert.equal(register.latestCurrentHeadCiObservation.exactHead, liveHeadSha);
   assert.equal(register.latestExactCiCheckpoint.branchHead, liveHeadSha);
   assert.equal(register.currentExactHeadExecution.sourceTestSha, liveHeadSha);
   assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeTests, 1159);
-  assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeFailed, 1);
+  assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeFailed, 6);
   assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeSkipped, 0);
   assert.equal(register.latestExactCiCheckpoint.ci.automation.npmAuditVulnerabilities, 0);
   assert.equal(register.latestExactCiCheckpoint.ci.dashboard.status, "PASS");
@@ -167,5 +167,5 @@ test("FFmpeg and zero-skip requirements have exact current CI evidence", () => {
   const skips = byId("CI-TEST-SKIPS-001");
   assert.equal(skips.currentHeadStatus, "PASS");
   assert.equal(skips.currentHeadEvidenceSha, liveHeadSha);
-  assert.match(skips.currentHeadEvidenceNote, /1,159 Node tests across 194 files, 1,158 passed, 1 failed and zero skips/i);
+  assert.match(skips.currentHeadEvidenceNote, /1,159 Node tests across 194 files, 1,153 passed, 6 failed and zero skips/i);
 });

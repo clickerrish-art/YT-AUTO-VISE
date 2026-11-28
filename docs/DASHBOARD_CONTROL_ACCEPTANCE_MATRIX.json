@@ -19694,9 +19694,9 @@
     "currentBranchBehindBy": 0
   },
   "latestExactHeadBrowserVerification": {
-    "sourceTestSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
-    "runId": 46121693023,
-    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46121693023",
+    "sourceTestSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
+    "runId": 46123447748,
+    "run": "https://github.com/clickerrish-art/YT-AUTO-VISE/actions/runs/46123447748",
     "journeys": 41,
     "passed": 41,
     "failed": 0,
@@ -19705,10 +19705,10 @@
   "dailyLiveRefresh": {
     "recordedAt": "2026-11-28T09:38:59+02:00",
     "implementationBranch": "codex/marketing-machine-audit-fixes",
-    "branchHead": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+    "branchHead": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
     "mainSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
     "mergeBaseSha": "3795519ccbf58fd02d74458624b58dd2e44a88c0",
-    "aheadBy": 5851,
+    "aheadBy": 5852,
     "behindBy": 0,
     "changedFiles": 591,
     "pr1": {
@@ -19716,7 +19716,7 @@
       "draft": true,
       "merged": false,
       "mergeable": true,
-      "headSha": "ee1dae17fb242d7427c0edd0d9d5113a7d32b584",
+      "headSha": "549e025b9f48fc3874fbfe74ad101a4b12d95706",
       "changedFiles": 591,
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/1"
     },
@@ -19732,17 +19732,17 @@
       "url": "https://github.com/clickerrish-art/YT-AUTO-VISE/pull/7"
     },
     "currentHeadCi": {
-      "automationRunId": 46121693024,
+      "automationRunId": 46123447684,
       "automationStatus": "FAIL",
       "nodeTests": 1159,
-      "nodePassed": 1158,
-      "nodeFailed": 1,
+      "nodePassed": 1153,
+      "nodeFailed": 6,
       "nodeSkipped": 0,
       "npmAuditVulnerabilities": 0,
       "pythonStatus": "NOT_RUN_AFTER_NODE_TEST_FAILURE"
     },
     "browserE2E": {
-      "runId": 46121693023,
+      "runId": 46123447748,
       "status": "PASS",
       "journeys": 41,
       "passed": 41,
@@ -19757,6 +19757,6 @@
       "crossCuttingDimensions": 15
     },
     "overallAcceptance": "NOT_TESTED",
-    "note": "The current exact-head browser journeys pass, but the dashboard's exhaustive per-control business acceptance remains NOT_TESTED. The older full Node/Python source snapshot remains separately recorded in currentHeadRefresh."
+    "note": "The current exact-head browser journeys pass, but exhaustive per-control business acceptance remains NOT_TESTED. The older full Node/Python source snapshot remains separately recorded in currentHeadRefresh."
   }
 }
