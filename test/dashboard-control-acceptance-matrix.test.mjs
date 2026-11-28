@@ -189,13 +189,13 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(latestHead.pythonSkipped, 0);
   assert.equal(latestHead.pythonEvidenceSha, automationEvidenceSha);
   assert.equal(latestHead.pythonRunId, 46120971281);
-  assert.match(latestHead.pythonRun, /actions\\/runs\\/46120971281$/);
+  assert.ok(latestHead.pythonRun.endsWith("/actions/runs/46120971281"));
   assert.equal(currentHeadRefresh.pythonTests, 113);
   assert.equal(currentHeadRefresh.pythonFailed, 0);
   assert.equal(currentHeadRefresh.pythonSkipped, 0);
   assert.equal(currentHeadRefresh.pythonEvidenceSha, automationEvidenceSha);
   assert.equal(currentHeadRefresh.pythonRunId, 46120971281);
-  assert.match(currentHeadRefresh.pythonRun, /actions\\/runs\\/46120971281$/);
+  assert.ok(currentHeadRefresh.pythonRun.endsWith("/actions/runs/46120971281"));
   assert.equal(latestHead.npmAuditVulnerabilities, 0);
   assert.equal(Object.hasOwn(latestHead, "npmAuditLastVerifiedSha"), false, "npm audit source SHA is recorded in currentHeadRefresh, not inferred from latestHeadVerification");
   assert.equal(matrix.currentHeadRefresh.npmAuditVulnerabilities, 0);
