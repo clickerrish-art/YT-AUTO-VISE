@@ -65,7 +65,8 @@ test("the owner-approved rolling publication cadence is no longer marked blocked
   assert.match(cadence.currentHeadEvidenceNote, /long_form.*long_form.*short/i);
   assert.match(cadence.currentHeadEvidenceNote, /72 elapsed hours/);
   assert.match(cadence.currentHeadEvidenceNote, /Africa\/Johannesburg/);
-  assert.match(cadence.currentHeadEvidenceNote, /no weekly target/i);
+  assert.match(cadence.currentHeadEvidenceNote, /no same-Africa\/Johannesburg-calendar-day collisions/i);
+  assert.match(cadence.currentHeadEvidenceNote, /does not verify a live publication slot/i);
 });
 
 test("API and dashboard acceptance statuses retain their exact evidence boundaries", () => {
@@ -81,7 +82,7 @@ test("API and dashboard acceptance statuses retain their exact evidence boundari
   assert.match(api.nextAction, /owner-renewed Meta Page token.*exact one-shot authorization/i);
   assert.equal(register.latestExactCiCheckpoint.branchHead, liveHeadSha);
   assert.equal(register.latestExactCiCheckpoint.ci.automation.status, "FAIL");
-  assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeFailed, 1);
+  assert.equal(register.latestExactCiCheckpoint.ci.automation.nodeFailed, 6);
   assert.equal(register.latestExactCiCheckpoint.ci.dashboard.status, "PASS");
   assert.equal(register.latestFullPassingCiCheckpoint.ci.automation.nodeTests, 1159);
   assert.equal(register.latestFullPassingCiCheckpoint.ci.automation.nodeFailed, 0);
@@ -138,7 +139,7 @@ test("worker dispatch backoff failure is fail-closed while live runtime remains 
   assert.equal(worker.currentHeadStatus, "NOT_TESTED");
   assert.equal(worker.currentHeadEvidenceSha, liveHeadSha);
   assert.match(worker.currentHeadEvidenceNote, /persisted HTTP 409 preflight cooldown across restart/);
-  assert.match(worker.currentHeadEvidenceNote, /fail-stop with retained process lock when cooldown persistence fails/);
+  assert.match(worker.currentHeadEvidenceNote, /fail-stop behaviour on persistence failure/i);
   assert.match(worker.currentHeadEvidenceNote, /Live worker dispatch remains NOT_TESTED/);
 
   const scheduler = byId("SCHED-001");
@@ -167,5 +168,5 @@ test("FFmpeg and zero-skip requirements have exact current CI evidence", () => {
   const skips = byId("CI-TEST-SKIPS-001");
   assert.equal(skips.currentHeadStatus, "PASS");
   assert.equal(skips.currentHeadEvidenceSha, liveHeadSha);
-  assert.match(skips.currentHeadEvidenceNote, /1,159 Node tests across 194 files, 1,153 passed, 6 failed and zero skips/i);
+  assert.match(skips.currentHeadEvidenceNote, /1,159 Node tests across 194 files, with 1,153 passed, 6 failed and zero skips/i);
 });
