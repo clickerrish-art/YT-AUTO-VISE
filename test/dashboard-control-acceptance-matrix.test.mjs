@@ -57,7 +57,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
 
   const currentHeadRefresh = matrix.currentHeadRefresh;
   assert.equal(currentHeadRefresh.sourceTestSha, automationEvidenceSha);
-  assert.equal(currentHeadRefresh.nodeTests, 1154);
+  assert.equal(currentHeadRefresh.nodeTests, matrix.latestHeadVerification.nodeTests);
   assert.equal(currentHeadRefresh.nodeTestFiles, 194);
   assert.equal(currentHeadRefresh.browserE2EStatus, "PASS");
   assert.equal(currentHeadRefresh.overallAcceptance, "NOT_TESTED");
@@ -180,11 +180,11 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(latestHead.browserJourneys.total, 41);
   assert.equal(latestHead.browserJourneys.failed, 0);
   assert.equal(latestHead.browserJourneys.skipped, 0);
-  assert.equal(latestHead.nodeTests, 1154);
+  assert.equal(latestHead.nodeTests, currentHeadRefresh.nodeTests);
   assert.equal(latestHead.nodeTestFiles, 194);
   assert.equal(latestHead.nodeFailed, 0);
   assert.equal(latestHead.nodeSkipped, 0);
-  assert.equal(latestHead.pythonTests, 113, "latest exact-head evidence records 113 Python tests");
+  assert.equal(currentHeadRefresh.pythonTests, "NOT_RUN_ON_THIS_EXACT_HEAD", "do not infer Python results from an earlier source/test SHA");
   assert.equal(latestHead.npmAuditVulnerabilities, 0);
   assert.equal(latestHead.npmAuditLastVerifiedSha, automationEvidenceSha);
   assert.equal(matrix.currentHeadRefresh.npmAuditVulnerabilities, 0);
