@@ -186,7 +186,7 @@ test("dashboard control evidence is internally consistent while DASH-001 remains
   assert.equal(latestHead.nodeSkipped, 0);
   assert.equal(currentHeadRefresh.pythonTests, "NOT_RUN_ON_THIS_EXACT_HEAD", "do not infer Python results from an earlier source/test SHA");
   assert.equal(latestHead.npmAuditVulnerabilities, 0);
-  assert.equal(latestHead.npmAuditLastVerifiedSha, automationEvidenceSha);
+  assert.equal(Object.hasOwn(latestHead, "npmAuditLastVerifiedSha"), false, "npm audit source SHA is recorded in currentHeadRefresh, not inferred from latestHeadVerification");
   assert.equal(matrix.currentHeadRefresh.npmAuditVulnerabilities, 0);
   assert.equal(matrix.currentHeadRefresh.npmAuditLastVerifiedSha, automationEvidenceSha);
   assert.equal(latestHead.overallAcceptance, "NOT_TESTED");
